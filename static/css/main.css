@@ -1,0 +1,37 @@
+body {
+  background-color: #0d1117 !important;
+}
+
+body::-webkit-scrollbar {
+  width: 14px; /* width of the entire scrollbar */
+}
+
+body::-webkit-scrollbar-track {
+  background: #322e25; /* color of the tracking area */
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: dimgray !important;
+  border-radius: 15px;
+  border: 3px solid #322e25;
+}
+
+.swal-overlay {
+  background-color: rgba(44, 54, 70, 0.59);
+}
+
+.swal-modal {
+  background-color: #34435a;
+  border: 2px solid #35403e;
+}
+
+.swal-icon--success__hide-corners {
+  background: none !important;
+}
+.swal-icon--success:before, .swal-icon--success:after {
+  background: none !important;
+}
+
+.swal-title, .swal-text {
+  color: white;
+}
