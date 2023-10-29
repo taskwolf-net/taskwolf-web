@@ -21,9 +21,9 @@
         <label class="form-check-label" for="remember-check" id="remember-check-label">Remember me</label>
       </div>
       <button type="button" id="login" class="btn btn-primary mb-4">LOG IN</button></br>
-      <p class="text-light">Not yet registered? <a id="not-registered" class="text-decoration-none" href="/home/">Create account</a>
+      <p class="text-light">Not yet registered? <a id="not-registered" class="text-decoration-none" href="/register/">Create account</a>
       <div>
-        <h id="authentification-failed" class="text-danger"></h>
+        <h id="authentication-failed" class="text-danger"></h>
       </div>
     </form>
   </body>
@@ -38,15 +38,16 @@
   });
 
   document.getElementById('login').onclick = function() {
-    let request = new HttpRequest("https://127.0.0.1:8080/verification/login", "POST", [{key: "Content-Type", value: "application/json"}],
+    let request = new HttpRequest("http://localhost:8080/verification/login/", "POST", [{key: "Content-Type", value: "application/json"}],
       {email: document.getElementById("email").value, password: document.getElementById("password").value});
     request.send(function (status, responseText) {
       if (status == 200) {
         Cookie.create("token", JSON.parse(responseText).apiKey, 60 * 60);
         Cookie.create("tokenExpiration", +new Date() + 1000 * 60 * 60, 60 * 60);
-        location.reload();
+        window.location.href = "/home/";
       } else {
-        document.getElementById("authentification-failed").innerHTML = "Authentification Failed!";
+        document.getElementById("authentication-failed").innerHTML = "Authentication Failed!";
+        document.getElementById("password").value = "";
       }
     });
   };
