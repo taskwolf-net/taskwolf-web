@@ -5,4 +5,4 @@ from base.authentication import authentication_required
 @authentication_required
 def home(request):
   return render(request, 'home.html', {'title': 'Taskwolf - Home',
-    'css': ['css/home.css', 'css/header.css']})
+    'css': ['css/home.css']})

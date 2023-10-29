@@ -1,20 +1,48 @@
-body {
-  background-color: #ffffff !important;
-}
-
 form {
   width: 30%;
   text-align: center;
-  margin-top: 10%;
+  margin-top: 5%;
   margin-left: auto;
   margin-right: auto;
 }
 
-#cast-label {
-  font-size: 10vw;
-  color: rgba(6, 35, 44, 0.73);
-  font-family: Gabriola;
-  font-weight: bold;
+input {
+  background-color: #0d1117 !important;
+  color: white !important;
+}
+
+.form-label {
+  color: white;
+  text-align: left;
+  width: 100%;
+  font-size: 20px;
+}
+
+#forgot-password {
+  text-align: right;
+  width: 100%;
+  text-decoration: none;
+}
+
+#remember-check {
+  border-color: white !important;
+  text-align: center !important;
+}
+
+#remember-check-label {
+  color: white;
+  width: 100%;
+  text-align: left;
+}
+
+#login-logo {
+  transition: transform .3s;
+  width: 50%;
+  height: auto;
+}
+
+#login-logo:hover {
+  transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 }
 
 #login {
@@ -22,10 +50,10 @@ form {
   width: 50%;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 800px) {
   form {
     width: 80%;
-    margin-top: 40%;
+    margin-top: 10%;
   }
 
   #login {

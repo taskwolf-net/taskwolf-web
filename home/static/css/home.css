@@ -23,8 +23,6 @@ body {
 }
 
 #home-logo {
-  color: white;
-  font-size: 5vw;
   transition: transform .3s;
   width: 15%;
   height: auto;
