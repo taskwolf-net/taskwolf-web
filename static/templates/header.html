@@ -22,11 +22,19 @@
           <span id="profile-button">{{username}}</span>
         </button>
         <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="profile-button-wrapper">
-          <button class="dropdown-item" type="button">Settings</button>
-          <button class="dropdown-item" type="button">Log out</button>
+          <button class="dropdown-item" id="settings-button" type="button">Settings</button>
+          <button class="dropdown-item" id="logout-button" type="button">Log out</button>
         </div>
       </div>
       {% endif %}
     </div>
   </div>
 </nav>
+
+<script>
+  document.getElementById('logout-button').onclick = function() {
+    Cookie.destroy("token");
+    Cookie.destroy("tokenExpiration");
+    window.location.href = "/home/";
+  };
+</script>
