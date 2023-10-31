@@ -37,7 +37,10 @@
 </html>
 
 <script>
-  document.getElementById("password").addEventListener("keypress", function(event) {
+  let emailInput = document.getElementById("email");
+  let usernameInput = document.getElementById("username");
+  let passwordInput = document.getElementById("password");
+  passwordInput.addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
       event.preventDefault();
       document.getElementById("register").click();
@@ -45,13 +48,16 @@
   });
 
   document.getElementById('register').onclick = function() {
+    if (emailInput.value === "" || usernameInput.value === "" || passwordInput.value === "") {
+      document.getElementById("registration-failed").innerHTML = "Please fill in all entries";
+      return;
+    }
     if (!document.getElementById("legal-check").checked) {
       document.getElementById("registration-failed").innerHTML = "You have to accept the terms of service and privacy policy to continue!";
       return;
     }
     let request = new HttpRequest("http://localhost:8080/verification/register/", "POST", [{key: "Content-Type", value: "application/json"}],
-      {email: document.getElementById("email").value, name: document.getElementById("username").value,
-        password: document.getElementById("password").value});
+      {email: emailInput.value, name: usernameInput.value, password: passwordInput.value});
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
       if (response.success === true) {
