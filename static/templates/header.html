@@ -9,12 +9,24 @@
     <div class="collapse navbar-collapse justify-content-center" id="navbar-content">
       <ul class="navbar-nav ml-auto d-flex align-items-center">
         <li class="nav-item d-none d-lg-block"><a href="/home/"><img class="nav-link" src="{% static 'img/logo.png' %}" width="80px" height="80px" alt=""></a></li>
-        <li class="ms-5 nav-item"><a class="nav-link {% if request.path == '/home/' %}active{% endif %}" aria-current="page" href="/home/">Home</a></li>
+        <li class="nav-item" id="home-nav-item"><a class="nav-link {% if request.path == '/home/' %}active{% endif %}" aria-current="page" href="/home/">Home</a></li>
         <li class="nav-item"><a class="nav-link {% if request.path == '/product/' %}active{% endif %}" href="/product/">Product</a></li>
         <li class="nav-item"><a class="nav-link {% if request.path == '/features/' %}active{% endif %}" href="/features/">Features</a></li>
-        <li class="nav-item"><a class="nav-link {% if request.path == '/about-us/' %}active{% endif %}" href="/about-us/">About us</a></li>
+        <li class="nav-item"><a class="text-nowrap nav-link {% if request.path == '/about-us/' %}active{% endif %}" href="/about-us/">About us</a></li>
       </ul>
+      {% if not authenticated %}
       <a href="/login/" class="btn btn-info" id="login-button" role="button">Login</a>
+      {% else %}
+      <div id="profile-button-container">
+        <button class="dropdown-toggle btn" id="profile-button-wrapper" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span id="profile-button">{{username}}</span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="profile-button-wrapper">
+          <button class="dropdown-item" type="button">Settings</button>
+          <button class="dropdown-item" type="button">Log out</button>
+        </div>
+      </div>
+      {% endif %}
     </div>
   </div>
 </nav>

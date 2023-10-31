@@ -2,12 +2,51 @@
   z-index: 100;
 }
 
+#home-nav-item {
+  margin-left: 5%;
+}
+
 #login-button {
   margin-left: 30%;
 }
 
+#profile-button {
+  color: rgba(33,37,41,255) !important;
+  font-size: 28px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+}
+
+#profile-button-container {
+  margin-left: 30%;
+  position: relative;
+}
+
+#profile-button-wrapper {
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  text-align: center;
+  background-color: white !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#profile-button-wrapper::after {
+  display: none;
+}
+
 @media (max-width: 400px) {
+  #home-nav-item {
+    margin: 0;
+  }
+
   #login-button  {
+    margin: 0;
+  }
+
+  #profile-button-container {
     margin: 0;
   }
 }
