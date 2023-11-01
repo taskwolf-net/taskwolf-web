@@ -3,8 +3,8 @@ from django.http import HttpResponse
 
 def login(request):
   return render(request, 'login.html', {'title': 'Taskwolf - Login',
-    'css': ['css/login.css']})
+    'css': ['css/home-header.css', 'css/login.css']})
 
 def register(request):
   return render(request, 'register.html', {'title': 'Taskwolf - Register',
-    'css': ['css/register.css']})
+    'css': ['css/home-header.css', 'css/register.css']})
