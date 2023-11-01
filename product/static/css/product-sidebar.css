@@ -1,0 +1,40 @@
+#sidebar {
+  position: fixed;
+  width: 300px;
+  color: white;
+  height: 100%;
+}
+
+#sidebar-content {
+  height: 100%;
+}
+
+.sidebar-item {
+  margin-top: 5%;
+  width: 90%;
+  border-radius: 10px;
+  transition-duration: 250ms;
+}
+
+.sidebar-item:hover {
+  background-color: #4a4a4a;
+}
+
+.sidebar-link {
+  font-size: 22px !important;
+}
+
+.sidebar-icon {
+  margin-left: 10%;
+  margin-right: 10%;
+  font-size: 30px;
+}
+
+.sidebar-active {
+  background-color: #666666;
+  border-radius: 10px;
+}
+
+#sidebar-bottom {
+  height:auto;
+}
