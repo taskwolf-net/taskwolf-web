@@ -21,8 +21,8 @@
       <div class="form-check">
         <input type="checkbox" class="form-check-input" id="legal-check">
         <label class="form-check-label" for="legal-check">By creating your account, you agree to the
-          <a class="text-decoration-none" href="/home/">Terms of Service</a> and
-          <a class="text-decoration-none" href="/home/">Privacy Policy</a></label>
+          <a class="text-decoration-none" href="/">Terms of Service</a> and
+          <a class="text-decoration-none" href="/">Privacy Policy</a></label>
       </div>
       <div class="form-check mb-3">
         <input type="checkbox" class="form-check-input" id="notification-check">
@@ -61,7 +61,7 @@
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
       if (response.success === true) {
-        window.location.href = "/home/";
+        window.location.href = "/";
       } else {
         document.getElementById("registration-failed").innerHTML = "There is already an account with this email!";
       }

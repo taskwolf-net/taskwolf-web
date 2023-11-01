@@ -12,7 +12,7 @@ def authentication_required(function):
     authenticated = await isAuthenticated(request)
     if (authenticated):
       return await function(request, *args, **kwargs)
-    return HttpResponseRedirect("/home/")
+    return HttpResponseRedirect("/")
   return authentication
 
 async def isAuthenticated(request):

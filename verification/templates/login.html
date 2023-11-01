@@ -12,7 +12,7 @@
       <div class="form-outline mb-4">
         <div class="d-flex">
           <label for="password" class="form-label">Password</label>
-          <a id="forgot-password" href="/home/">Forgot your password?</a>
+          <a id="forgot-password" href="/">Forgot your password?</a>
         </div>
         <input type="password" id="password" class="form-control" placeholder="Password"/>
       </div>
@@ -44,7 +44,7 @@
       if (status == 200) {
         Cookie.create("token", JSON.parse(responseText).apiKey, 60 * 60);
         Cookie.create("tokenExpiration", +new Date() + 1000 * 60 * 60, 60 * 60);
-        window.location.href = "/home/";
+        window.location.href = "/";
       } else {
         document.getElementById("authentication-failed").innerHTML = "Authentication Failed!";
         document.getElementById("password").value = "";
