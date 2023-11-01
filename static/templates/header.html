@@ -8,8 +8,8 @@
 
     <div class="collapse navbar-collapse justify-content-center" id="navbar-content">
       <ul class="navbar-nav ml-auto d-flex align-items-center">
-        <li class="nav-item d-none d-lg-block"><a href="/home/"><img class="nav-link" src="{% static 'img/logo.png' %}" width="80px" height="80px" alt=""></a></li>
-        <li class="nav-item" id="home-nav-item"><a class="nav-link {% if request.path == '/home/' %}active{% endif %}" aria-current="page" href="/home/">Home</a></li>
+        <li class="nav-item d-none d-lg-block"><a href="/"><img class="nav-link" src="{% static 'img/logo.png' %}" width="80px" height="80px" alt=""></a></li>
+        <li class="nav-item" id="home-nav-item"><a class="nav-link {% if request.path == '/' %}active{% endif %}" aria-current="page" href="/">Home</a></li>
         <li class="nav-item"><a class="nav-link {% if request.path == '/product/' %}active{% endif %}" href="/product/">Product</a></li>
         <li class="nav-item"><a class="nav-link {% if request.path == '/features/' %}active{% endif %}" href="/features/">Features</a></li>
         <li class="nav-item"><a class="text-nowrap nav-link {% if request.path == '/about-us/' %}active{% endif %}" href="/about-us/">About us</a></li>
@@ -22,7 +22,9 @@
           <span id="profile-button">{{username}}</span>
         </button>
         <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="profile-button-wrapper">
+          <button class="dropdown-item" id="dashboard-button" type="button">Dashboard</button>
           <button class="dropdown-item" id="settings-button" type="button">Settings</button>
+          <div class="dropdown-divider"></div>
           <button class="dropdown-item" id="logout-button" type="button">Log out</button>
         </div>
       </div>
@@ -32,9 +34,15 @@
 </nav>
 
 <script>
+  document.getElementById('dashboard-button').onclick = function() {
+    window.location.href = "/dashboard/";
+  };
+  document.getElementById('settings-button').onclick = function() {
+    window.location.href = "/settings/";
+  };
   document.getElementById('logout-button').onclick = function() {
     Cookie.destroy("token");
     Cookie.destroy("tokenExpiration");
-    window.location.href = "/home/";
+    window.location.href = "/";
   };
 </script>
