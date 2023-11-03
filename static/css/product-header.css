@@ -1,9 +1,24 @@
 .navbar {
   z-index: 100;
   border-bottom: 1px #4a4a4a solid;
+  position: fixed !important;
+  width: 100%;
 }
 
-#navbar-logo {
+#header-space {
+  height: 97px;
+}
+
+#sidebar-button {
+  position: absolute;
+  margin-left: 30px;
+  color: white;
+  background-color: transparent;
+  border: none;
+  font-size: 30px;
+}
+
+#navbar-logo-container {
   margin-left: calc(300px / 2 - 64px);
 }
 
@@ -35,9 +50,14 @@
   display: none;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 575px) {
+  #header-space {
+    height: 57px;
+  }
+
   #navbar-logo-container {
     text-align: center;
+    margin: 0;
   }
 
   #profile-button-container {
@@ -52,9 +72,14 @@
   #profile-button {
     font-size: 24px;
   }
+
+  #sidebar-button {
+    top: 15px;
+    right: 30px;
+  }
 }
 
-@media(min-width: 400px) {
+@media(min-width: 575px) {
   .dropdown-menu-center {
     left: 50% !important;
     right: auto !important;

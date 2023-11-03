@@ -5,7 +5,7 @@
             aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-
+    <button id="sidebar-button" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="false" aria-controls="sidebar"></button>
     <div class="collapse navbar-collapse" id="navbar-content">
       <div id="navbar-logo-container">
         <a href="/" id="navbar-logo"><img src="{% static 'img/logo.png' %}" width="80px" height="80px" alt=""></a>
@@ -24,6 +24,7 @@
     </div>
   </div>
 </nav>
+<div id="header-space"></div>
 
 <script>
   document.getElementById('dashboard-button').onclick = function() {
@@ -37,4 +38,40 @@
     Cookie.destroy("tokenExpiration");
     window.location.href = "/";
   };
+
+  var isSidebarShown;
+
+  window.onload = function() {
+    isSidebarShown = window.innerWidth > 575;
+    if (isSidebarShown) {
+      document.getElementById("sidebar").classList.add("show");
+    }
+    updateSidebarSpacing();
+    updateSidebarButtonIcon();
+  };
+
+  document.getElementById('sidebar-button').onclick = function() {
+    isSidebarShown = !isSidebarShown;
+    updateSidebarSpacing();
+    updateSidebarButtonIcon();
+  };
+
+  function updateSidebarSpacing() {
+    var elements = document.getElementsByClassName('sidebar-influenced');
+    for (var i = 0; i < elements.length; i++) {
+      if (isSidebarShown && window.innerWidth > 800) {
+        elements[i].style.marginLeft = '300px';
+      } else {
+        elements[i].style.marginLeft = '0';
+      }
+    }
+  }
+
+  function updateSidebarButtonIcon() {
+    if (isSidebarShown) {
+      document.getElementById("sidebar-button").innerHTML ='<i class="fa-solid fa-xmark"></i>';
+      return;
+    }
+    document.getElementById("sidebar-button").innerHTML ='<i class="fa-solid fa-bars"></i>';
+  }
 </script>
