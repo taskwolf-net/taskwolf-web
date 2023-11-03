@@ -8,3 +8,7 @@ def login(request):
 def register(request):
   return render(request, 'register.html', {'title': 'Taskwolf - Register',
     'css': ['css/home-header.css', 'css/register.css']})
+
+def forgotPassword(request):
+  return render(request, 'forgot-password.html', {'title': 'Taskwolf - Forgot Password',
+    'css': ['css/home-header.css', 'css/forgot-password.css']})

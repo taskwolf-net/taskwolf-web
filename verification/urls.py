@@ -3,5 +3,6 @@ from . import verification
 
 urlpatterns = [
   path('login/', verification.login),
-  path('register/', verification.register)
+  path('register/', verification.register),
+  path('forgot-password/', verification.forgotPassword),
 ]
