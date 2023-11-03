@@ -1,5 +1,11 @@
 .navbar {
   z-index: 100;
+  position: fixed !important;
+  width: 100%;
+}
+
+#header-space {
+  height: 97px;
 }
 
 #home-nav-item {
@@ -37,7 +43,13 @@
   display: none;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 991px) {
+  #header-space {
+    height: 57px;
+  }
+}
+
+@media (max-width: 575px) {
   #home-nav-item {
     margin: 0;
   }
@@ -60,7 +72,7 @@
   }
 }
 
-@media(min-width: 400px) {
+@media(min-width: 575px) {
   .dropdown-menu-center {
     left: 50% !important;
     right: auto !important;

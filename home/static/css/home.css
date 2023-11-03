@@ -37,7 +37,7 @@ body {
   height: 100%;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 575px) {
   #home-headline {
     font-size: 15vw;
   }
