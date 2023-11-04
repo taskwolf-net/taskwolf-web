@@ -1,0 +1,113 @@
+{% load static %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body>
+    {% include 'templates/product-header.html' %}
+    {% include 'templates/product-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="organization-container">
+        <div id="organization-wrapper" class="d-none">
+          <h1 id="organization-name"></h1>
+          <h2 id="organization-owner-headline">Owner:</h2>
+          <ul id="organization-owner">
+          </ul>
+          <div id="organization-members-header">
+            <h2 id="organization-members-headline">Members:</h2>
+            <button type="button" id="organization-invite" class="btn btn-primary btn-block">INVITE</button>
+          </div>
+          <ul id="organization-members">
+          </ul>
+          <div id="organization-members-empty">
+            <span id="organization-members-empty-headline">Currently your organization has no members.</span>
+            <span>Would you like to add any? You can do that&nbsp;</span><a id="organization-members-empty-link" href="./invite/">here</a>
+          </div>
+          <h2 id="organization-invitations-headline">Pending Invitations:</h2>
+          <ul id="organization-invitations">
+          </ul>
+          <span id="organization-invitations-empty">There are currently no pending invitations for this organization.</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  var organization;
+  var invitations;
+
+  $(document).ready(function() {
+    displayLoader();
+    fetchOrganizationData(function() {
+      displayInformation();
+      removeLoader();
+    });
+  });
+
+  function fetchOrganizationData(callback) {
+    var location = window.location;
+    var id = location.href.replace(location.host, "").replace(location.protocol, "").replace("organization", "").replaceAll("/", "");
+    let request = new HttpRequest("http://localhost:8080/organization/selected/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}], {id: id});
+    request.send(function (status, responseText) {
+      organization = JSON.parse(responseText);
+      let request = new HttpRequest("http://localhost:8080/organization/invitations/", "POST", [{key: "Content-Type", value: "application/json"},
+        {key: "API-KEY", value: Cookie.find("token")}], {id: id});
+      request.send(function (status, responseText) {
+        invitations = JSON.parse(responseText).invitations;
+        callback();
+      });
+    });
+  }
+
+  function displayInformation() {
+    document.getElementById("organization-name").innerHTML = organization.name;
+    document.getElementById("organization-owner").appendChild(createUserEntry(organization.owner, "li"));
+    var memberListElement = document.getElementById("organization-members");
+    if (organization.members.length === 0) {
+      document.getElementById("organization-members-empty").style.display = "flex";
+    }
+    for (var i = 0; i < organization.members.length; i++) {
+      memberListElement.appendChild(createUserEntry(organization.members[i], "li"));
+    }
+    if (organization.isOwner === true) {
+      document.getElementById("organization-invite").style.display = "block";
+    }
+    var invitationsListElement = document.getElementById("organization-invitations");
+    if (invitations.length === 0) {
+      document.getElementById("organization-invitations-empty").style.display = "flex";
+    }
+    for (var i = 0; i < invitations.length; i++) {
+      invitationsListElement.appendChild(createUserEntry(invitations[i], "li"));
+    }
+  }
+
+  function createUserEntry(user, elementType) {
+    var memberElement = document.createElement(elementType);
+    memberElement.classList.add("organization-user");
+    var memberIconElement = document.createElement("span");
+    memberIconElement.classList.add("organization-user-icon");
+    memberIconElement.innerHTML = user[0];
+    memberElement.appendChild(memberIconElement);
+    var memberNameElement = document.createElement("span");
+    memberNameElement.classList.add("organization-user-name");
+    memberNameElement.innerHTML = user;
+    memberElement.appendChild(memberNameElement);
+    return memberElement;
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.id = "organization-loader";
+    loader.classList.add("loader");
+    document.getElementById("organization-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("organization-container").removeChild(document.getElementById("organization-loader"));
+    document.getElementById("organization-wrapper").classList.remove("d-none");
+  }
+
+  document.getElementById("organization-invite").onclick = function (event) {
+    window.location.href = window.location.href + "invite/";
+  }
+</script>
