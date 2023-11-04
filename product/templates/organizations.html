@@ -1,0 +1,344 @@
+{% load static %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body>
+    {% include 'templates/product-header.html' %}
+    {% include 'templates/product-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="organizations-wrapper">
+        <h1 id="organizations-headline">Your Organizations</h1>
+        <div id="organizations-header">
+          <div id="organizations-search-box">
+            <input id="organizations-search-input" placeholder="Search for organization..." type="text" class="form-control" value="" autocomplete="off">
+            <button type="button">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+          <button type="button" id="organizations-create" class="btn btn-primary btn-block">CREATE</button>
+        </div>
+        <ul id="organizations-table-description">
+          <li>
+            <div>
+              <span>Name</span> <button id="organizations-filter-name" class="organizations-filter"><span class="fa-solid fa-sort"></span></button>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span>Owner</span> <button id="organizations-filter-owner" class="organizations-filter"><span class="fa-solid fa-sort"></span></button>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span>Members</span> <button id="organizations-filter-members" class="organizations-filter"><span class="fa-solid fa-sort"></span></button>
+            </div>
+          </li>
+        </ul>
+        <ul id="organizations-list">
+        </ul>
+        <div id="organizations-not-a-member">
+          <span id="organizations-not-a-member-headline">You are not currently a member of an organization.</span>
+          <span>Why don't you just create one&nbsp;</span><a id="organizations-not-a-member-link" href="/organization/create/">here</a><span>?</span>
+        </div>
+      </div>
+      <div id="invitations-wrapper">
+        <h1 id="invitations-headline">Your Invitations</h1>
+        <div id="invitations-header">
+          <div id="invitations-search-box">
+            <input id="invitations-search-input" placeholder="Search for invitations..." type="text" class="form-control" value="" autocomplete="off">
+            <button type="button">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </div>
+        <ul id="invitations-table-description">
+          <li>
+            <div>
+              <span>Name</span> <button id="invitations-filter-name" class="invitations-filter"><span class="fa-solid fa-sort"></span></button>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span>Owner</span> <button id="invitations-filter-owner" class="invitations-filter"><span class="fa-solid fa-sort"></span></button>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span>Action</span>
+            </div>
+          </li>
+        </ul>
+        <ul id="invitations-list">
+        </ul>
+        <span id="organizations-no-invitations">You currently have no invitations.</span>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  var organizations;
+  var organizationsFilters = [];
+  var organizationsCurrentFilter;
+  var organizationsCurrentFilterDirection;
+  var organizationsCurrentFilterIcon;
+  var organizationsCurrentNameFilter = "";
+
+  $(document).ready(function() {
+    fetchOrganizationsData(function() {
+      registerAllOrganizationsFilters();
+      for (var i = 0; i < organizationsFilters.length; i++) {
+        let filter = organizationsFilters[i];
+        document.getElementById("organizations-filter-" + filter.elementName).addEventListener("click", event => {
+          changeOrganizationsFilter(filter);
+        });
+      }
+      changeOrganizationsFilter(organizationsFilters.filter(filter => filter.elementName === "name")[0]);
+    });
+  });
+
+  function fetchOrganizationsData(callback) {
+    let request = new HttpRequest("http://localhost:8080/organizations/all/", "GET", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}]);
+    request.send(function (status, responseText) {
+      organizations = JSON.parse(responseText).organizations;
+      for (let i = 0; i < organizations.length; i++) {
+        let organization = organizations[i];
+        organization.members = Number(organization.members.length);
+      }
+      if (organizations.length === 0) {
+        document.getElementById("organizations-not-a-member").style.display = "flex";
+      }
+      callback();
+    });
+  }
+
+  function displayOrganizations() {
+    var sortedOrganizations = organizations.sort(sort(organizationsCurrentFilter.variableName));
+    if (organizationsCurrentFilterDirection) {
+      sortedOrganizations.reverse();
+    }
+    document.getElementById("organizations-list").innerHTML = "";
+    for (var i = 0; i < sortedOrganizations.length; i++) {
+      var entry = sortedOrganizations[i];
+      if(!entry.name.toLowerCase().startsWith(organizationsCurrentNameFilter.toLowerCase())) {
+        continue;
+      }
+      displayOrganization(entry.id, entry.name, entry.owner, entry.isOwner, entry.members);
+    }
+  }
+
+  function sort(field) {
+    return function(first, second) {
+      return (first[field] > second[field]) - (first[field] < second[field]);
+    };
+  }
+
+  function displayOrganization(id, name, owner, isOwner, members) {
+    var entry = document.createElement('li');
+    entry.addEventListener("click", event => {
+      window.location.href = "/organization/" + id + "/";
+    });
+    appendOrganizationsCell(entry, "name", name, "span");
+    var ownerSpan = appendOrganizationsCell(entry, "owner", isOwner ? "You" : owner, "span");
+    if (isOwner) {
+      ownerSpan.classList.add("fw-bold");
+    }
+    appendOrganizationsCell(entry, "members", members, "span");
+    document.getElementById("organizations-list").appendChild(entry);
+  }
+
+  function appendOrganizationsCell(entry, identifier, information, elementType) {
+    var div = document.createElement("div");
+    var element = document.createElement(elementType);
+    element.innerText = information;
+    element.classList.add("organizations-list-" + identifier);
+    div.appendChild(element);
+    entry.appendChild(div);
+    return element;
+  }
+
+  function registerAllOrganizationsFilters() {
+    registerOrganizationsFilter("name", "name");
+    registerOrganizationsFilter("owner", "owner");
+    registerOrganizationsFilter("members", "members");
+  }
+
+  function registerOrganizationsFilter(variableName, elementName) {
+    organizationsFilters.push({
+      variableName: variableName,
+      elementName: elementName
+    });
+  }
+
+  function changeOrganizationsFilter(filter) {
+    if (organizationsCurrentFilter === filter) {
+      organizationsCurrentFilterDirection = !organizationsCurrentFilterDirection;
+      if (organizationsCurrentFilterDirection) {
+        organizationsCurrentFilterIcon.classList.add("fa-sort-down");
+        organizationsCurrentFilterIcon.classList.remove("fa-sort-up");
+        organizationsCurrentFilterIcon.classList.remove("fa-sort");
+      } else {
+        organizationsCurrentFilterIcon.classList.remove("fa-sort-down");
+        organizationsCurrentFilterIcon.classList.add("fa-sort-up");
+        organizationsCurrentFilterIcon.classList.remove("fa-sort");
+      }
+    } else {
+      if (organizationsCurrentFilterIcon != null) {
+        organizationsCurrentFilterIcon.classList.remove("fa-sort-up");
+        organizationsCurrentFilterIcon.classList.remove("fa-sort-down");
+        organizationsCurrentFilterIcon.classList.add("fa-sort");
+      }
+      organizationsCurrentFilter = filter;
+      organizationsCurrentFilterDirection = filter.elementName === "name" || filter.elementName === "owner";
+      organizationsCurrentFilterIcon = document.getElementById("organizations-filter-" + filter.elementName).firstChild;
+      changeOrganizationsFilter(filter);
+      return;
+    }
+    displayOrganizations();
+  }
+
+  document.getElementById("organizations-search-input").oninput = function(event) {
+    organizationsCurrentNameFilter = event.target.value;
+    displayOrganizations();
+  };
+
+  document.getElementById("organizations-create").onclick = function(event) {
+    window.location.href = "/organization/create/";
+  };
+</script>
+
+<script>
+  var invitations;
+  var invitationsFilters = [];
+  var invitationsCurrentFilter;
+  var invitationsCurrentFilterDirection;
+  var invitationsCurrentFilterIcon;
+  var invitationsCurrentNameFilter = "";
+
+  $(document).ready(function() {
+    fetchInvitationsData(function() {
+      registerAllInvitationsFilters();
+      for (var i = 0; i < invitationsFilters.length; i++) {
+        let filter = invitationsFilters[i];
+        document.getElementById("invitations-filter-" + filter.elementName).addEventListener("click", event => {
+          changeInvitationsFilter(filter);
+        });
+      }
+      changeInvitationsFilter(invitationsFilters.filter(filter => filter.elementName === "name")[0]);
+    });
+  });
+
+  function fetchInvitationsData(callback) {
+    let request = new HttpRequest("http://localhost:8080/organization/invitations/personal/", "GET", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}]);
+    request.send(function (status, responseText) {
+      console.log(responseText);
+      invitations = JSON.parse(responseText).invitations;
+      console.log(invitations);
+      if (invitations.length === 0) {
+        document.getElementById("organizations-no-invitations").style.display = "flex";
+      }
+      callback();
+    });
+  }
+
+  function displayInvitations() {
+    var sortedInvitations = invitations.sort(sort(invitationsCurrentFilter.variableName));
+    if (invitationsCurrentFilterDirection) {
+      sortedInvitations.reverse();
+    }
+    document.getElementById("invitations-list").innerHTML = "";
+    for (var i = 0; i < sortedInvitations.length; i++) {
+      var entry = sortedInvitations[i];
+      if(!entry.name.toLowerCase().startsWith(invitationsCurrentNameFilter.toLowerCase())) {
+        continue;
+      }
+      displayInvitation(entry.id, entry.name, entry.owner);
+    }
+  }
+
+  function sort(field) {
+    return function(first, second) {
+      return (first[field] > second[field]) - (first[field] < second[field]);
+    };
+  }
+
+  function displayInvitation(id, name, owner) {
+    var entry = document.createElement('li');
+    appendInvitationsCell(entry, "name", name, "span");
+    appendInvitationsCell(entry, "owner", owner, "span");
+    var actionElement = appendInvitationsCell(entry, "action", "", "div");
+    var acceptElement = document.createElement("span");
+    acceptElement.classList.add("invitations-list-action-accept", "fa", "fa-check");
+    acceptElement.onclick = function (event) {
+      let request = new HttpRequest("http://localhost:8080/organization/invitation/accept/", "POST",
+        [{key: "Content-Type", value: "application/json"}, {key: "API-KEY", value: Cookie.find("token")}],
+        {organization: id});
+      request.send(function (status, responseText) {
+        window.location.href = "/organizations/";
+      });
+    }
+    actionElement.appendChild(acceptElement);
+    var ignoreElement = document.createElement("span");
+    ignoreElement.classList.add("invitations-list-action-ignore", "fa", "fa-ban");
+    ignoreElement.onclick = function (event) {
+
+    }
+    actionElement.appendChild(ignoreElement);
+    document.getElementById("invitations-list").appendChild(entry);
+  }
+
+  function appendInvitationsCell(entry, identifier, information, elementType) {
+    var div = document.createElement("div");
+    var element = document.createElement(elementType);
+    element.innerText = information;
+    element.classList.add("invitations-list-" + identifier);
+    div.appendChild(element);
+    entry.appendChild(div);
+    return element;
+  }
+
+  function registerAllInvitationsFilters() {
+    registerInvitationsFilter("name", "name");
+    registerInvitationsFilter("owner", "owner");
+  }
+
+  function registerInvitationsFilter(variableName, elementName) {
+    invitationsFilters.push({
+      variableName: variableName,
+      elementName: elementName
+    });
+  }
+
+  function changeInvitationsFilter(filter) {
+    if (invitationsCurrentFilter === filter) {
+      invitationsCurrentFilterDirection = !invitationsCurrentFilterDirection;
+      if (invitationsCurrentFilterDirection) {
+        invitationsCurrentFilterIcon.classList.add("fa-sort-down");
+        invitationsCurrentFilterIcon.classList.remove("fa-sort-up");
+        invitationsCurrentFilterIcon.classList.remove("fa-sort");
+      } else {
+        invitationsCurrentFilterIcon.classList.remove("fa-sort-down");
+        invitationsCurrentFilterIcon.classList.add("fa-sort-up");
+        invitationsCurrentFilterIcon.classList.remove("fa-sort");
+      }
+    } else {
+      if (invitationsCurrentFilterIcon != null) {
+        invitationsCurrentFilterIcon.classList.remove("fa-sort-up");
+        invitationsCurrentFilterIcon.classList.remove("fa-sort-down");
+        invitationsCurrentFilterIcon.classList.add("fa-sort");
+      }
+      invitationsCurrentFilter = filter;
+      invitationsCurrentFilterDirection = filter.elementName === "name" || filter.elementName === "owner";
+      invitationsCurrentFilterIcon = document.getElementById("invitations-filter-" + filter.elementName).firstChild;
+      changeInvitationsFilter(filter);
+      return;
+    }
+    displayInvitations();
+  }
+
+  document.getElementById("invitations-search-input").oninput = function(event) {
+    invitationsCurrentNameFilter = event.target.value;
+    displayInvitations();
+  };
+</script>
