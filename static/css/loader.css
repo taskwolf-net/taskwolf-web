@@ -6,9 +6,9 @@
   width: 1em;
   height: 4em;
   animation-delay: -0.16s;
-  position: absolute;
+  position: relative;
   left: 50%;
-  top: 50%;
+  top: 40%;
 }
 .loader:before,
 .loader:after {
