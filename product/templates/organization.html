@@ -7,7 +7,10 @@
     <div class="sidebar-influenced">
       <div id="organization-container">
         <div id="organization-wrapper" class="d-none">
-          <h1 id="organization-name"></h1>
+          <div id="organization-header">
+            <h1 id="organization-name"></h1>
+            <button id="organization-modification" class="btn btn-danger btn-block"></button>
+          </div>
           <h2 id="organization-owner-headline">Owner:</h2>
           <ul id="organization-owner">
           </ul>
@@ -39,6 +42,7 @@
     displayLoader();
     fetchOrganizationData(function() {
       displayInformation();
+      displayModificationButton();
       removeLoader();
     });
   });
@@ -66,8 +70,22 @@
     if (organization.members.length === 0) {
       document.getElementById("organization-members-empty").style.display = "flex";
     }
-    for (var i = 0; i < organization.members.length; i++) {
-      memberListElement.appendChild(createUserEntry(organization.members[i], "li"));
+    for (let i = 0; i < organization.members.length; i++) {
+      var memberElement = createUserEntry(organization.members[i], "li");
+      if (organization.isOwner === true) {
+        var memberKickElement = document.createElement("span");
+        memberKickElement.classList.add("organization-member-kick", "fa", "fa-ban", "text-danger");
+        memberKickElement.onclick = function (event) {
+          let request = new HttpRequest("http://localhost:8080/organization/kick/", "POST",
+            [{key: "Content-Type", value: "application/json"}, {key: "API-KEY", value: Cookie.find("token")}],
+            {organization: organization.id, target: organization.memberIds[i]});
+          request.send(function (status, responseText) {
+            location.reload();
+          });
+        }
+        memberElement.appendChild(memberKickElement);
+      }
+      memberListElement.appendChild(memberElement);
     }
     if (organization.isOwner === true) {
       document.getElementById("organization-invite").style.display = "block";
@@ -84,15 +102,27 @@
   function createUserEntry(user, elementType) {
     var memberElement = document.createElement(elementType);
     memberElement.classList.add("organization-user");
+    var memberInformationContainer = document.createElement("div");
+    memberInformationContainer.classList.add("organization-user-information");
     var memberIconElement = document.createElement("span");
     memberIconElement.classList.add("organization-user-icon");
     memberIconElement.innerHTML = user[0];
-    memberElement.appendChild(memberIconElement);
+    memberInformationContainer.appendChild(memberIconElement);
     var memberNameElement = document.createElement("span");
     memberNameElement.classList.add("organization-user-name");
     memberNameElement.innerHTML = user;
-    memberElement.appendChild(memberNameElement);
+    memberInformationContainer.appendChild(memberNameElement);
+    memberElement.appendChild(memberInformationContainer);
     return memberElement;
+  }
+
+  function displayModificationButton() {
+    var element = document.getElementById("organization-modification");
+    if (organization.isOwner === true) {
+      element.innerHTML = "DELETE";
+      return;
+    }
+    element.innerHTML = "LEAVE";
   }
 
   function displayLoader() {
@@ -109,5 +139,49 @@
 
   document.getElementById("organization-invite").onclick = function (event) {
     window.location.href = window.location.href + "invite/";
+  }
+
+  document.getElementById("organization-modification").onclick = function (event) {
+    if (organization.isOwner === true) {
+      openDeleteMenu(organization.id);
+      return;
+    }
+    openLeaveMenu(organization.id);
+  }
+
+  function openDeleteMenu(organization) {
+    swal({
+      title: "Delete Organization?",
+      text: "Are you sure that you want to delete that organization?",
+      icon: "warning",
+      dangerMode: true,
+      buttons: true,
+    }).then(willDelete => {
+      if (willDelete) {
+        let request = new HttpRequest("http://localhost:8080/organization/delete/", "POST", [{key: "Content-Type", value: "application/json"},
+          {key: "API-KEY", value: Cookie.find("token")}], {organization: organization});
+        request.send(function (status, responseText) {
+          swal("Deleted!", "That organization has been successfully deleted!", "success").then(success => window.location.href = "/organizations/");
+        });
+      }
+    });
+  }
+
+  function openLeaveMenu(organization) {
+    swal({
+      title: "Leave Organization?",
+      text: "Are you sure that you want to leave that organization?",
+      icon: "warning",
+      dangerMode: true,
+      buttons: true,
+    }).then(willDelete => {
+      if (willDelete) {
+        let request = new HttpRequest("http://localhost:8080/organization/leave/", "POST", [{key: "Content-Type", value: "application/json"},
+          {key: "API-KEY", value: Cookie.find("token")}], {organization: organization});
+        request.send(function (status, responseText) {
+          swal("Left!", "You have successfully left that organization!", "success").then(success => window.location.href = "/organizations/");
+        });
+      }
+    });
   }
 </script>

@@ -12,7 +12,18 @@
   color: white;
 }
 
+#organization-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5%;
+}
+
+#organization-modification {
+  margin-left: auto;
+}
+
 #organization-name {
+  position: absolute;
   font-weight: bold;
 }
 
@@ -78,15 +89,15 @@
 .organization-user {
   list-style-type: none;
   display: flex;
-  flex-flow: row;
   align-items: center;
   margin-bottom: 2%;
+  justify-content: space-between;
 }
 
-.organization-user-name {
-  margin-left: 5%;
-  font-size: 20px;
-  font-weight: bold;
+.organization-user-information {
+  width: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .organization-user-icon {
@@ -101,4 +112,28 @@
   font-weight: bold;
   align-items: center;
   justify-content: center;
+}
+
+.organization-user-name {
+  margin-left: 5%;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.organization-member-kick {
+  margin-right: 25%;
+  font-size: 30px;
+  padding: 15px;
+  border-radius: 50%;
+  transition-duration: 0.5s;
+}
+
+.organization-member-kick:hover {
+  background-color: #293548;
+}
+
+@media (max-width: 575px) {
+  .organization-member-kick {
+    margin-right: 0;
+  }
 }

@@ -232,9 +232,7 @@
     let request = new HttpRequest("http://localhost:8080/organization/invitations/personal/", "GET", [{key: "Content-Type", value: "application/json"},
       {key: "API-KEY", value: Cookie.find("token")}]);
     request.send(function (status, responseText) {
-      console.log(responseText);
       invitations = JSON.parse(responseText).invitations;
-      console.log(invitations);
       if (invitations.length === 0) {
         document.getElementById("organizations-no-invitations").style.display = "flex";
       }
@@ -282,7 +280,12 @@
     var ignoreElement = document.createElement("span");
     ignoreElement.classList.add("invitations-list-action-ignore", "fa", "fa-ban");
     ignoreElement.onclick = function (event) {
-
+      let request = new HttpRequest("http://localhost:8080/organization/invitation/dismiss/", "POST",
+        [{key: "Content-Type", value: "application/json"}, {key: "API-KEY", value: Cookie.find("token")}],
+        {organization: id});
+      request.send(function (status, responseText) {
+        window.location.href = "/organizations/";
+      });
     }
     actionElement.appendChild(ignoreElement);
     document.getElementById("invitations-list").appendChild(entry);
