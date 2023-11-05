@@ -6,7 +6,7 @@ urlpatterns = [
   path('workflows/', product.workflows),
   path('tables/', product.tables),
   path('organizations/', product.organizations),
-  path('organization/create/', product.organizationCreate),
+  path('organization/add/', product.organizationCreate),
   path('organization/<str:id>/', product.organization),
   path('organization/<str:id>/invite/', product.organizationInvite),
 ]
