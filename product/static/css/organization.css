@@ -105,6 +105,7 @@
   border-radius: 50%;
   width: 64px;
   height: 64px;
+  min-width: 64px;
   text-align: center;
   background-color: white !important;
   display: flex;
@@ -121,7 +122,7 @@
 }
 
 .organization-member-kick {
-  margin-right: 25%;
+  margin-right: 8px;
   font-size: 30px;
   padding: 15px;
   border-radius: 50%;
