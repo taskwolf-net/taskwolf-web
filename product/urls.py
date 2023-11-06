@@ -5,6 +5,7 @@ urlpatterns = [
   path('dashboard/', product.dashboard),
   path('workflows/', workflow.workflows),
   path('tables/', product.tables),
+  path('templates/', product.templates),
   path('organizations/', organization.organizations),
   path('organization/add/', organization.organizationCreate),
   path('organization/<str:id>/', organization.organization),
