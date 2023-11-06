@@ -9,12 +9,6 @@ async def dashboard(request):
       'username': findUsername(request)[0]})
 
 @authentication_required
-async def workflows(request):
-  return render(request, 'workflow/workflows.html', {'title': 'Taskwolf - Workflows',
-    'css': ['css/product-header.css', 'css/product-sidebar.css', 'css/workflow/workflows.css'],
-      'username': findUsername(request)[0]})
-
-@authentication_required
 async def tables(request):
   return render(request, 'tables/tables.html', {'title': 'Taskwolf - Tables',
     'css': ['css/product-header.css', 'css/product-sidebar.css', 'css/tables/tables.css'],

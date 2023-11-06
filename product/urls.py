@@ -1,9 +1,9 @@
 from django.urls import path, include
-from . import product, organization
+from . import product, workflow, organization
 
 urlpatterns = [
   path('dashboard/', product.dashboard),
-  path('workflows/', product.workflows),
+  path('workflows/', workflow.workflows),
   path('tables/', product.tables),
   path('organizations/', organization.organizations),
   path('organization/add/', organization.organizationCreate),
