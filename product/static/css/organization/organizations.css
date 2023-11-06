@@ -55,10 +55,6 @@
   #organizations-create {
     width: 30%;
   }
-
-  .organizations-list-stock {
-    font-size: 3.5vw;
-  }
 }
 
 #organizations-list {
@@ -197,10 +193,6 @@
 @media (max-width: 400px) {
   #invitations-header {
     margin-bottom: 5%;
-  }
-
-  .organizations-list-stock {
-    font-size: 3.5vw;
   }
 }
 
