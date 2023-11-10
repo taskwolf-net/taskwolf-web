@@ -2,5 +2,5 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 def handler404(request, *args, **argv):
-  print("Error")
-  return render(request, 'errors/404.html', status=404)
+  return render(request, 'errors/404.html', {'title': 'Taskwolf - Page not found',
+    'css': ['css/home-header.css', 'css/404.css']})
