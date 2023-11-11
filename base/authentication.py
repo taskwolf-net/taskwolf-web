@@ -1,10 +1,10 @@
 from functools import wraps
-from django.http import HttpResponseRedirect
 from functools import partial
 import asyncio
 import requests
 import json
 import jwt
+from home import home
 
 def authentication_required(function):
   @wraps(function)
@@ -12,7 +12,7 @@ def authentication_required(function):
     authenticated = await isAuthenticated(request)
     if (authenticated):
       return await function(request, *args, **kwargs)
-    return HttpResponseRedirect("/")
+    return await home.home(request)
   return authentication
 
 async def isAuthenticated(request):
