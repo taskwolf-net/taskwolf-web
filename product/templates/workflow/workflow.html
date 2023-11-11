@@ -5,7 +5,42 @@
     {% include 'templates/product-header.html' %}
     {% include 'templates/product-sidebar.html' %}
     <div class="sidebar-influenced">
-
+      <div class="workflow-entry workflow-trigger">
+        <h1 class="workflow-trigger-headline">Trigger</h1></br>
+        <span class="workflow-entry-description">Starts the workflow and triggers the chain of further actions</span></br></br>
+      </div>
+      <div class="arrow-container">
+        <svg>
+          <defs>
+            <marker id="markerArrow" markerWidth="13" markerHeight="13" refX="2" refY="6" orient="auto">
+              <path d="M2,2 L2,11 L10,6 L2,2" style="fill: #ffffff;" />
+            </marker>
+          </defs>
+          <line x1="10" y1="0" x2="10" y2="100" class="arrow" />
+        </svg>
+      </div>
+      <div class="workflow-entry workflow-action">
+        <h1 class="workflow-action-headline">Action</h1></br>
+        <span class="workflow-entry-description">Is executed as soon as the workflow is triggered</span></br></br>
+      </div>
+      <div class="workflow-action-add-container">
+        <i class="workflow-action-add fa-solid fa-plus"></i>
+      </div>
     </div>
   </body>
 </html>
+
+<script>
+  var workflowTriggerElements = document.getElementsByClassName("workflow-trigger");
+  for (var i = 0; i < workflowTriggerElements.length; i++) {
+    workflowTriggerElements[i].onclick = function (event) {
+      window.location.href = "/workflow/trigger/";
+    }
+  }
+  var workflowActionElements = document.getElementsByClassName("workflow-action");
+  for (var i = 0; i < workflowActionElements.length; i++) {
+    workflowActionElements[i].onclick = function (event) {
+      window.location.href = "/workflow/action/";
+    }
+  }
+</script>

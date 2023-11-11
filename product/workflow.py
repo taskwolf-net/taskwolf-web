@@ -7,3 +7,39 @@ async def workflows(request):
   return render(request, 'workflow/workflows.html', {'title': 'Taskwolf - Workflows',
     'css': ['css/product-header.css', 'css/product-sidebar.css', 'css/workflow/workflows.css'],
       'username': findUsername(request)[0]})
+
+@authentication_required
+async def workflow(request, id):
+  return render(request, 'workflow/workflow.html', {'title': 'Taskwolf - Workflow',
+    'css': ['css/product-header.css', 'css/product-sidebar.css', 'css/workflow/workflow.css'],
+      'username': findUsername(request)[0]})
+
+@authentication_required
+async def workflowCreate(request):
+  return render(request, 'workflow/workflow.html', {'title': 'Taskwolf - Workflow - Create',
+    'css': ['css/product-header.css', 'css/product-sidebar.css', 'css/workflow/workflow.css'],
+      'username': findUsername(request)[0]})
+
+@authentication_required
+async def workflowTrigger(request, id):
+  return render(request, 'workflow/workflow-trigger.html', {'title': 'Taskwolf - Trigger',
+    'css': ['css/product-header.css', 'css/product-sidebar.css', 'css/workflow/workflow-trigger.css'],
+      'username': findUsername(request)[0]})
+
+@authentication_required
+async def workflowTriggerCreate(request):
+  return render(request, 'workflow/workflow-trigger.html', {'title': 'Taskwolf - Trigger - Create',
+    'css': ['css/product-header.css', 'css/product-sidebar.css', 'css/workflow/workflow-trigger.css'],
+      'username': findUsername(request)[0]})
+
+@authentication_required
+async def workflowAction(request, id):
+  return render(request, 'workflow/workflow-action.html', {'title': 'Taskwolf - Action',
+    'css': ['css/product-header.css', 'css/product-sidebar.css', 'css/workflow/workflow-action.css'],
+      'username': findUsername(request)[0]})
+
+@authentication_required
+async def workflowActionCreate(request):
+  return render(request, 'workflow/workflow-action.html', {'title': 'Taskwolf - Action - Create',
+    'css': ['css/product-header.css', 'css/product-sidebar.css', 'css/workflow/workflow-action.css'],
+      'username': findUsername(request)[0]})

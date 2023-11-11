@@ -5,7 +5,145 @@
     {% include 'templates/product-header.html' %}
     {% include 'templates/product-sidebar.html' %}
     <div class="sidebar-influenced">
-
+      <div id="workflows-wrapper">
+        <h1 id="workflows-headline">Your Workflows</h1>
+        <div id="workflows-header">
+          <div id="workflows-search-box">
+            <input id="workflows-search-input" placeholder="Search for workflows..." type="text" class="form-control" value="" autocomplete="off">
+            <button type="button">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+          <button type="button" id="workflow-create" class="btn btn-primary btn-block">CREATE</button>
+        </div>
+        <ul id="workflows-table-description">
+          <li id="workflows-table-description-name">
+            <div>
+              <span>Name</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span>Creator</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span>Creation Date</span>
+            </div>
+          </li>
+          <li id="workflows-table-description-is-running">
+            <div>
+              <span>Running</span>
+            </div>
+          </li>
+        </ul>
+        <ul id="workflows-list">
+        </ul>
+        <div id="workflows-empty">
+          <span id="workflows-empty-headline">You have not yet created any workflows.</span>
+          <span>Why don't you just create one&nbsp;</span><a id="workflows-empty-link" href="/workflow/">here</a><span>?</span>
+        </div>
+      </div>
     </div>
   </body>
 </html>
+
+<script>
+  var workflows;
+  var workflowsCurrentNameFilter = "";
+
+  $(document).ready(function() {
+    workflows = [];
+    workflows[0] = {id: "", name: "Move data from discrod to gmail", creator: "Lukas Breuer", creationDate: "06.11.2023", isRunning: true};
+    workflows[1] = {id: "", name: "Redirect new emals to a discord channel", creator: "Konstatin Hirschfeld", creationDate: "01.11.2023", isRunning: true};
+    workflows[2] = {id: "", name: "Create a new Github Commit", creator: "Lukas Breuer", creationDate: "23.10.2023", isRunning: true};
+    workflows[3] = {id: "", name: "Automate Google Calendar Entries", creator: "Miguel Cortina Zapp", creationDate: "12.09.2023", isRunning: true};
+    displayWorkflows();
+    if (workflows.length === 0) {
+      document.getElementById("workflows-empty").style.display = "flex";
+    }
+    /*fetchOrganizationsData(function() {
+
+    });*/
+  });
+
+  /*function fetchOrganizationsData(callback) {
+    let request = new HttpRequest("http://localhost:8080/organizations/all/", "GET", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}]);
+    request.send(function (status, responseText) {
+      organizations = JSON.parse(responseText).organizations;
+      for (let i = 0; i < organizations.length; i++) {
+        let organization = organizations[i];
+        organization.members = Number(organization.members.length);
+      }
+      if (organizations.length === 0) {
+        document.getElementById("organizations-not-a-member").style.display = "flex";
+      }
+      callback();
+    });
+  }*/
+
+  function displayWorkflows() {
+    document.getElementById("workflows-list").innerHTML = "";
+    for (var i = 0; i < workflows.length; i++) {
+      var entry = workflows[i];
+      if(!(shouldDisplayWorkflowEntry(entry))) {
+        continue;
+      }
+      displayWorkflow(entry.id, entry.name, entry.creator, entry.creationDate, entry.isRunning);
+    }
+  }
+
+  function shouldDisplayWorkflowEntry(entry) {
+    return workflowsCurrentNameFilter.length === 0 ||
+      entry.name.toLowerCase().includes(workflowsCurrentNameFilter.toLowerCase()) ||
+      entry.creator.toLowerCase().includes(workflowsCurrentNameFilter.toLowerCase()) ||
+      entry.creationDate.toLowerCase().includes(workflowsCurrentNameFilter.toLowerCase());
+  }
+
+  function displayWorkflow(id, name, creator, creationDate, isRunning) {
+    var entry = document.createElement('li');
+    var nameDiv = document.createElement("div");
+    nameDiv.classList.add("workflows-entry-name");
+    var nameElement = document.createElement("span");
+    nameElement.innerText = name;
+    nameElement.classList.add("workflows-list-name");
+    nameDiv.appendChild(nameElement);
+    entry.appendChild(nameDiv);
+    appendWorkflowsCell(entry, "creator", creator, "span");
+    appendWorkflowsCell(entry, "creationDate", creationDate, "span");
+    var isRunningDiv = document.createElement("div");
+    isRunningDiv.classList.add("workflows-entry-is-running");
+    var isRunningElement = document.createElement("label");
+    isRunningElement.classList.add("switch");
+    var isRunningInput = document.createElement("input");
+    isRunningInput.type = "checkbox";
+    isRunningElement.appendChild(isRunningInput);
+    var isRunningSpan = document.createElement("span");
+    isRunningSpan.classList.add("slider", "round");
+    isRunningElement.appendChild(isRunningSpan);
+    isRunningDiv.appendChild(isRunningElement);
+    entry.appendChild(isRunningDiv);
+    document.getElementById("workflows-list").appendChild(entry);
+  }
+
+  function appendWorkflowsCell(entry, identifier, information, elementType) {
+    var div = document.createElement("div");
+    var element = document.createElement(elementType);
+    element.innerText = information;
+    element.classList.add("workflows-list-" + identifier);
+    div.appendChild(element);
+    entry.appendChild(div);
+    return element;
+  }
+
+  document.getElementById("workflows-search-input").oninput = function(event) {
+    workflowsCurrentNameFilter = event.target.value;
+    displayWorkflows();
+  };
+
+  document.getElementById("workflow-create").onclick = function(event) {
+    window.location.href = "/workflow/";
+  };
+</script>

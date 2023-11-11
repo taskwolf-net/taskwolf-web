@@ -1,0 +1,76 @@
+.workflow-entry {
+  color: white;
+  width: min(calc(800px), 95%);
+  margin: auto;
+  padding-top: 5px;
+  border: 2px #747474 solid;
+  border-radius: 8px;
+  text-align: center;
+  background-color: #1b232f;
+  transition-duration: 0.4s;
+}
+
+.workflow-entry:hover {
+  scale: 1.02;
+}
+
+.workflow-trigger {
+  margin-top: 5%;
+}
+
+.workflow-trigger-headline {
+  background-color: #34435a;
+  border-radius: 10px;
+  display: inline-block;
+  padding: 5px 10px;
+  font-weight: bold;
+  margin-top: 1%;
+}
+
+.workflow-action-headline {
+  background-color: #34435a;
+  border-radius: 10px;
+  display: inline-block;
+  padding: 5px 10px;
+  font-weight: bold;
+  margin-top: 1%;
+}
+
+.workflow-entry-description {
+  font-size: 22px;
+}
+
+.workflow-action-add-container {
+  width: 100%;
+  text-align: center;
+  margin-top: 1%;
+}
+
+.workflow-action-add {
+  color: white;
+  font-size: 25px;
+  border-radius: 50%;
+  background-color: #242f3f;
+  padding: 20px;
+  transition-duration: 0.4s;
+}
+
+.workflow-action-add:hover {
+  background-color: #35465d;
+}
+
+.arrow {
+  stroke: rgb(255, 255, 255);
+  stroke-width: 2;
+  marker-end: url(#markerArrow);
+}
+
+.arrow-container {
+  width: 16px;
+  height: 116px;
+  margin: auto;
+}
+
+.arrow-container svg {
+  width: 18px;
+}

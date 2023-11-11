@@ -1,0 +1,254 @@
+#workflows-headline {
+  color: white;
+  text-align: center;
+  margin-top: 2%;
+}
+
+#workflows-header {
+  width: min(calc(2000px - 15vw), 95%);
+  margin: auto;
+  margin-top: 2%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#workflows-search-box {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 5px;
+  background-color: #161b25;
+}
+
+#workflows-search-box input {
+  flex-grow: 2;
+  border: none;
+  border-radius: 5px;
+  background-color: #161b25;
+  color: white;
+}
+
+#workflows-search-box input:focus{
+  box-shadow: 0 0 0 rgb(255, 255, 255);
+}
+
+#workflows-search-box button {
+  background-color: #161b25;
+  color: #9b9b9b;
+  border: none;
+  border-radius: 5px;
+}
+
+#workflow-create {
+  width: 20%;
+  margin-left: 5%;
+}
+
+@media (max-width: 400px) {
+  #workflows-header {
+    margin-bottom: 5%;
+  }
+
+  #workflow-create {
+    width: 30%;
+  }
+}
+
+#workflows-list {
+  width: min(calc(2000px - 15vw), 95%);
+  position: relative;
+  list-style-type: none;
+  padding: 0;
+  margin: auto;
+}
+
+#workflows-list li {
+  border-bottom: 1px #4a4a4a solid;
+  width: 100%;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+  font-size: 18px;
+  transition-duration: 0.3s;
+}
+
+#workflows-list li:hover {
+  background-color: #19202c !important;
+}
+
+#workflows-list li div {
+  padding: 3%;
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+  max-width: 25%;
+  text-align: left;
+}
+
+.workflows-entry-name {
+  width: 40% !important;
+  max-width: 40% !important;
+}
+
+.workflows-entry-is-running {
+  width: 10% !important;
+  max-width: 10% !important;
+}
+
+#workflows-table-description {
+  width: min(calc(2000px - 15vw), 95%);
+  position: relative;
+  list-style-type: none;
+  margin: auto;
+  margin-top: 1%;
+  border-bottom: 4px #717171 solid;
+  padding: 0;
+  color: white;
+  display: flex;
+  flex-direction: row;
+}
+
+#workflows-table-description li {
+  width: 25%;
+  max-width: 25%;
+  padding-left: 2%;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+#workflows-table-description-name {
+  width: 40% !important;
+  max-width: 40% !important;
+}
+
+#workflows-table-description-is-running {
+  width: 10% !important;
+  max-width: 10% !important;
+  padding-left: 0 !important;
+  text-align: center;
+}
+
+#workflows-table-description li div {
+  padding: 3%;
+}
+
+#workflows-table-description button {
+  border: none;
+  background-color: #222b38;
+  color: #9b9b9b;
+}
+
+@media (max-width: 400px) {
+  #workflows-table-description li {
+    font-size: .8em;
+  }
+
+  #workflows-list li div span {
+    font-size: .8em;
+  }
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  align-self: center;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+@media (max-width: 600px) {
+  .switch {
+    width: 30px;
+    height: 17px;
+  }
+
+  .slider:before {
+    height: 13px;
+    width: 13px;
+    left: 2px;
+    bottom: 2px;
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(13px);
+    -ms-transform: translateX(13px);
+    transform: translateX(13px);
+  }
+}
+
+#workflows-empty {
+  color: white;
+  display: none;
+  flex-flow: wrap;
+  justify-content: center;
+  text-align: center;
+  margin-top: 5%;
+}
+
+#workflows-empty-headline {
+  font-size: 20px;
+  font-weight: bold;
+  width: 100%;
+  margin-bottom: 1%;
+}
+
+#workflows-empty-link {
+  text-decoration: none;
+}
