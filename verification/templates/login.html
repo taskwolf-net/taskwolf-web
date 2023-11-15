@@ -37,8 +37,8 @@
     }
   });
 
-  document.getElementById('login').onclick = function() {
-    let request = new HttpRequest("http://localhost:8080/verification/login/", "POST", [{key: "Content-Type", value: "application/json"}],
+  document.getElementById('login').onclick = function(event) {
+    let request = new HttpRequest("http://192.168.178.:8080/verification/login/", "POST", [{key: "Content-Type", value: "application/json"}],
       {email: document.getElementById("email").value, password: document.getElementById("password").value});
     request.send(function (status, responseText) {
       if (status == 200) {

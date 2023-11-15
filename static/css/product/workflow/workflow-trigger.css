@@ -171,6 +171,33 @@ input:-webkit-autofill:active{
   font-size: 13px;
 }
 
+#workflow-trigger-specifications-container {
+  margin-top: 3%;
+  display: flex;
+}
+
+#workflow-trigger-specifications-inputs {
+  width: 50%;
+}
+
+#workflow-trigger-specifications-channel-name {
+  width: 80%;
+  margin: auto;
+}
+
+#workflow-trigger-specifications-placeholders {
+  width: 50%;
+}
+
+#workflow-trigger-specifications-test1 {
+  width: 80%;
+  margin: auto;
+}
+
+#workflow-trigger-specifications-divider {
+  height: 300px;
+}
+
 .workflow-trigger-reset {
   float: right;
   margin-top: 2%;

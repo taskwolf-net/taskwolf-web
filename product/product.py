@@ -5,17 +5,17 @@ from base.authentication import authentication_required, isAuthenticated, findUs
 @authentication_required
 async def dashboard(request):
   return render(request, 'dashboard/dashboard.html', {'title': 'Taskwolf - Dashboard',
-    'css': ['css/product-header.css', 'css/product-sidebar.css', 'css/dashboard/dashboard.css'],
+    'css': ['css/base/product-header.css', 'css/product-sidebar.css', 'css/product/dashboard/dashboard.css'],
       'username': findUsername(request)[0]})
 
 @authentication_required
 async def tables(request):
   return render(request, 'tables/tables.html', {'title': 'Taskwolf - Tables',
-    'css': ['css/product-header.css', 'css/product-sidebar.css', 'css/tables/tables.css'],
+    'css': ['css/base/product-header.css', 'css/product-sidebar.css', 'css/product/tables/tables.css'],
       'username': findUsername(request)[0]})
 
 @authentication_required
 async def templates(request):
   return render(request, 'template/templates.html', {'title': 'Taskwolf - Templates',
-    'css': ['css/product-header.css', 'css/product-sidebar.css', 'css/template/templates.css'],
+    'css': ['css/base/product-header.css', 'css/product-sidebar.css', 'css/product/template/templates.css'],
       'username': findUsername(request)[0]})

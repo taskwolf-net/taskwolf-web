@@ -49,7 +49,7 @@
               </div>
             </div>
           </div>
-          <div class="accordion-item">
+          <!--<div class="accordion-item">
             <h2 class="accordion-header">
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#workflow-trigger-account" aria-expanded="false" aria-controls="workflow-trigger-account">
                 Account
@@ -58,7 +58,7 @@
             <div id="workflow-trigger-account" class="accordion-collapse collapse" data-bs-parent="#workflow-trigger-accordion">
               <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
             </div>
-          </div>
+          </div>-->
           <div class="accordion-item">
             <h2 class="accordion-header">
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#workflow-trigger-specifications" aria-expanded="false" aria-controls="workflow-trigger-specifications">
@@ -66,7 +66,28 @@
               </button>
             </h2>
             <div id="workflow-trigger-specifications" class="accordion-collapse collapse" data-bs-parent="#workflow-trigger-accordion">
-              <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
+              <div id="workflow-trigger-specifications-body" class="accordion-body">
+                <h4 class="text-center">Select Trigger Specifications</h4>
+                <div id="workflow-trigger-specifications-container">
+                  <div id="workflow-trigger-specifications-inputs">
+                    <h5 class="text-center">Inputs</h5>
+                    <div id="workflow-trigger-specifications-channel-name" class="form-outline mb-4">
+                      <label class="form-label">Channel Name</label>
+                      <input id="workflow-trigger-application-channel-name" type="name" class="form-control" placeholder="Channel Name">
+                    </div>
+                  </div>
+                  <div id="workflow-trigger-specifications-divider" class="d-flex">
+                    <div class="vr"></div>
+                  </div>
+                  <div id="workflow-trigger-specifications-placeholders">
+                    <h5 class="text-center">Placeholders</h5>
+                    <div id="workflow-trigger-specifications-test1" class="form-outline mb-4">
+                      <label class="form-label">Test1</label>
+                      <input id="workflow-trigger-application-test1" type="test" class="form-control" placeholder="Test">
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -85,14 +106,32 @@
   var selectedEvent;
 
   $(document).ready(function() {
-    displayApplications();
+    fetchApplicationsData(function() {
+      displayApplications();
+    });
   });
+
+  function fetchApplicationsData(callback) {
+    let request = new HttpRequest("http://localhost:8080/modules/all/", "GET", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}]);
+    request.send(function (status, responseText) {
+      applications = JSON.parse(responseText).modules;
+      callback();
+    });
+  }
 
   function displayApplications() {
     document.getElementById("workflow-trigger-application-list").innerHTML = "";
     if (workflowCurrentApplicationFilter === "") {
       displayPopularApplications();
       return;
+    }
+    for (var i = 0; i < applications.length; i++) {
+      var entry = applications[i];
+      if(!(entry.name.toLowerCase().includes(workflowCurrentApplicationFilter.toLowerCase()))) {
+        continue;
+      }
+      displayApplication(entry.name, entry.logo);
     }
   }
 
@@ -157,8 +196,15 @@
 
   function fillEventDropdown() {
     document.getElementById("workflow-trigger-event-dropdown-list").innerHTML = "";
-    addEventDropdownEntry("Receive new channel message", "Receive new channel message");
-    addEventDropdownEntry("Receive new private message", "Receive new private message");
+    let request = new HttpRequest("http://localhost:8080/triggers/find/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}], {module: selectedApplication.toLowerCase()});
+    request.send(function (status, responseText) {
+      var events = JSON.parse(responseText).triggers;
+      for (var i = 0; i < events.length; i++) {
+        var event = events[i];
+        addEventDropdownEntry(event.name, event.description);
+      }
+    });
   }
 
   function addEventDropdownEntry(name, description) {
@@ -197,9 +243,12 @@
     createResetButton(document.getElementById("workflow-trigger-event-body"), function() {
       resetEvent();
       prepareEvent();
-    })
+    });
+    setTimeout(function(){
+      $('#workflow-trigger-specifications').collapse("toggle");
+    }, 600);
   }
-r
+
   function resetEvent(isApplicationSelected) {
     if (!isApplicationSelected) {
       document.getElementById("workflow-trigger-event-dropdown").style.display = "none";
@@ -214,6 +263,14 @@ r
     selectedElement.innerHTML = "";
     selectedElement.style.display = "none";
     selectedEvent = "";
+  }
+
+  function prepareSpecifications() {
+
+  }
+
+  function resetSpecifications() {
+
   }
 
   function createResetButton(container, resetCallback) {
