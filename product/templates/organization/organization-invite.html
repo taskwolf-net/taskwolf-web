@@ -28,7 +28,7 @@
 
   document.getElementById('invite').onclick = function() {
     var organization = location.href.replace(location.host, "").replace(location.protocol, "").replace("organization", "").replace("invite", "").replaceAll("/", "");
-    let request = new HttpRequest("http://localhost:8080/organization/invite/", "POST",
+    let request = new HttpRequest("https://api.taskwolf.net/organization/invite/", "POST",
       [{key: "Content-Type", value: "application/json"}, {key: "API-KEY", value: Cookie.find("token")}],
       {organization: organization, target: document.getElementById("id").value});
     request.send(function (status, responseText) {

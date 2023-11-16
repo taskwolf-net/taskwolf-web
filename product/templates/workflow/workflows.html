@@ -69,7 +69,7 @@
   });
 
   /*function fetchOrganizationsData(callback) {
-    let request = new HttpRequest("http://localhost:8080/organizations/all/", "GET", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/organizations/all/", "GET", [{key: "Content-Type", value: "application/json"},
       {key: "API-KEY", value: Cookie.find("token")}]);
     request.send(function (status, responseText) {
       organizations = JSON.parse(responseText).organizations;

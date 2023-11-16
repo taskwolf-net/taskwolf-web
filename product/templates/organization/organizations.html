@@ -97,7 +97,7 @@
   });
 
   function fetchOrganizationsData(callback) {
-    let request = new HttpRequest("http://localhost:8080/organizations/all/", "GET", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/organizations/all/", "GET", [{key: "Content-Type", value: "application/json"},
       {key: "API-KEY", value: Cookie.find("token")}]);
     request.send(function (status, responseText) {
       organizations = JSON.parse(responseText).organizations;
@@ -229,7 +229,7 @@
   });
 
   function fetchInvitationsData(callback) {
-    let request = new HttpRequest("http://localhost:8080/organization/invitations/personal/", "GET", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/organization/invitations/personal/", "GET", [{key: "Content-Type", value: "application/json"},
       {key: "API-KEY", value: Cookie.find("token")}]);
     request.send(function (status, responseText) {
       invitations = JSON.parse(responseText).invitations;
@@ -269,7 +269,7 @@
     var acceptElement = document.createElement("span");
     acceptElement.classList.add("invitations-list-action-accept", "fa", "fa-check");
     acceptElement.onclick = function (event) {
-      let request = new HttpRequest("http://localhost:8080/organization/invitation/accept/", "POST",
+      let request = new HttpRequest("https://api.taskwolf.net/organization/invitation/accept/", "POST",
         [{key: "Content-Type", value: "application/json"}, {key: "API-KEY", value: Cookie.find("token")}],
         {organization: id});
       request.send(function (status, responseText) {
@@ -280,7 +280,7 @@
     var ignoreElement = document.createElement("span");
     ignoreElement.classList.add("invitations-list-action-ignore", "fa", "fa-ban");
     ignoreElement.onclick = function (event) {
-      let request = new HttpRequest("http://localhost:8080/organization/invitation/dismiss/", "POST",
+      let request = new HttpRequest("https://api.taskwolf.net/organization/invitation/dismiss/", "POST",
         [{key: "Content-Type", value: "application/json"}, {key: "API-KEY", value: Cookie.find("token")}],
         {organization: id});
       request.send(function (status, responseText) {

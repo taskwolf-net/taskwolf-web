@@ -112,7 +112,7 @@
   });
 
   function fetchApplicationsData(callback) {
-    let request = new HttpRequest("http://localhost:8080/modules/all/", "GET", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/modules/all/", "GET", [{key: "Content-Type", value: "application/json"},
       {key: "API-KEY", value: Cookie.find("token")}]);
     request.send(function (status, responseText) {
       applications = JSON.parse(responseText).modules;
@@ -196,7 +196,7 @@
 
   function fillEventDropdown() {
     document.getElementById("workflow-trigger-event-dropdown-list").innerHTML = "";
-    let request = new HttpRequest("http://localhost:8080/triggers/find/", "POST", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/triggers/find/", "POST", [{key: "Content-Type", value: "application/json"},
       {key: "API-KEY", value: Cookie.find("token")}], {module: selectedApplication.toLowerCase()});
     request.send(function (status, responseText) {
       var events = JSON.parse(responseText).triggers;
