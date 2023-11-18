@@ -37,7 +37,7 @@
               <div id="workflow-trigger-event-body" class="accordion-body">
                 <h4 class="text-center">Select Trigger Event</h4>
                 <div id="workflow-trigger-event-dropdown" class="dropdown">
-                  <button class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <button class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
                     Event
                   </button>
                   <ul id="workflow-trigger-event-dropdown-list" class="dropdown-menu dropdown-menu-dark">
@@ -70,29 +70,31 @@
                 <h4 class="text-center">Select Trigger Specifications</h4>
                 <div id="workflow-trigger-specifications-container">
                   <div id="workflow-trigger-specifications-inputs">
-                    <h5 class="text-center">Inputs</h5>
-                    <div id="workflow-trigger-specifications-channel-name" class="form-outline mb-4">
-                      <label class="form-label">Channel Name</label>
-                      <input id="workflow-trigger-application-channel-name" type="name" class="form-control" placeholder="Channel Name">
+                    <h5 id="workflow-trigger-specifications-inputs-headline" class="text-center">Inputs</h5>
+                    <hr class="w-100 hr"/>
+                    <div id="workflow-trigger-specifications-input-list">
+                      <div id="workflow-trigger-specifications-channel-name" class="form-outline mb-4">
+                        <label class="form-label">Channel Name</label>
+                        <input id="workflow-trigger-application-channel-name" type="name" class="form-control" placeholder="Channel Name">
+                      </div>
                     </div>
                   </div>
-                  <div id="workflow-trigger-specifications-divider" class="d-flex">
+                  <div id="workflow-trigger-specifications-divider">
                     <div class="vr"></div>
                   </div>
                   <div id="workflow-trigger-specifications-placeholders">
-                    <h5 class="text-center">Placeholders</h5>
-                    <div id="workflow-trigger-specifications-test1" class="form-outline mb-4">
-                      <label class="form-label">Test1</label>
-                      <input id="workflow-trigger-application-test1" type="test" class="form-control" placeholder="Test">
-                    </div>
+                    <h5 id="workflow-trigger-specifications-placeholders-headline" class="text-center">Placeholders</h5>
+                    <hr class="w-100 hr"/>
+                    <p class="text-center">Unfortunately there are no placeholders available for this event.</p>
                   </div>
                 </div>
+                <h6 id="workflow-trigger-specifications-unable" class="mt-5 text-center">You must first select an application and event in order to be able to select the specifications</h6>
               </div>
             </div>
           </div>
         </div>
         <div id="workflow-trigger-adopt">
-          <button type="button" class="btn btn-success disabled">ADOPT</button>
+          <button id="workflow-trigger-adopt-button" type="button" class="btn btn-success disabled">ADOPT</button>
         </div>
       </div>
     </div>
@@ -104,6 +106,7 @@
   var workflowCurrentApplicationFilter = "";
   var selectedApplication;
   var selectedEvent;
+  var specificationValues = {};
 
   $(document).ready(function() {
     fetchApplicationsData(function() {
@@ -185,6 +188,7 @@
     }
     selectedApplication = "";
     resetEvent();
+    resetSpecifications();
     displayApplications();
   }
 
@@ -202,12 +206,12 @@
       var events = JSON.parse(responseText).triggers;
       for (var i = 0; i < events.length; i++) {
         var event = events[i];
-        addEventDropdownEntry(event.name, event.description);
+        addEventDropdownEntry(event.identifier, event.name, event.description);
       }
     });
   }
 
-  function addEventDropdownEntry(name, description) {
+  function addEventDropdownEntry(identifier, name, description) {
     var entryElement = document.createElement("li");
     entryElement.classList.add("dropdown-item");
     var nameElement = document.createElement("b");
@@ -219,13 +223,13 @@
     descriptionElement.innerHTML = description;
     entryElement.appendChild(descriptionElement);
     entryElement.onclick = function (event) {
-      selectEvent(name, description);
+      selectEvent(identifier, name, description);
     }
     document.getElementById("workflow-trigger-event-dropdown-list").appendChild(entryElement);
   }
 
-  function selectEvent(name, description) {
-    selectedEvent = name;
+  function selectEvent(identifier, name, description) {
+    selectedEvent = identifier;
     document.getElementById("workflow-trigger-event-dropdown").style.display = "none";
     var selectedElement = document.getElementById("workflow-trigger-event-selected");
     var nameElement = document.createElement("b");
@@ -244,6 +248,7 @@
       resetEvent();
       prepareEvent();
     });
+    prepareSpecifications();
     setTimeout(function(){
       $('#workflow-trigger-specifications').collapse("toggle");
     }, 600);
@@ -263,14 +268,113 @@
     selectedElement.innerHTML = "";
     selectedElement.style.display = "none";
     selectedEvent = "";
+    resetSpecifications();
   }
 
   function prepareSpecifications() {
+    document.getElementById("workflow-trigger-specifications-container").style.display = "flex";
+    document.getElementById("workflow-trigger-specifications-unable").style.display = "none";
+    fillSpecificationsInputs();
+  }
 
+  function fillSpecificationsInputs() {
+    document.getElementById("workflow-trigger-specifications-input-list").innerHTML = "";
+    let request = new HttpRequest("https://api.taskwolf.net/trigger/find/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}], {module: selectedApplication.toLowerCase(), type: selectedEvent});
+    request.send(function (status, responseText) {
+      var trigger = JSON.parse(responseText);
+      var inputVariables = trigger.inputVariables;
+      for (let i = 0; i < inputVariables.length; i++) {
+        var inputVariable = inputVariables[i];
+        var isLast = i === (inputVariables.length - 1);
+        if (inputVariable.type === "TEXT") {
+          addSpecificationInput(inputVariable.identifier, inputVariable.name, i, isLast);
+        }
+        if (inputVariable.type === "SELECT") {
+          addSpecificationSelect(inputVariable.identifier, inputVariable.name, i, isLast);
+        }
+      }
+    });
+  }
+
+  function addSpecificationInput(identifier, name, index, isLast) {
+    var inputContainerElement = document.createElement("div");
+    inputContainerElement.classList.add("workflow-trigger-specifications-input-container", "form-outline", "mb-4");
+    var labelElement = document.createElement("label");
+    labelElement.classList.add("form-label");
+    labelElement.innerHTML = name;
+    inputContainerElement.appendChild(labelElement);
+    var inputElement = document.createElement("input");
+    inputElement.type = "name";
+    inputElement.placeholder = name;
+    inputElement.id = "workflow-trigger-specifications-input-" + identifier;
+    inputElement.classList.add("workflow-trigger-specifications-input", "form-control");
+    inputElement.oninput = function (event) {
+      specificationValues[identifier] = event.target.value;
+    }
+    inputContainerElement.appendChild(inputElement);
+    document.getElementById("workflow-trigger-specifications-input-list").appendChild(inputContainerElement);
+  }
+
+  function addSpecificationSelect(identifier, name, index, isLast) {
+    var dropdownContainer = document.createElement("div");
+    dropdownContainer.classList.add("mb-4");
+    var labelElement = document.createElement("label");
+    labelElement.classList.add("form-label");
+    labelElement.innerHTML = name;
+    dropdownContainer.appendChild(labelElement);
+    dropdownContainer.classList.add("workflow-trigger-specifications-select-container", "dropdown");
+    var dropdownButton = document.createElement("button");
+    dropdownButton.classList.add("btn", "btn-secondary", "dropdown-toggle", "bg-dark");
+    $(dropdownButton).attr('data-bs-toggle','dropdown');
+    dropdownButton.type = "button";
+    dropdownButton.innerHTML = name;
+    dropdownContainer.appendChild(dropdownButton);
+    var dropdownList = document.createElement("ul");
+    dropdownList.classList.add("workflow-trigger-specifications-select-list", "dropdown-menu", "dropdown-menu-dark");
+    dropdownContainer.appendChild(dropdownList);
+    dropdownButton.addEventListener("click", function (event) {
+      clickSpecificationSelect(identifier, dropdownList);
+    });
+    document.getElementById("workflow-trigger-specifications-input-list").appendChild(dropdownContainer);
+  }
+
+  function clickSpecificationSelect(identifier, dropdownList) {
+    if (!dropdownList.classList.contains("show")) {
+      return;
+    }
+    dropdownList.innerHTML = "";
+    let request = new HttpRequest("https://api.taskwolf.net/trigger/select/items/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}], {module: selectedApplication.toLowerCase(), type: selectedEvent, previousInputs: specificationValues, select: identifier});
+    request.send(function (status, responseText) {
+      var items = JSON.parse(responseText).items;
+      for (var i = 0; i < items.length; i++) {
+        var item = JSON.parse(items[i]);
+        var itemElement = document.createElement("li");
+        itemElement.classList.add("dropdown-item");
+        var itemNameName = document.createElement("b");
+        itemNameName.innerHTML = item.name;
+        itemElement.appendChild(itemNameName);
+        var itemIdentifierName = document.createElement("p");
+        itemIdentifierName.classList.add("workflow-trigger-specifications-select-item-identifier");
+        itemIdentifierName.innerHTML = item.identifier;
+        itemElement.appendChild(itemIdentifierName);
+        dropdownList.appendChild(itemElement);
+      }
+    });
   }
 
   function resetSpecifications() {
+    document.getElementById("workflow-trigger-specifications-container").style.display = "none";
+    document.getElementById("workflow-trigger-specifications-unable").style.display = "block";
+  }
 
+  function updateAdoptability(isAdoptable) {
+    if (isAdoptable) {
+      document.getElementById("workflow-trigger-adopt-button").classList.remove("disabled");
+    } else {
+      document.getElementById("workflow-trigger-adopt-button").classList.add("disabled");
+    }
   }
 
   function createResetButton(container, resetCallback) {
