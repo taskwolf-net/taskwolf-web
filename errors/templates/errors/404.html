@@ -2,6 +2,12 @@
 <html lang="en">
   {% include 'templates/head.html' %}
   <body>
-    <h1>The page could not be found</h1>
+    <div id="error-wrapper">
+      <div id="error-headline-wrapper">
+        <a href="/"><img id="error-logo" src="{% static 'img/logo.png' %}"></a></br>
+        <h1 id="error-headline">Error - 404</h1></br>
+        <b id="error-description">Sorry, the page could not be found. Click on the wolf to get back to the homepage.</b>
+      </div>
+    </div>
   </body>
 </html>

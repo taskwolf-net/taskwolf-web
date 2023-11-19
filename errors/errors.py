@@ -3,4 +3,4 @@ from django.http import HttpResponse
 
 def handler404(request, *args, **argv):
   return render(request, 'errors/404.html', {'title': 'Taskwolf - Page not found',
-    'css': ['css/home-header.css', 'css/404.css']})
+    'css': ['css/errors/404.css']})
