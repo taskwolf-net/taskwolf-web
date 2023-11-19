@@ -303,6 +303,7 @@
 
 <script>
   var selectedEvent;
+  var selectedEventDescription;
 
   function prepareEvent() {
     document.getElementById("workflow-trigger-event-dropdown").style.display = "block";
@@ -342,6 +343,7 @@
 
   function selectEvent(identifier, name, description) {
     selectedEvent = identifier;
+    selectedEventDescription = description;
     document.getElementById("workflow-trigger-event-dropdown").style.display = "none";
     var selectedElement = document.getElementById("workflow-trigger-event-selected");
     var nameElement = document.createElement("b");
@@ -380,6 +382,7 @@
     selectedElement.innerHTML = "";
     selectedElement.style.display = "none";
     selectedEvent = "";
+    selectedEventDescription = "";
     resetSpecifications();
   }
 </script>
@@ -538,12 +541,24 @@
   }
 
   function updateAdoptability(isAdoptable) {
+    var adoptButton = document.getElementById("workflow-trigger-adopt-button");
     if (isAdoptable) {
-      document.getElementById("workflow-trigger-adopt-button").classList.remove("disabled");
-      document.getElementById("workflow-trigger-adopt-button").classList.add("workflow-trigger-adopt-enabled");
+      adoptButton.classList.remove("disabled");
+      adoptButton.classList.add("workflow-trigger-adopt-enabled");
     } else {
-      document.getElementById("workflow-trigger-adopt-button").classList.add("disabled");
-      document.getElementById("workflow-trigger-adopt-button").classList.remove("workflow-trigger-adopt-enabled");
+      adoptButton.classList.add("disabled");
+      adoptButton.classList.remove("workflow-trigger-adopt-enabled");
     }
   }
+
+  document.getElementById("workflow-trigger-adopt-button").addEventListener("click", function(event) {
+    var trigger = {
+      "module": selectedApplication,
+      "type": selectedEvent,
+      "typeDescription": selectedEventDescription,
+      "content": specificationValues
+    };
+    sessionStorage.setItem("workflow-trigger", JSON.stringify(trigger));
+    window.location.href = "/workflow/";
+  });
 </script>
