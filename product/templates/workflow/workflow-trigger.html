@@ -29,6 +29,21 @@
           </div>
           <div class="accordion-item">
             <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#workflow-trigger-account" aria-expanded="false" aria-controls="workflow-trigger-account">
+                Account
+              </button>
+            </h2>
+            <div id="workflow-trigger-account" class="accordion-collapse collapse" data-bs-parent="#workflow-trigger-accordion">
+              <div id="workflow-trigger-account-body" class="accordion-body">
+                <h4 class="text-center">Select Trigger Account</h4>
+                <div id="workflow-trigger-account-content">
+                </div>
+                <h6 id="workflow-trigger-account-unable" class="mt-5 text-center">You must first select an application in order to be able to select the account.</h6>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
               <button id="workflow-trigger-event-button" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#workflow-trigger-event" aria-expanded="false" aria-controls="workflow-trigger-event">
                 Event
               </button>
@@ -45,20 +60,10 @@
                 </div>
                 <div id="workflow-trigger-event-selected">
                 </div>
-                <h6 id="workflow-trigger-event-unable" class="mt-5 text-center">You must first select an application in order to be able to select the event</h6>
+                <h6 id="workflow-trigger-event-unable" class="mt-5 text-center">You must first select an application in order to be able to select the event.</h6>
               </div>
             </div>
           </div>
-          <!--<div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#workflow-trigger-account" aria-expanded="false" aria-controls="workflow-trigger-account">
-                Account
-              </button>
-            </h2>
-            <div id="workflow-trigger-account" class="accordion-collapse collapse" data-bs-parent="#workflow-trigger-accordion">
-              <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
-            </div>
-          </div>-->
           <div class="accordion-item">
             <h2 class="accordion-header">
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#workflow-trigger-specifications" aria-expanded="false" aria-controls="workflow-trigger-specifications">
@@ -88,7 +93,7 @@
                     <p class="text-center">Unfortunately there are no placeholders available for this event.</p>
                   </div>
                 </div>
-                <h6 id="workflow-trigger-specifications-unable" class="mt-5 text-center">You must first select an application and event in order to be able to select the specifications</h6>
+                <h6 id="workflow-trigger-specifications-unable" class="mt-5 text-center">You must first select an application and event in order to be able to select the specifications.</h6>
               </div>
             </div>
           </div>
@@ -105,8 +110,7 @@
   var applications;
   var workflowCurrentApplicationFilter = "";
   var selectedApplication;
-  var selectedEvent;
-  var specificationValues = {};
+  var selectedApplicationLogo;
 
   $(document).ready(function() {
     fetchApplicationsData(function() {
@@ -159,13 +163,14 @@
     nameElement.innerHTML = name;
     entryElement.appendChild(nameElement);
     entryElement.onclick = function(event) {
-      selectApplication(name, entryElement);
+      selectApplication(name, logo, entryElement);
     }
     document.getElementById("workflow-trigger-application-list").appendChild(entryElement);
   }
 
-  function selectApplication(name, entryElement) {
+  function selectApplication(name, logo, entryElement) {
     selectedApplication = name;
+    selectedApplicationLogo = logo;
     document.getElementById("workflow-trigger-application-list").style.display = "none";
     entryElement.classList.add("workflow-trigger-application-entry-selected");
     document.getElementById("workflow-trigger-application-body").appendChild(entryElement);
@@ -173,9 +178,10 @@
       resetApplication(entryElement);
     });
     entryElement.onclick = function(event) {}
+    prepareAccount();
     prepareEvent();
     setTimeout(function(){
-      $('#workflow-trigger-event').collapse("toggle");
+      $('#workflow-trigger-account').collapse("toggle");
     }, 600);
   }
 
@@ -187,10 +193,116 @@
       document.getElementById("workflow-trigger-application-body").removeChild(resetButtons[i]);
     }
     selectedApplication = "";
+    selectedApplicationLogo = "";
+    resetAccount();
     resetEvent();
     resetSpecifications();
     displayApplications();
   }
+
+  document.getElementById("workflow-trigger-application-name-input").oninput = function(event) {
+    workflowCurrentApplicationFilter = event.target.value;
+    displayApplications();
+  };
+
+  function createResetButton(container, resetCallback) {
+    var resetButtonContainer = document.createElement("div");
+    resetButtonContainer.classList.add("workflow-trigger-reset");
+    var resetButton = document.createElement("button");
+    resetButton.type = "button";
+    resetButton.classList.add("btn", "btn-danger");
+    resetButton.innerHTML = "RESET";
+    resetButtonContainer.appendChild(resetButton);
+    container.appendChild(resetButtonContainer);
+    resetButton.onclick = function (event) {
+      resetCallback();
+    }
+  }
+</script>
+
+<script>
+  function prepareAccount() {
+    document.getElementById("workflow-trigger-account-content").style.display = "block";
+    document.getElementById("workflow-trigger-account-unable").style.display = "none";
+    displayAccountInformation();
+  }
+
+  function displayAccountInformation() {
+    var accountContentElement = document.getElementById("workflow-trigger-account-content");
+    accountContentElement.innerHTML = "";
+    let request = new HttpRequest("https://api.taskwolf.net/account/information/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}], {module: selectedApplication.toLowerCase()});
+    request.send(function (status, responseText) {
+      var information = JSON.parse(responseText);
+      var logoLinkElement = document.createElement("a");
+      logoLinkElement.href = information.registrationUrl;
+      logoLinkElement.target = "_blank";
+      logoLinkElement.onclick = function(event) {
+        clickSkipButton();
+      }
+      var logoElement = document.createElement("img");
+      logoElement.src = "{% static '' %}" + "img/applications/" + selectedApplicationLogo;
+      applyTooltips(logoElement, "Click to link account.");
+      logoLinkElement.appendChild(logoElement);
+      accountContentElement.appendChild(logoLinkElement);
+      var descriptionContainerElement = document.createElement("div");
+      descriptionContainerElement.id = "workflow-trigger-account-description";
+      var descriptionElement = document.createElement("b");
+      descriptionElement.innerHTML = information.linkDescription;
+      descriptionContainerElement.appendChild(descriptionElement);
+      accountContentElement.appendChild(descriptionContainerElement);
+      updateTooltips();
+      if (information.accountExists === true) {
+        displaySkipButton();
+      }
+    });
+  }
+
+  function displaySkipButton() {
+    var resetButtonContainer = document.createElement("div");
+    resetButtonContainer.id = "workflow-trigger-account-skip";
+    var skipButton = document.createElement("button");
+    skipButton.type = "button";
+    skipButton.classList.add("btn", "btn-info");
+    skipButton.innerHTML = "SKIP";
+    applyTooltips(skipButton, "You already have linked an account. Would you like to skip this process?");
+    resetButtonContainer.appendChild(skipButton);
+    skipButton.onclick = function (event) {
+      clickSkipButton();
+    }
+    document.getElementById("workflow-trigger-account-content").appendChild(resetButtonContainer);
+    updateTooltips();
+  }
+
+  function applyTooltips(element, text) {
+    $(element).attr("data-bs-toggle", "tooltip");
+    $(element).attr("data-bs-placement", "top");
+    $(element).attr("data-bs-title", text);
+  }
+
+  function updateTooltips() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+  }
+
+  function clickSkipButton() {
+    $('#workflow-trigger-event').collapse("toggle");
+    var tooltips = document.getElementsByClassName("tooltip")
+    for (var i = 0; i < tooltips.length; i++) {
+      tooltips[i].remove();
+    }
+  }
+
+  function resetAccount() {
+    document.getElementById("workflow-trigger-account-content").style.display = "none";
+    document.getElementById("workflow-trigger-account-unable").style.display = "block";
+  }
+</script>
+
+<script>
+  var selectedEvent;
 
   function prepareEvent() {
     document.getElementById("workflow-trigger-event-dropdown").style.display = "block";
@@ -270,6 +382,22 @@
     selectedEvent = "";
     resetSpecifications();
   }
+</script>
+
+<script>
+  var specificationSelectButtons = [];
+  var specificationValues = {};
+
+  $(document).ready(function() {
+    new ResizeObserver(() => updateSpecificationsDividerHeight())
+      .observe(document.getElementById("workflow-trigger-specifications-container"));
+  });
+
+  function updateSpecificationsDividerHeight() {
+    var height = document.getElementById("workflow-trigger-specifications-container").offsetHeight;
+    document.getElementById("workflow-trigger-specifications-divider").style.height =
+      height + "px";
+  }
 
   function prepareSpecifications() {
     document.getElementById("workflow-trigger-specifications-container").style.display = "flex";
@@ -278,10 +406,10 @@
   }
 
   function fillSpecificationsInputs() {
-    document.getElementById("workflow-trigger-specifications-input-list").innerHTML = "";
     let request = new HttpRequest("https://api.taskwolf.net/trigger/find/", "POST", [{key: "Content-Type", value: "application/json"},
       {key: "API-KEY", value: Cookie.find("token")}], {module: selectedApplication.toLowerCase(), type: selectedEvent});
     request.send(function (status, responseText) {
+      document.getElementById("workflow-trigger-specifications-input-list").innerHTML = "";
       var trigger = JSON.parse(responseText);
       var inputVariables = trigger.inputVariables;
       for (let i = 0; i < inputVariables.length; i++) {
@@ -294,15 +422,21 @@
           addSpecificationSelect(inputVariable.identifier, inputVariable.name, i, isLast);
         }
       }
+      createResetButton(document.getElementById("workflow-trigger-specifications-input-list"), function() {
+        specificationSelectButtons = [];
+        specificationValues = {};
+        updateAdoptability(false);
+        fillSpecificationsInputs();
+      });
     });
   }
 
   function addSpecificationInput(identifier, name, index, isLast) {
     var inputContainerElement = document.createElement("div");
     inputContainerElement.classList.add("workflow-trigger-specifications-input-container", "form-outline", "mb-4");
-    var labelElement = document.createElement("label");
+    var labelElement = document.createElement("h5");
     labelElement.classList.add("form-label");
-    labelElement.innerHTML = name;
+    labelElement.innerHTML = name + ":";
     inputContainerElement.appendChild(labelElement);
     var inputElement = document.createElement("input");
     inputElement.type = "name";
@@ -311,6 +445,9 @@
     inputElement.classList.add("workflow-trigger-specifications-input", "form-control");
     inputElement.oninput = function (event) {
       specificationValues[identifier] = event.target.value;
+      if (isLast) {
+        updateAdoptability(event.target.value !== "");
+      }
     }
     inputContainerElement.appendChild(inputElement);
     document.getElementById("workflow-trigger-specifications-input-list").appendChild(inputContainerElement);
@@ -319,13 +456,17 @@
   function addSpecificationSelect(identifier, name, index, isLast) {
     var dropdownContainer = document.createElement("div");
     dropdownContainer.classList.add("mb-4");
-    var labelElement = document.createElement("label");
+    var labelElement = document.createElement("h5");
     labelElement.classList.add("form-label");
-    labelElement.innerHTML = name;
+    labelElement.innerHTML = name + ":";
     dropdownContainer.appendChild(labelElement);
     dropdownContainer.classList.add("workflow-trigger-specifications-select-container", "dropdown");
     var dropdownButton = document.createElement("button");
     dropdownButton.classList.add("btn", "btn-secondary", "dropdown-toggle", "bg-dark");
+    if (index !== 0) {
+      dropdownButton.classList.add("disabled");
+      specificationSelectButtons.push(dropdownButton);
+    }
     $(dropdownButton).attr('data-bs-toggle','dropdown');
     dropdownButton.type = "button";
     dropdownButton.innerHTML = name;
@@ -334,12 +475,12 @@
     dropdownList.classList.add("workflow-trigger-specifications-select-list", "dropdown-menu", "dropdown-menu-dark");
     dropdownContainer.appendChild(dropdownList);
     dropdownButton.addEventListener("click", function (event) {
-      clickSpecificationSelect(identifier, dropdownList);
+      clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton, isLast);
     });
     document.getElementById("workflow-trigger-specifications-input-list").appendChild(dropdownContainer);
   }
 
-  function clickSpecificationSelect(identifier, dropdownList) {
+  function clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton, isLast) {
     if (!dropdownList.classList.contains("show")) {
       return;
     }
@@ -349,7 +490,7 @@
     request.send(function (status, responseText) {
       var items = JSON.parse(responseText).items;
       for (var i = 0; i < items.length; i++) {
-        var item = JSON.parse(items[i]);
+        let item = JSON.parse(items[i]);
         var itemElement = document.createElement("li");
         itemElement.classList.add("dropdown-item");
         var itemNameName = document.createElement("b");
@@ -359,40 +500,50 @@
         itemIdentifierName.classList.add("workflow-trigger-specifications-select-item-identifier");
         itemIdentifierName.innerHTML = item.identifier;
         itemElement.appendChild(itemIdentifierName);
+        itemElement.onclick = function (event) {
+          dropdownContainer.removeChild(dropdownButton);
+          dropdownContainer.removeChild(dropdownList);
+          selectSpecificationSelect(identifier, item.identifier, item.name, dropdownContainer, isLast);
+        }
         dropdownList.appendChild(itemElement);
       }
     });
   }
 
+  function selectSpecificationSelect(selectIdentifier, itemIdentifier, itemName, dropdownContainer, isLast) {
+    specificationValues[selectIdentifier] = itemIdentifier;
+    var itemElement = document.createElement("div");
+    itemElement.classList.add("workflow-trigger-specifications-selected-item");
+    var itemNameElement = document.createElement("b");
+    itemNameElement.innerHTML = itemName;
+    itemElement.appendChild(itemNameElement);
+    var itemIdentifierElement = document.createElement("p");
+    itemIdentifierElement.innerHTML = " (" + itemIdentifier + ")";
+    itemElement.appendChild(itemIdentifierElement);
+    dropdownContainer.appendChild(itemElement);
+    if (specificationSelectButtons.length > 0) {
+      specificationSelectButtons.shift().classList.remove("disabled");
+    }
+    if (isLast) {
+      updateAdoptability(true);
+    }
+  }
+
   function resetSpecifications() {
     document.getElementById("workflow-trigger-specifications-container").style.display = "none";
     document.getElementById("workflow-trigger-specifications-unable").style.display = "block";
+    specificationSelectButtons = [];
+    specificationValues = {};
+    updateAdoptability(false);
   }
 
   function updateAdoptability(isAdoptable) {
     if (isAdoptable) {
       document.getElementById("workflow-trigger-adopt-button").classList.remove("disabled");
+      document.getElementById("workflow-trigger-adopt-button").classList.add("workflow-trigger-adopt-enabled");
     } else {
       document.getElementById("workflow-trigger-adopt-button").classList.add("disabled");
+      document.getElementById("workflow-trigger-adopt-button").classList.remove("workflow-trigger-adopt-enabled");
     }
   }
-
-  function createResetButton(container, resetCallback) {
-    var resetButtonContainer = document.createElement("div");
-    resetButtonContainer.classList.add("workflow-trigger-reset");
-    var resetButton = document.createElement("button");
-    resetButton.type = "button";
-    resetButton.classList.add("btn", "btn-danger");
-    resetButton.innerHTML = "RESET";
-    resetButtonContainer.appendChild(resetButton);
-    container.appendChild(resetButtonContainer);
-    resetButton.onclick = function (event) {
-      resetCallback();
-    }
-  }
-
-  document.getElementById("workflow-trigger-application-name-input").oninput = function(event) {
-    workflowCurrentApplicationFilter = event.target.value;
-    displayApplications();
-  };
 </script>

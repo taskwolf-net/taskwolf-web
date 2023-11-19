@@ -147,6 +147,45 @@ input:-webkit-autofill:active{
   }
 }
 
+#workflow-trigger-account-content {
+  text-align: center;
+  margin-top: 4%;
+}
+
+#workflow-trigger-account-content img {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  transition-duration: 0.4s;
+}
+
+#workflow-trigger-account-content img:hover {
+  scale: 1.1;
+}
+
+#workflow-trigger-account-description {
+  width: 50%;
+  margin: auto;
+  margin-top: 4%;
+}
+
+#workflow-trigger-account-skip {
+  float: right;
+  margin-top: 2%;
+  margin-right: 2%;
+  width: 20%;
+}
+
+#workflow-trigger-account-skip button {
+  width: 100%;
+}
+
+@media (max-width: 575px) {
+  #workflow-trigger-account-skip {
+    width: 30%;
+  }
+}
+
 #workflow-trigger-event-dropdown {
   text-align: center;
   margin-top: 2%;
@@ -245,7 +284,6 @@ input:-webkit-autofill:active{
 
 #workflow-trigger-specifications-inputs {
   width: 50%;
-  margin-bottom: 10%;
 }
 
 #workflow-trigger-specifications-inputs-headline {
@@ -279,6 +317,11 @@ input:-webkit-autofill:active{
   font-size: 13px;
 }
 
+.workflow-trigger-specifications-selected-item p {
+  display: inline-block;
+  white-space: pre;
+}
+
 #workflow-trigger-specifications-placeholders {
   width: 50%;
 }
@@ -289,12 +332,12 @@ input:-webkit-autofill:active{
 
 #workflow-trigger-specifications-divider {
   display: flex;
-  height: 300px;
 }
 
 .workflow-trigger-reset {
   float: right;
   margin-top: 2%;
+  margin-right: 2%;
   width: 20%;
 }
 
@@ -311,9 +354,16 @@ input:-webkit-autofill:active{
 #workflow-trigger-adopt {
   width: 20%;
   margin: auto;
-  margin-top: 2%;
+  margin-top: 5%;
+  transition-duration: 1s;
 }
 
 #workflow-trigger-adopt button {
   width: 100%;
+}
+
+.workflow-trigger-adopt-enabled {
+  -moz-box-shadow: 0 0 50px rgba(136, 255, 113, 0.5);
+  -webkit-box-shadow: 0 0 50px rgba(136, 255, 113, 0.5);
+  box-shadow: 0 0 50px rgba(136, 255, 113, 0.5);
 }
