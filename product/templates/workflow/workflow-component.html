@@ -169,7 +169,7 @@
   }
 
   function selectApplication(name, logo, entryElement) {
-    selectedApplication = name;
+    selectedApplication = name.toLowerCase();
     selectedApplicationLogo = logo;
     document.getElementById("workflow-component-application-list").style.display = "none";
     entryElement.classList.add("workflow-component-application-entry-selected");
@@ -456,7 +456,7 @@
     if (event.target.value === "" && identifier in specificationValues) {
       delete specificationValues[identifier];
     }
-    if (event.target.value !== "" && !(identifier in specificationValues)) {
+    if (event.target.value !== "") {
       specificationValues[identifier] = event.target.value;
     }
     checkAdoptability(inputsLength);

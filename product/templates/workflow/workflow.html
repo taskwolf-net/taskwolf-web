@@ -37,7 +37,7 @@
 
   if (sessionStorage.getItem("workflow-trigger") !== null) {
     var trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
-    createComponentElement(trigger.module, trigger.typeDescription, trigger.moduleLogo, "trigger", true);
+    createComponentElement(trigger.module.charAt(0).toUpperCase() + trigger.module.slice(1), trigger.typeDescription, trigger.moduleLogo, "trigger", true);
   } else {
     createComponentElement("Trigger", "Starts the workflow and triggers the chain of further actions", "", "trigger", false);
   }
@@ -46,7 +46,7 @@
     for (var i = 0; i < actions.length; i++) {
       var action = actions[i];
       drawArrow();
-      createComponentElement(action.module, action.typeDescription, action.moduleLogo, "action", true);
+      createComponentElement(action.module.charAt(0).toUpperCase() + action.module.slice(1), action.typeDescription, action.moduleLogo, "action", true);
     }
     createAddActionButton();
   } else {
@@ -159,6 +159,7 @@
   }
 
   document.getElementById("workflow-publish-button").onclick = function (event) {
+    var workflowOwner = sessionStorage.getItem("workflow-owner");
     var workflowName = sessionStorage.getItem("workflow-name");
     var workflowDescription = sessionStorage.getItem("workflow-description");
     var workflowTriggerInformation = JSON.parse(sessionStorage.getItem("workflow-trigger"));
@@ -178,8 +179,12 @@
       });
     }
     let request = new HttpRequest("https://api.taskwolf.net/workflow/add/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}], {owner: "2e9db100-910e-4855-af98-76341e437ee9", name: workflowName, description: workflowDescription, trigger: workflowTrigger, actions : workflowActions});
+      {key: "API-KEY", value: Cookie.find("token")}], {owner: workflowOwner, name: workflowName, description: workflowDescription, trigger: workflowTrigger, actions : workflowActions});
     request.send(function (status, responseText) {
+      sessionStorage.removeItem("workflow-name");
+      sessionStorage.removeItem("workflow-description");
+      sessionStorage.removeItem("workflow-trigger");
+      sessionStorage.removeItem("workflow-actions");
       window.location.href = "/workflows/";
     });
   }
