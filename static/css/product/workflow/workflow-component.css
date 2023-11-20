@@ -20,12 +20,12 @@ input:-webkit-autofill:active{
   box-shadow: inset 0 0 20px 20px #23232329;
 }
 
-#workflow-trigger-container {
+#workflow-component-container {
   width: min(calc(1500px - 15vw), 95%);
   margin: auto;
 }
 
-#workflow-trigger-headline {
+#workflow-component-headline {
   color: white;
   font-weight: bold;
   text-align: center;
@@ -60,17 +60,17 @@ input:-webkit-autofill:active{
   box-shadow: none !important;
 }
 
-#workflow-trigger-application-name {
+#workflow-component-application-name {
   width: 60%;
   margin: auto;
 }
 
-#workflow-trigger-application-divider {
+#workflow-component-application-divider {
   width: 90%;
   margin: auto;
 }
 
-#workflow-trigger-application-list {
+#workflow-component-application-list {
   width: 50%;
   margin: auto;
   margin-top: 1%;
@@ -78,7 +78,7 @@ input:-webkit-autofill:active{
   column-gap: 20px;
 }
 
-.workflow-trigger-application-entry {
+.workflow-component-application-entry {
   list-style-type: none;
   margin-bottom: 1%;
   transition-duration: 0.3s;
@@ -86,19 +86,19 @@ input:-webkit-autofill:active{
   border-radius: 10px;
 }
 
-.workflow-trigger-application-entry:hover {
+.workflow-component-application-entry:hover {
   background-color: #212b3a;
 }
 
-.workflow-trigger-application-entry img {
+.workflow-component-application-entry img {
   border-radius: 50%;
 }
 
-.workflow-trigger-application-entry label {
+.workflow-component-application-entry label {
   margin-left: 5%;
 }
 
-.workflow-trigger-application-entry-selected {
+.workflow-component-application-entry-selected {
   width: fit-content;
   display: flex;
   justify-content: center;
@@ -111,101 +111,101 @@ input:-webkit-autofill:active{
   white-space:nowrap;
 }
 
-.workflow-trigger-application-entry-selected img {
+.workflow-component-application-entry-selected img {
   margin-right: 10%;
 }
 
 @media (max-width: 1300px) {
-  #workflow-trigger-application-list {
+  #workflow-component-application-list {
     width: 75%;
   }
 }
 
 @media (max-width: 1000px) {
-  #workflow-trigger-application-list {
+  #workflow-component-application-list {
     width: 100%;
   }
 }
 
 @media (max-width: 800px) {
-  #workflow-trigger-application-name {
+  #workflow-component-application-name {
     width: 90%;
   }
 
-  #workflow-trigger-application-divider {
+  #workflow-component-application-divider {
     width: 100%;
   }
 
-  #workflow-trigger-application-list {
+  #workflow-component-application-list {
     width: 90%;
     column-count: 1;
   }
 
-  .workflow-trigger-application-entry-selected {
+  .workflow-component-application-entry-selected {
     margin-top: 5%;
     scale: 1.2;
   }
 }
 
-#workflow-trigger-account-content {
+#workflow-component-account-content {
   text-align: center;
   margin-top: 4%;
 }
 
-#workflow-trigger-account-content img {
+#workflow-component-account-content img {
   width: 96px;
   height: 96px;
   border-radius: 50%;
   transition-duration: 0.4s;
 }
 
-#workflow-trigger-account-content img:hover {
+#workflow-component-account-content img:hover {
   scale: 1.1;
 }
 
-#workflow-trigger-account-description {
+#workflow-component-account-description {
   width: 50%;
   margin: auto;
   margin-top: 4%;
 }
 
-#workflow-trigger-account-skip {
+#workflow-component-account-skip {
   float: right;
   margin-top: 2%;
   margin-right: 2%;
   width: 20%;
 }
 
-#workflow-trigger-account-skip button {
+#workflow-component-account-skip button {
   width: 100%;
 }
 
 @media (max-width: 575px) {
-  #workflow-trigger-account-skip {
+  #workflow-component-account-skip {
     width: 30%;
   }
 }
 
-#workflow-trigger-event-dropdown {
+#workflow-component-event-dropdown {
   text-align: center;
   margin-top: 2%;
   display: none;
 }
 
-#workflow-trigger-event-dropdown button {
+#workflow-component-event-dropdown button {
   width: 40%;
 }
 
-#workflow-trigger-event-dropdown ul {
+#workflow-component-event-dropdown ul {
   width: 40%;
 }
 
-.workflow-trigger-event-description {
+.workflow-component-event-description {
   margin-left: 5%;
   font-size: 13px;
 }
 
-#workflow-trigger-event-selected {
+#workflow-component-event-selected {
   background-color: #212529;
   margin: auto;
   margin-top: 4%;
@@ -219,150 +219,150 @@ input:-webkit-autofill:active{
   border: 1px solid #535353;
 }
 
-#workflow-trigger-event-selected b {
+#workflow-component-event-selected b {
   font-size: 22px;
 }
 
-#workflow-trigger-event-selected p {
+#workflow-component-event-selected p {
   font-size: 20px;
 }
 
-#workflow-trigger-event-selected:hover {
+#workflow-component-event-selected:hover {
   background-color: #2f343a;
 }
 
-#workflow-trigger-event-selected-description {
+#workflow-component-event-selected-description {
   font-size: 13px;
 }
 
 @media (max-width: 1500px) {
-  #workflow-trigger-event-dropdown button {
+  #workflow-component-event-dropdown button {
     width: 60%;
   }
 
-  #workflow-trigger-event-dropdown ul {
+  #workflow-component-event-dropdown ul {
     width: 60%;
   }
 
-  #workflow-trigger-event-selected {
+  #workflow-component-event-selected {
     width: 60%;
   }
 }
 
 @media (max-width: 900px) {
-  #workflow-trigger-event-dropdown button {
+  #workflow-component-event-dropdown button {
     width: 75%
   }
 
-  #workflow-trigger-event-dropdown ul {
+  #workflow-component-event-dropdown ul {
     width: 75%
   }
 
-  #workflow-trigger-event-selected {
+  #workflow-component-event-selected {
     width: 75%;
   }
 }
 
 @media (max-width: 575px) {
-  #workflow-trigger-event-dropdown button {
+  #workflow-component-event-dropdown button {
     width: 90%
   }
 
-  #workflow-trigger-event-dropdown ul {
+  #workflow-component-event-dropdown ul {
     width: 90%
   }
 
-  #workflow-trigger-event-selected {
+  #workflow-component-event-selected {
     width: 90%;
   }
 }
 
-#workflow-trigger-specifications-container {
+#workflow-component-specifications-container {
   margin-top: 3%;
   display: none;
 }
 
-#workflow-trigger-specifications-inputs {
+#workflow-component-specifications-inputs {
   width: 50%;
 }
 
-#workflow-trigger-specifications-inputs-headline {
+#workflow-component-specifications-inputs-headline {
   margin-bottom: 4%;
 }
 
-.workflow-trigger-specifications-input-container {
+.workflow-component-specifications-input-container {
   width: 80%;
   margin: auto;
 }
 
-.workflow-trigger-specifications-select-container {
+.workflow-component-specifications-select-container {
   width: 80%;
   margin: auto;
 }
 
-.workflow-trigger-specifications-select-container button {
+.workflow-component-specifications-select-container button {
   width: 100%;
 }
 
-.workflow-trigger-specifications-select-list {
+.workflow-component-specifications-select-list {
   width: 100%;
 }
 
-.workflow-trigger-specifications-select-list {
+.workflow-component-specifications-select-list {
   width: 100%;
 }
 
-.workflow-trigger-specifications-select-item-identifier {
+.workflow-component-specifications-select-item-identifier {
   margin-left: 5%;
   font-size: 13px;
 }
 
-.workflow-trigger-specifications-selected-item p {
+.workflow-component-specifications-selected-item p {
   display: inline-block;
   white-space: pre;
 }
 
-#workflow-trigger-specifications-placeholders {
+#workflow-component-specifications-placeholders {
   width: 50%;
 }
 
-#workflow-trigger-specifications-placeholders-headline {
+#workflow-component-specifications-placeholders-headline {
   margin-bottom: 4%;
 }
 
-#workflow-trigger-specifications-divider {
+#workflow-component-specifications-divider {
   display: flex;
 }
 
-.workflow-trigger-reset {
+.workflow-component-reset {
   float: right;
   margin-top: 2%;
   margin-right: 2%;
   width: 20%;
 }
 
-.workflow-trigger-reset button {
+.workflow-component-reset button {
   width: 100%;
 }
 
 @media (max-width: 575px) {
-  .workflow-trigger-reset {
+  .workflow-component-reset {
     width: 30%;
   }
 }
 
-#workflow-trigger-adopt {
+#workflow-component-adopt {
   width: 20%;
   margin: auto;
   margin-top: 5%;
   transition-duration: 1s;
 }
 
-#workflow-trigger-adopt button {
+#workflow-component-adopt button {
   width: 100%;
 }
 
-.workflow-trigger-adopt-enabled {
+.workflow-component-adopt-enabled {
   -moz-box-shadow: 0 0 50px rgba(136, 255, 113, 0.5);
   -webkit-box-shadow: 0 0 50px rgba(136, 255, 113, 0.5);
   box-shadow: 0 0 50px rgba(136, 255, 113, 0.5);

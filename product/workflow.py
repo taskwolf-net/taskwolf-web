@@ -22,15 +22,15 @@ async def workflowCreate(request):
 
 @authentication_required
 async def workflowTrigger(request, id):
-  return render(request, 'workflow/workflow-trigger.html', {'title': 'Taskwolf - Trigger',
-    'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflow-trigger.css'],
-      'username': findUsername(request)[0]})
+  return render(request, 'workflow/workflow-component.html', {'title': 'Taskwolf - Trigger',
+    'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflow-component.css'],
+      'username': findUsername(request)[0], 'type': 'Trigger'})
 
 @authentication_required
 async def workflowTriggerCreate(request):
-  return render(request, 'workflow/workflow-trigger.html', {'title': 'Taskwolf - Trigger - Create',
-    'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflow-trigger.css'],
-      'username': findUsername(request)[0]})
+  return render(request, 'workflow/workflow-component.html', {'title': 'Taskwolf - Trigger - Create',
+    'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflow-component.css'],
+      'username': findUsername(request)[0], 'type': 'Trigger'})
 
 @authentication_required
 async def workflowAction(request, id):
