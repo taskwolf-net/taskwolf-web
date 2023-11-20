@@ -5,17 +5,21 @@
     {% include 'templates/product-header.html' %}
     {% include 'templates/product-sidebar.html' %}
     <div class="sidebar-influenced">
+      <div id="workflow-publish">
+        <button id="workflow-publish-button" type="button" class="btn btn-success disabled">PUBLISH</button>
+      </div>
       <div id="workflow-container">
         <h1 id="workflow-headline">Workflow</h1>
         <div id="workflow-inputs">
           <div class="form-outline mb-4">
-            <label for="name" class="form-label">Name</label>
-            <input type="name" id="name" class="form-control" placeholder="Name">
+            <label for="workflow-name" class="form-label">Name</label>
+            <input type="name" id="workflow-name" class="form-control" placeholder="Name">
           </div>
-          <div class="form-outline mb-4">
-            <label for="description" class="form-label">Description</label>
-            <input type="description" id="description" class="form-control" placeholder="Description">
+          <div class="form-outline mb-5">
+            <label for="workflow-description" class="form-label">Description</label>
+            <input type="description" id="workflow-description" class="form-control" placeholder="Description">
           </div>
+          <hr id="workflow-divider" class="hr mb-5"/>
         </div>
       </div>
     </div>
@@ -23,6 +27,14 @@
 </html>
 
 <script>
+  if(sessionStorage.getItem("workflow-name") !== null) {
+    document.getElementById("workflow-name").value = sessionStorage.getItem("workflow-name");
+  }
+
+  if(sessionStorage.getItem("workflow-description") !== null) {
+    document.getElementById("workflow-description").value = sessionStorage.getItem("workflow-description");
+  }
+
   if (sessionStorage.getItem("workflow-trigger") !== null) {
     var trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
     createComponentElement(trigger.module, trigger.typeDescription, trigger.moduleLogo, "trigger", true);
@@ -42,6 +54,8 @@
     createComponentElement("Action", "Is executed as soon as the workflow is triggered", "", "action", false);
     createAddActionButton();
   }
+
+  checkPublishability();
 
   function createComponentElement(title, description, logo, type, selected) {
     var componentContainer = document.createElement("div");
@@ -103,5 +117,70 @@
     for (var i = 0; i < buttons.length; i++) {
       buttons[i].remove();
     }
+  }
+
+  document.getElementById("workflow-name").oninput = function (event) {
+    sessionStorage.setItem("workflow-name", event.target.value);
+    checkPublishability();
+  }
+
+  document.getElementById("workflow-description").oninput = function (event) {
+    sessionStorage.setItem("workflow-description", event.target.value);
+    checkPublishability();
+  }
+
+  function checkPublishability() {
+    if (sessionStorage.getItem("workflow-name") === null ||
+      sessionStorage.getItem("workflow-description") === null ||
+      sessionStorage.getItem("workflow-trigger") === null ||
+      sessionStorage.getItem("workflow-actions") === null
+    ) {
+      updatePublishability(false);
+      return;
+    }
+    if (sessionStorage.getItem("workflow-name") === "" ||
+      sessionStorage.getItem("workflow-description") === ""
+    ) {
+      updatePublishability(false);
+      return;
+    }
+    updatePublishability(true);
+  }
+
+  function updatePublishability(isPublishable) {
+    var publishButton = document.getElementById("workflow-publish-button");
+    if (isPublishable) {
+      publishButton.classList.remove("disabled");
+      publishButton.classList.add("workflow-publish-enabled");
+    } else {
+      publishButton.classList.add("disabled");
+      publishButton.classList.remove("workflow-publish-enabled");
+    }
+  }
+
+  document.getElementById("workflow-publish-button").onclick = function (event) {
+    var workflowName = sessionStorage.getItem("workflow-name");
+    var workflowDescription = sessionStorage.getItem("workflow-description");
+    var workflowTriggerInformation = JSON.parse(sessionStorage.getItem("workflow-trigger"));
+    var workflowTrigger = {
+      "module": workflowTriggerInformation["module"],
+      "type": workflowTriggerInformation["type"],
+      "content": JSON.stringify(workflowTriggerInformation["content"])
+    };
+    var workflowActionsInformation = JSON.parse(sessionStorage.getItem("workflow-actions")).actions;
+    var workflowActions = [];
+    for (var i = 0; i < workflowActionsInformation.length; i++) {
+      var workflowActionInformation = workflowActionsInformation[i];
+      workflowActions.push({
+        "module": workflowActionInformation["module"],
+        "type": workflowActionInformation["type"],
+        "content": JSON.stringify(workflowActionInformation["content"])
+      });
+    }
+    let request = new HttpRequest("https://api.taskwolf.net/workflow/add/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}], {owner: "2e9db100-910e-4855-af98-76341e437ee9", name: workflowName, description: workflowDescription, trigger: workflowTrigger, actions : workflowActions});
+    request.send(function (status, responseText) {
+      window.location.href = "/workflows/";
+    });
   }
 </script>

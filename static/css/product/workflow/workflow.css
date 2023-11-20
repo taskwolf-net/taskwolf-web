@@ -28,6 +28,34 @@ input:-webkit-autofill:active{
   font-size: 20px;
 }
 
+#workflow-publish {
+  position: absolute;
+  right: 2%;
+}
+
+#workflow-publish-button {
+  width: 100%;
+}
+
+.workflow-publish-enabled {
+  animation: workflow-publish-enabled-animation 1.5s infinite;
+}
+
+@keyframes workflow-publish-enabled-animation  {
+  from {
+    box-shadow: 0 0 0 rgb(43, 255, 0, 1);
+  }
+
+  50% {
+    box-shadow: 0 0 60px rgba(44, 255, 0, 0.8);
+    scale: 1.1;
+  }
+
+  to {
+    box-shadow: 0 0 0 rgb(0, 0, 0, 0);
+  }
+}
+
 #workflow-headline {
   color: white;
   font-weight: bold;
@@ -38,7 +66,13 @@ input:-webkit-autofill:active{
 #workflow-inputs {
   width: min(calc(800px), 95%);
   margin: auto;
-  margin-top: 2%;
+  margin-top: 1%;
+}
+
+#workflow-divider {
+  color: white;
+  width: 100%;
+  margin: auto;
 }
 
 .workflow-entry {
@@ -59,10 +93,6 @@ input:-webkit-autofill:active{
 
 .workflow-entry-selected {
   background-color: #1b232f !important;
-}
-
-.workflow-trigger {
-  margin-top: 4%;
 }
 
 .workflow-headline {
