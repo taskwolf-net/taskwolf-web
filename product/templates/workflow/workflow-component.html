@@ -6,7 +6,7 @@
     {% include 'templates/product-sidebar.html' %}
     <div class="sidebar-influenced">
       <div id="workflow-component-container">
-        <h1 id="workflow-component-headline">Workflow {{type}}</h1>
+        <h1 id="workflow-component-headline">Workflow {{typename}}</h1>
         <div class="accordion accordion-flush" id="workflow-component-accordion">
           <div class="accordion-item">
             <h2 class="accordion-header">
@@ -16,7 +16,7 @@
             </h2>
             <div id="workflow-component-application" class="accordion-collapse collapse show" data-bs-parent="#workflow-component-accordion">
               <div id="workflow-component-application-body" class="accordion-body">
-                <h4 class="text-center">Select {{type}} Application</h4>
+                <h4 class="text-center">Select {{typename}} Application</h4>
                 <div id="workflow-component-application-name" class="form-outline mb-4">
                   <label for="name" class="form-label">Name</label>
                   <input id="workflow-component-application-name-input" type="name" id="name" class="form-control" placeholder="Application Name">
@@ -35,7 +35,7 @@
             </h2>
             <div id="workflow-component-account" class="accordion-collapse collapse" data-bs-parent="#workflow-component-accordion">
               <div id="workflow-component-account-body" class="accordion-body">
-                <h4 class="text-center">Select {{type}} Account</h4>
+                <h4 class="text-center">Select {{typename}} Account</h4>
                 <div id="workflow-component-account-content">
                 </div>
                 <h6 id="workflow-component-account-unable" class="mt-5 text-center">You must first select an application in order to be able to select the account.</h6>
@@ -50,7 +50,7 @@
             </h2>
             <div id="workflow-component-event" class="accordion-collapse collapse" data-bs-parent="#workflow-component-accordion">
               <div id="workflow-component-event-body" class="accordion-body">
-                <h4 class="text-center">Select {{type}} Event</h4>
+                <h4 class="text-center">Select {{typename}} Event</h4>
                 <div id="workflow-component-event-dropdown" class="dropdown">
                   <button class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
                     Event
@@ -72,7 +72,7 @@
             </h2>
             <div id="workflow-component-specifications" class="accordion-collapse collapse" data-bs-parent="#workflow-component-accordion">
               <div id="workflow-component-specifications-body" class="accordion-body">
-                <h4 class="text-center">Select {{type}} Specifications</h4>
+                <h4 class="text-center">Select {{typename}} Specifications</h4>
                 <div id="workflow-component-specifications-container">
                   <div id="workflow-component-specifications-inputs">
                     <h5 id="workflow-component-specifications-inputs-headline" class="text-center">Inputs</h5>
@@ -313,10 +313,10 @@
 
   function fillEventDropdown() {
     document.getElementById("workflow-component-event-dropdown-list").innerHTML = "";
-    let request = new HttpRequest("https://api.taskwolf.net/triggers/find/", "POST", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/{{type}}s/find/", "POST", [{key: "Content-Type", value: "application/json"},
       {key: "API-KEY", value: Cookie.find("token")}], {module: selectedApplication.toLowerCase()});
     request.send(function (status, responseText) {
-      var events = JSON.parse(responseText).triggers;
+      var events = JSON.parse(responseText)["{{type}}s"];
       for (var i = 0; i < events.length; i++) {
         var event = events[i];
         addEventDropdownEntry(event.identifier, event.name, event.description);
@@ -409,12 +409,12 @@
   }
 
   function fillSpecificationsInputs() {
-    let request = new HttpRequest("https://api.taskwolf.net/trigger/find/", "POST", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/{{type}}/find/", "POST", [{key: "Content-Type", value: "application/json"},
       {key: "API-KEY", value: Cookie.find("token")}], {module: selectedApplication.toLowerCase(), type: selectedEvent});
     request.send(function (status, responseText) {
       document.getElementById("workflow-component-specifications-input-list").innerHTML = "";
-      var trigger = JSON.parse(responseText);
-      var inputVariables = trigger.inputVariables;
+      var component = JSON.parse(responseText);
+      var inputVariables = component.inputVariables;
       for (let i = 0; i < inputVariables.length; i++) {
         var inputVariable = inputVariables[i];
         if (inputVariable.type === "TEXT") {
@@ -494,7 +494,7 @@
       return;
     }
     dropdownList.innerHTML = "";
-    let request = new HttpRequest("https://api.taskwolf.net/trigger/select/items/", "POST", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/{{type}}/select/items/", "POST", [{key: "Content-Type", value: "application/json"},
       {key: "API-KEY", value: Cookie.find("token")}], {module: selectedApplication.toLowerCase(), type: selectedEvent, previousInputs: specificationValues, select: identifier});
     request.send(function (status, responseText) {
       var items = JSON.parse(responseText).items;
@@ -560,13 +560,35 @@
   }
 
   document.getElementById("workflow-component-adopt-button").addEventListener("click", function(event) {
-    var trigger = {
+    if ("{{type}}" === "trigger") {
+      saveTrigger();
+    } else {
+      saveAction();
+    }
+    window.location.href = "/workflow/";
+  });
+
+  function saveTrigger() {
+    sessionStorage.setItem("workflow-trigger", JSON.stringify(createComponent()));
+  }
+
+  function saveAction() {
+    if (sessionStorage.getItem("workflow-actions") === null) {
+      sessionStorage.setItem("workflow-actions", JSON.stringify({actions: [createComponent()]}));
+    } else {
+      var actions = JSON.parse(sessionStorage.getItem("workflow-actions")).actions;
+      actions.push(createComponent());
+      sessionStorage.setItem("workflow-actions", JSON.stringify({actions: actions}));
+    }
+  }
+
+  function createComponent() {
+    return {
       "module": selectedApplication,
+      "moduleLogo": selectedApplicationLogo,
       "type": selectedEvent,
       "typeDescription": selectedEventDescription,
       "content": specificationValues
     };
-    sessionStorage.setItem("workflow-trigger", JSON.stringify(trigger));
-    window.location.href = "/workflow/";
-  });
+  }
 </script>

@@ -6,6 +6,17 @@
     {% include 'templates/product-sidebar.html' %}
     <div class="sidebar-influenced">
       <div id="workflow-container">
+        <h1 id="workflow-headline">Workflow</h1>
+        <div id="workflow-inputs">
+          <div class="form-outline mb-4">
+            <label for="name" class="form-label">Name</label>
+            <input type="name" id="name" class="form-control" placeholder="Name">
+          </div>
+          <div class="form-outline mb-4">
+            <label for="description" class="form-label">Description</label>
+            <input type="description" id="description" class="form-control" placeholder="Description">
+          </div>
+        </div>
       </div>
     </div>
   </body>
@@ -14,32 +25,55 @@
 <script>
   if (sessionStorage.getItem("workflow-trigger") !== null) {
     var trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
-    createTriggerElement(trigger.module, trigger.typeDescription);
-    drawArrow();
-    createActionElement("Action", "Is executed as soon as the workflow is triggered");
+    createComponentElement(trigger.module, trigger.typeDescription, trigger.moduleLogo, "trigger", true);
+  } else {
+    createComponentElement("Trigger", "Starts the workflow and triggers the chain of further actions", "", "trigger", false);
+  }
+  if (sessionStorage.getItem("workflow-actions") !== null) {
+    var actions = JSON.parse(sessionStorage.getItem("workflow-actions")).actions;
+    for (var i = 0; i < actions.length; i++) {
+      var action = actions[i];
+      drawArrow();
+      createComponentElement(action.module, action.typeDescription, action.moduleLogo, "action", true);
+    }
     createAddActionButton();
   } else {
-    createTriggerElement("Trigger", "Starts the workflow and triggers the chain of further actions");
     drawArrow();
-    createActionElement("Action", "Is executed as soon as the workflow is triggered");
+    createComponentElement("Action", "Is executed as soon as the workflow is triggered", "", "action", false);
     createAddActionButton();
   }
 
-  function createTriggerElement(title, description) {
-    var triggerContainer = document.createElement("div");
-    triggerContainer.classList.add("workflow-entry", "workflow-trigger");
-    var triggerHeadline = document.createElement("h1");
-    triggerHeadline.innerHTML = title;
-    triggerHeadline.classList.add("workflow-trigger-headline");
-    triggerContainer.appendChild(triggerHeadline);
-    triggerContainer.appendChild(document.createElement("br"));
-    var triggerDescription = document.createElement("span");
-    triggerDescription.innerHTML = description;
-    triggerDescription.classList.add("workflow-entry-description");
-    triggerContainer.appendChild(triggerDescription);
-    triggerContainer.appendChild(document.createElement("br"));
-    triggerContainer.appendChild(document.createElement("br"));
-    document.getElementById("workflow-container").appendChild(triggerContainer);
+  function createComponentElement(title, description, logo, type, selected) {
+    var componentContainer = document.createElement("div");
+    componentContainer.classList.add("workflow-entry", "workflow-" + type);
+    var componentHeadline = document.createElement("div");
+    componentHeadline.classList.add("workflow-headline");
+    if (logo !== "") {
+      var logoElement = document.createElement("img");
+      logoElement.src = "{% static '' %}" + "img/applications/" + logo;
+      logoElement.width = 48;
+      logoElement.height = 48;
+      componentHeadline.appendChild(logoElement);
+    }
+    var componentHeadlineContent = document.createElement("h1");
+    componentHeadlineContent.innerHTML = title;
+    if (selected) {
+      componentContainer.classList.add("workflow-entry-selected");
+      componentHeadline.classList.add("workflow-headline-selected");
+    }
+    componentHeadline.appendChild(componentHeadlineContent);
+    componentContainer.appendChild(componentHeadline);
+    componentContainer.appendChild(document.createElement("br"));
+    var componentDescription = document.createElement("span");
+    componentDescription.innerHTML = description;
+    componentDescription.classList.add("workflow-entry-description");
+    componentContainer.appendChild(componentDescription);
+    componentContainer.appendChild(document.createElement("br"));
+    componentContainer.appendChild(document.createElement("br"));
+    componentContainer.onclick = function (event) {
+      window.location.href = "/workflow/" + type + "/";
+    }
+    document.getElementById("workflow-container").appendChild(componentContainer);
   }
 
   function drawArrow() {
@@ -47,23 +81,6 @@
     arrowContainer.classList.add("arrow-container");
     arrowContainer.innerHTML = '<svg><defs><marker id="markerArrow" markerWidth="13" markerHeight="13" refX="2" refY="6" orient="auto"><path d="M2,2 L2,11 L10,6 L2,2" style="fill: #ffffff;" /></marker></defs><line x1="10" y1="0" x2="10" y2="100" class="arrow" /></svg>';
     document.getElementById("workflow-container").appendChild(arrowContainer);
-  }
-
-  function createActionElement(title, description) {
-    var actionContainer = document.createElement("div");
-    actionContainer.classList.add("workflow-entry", "workflow-action");
-    var actionHeadline = document.createElement("h1");
-    actionHeadline.innerHTML = title;
-    actionHeadline.classList.add("workflow-action-headline");
-    actionContainer.appendChild(actionHeadline);
-    actionContainer.appendChild(document.createElement("br"));
-    var actionDescription = document.createElement("span");
-    actionDescription.innerHTML = description;
-    actionDescription.classList.add("workflow-entry-description");
-    actionContainer.appendChild(actionDescription);
-    actionContainer.appendChild(document.createElement("br"));
-    actionContainer.appendChild(document.createElement("br"));
-    document.getElementById("workflow-container").appendChild(actionContainer);
   }
 
   function createAddActionButton() {
@@ -75,7 +92,7 @@
     iconContainer.addEventListener("click", function(event) {
       removeCurrentAddActionButtons();
       drawArrow();
-      createActionElement("Action", "Is executed as soon as the workflow is triggered");
+      createComponentElement("Action", "Is executed as soon as the workflow is triggered", "", "action", false);
       createAddActionButton();
     });
     document.getElementById("workflow-container").appendChild(buttonContainer);
@@ -85,19 +102,6 @@
     var buttons = document.getElementsByClassName("workflow-action-add-container");
     for (var i = 0; i < buttons.length; i++) {
       buttons[i].remove();
-    }
-  }
-
-  var workflowTriggerElements = document.getElementsByClassName("workflow-trigger");
-  for (var i = 0; i < workflowTriggerElements.length; i++) {
-    workflowTriggerElements[i].onclick = function (event) {
-      window.location.href = "/workflow/trigger/";
-    }
-  }
-  var workflowActionElements = document.getElementsByClassName("workflow-action");
-  for (var i = 0; i < workflowActionElements.length; i++) {
-    workflowActionElements[i].onclick = function (event) {
-      window.location.href = "/workflow/action/";
     }
   }
 </script>

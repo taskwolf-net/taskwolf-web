@@ -1,3 +1,46 @@
+form {
+  width: 30%;
+  text-align: center;
+  margin-top: 5%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+input {
+  background-color: #0d1117 !important;
+  color: white !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active{
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: #ffffff;
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 20px 20px #23232329;
+}
+
+.form-label {
+  color: white;
+  text-align: left;
+  width: 100%;
+  font-size: 20px;
+}
+
+#workflow-headline {
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 2%;
+}
+
+#workflow-inputs {
+  width: min(calc(800px), 95%);
+  margin: auto;
+  margin-top: 2%;
+}
+
 .workflow-entry {
   color: white;
   width: min(calc(800px), 95%);
@@ -6,7 +49,7 @@
   border: 2px #747474 solid;
   border-radius: 8px;
   text-align: center;
-  background-color: #1b232f;
+  background-color: #36393e;
   transition-duration: 0.4s;
 }
 
@@ -14,26 +57,37 @@
   scale: 1.02;
 }
 
+.workflow-entry-selected {
+  background-color: #1b232f !important;
+}
+
 .workflow-trigger {
-  margin-top: 5%;
+  margin-top: 4%;
 }
 
-.workflow-trigger-headline {
-  background-color: #34435a;
+.workflow-headline {
+  background-color: #53575d;
   border-radius: 10px;
-  display: inline-block;
-  padding: 5px 10px;
+  display: flex;
+  width: fit-content;
+  padding: 10px 20px;
   font-weight: bold;
+  margin: auto;
   margin-top: 1%;
+  justify-content: center;
+  align-items: center;
 }
 
-.workflow-action-headline {
+.workflow-headline img {
+  margin-right: 10%;
+}
+
+.workflow-headline h1 {
+  margin: auto;
+}
+
+.workflow-headline-selected {
   background-color: #34435a;
-  border-radius: 10px;
-  display: inline-block;
-  padding: 5px 10px;
-  font-weight: bold;
-  margin-top: 1%;
 }
 
 .workflow-entry-description {
@@ -50,13 +104,13 @@
   color: white;
   font-size: 25px;
   border-radius: 50%;
-  background-color: #242f3f;
+  background-color: #5c616a;
   padding: 20px;
   transition-duration: 0.4s;
 }
 
 .workflow-action-add:hover {
-  background-color: #35465d;
+  background-color: #3c3f45;
 }
 
 .arrow {
