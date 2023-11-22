@@ -107,12 +107,20 @@
 </html>
 
 <script>
+  var selectedComponent = {};
   var applications;
   var workflowCurrentApplicationFilter = "";
   var selectedApplication;
   var selectedApplicationLogo;
 
   $(document).ready(function() {
+    if ("{{type}}" === "trigger" && sessionStorage.getItem("workflow-trigger") !== null) {
+      selectedComponent = JSON.parse(sessionStorage.getItem("workflow-trigger"));
+    }
+    if ("{{type}}" === "action" && sessionStorage.getItem("workflow-action-index") !== null) {
+      selectedComponent = JSON.parse(sessionStorage.getItem("workflow-actions"))
+        .actions[parseInt(sessionStorage.getItem("workflow-action-index"))];
+    }
     fetchApplicationsData(function() {
       displayApplications();
     });
@@ -166,6 +174,11 @@
       selectApplication(name, logo, entryElement);
     }
     document.getElementById("workflow-component-application-list").appendChild(entryElement);
+    if (!(_.isEqual(selectedComponent, {})) && selectedComponent.module === name.toLowerCase()) {
+      setTimeout(function(){
+        selectApplication(name, logo, entryElement);
+      }, 600);
+    }
   }
 
   function selectApplication(name, logo, entryElement) {
@@ -272,6 +285,11 @@
     }
     document.getElementById("workflow-component-account-content").appendChild(resetButtonContainer);
     updateTooltips();
+    if (!(_.isEqual(selectedComponent, {}))) {
+      setTimeout(function() {
+        clickSkipButton();
+      }, 1200);
+    }
   }
 
   function applyTooltips(element, text) {
@@ -339,6 +357,11 @@
       selectEvent(identifier, name, description);
     }
     document.getElementById("workflow-component-event-dropdown-list").appendChild(entryElement);
+    if (!(_.isEqual(selectedComponent, {})) && selectedComponent.type === identifier) {
+      setTimeout(function(){
+        selectEvent(identifier, name, description);
+      }, 1800);
+    }
   }
 
   function selectEvent(identifier, name, description) {
@@ -418,10 +441,10 @@
       for (let i = 0; i < inputVariables.length; i++) {
         var inputVariable = inputVariables[i];
         if (inputVariable.type === "TEXT") {
-          addSpecificationInput(inputVariable.identifier, inputVariable.name, inputVariables.length);
+          addSpecificationInput(inputVariable.identifier, inputVariable.name, i, inputVariables.length);
         }
         if (inputVariable.type === "SELECT") {
-          addSpecificationSelect(inputVariable.identifier, inputVariable.name, inputVariables.length);
+          addSpecificationSelect(inputVariable.identifier, inputVariable.name, i, inputVariables.length);
         }
       }
       createResetButton(document.getElementById("workflow-component-specifications-input-list"), function() {
@@ -433,7 +456,7 @@
     });
   }
 
-  function addSpecificationInput(identifier, name, inputsLength) {
+  function addSpecificationInput(identifier, name, index, inputsLength) {
     var inputContainerElement = document.createElement("div");
     inputContainerElement.classList.add("workflow-component-specifications-input-container", "form-outline", "mb-4");
     var labelElement = document.createElement("h5");
@@ -446,23 +469,33 @@
     inputElement.id = "workflow-component-specifications-input-" + identifier;
     inputElement.classList.add("workflow-component-specifications-input", "form-control");
     inputElement.oninput = function (event) {
-      inputSpecificationInput(identifier, event, inputsLength);
+      inputSpecificationInput(identifier, event.target.value, inputsLength);
     }
     inputContainerElement.appendChild(inputElement);
     document.getElementById("workflow-component-specifications-input-list").appendChild(inputContainerElement);
+    if (!(_.isEqual(selectedComponent, {}))) {
+      var selectedComponentContent = JSON.parse(selectedComponent.content);
+      setTimeout(function(){
+        inputElement.value = selectedComponentContent[identifier];
+        inputSpecificationInput(identifier, inputElement.value, inputsLength);
+        if (index === inputsLength - 1) {
+          selectedComponent = {};
+        }
+      }, 1200 + 600 * index);
+    }
   }
 
-  function inputSpecificationInput(identifier, event, inputsLength) {
-    if (event.target.value === "" && identifier in specificationValues) {
+  function inputSpecificationInput(identifier, value, inputsLength) {
+    if (value === "" && identifier in specificationValues) {
       delete specificationValues[identifier];
     }
-    if (event.target.value !== "") {
-      specificationValues[identifier] = event.target.value;
+    if (value !== "") {
+      specificationValues[identifier] = value;
     }
     checkAdoptability(inputsLength);
   }
 
-  function addSpecificationSelect(identifier, name, inputsLength) {
+  function addSpecificationSelect(identifier, name, index, inputsLength) {
     var dropdownContainer = document.createElement("div");
     dropdownContainer.classList.add("mb-4");
     var labelElement = document.createElement("h5");
@@ -484,15 +517,17 @@
     dropdownList.classList.add("workflow-component-specifications-select-list", "dropdown-menu", "dropdown-menu-dark");
     dropdownContainer.appendChild(dropdownList);
     dropdownButton.addEventListener("click", function (event) {
-      clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton, inputsLength);
+      clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton, index, inputsLength);
     });
     document.getElementById("workflow-component-specifications-input-list").appendChild(dropdownContainer);
+    if (!(_.isEqual(selectedComponent, {}))) {
+      setTimeout(function(){
+        clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton, index, inputsLength);
+      }, 1200 + 600 * index);
+    }
   }
 
-  function clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton, inputsLength) {
-    if (!dropdownList.classList.contains("show")) {
-      return;
-    }
+  function clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton, index, inputsLength) {
     dropdownList.innerHTML = "";
     let request = new HttpRequest("https://api.taskwolf.net/{{type}}/select/items/", "POST", [{key: "Content-Type", value: "application/json"},
       {key: "API-KEY", value: Cookie.find("token")}], {module: selectedApplication.toLowerCase(), type: selectedEvent, previousInputs: specificationValues, select: identifier});
@@ -510,17 +545,23 @@
         itemIdentifierName.innerHTML = item.identifier;
         itemElement.appendChild(itemIdentifierName);
         itemElement.onclick = function (event) {
-          dropdownContainer.removeChild(dropdownButton);
-          dropdownContainer.removeChild(dropdownList);
-          selectSpecificationSelect(identifier, item.identifier, item.name, dropdownContainer, inputsLength);
+          selectSpecificationSelect(identifier, item.identifier, item.name, dropdownContainer, dropdownButton, dropdownList, inputsLength);
         }
         dropdownList.appendChild(itemElement);
+        if (!(_.isEqual(selectedComponent, {})) && selectedComponent.content !== undefined && JSON.parse(selectedComponent.content)[identifier] === item.identifier) {
+          selectSpecificationSelect(identifier, item.identifier, item.name, dropdownContainer, dropdownButton, dropdownList, inputsLength);
+        }
+        if (index === inputsLength - 1) {
+          selectedComponent = {};
+        }
       }
     });
   }
 
-  function selectSpecificationSelect(selectIdentifier, itemIdentifier, itemName, dropdownContainer, inputsLength) {
+  function selectSpecificationSelect(selectIdentifier, itemIdentifier, itemName, dropdownContainer, dropdownButton, dropdownList, inputsLength) {
     specificationValues[selectIdentifier] = itemIdentifier;
+    dropdownContainer.removeChild(dropdownButton);
+    dropdownContainer.removeChild(dropdownList);
     var itemElement = document.createElement("div");
     itemElement.classList.add("workflow-component-specifications-selected-item");
     var itemNameElement = document.createElement("b");
@@ -577,7 +618,13 @@
       sessionStorage.setItem("workflow-actions", JSON.stringify({actions: [createComponent()]}));
     } else {
       var actions = JSON.parse(sessionStorage.getItem("workflow-actions")).actions;
-      actions.push(createComponent());
+      var component = createComponent();
+      if (sessionStorage.getItem("workflow-action-index") !== null) {
+        actions[sessionStorage.getItem("workflow-action-index")] = component;
+        sessionStorage.removeItem("workflow-action-index");
+      } else {
+        actions.push(component);
+      }
       sessionStorage.setItem("workflow-actions", JSON.stringify({actions: actions}));
     }
   }
@@ -588,7 +635,7 @@
       "moduleLogo": selectedApplicationLogo,
       "type": selectedEvent,
       "typeDescription": selectedEventDescription,
-      "content": specificationValues
+      "content": JSON.stringify(specificationValues)
     };
   }
 </script>

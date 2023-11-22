@@ -162,7 +162,42 @@
     isRunningElement.appendChild(isRunningSpan);
     isRunningDiv.appendChild(isRunningElement);
     entry.appendChild(isRunningDiv);
+    entry.onclick = function (event) {
+      clickWorkflow(id);
+    }
     document.getElementById("workflows-list").appendChild(entry);
+  }
+
+  function clickWorkflow(id) {
+    let request = new HttpRequest("https://api.taskwolf.net/workflow/find/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}], {workflow: id});
+    request.send(function (status, responseText) {
+      var workflow = JSON.parse(responseText);
+      sessionStorage.setItem("workflow-selected", "true");
+      sessionStorage.setItem("workflow-id", workflow.id);
+      sessionStorage.setItem("workflow-name", workflow.name);
+      sessionStorage.setItem("workflow-description", workflow.description);
+      sessionStorage.setItem("workflow-trigger", JSON.stringify({
+        "module": workflow.triggerModule,
+        "moduleLogo": workflow.triggerModuleLogo,
+        "type": workflow.triggerType,
+        "typeDescription": workflow.triggerTypeDescription,
+        "content": workflow.triggerContent
+      }));
+      var actions = [];
+      for (var i = 0; i < workflow.actions.length; i++) {
+        var workflowActionInformation = workflow.actions[i];
+        actions.push({
+          "module": workflowActionInformation.actionModule,
+          "moduleLogo": workflowActionInformation.actionModuleLogo,
+          "type": workflowActionInformation.actionType,
+          "typeDescription": workflowActionInformation.actionTypeDescription,
+          "content": workflowActionInformation.actionContent
+        });
+      }
+      sessionStorage.setItem("workflow-actions", JSON.stringify({actions: actions}));
+      window.location.href = "/workflow/";
+    });
   }
 
   function appendWorkflowsCell(entry, identifier, information, elementType) {
@@ -181,6 +216,12 @@
   };
 
   document.getElementById("workflow-create").onclick = function(event) {
+    sessionStorage.removeItem("workflow-name");
+    sessionStorage.removeItem("workflow-description");
+    sessionStorage.removeItem("workflow-trigger");
+    sessionStorage.removeItem("workflow-actions");
+    sessionStorage.removeItem("workflow-selected");
+    sessionStorage.removeItem("workflow-id");
     window.location.href = "/workflow/";
   };
 </script>

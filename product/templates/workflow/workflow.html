@@ -30,34 +30,32 @@
   if(sessionStorage.getItem("workflow-name") !== null) {
     document.getElementById("workflow-name").value = sessionStorage.getItem("workflow-name");
   }
-
   if(sessionStorage.getItem("workflow-description") !== null) {
     document.getElementById("workflow-description").value = sessionStorage.getItem("workflow-description");
   }
-
   if (sessionStorage.getItem("workflow-trigger") !== null) {
     var trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
-    createComponentElement(trigger.module.charAt(0).toUpperCase() + trigger.module.slice(1), trigger.typeDescription, trigger.moduleLogo, "trigger", true);
+    createComponentElement(trigger.module.charAt(0).toUpperCase() + trigger.module.slice(1), trigger.typeDescription, trigger.moduleLogo, "trigger", 0, true);
   } else {
-    createComponentElement("Trigger", "Starts the workflow and triggers the chain of further actions", "", "trigger", false);
+    createComponentElement("Trigger", "Starts the workflow and triggers the chain of further actions", "", "trigger", 0, false);
   }
   if (sessionStorage.getItem("workflow-actions") !== null) {
     var actions = JSON.parse(sessionStorage.getItem("workflow-actions")).actions;
-    for (var i = 0; i < actions.length; i++) {
+    for (let i = 0; i < actions.length; i++) {
       var action = actions[i];
       drawArrow();
-      createComponentElement(action.module.charAt(0).toUpperCase() + action.module.slice(1), action.typeDescription, action.moduleLogo, "action", true);
+      createComponentElement(action.module.charAt(0).toUpperCase() + action.module.slice(1), action.typeDescription, action.moduleLogo, "action", i, true);
     }
     createAddActionButton();
   } else {
     drawArrow();
-    createComponentElement("Action", "Is executed as soon as the workflow is triggered", "", "action", false);
+    createComponentElement("Action", "Is executed as soon as the workflow is triggered", "", "action", 0, false);
     createAddActionButton();
   }
 
   checkPublishability();
 
-  function createComponentElement(title, description, logo, type, selected) {
+  function createComponentElement(title, description, logo, type, index, selected) {
     var componentContainer = document.createElement("div");
     componentContainer.classList.add("workflow-entry", "workflow-" + type);
     var componentHeadline = document.createElement("div");
@@ -85,6 +83,9 @@
     componentContainer.appendChild(document.createElement("br"));
     componentContainer.appendChild(document.createElement("br"));
     componentContainer.onclick = function (event) {
+      if (selected && type === "action") {
+        sessionStorage.setItem("workflow-action-index", index.toString());
+      }
       window.location.href = "/workflow/" + type + "/";
     }
     document.getElementById("workflow-container").appendChild(componentContainer);
@@ -159,14 +160,13 @@
   }
 
   document.getElementById("workflow-publish-button").onclick = function (event) {
-    var workflowOwner = sessionStorage.getItem("workflow-owner");
     var workflowName = sessionStorage.getItem("workflow-name");
     var workflowDescription = sessionStorage.getItem("workflow-description");
     var workflowTriggerInformation = JSON.parse(sessionStorage.getItem("workflow-trigger"));
     var workflowTrigger = {
       "module": workflowTriggerInformation["module"],
       "type": workflowTriggerInformation["type"],
-      "content": JSON.stringify(workflowTriggerInformation["content"])
+      "content": workflowTriggerInformation["content"]
     };
     var workflowActionsInformation = JSON.parse(sessionStorage.getItem("workflow-actions")).actions;
     var workflowActions = [];
@@ -175,16 +175,31 @@
       workflowActions.push({
         "module": workflowActionInformation["module"],
         "type": workflowActionInformation["type"],
-        "content": JSON.stringify(workflowActionInformation["content"])
+        "content": workflowActionInformation["content"]
       });
     }
-    let request = new HttpRequest("https://api.taskwolf.net/workflow/add/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}], {owner: workflowOwner, name: workflowName, description: workflowDescription, trigger: workflowTrigger, actions : workflowActions});
+    publish(workflowName, workflowDescription, workflowTrigger, workflowActions);
+  }
+
+  function publish(name, description, trigger, actions) {
+    var isSelected = sessionStorage.getItem("workflow-selected") !== null;
+    var requestBody = {name: name, description: description, trigger: trigger, actions : actions};
+    if (isSelected) {
+      requestBody.workflow = sessionStorage.getItem("workflow-id");
+    } else {
+      requestBody.owner = sessionStorage.getItem("workflow-owner");
+    }
+    let request = new HttpRequest("https://api.taskwolf.net/workflow" + (isSelected ? "/update/" : "/add/"), "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}], requestBody);
     request.send(function (status, responseText) {
       sessionStorage.removeItem("workflow-name");
       sessionStorage.removeItem("workflow-description");
       sessionStorage.removeItem("workflow-trigger");
       sessionStorage.removeItem("workflow-actions");
+      if (isSelected) {
+        sessionStorage.removeItem("workflow-selected");
+        sessionStorage.removeItem("workflow-id");
+      }
       window.location.href = "/workflows/";
     });
   }
