@@ -56,6 +56,16 @@ input:-webkit-autofill:active{
   }
 }
 
+#workflow-delete {
+  display: none;
+  position: absolute;
+  margin-left: 2%;
+}
+
+#workflow-delete-button {
+  width: 100%;
+}
+
 #workflow-headline {
   color: white;
   font-weight: bold;
@@ -84,15 +94,19 @@ input:-webkit-autofill:active{
   border-radius: 8px;
   text-align: center;
   background-color: #36393e;
-  transition-duration: 0.4s;
+  transition-duration: 0.3s;
 }
 
 .workflow-entry:hover {
-  scale: 1.02;
+  background-color: #43474d !important;
 }
 
 .workflow-entry-selected {
   background-color: #1b232f !important;
+}
+
+.workflow-entry-selected:hover {
+  background-color: #242f3f !important;
 }
 
 .workflow-headline {
@@ -122,6 +136,22 @@ input:-webkit-autofill:active{
 
 .workflow-entry-description {
   font-size: 22px;
+}
+
+.workflow-action-remove-container {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  margin-top: 5px;
+  margin-left: min(calc(800px - 42px), calc(95% - 42px));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border-radius: 50%;
+  background-color: #a90000;
+  padding: 5px;
+  transition-duration: 0.4s;
 }
 
 .workflow-action-add-container {

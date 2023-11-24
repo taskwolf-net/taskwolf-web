@@ -90,7 +90,11 @@
                   <div id="workflow-component-specifications-placeholders">
                     <h5 id="workflow-component-specifications-placeholders-headline" class="text-center">Placeholders</h5>
                     <hr class="w-100 hr"/>
-                    <p class="text-center">Unfortunately there are no placeholders available for this event.</p>
+                    <ul id="workflow-component-specifications-placeholders-tabs" class="nav nav-tabs d-none">
+                    </ul>
+                    <p id="workflow-component-specifications-placeholders-empty" class="text-center d-none">Unfortunately there are no placeholders available for this event.</p>
+                    <ul id="workflow-component-specifications-placeholders-list">
+                    </ul>
                   </div>
                 </div>
                 <h6 id="workflow-component-specifications-unable" class="mt-5 text-center">You must first select an application and event in order to be able to select the specifications.</h6>
@@ -117,7 +121,9 @@
     if ("{{type}}" === "trigger" && sessionStorage.getItem("workflow-trigger") !== null) {
       selectedComponent = JSON.parse(sessionStorage.getItem("workflow-trigger"));
     }
-    if ("{{type}}" === "action" && sessionStorage.getItem("workflow-action-index") !== null) {
+    var actionIndex = sessionStorage.getItem("workflow-action-index");
+    var actions = sessionStorage.getItem("workflow-actions");
+    if ("{{type}}" === "action" && actionIndex !== null && actions != null && JSON.parse(actions).actions.length > actionIndex) {
       selectedComponent = JSON.parse(sessionStorage.getItem("workflow-actions"))
         .actions[parseInt(sessionStorage.getItem("workflow-action-index"))];
     }
@@ -413,6 +419,7 @@
 <script>
   var specificationSelectButtons = [];
   var specificationValues = {};
+  var currentPlaceholderElement;
 
   $(document).ready(function() {
     new ResizeObserver(() => updateSpecificationsDividerHeight())
@@ -429,6 +436,11 @@
     document.getElementById("workflow-component-specifications-container").style.display = "flex";
     document.getElementById("workflow-component-specifications-unable").style.display = "none";
     fillSpecificationsInputs();
+    if (sessionStorage.getItem("workflow-action-index")) {
+      displayPlaceholdersTabs();
+    } else {
+      document.getElementById("workflow-component-specifications-placeholders-empty").classList.remove("d-none");
+    }
   }
 
   function fillSpecificationsInputs() {
@@ -471,6 +483,15 @@
     inputElement.oninput = function (event) {
       inputSpecificationInput(identifier, event.target.value, inputsLength);
     }
+    inputElement.ondragover = function (event) {
+      event.preventDefault();
+    };
+    inputElement.ondrop = function (event) {
+        inputElement.value =  inputElement.value.substring(0, inputElement.selectionStart) +
+          "$" + event.dataTransfer.getData("placeholder-identifier") +
+          inputElement.value.substring(inputElement.selectionStart);
+        inputSpecificationInput(identifier, inputElement.value, inputsLength);
+    };
     inputContainerElement.appendChild(inputElement);
     document.getElementById("workflow-component-specifications-input-list").appendChild(inputContainerElement);
     if (!(_.isEqual(selectedComponent, {}))) {
@@ -577,9 +598,83 @@
     checkAdoptability(inputsLength);
   }
 
+  function displayPlaceholdersTabs() {
+    displayPlaceholdersTab(-1);
+    for (var i = 0; i < sessionStorage.getItem("workflow-action-index"); i++) {
+      displayPlaceholdersTab(i);
+    }
+    document.getElementById("workflow-component-specifications-placeholders-tabs").classList.remove("d-none");
+  }
+
+  function displayPlaceholdersTab(index) {
+    var tabElement = document.createElement("li");
+    tabElement.classList.add("nav-item");
+    var linkElement = document.createElement("a");
+    linkElement.classList.add("nav-link");
+    if (index === -1) {
+      currentPlaceholderElement = linkElement;
+      linkElement.classList.add("nav-link-active");
+      displayPlaceholders(index);
+    }
+    linkElement.innerHTML = (index < 0) ? "Trigger" : ((index + 1) + ". Action");
+    tabElement.appendChild(linkElement);
+    tabElement.onclick = function (event) {
+      clickPlaceholdersTab(index, linkElement);
+    }
+    document.getElementById("workflow-component-specifications-placeholders-tabs").appendChild(tabElement);
+  }
+
+  function clickPlaceholdersTab(index, tabElement) {
+    if (currentPlaceholderElement === tabElement) {
+      return;
+    }
+    currentPlaceholderElement.classList.remove("nav-link-active");
+    tabElement.classList.add("nav-link-active");
+    currentPlaceholderElement = tabElement;
+    displayPlaceholders(index);
+  }
+
+  function displayPlaceholders(index) {
+    document.getElementById("workflow-component-specifications-placeholders-list").innerHTML = "";
+    var componentType = (index < 0) ? "trigger" : "action";
+    var component;
+    if (componentType === "trigger") {
+      component = JSON.parse(sessionStorage.getItem("workflow-trigger"));
+    } else {
+      component = JSON.parse(sessionStorage.getItem("workflow-actions")).actions[index];
+    }
+    var module = component.module;
+    var type = component.type;
+    let request = new HttpRequest("https://api.taskwolf.net/" + componentType + "/find/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}], {module: module, type: type});
+    request.send(function (status, responseText) {
+      var outputVariables = JSON.parse(responseText).outputVariables;
+      for (var i = 0; i < outputVariables.length; i++) {
+        let variable = outputVariables[i];
+        displayPlaceholder(variable.identifier, variable.name);
+      }
+    });
+  }
+
+  function displayPlaceholder(identifier, name) {
+    var placeholderElement = document.createElement("li");
+    placeholderElement.classList.add("workflow-component-specifications-placeholder");
+    placeholderElement.draggable= "true";
+    placeholderElement.ondragstart = function (event) {
+      event.dataTransfer.setData("placeholder-identifier", identifier);
+    }
+    var placeholderNameElement = document.createElement("b");
+    placeholderNameElement.innerHTML = name;
+    placeholderElement.appendChild(placeholderNameElement);
+    document.getElementById("workflow-component-specifications-placeholders-list").appendChild(placeholderElement);
+  }
+
   function resetSpecifications() {
     document.getElementById("workflow-component-specifications-container").style.display = "none";
     document.getElementById("workflow-component-specifications-unable").style.display = "block";
+    document.getElementById("workflow-component-specifications-placeholders-empty").classList.add("d-none");
+    document.getElementById("workflow-component-specifications-placeholders-tabs").classList.add("d-none");
+    document.getElementById("workflow-component-specifications-placeholders-list").innerHTML = "";
     specificationSelectButtons = [];
     specificationValues = {};
     updateAdoptability(false);

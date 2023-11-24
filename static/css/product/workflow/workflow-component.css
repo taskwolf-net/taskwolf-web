@@ -330,6 +330,41 @@ input:-webkit-autofill:active{
   margin-bottom: 4%;
 }
 
+.nav-tabs {
+  border-color: #646464 !important;
+  width: 90%;
+  margin: auto;
+}
+
+.nav-link-active {
+  background-color: #646464 !important;
+}
+
+.nav-link {
+  color: white !important;
+  border: none !important;
+  transition-duration: 0.3s;
+}
+
+#workflow-component-specifications-placeholders-list {
+  list-style-type: none;
+  width: 50%;
+  margin: auto;
+  text-align: center;
+}
+
+.workflow-component-specifications-placeholder {
+  margin-top: 5%;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #323438;
+  transition-duration: 0.3s;
+}
+
+.workflow-component-specifications-placeholder:hover {
+  background-color: #45484d;
+}
+
 #workflow-component-specifications-divider {
   display: flex;
 }

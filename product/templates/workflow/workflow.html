@@ -8,6 +8,9 @@
       <div id="workflow-publish">
         <button id="workflow-publish-button" type="button" class="btn btn-success disabled">PUBLISH</button>
       </div>
+      <div id="workflow-delete">
+        <button id="workflow-delete-button" type="button" class="btn btn-danger">DELETE</button>
+      </div>
       <div id="workflow-container">
         <h1 id="workflow-headline">Workflow</h1>
         <div id="workflow-inputs">
@@ -21,43 +24,55 @@
           </div>
           <hr id="workflow-divider" class="hr mb-5"/>
         </div>
+        <div id="workflow-components">
+        </div>
       </div>
     </div>
   </body>
 </html>
 
 <script>
-  if(sessionStorage.getItem("workflow-name") !== null) {
-    document.getElementById("workflow-name").value = sessionStorage.getItem("workflow-name");
-  }
-  if(sessionStorage.getItem("workflow-description") !== null) {
-    document.getElementById("workflow-description").value = sessionStorage.getItem("workflow-description");
-  }
-  if (sessionStorage.getItem("workflow-trigger") !== null) {
-    var trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
-    createComponentElement(trigger.module.charAt(0).toUpperCase() + trigger.module.slice(1), trigger.typeDescription, trigger.moduleLogo, "trigger", 0, true);
-  } else {
-    createComponentElement("Trigger", "Starts the workflow and triggers the chain of further actions", "", "trigger", 0, false);
-  }
-  if (sessionStorage.getItem("workflow-actions") !== null) {
-    var actions = JSON.parse(sessionStorage.getItem("workflow-actions")).actions;
-    for (let i = 0; i < actions.length; i++) {
-      var action = actions[i];
-      drawArrow();
-      createComponentElement(action.module.charAt(0).toUpperCase() + action.module.slice(1), action.typeDescription, action.moduleLogo, "action", i, true);
-    }
-    createAddActionButton();
-  } else {
-    drawArrow();
-    createComponentElement("Action", "Is executed as soon as the workflow is triggered", "", "action", 0, false);
-    createAddActionButton();
-  }
+  displayWorkflow();
 
-  checkPublishability();
+  function displayWorkflow() {
+    document.getElementById("workflow-components").innerHTML = "";
+    if(sessionStorage.getItem("workflow-name") !== null) {
+      document.getElementById("workflow-name").value = sessionStorage.getItem("workflow-name");
+    }
+    if(sessionStorage.getItem("workflow-description") !== null) {
+      document.getElementById("workflow-description").value = sessionStorage.getItem("workflow-description");
+    }
+    if (sessionStorage.getItem("workflow-trigger") !== null) {
+      var trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
+      createComponentElement(trigger.module.charAt(0).toUpperCase() + trigger.module.slice(1), trigger.typeDescription, trigger.moduleLogo, "trigger", 0, true);
+    } else {
+      createComponentElement("Trigger", "Starts the workflow and triggers the chain of further actions", "", "trigger", 0, false);
+    }
+    if (sessionStorage.getItem("workflow-actions") !== null) {
+      var actions = JSON.parse(sessionStorage.getItem("workflow-actions")).actions;
+      for (let i = 0; i < actions.length; i++) {
+        var action = actions[i];
+        drawArrow();
+        createComponentElement(action.module.charAt(0).toUpperCase() + action.module.slice(1), action.typeDescription, action.moduleLogo, "action", i, true);
+      }
+      createAddActionButton(actions.length);
+    } else {
+      drawArrow();
+      createComponentElement("Action", "Is executed as soon as the workflow is triggered", "", "action", 0, false);
+      createAddActionButton(1);
+    }
+    checkPublishability();
+    if (sessionStorage.getItem("workflow-selected") !== null) {
+      document.getElementById("workflow-delete").style.display = "block";
+    }
+  }
 
   function createComponentElement(title, description, logo, type, index, selected) {
     var componentContainer = document.createElement("div");
     componentContainer.classList.add("workflow-entry", "workflow-" + type);
+    if (type === "action" && ((sessionStorage.getItem("workflow-actions") != null && JSON.parse(sessionStorage.getItem("workflow-actions")).actions.length > 1) || (!selected && index > 0))) {
+      createActionRemoveButton(index, componentContainer);
+    }
     var componentHeadline = document.createElement("div");
     componentHeadline.classList.add("workflow-headline");
     if (logo !== "") {
@@ -83,22 +98,40 @@
     componentContainer.appendChild(document.createElement("br"));
     componentContainer.appendChild(document.createElement("br"));
     componentContainer.onclick = function (event) {
-      if (selected && type === "action") {
+      if (event.target.classList.contains("workflow-action-remove-container") || event.target.classList.contains("workflow-action-remove")) {
+        return;
+      }
+      if (type === "action") {
         sessionStorage.setItem("workflow-action-index", index.toString());
       }
       window.location.href = "/workflow/" + type + "/";
     }
-    document.getElementById("workflow-container").appendChild(componentContainer);
+    document.getElementById("workflow-components").appendChild(componentContainer);
+  }
+
+  function createActionRemoveButton(index, componentContainer) {
+    var actionRemoveContainer = document.createElement("div");
+    actionRemoveContainer.classList.add("workflow-action-remove-container");
+    var iconContainer = document.createElement("i");
+    iconContainer.classList.add("workflow-action-remove", "fa-solid", "fa-xmark");
+    actionRemoveContainer.appendChild(iconContainer);
+    actionRemoveContainer.addEventListener("click", function(event) {
+      var actions = JSON.parse(sessionStorage.getItem("workflow-actions"));
+      actions.actions = actions.actions.filter(item => actions.actions.indexOf(item)!== index);
+      sessionStorage.setItem("workflow-actions", JSON.stringify(actions));
+      displayWorkflow();
+    });
+    componentContainer.appendChild(actionRemoveContainer);
   }
 
   function drawArrow() {
     var arrowContainer = document.createElement("div");
     arrowContainer.classList.add("arrow-container");
     arrowContainer.innerHTML = '<svg><defs><marker id="markerArrow" markerWidth="13" markerHeight="13" refX="2" refY="6" orient="auto"><path d="M2,2 L2,11 L10,6 L2,2" style="fill: #ffffff;" /></marker></defs><line x1="10" y1="0" x2="10" y2="100" class="arrow" /></svg>';
-    document.getElementById("workflow-container").appendChild(arrowContainer);
+    document.getElementById("workflow-components").appendChild(arrowContainer);
   }
 
-  function createAddActionButton() {
+  function createAddActionButton(index) {
     var buttonContainer = document.createElement("div");
     buttonContainer.classList.add("workflow-action-add-container");
     var iconContainer = document.createElement("i");
@@ -107,10 +140,10 @@
     iconContainer.addEventListener("click", function(event) {
       removeCurrentAddActionButtons();
       drawArrow();
-      createComponentElement("Action", "Is executed as soon as the workflow is triggered", "", "action", false);
-      createAddActionButton();
+      createComponentElement("Action", "Is executed as soon as the workflow is triggered", "", "action", index, false);
+      createAddActionButton(index + 1);
     });
-    document.getElementById("workflow-container").appendChild(buttonContainer);
+    document.getElementById("workflow-components").appendChild(buttonContainer);
   }
 
   function removeCurrentAddActionButtons() {
@@ -201,6 +234,28 @@
         sessionStorage.removeItem("workflow-id");
       }
       window.location.href = "/workflows/";
+    });
+  }
+
+  document.getElementById("workflow-delete").onclick = function (event) {
+    openDeleteMenu();
+  }
+
+  function openDeleteMenu() {
+    swal({
+      title: "Delete Workflow?",
+      text: "Are you sure that you want to delete that workflow?",
+      icon: "warning",
+      dangerMode: true,
+      buttons: true,
+    }).then(willDelete => {
+      if (willDelete) {
+        let request = new HttpRequest("https://api.taskwolf.net/workflow/remove/", "POST", [{key: "Content-Type", value: "application/json"},
+          {key: "API-KEY", value: Cookie.find("token")}], {workflow: sessionStorage.getItem("workflow-id")});
+        request.send(function (status, responseText) {
+          swal("Deleted!", "That workflow has been successfully deleted!", "success").then(success => window.location.href = "/workflows/");
+        });
+      }
     });
   }
 </script>

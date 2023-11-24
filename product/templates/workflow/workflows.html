@@ -49,7 +49,7 @@
         </ul>
         <div id="workflows-empty">
           <span id="workflows-empty-headline">You have not yet created any workflows.</span>
-          <span>Why don't you just create one&nbsp;</span><a id="workflows-empty-link" href="/workflow/">here</a><span>?</span>
+          <span>Why don't you just create one&nbsp;</span><a id="workflows-empty-link" href="javascript:createWorkflow()">here</a><span>?</span>
         </div>
       </div>
     </div>
@@ -60,6 +60,7 @@
   var owners;
   var workflows;
   var workflowsCurrentNameFilter = "";
+  var changeStateBlocked = false;
 
   $(document).ready(function() {
     workflows = [];
@@ -110,10 +111,6 @@
       {key: "API-KEY", value: Cookie.find("token")}], {owner: sessionStorage.getItem("workflow-owner")});
     request.send(function (status, responseText) {
       workflows = JSON.parse(responseText).workflows;
-      for (var i = 0; i < workflows.length; i++) {
-        workflows[i].creationDate = "Comming Soon";
-        workflows[i].isRunning = true;
-      }
       callback();
     });
   }
@@ -125,7 +122,7 @@
       if(!(shouldDisplayWorkflowEntry(entry))) {
         continue;
       }
-      displayWorkflow(entry.id, entry.name, entry.creator, entry.creationDate, entry.isRunning);
+      displayWorkflow(entry.id, entry.name, entry.creator, entry.created, entry.armed);
     }
   }
 
@@ -133,10 +130,10 @@
     return workflowsCurrentNameFilter.length === 0 ||
       entry.name.toLowerCase().includes(workflowsCurrentNameFilter.toLowerCase()) ||
       entry.creator.toLowerCase().includes(workflowsCurrentNameFilter.toLowerCase()) ||
-      entry.creationDate.toLowerCase().includes(workflowsCurrentNameFilter.toLowerCase());
+      entry.created.toLowerCase().includes(workflowsCurrentNameFilter.toLowerCase());
   }
 
-  function displayWorkflow(id, name, creator, creationDate, isRunning) {
+  function displayWorkflow(id, name, creator, created, armed) {
     var entry = document.createElement('li');
     var nameDiv = document.createElement("div");
     nameDiv.classList.add("workflows-entry-name");
@@ -146,15 +143,21 @@
     nameDiv.appendChild(nameElement);
     entry.appendChild(nameDiv);
     appendWorkflowsCell(entry, "creator", creator, "span");
-    appendWorkflowsCell(entry, "creationDate", creationDate, "span");
+    appendWorkflowsCell(entry, "created", created, "span");
     var isRunningDiv = document.createElement("div");
     isRunningDiv.classList.add("workflows-entry-is-running");
     var isRunningElement = document.createElement("label");
     isRunningElement.classList.add("switch");
     var isRunningInput = document.createElement("input");
     isRunningInput.type = "checkbox";
-    if (isRunning) {
+    if (armed) {
       isRunningInput.checked = true;
+    }
+    isRunningElement.onclick = function (event) {
+      if (changeStateBlocked === true) {
+        return;
+      }
+      updateWorkflowState(id, !isRunningInput.checked);
     }
     isRunningElement.appendChild(isRunningInput);
     var isRunningSpan = document.createElement("span");
@@ -163,6 +166,9 @@
     isRunningDiv.appendChild(isRunningElement);
     entry.appendChild(isRunningDiv);
     entry.onclick = function (event) {
+      if (event.target === isRunningSpan || event.target === isRunningInput) {
+        return;
+      }
       clickWorkflow(id);
     }
     document.getElementById("workflows-list").appendChild(entry);
@@ -200,6 +206,15 @@
     });
   }
 
+  function updateWorkflowState(id, state) {
+    changeStateBlocked = true;
+    let request = new HttpRequest("https://api.taskwolf.net/workflow/state/change/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}], {workflow: id, armed: state});
+    request.send(function (status, responseText) {
+      changeStateBlocked = false;
+    });
+  }
+
   function appendWorkflowsCell(entry, identifier, information, elementType) {
     var div = document.createElement("div");
     var element = document.createElement(elementType);
@@ -216,6 +231,10 @@
   };
 
   document.getElementById("workflow-create").onclick = function(event) {
+    createWorkflow();
+  };
+
+  function createWorkflow() {
     sessionStorage.removeItem("workflow-name");
     sessionStorage.removeItem("workflow-description");
     sessionStorage.removeItem("workflow-trigger");
@@ -223,5 +242,5 @@
     sessionStorage.removeItem("workflow-selected");
     sessionStorage.removeItem("workflow-id");
     window.location.href = "/workflow/";
-  };
+  }
 </script>
