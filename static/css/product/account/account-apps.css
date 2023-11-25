@@ -1,0 +1,77 @@
+#account-apps-headline {
+  color: white;
+  text-align: center;
+  margin-top: 2%;
+}
+
+#account-apps-search-box {
+  width: min(calc(1200px - 15vw), 95%);
+  margin: auto;
+  margin-top: 2%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 5px;
+  background-color: #161b25;
+}
+
+#account-apps-search-box input {
+  flex-grow: 2;
+  border: none;
+  border-radius: 5px;
+  background-color: #161b25;
+  color: white;
+}
+
+#account-apps-search-box input:focus{
+  box-shadow: 0 0 0 rgb(255, 255, 255);
+}
+
+#account-apps-search-box button {
+  background-color: #161b25;
+  color: #9b9b9b;
+  border: none;
+  border-radius: 5px;
+}
+
+#account-apps-list {
+  width: min(calc(1200px - 15vw), 95%);
+  margin: auto;
+  margin-top: 2%;
+  list-style-type: none;
+}
+
+.account-application-entry {
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2%;
+  padding: 15px;
+  border: 1px solid #5b5b5b;
+  border-radius: 10px;
+}
+
+.account-application-entry b {
+  margin-left: 5%;
+  font-size: 20px;
+  width: 100%;
+}
+
+.account-application-entry i {
+  color: white;
+  font-size: 25px;
+  font-weight: bold;
+  transition-duration: 0.3s;
+}
+
+.account-application-entry i:hover {
+  color: #8e8e8e;
+}
+
+#account-apps-empty {
+  display: none;
+  width: 100%;
+  text-align: center;
+  color: white;
+}

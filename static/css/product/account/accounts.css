@@ -1,0 +1,65 @@
+#accounts-header {
+  margin: auto;
+  margin-top: 2%;
+  width: min(calc(1500px - 15vw), 95%);
+}
+
+#accounts-logo {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 4%;
+}
+
+#accounts-headline {
+  display: inline-block;
+  vertical-align: middle;
+  color: white;
+  font-weight: bold;
+}
+
+#accounts-list-headline {
+  color: white;
+  width: min(calc(1500px - 15vw), 95%);
+  margin: auto;
+  margin-top: 2%;
+  border-bottom: 2px #4a4a4a solid;
+}
+
+#accounts-list {
+  width: min(calc(1500px - 15vw), 95%);
+  margin: auto;
+  margin-top: 1%;
+  list-style-type: none;
+}
+
+.account-entry {
+  color: white;
+  margin-top: 1%;
+  padding: 15px;
+  border: 1px solid #5b5b5b;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.account-entry b {
+  display: inline-block;
+  margin-left: 5%;
+  font-size: 18px;
+  width: 40%;
+}
+
+.account-entry span {
+  display: inline-block;
+  width: 45%;
+}
+
+.account-entry button {
+  width: 10%;
+}
+
+#accounts-empty {
+  display: none;
+  width: 100%;
+  text-align: center;
+  color: white;
+}

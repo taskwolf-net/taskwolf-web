@@ -1,0 +1,96 @@
+{% load static %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body>
+    {% include 'templates/product-header.html' %}
+    {% include 'templates/product-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="accounts-wrapper">
+        <div id="accounts-header">
+          <img id="accounts-logo" width="80px" height="80px"></img>
+          <h1 id="accounts-headline"></h1>
+        </div>
+        <h1 id="accounts-list-headline">Accounts</h1>
+        <ul id="accounts-list">
+        </ul>
+        <div id="accounts-empty">
+          <b id="accounts-empty-headline"></b>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  var accounts;
+
+  $(document).ready(function() {
+    document.getElementById("accounts-logo").src = "{% static '' %}" +
+      "img/applications/" + sessionStorage.getItem("account-app-logo");
+    document.getElementById("accounts-headline").innerHTML =
+      sessionStorage.getItem("account-app-name");
+    fetchAccountsData(function() {
+      displayAccounts();
+      if (accounts.length === 0) {
+        document.getElementById("accounts-empty").style.display = "block";
+        document.getElementById("accounts-empty-headline").innerHTML =
+          "You currently have no linked " + sessionStorage.getItem("account-app-name") + " accounts."
+      }
+    });
+  });
+
+  function fetchAccountsData(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/accounts/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}], {module: sessionStorage.getItem("account-app-identifier")});
+    request.send(function (status, responseText) {
+      accounts = JSON.parse(responseText).accounts;
+      callback();
+    });
+  }
+
+  function displayAccounts() {
+    document.getElementById("accounts-list").innerHTML = "";
+    for (var i = 0; i < accounts.length; i++) {
+      var entry = accounts[i];
+      displayAccount(entry.identifier, entry.name);
+    }
+  }
+
+  function displayAccount(identifier, name) {
+    var entryElement = document.createElement("li");
+    entryElement.classList.add("account-entry");
+    var nameElement = document.createElement("b");
+    nameElement.innerHTML = name;
+    entryElement.appendChild(nameElement);
+    var identifierElement = document.createElement("span");
+    identifierElement.innerHTML = "(" + identifier + ")";
+    entryElement.appendChild(identifierElement);
+    var deleteButton = document.createElement("button");
+    deleteButton.classList.add("btn", "btn-danger");
+    deleteButton.type = "button";
+    deleteButton.innerHTML = "DELETE";
+    deleteButton.onclick = function (event) {
+      openDeleteMenu(identifier);
+    }
+    entryElement.appendChild(deleteButton);
+    document.getElementById("accounts-list").appendChild(entryElement);
+  }
+
+  function openDeleteMenu(identifier) {
+    swal({
+      title: "Delete Account?",
+      text: "Are you sure that you want to delete that account?",
+      icon: "warning",
+      dangerMode: true,
+      buttons: true,
+    }).then(willDelete => {
+      if (willDelete) {
+        let request = new HttpRequest("https://api.taskwolf.net/account/remove/", "POST", [{key: "Content-Type", value: "application/json"},
+          {key: "API-KEY", value: Cookie.find("token")}], {module: sessionStorage.getItem("account-app-identifier"), identifier: identifier});
+        request.send(function (status, responseText) {
+          swal("Deleted!", "That account has been successfully deleted!", "success").then(success => window.location.href = "/account/apps/");
+        });
+      }
+    });
+  }
+</script>

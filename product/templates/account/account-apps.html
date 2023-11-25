@@ -1,0 +1,91 @@
+{% load static %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body>
+    {% include 'templates/product-header.html' %}
+    {% include 'templates/product-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="account-apps-wrapper">
+        <h1 id="account-apps-headline">Apps</h1>
+        <div id="account-apps-search-box">
+          <input id="account-apps-search-input" placeholder="Search for app..." type="text" class="form-control" value="" autocomplete="off">
+          <button type="button">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+        <ul id="account-apps-list">
+        </ul>
+        <div id="account-apps-empty">
+          <b id="account-apps-empty-headline">You have not yet linked any accounts.</b>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  var apps;
+  var appsCurrentNameFilter = "";
+
+  $(document).ready(function() {
+    fetchAppsData(function() {
+      displayApps();
+      if (apps.length === 0) {
+        document.getElementById("account-apps-empty").style.display = "block";
+      }
+    });
+  });
+
+  function fetchAppsData(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/account/apps/", "GET", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}]);
+    request.send(function (status, responseText) {
+      apps = JSON.parse(responseText).apps;
+      callback();
+    });
+  }
+
+  function displayApps() {
+    document.getElementById("account-apps-list").innerHTML = "";
+    for (var i = 0; i < apps.length; i++) {
+      var entry = apps[i];
+      if(!(shouldDisplayAppEntry(entry))) {
+        continue;
+      }
+      displayApp(entry.name, entry.logo);
+    }
+  }
+
+  function shouldDisplayAppEntry(entry) {
+    return appsCurrentNameFilter.length === 0 ||
+      entry.name.toLowerCase().includes(appsCurrentNameFilter.toLowerCase());
+  }
+
+  function displayApp(name, logo) {
+    var entryElement = document.createElement("li");
+    entryElement.classList.add("account-application-entry");
+    var logoElement = document.createElement("img");
+    logoElement.src = "{% static '' %}" + "img/applications/" + logo;
+    logoElement.width = 64;
+    logoElement.height = 64;
+    entryElement.appendChild(logoElement);
+    var nameElement = document.createElement("b");
+    nameElement.innerHTML = name;
+    entryElement.appendChild(nameElement);
+    entryElement.onclick = function(event) {
+      sessionStorage.setItem("account-app-identifier", name.toLowerCase());
+      sessionStorage.setItem("account-app-name", name.charAt(0).toUpperCase() + name.slice(1));
+      sessionStorage.setItem("account-app-logo", logo);
+      window.location.href = "/accounts/";
+    }
+    var arrowElement = document.createElement("i");
+    arrowElement.classList.add("fa-solid", "fa-angle-right");
+    entryElement.appendChild(arrowElement);
+    document.getElementById("account-apps-list").appendChild(entryElement);
+  }
+
+  document.getElementById("account-apps-search-input").oninput = function(event) {
+    appsCurrentNameFilter = event.target.value;
+    displayApps();
+  };
+</script>
