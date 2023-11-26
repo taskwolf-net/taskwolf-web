@@ -36,9 +36,9 @@
 
 #account-apps-list {
   width: min(calc(1200px - 15vw), 95%);
-  margin: auto;
-  margin-top: 2%;
   list-style-type: none;
+  margin: auto;
+  padding: 0;
 }
 
 .account-application-entry {
