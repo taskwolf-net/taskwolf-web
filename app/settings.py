@@ -20,6 +20,7 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 # Application definition
 
 INSTALLED_APPS = [
+  'base.apps.BaseConfig',
   'errors.apps.ErrorsConfig',
   'home.apps.HomeConfig',
   'verification.apps.VerificationConfig',
