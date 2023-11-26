@@ -254,9 +254,8 @@
     request.send(function (status, responseText) {
       var information = JSON.parse(responseText);
       var logoLinkElement = document.createElement("a");
-      logoLinkElement.href = information.registrationUrl;
-      logoLinkElement.target = "_blank";
       logoLinkElement.onclick = function(event) {
+        window.open(information.registrationUrl);
         clickSkipButton();
       }
       var logoElement = document.createElement("img");
