@@ -198,7 +198,9 @@
     });
     entryElement.onclick = function(event) {}
     prepareAccount();
-    prepareEvent();
+    if (_.isEqual(selectedComponent, {})) {
+      prepareEvent();
+    }
     setTimeout(function(){
       $('#workflow-component-account').collapse("toggle");
     }, 600);
@@ -311,6 +313,9 @@
   }
 
   function clickSkipButton() {
+    if (!(_.isEqual(selectedComponent, {}))) {
+      prepareEvent();
+    }
     $('#workflow-component-event').collapse("toggle");
     var tooltips = document.getElementsByClassName("tooltip")
     for (var i = 0; i < tooltips.length; i++) {
@@ -365,7 +370,7 @@
     if (!(_.isEqual(selectedComponent, {})) && selectedComponent.type === identifier) {
       setTimeout(function(){
         selectEvent(identifier, name, description);
-      }, 1800);
+      }, 600);
     }
   }
 
@@ -493,7 +498,7 @@
     };
     inputContainerElement.appendChild(inputElement);
     document.getElementById("workflow-component-specifications-input-list").appendChild(inputContainerElement);
-    if (!(_.isEqual(selectedComponent, {}))) {
+    if (!(_.isEqual(selectedComponent, {})) && "content" in selectedComponent) {
       var selectedComponentContent = JSON.parse(selectedComponent.content);
       setTimeout(function(){
         inputElement.value = selectedComponentContent[identifier];
@@ -540,7 +545,7 @@
       clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton, index, inputsLength);
     });
     document.getElementById("workflow-component-specifications-input-list").appendChild(dropdownContainer);
-    if (!(_.isEqual(selectedComponent, {}))) {
+    if (!(_.isEqual(selectedComponent, {})) && "content" in selectedComponent) {
       setTimeout(function(){
         clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton, index, inputsLength);
       }, 1200 + 600 * index);

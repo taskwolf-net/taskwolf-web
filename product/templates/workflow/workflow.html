@@ -173,8 +173,10 @@
       return;
     }
     if (sessionStorage.getItem("workflow-name") === "" ||
-      sessionStorage.getItem("workflow-description") === ""
-    ) {
+      sessionStorage.getItem("workflow-description") === "" ||
+      (!("content" in JSON.parse(sessionStorage.getItem("workflow-trigger")))) ||
+      JSON.parse(sessionStorage.getItem("workflow-actions")).actions.some((action) => !("content" in action))
+  ) {
       updatePublishability(false);
       return;
     }

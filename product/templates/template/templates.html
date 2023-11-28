@@ -5,7 +5,198 @@
     {% include 'templates/product-header.html' %}
     {% include 'templates/product-sidebar.html' %}
     <div class="sidebar-influenced">
-
+      <div id="templates-wrapper">
+        <h1 id="templates-headline">Templates</h1>
+        <div id="templates-header">
+          <div id="templates-modules-dropdown" class="dropdown">
+            <button id="templates-modules-dropdown-button" class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
+              App: All
+            </button>
+            <ul id="templates-modules-dropdown-list" class="dropdown-menu dropdown-menu-dark">
+            </ul>
+          </div>
+          <div id="templates-search-box">
+            <input id="templates-search-input" placeholder="Search for template..." type="text" class="form-control" value="" autocomplete="off">
+            <button type="button">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </div>
+        <ul id="templates-list">
+        </ul>
+        <div id="templates-empty">
+          <b id="templates-empty-headline">Unfortunately no templates could be found.</b>
+        </div>
+      </div>
     </div>
   </body>
 </html>
+
+<script>
+  var modules;
+  var currentSelectedModule = "all";
+  var templates;
+  var templatesCurrentNameFilter = "";
+
+  $(document).ready(function() {
+    fetchModulesData(function () {
+      addTemplateModule("All");
+      for (var i = 0; i < modules.length; i++) {
+        addTemplateModule(modules[i].name);
+      }
+      fetchTemplatesData(function() {
+        displayTemplates();
+      });
+    });
+  });
+
+  function fetchModulesData(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/modules/all/", "GET", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}]);
+    request.send(function (status, responseText) {
+      modules = JSON.parse(responseText).modules;
+      callback();
+    });
+  }
+
+  function addTemplateModule(module) {
+    var moduleElement = document.createElement("li");
+    moduleElement.classList.add("dropdown-item");
+    var moduleName = document.createElement("b");
+    moduleName.innerHTML = module;
+    moduleElement.appendChild(moduleName);
+    moduleElement.onclick = function(event) {
+      selectTemplateModule(module);
+    }
+    document.getElementById("templates-modules-dropdown-list").appendChild(moduleElement);
+  }
+
+  function selectTemplateModule(module) {
+    document.getElementById("templates-modules-dropdown-button").innerHTML = "App: " + module;
+    currentSelectedModule = module.toLowerCase();
+    displayTemplates();
+  }
+
+  function fetchTemplatesData(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/templates/all/", "GET", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}]);
+    request.send(function (status, responseText) {
+      templates = JSON.parse(responseText).templates;
+      callback();
+    });
+  }
+
+  function displayTemplates() {
+    document.getElementById("templates-list").innerHTML = "";
+    var displayedEntries = 0;
+    for (var i = 0; i < templates.length; i++) {
+      var entry = templates[i];
+      if(!(shouldDisplayTemplateEntry(entry))) {
+        continue;
+      }
+      displayTemplate(entry.name, entry.description, entry.trigger, entry.actions);
+      displayedEntries++;
+    }
+    updateTooltips();
+    if (displayedEntries === 0) {
+      document.getElementById("templates-empty").style.display = "block";
+    } else {
+      document.getElementById("templates-empty").style.display = "none";
+    }
+  }
+
+  function shouldDisplayTemplateEntry(entry) {
+    if (currentSelectedModule !== "all" && !entry.modules.some((module) => module.toLowerCase() === currentSelectedModule)) {
+      return false;
+    }
+    return templatesCurrentNameFilter.length === 0 ||
+      entry.name.toLowerCase().includes(templatesCurrentNameFilter.toLowerCase()) ||
+      entry.description.toLowerCase().includes(templatesCurrentNameFilter.toLowerCase());
+  }
+
+  function displayTemplate(name, description, trigger, actions) {
+    var entryElement = document.createElement("li");
+    entryElement.classList.add("template-entry");
+    entryElement.appendChild(createWorkflowElement(trigger, actions));
+    var nameElement = document.createElement("b");
+    nameElement.innerHTML = name;
+    entryElement.appendChild(nameElement);
+    var descriptionElement = document.createElement("span");
+    descriptionElement.innerHTML = description;
+    entryElement.appendChild(descriptionElement);
+    entryElement.onclick = function(event) {
+      clickTemplate(name, description, trigger, actions);
+    }
+    applyTooltips(entryElement, "Click to try out template!");
+    document.getElementById("templates-list").appendChild(entryElement);
+  }
+
+  function clickTemplate(name, description, trigger, actions) {
+    sessionStorage.setItem("workflow-name", name);
+    sessionStorage.setItem("workflow-description", description);
+    sessionStorage.setItem("workflow-trigger", JSON.stringify({
+      "module": trigger.module,
+      "moduleLogo": trigger.moduleLogo,
+      "type": trigger.type,
+      "typeDescription": trigger.typeDescription
+    }));
+    var encodedActions = [];
+    for (var i = 0; i < actions.length; i++) {
+      var action = actions[i];
+      encodedActions.push({
+        "module": action.module,
+        "moduleLogo": action.moduleLogo,
+        "type": action.type,
+        "typeDescription": action.typeDescription
+      });
+    }
+    sessionStorage.setItem("workflow-actions", JSON.stringify({actions: encodedActions}));
+    window.location.href = "/workflow/";
+  }
+
+  function createWorkflowElement(trigger, actions) {
+    var workflowElement = document.createElement("div");
+    workflowElement.classList.add("template-workflow");
+    workflowElement.appendChild(createLogoElement(trigger));
+    for (var i = 0; i < actions.length; i++) {
+      workflowElement.appendChild(createArrowElement());
+      workflowElement.appendChild(createLogoElement(actions[i]));
+    }
+    return workflowElement;
+  }
+
+  function createLogoElement(module) {
+    var logoElement = document.createElement("img");
+    logoElement.src = "{% static '' %}" + "img/applications/" + modules.filter(entry => {
+      return entry.name.toLowerCase() === module.module.toLowerCase();
+    })[0].logo;
+    logoElement.width = 64;
+    logoElement.height = 64;
+    return logoElement;
+  }
+
+  function createArrowElement() {
+    var arrow = document.createElement("span");
+    arrow.classList.add("template-workflow-arrow");
+    arrow.innerHTML = "&#10132;";
+    return arrow;
+  }
+
+  function applyTooltips(element, text) {
+    $(element).attr("data-bs-toggle", "tooltip");
+    $(element).attr("data-bs-placement", "top");
+    $(element).attr("data-bs-title", text);
+  }
+
+  function updateTooltips() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+  }
+
+  document.getElementById("templates-search-input").oninput = function(event) {
+    templatesCurrentNameFilter = event.target.value;
+    displayTemplates();
+  };
+</script>

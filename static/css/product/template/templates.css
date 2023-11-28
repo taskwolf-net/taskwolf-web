@@ -1,0 +1,128 @@
+#templates-headline {
+  color: white;
+  text-align: center;
+  margin-top: 2%;
+  font-weight: bold;
+}
+
+#templates-header {
+  width: min(calc(1500px - 15vw), 95%);
+  margin: auto;
+  margin-top: 2%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#templates-modules-dropdown {
+  width: 30%;
+  margin-right: 2%;
+}
+
+#templates-modules-dropdown-button {
+  width: 100%;
+}
+
+#templates-modules-dropdown-list {
+  width: 100%;
+}
+
+#templates-search-box {
+  width: 70%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 5px;
+  background-color: #161b25;
+}
+
+#templates-search-box input {
+  flex-grow: 2;
+  border: none;
+  border-radius: 5px;
+  background-color: #161b25;
+  color: white;
+}
+
+#templates-search-box input:focus{
+  box-shadow: 0 0 0 rgb(255, 255, 255);
+}
+
+#templates-search-box button {
+  background-color: #161b25;
+  color: #9b9b9b;
+  border: none;
+  border-radius: 5px;
+}
+#templates-list {
+  width: min(calc(2000px - 15vw), 95%);
+  list-style-type: none;
+  margin: auto;
+  margin-top: 2%;
+  padding: 0;
+  align-items: stretch;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 50px;
+  row-gap: 50px;
+}
+
+.template-entry {
+  color: white;
+  height: 350px;
+  border: 1px solid #7f7f7f;
+  border-radius: 10px;
+  padding: 10px;
+  transition-duration: 0.3s;
+}
+
+.template-entry:hover {
+  scale: 1.05;
+}
+
+.template-workflow {
+  background-color: #202428;
+  padding: 50px 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.template-workflow-arrow {
+  font-size: 42px;
+  transform: scale(1.5);
+  height: 64px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.template-entry b {
+  display: block;
+  margin-bottom: 5%;
+}
+
+.template-entry span {
+  display: block;
+}
+
+#templates-empty {
+  display: none;
+  width: 100%;
+  text-align: center;
+  color: white;
+  margin-top: 2%;
+}
+
+@media (max-width: 1500px) {
+  #templates-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1000px) {
+  #templates-list {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
