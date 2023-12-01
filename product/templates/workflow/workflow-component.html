@@ -98,6 +98,7 @@
                   </div>
                 </div>
                 <h6 id="workflow-component-specifications-unable" class="mt-5 text-center">You must first select an application and event in order to be able to select the specifications.</h6>
+                <h6 id="workflow-component-specifications-redundant" class="mt-5 text-center">You do not need to enter any further specifications to use this event. When you are ready, you can simply click on the "Adopt" button.</h6>
               </div>
             </div>
           </div>
@@ -454,6 +455,11 @@
       document.getElementById("workflow-component-specifications-input-list").innerHTML = "";
       var component = JSON.parse(responseText);
       var inputVariables = component.inputVariables;
+      if (inputVariables.length === 0) {
+          document.getElementById("workflow-component-specifications-container").style.display = "none";
+          document.getElementById("workflow-component-specifications-redundant").style.display = "block";
+          updateAdoptability(true);
+      }
       for (let i = 0; i < inputVariables.length; i++) {
         var inputVariable = inputVariables[i];
         if (inputVariable.type === "TEXT") {
@@ -676,6 +682,7 @@
   function resetSpecifications() {
     document.getElementById("workflow-component-specifications-container").style.display = "none";
     document.getElementById("workflow-component-specifications-unable").style.display = "block";
+    document.getElementById("workflow-component-specifications-redundant").style.display = "none";
     document.getElementById("workflow-component-specifications-placeholders-empty").classList.add("d-none");
     document.getElementById("workflow-component-specifications-placeholders-tabs").classList.add("d-none");
     document.getElementById("workflow-component-specifications-placeholders-list").innerHTML = "";

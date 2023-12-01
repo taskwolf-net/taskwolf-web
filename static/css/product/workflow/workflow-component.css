@@ -369,6 +369,10 @@ input:-webkit-autofill:active{
   display: flex;
 }
 
+#workflow-component-specifications-redundant {
+  display: none;
+}
+
 .workflow-component-reset {
   float: right;
   margin-top: 2%;
