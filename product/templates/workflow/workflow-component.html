@@ -133,6 +133,7 @@
         workflowCurrentApplicationFilter = selectedComponent.module;
       }
       displayApplications();
+      workflowCurrentApplicationFilter = "";
     });
   });
 
@@ -612,6 +613,10 @@
   }
 
   function displayPlaceholdersTabs() {
+    if (sessionStorage.getItem("workflow-trigger") == null) {
+      document.getElementById("workflow-component-specifications-placeholders-empty").classList.remove("d-none");
+      return;
+    }
     displayPlaceholdersTab(-1);
     for (var i = 0; i < sessionStorage.getItem("workflow-action-index"); i++) {
       displayPlaceholdersTab(i);
