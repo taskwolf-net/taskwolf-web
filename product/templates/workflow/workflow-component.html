@@ -129,6 +129,9 @@
         .actions[parseInt(sessionStorage.getItem("workflow-action-index"))];
     }
     fetchApplicationsData(function() {
+      if (!(_.isEqual(selectedComponent, {}))) {
+        workflowCurrentApplicationFilter = selectedComponent.module;
+      }
       displayApplications();
     });
   });
@@ -178,17 +181,15 @@
     nameElement.innerHTML = name;
     entryElement.appendChild(nameElement);
     entryElement.onclick = function(event) {
-      selectApplication(name, logo, entryElement);
+      selectApplication(name, logo, entryElement, false);
     }
     document.getElementById("workflow-component-application-list").appendChild(entryElement);
     if (!(_.isEqual(selectedComponent, {})) && selectedComponent.module === name.toLowerCase()) {
-      setTimeout(function(){
-        selectApplication(name, logo, entryElement);
-      }, 600);
+      selectApplication(name, logo, entryElement, false);
     }
   }
 
-  function selectApplication(name, logo, entryElement) {
+  function selectApplication(name, logo, entryElement, collapse) {
     selectedApplication = name.toLowerCase();
     selectedApplicationLogo = logo;
     document.getElementById("workflow-component-application-list").style.display = "none";
@@ -202,9 +203,11 @@
     if (_.isEqual(selectedComponent, {})) {
       prepareEvent();
     }
-    setTimeout(function(){
-      $('#workflow-component-account').collapse("toggle");
-    }, 600);
+    if (collapse) {
+      setTimeout(function(){
+        $('#workflow-component-account').collapse("toggle");
+      }, 600);
+    }
   }
 
   function resetApplication(entryElement) {
@@ -257,9 +260,11 @@
     request.send(function (status, responseText) {
       var information = JSON.parse(responseText);
       var logoLinkElement = document.createElement("a");
-      logoLinkElement.onclick = function(event) {
-        window.open(information.registrationUrl);
-        clickSkipButton();
+      if (information.registrationUrl !== "") {
+        logoLinkElement.onclick = function (event) {
+          window.open(information.registrationUrl);
+          clickSkipButton(true);
+        }
       }
       var logoElement = document.createElement("img");
       logoElement.src = "{% static '' %}" + "img/applications/" + selectedApplicationLogo;
@@ -289,14 +294,12 @@
     applyTooltips(skipButton, "You already have linked an account. Would you like to skip this process?");
     resetButtonContainer.appendChild(skipButton);
     skipButton.onclick = function (event) {
-      clickSkipButton();
+      clickSkipButton(true);
     }
     document.getElementById("workflow-component-account-content").appendChild(resetButtonContainer);
     updateTooltips();
     if (!(_.isEqual(selectedComponent, {}))) {
-      setTimeout(function() {
-        clickSkipButton();
-      }, 1200);
+      clickSkipButton(false);
     }
   }
 
@@ -313,11 +316,13 @@
     })
   }
 
-  function clickSkipButton() {
+  function clickSkipButton(collapse) {
     if (!(_.isEqual(selectedComponent, {}))) {
       prepareEvent();
     }
-    $('#workflow-component-event').collapse("toggle");
+    if (collapse) {
+      $('#workflow-component-event').collapse("toggle");
+    }
     var tooltips = document.getElementsByClassName("tooltip")
     for (var i = 0; i < tooltips.length; i++) {
       tooltips[i].remove();
@@ -369,9 +374,7 @@
     }
     document.getElementById("workflow-component-event-dropdown-list").appendChild(entryElement);
     if (!(_.isEqual(selectedComponent, {})) && selectedComponent.type === identifier) {
-      setTimeout(function(){
-        selectEvent(identifier, name, description);
-      }, 600);
+      selectEvent(identifier, name, description);
     }
   }
 
@@ -512,7 +515,7 @@
         if (index === inputsLength - 1) {
           selectedComponent = {};
         }
-      }, 1200 + 600 * index);
+      }, 200 * index);
     }
   }
 
@@ -554,7 +557,7 @@
     if (!(_.isEqual(selectedComponent, {})) && "content" in selectedComponent) {
       setTimeout(function(){
         clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton, index, inputsLength);
-      }, 1200 + 600 * index);
+      }, 200 * index);
     }
   }
 
