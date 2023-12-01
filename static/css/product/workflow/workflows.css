@@ -166,6 +166,14 @@
   }
 }
 
+.workflow-run-button {
+  margin: auto;
+}
+
+.workflow-run-button label {
+  margin-left: 10px;
+}
+
 .switch {
   position: relative;
   display: inline-block;
