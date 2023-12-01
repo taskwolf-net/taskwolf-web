@@ -181,7 +181,7 @@
     nameElement.innerHTML = name;
     entryElement.appendChild(nameElement);
     entryElement.onclick = function(event) {
-      selectApplication(name, logo, entryElement, false);
+      selectApplication(name, logo, entryElement, true);
     }
     document.getElementById("workflow-component-application-list").appendChild(entryElement);
     if (!(_.isEqual(selectedComponent, {})) && selectedComponent.module === name.toLowerCase()) {
