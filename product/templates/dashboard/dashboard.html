@@ -7,7 +7,339 @@
     <div class="sidebar-influenced">
       <div id="dashboard-wrapper">
         <h1 id="dashboard-headline">Dashboard</h1>
+        <div id="dashboard-progress">
+          <div class="dashboard-progress-entry">
+            <h4 class="dashboard-progress-entry-headline">Workflows</h4>
+            <div id="dashboard-workflow-progress-circle" class="dashboard-progress-entry-circle"></div>
+          </div>
+          <div class="dashboard-progress-entry">
+            <h4 class="dashboard-progress-entry-headline">Failing Workflows</h4>
+            <div id="dashboard-failing-workflow-progress-circle" class="dashboard-progress-entry-circle"></div>
+          </div>
+          <div class="dashboard-progress-entry">
+            <h4 class="dashboard-progress-entry-headline">Organizations</h4>
+            <div id="dashboard-organization-progress-circle" class="dashboard-progress-entry-circle"></div>
+          </div>
+          <div class="dashboard-progress-entry">
+            <h4 class="dashboard-progress-entry-headline">Linked Accounts</h4>
+            <div id="dashboard-account-progress-circle" class="dashboard-progress-entry-circle"></div>
+          </div>
+        </div>
+        <div id="dashboard-first-charts">
+          <div id="dashboard-workflow-chart-container">
+            <canvas id="dashboard-workflow-chart"></canvas>
+          </div>
+          <div id="dashboard-app-chart-container">
+            <canvas id="dashboard-app-chart"></canvas>
+          </div>
+        </div>
+        <div id="dashboard-second-charts">
+          <div id="dashboard-user-chart-container">
+            <canvas id="dashboard-user-chart"></canvas>
+          </div>
+          <div id="dashboard-workflow-change-chart-container">
+            <canvas id="dashboard-workflow-change-chart"></canvas>
+          </div>
+        </div>
       </div>
     </div>
   </body>
 </html>
+
+<script>
+  drawProgress("#dashboard-workflow-progress-circle", 11, 100, "", "#d3d3d3", "#235bd1");
+  drawProgress("#dashboard-failing-workflow-progress-circle", 0, 8, "", "#d01c1c", "#d01c1c");
+  drawProgress("#dashboard-organization-progress-circle", 1, 2, "", "#d3d3d3", "#235bd1");
+  drawProgress("#dashboard-account-progress-circle", 6, 15, "", "#d3d3d3", "#235bd1");
+  drawWorkflowGraph();
+  drawAppGraph();
+  drawWorkflowChangeGraph();
+  drawUserGraph();
+
+  function drawProgress(circleElement, value, maxValue, circleValueSuffix, fromColor, toColor) {
+    var bar = new ProgressBar.Circle(circleElement, {
+      color: '#ffffff',
+      strokeWidth: 4,
+      trailColor: '#4a4a4a',
+      trailWidth: 1.8,
+      easing: 'easeInOut',
+      duration: 800,
+      text: {
+        autoStyleContainer: false
+      },
+      from: { color: fromColor, width: 2 },
+      to: { color: toColor, width: 4 },
+      step: function(state, circle) {
+        circle.path.setAttribute('stroke', state.color);
+        circle.path.setAttribute('stroke-width', state.width);
+        var value = Math.round(circle.value() * maxValue);
+        circle.setText(value + circleValueSuffix);
+      }
+    });
+    bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+    bar.text.style.fontSize = '2rem';
+    bar.animate(value / maxValue);
+  }
+
+  function drawWorkflowGraph() {
+    const xValues = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dez"];
+    const workflowAmountDataset = {
+      label: "Workflows",
+      data: [10, 7, 11, 8, 15, 20, 6, 1, 4, 25, 10, 3],
+      borderColor: "#235bd1",
+      fill: false
+    };
+    const executionsAmountDataset = {
+      label: "Executions",
+      data: [0, 4, 2, 7, 9, 15, 12, 16, 8, 6, 22, 20],
+      borderColor: "#cebc54",
+      fill: false
+    };
+
+    new Chart("dashboard-workflow-chart", {
+      type: 'line',
+      data: {
+        labels: xValues,
+        datasets: [workflowAmountDataset, executionsAmountDataset]
+      },
+      options: {
+        maintainAspectRatio: false,
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Workflows',
+            color: '#ffffff',
+            font: {
+              size: 22,
+            },
+          },
+          legend: {
+            display: true,
+            labels: {
+              color: '#ffffff',
+              font: {
+                size: 16,
+              },
+            }
+          }
+        },
+        scales: {
+          y: {
+            offset: true,
+            ticks: {
+              color: '#cacaca',
+              font: {
+                size: 18,
+              },
+            },
+            grid: {
+              display: false
+            },
+            border: {
+              width: 2,
+              color: '#cacaca',
+            },
+          },
+          x: {
+            offset: true,
+            ticks: {
+              color: '#cacaca',
+              font: {
+                size: 18,
+              },
+            },
+            grid: {
+              display: false
+            },
+            border: {
+              width: 2,
+              color: '#cacaca',
+            },
+          }
+        }
+      },
+    });
+  }
+
+  function drawAppGraph() {
+    const xValues = ["Discord", "Gmail", "Github", "Google Calendar", "Google Drive", "Google Docs", "Whatsapp", "Internal"];
+
+    new Chart("dashboard-app-chart", {
+      type: 'polarArea',
+      data: {
+        labels: xValues,
+        datasets: [{
+          data: [10,7,11,8,15,20, 22, 6],
+          borderWidth: 0,
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false
+          },
+          title: {
+            display: true,
+            text: 'Apps',
+            color: '#ffffff',
+            font: {
+              size: 22
+            },
+          }
+        },
+        scales: {
+          r: {
+            grid: {
+              color: '#686868'
+            },
+            ticks: {
+              color: 'white',
+              backdropColor: '#1F1F2184'
+            }
+          }
+        },
+      },
+    });
+  }
+
+  function drawWorkflowChangeGraph() {
+    const xValues = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dez"];
+
+    new Chart("dashboard-workflow-change-chart", {
+      type: 'bar',
+      data: {
+        labels: xValues,
+        datasets: [{
+          data: [0, 1, 4, 2, 6, 7, 3, 1, 0, 8, 11, 5],
+          backgroundColor: [
+            'rgb(106,199,116, 0.6)'
+          ],
+          borderColor: [
+            'rgb(106,199,116)'
+          ],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false
+          },
+          title: {
+            display: true,
+            text: 'Growth',
+            color: '#ffffff',
+            font: {
+              size: 22,
+            },
+          }
+        },
+        scales: {
+          y: {
+            offset: true,
+            ticks: {
+              color: '#cacaca',
+              font: {
+                size: 18,
+              },
+            },
+            grid: {
+              display: false
+            },
+            border: {
+              width: 2,
+              color: '#cacaca',
+            },
+          },
+          x: {
+            offset: true,
+            ticks: {
+              color: '#cacaca',
+              font: {
+                size: 18,
+              },
+            },
+            grid: {
+              display: false
+            },
+            border: {
+              width: 2,
+              color: '#cacaca',
+            },
+          }
+        }
+      },
+    });
+  }
+
+  function drawUserGraph() {
+    const xValues = ["Discord", "Gmail", "Github", "Google Calendar", "Google Drive", "Google Docs", "Whatsapp", "Internal"];
+    const lukasDataset = {
+      label: "Lukas Breuer",
+      data: [0,1,0,3,0,3,2,0],
+    };
+
+    const miguelDataset = {
+      label: "Miguel Cortina Zapp",
+      data: [0,0,0,2,0,0,3,2]
+    };
+
+    const konstantinDataset = {
+      label: "Konstantin Hirschfeld",
+      data: [2,2,2,0,0,3,0,1]
+    };
+
+    new Chart("dashboard-user-chart", {
+      type: 'radar',
+      data: {
+        labels: xValues,
+        datasets: [lukasDataset, miguelDataset, konstantinDataset]
+      },
+      options: {
+        maintainAspectRatio: false,
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Staff',
+            color: '#ffffff',
+            font: {
+              size: 22
+            },
+          },
+          legend: {
+            display: true,
+            labels: {
+              color: '#ffffff',
+              font: {
+                size: 12,
+              },
+            }
+          },
+        },
+        scales: {
+          r: {
+            grid: {
+              color: '#686868'
+            },
+            ticks: {
+              color: 'white',
+              backdropColor: '#1F1F2184'
+            },
+            pointLabels: {
+              color: '#ffffff',
+              font: {
+                size: 12,
+              },
+            }
+          }
+        }
+      },
+    });
+  }
+</script>

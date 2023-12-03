@@ -1,6 +1,104 @@
 #dashboard-headline {
     color: white;
     text-align: center;
-    margin-top: 2%;
+    margin-top: 20px;
+    margin-bottom: 20px;
     font-weight: bold;
+}
+
+#dashboard-progress {
+  text-align: center;
+  margin: auto;
+  margin-bottom: 20px;
+}
+
+.dashboard-progress-entry {
+  width: 300px;
+  display: inline-block;
+  background-color: rgba(31, 31, 33, 0.52);
+  margin-left: 20px;
+  margin-right: 20px;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.dashboard-progress-entry-headline {
+  color: white;
+  margin-bottom: 10%;
+}
+
+.dashboard-progress-entry-circle {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  margin: auto;
+}
+
+.dashboard-progress-values {
+  color: white;
+}
+
+#dashboard-first-charts {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#dashboard-workflow-chart-container {
+  display: inline-block;
+}
+
+#dashboard-workflow-chart {
+  width: 900px;
+  height: 380px;
+  margin: auto;
+  color: white;
+  background-color: rgba(31, 31, 33, 0.52);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+#dashboard-app-chart-container {
+  display: inline-block;
+  margin-left: 50px;
+}
+
+#dashboard-app-chart {
+  margin: auto;
+  color: white;
+  background-color: rgba(31, 31, 33, 0.52);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+#dashboard-second-charts {
+  text-align: center;
+}
+
+#dashboard-workflow-change-chart-container {
+  display: inline-block;
+}
+
+#dashboard-workflow-change-chart {
+  width: 800px;
+  height: 400px;
+  margin: auto;
+  color: white;
+  background-color: rgba(31, 31, 33, 0.52);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+#dashboard-user-chart-container {
+  display: inline-block;
+  margin-right: 50px;
+}
+
+#dashboard-user-chart {
+  width: 480px;
+  height: 400px;
+  margin: auto;
+  color: white;
+  background-color: rgba(31, 31, 33, 0.52);
+  padding: 20px;
+  border-radius: 10px;
 }
