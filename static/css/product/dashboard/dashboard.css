@@ -1,9 +1,37 @@
+#dashboard-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+#dashboard-container {
+  width: min(1380px, 100%);
+  margin: auto;
+}
+
+#dashboard-header {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#dashboard-target-dropdown {
+  margin-left: auto;
+  margin-right: 20px;
+}
+
+#dashboard-target-dropdown-button {
+  width: 100%;
+}
+
+#dashboard-target-dropdown-list {
+  width: 100%;
+}
+
 #dashboard-headline {
-    color: white;
-    text-align: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    font-weight: bold;
+  position: absolute;
+  color: white;
+  font-weight: bold;
 }
 
 #dashboard-progress {
@@ -63,6 +91,8 @@
 }
 
 #dashboard-app-chart {
+  width: 380px;
+  height: 380px;
   margin: auto;
   color: white;
   background-color: rgba(31, 31, 33, 0.52);
@@ -74,11 +104,11 @@
   text-align: center;
 }
 
-#dashboard-workflow-change-chart-container {
+#dashboard-growth-chart-container {
   display: inline-block;
 }
 
-#dashboard-workflow-change-chart {
+#dashboard-growth-chart {
   width: 800px;
   height: 400px;
   margin: auto;
@@ -101,4 +131,25 @@
   background-color: rgba(31, 31, 33, 0.52);
   padding: 20px;
   border-radius: 10px;
+}
+
+#dashboard-statistics-unavailable {
+  width: 50%;
+  margin: auto;
+  margin-top: 5%;
+  color: white;
+  flex-flow: wrap;
+  justify-content: center;
+  text-align: center;
+}
+
+#dashboard-statistics-unavailable-headline {
+  font-size: 20px;
+  font-weight: bold;
+  width: 100%;
+  margin-bottom: 1%;
+}
+
+#dashboard-statistics-unavailable-link {
+  text-decoration: none;
 }

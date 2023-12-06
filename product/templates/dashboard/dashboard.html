@@ -6,39 +6,54 @@
     {% include 'templates/product-sidebar.html' %}
     <div class="sidebar-influenced">
       <div id="dashboard-wrapper">
-        <h1 id="dashboard-headline">Dashboard</h1>
-        <div id="dashboard-progress">
-          <div class="dashboard-progress-entry">
-            <h4 class="dashboard-progress-entry-headline">Workflows</h4>
-            <div id="dashboard-workflow-progress-circle" class="dashboard-progress-entry-circle"></div>
+        <div id="dashboard-container" class="d-none">
+          <div id="dashboard-header">
+            <div id="dashboard-target-dropdown" class="dropdown">
+              <button id="dashboard-target-dropdown-button" class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
+                Target
+              </button>
+              <ul id="dashboard-target-dropdown-list" class="dropdown-menu dropdown-menu-dark">
+              </ul>
+            </div>
+            <h1 id="dashboard-headline">Dashboard</h1>
           </div>
-          <div class="dashboard-progress-entry">
-            <h4 class="dashboard-progress-entry-headline">Failing Workflows</h4>
-            <div id="dashboard-failing-workflow-progress-circle" class="dashboard-progress-entry-circle"></div>
+          <div id="dashboard-progress">
+            <div class="dashboard-progress-entry">
+              <h4 class="dashboard-progress-entry-headline">Workflows</h4>
+              <div id="dashboard-workflow-progress-circle" class="dashboard-progress-entry-circle"></div>
+            </div>
+            <div class="dashboard-progress-entry">
+              <h4 class="dashboard-progress-entry-headline">Failing Workflows</h4>
+              <div id="dashboard-failing-workflow-progress-circle" class="dashboard-progress-entry-circle"></div>
+            </div>
+            <div class="dashboard-progress-entry">
+              <h4 class="dashboard-progress-entry-headline">Organization Members</h4>
+              <div id="dashboard-organization-progress-circle" class="dashboard-progress-entry-circle"></div>
+            </div>
+            <div class="dashboard-progress-entry">
+              <h4 class="dashboard-progress-entry-headline">Linked Accounts</h4>
+              <div id="dashboard-account-progress-circle" class="dashboard-progress-entry-circle"></div>
+            </div>
           </div>
-          <div class="dashboard-progress-entry">
-            <h4 class="dashboard-progress-entry-headline">Organizations</h4>
-            <div id="dashboard-organization-progress-circle" class="dashboard-progress-entry-circle"></div>
+          <div id="dashboard-first-charts">
+            <div id="dashboard-workflow-chart-container">
+              <canvas id="dashboard-workflow-chart"></canvas>
+            </div>
+            <div id="dashboard-app-chart-container">
+              <canvas id="dashboard-app-chart"></canvas>
+            </div>
           </div>
-          <div class="dashboard-progress-entry">
-            <h4 class="dashboard-progress-entry-headline">Linked Accounts</h4>
-            <div id="dashboard-account-progress-circle" class="dashboard-progress-entry-circle"></div>
+          <div id="dashboard-second-charts">
+            <div id="dashboard-user-chart-container">
+              <canvas id="dashboard-user-chart"></canvas>
+            </div>
+            <div id="dashboard-growth-chart-container">
+              <canvas id="dashboard-growth-chart"></canvas>
+            </div>
           </div>
-        </div>
-        <div id="dashboard-first-charts">
-          <div id="dashboard-workflow-chart-container">
-            <canvas id="dashboard-workflow-chart"></canvas>
-          </div>
-          <div id="dashboard-app-chart-container">
-            <canvas id="dashboard-app-chart"></canvas>
-          </div>
-        </div>
-        <div id="dashboard-second-charts">
-          <div id="dashboard-user-chart-container">
-            <canvas id="dashboard-user-chart"></canvas>
-          </div>
-          <div id="dashboard-workflow-change-chart-container">
-            <canvas id="dashboard-workflow-change-chart"></canvas>
+          <div id="dashboard-statistics-unavailable">
+            <span id="dashboard-statistics-unavailable-headline">Unfortunately, no further statistics are currently available.</span><br><br>
+            <span>This is because you have not yet created any workflows on this account. Would you like to create workflows? You can do that </span><a id="dashboard-statistics-unavailable-link" href="/workflows/">here</a>
           </div>
         </div>
       </div>
@@ -47,14 +62,84 @@
 </html>
 
 <script>
-  drawProgress("#dashboard-workflow-progress-circle", 11, 100, "", "#d3d3d3", "#235bd1");
-  drawProgress("#dashboard-failing-workflow-progress-circle", 0, 8, "", "#d01c1c", "#d01c1c");
-  drawProgress("#dashboard-organization-progress-circle", 1, 2, "", "#d3d3d3", "#235bd1");
-  drawProgress("#dashboard-account-progress-circle", 6, 15, "", "#d3d3d3", "#235bd1");
-  drawWorkflowGraph();
-  drawAppGraph();
-  drawWorkflowChangeGraph();
-  drawUserGraph();
+  var targets;
+  var selectedTarget;
+  var statistics;
+  var charts = [];
+
+  $(document).ready(function() {
+    fetchTargetsData(function() {
+      for (var i = 0; i < targets.length; i++) {
+        addDashboardTarget(targets[i]);
+      }
+      selectDashboardTarget(targets[0]);
+    });
+  });
+
+  function fetchTargetsData(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/workflow/owners/all/", "GET", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}]);
+    request.send(function (status, responseText) {
+      targets = JSON.parse(responseText).owners;
+      callback();
+    });
+  }
+
+  function addDashboardTarget(target) {
+    var targetElement = document.createElement("li");
+    targetElement.classList.add("dropdown-item");
+    var targetNameName = document.createElement("b");
+    targetNameName.innerHTML = target.name;
+    targetElement.appendChild(targetNameName);
+    targetElement.onclick = function(event) {
+      selectDashboardTarget(target);
+    }
+    document.getElementById("dashboard-target-dropdown-list").appendChild(targetElement);
+  }
+
+  function selectDashboardTarget(target) {
+    selectedTarget = target;
+    document.getElementById("dashboard-target-dropdown-button").innerHTML = "Target: " + target.name;
+    displayDashboard();
+  }
+
+  function displayDashboard() {
+    displayLoader();
+    fetchStatisticsData(function() {
+      document.getElementById("dashboard-workflow-progress-circle").innerHTML = "";
+      document.getElementById("dashboard-failing-workflow-progress-circle").innerHTML = "";
+      document.getElementById("dashboard-organization-progress-circle").innerHTML = "";
+      document.getElementById("dashboard-account-progress-circle").innerHTML = "";
+      for (var i = 0; i < charts.length; i++) {
+        charts[i].destroy();
+      }
+      charts = [];
+      drawProgress("#dashboard-workflow-progress-circle", statistics.workflows, statistics.maxWorkflows, "", "#d3d3d3", "#235bd1");
+      drawProgress("#dashboard-failing-workflow-progress-circle", 0, statistics.workflows === 0 ? 1 : statistics.workflows, "", "#d01c1c", "#d01c1c");
+      drawProgress("#dashboard-organization-progress-circle", statistics.organizationMembers, statistics.maxOrganizationMembers, "", "#d3d3d3", "#235bd1");
+      drawProgress("#dashboard-account-progress-circle", statistics.linkedAccounts, statistics.maxLinkedAccounts, "", "#d3d3d3", "#235bd1");
+      removeLoader();
+      drawWorkflowGraph(statistics.workflowNumberOccurrence, statistics.workflowExecutionsOccurrence);
+      drawAppGraph(statistics.moduleUsage);
+      drawGrowthGraph(statistics.workflowNumberGrowth);
+      drawUserGraph(statistics.staffModuleUsages);
+      var statisticsUnavailableElement = document.getElementById("dashboard-statistics-unavailable");
+      if (statistics.workflows === 0) {
+        statisticsUnavailableElement.classList.remove("d-none");
+      } else {
+        statisticsUnavailableElement.classList.add("d-none");
+      }
+    });
+  }
+
+  function fetchStatisticsData(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/statistics/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}], {target: selectedTarget.id});
+    request.send(function (status, responseText) {
+      statistics = JSON.parse(responseText);
+      callback();
+    });
+  }
 
   function drawProgress(circleElement, value, maxValue, circleValueSuffix, fromColor, toColor) {
     var bar = new ProgressBar.Circle(circleElement, {
@@ -81,22 +166,32 @@
     bar.animate(value / maxValue);
   }
 
-  function drawWorkflowGraph() {
+  function drawWorkflowGraph(workflowNumberOccurrence, workflowExecutionsOccurrence) {
+    var container = document.getElementById("dashboard-workflow-chart-container");
+    var workflows = Object.keys(workflowNumberOccurrence).map((key) => workflowNumberOccurrence[key]);
+    workflows = workflows.filter(function(item, pos) {
+      return workflows.indexOf(item) === pos;
+    });
+    if (workflows.length === 1) {
+      container.classList.add("d-none");
+      return;
+    } else {
+      container.classList.remove("d-none");
+    }
     const xValues = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dez"];
     const workflowAmountDataset = {
       label: "Workflows",
-      data: [10, 7, 11, 8, 15, 20, 6, 1, 4, 25, 10, 3],
+      data: Object.keys(workflowNumberOccurrence).map((key) => workflowNumberOccurrence[key]),
       borderColor: "#235bd1",
       fill: false
     };
     const executionsAmountDataset = {
       label: "Executions",
-      data: [0, 4, 2, 7, 9, 15, 12, 16, 8, 6, 22, 20],
+      data: Object.keys(workflowExecutionsOccurrence).map((key) => workflowExecutionsOccurrence[key]),
       borderColor: "#cebc54",
       fill: false
     };
-
-    new Chart("dashboard-workflow-chart", {
+    charts.push(new Chart("dashboard-workflow-chart", {
       type: 'line',
       data: {
         labels: xValues,
@@ -159,18 +254,24 @@
           }
         }
       },
-    });
+    }));
   }
 
-  function drawAppGraph() {
-    const xValues = ["Discord", "Gmail", "Github", "Google Calendar", "Google Drive", "Google Docs", "Whatsapp", "Internal"];
-
-    new Chart("dashboard-app-chart", {
+  function drawAppGraph(moduleUsage) {
+    var modules = Object.keys(moduleUsage);
+    var container = document.getElementById("dashboard-app-chart-container");
+    if (modules.length === 0) {
+      container.classList.add("d-none");
+      return;
+    } else {
+      container.classList.remove("d-none");
+    }
+    charts.push(new Chart("dashboard-app-chart", {
       type: 'polarArea',
       data: {
-        labels: xValues,
+        labels: modules,
         datasets: [{
-          data: [10,7,11,8,15,20, 22, 6],
+          data: modules.map((key) => moduleUsage[key]),
           borderWidth: 0,
         }]
       },
@@ -202,18 +303,28 @@
           }
         },
       },
-    });
+    }));
   }
 
-  function drawWorkflowChangeGraph() {
+  function drawGrowthGraph(workflowNumberGrowth) {
+    var container = document.getElementById("dashboard-growth-chart-container");
+    var growth = Object.keys(workflowNumberGrowth).map((key) => workflowNumberGrowth[key]);
+    growth = growth.filter(function(item, pos) {
+      return growth.indexOf(item) === pos;
+    });
+    if (growth.length === 1) {
+      container.classList.add("d-none");
+      return;
+    } else {
+      container.classList.remove("d-none");
+    }
     const xValues = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dez"];
-
-    new Chart("dashboard-workflow-change-chart", {
+    charts.push(new Chart("dashboard-growth-chart", {
       type: 'bar',
       data: {
         labels: xValues,
         datasets: [{
-          data: [0, 1, 4, 2, 6, 7, 3, 1, 0, 8, 11, 5],
+          data: Object.keys(workflowNumberGrowth).map((key) => workflowNumberGrowth[key]),
           backgroundColor: [
             'rgb(106,199,116, 0.6)'
           ],
@@ -274,31 +385,49 @@
           }
         }
       },
-    });
+    }));
   }
 
-  function drawUserGraph() {
-    const xValues = ["Discord", "Gmail", "Github", "Google Calendar", "Google Drive", "Google Docs", "Whatsapp", "Internal"];
-    const lukasDataset = {
-      label: "Lukas Breuer",
-      data: [0,1,0,3,0,3,2,0],
-    };
-
-    const miguelDataset = {
-      label: "Miguel Cortina Zapp",
-      data: [0,0,0,2,0,0,3,2]
-    };
-
-    const konstantinDataset = {
-      label: "Konstantin Hirschfeld",
-      data: [2,2,2,0,0,3,0,1]
-    };
-
-    new Chart("dashboard-user-chart", {
+  function drawUserGraph(staffModuleUsages) {
+    var staffs = Object.keys(staffModuleUsages);
+    var modules = [];
+    for (var i = 0; i < staffs.length; i++) {
+      var staff = staffs[i];
+      var staffModules = Object.keys(staffModuleUsages[staff]);
+      for (var j = 0; j < staffModules.length; j++) {
+        modules.push(staffModules[j]);
+      }
+    }
+    modules = modules.filter(function(item, pos) {
+      return modules.indexOf(item) === pos;
+    });
+    var container = document.getElementById("dashboard-user-chart-container");
+    if (modules.length <= 2) {
+      container.classList.add("d-none");
+      return;
+    } else {
+      container.classList.remove("d-none");
+    }
+    var datasets = [];
+    for (var i = 0; i < staffs.length; i++) {
+      var staff = staffs[i];
+      var staffModules = staffModuleUsages[staff];
+      var data = [];
+      for (var j = 0; j < modules.length; j++) {
+        var moduleUsage = staffModules[modules[j]];
+        if (moduleUsage !== undefined) {
+          data.push(moduleUsage);
+        } else {
+          data.push(0);
+        }
+      }
+      datasets.push({label: staff, data: data});
+    }
+    charts.push(new Chart("dashboard-user-chart", {
       type: 'radar',
       data: {
-        labels: xValues,
-        datasets: [lukasDataset, miguelDataset, konstantinDataset]
+        labels: modules,
+        datasets: datasets
       },
       options: {
         maintainAspectRatio: false,
@@ -340,6 +469,19 @@
           }
         }
       },
-    });
+    }));
+  }
+
+  function displayLoader() {
+    document.getElementById("dashboard-container").classList.add("d-none");
+    var loader = document.createElement("div");
+    loader.id = "dashboard-loader";
+    loader.classList.add("loader");
+    document.getElementById("dashboard-wrapper").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("dashboard-wrapper").removeChild(document.getElementById("dashboard-loader"));
+    document.getElementById("dashboard-container").classList.remove("d-none");
   }
 </script>
