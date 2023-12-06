@@ -366,7 +366,8 @@
     nameElement.classList.add("workflow-component-event-name");
     nameElement.innerHTML = name;
     entryElement.appendChild(nameElement);
-    var descriptionElement = document.createElement("p");
+    entryElement.appendChild(document.createElement("br"));
+    var descriptionElement = document.createElement("span");
     descriptionElement.classList.add("workflow-component-event-description");
     descriptionElement.innerHTML = description;
     entryElement.appendChild(descriptionElement);
