@@ -515,15 +515,15 @@
     document.getElementById("workflow-component-specifications-input-list").appendChild(inputContainerElement);
     if (!(_.isEqual(selectedComponent, {})) && "content" in selectedComponent) {
       var selectedComponentContent = JSON.parse(selectedComponent.content);
-      if (identifier in selectedComponentContent) {
-        setTimeout(function() {
+      setTimeout(function() {
+        if (identifier in selectedComponentContent) {
           inputElement.value = selectedComponentContent[identifier];
           inputSpecificationInput(identifier, inputElement.value);
-          if (index === inputsLength - 1) {
-            selectedComponent = {};
-          }
-        }, 200 * index);
-      }
+        }
+        if (index === inputsLength - 1) {
+          selectedComponent = {};
+        }
+      }, 200 * index);
     }
   }
 
