@@ -430,6 +430,7 @@
   var specificationSelectButtons = [];
   var specificationValues = {};
   var currentPlaceholderElement;
+  var requiredSpecificationVariables = [];
 
   $(document).ready(function() {
     new ResizeObserver(() => updateSpecificationsDividerHeight())
@@ -467,11 +468,14 @@
       }
       for (let i = 0; i < inputVariables.length; i++) {
         var inputVariable = inputVariables[i];
-        if (inputVariable.type === "TEXT") {
+        if (inputVariable.dataType === "TEXT") {
           addSpecificationInput(inputVariable.identifier, inputVariable.name, i, inputVariables.length);
         }
-        if (inputVariable.type === "SELECT") {
+        if (inputVariable.dataType === "SELECT") {
           addSpecificationSelect(inputVariable.identifier, inputVariable.name, i, inputVariables.length);
+        }
+        if (inputVariable.type === "REQUIRED") {
+          requiredSpecificationVariables.push(inputVariable.identifier);
         }
       }
       createResetButton(document.getElementById("workflow-component-specifications-input-list"), function() {
@@ -496,7 +500,7 @@
     inputElement.id = "workflow-component-specifications-input-" + identifier;
     inputElement.classList.add("workflow-component-specifications-input", "form-control");
     inputElement.oninput = function (event) {
-      inputSpecificationInput(identifier, event.target.value, inputsLength);
+      inputSpecificationInput(identifier, event.target.value);
     }
     inputElement.ondragover = function (event) {
       event.preventDefault();
@@ -505,30 +509,32 @@
         inputElement.value =  inputElement.value.substring(0, inputElement.selectionStart) +
           "$" + event.dataTransfer.getData("placeholder-identifier") +
           inputElement.value.substring(inputElement.selectionStart);
-        inputSpecificationInput(identifier, inputElement.value, inputsLength);
+        inputSpecificationInput(identifier, inputElement.value);
     };
     inputContainerElement.appendChild(inputElement);
     document.getElementById("workflow-component-specifications-input-list").appendChild(inputContainerElement);
     if (!(_.isEqual(selectedComponent, {})) && "content" in selectedComponent) {
       var selectedComponentContent = JSON.parse(selectedComponent.content);
-      setTimeout(function(){
-        inputElement.value = selectedComponentContent[identifier];
-        inputSpecificationInput(identifier, inputElement.value, inputsLength);
-        if (index === inputsLength - 1) {
-          selectedComponent = {};
-        }
-      }, 200 * index);
+      if (identifier in selectedComponentContent) {
+        setTimeout(function() {
+          inputElement.value = selectedComponentContent[identifier];
+          inputSpecificationInput(identifier, inputElement.value);
+          if (index === inputsLength - 1) {
+            selectedComponent = {};
+          }
+        }, 200 * index);
+      }
     }
   }
 
-  function inputSpecificationInput(identifier, value, inputsLength) {
+  function inputSpecificationInput(identifier, value) {
     if (value === "" && identifier in specificationValues) {
       delete specificationValues[identifier];
     }
     if (value !== "") {
       specificationValues[identifier] = value;
     }
-    checkAdoptability(inputsLength);
+    checkAdoptability();
   }
 
   function addSpecificationSelect(identifier, name, index, inputsLength) {
@@ -581,11 +587,11 @@
         itemIdentifierName.innerHTML = item.identifier;
         itemElement.appendChild(itemIdentifierName);
         itemElement.onclick = function (event) {
-          selectSpecificationSelect(identifier, item.identifier, item.name, dropdownContainer, dropdownButton, dropdownList, inputsLength);
+          selectSpecificationSelect(identifier, item.identifier, item.name, dropdownContainer, dropdownButton, dropdownList);
         }
         dropdownList.appendChild(itemElement);
         if (!(_.isEqual(selectedComponent, {})) && selectedComponent.content !== undefined && JSON.parse(selectedComponent.content)[identifier] === item.identifier) {
-          selectSpecificationSelect(identifier, item.identifier, item.name, dropdownContainer, dropdownButton, dropdownList, inputsLength);
+          selectSpecificationSelect(identifier, item.identifier, item.name, dropdownContainer, dropdownButton, dropdownList);
         }
         if (index === inputsLength - 1) {
           selectedComponent = {};
@@ -594,7 +600,7 @@
     });
   }
 
-  function selectSpecificationSelect(selectIdentifier, itemIdentifier, itemName, dropdownContainer, dropdownButton, dropdownList, inputsLength) {
+  function selectSpecificationSelect(selectIdentifier, itemIdentifier, itemName, dropdownContainer, dropdownButton, dropdownList) {
     specificationValues[selectIdentifier] = itemIdentifier;
     dropdownContainer.removeChild(dropdownButton);
     dropdownContainer.removeChild(dropdownList);
@@ -610,7 +616,7 @@
     if (specificationSelectButtons.length > 0) {
       specificationSelectButtons.shift().removeAttribute("disabled");
     }
-    checkAdoptability(inputsLength);
+    checkAdoptability();
   }
 
   function displayPlaceholdersTabs() {
@@ -694,14 +700,23 @@
     document.getElementById("workflow-component-specifications-redundant").style.display = "none";
     document.getElementById("workflow-component-specifications-placeholders-empty").classList.add("d-none");
     document.getElementById("workflow-component-specifications-placeholders-tabs").classList.add("d-none");
+    document.getElementById("workflow-component-specifications-placeholders-tabs").innerText = "";
     document.getElementById("workflow-component-specifications-placeholders-list").innerHTML = "";
     specificationSelectButtons = [];
     specificationValues = {};
+    requiredSpecificationVariables = [];
     updateAdoptability(false);
   }
 
-  function checkAdoptability(length) {
-    updateAdoptability(Object.keys(specificationValues).length === length);
+  function checkAdoptability() {
+    var isAdoptable = true;
+    for (var i = 0; i < requiredSpecificationVariables.length; i++) {
+      if (!(requiredSpecificationVariables[i] in specificationValues)) {
+        isAdoptable = false;
+        break;
+      }
+    }
+    updateAdoptability(isAdoptable);
   }
 
   function updateAdoptability(isAdoptable) {
