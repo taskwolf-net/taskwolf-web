@@ -327,6 +327,14 @@ input:-webkit-autofill:active{
   white-space: pre;
 }
 
+.workflow-component-specification-headline {
+  position: absolute;
+}
+
+.workflow-component-specification-information {
+  margin-left: calc(100% - 20px);
+}
+
 #workflow-component-specifications-placeholders {
   width: 50%;
 }

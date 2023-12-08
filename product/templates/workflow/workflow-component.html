@@ -304,19 +304,6 @@
     }
   }
 
-  function applyTooltips(element, text) {
-    $(element).attr("data-bs-toggle", "tooltip");
-    $(element).attr("data-bs-placement", "top");
-    $(element).attr("data-bs-title", text);
-  }
-
-  function updateTooltips() {
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-      return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
-  }
-
   function clickSkipButton(collapse) {
     if (!(_.isEqual(selectedComponent, {}))) {
       prepareEvent();
@@ -469,15 +456,16 @@
       for (let i = 0; i < inputVariables.length; i++) {
         var inputVariable = inputVariables[i];
         if (inputVariable.dataType === "TEXT") {
-          addSpecificationInput(inputVariable.identifier, inputVariable.name, i, inputVariables.length);
+          addSpecificationInput(inputVariable.identifier, inputVariable.name, inputVariable.description, i, inputVariables.length);
         }
         if (inputVariable.dataType === "SELECT") {
-          addSpecificationSelect(inputVariable.identifier, inputVariable.name, i, inputVariables.length);
+          addSpecificationSelect(inputVariable.identifier, inputVariable.name, inputVariable.description, i, inputVariables.length);
         }
         if (inputVariable.type === "REQUIRED") {
           requiredSpecificationVariables.push(inputVariable.identifier);
         }
       }
+      updateTooltips();
       createResetButton(document.getElementById("workflow-component-specifications-input-list"), function() {
         specificationSelectButtons = [];
         specificationValues = {};
@@ -487,13 +475,17 @@
     });
   }
 
-  function addSpecificationInput(identifier, name, index, inputsLength) {
+  function addSpecificationInput(identifier, name, description, index, inputsLength) {
     var inputContainerElement = document.createElement("div");
     inputContainerElement.classList.add("workflow-component-specifications-input-container", "form-outline", "mb-4");
     var labelElement = document.createElement("h5");
-    labelElement.classList.add("form-label");
+    labelElement.classList.add("workflow-component-specification-headline", "form-label");
     labelElement.innerHTML = name + ":";
     inputContainerElement.appendChild(labelElement);
+    var informationElement = document.createElement("h5");
+    informationElement.classList.add("workflow-component-specification-information", "fa", "fa-question-circle");
+    applyTooltips(informationElement, description);
+    inputContainerElement.appendChild(informationElement);
     var inputElement = document.createElement("input");
     inputElement.type = "name";
     inputElement.placeholder = name;
@@ -537,13 +529,17 @@
     checkAdoptability();
   }
 
-  function addSpecificationSelect(identifier, name, index, inputsLength) {
+  function addSpecificationSelect(identifier, name, description, index, inputsLength) {
     var dropdownContainer = document.createElement("div");
     dropdownContainer.classList.add("mb-4");
     var labelElement = document.createElement("h5");
-    labelElement.classList.add("form-label");
+    labelElement.classList.add("workflow-component-specification-headline", "form-label");
     labelElement.innerHTML = name + ":";
     dropdownContainer.appendChild(labelElement);
+    var informationElement = document.createElement("h5");
+    informationElement.classList.add("workflow-component-specification-information", "fa", "fa-question-circle");
+    applyTooltips(informationElement, description);
+    dropdownContainer.appendChild(informationElement);
     dropdownContainer.classList.add("workflow-component-specifications-select-container", "dropdown");
     var dropdownButton = document.createElement("button");
     dropdownButton.classList.add("btn", "btn-secondary", "dropdown-toggle", "bg-dark");
@@ -767,5 +763,18 @@
       "typeDescription": selectedEventDescription,
       "content": JSON.stringify(specificationValues)
     };
+  }
+
+  function applyTooltips(element, text) {
+    $(element).attr("data-bs-toggle", "tooltip");
+    $(element).attr("data-bs-placement", "top");
+    $(element).attr("data-bs-title", text);
+  }
+
+  function updateTooltips() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
   }
 </script>
