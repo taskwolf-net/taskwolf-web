@@ -68,7 +68,12 @@
       for (var i = 0; i < owners.length; i++) {
         addWorkflowOwner(owners[i]);
       }
-      selectWorkflowOwner(owners[0]);
+      var ownerCookie = Cookie.find("taskwolf-organization-target");
+      if (ownerCookie != null) {
+        selectWorkflowOwner(owners.filter((owner) => owner.id === ownerCookie)[0]);
+      } else {
+        selectWorkflowOwner(owners[0]);
+      }
     });
   });
 
@@ -95,7 +100,7 @@
 
   function selectWorkflowOwner(owner) {
     document.getElementById("workflows-owner-dropdown-button").innerHTML = "Owner: " + owner.name;
-    sessionStorage.setItem("workflow-owner", owner.id);
+    Cookie.create("taskwolf-organization-target", owner.id, 12 * 30 * 24 * 60 * 60);
     fetchWorkflowsData(function() {
       displayWorkflows();
       if (workflows.length === 0) {
@@ -108,7 +113,7 @@
 
   function fetchWorkflowsData(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/workflows/selected/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}], {owner: sessionStorage.getItem("workflow-owner")});
+      {key: "API-KEY", value: Cookie.find("token")}], {owner: Cookie.find("taskwolf-organization-target")});
     request.send(function (status, responseText) {
       workflows = JSON.parse(responseText).workflows;
       callback();

@@ -63,7 +63,6 @@
 
 <script>
   var targets;
-  var selectedTarget;
   var statistics;
   var charts = [];
 
@@ -72,7 +71,12 @@
       for (var i = 0; i < targets.length; i++) {
         addDashboardTarget(targets[i]);
       }
-      selectDashboardTarget(targets[0]);
+      var targetCookie = Cookie.find("taskwolf-organization-target");
+      if (targetCookie != null) {
+        selectDashboardTarget(targets.filter((target) => target.id === targetCookie)[0]);
+      } else {
+        selectDashboardTarget(targets[0]);
+      }
     });
   });
 
@@ -98,7 +102,7 @@
   }
 
   function selectDashboardTarget(target) {
-    selectedTarget = target;
+    Cookie.create("taskwolf-organization-target", target.id, 12 * 30 * 24 * 60 * 60);
     document.getElementById("dashboard-target-dropdown-button").innerHTML = "Target: " + target.name;
     displayDashboard();
   }
@@ -134,7 +138,7 @@
 
   function fetchStatisticsData(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/statistics/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}], {target: selectedTarget.id});
+      {key: "API-KEY", value: Cookie.find("token")}], {target: Cookie.find("taskwolf-organization-target")});
     request.send(function (status, responseText) {
       statistics = JSON.parse(responseText);
       callback();
