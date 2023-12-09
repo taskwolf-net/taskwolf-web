@@ -44,7 +44,7 @@
     }
     if (sessionStorage.getItem("workflow-trigger") !== null) {
       var trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
-      createComponentElement(trigger.module.charAt(0).toUpperCase() + trigger.module.slice(1), trigger.typeDescription, trigger.moduleLogo, "trigger", 0, true);
+      createComponentElement("Trigger", trigger.typeDescription, trigger.moduleLogo, "trigger", 0, true);
     } else {
       createComponentElement("Trigger", "Starts the workflow and triggers the chain of further actions", "", "trigger", 0, false);
     }
@@ -53,7 +53,7 @@
       for (let i = 0; i < actions.length; i++) {
         var action = actions[i];
         drawArrow();
-        createComponentElement(action.module.charAt(0).toUpperCase() + action.module.slice(1), action.typeDescription, action.moduleLogo, "action", i, true);
+        createComponentElement((i + 1) + ". Action", action.typeDescription, action.moduleLogo, "action", i, true);
       }
       createAddActionButton(actions.length);
     } else {
