@@ -9,12 +9,6 @@ async def dashboard(request):
       'username': findUsername(request)[0]})
 
 @authentication_required
-async def tables(request):
-  return render(request, 'tables/tables.html', {'title': 'Taskwolf - Tables',
-    'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/tables/tables.css'],
-      'username': findUsername(request)[0]})
-
-@authentication_required
 async def templates(request):
   return render(request, 'template/templates.html', {'title': 'Taskwolf - Templates',
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/template/templates.css'],

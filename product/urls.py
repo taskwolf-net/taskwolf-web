@@ -10,7 +10,6 @@ urlpatterns = [
   path('workflow/action/', workflow.workflowActionCreate),
   path('workflow/<str:id>/', workflow.workflow),
   path('workflow/', workflow.workflowCreate),
-  path('tables/', product.tables),
   path('templates/', template.templates),
   path('organizations/', organization.organizations),
   path('organization/add/', organization.organizationCreate),
