@@ -674,6 +674,12 @@
         let variable = outputVariables[i];
         displayPlaceholder(variable.identifier, variable.name);
       }
+      if (outputVariables.length === 0) {
+        var noPlaceholdersAvailableElement = document.createElement("p");
+        noPlaceholdersAvailableElement.classList.add("text-center", "mt-4");
+        noPlaceholdersAvailableElement.innerHTML = "This component does not have a placeholder.";
+        document.getElementById("workflow-component-specifications-placeholders-list").appendChild(noPlaceholdersAvailableElement);
+      }
     });
   }
 
