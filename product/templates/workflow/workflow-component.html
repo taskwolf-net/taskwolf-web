@@ -499,7 +499,7 @@
     };
     inputElement.ondrop = function (event) {
         inputElement.value =  inputElement.value.substring(0, inputElement.selectionStart) +
-          "$" + event.dataTransfer.getData("placeholder-identifier") +
+          "%" + event.dataTransfer.getData("placeholder-identifier") + "%" +
           inputElement.value.substring(inputElement.selectionStart);
         inputSpecificationInput(identifier, inputElement.value);
     };
