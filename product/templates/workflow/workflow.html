@@ -120,7 +120,6 @@
         var actions = JSON.parse(sessionStorage.getItem("workflow-actions"));
         actions.actions = actions.actions.filter(item => actions.actions.indexOf(item) !== index);
         sessionStorage.setItem("workflow-actions", JSON.stringify(actions));
-        return;
       }
       displayWorkflow();
     });
