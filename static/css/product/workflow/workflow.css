@@ -155,13 +155,19 @@ input:-webkit-autofill:active{
   transition-duration: 0.4s;
 }
 
+.workflow-condition-add-container {
+  height: 0;
+  margin-left: calc(50% + 50px);
+  margin-top: 25px;
+}
+
 .workflow-action-add-container {
   width: 100%;
   text-align: center;
   margin-top: 1%;
 }
 
-.workflow-action-add {
+.workflow-condition-add, .workflow-action-add {
   color: white;
   font-size: 25px;
   border-radius: 50%;
@@ -170,7 +176,7 @@ input:-webkit-autofill:active{
   transition-duration: 0.4s;
 }
 
-.workflow-action-add:hover {
+.workflow-condition-add:hover, .workflow-action-add:hover {
   background-color: #3c3f45;
 }
 
@@ -184,6 +190,7 @@ input:-webkit-autofill:active{
   width: 16px;
   height: 116px;
   margin: auto;
+  margin-top: -25px;
 }
 
 .arrow-container svg {

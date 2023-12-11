@@ -52,12 +52,12 @@
       var actions = JSON.parse(sessionStorage.getItem("workflow-actions")).actions;
       for (let i = 0; i < actions.length; i++) {
         var action = actions[i];
-        drawArrow();
+        drawArrow(i);
         createComponentElement((i + 1) + ". Action", action.typeDescription, action.moduleLogo, "action", i, true);
       }
       createAddActionButton(actions.length);
     } else {
-      drawArrow();
+      drawArrow(0);
       createComponentElement("Action", "Is executed as soon as the workflow is triggered", "", "action", 0, false);
       createAddActionButton(1);
     }
@@ -116,19 +116,35 @@
     iconContainer.classList.add("workflow-action-remove", "fa-solid", "fa-xmark");
     actionRemoveContainer.appendChild(iconContainer);
     actionRemoveContainer.addEventListener("click", function(event) {
-      var actions = JSON.parse(sessionStorage.getItem("workflow-actions"));
-      actions.actions = actions.actions.filter(item => actions.actions.indexOf(item)!== index);
-      sessionStorage.setItem("workflow-actions", JSON.stringify(actions));
+      if (sessionStorage.getItem("workflow-actions") !== null) {
+        var actions = JSON.parse(sessionStorage.getItem("workflow-actions"));
+        actions.actions = actions.actions.filter(item => actions.actions.indexOf(item) !== index);
+        sessionStorage.setItem("workflow-actions", JSON.stringify(actions));
+        return;
+      }
       displayWorkflow();
     });
     componentContainer.appendChild(actionRemoveContainer);
   }
 
-  function drawArrow() {
+  function drawArrow(index) {
+    createConditionButton(index);
     var arrowContainer = document.createElement("div");
     arrowContainer.classList.add("arrow-container");
     arrowContainer.innerHTML = '<svg><defs><marker id="markerArrow" markerWidth="13" markerHeight="13" refX="2" refY="6" orient="auto"><path d="M2,2 L2,11 L10,6 L2,2" style="fill: #ffffff;" /></marker></defs><line x1="10" y1="0" x2="10" y2="100" class="arrow" /></svg>';
     document.getElementById("workflow-components").appendChild(arrowContainer);
+  }
+
+  function createConditionButton(index) {
+    var buttonContainer = document.createElement("div");
+    buttonContainer.classList.add("workflow-condition-add-container");
+    var iconContainer = document.createElement("i");
+    iconContainer.classList.add("workflow-condition-add", "fa-solid", "fa-filter");
+    buttonContainer.appendChild(iconContainer);
+    iconContainer.addEventListener("click", function(event) {
+
+    });
+    document.getElementById("workflow-components").appendChild(buttonContainer);
   }
 
   function createAddActionButton(index) {
@@ -139,7 +155,7 @@
     buttonContainer.appendChild(iconContainer);
     iconContainer.addEventListener("click", function(event) {
       removeCurrentAddActionButtons();
-      drawArrow();
+      drawArrow(index);
       createComponentElement("Action", "Is executed as soon as the workflow is triggered", "", "action", index, false);
       createAddActionButton(index + 1);
     });
