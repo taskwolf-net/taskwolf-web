@@ -4,10 +4,9 @@ from . import product, workflow, organization, account, template
 urlpatterns = [
   path('dashboard/', product.dashboard),
   path('workflows/', workflow.workflows),
-  path('workflow/trigger/<str:id>/', workflow.workflowTrigger),
-  path('workflow/trigger/', workflow.workflowTriggerCreate),
-  path('workflow/action/<str:id>/', workflow.workflowAction),
-  path('workflow/action/', workflow.workflowActionCreate),
+  path('workflow/trigger/', workflow.workflowTrigger),
+  path('workflow/action/', workflow.workflowAction),
+  path('workflow/condition/', workflow.workflowCondition),
   path('workflow/<str:id>/', workflow.workflow),
   path('workflow/', workflow.workflowCreate),
   path('templates/', template.templates),

@@ -127,23 +127,80 @@
   }
 
   function drawArrow(index) {
-    createConditionButton(index);
+    var arrow = createArrow();
+    document.getElementById("workflow-components").appendChild(createConditionButton(arrow, index, 0));
+    document.getElementById("workflow-components").appendChild(arrow);
+  }
+
+  function createArrow() {
     var arrowContainer = document.createElement("div");
     arrowContainer.classList.add("arrow-container");
     arrowContainer.innerHTML = '<svg><defs><marker id="markerArrow" markerWidth="13" markerHeight="13" refX="2" refY="6" orient="auto"><path d="M2,2 L2,11 L10,6 L2,2" style="fill: #ffffff;" /></marker></defs><line x1="10" y1="0" x2="10" y2="100" class="arrow" /></svg>';
-    document.getElementById("workflow-components").appendChild(arrowContainer);
+    return arrowContainer;
   }
 
-  function createConditionButton(index) {
+  function createConditionButton(arrowElement, index, conditionIndex) {
     var buttonContainer = document.createElement("div");
     buttonContainer.classList.add("workflow-condition-add-container");
     var iconContainer = document.createElement("i");
     iconContainer.classList.add("workflow-condition-add", "fa-solid", "fa-filter");
     buttonContainer.appendChild(iconContainer);
     iconContainer.addEventListener("click", function(event) {
-
+      createConditionElement(arrowElement, index, conditionIndex, false);
     });
-    document.getElementById("workflow-components").appendChild(buttonContainer);
+    return buttonContainer;
+  }
+
+  function createConditionElement(arrowElement, actionIndex, conditionIndex, selected) {
+    var componentContainer = document.createElement("div");
+    componentContainer.classList.add("workflow-entry", "workflow-condition");
+    createConditionRemoveButton(actionIndex, conditionIndex, componentContainer);
+    var componentHeadline = document.createElement("div");
+    componentHeadline.classList.add("workflow-headline");
+    var componentHeadlineContent = document.createElement("h1");
+    componentHeadlineContent.innerHTML = "Condition";
+    if (selected) {
+      componentContainer.classList.add("workflow-entry-selected");
+      componentHeadline.classList.add("workflow-headline-selected");
+    }
+    componentHeadline.appendChild(componentHeadlineContent);
+    componentContainer.appendChild(componentHeadline);
+    componentContainer.appendChild(document.createElement("br"));
+    var componentDescription = document.createElement("span");
+    componentDescription.innerHTML = "Can influence the behavior of the following actions";
+    componentDescription.classList.add("workflow-entry-description");
+    componentContainer.appendChild(componentDescription);
+    componentContainer.appendChild(document.createElement("br"));
+    componentContainer.appendChild(document.createElement("br"));
+    componentContainer.onclick = function (event) {
+      if (event.target.classList.contains("workflow-condition-remove-container") || event.target.classList.contains("workflow-condition-remove")) {
+        return;
+      }
+      sessionStorage.setItem("workflow-condition-index", actionIndex.toString() + ":" + conditionIndex.toString());
+      window.location.href = "/workflow/condition/";
+    }
+    arrowElement.parentNode.insertBefore(componentContainer, arrowElement.nextSibling);
+    var newArrow = createArrow();
+    var conditionButton = createConditionButton(newArrow, actionIndex, conditionIndex + 1);
+    componentContainer.parentNode.insertBefore(conditionButton, componentContainer.nextSibling);
+    conditionButton.parentNode.insertBefore(newArrow, conditionButton.nextSibling);
+  }
+
+  function createConditionRemoveButton(actionIndex, conditionIndex, componentContainer) {
+    var conditionRemoveContainer = document.createElement("div");
+    conditionRemoveContainer.classList.add("workflow-condition-remove-container");
+    var iconContainer = document.createElement("i");
+    iconContainer.classList.add("workflow-condition-remove", "fa-solid", "fa-xmark");
+    conditionRemoveContainer.appendChild(iconContainer);
+    conditionRemoveContainer.addEventListener("click", function(event) {
+      if (sessionStorage.getItem("workflow-conditions") !== null) {
+        var conditions = JSON.parse(sessionStorage.getItem("workflow-conditions"));
+        conditions.conditions = conditions.conditions.filter(item => !(item.actionIndex === actionIndex && item.conditionIndex === conditionIndex));
+        sessionStorage.setItem("workflow-conditions", JSON.stringify(conditions));
+      }
+      displayWorkflow();
+    });
+    componentContainer.appendChild(conditionRemoveContainer);
   }
 
   function createAddActionButton(index) {
