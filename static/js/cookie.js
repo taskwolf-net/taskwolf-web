@@ -37,7 +37,8 @@ var Cookie = {
     var cookie = _.map({
       name: escape(value),
       expires: expires_at.toGMTString(),
-      path: '/'
+      path: '/',
+      secure: true,
     }, function (value, key) {
       return [(key == 'name') ? name : key, value].join('=');
     }).join(';');
