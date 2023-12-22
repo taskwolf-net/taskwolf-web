@@ -223,7 +223,8 @@
         "moduleLogo": workflow.triggerModuleLogo,
         "type": workflow.triggerType,
         "typeDescription": workflow.triggerTypeDescription,
-        "content": workflow.triggerContent
+        "content": workflow.triggerContent,
+        "selected": true
       }));
       var actions = [];
       for (var i = 0; i < workflow.actions.length; i++) {
@@ -233,10 +234,22 @@
           "moduleLogo": workflowActionInformation.actionModuleLogo,
           "type": workflowActionInformation.actionType,
           "typeDescription": workflowActionInformation.actionTypeDescription,
-          "content": workflowActionInformation.actionContent
+          "content": workflowActionInformation.actionContent,
+          "selected": true
         });
       }
       sessionStorage.setItem("workflow-actions", JSON.stringify({actions: actions}));
+      var conditions = [];
+      for (var i = 0; i < workflow.conditions.length; i++) {
+        var workflowConditionInformation = workflow.conditions[i];
+        conditions.push({
+          "actionIndex": workflowConditionInformation.conditionIndex,
+          "type": workflowConditionInformation.conditionType,
+          "content": workflowConditionInformation.conditionContent,
+          "selected": true
+        });
+      }
+      sessionStorage.setItem("workflow-conditions", JSON.stringify({conditions: conditions}));
       window.location.href = "/workflow/";
     });
   }
@@ -274,6 +287,7 @@
     sessionStorage.removeItem("workflow-description");
     sessionStorage.removeItem("workflow-trigger");
     sessionStorage.removeItem("workflow-actions");
+    sessionStorage.removeItem("workflow-conditions");
     sessionStorage.removeItem("workflow-selected");
     sessionStorage.removeItem("workflow-id");
     window.location.href = "/workflow/";

@@ -120,13 +120,19 @@
 
   $(document).ready(function() {
     if ("{{type}}" === "trigger" && sessionStorage.getItem("workflow-trigger") !== null) {
-      selectedComponent = JSON.parse(sessionStorage.getItem("workflow-trigger"));
+      var trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
+      if (trigger.selected === true) {
+        selectedComponent = trigger;
+      }
     }
     var actionIndex = sessionStorage.getItem("workflow-action-index");
     var actions = sessionStorage.getItem("workflow-actions");
     if ("{{type}}" === "action" && actionIndex !== null && actions != null && JSON.parse(actions).actions.length > actionIndex) {
-      selectedComponent = JSON.parse(sessionStorage.getItem("workflow-actions"))
+      var action = JSON.parse(sessionStorage.getItem("workflow-actions"))
         .actions[parseInt(sessionStorage.getItem("workflow-action-index"))];
+      if (action.selected === true) {
+        selectedComponent = action;
+      }
     }
     fetchApplicationsData(function() {
       if (!(_.isEqual(selectedComponent, {}))) {
@@ -767,7 +773,8 @@
       "moduleLogo": selectedApplicationLogo,
       "type": selectedEvent,
       "typeDescription": selectedEventDescription,
-      "content": JSON.stringify(specificationValues)
+      "content": JSON.stringify(specificationValues),
+      "selected": true
     };
   }
 
