@@ -39,14 +39,36 @@
   var selectButtons = [];
   var inputValue = "";
   var conditionType = "";
-  var conditionTypeName = "";
   var comparativeValue = "";
   var currentPlaceholderElement;
 
   $(document).ready(function() {
+    performAutoCompletion();
     fillConditionInputs();
     displayPlaceholdersTabs();
   });
+
+  function performAutoCompletion() {
+    var indexes = sessionStorage.getItem("workflow-condition-index").split(":");
+    var actionIndex = parseInt(indexes[0]);
+    var conditionIndex = parseInt(indexes[1]);
+    if (sessionStorage.getItem("workflow-conditions") === null) {
+      return;
+    }
+    var actionConditions = JSON.parse(sessionStorage.getItem("workflow-conditions"))
+      .conditions.filter(item => item.actionIndex === actionIndex);
+    if (actionConditions.length <= conditionIndex) {
+      return;
+    }
+    var condition = actionConditions[conditionIndex];
+    if (condition.selected === false) {
+      return;
+    }
+    var content = JSON.parse(condition.content);
+    inputConditionInput("condition-input-value", content.inputValue);
+    inputConditionInput("condition-comparative-value", content.comparativeValue);
+    conditionType = condition.type;
+  }
 
   function fillConditionInputs() {
     var inputListElement = document.getElementById("workflow-condition-input-list");
@@ -59,7 +81,6 @@
       selectButtons = [];
       inputValue = "";
       conditionType = "";
-      conditionTypeName = "";
       comparativeValue = "";
       updateAdoptability(false);
       fillConditionInputs();
@@ -82,6 +103,12 @@
     inputElement.placeholder = name;
     inputElement.id = "workflow-condition-input-" + identifier;
     inputElement.classList.add("workflow-condition-input", "form-control");
+    if (identifier === "condition-input-value" && inputValue !== "") {
+      inputElement.value = inputValue;
+    }
+    if (identifier === "condition-comparative-value" && comparativeValue !== "") {
+      inputElement.value = comparativeValue;
+    }
     inputElement.oninput = function (event) {
       inputConditionInput(identifier, event.target.value);
     }
@@ -137,6 +164,9 @@
       clickConditionSelect(identifier, dropdownContainer, dropdownList, dropdownButton);
     });
     document.getElementById("workflow-condition-input-list").appendChild(dropdownContainer);
+    if (conditionType !== "") {
+      clickConditionSelect(identifier, dropdownContainer, dropdownList, dropdownButton);
+    }
   }
 
   function clickConditionSelect(identifier, dropdownContainer, dropdownList, dropdownButton) {
@@ -153,9 +183,14 @@
         itemNameName.innerHTML = item.name;
         itemElement.appendChild(itemNameName);
         itemElement.onclick = function (event) {
-          selectConditionSelect(identifier, item.identifier, item.name, dropdownContainer, dropdownButton, dropdownList);
+          selectConditionSelect(identifier, item.identifier, item.name,
+              dropdownContainer, dropdownButton, dropdownList);
         }
         dropdownList.appendChild(itemElement);
+        if (conditionType !== "" && item.identifier === conditionType) {
+          selectConditionSelect(identifier, item.identifier, item.name,
+              dropdownContainer, dropdownButton, dropdownList);
+        }
       }
     });
   }
@@ -188,7 +223,7 @@
       displayPlaceholdersTab(-1);
     }
     if ((actions != null && actions.length > 0)) {
-      for (var i = 0; i < sessionStorage.getItem("workflow-condition-index").split(":")[0]; i++) {
+      for (var i = 0; i < parseInt(sessionStorage.getItem("workflow-condition-index").split(":")[0]); i++) {
         if (i < actions.length) {
           displayPlaceholdersTab(i);
         }
@@ -291,6 +326,8 @@
       sessionStorage.setItem("workflow-conditions", JSON.stringify({conditions: [createCondition()]}));
     } else {
       var conditions = JSON.parse(sessionStorage.getItem("workflow-conditions")).conditions;
+      var indexes = sessionStorage.getItem("workflow-condition-index").split(":");
+      conditions = conditions.filter(item => !(item.actionIndex === parseInt(indexes[0]) && conditions.indexOf(item) === parseInt(indexes[1])));
       var component = createCondition();
       if (sessionStorage.getItem("workflow-condition-index") !== null) {
         sessionStorage.removeItem("workflow-condition-index");
@@ -301,16 +338,14 @@
   }
 
   function createCondition() {
-    var indexes = sessionStorage.getItem("workflow-condition-index").split(":")[0];
     return {
       "type": conditionType,
-      "typeName": conditionTypeName,
-      "actionIndex": indexes[0],
-      "conditionIndex": indexes[1],
+      "actionIndex": parseInt(sessionStorage.getItem("workflow-condition-index").split(":")[0]),
       "content": JSON.stringify({
         "inputValue": inputValue,
         "comparativeValue": comparativeValue
-      })
+      }),
+      "selected": true
     };
   }
 
