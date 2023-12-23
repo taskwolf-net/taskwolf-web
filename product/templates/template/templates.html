@@ -138,16 +138,19 @@
       "module": trigger.module,
       "moduleLogo": trigger.moduleLogo,
       "type": trigger.type,
-      "typeDescription": trigger.typeDescription
+      "typeDescription": trigger.typeDescription,
+      "selected": true
     }));
     var encodedActions = [];
     for (var i = 0; i < actions.length; i++) {
       var action = actions[i];
       encodedActions.push({
+        "actionIndex": action.actionIndex,
         "module": action.module,
         "moduleLogo": action.moduleLogo,
         "type": action.type,
-        "typeDescription": action.typeDescription
+        "typeDescription": action.typeDescription,
+        "selected": true
       });
     }
     sessionStorage.setItem("workflow-actions", JSON.stringify({actions: encodedActions}));
