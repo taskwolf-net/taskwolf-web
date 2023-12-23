@@ -1,11 +1,15 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from base.authentication import isAuthenticated, findUsername
+from product.product import dashboard
 
 async def home(request):
+  authenticated = await isAuthenticated(request)
+  if (authenticated):
+    return await dashboard(request)
   return render(request, 'home.html', {'title': 'Taskwolf - Home',
     'css': ['css/base/home-header.css', 'css/home/home.css'], 'authenticated':
-      await isAuthenticated(request), 'username': findUsername(request)[0]})
+      authenticated, 'username': findUsername(request)[0]})
 
 async def product(request):
   return render(request, 'product.html', {'title': 'Taskwolf - Product',
