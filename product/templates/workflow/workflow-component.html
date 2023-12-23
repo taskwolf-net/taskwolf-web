@@ -752,17 +752,15 @@
   }
 
   function saveAction() {
+    var component = createComponent();
+    var index = parseInt(sessionStorage.getItem("workflow-action-index"));
+    component.actionIndex = index;
     if (sessionStorage.getItem("workflow-actions") === null) {
-      sessionStorage.setItem("workflow-actions", JSON.stringify({actions: [createComponent()]}));
+      sessionStorage.setItem("workflow-actions", JSON.stringify({actions: [component]}));
     } else {
       var actions = JSON.parse(sessionStorage.getItem("workflow-actions")).actions;
-      var component = createComponent();
-      if (sessionStorage.getItem("workflow-action-index") !== null) {
-        actions[sessionStorage.getItem("workflow-action-index")] = component;
-        sessionStorage.removeItem("workflow-action-index");
-      } else {
-        actions.push(component);
-      }
+      actions[index] = component;
+      sessionStorage.removeItem("workflow-action-index");
       sessionStorage.setItem("workflow-actions", JSON.stringify({actions: actions}));
     }
   }

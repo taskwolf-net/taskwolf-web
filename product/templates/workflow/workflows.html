@@ -230,6 +230,7 @@
       for (var i = 0; i < workflow.actions.length; i++) {
         var workflowActionInformation = workflow.actions[i];
         actions.push({
+          "actionIndex": workflowActionInformation.actionIndex,
           "module": workflowActionInformation.actionModule,
           "moduleLogo": workflowActionInformation.actionModuleLogo,
           "type": workflowActionInformation.actionType,
