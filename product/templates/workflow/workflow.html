@@ -129,7 +129,13 @@
     actionRemoveContainer.addEventListener("click", function(event) {
       if (sessionStorage.getItem("workflow-actions") !== null) {
         var actions = JSON.parse(sessionStorage.getItem("workflow-actions"));
-        actions.actions = actions.actions.filter(item => actions.actions.indexOf(item) !== index);
+        actions.actions = actions.actions.filter(item => item.actionIndex !== index);
+        var actionsBehindTarget = actions.actions.filter(item => item.actionIndex > index);
+        actions.actions = actions.actions.filter(item => !(item.actionIndex > index));
+        for (var i = 0; i < actionsBehindTarget.length; i++) {
+          actionsBehindTarget[i].actionIndex = actionsBehindTarget[i].actionIndex - 1;
+        }
+        actions.actions = actions.actions.concat(actionsBehindTarget);
         sessionStorage.setItem("workflow-actions", JSON.stringify(actions));
       }
       displayWorkflow();

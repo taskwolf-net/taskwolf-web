@@ -128,8 +128,8 @@
     var actionIndex = sessionStorage.getItem("workflow-action-index");
     var actions = sessionStorage.getItem("workflow-actions");
     if ("{{type}}" === "action" && actionIndex !== null && actions != null && JSON.parse(actions).actions.length > actionIndex) {
-      var action = JSON.parse(sessionStorage.getItem("workflow-actions"))
-        .actions[parseInt(sessionStorage.getItem("workflow-action-index"))];
+      var action = JSON.parse(sessionStorage.getItem("workflow-actions")).actions
+        .filter(item => item.actionIndex === parseInt(sessionStorage.getItem("workflow-action-index")))[0];
       if (action.selected === true) {
         selectedComponent = action;
       }
@@ -759,7 +759,8 @@
       sessionStorage.setItem("workflow-actions", JSON.stringify({actions: [component]}));
     } else {
       var actions = JSON.parse(sessionStorage.getItem("workflow-actions")).actions;
-      actions[index] = component;
+      actions = actions.filter(item => item.actionIndex !== index);
+      actions.push(component);
       sessionStorage.removeItem("workflow-action-index");
       sessionStorage.setItem("workflow-actions", JSON.stringify({actions: actions}));
     }
