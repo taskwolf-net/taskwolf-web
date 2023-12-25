@@ -37,3 +37,9 @@ async def workflowCondition(request):
   return render(request, 'workflow/workflow-condition.html', {'title': 'Taskwolf - Condition',
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflow-condition.css'],
       'username': findUsername(request)[0]})
+
+@authentication_required
+async def workflowTimeline(request):
+  return render(request, 'workflow/workflow-timeline.html', {'title': 'Taskwolf - Timeline',
+    'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflow-timeline.css'],
+      'username': findUsername(request)[0]})

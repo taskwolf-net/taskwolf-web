@@ -7,6 +7,7 @@ urlpatterns = [
   path('workflow/trigger/', workflow.workflowTrigger),
   path('workflow/action/', workflow.workflowAction),
   path('workflow/condition/', workflow.workflowCondition),
+  path('workflow/timeline/', workflow.workflowTimeline),
   path('workflow/<str:id>/', workflow.workflow),
   path('workflow/', workflow.workflowCreate),
   path('templates/', template.templates),

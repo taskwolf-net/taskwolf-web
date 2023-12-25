@@ -1,0 +1,67 @@
+{% load static %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body>
+    {% include 'templates/product-header.html' %}
+    {% include 'templates/product-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="workflow-timeline-container">
+        <h1 id="workflow-timeline-headline">Workflow Timeline</h1>
+        <hr id="workflow-timeline-divider" class="hr"/>
+        <section id="workflow-timeline-section">
+          <ul id="workflow-timeline" class="timeline">
+          </ul>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  var timeline;
+
+  $(document).ready(function() {
+    if (sessionStorage.getItem("workflow-selected") === null || sessionStorage.getItem("workflow-id") === null) {
+      return;
+    }
+    fetchTimelineData(function() {
+        displayTimeline();
+    });
+  });
+
+  function fetchTimelineData(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/workflow/timeline/find/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}], {workflow: sessionStorage.getItem("workflow-id")});
+    request.send(function (status, responseText) {
+      timeline = JSON.parse(responseText).timeline;
+      callback();
+    });
+  }
+
+  function displayTimeline() {
+    document.getElementById("workflow-timeline").innerHTML = "";
+    for (var i = 0; i < timeline.length; i++) {
+      displayEntry(timeline[i]);
+    }
+  }
+
+  function displayEntry(entry) {
+    var entryElement = document.createElement("li");
+    entryElement.classList.add("timeline-item", "mb-5");
+    var entryHeaderElement = document.createElement("div");
+    entryHeaderElement.classList.add("timeline-item-header");
+    var entryTitleElement = document.createElement("h5");
+    entryTitleElement.classList.add("timeline-item-title", "fw-bold");
+    entryTitleElement.innerHTML = entry.title;
+    entryHeaderElement.appendChild(entryTitleElement);
+    var entryDateElement = document.createElement("p");
+    entryDateElement.classList.add("timeline-item-date", "mb-2", "fw-bold");
+    entryDateElement.innerHTML = entry.time;
+    entryHeaderElement.appendChild(entryDateElement);
+    entryElement.appendChild(entryHeaderElement);
+    var entryDescriptionElement = document.createElement("p");
+    entryDescriptionElement.innerHTML = entry.description;
+    entryElement.appendChild(entryDescriptionElement);
+    document.getElementById("workflow-timeline").appendChild(entryElement);
+  }
+</script>

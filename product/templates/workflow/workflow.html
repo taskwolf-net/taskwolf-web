@@ -5,14 +5,15 @@
     {% include 'templates/product-header.html' %}
     {% include 'templates/product-sidebar.html' %}
     <div class="sidebar-influenced">
-      <div id="workflow-publish">
-        <button id="workflow-publish-button" type="button" class="btn btn-success disabled">PUBLISH</button>
-      </div>
-      <div id="workflow-delete">
-        <button id="workflow-delete-button" type="button" class="btn btn-danger">DELETE</button>
-      </div>
       <div id="workflow-container">
-        <h1 id="workflow-headline">Workflow</h1>
+        <div id="workflow-header">
+          <h1 id="workflow-headline">Workflow</h1>
+          <button id="workflow-delete" type="button" class="btn btn-danger d-none">DELETE</button>
+          <button id="workflow-publish" type="button" class="btn btn-success disabled">PUBLISH</button>
+        </div>
+        <div id="workflow-timeline" class="d-none">
+          <i id="workflow-timeline-button" class="fa-solid fa-clock-rotate-left"></i>
+        </div>
         <div id="workflow-inputs">
           <div class="form-outline mb-4">
             <label for="workflow-name" class="form-label">Name</label>
@@ -57,7 +58,8 @@
     displayActions();
     checkPublishability();
     if (sessionStorage.getItem("workflow-selected") !== null) {
-      document.getElementById("workflow-delete").style.display = "block";
+      document.getElementById("workflow-delete").classList.remove("d-none");
+      document.getElementById("workflow-timeline").classList.remove("d-none");
     }
   }
 
@@ -306,7 +308,7 @@
   }
 
   function updatePublishability(isPublishable) {
-    var publishButton = document.getElementById("workflow-publish-button");
+    var publishButton = document.getElementById("workflow-publish");
     if (isPublishable) {
       publishButton.classList.remove("disabled");
       publishButton.classList.add("workflow-publish-enabled");
@@ -316,7 +318,7 @@
     }
   }
 
-  document.getElementById("workflow-publish-button").onclick = function (event) {
+  document.getElementById("workflow-publish").onclick = function (event) {
     var workflowName = sessionStorage.getItem("workflow-name");
     var workflowDescription = sessionStorage.getItem("workflow-description");
     var workflowTriggerInformation = JSON.parse(sessionStorage.getItem("workflow-trigger"));
@@ -398,5 +400,9 @@
         });
       }
     });
+  }
+
+  document.getElementById("workflow-timeline-button").onclick = function (event) {
+    window.location.href = "/workflow/timeline/";
   }
 </script>

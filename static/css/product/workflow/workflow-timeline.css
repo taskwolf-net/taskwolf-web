@@ -1,0 +1,59 @@
+#workflow-timeline-container {
+  width: min(calc(800px), 95%);
+  margin: auto;
+  color: white;
+}
+
+#workflow-timeline-headline {
+  margin-top: 5%;
+  text-align: center;
+  font-weight: bold;
+}
+
+#workflow-timeline-divider {
+  color: white;
+  width: 100%;
+  margin: 5% auto;
+}
+
+#workflow-timeline-section {
+  width: 90%;
+  margin: auto;
+}
+
+.timeline {
+  border-left: 1px solid hsl(0, 0%, 90%);
+  position: relative;
+  list-style: none;
+}
+
+.timeline .timeline-item {
+  position: relative;
+}
+
+.timeline .timeline-item:after {
+  position: absolute;
+  display: block;
+  top: 0;
+}
+
+.timeline .timeline-item:after {
+  background-color: hsl(0, 0%, 90%);
+  left: -43px;
+  border-radius: 50%;
+  height: 21px;
+  width: 21px;
+  content: "";
+}
+
+.timeline-item-header {
+  display: flex;
+}
+
+.timeline-item-title {
+  width: 100%;
+}
+
+.timeline-item-date {
+  white-space: nowrap;
+}
