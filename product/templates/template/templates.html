@@ -132,6 +132,13 @@
   }
 
   function clickTemplate(name, description, trigger, actions) {
+    sessionStorage.removeItem("workflow-name");
+    sessionStorage.removeItem("workflow-description");
+    sessionStorage.removeItem("workflow-trigger");
+    sessionStorage.removeItem("workflow-actions");
+    sessionStorage.removeItem("workflow-conditions");
+    sessionStorage.removeItem("workflow-selected");
+    sessionStorage.removeItem("workflow-id");
     sessionStorage.setItem("workflow-name", name);
     sessionStorage.setItem("workflow-description", description);
     sessionStorage.setItem("workflow-trigger", JSON.stringify({
