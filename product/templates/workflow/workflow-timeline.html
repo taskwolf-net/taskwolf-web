@@ -62,6 +62,14 @@
     var entryDescriptionElement = document.createElement("p");
     entryDescriptionElement.innerHTML = entry.description;
     entryElement.appendChild(entryDescriptionElement);
+    if (entry.level === "SUCCESS") {
+      entryElement.classList.add("timeline-item-success");
+      entryTitleElement.classList.add("text-success");
+    }
+    if (entry.level === "FAILURE") {
+      entryElement.classList.add("timeline-item-failure");
+      entryTitleElement.classList.add("text-danger");
+    }
     document.getElementById("workflow-timeline").appendChild(entryElement);
   }
 </script>

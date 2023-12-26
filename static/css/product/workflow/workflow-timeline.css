@@ -46,6 +46,14 @@
   content: "";
 }
 
+.timeline .timeline-item-success:after {
+  background-color: #198754 !important;
+}
+
+.timeline .timeline-item-failure:after {
+  background-color: #dc3545 !important;
+}
+
 .timeline-item-header {
   display: flex;
 }
