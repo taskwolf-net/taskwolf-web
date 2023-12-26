@@ -3,16 +3,16 @@
   <div id="sidebar-content">
     <ul class="navbar-nav ml-auto mt-4 h-100 d-flex align-items-center">
       <li class="sidebar-item">
-        <a href="/dashboard/" class="sidebar-link nav-link {% if request.path == '/dashboard/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-home" aria-hidden="true"></i>Dashboard</a>
+        <a href="/dashboard/" class="sidebar-link nav-link {% if request.path == '/dashboard/' or request.path == '/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-home" aria-hidden="true"></i>Dashboard</a>
       </li>
       <li class="sidebar-item">
-        <a href="/workflows/" class="sidebar-link nav-link {% if request.path == '/workflows/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-tasks" aria-hidden="true"></i>Workflows</a>
+        <a href="/workflows/" class="sidebar-link nav-link {% if 'workflow' in request.path %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-tasks" aria-hidden="true"></i>Workflows</a>
       </li>
       <li class="sidebar-item">
         <a href="/templates/" class="sidebar-link nav-link {% if request.path == '/templates/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-sheet-plastic" aria-hidden="true"></i>Templates</a>
       </li>
       <li class="sidebar-item">
-        <a href="/organizations/" class="sidebar-link nav-link {% if request.path == '/organizations/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-users" aria-hidden="true"></i>Organizations</a>
+        <a href="/organizations/" class="sidebar-link nav-link {% if 'organization' in request.path %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-users" aria-hidden="true"></i>Organizations</a>
       </li>
       <li class="sidebar-item">
         <a href="/account/apps/" class="sidebar-link nav-link {% if request.path == '/account/apps/' or request.path == '/accounts/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-link" aria-hidden="true"></i>Accounts</a>
