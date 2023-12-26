@@ -61,7 +61,7 @@
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
       if (response.success === true) {
-        window.location.href = "/";
+        window.location.href = "/register/email/";
       } else {
         document.getElementById("registration-failed").innerHTML = "There is already an account with this email!";
       }

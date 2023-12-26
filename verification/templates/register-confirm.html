@@ -1,0 +1,27 @@
+{% load static %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body>
+    {% include 'templates/home-header.html' %}
+    <div id="register-confirm">
+      <div class="success-icon-wrapper">
+        <div class="success-icon">
+          <div class="success-icon__tip"></div>
+          <div class="success-icon__long"></div>
+        </div>
+      </div>
+      <h1 id="register-confirm-headline">Registration completed</h1>
+      <p id="register-confirm-description">You have successfully verified your account. You can now continue with the login.</p>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    let request = new HttpRequest("https://api.taskwolf.net/verification/complete/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "API-KEY", value: Cookie.find("token")}], {user: "{{user}}", token: "{{token}}"});
+    request.send(function (status, responseText) {
+
+    });
+  });
+</script>
