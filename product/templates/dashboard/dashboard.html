@@ -119,7 +119,7 @@
       }
       charts = [];
       drawProgress("#dashboard-workflow-progress-circle", statistics.workflows, statistics.maxWorkflows, "", "#d3d3d3", "#235bd1");
-      drawProgress("#dashboard-failing-workflow-progress-circle", 0, statistics.workflows === 0 ? 1 : statistics.workflows, "", "#d01c1c", "#d01c1c");
+      drawProgress("#dashboard-failing-workflow-progress-circle", statistics.failingWorkflows, statistics.workflows === 0 ? 1 : statistics.workflows, "", "#d01c1c", "#d01c1c");
       drawProgress("#dashboard-organization-progress-circle", statistics.organizationMembers, statistics.maxOrganizationMembers, "", "#d3d3d3", "#235bd1");
       drawProgress("#dashboard-account-progress-circle", statistics.linkedAccounts, statistics.maxLinkedAccounts, "", "#d3d3d3", "#235bd1");
       removeLoader();
