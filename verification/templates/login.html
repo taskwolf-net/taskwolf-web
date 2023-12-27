@@ -43,6 +43,7 @@
     request.send(function (status, responseText) {
       if (status == 200) {
         Cookie.create("token", JSON.parse(responseText).apiKey, 60 * 60);
+        Cookie.destroy("taskwolf-organization-target");
         window.location.href = "/dashboard/";
       } else {
         document.getElementById("authentication-failed").innerHTML = "Authentication Failed!";
