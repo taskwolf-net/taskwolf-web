@@ -365,7 +365,7 @@
     }
     console.log(requestBody);
     let request = new HttpRequest("https://api.taskwolf.net/workflow" + (isSelected ? "/update/" : "/add/"), "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}], requestBody);
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], requestBody);
     request.send(function (status, responseText) {
       sessionStorage.removeItem("workflow-name");
       sessionStorage.removeItem("workflow-description");
@@ -394,7 +394,7 @@
     }).then(willDelete => {
       if (willDelete) {
         let request = new HttpRequest("https://api.taskwolf.net/workflow/remove/", "POST", [{key: "Content-Type", value: "application/json"},
-          {key: "API-KEY", value: Cookie.find("token")}], {workflow: sessionStorage.getItem("workflow-id")});
+          {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {workflow: sessionStorage.getItem("workflow-id")});
         request.send(function (status, responseText) {
           swal("Deleted!", "That workflow has been successfully deleted!", "success").then(success => window.location.href = "/workflows/");
         });

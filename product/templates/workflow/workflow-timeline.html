@@ -31,7 +31,7 @@
 
   function fetchTimelineData(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/workflow/timeline/find/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}], {workflow: sessionStorage.getItem("workflow-id")});
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {workflow: sessionStorage.getItem("workflow-id")});
     request.send(function (status, responseText) {
       timeline = JSON.parse(responseText).timeline;
       callback();

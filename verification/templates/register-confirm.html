@@ -19,7 +19,7 @@
 <script>
   $(document).ready(function() {
     let request = new HttpRequest("https://api.taskwolf.net/verification/complete/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}], {user: "{{user}}", token: "{{token}}"});
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {user: "{{user}}", token: "{{token}}"});
     request.send(function (status, responseText) {
 
     });

@@ -82,7 +82,7 @@
 
   function fetchTargetsData(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/workflow/owners/all/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}]);
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
     request.send(function (status, responseText) {
       targets = JSON.parse(responseText).owners;
       callback();
@@ -138,7 +138,7 @@
 
   function fetchStatisticsData(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/statistics/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}], {target: Cookie.find("taskwolf-organization-target")});
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {target: Cookie.find("taskwolf-organization-target")});
     request.send(function (status, responseText) {
       statistics = JSON.parse(responseText);
       callback();

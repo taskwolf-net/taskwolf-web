@@ -79,7 +79,7 @@
 
   function fetchOwnersData(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/workflow/owners/all/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}]);
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
     request.send(function (status, responseText) {
       owners = JSON.parse(responseText).owners;
       callback();
@@ -113,7 +113,7 @@
 
   function fetchWorkflowsData(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/workflows/selected/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}], {owner: Cookie.find("taskwolf-organization-target")});
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {owner: Cookie.find("taskwolf-organization-target")});
     request.send(function (status, responseText) {
       workflows = JSON.parse(responseText).workflows;
       callback();
@@ -177,7 +177,7 @@
     runButton.appendChild(runLabel);
     runButton.onclick = function (event) {
       let request = new HttpRequest("https://api.taskwolf.net/workflow/manual/execute/", "POST", [{key: "Content-Type", value: "application/json"},
-        {key: "API-KEY", value: Cookie.find("token")}], {workflow: id});
+        {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {workflow: id});
       request.send(function (status, responseText) {
         swal("Executed!", "You have successfully executed that workflow", "success");
       });
@@ -211,7 +211,7 @@
 
   function clickWorkflow(id) {
     let request = new HttpRequest("https://api.taskwolf.net/workflow/find/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}], {workflow: id});
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {workflow: id});
     request.send(function (status, responseText) {
       var workflow = JSON.parse(responseText);
       sessionStorage.setItem("workflow-selected", "true");
@@ -258,7 +258,7 @@
   function updateWorkflowState(id, state) {
     changeStateBlocked = true;
     let request = new HttpRequest("https://api.taskwolf.net/workflow/state/change/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}], {workflow: id, armed: state});
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {workflow: id, armed: state});
     request.send(function (status, responseText) {
       changeStateBlocked = false;
     });

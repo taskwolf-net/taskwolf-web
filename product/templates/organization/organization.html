@@ -51,11 +51,11 @@
     var location = window.location;
     var id = location.href.replace(location.host, "").replace(location.protocol, "").replace("organization", "").replaceAll("/", "");
     let request = new HttpRequest("https://api.taskwolf.net/organization/selected/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}], {id: id});
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {id: id});
     request.send(function (status, responseText) {
       organization = JSON.parse(responseText);
       let request = new HttpRequest("https://api.taskwolf.net/organization/invitations/", "POST", [{key: "Content-Type", value: "application/json"},
-        {key: "API-KEY", value: Cookie.find("token")}], {id: id});
+        {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {id: id});
       request.send(function (status, responseText) {
         invitations = JSON.parse(responseText).invitations;
         callback();
@@ -77,7 +77,7 @@
         memberKickElement.classList.add("organization-member-kick", "fa", "fa-ban", "text-danger");
         memberKickElement.onclick = function (event) {
           let request = new HttpRequest("https://api.taskwolf.net/organization/kick/", "POST",
-            [{key: "Content-Type", value: "application/json"}, {key: "API-KEY", value: Cookie.find("token")}],
+            [{key: "Content-Type", value: "application/json"}, {key: "Authorization", value: "Bearer " + Cookie.find("token")}],
             {organization: organization.id, target: organization.memberIds[i]});
           request.send(function (status, responseText) {
             location.reload();
@@ -159,7 +159,7 @@
     }).then(willDelete => {
       if (willDelete) {
         let request = new HttpRequest("https://api.taskwolf.net/organization/delete/", "POST", [{key: "Content-Type", value: "application/json"},
-          {key: "API-KEY", value: Cookie.find("token")}], {organization: organization});
+          {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {organization: organization});
         request.send(function (status, responseText) {
           swal("Deleted!", "That organization has been successfully deleted!", "success").then(success => window.location.href = "/organizations/");
         });
@@ -177,7 +177,7 @@
     }).then(willDelete => {
       if (willDelete) {
         let request = new HttpRequest("https://api.taskwolf.net/organization/leave/", "POST", [{key: "Content-Type", value: "application/json"},
-          {key: "API-KEY", value: Cookie.find("token")}], {organization: organization});
+          {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {organization: organization});
         request.send(function (status, responseText) {
           swal("Left!", "You have successfully left that organization!", "success").then(success => window.location.href = "/organizations/");
         });

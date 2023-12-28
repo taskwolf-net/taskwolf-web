@@ -38,7 +38,7 @@
 
   function fetchAppsData(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/account/apps/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}]);
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
     request.send(function (status, responseText) {
       apps = JSON.parse(responseText).apps;
       callback();

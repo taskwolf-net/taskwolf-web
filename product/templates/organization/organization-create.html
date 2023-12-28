@@ -27,7 +27,7 @@
 
   document.getElementById('create').onclick = function() {
     let request = new HttpRequest("https://api.taskwolf.net/organization/create/", "POST",
-      [{key: "Content-Type", value: "application/json"}, {key: "API-KEY", value: Cookie.find("token")}],
+      [{key: "Content-Type", value: "application/json"}, {key: "Authorization", value: "Bearer " + Cookie.find("token")}],
       {name: document.getElementById("name").value});
     request.send(function (status, responseText) {
       window.location.href = "/organizations/";

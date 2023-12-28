@@ -172,7 +172,7 @@
   function clickConditionSelect(identifier, dropdownContainer, dropdownList, dropdownButton) {
     dropdownList.innerHTML = "";
     let request = new HttpRequest("https://api.taskwolf.net/conditions/find/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}]);
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
     request.send(function (status, responseText) {
       var items = JSON.parse(responseText).conditions;
       for (var i = 0; i < items.length; i++) {
@@ -272,7 +272,7 @@
     var module = component.module;
     var type = component.type;
     let request = new HttpRequest("https://api.taskwolf.net/" + componentType + "/find/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}], {module: module, type: type});
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {module: module, type: type});
     request.send(function (status, responseText) {
       var outputVariables = JSON.parse(responseText).outputVariables;
       for (var i = 0; i < outputVariables.length; i++) {

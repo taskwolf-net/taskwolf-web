@@ -98,7 +98,7 @@
 
   function fetchOrganizationsData(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/organizations/all/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}]);
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
     request.send(function (status, responseText) {
       organizations = JSON.parse(responseText).organizations;
       for (let i = 0; i < organizations.length; i++) {
@@ -230,7 +230,7 @@
 
   function fetchInvitationsData(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/organization/invitations/personal/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}]);
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
     request.send(function (status, responseText) {
       invitations = JSON.parse(responseText).invitations;
       if (invitations.length === 0) {
@@ -270,7 +270,7 @@
     acceptElement.classList.add("invitations-list-action-accept", "fa", "fa-check");
     acceptElement.onclick = function (event) {
       let request = new HttpRequest("https://api.taskwolf.net/organization/invitation/accept/", "POST",
-        [{key: "Content-Type", value: "application/json"}, {key: "API-KEY", value: Cookie.find("token")}],
+        [{key: "Content-Type", value: "application/json"}, {key: "Authorization", value: "Bearer " + Cookie.find("token")}],
         {organization: id});
       request.send(function (status, responseText) {
         window.location.href = "/organizations/";
@@ -281,7 +281,7 @@
     ignoreElement.classList.add("invitations-list-action-ignore", "fa", "fa-ban");
     ignoreElement.onclick = function (event) {
       let request = new HttpRequest("https://api.taskwolf.net/organization/invitation/dismiss/", "POST",
-        [{key: "Content-Type", value: "application/json"}, {key: "API-KEY", value: Cookie.find("token")}],
+        [{key: "Content-Type", value: "application/json"}, {key: "Authorization", value: "Bearer " + Cookie.find("token")}],
         {organization: id});
       request.send(function (status, responseText) {
         window.location.href = "/organizations/";

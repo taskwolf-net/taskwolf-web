@@ -52,7 +52,7 @@
 
   function fetchModulesData(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/modules/all/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}]);
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
     request.send(function (status, responseText) {
       modules = JSON.parse(responseText).modules;
       callback();
@@ -79,7 +79,7 @@
 
   function fetchTemplatesData(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/templates/all/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}]);
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
     request.send(function (status, responseText) {
       templates = JSON.parse(responseText).templates;
       callback();

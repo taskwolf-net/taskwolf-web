@@ -145,7 +145,7 @@
 
   function fetchApplicationsData(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/modules/all/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}]);
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
     request.send(function (status, responseText) {
       applications = JSON.parse(responseText).modules;
       callback();
@@ -263,7 +263,7 @@
     var accountContentElement = document.getElementById("workflow-component-account-content");
     accountContentElement.innerHTML = "";
     let request = new HttpRequest("https://api.taskwolf.net/account/information/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}], {module: selectedApplication.toLowerCase()});
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {module: selectedApplication.toLowerCase()});
     request.send(function (status, responseText) {
       var information = JSON.parse(responseText);
       var logoLinkElement = document.createElement("a");
@@ -342,7 +342,7 @@
   function fillEventDropdown() {
     document.getElementById("workflow-component-event-dropdown-list").innerHTML = "";
     let request = new HttpRequest("https://api.taskwolf.net/{{type}}s/find/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}], {module: selectedApplication.toLowerCase()});
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {module: selectedApplication.toLowerCase()});
     request.send(function (status, responseText) {
       var events = JSON.parse(responseText)["{{type}}s"];
       for (var i = 0; i < events.length; i++) {
@@ -449,7 +449,7 @@
 
   function fillSpecificationsInputs() {
     let request = new HttpRequest("https://api.taskwolf.net/{{type}}/find/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}], {module: selectedApplication.toLowerCase(), type: selectedEvent});
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {module: selectedApplication.toLowerCase(), type: selectedEvent});
     request.send(function (status, responseText) {
       document.getElementById("workflow-component-specifications-input-list").innerHTML = "";
       var component = JSON.parse(responseText);
@@ -574,7 +574,7 @@
   function clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton, index, inputsLength) {
     dropdownList.innerHTML = "";
     let request = new HttpRequest("https://api.taskwolf.net/{{type}}/select/items/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}], {module: selectedApplication.toLowerCase(), type: selectedEvent, previousInputs: specificationValues, select: identifier});
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {module: selectedApplication.toLowerCase(), type: selectedEvent, previousInputs: specificationValues, select: identifier});
     request.send(function (status, responseText) {
       var items = JSON.parse(responseText).items;
       for (var i = 0; i < items.length; i++) {
@@ -673,7 +673,7 @@
     var module = component.module;
     var type = component.type;
     let request = new HttpRequest("https://api.taskwolf.net/" + componentType + "/find/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "API-KEY", value: Cookie.find("token")}], {module: module, type: type});
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {module: module, type: type});
     request.send(function (status, responseText) {
       var outputVariables = JSON.parse(responseText).outputVariables;
       for (var i = 0; i < outputVariables.length; i++) {
