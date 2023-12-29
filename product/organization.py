@@ -21,7 +21,7 @@ async def organization(request, id):
       'username': findUsername(request)[0]})
 
 @authentication_required
-async def organizationInvite(request, id):
-  return render(request, 'organization/organization-invite.html', {'title': 'Taskwolf - Organization Invite',
-    'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/organization/organization-invite.css'],
-      'username': findUsername(request)[0]})
+async def organizationJoin(request, organization, token):
+  return render(request, 'organization/organization-join.html', {'title': 'Taskwolf - Organization Join',
+    'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/organization/organization-join.css'],
+    'username': findUsername(request)[0], 'organization': organization, 'token': token})

@@ -16,18 +16,14 @@
           </ul>
           <div id="organization-members-header">
             <h2 id="organization-members-headline">Members:</h2>
-            <button type="button" id="organization-invite" class="btn btn-primary btn-block">INVITE</button>
+            <button type="button" id="organization-invite" class="btn btn-primary btn-block">COPY LINK</button>
+            <button type="button" id="organization-link-regenerate" class="btn btn-secondary btn-block"><span class="fa-solid fa-rotate-right"></span></button>
           </div>
           <ul id="organization-members">
           </ul>
           <div id="organization-members-empty">
             <span id="organization-members-empty-headline">Currently your organization has no members.</span>
-            <span>Would you like to add any? You can do that&nbsp;</span><a id="organization-members-empty-link" href="./invite/">here</a>
           </div>
-          <h2 id="organization-invitations-headline">Pending Invitations:</h2>
-          <ul id="organization-invitations">
-          </ul>
-          <span id="organization-invitations-empty">There are currently no pending invitations for this organization.</span>
         </div>
       </div>
     </div>
@@ -36,7 +32,6 @@
 
 <script>
   var organization;
-  var invitations;
 
   $(document).ready(function() {
     displayLoader();
@@ -45,6 +40,9 @@
       displayModificationButton();
       removeLoader();
     });
+    applyTooltips(document.getElementById("organization-invite"), "Copy Invitation Link");
+    applyTooltips(document.getElementById("organization-link-regenerate"), "Regenerate Link");
+    updateTooltips();
   });
 
   function fetchOrganizationData(callback) {
@@ -54,12 +52,7 @@
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {id: id});
     request.send(function (status, responseText) {
       organization = JSON.parse(responseText);
-      let request = new HttpRequest("https://api.taskwolf.net/organization/invitations/", "POST", [{key: "Content-Type", value: "application/json"},
-        {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {id: id});
-      request.send(function (status, responseText) {
-        invitations = JSON.parse(responseText).invitations;
-        callback();
-      });
+      callback();
     });
   }
 
@@ -89,13 +82,7 @@
     }
     if (organization.isOwner === true) {
       document.getElementById("organization-invite").style.display = "block";
-    }
-    var invitationsListElement = document.getElementById("organization-invitations");
-    if (invitations.length === 0) {
-      document.getElementById("organization-invitations-empty").style.display = "flex";
-    }
-    for (var i = 0; i < invitations.length; i++) {
-      invitationsListElement.appendChild(createUserEntry(invitations[i], "li"));
+      document.getElementById("organization-link-regenerate").style.display = "block";
     }
   }
 
@@ -138,7 +125,32 @@
   }
 
   document.getElementById("organization-invite").onclick = function (event) {
-    window.location.href = window.location.href + "invite/";
+    var linkButton = document.getElementById("organization-invite");
+    linkButton.classList.remove("btn-primary");
+    linkButton.classList.add("btn-success");
+    $('#organization-invite').tooltip('hide');
+    applyTooltips(linkButton, "Copied!");
+    updateTooltips();
+    $('#organization-invite').tooltip('show');
+    let request = new HttpRequest("https://api.taskwolf.net/organization/link/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {organization: organization.id});
+    request.send(function (status, responseText) {
+      navigator.clipboard.writeText(JSON.parse(responseText).link);
+    });
+  }
+
+  document.getElementById("organization-link-regenerate").onclick = function (event) {
+    var linkButton = document.getElementById("organization-invite");
+    linkButton.classList.remove("btn-success");
+    linkButton.classList.add("btn-primary");
+    $('#organization-link-regenerate').tooltip('hide');
+    applyTooltips(linkButton, "Copy Invitation Link");
+    updateTooltips();
+    let request = new HttpRequest("https://api.taskwolf.net/organization/link/regenerate/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {organization: organization.id});
+    request.send(function (status, responseText) {
+
+    });
   }
 
   document.getElementById("organization-modification").onclick = function (event) {
@@ -183,5 +195,18 @@
         });
       }
     });
+  }
+
+  function applyTooltips(element, text) {
+    $(element).attr("data-bs-toggle", "tooltip");
+    $(element).attr("data-bs-placement", "top");
+    $(element).attr("data-bs-title", text);
+  }
+
+  function updateTooltips() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
   }
 </script>

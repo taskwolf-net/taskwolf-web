@@ -14,7 +14,7 @@ urlpatterns = [
   path('organizations/', organization.organizations),
   path('organization/add/', organization.organizationCreate),
   path('organization/<str:id>/', organization.organization),
-  path('organization/<str:id>/invite/', organization.organizationInvite),
+  path('organization/join/<str:organization>/<str:token>/', organization.organizationJoin),
   path('account/apps/', account.accountApps),
   path('accounts/', account.accounts),
 ]

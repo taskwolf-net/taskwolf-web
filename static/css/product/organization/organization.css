@@ -1,8 +1,3 @@
-#organization-container {
-  width: 100%;
-  height: 100%;
-}
-
 #organization-wrapper {
   width: min(calc(1500px - 15vw), 95%);
   text-align: center;
@@ -44,19 +39,18 @@
   padding-bottom: 5px;
 }
 
-#organization-invitations-headline {
-  text-align: left;
-  border-bottom: 2px #4a4a4a solid;
-  padding-bottom: 5px;
-}
-
-#organization-owner, #organization-members, #organization-invitations {
+#organization-owner, #organization-members {
   list-style-type: none;
   margin-bottom: 5%;
 }
 
 #organization-invite {
   margin-left: auto;
+  display: none;
+}
+
+#organization-link-regenerate {
+  margin-left: 1%;
   display: none;
 }
 
@@ -73,17 +67,6 @@
   font-weight: bold;
   width: 100%;
   margin-bottom: 1%;
-}
-
-#organization-members-empty-link {
-  text-decoration: none;
-}
-
-#organization-invitations-empty {
-  display: none;
-  justify-content: center;
-  font-size: 20px;
-  font-weight: bold;
 }
 
 .organization-user {
