@@ -1,7 +1,27 @@
-#account-apps-headline {
-  color: white;
-  text-align: center;
+#account-apps-header {
+  display: flex;
+  justify-content: center;
+  margin: auto;
   margin-top: 2%;
+  width: min(calc(1200px - 15vw), 95%);
+}
+
+#account-apps-target-dropdown {
+  margin-left: auto;
+}
+
+#account-apps-target-dropdown-button {
+  width: 100%;
+}
+
+#account-apps-target-dropdown-list {
+  width: 100%;
+}
+
+#account-apps-headline {
+  position: absolute;
+  color: white;
+  font-weight: bold;
 }
 
 #account-apps-search-box {
