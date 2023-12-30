@@ -18,6 +18,11 @@ def registerConfirm(request, user, token):
     'css': ['css/base/home-header.css', 'css/verification/register-confirm.css'],
     'user': user, 'token': token})
 
-def forgotPassword(request):
-  return render(request, 'forgot-password.html', {'title': 'Taskwolf - Forgot Password',
-    'css': ['css/base/home-header.css', 'css/verification/forgot-password.css']})
+def passwordResetRequest(request):
+  return render(request, 'password-reset-request.html', {'title': 'Taskwolf - Password Reset',
+    'css': ['css/base/home-header.css', 'css/verification/password-reset-request.css']})
+
+def passwordResetComplete(request, user, token):
+  return render(request, 'password-reset-complete.html', {'title': 'Taskwolf - Password Reset',
+    'css': ['css/base/home-header.css', 'css/verification/password-reset-complete.css'],
+    'user': user, 'token': token})
