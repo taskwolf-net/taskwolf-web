@@ -9,5 +9,5 @@ urlpatterns = [
   path('', include('home.urls')),
   path('', include('verification.urls')),
   path('', include('product.urls')),
-  path('', include('profile.urls')),
+  path('', include('settings.urls')),
 ]
