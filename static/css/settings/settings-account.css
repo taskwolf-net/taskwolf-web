@@ -1,0 +1,53 @@
+#settings-account-password-container {
+  width: 90%;
+  margin: auto;
+}
+
+#settings-account-password-headline {
+  border-bottom: 2px #212529 solid;
+  padding-bottom: 10px;
+}
+
+#settings-account-password-button {
+  margin-left: 5%;
+  margin-bottom: 5%;
+}
+
+#settings-account-email-container {
+  width: 90%;
+  margin: auto;
+}
+
+#settings-account-email-headline {
+  border-bottom: 2px #212529 solid;
+  padding-bottom: 10px;
+}
+
+#settings-account-email-button {
+  margin-left: 5%;
+  margin-bottom: 5%;
+}
+
+#settings-account-delete-container {
+  width: 90%;
+  margin: auto;
+}
+
+#settings-account-delete-headline {
+  border-bottom: 2px #212529 solid;
+  padding-bottom: 10px;
+  color: #dc3545;
+}
+
+#settings-account-delete-button {
+  margin: auto;
+  margin-bottom: 5%;
+  display: block;
+}
+
+.swal-content__input {
+  color: white;
+  background-color: #34435a;
+  border-radius: 5px;
+  border-color: white !important;
+}

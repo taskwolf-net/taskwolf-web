@@ -1,0 +1,37 @@
+#sidebar {
+  width: 300px;
+  color: white;
+}
+
+.sidebar-item {
+  width: 100%;
+  border-radius: 10px;
+  transition-duration: 250ms;
+}
+
+.sidebar-item:hover {
+  background-color: #1c2431;
+}
+
+.sidebar-section {
+  text-align: center;
+  margin-top: 1%;
+  font-size: 18px;
+}
+
+.sidebar-link {
+  font-size: 16px !important;
+}
+
+.sidebar-icon {
+  margin-left: 5%;
+  margin-right: 5%;
+  font-size: 15px;
+  width: 15px;
+  height: 15px;
+}
+
+.sidebar-active {
+  background-color: #232d3e;
+  border-radius: 10px;
+}

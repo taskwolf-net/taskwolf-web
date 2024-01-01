@@ -14,21 +14,7 @@
         <li class="nav-item"><a class="nav-link {% if request.path == '/features/' %}active{% endif %}" href="/features/">Features</a></li>
         <li class="nav-item"><a class="text-nowrap nav-link {% if request.path == '/about-us/' %}active{% endif %}" href="/about-us/">About us</a></li>
       </ul>
-      {% if not authenticated %}
       <a href="/login/" class="btn btn-info" id="login-button" role="button">Login</a>
-      {% else %}
-      <div id="profile-button-container">
-        <button class="dropdown-toggle btn" id="profile-button-wrapper" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <span id="profile-button">{{username}}</span>
-        </button>
-        <div class="dropdown-menu dropdown-menu-dark dropdown-menu-center" aria-labelledby="profile-button-wrapper">
-          <button class="dropdown-item" id="dashboard-button" type="button">Dashboard</button>
-          <button class="dropdown-item" id="settings-button" type="button">Settings</button>
-          <div class="dropdown-divider"></div>
-          <button class="dropdown-item" id="logout-button" type="button">Log out</button>
-        </div>
-      </div>
-      {% endif %}
     </div>
   </div>
 </nav>

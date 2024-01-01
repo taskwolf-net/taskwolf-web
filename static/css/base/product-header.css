@@ -22,11 +22,11 @@
   margin-left: calc(300px / 2 - 64px);
 }
 
-#profile-button {
-  color: rgba(33,37,41,255) !important;
-  font-size: 28px;
-  font-weight: bold;
-  font-family: Arial, sans-serif;
+#profile-picture {
+  width: 64px;
+  height: 64px;
+  border-radius: 40%;
+  background-color: #212529;
 }
 
 #profile-button-container {

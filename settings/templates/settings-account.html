@@ -1,0 +1,136 @@
+{% load static %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body>
+    {% include 'templates/settings-header.html' %}
+    <div class="settings-container">
+      {% include 'templates/settings-sidebar.html' %}
+      <div class="settings-content">
+        <h1 class="settings-headline">Account Settings</h1>
+        <div id="settings-account-password-container">
+          <h3 id="settings-account-password-headline">Change Password</h3>
+          <form>
+            <div class="form-outline mb-4">
+              <label for="settings-account-current-password" class="form-label">Current Password</label>
+              <input id="settings-account-current-password" type="password" class="form-control" placeholder="Current Password">
+            </div>
+            <div class="form-outline mb-4">
+              <label for="settings-account-new-password" class="form-label">New Password</label>
+              <input id="settings-account-new-password" type="password" class="form-control" placeholder="New Password">
+            </div>
+            <div class="form-outline mb-4">
+              <label for="settings-account-new-password-repetition" class="form-label">New Password Repetition</label>
+              <input id="settings-account-new-password-repetition" type="password" class="form-control" placeholder="New Password Repetition">
+            </div>
+          </form>
+          <button id="settings-account-password-button" type="button" class="btn btn-success">SUBMIT</button>
+        </div>
+        <div id="settings-account-email-container">
+          <h3 id="settings-account-email-headline">Change Email</h3>
+          <form>
+            <div class="form-outline mb-4">
+              <label for="settings-account-password" class="form-label">Password</label>
+              <input id="settings-account-password" type="password" class="form-control" placeholder="Password">
+            </div>
+            <div class="form-outline mb-4">
+              <label for="settings-account-email" class="form-label">New Email</label>
+              <input id="settings-account-email" type="password" class="form-control" placeholder="New Email">
+            </div>
+          </form>
+          <button id="settings-account-email-button" type="button" class="btn btn-success">CHANGE</button>
+        </div>
+        <div id="settings-account-delete-container">
+          <h3 id="settings-account-delete-headline">Delete Account</h3>
+          <p id="settings-account-delete-disclaimer" class="text-secondary my-3">Are you sure you want to permanently delete your account? All workflows and organizations you have created will be deleted and cannot be restored afterwards. You will lose access to all our products and all the interfaces you have used will become completely unusable.</p>
+          <button id="settings-account-delete-button" type="button" class="btn btn-danger">DELETE</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  document.getElementById("settings-account-password-button").onclick = function(event) {
+    var currentPasswordElement = document.getElementById("settings-account-current-password");
+    var newPasswordElement = document.getElementById("settings-account-new-password");
+    var newPasswordRepetitionElement = document.getElementById("settings-account-new-password-repetition");
+    if (currentPasswordElement.value === "" || newPasswordElement.value === "") {
+      return;
+    }
+    if (newPasswordElement.value !== newPasswordRepetitionElement.value) {
+      newPasswordElement.value = "";
+      newPasswordRepetitionElement.value = "";
+      swal("Failed!", "The two new passwords do not match. Please try again!", "error");
+      return;
+    }
+    let request = new HttpRequest("https://api.taskwolf.net/settings/account/password/change/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {currentPassword: currentPasswordElement.value, newPassword: newPasswordElement.value});
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      if (response.success === false) {
+        swal("Failed!", "The password entered does not match the current one!", "error");
+      } else {
+        swal("Changed!", "The password has been successfully changed!", "success");
+      }
+      currentPasswordElement.value = "";
+      newPasswordElement.value = "";
+      newPasswordRepetitionElement.value = "";
+    });
+  };
+
+  document.getElementById("settings-account-email-button").onclick = function(event) {
+    var passwordElement = document.getElementById("settings-account-password");
+    var emailElement = document.getElementById("settings-account-email");
+    if (passwordElement.value === "" || emailElement.value === "") {
+      return;
+    }
+    let request = new HttpRequest("https://api.taskwolf.net/settings/account/password/change/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {password: emailElement.value, newEmail: emailElement.value});
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      if (response.success === false) {
+        swal("Failed!", "The password entered does not match the current one!", "error");
+      } else {
+        swal("Changed!", "The email has been successfully changed!", "success");
+      }
+      passwordElement.value = "";
+      emailElement.value = "";
+    });
+  };
+
+  document.getElementById("settings-account-delete-button").onclick = function (event) {
+    openAccountDeleteMenu();
+  }
+
+  function openAccountDeleteMenu() {
+    swal({
+      title: "Delete Account?",
+      text: "Are you sure that you want to delete your account?",
+      content: {
+        element: "input",
+        attributes: {
+          placeholder: "Type your password",
+          type: "password",
+        },
+      },
+      icon: "warning",
+      dangerMode: true,
+      buttons: true,
+    }).then(result => {
+      if (result != null) {
+        let request = new HttpRequest("https://api.taskwolf.net/settings/account/delete/", "POST", [{key: "Content-Type", value: "application/json"},
+          {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {password: result});
+        request.send(function (status, responseText) {
+          var success = JSON.parse(responseText).success;
+          if (success === true) {
+            Cookie.destroy("token");
+            Cookie.destroy("taskwolf-organization-target");
+            swal("Deleted!", "You have successfully deleted your account. I hope to see you again soon!", "success").then(success => window.location.href = "/");
+          } else {
+            swal("Failed!", "The password entered does not match the current one!", "error");
+          }
+        });
+      }
+    });
+  }
+</script>

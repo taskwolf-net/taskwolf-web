@@ -1,0 +1,54 @@
+{% load static %}
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark" id="navbar">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-content"
+            aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbar-content">
+      <div id="navbar-logo-container">
+        <a href="/" id="navbar-logo"><img src="{% static 'img/logo.png' %}" width="80px" height="80px" alt=""></a>
+      </div>
+      <div id="profile-button-container">
+        <button class="dropdown-toggle btn" id="profile-button-wrapper" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img id="profile-picture" class="d-none">
+        </button>
+        <div class="dropdown-menu dropdown-menu-dark dropdown-menu-center" aria-labelledby="profile-button-wrapper">
+          <button class="dropdown-item" id="dashboard-button" type="button">Dashboard</button>
+          <button class="dropdown-item" id="settings-button" type="button">Settings</button>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item" id="logout-button" type="button">Log out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+<div id="header-space"></div>
+
+<script>
+  $(document).ready(function() {
+    displayProfilePicture();
+  });
+
+  function displayProfilePicture() {
+    let request = new HttpRequest("https://api.taskwolf.net/settings/profile/picture/", "GET", [{key: "Content-Type", value: "application/json"},
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
+    request.send(function (status, responseText) {
+      var pictureElement = document.getElementById("profile-picture");
+      pictureElement.src = JSON.parse(responseText).picture;
+      pictureElement.classList.remove("d-none");
+    });
+  }
+
+  document.getElementById('dashboard-button').onclick = function() {
+    window.location.href = "/dashboard/";
+  };
+  document.getElementById('settings-button').onclick = function() {
+    window.location.href = "/settings/profile/";
+  };
+  document.getElementById('logout-button').onclick = function() {
+    Cookie.destroy("token");
+    Cookie.destroy("taskwolf-organization-target");
+    window.location.href = "/";
+  };
+</script>

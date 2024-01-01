@@ -1,0 +1,44 @@
+#settings-profile-picture-container {
+  align-items: center;
+  justify-content: center;
+}
+
+#settings-profile-picture {
+  width: 200px;
+  height: 200px;
+  border-radius: 40%;
+  background-color: #0d1117;
+}
+
+#settings-profile-picture-button-container {
+  width: 100%;
+}
+
+#settings-profile-picture-button {
+  height: fit-content;
+  margin-left: 20%;
+}
+
+@media (min-width: 1200px) {
+  #settings-profile-picture-container {
+    display: flex;
+  }
+}
+
+@media (max-width: 1200px) {
+  #settings-profile-picture, #settings-profile-picture-button {
+    margin: auto;
+    display: block;
+  }
+
+  #settings-profile-picture-button {
+    margin-top: 5%;
+  }
+}
+
+@media (max-width: 575px) {
+  #settings-profile-picture {
+    width: 90%;
+    height: fit-content;
+  }
+}

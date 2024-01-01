@@ -1,0 +1,74 @@
+.navbar {
+  z-index: 100;
+  border-bottom: 1px #4a4a4a solid;
+  position: fixed !important;
+  width: 100%;
+}
+
+#header-space {
+  height: 97px;
+}
+
+#navbar-logo-container {
+  margin-left: 50px;
+}
+
+#profile-button-container {
+  margin-left: auto;
+  margin-right: 50px;
+  position: relative;
+}
+
+#profile-picture {
+  width: 64px;
+  height: 64px;
+  border-radius: 40%;
+  background-color: #212529;
+}
+
+#profile-button-wrapper {
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  text-align: center;
+  background-color: white !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#profile-button-wrapper::after {
+  display: none;
+}
+
+@media (max-width: 575px) {
+  #header-space {
+    height: 57px;
+  }
+
+  #navbar-logo-container {
+    text-align: center;
+    margin: 0;
+  }
+
+  #profile-button-container {
+    margin: 0;
+  }
+
+  #profile-button-wrapper {
+    width: 48px;
+    height: 48px;
+  }
+
+  #profile-button {
+    font-size: 24px;
+  }
+}
+
+@media(min-width: 575px) {
+  .dropdown-menu-center {
+    left: 50% !important;
+    right: auto !important;
+    transform: translate(-50%, 0) !important;
+  }
+}
