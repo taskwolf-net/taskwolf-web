@@ -18,6 +18,11 @@ def changeEmailComplete(request, user, token):
     'user': user, 'token': token})
 
 @authentication_required
+async def languageSettings(request):
+  return render(request, 'settings-language.html', {'title': 'Taskwolf - Language Settings',
+    'css': ['css/base/settings-header.css', 'css/base/settings-sidebar.css', 'css/base/settings.css', 'css/settings/settings-language.css']})
+
+@authentication_required
 async def notificationsSettings(request):
   return render(request, 'settings-notifications.html', {'title': 'Taskwolf - Account Settings',
     'css': ['css/base/settings-header.css', 'css/base/settings-sidebar.css', 'css/base/settings.css', 'css/settings/settings-notifications.css']})
