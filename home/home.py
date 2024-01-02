@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from base.authentication import isAuthenticated, findUsername
+from base.authentication import isAuthenticated
 from product.product import dashboard
 
 async def home(request):

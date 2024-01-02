@@ -1,0 +1,23 @@
+#settings-language-select-headline {
+  text-align: center;
+  margin-top: 3%;
+}
+
+#settings-language-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3%;
+  gap: 10%;
+}
+
+.settings-language {
+  width: 192px;
+  height: 108px;
+  border: 2px #6d6d6d solid;
+  border-radius: 10px;
+}
+
+.settings-language-selected {
+  border: 4px #ffffff solid;
+}

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from base.authentication import authentication_required, isAuthenticated, findUsername
+from base.authentication import authentication_required, isAuthenticated
 
 @authentication_required
 async def dashboard(request):

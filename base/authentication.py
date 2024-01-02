@@ -5,12 +5,14 @@ import requests
 import json
 import jwt
 from home import home
+from django.utils import translation
 
 def authentication_required(function):
   @wraps(function)
   async def authentication(request, *args, **kwargs):
     authenticated = await isAuthenticated(request)
     if (authenticated):
+      await applyLanguage(request)
       return await function(request, *args, **kwargs)
     return await home.home(request)
   return authentication
@@ -29,9 +31,13 @@ async def isAuthenticated(request):
     return True
   return False
 
-def findUsername(request):
+async def applyLanguage(request):
   token = request.COOKIES.get('token')
   if (token is None):
-    return " "
-  decoded = jwt.decode(token, options={"verify_signature": False})
-  return decoded["username"]
+    return False
+  response = await asyncio.get_event_loop().run_in_executor(None,
+    partial(requests.get, "http://127.0.0.1:10101/settings/language/",
+    headers = {"Authorization": "Bearer " + token}))
+  text = response.text
+  jsonText = json.loads(text)
+  translation.activate(jsonText["language"])
