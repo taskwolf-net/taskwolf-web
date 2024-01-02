@@ -1,0 +1,28 @@
+{% load static %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body>
+    {% include 'templates/home-header.html' %}
+    <div id="email-change">
+      <div class="success-icon-wrapper">
+        <div class="success-icon">
+          <div class="success-icon__tip"></div>
+          <div class="success-icon__long"></div>
+        </div>
+      </div>
+      <h1 id="email-change-headline">Email change completed</h1>
+      <p id="email-change-description">You have successfully changed your account email. You can now continue with the login.</p>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    let request = new HttpRequest("https://api.taskwolf.net/settings/account/email/change/complete/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {user: "{{user}}", token: "{{token}}"});
+    request.send(function (status, responseText) {
+      Cookie.destroy("token");
+      Cookie.destroy("taskwolf-organization-target");
+    });
+  });
+</script>

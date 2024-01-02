@@ -34,7 +34,7 @@
             </div>
             <div class="form-outline mb-4">
               <label for="settings-account-email" class="form-label">New Email</label>
-              <input id="settings-account-email" type="password" class="form-control" placeholder="New Email">
+              <input id="settings-account-email" type="email" class="form-control" placeholder="New Email">
             </div>
           </form>
           <button id="settings-account-email-button" type="button" class="btn btn-success">CHANGE</button>
@@ -84,14 +84,18 @@
     if (passwordElement.value === "" || emailElement.value === "") {
       return;
     }
-    let request = new HttpRequest("https://api.taskwolf.net/settings/account/password/change/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {password: emailElement.value, newEmail: emailElement.value});
+    let request = new HttpRequest("https://api.taskwolf.net/settings/account/email/change/request/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {password: passwordElement.value, newEmail: emailElement.value});
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
       if (response.success === false) {
-        swal("Failed!", "The password entered does not match the current one!", "error");
+        if (response.errorCode === 1000) {
+          swal("Failed!", "The password entered does not match the current one!", "error");
+        } else if (response.errorCode === 1001) {
+          swal("Failed!", "There is already an account with this email address!", "error");
+        }
       } else {
-        swal("Changed!", "The email has been successfully changed!", "success");
+        swal("Changed!", "A change request was sent to the new email!", "success");
       }
       passwordElement.value = "";
       emailElement.value = "";
