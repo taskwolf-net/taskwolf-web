@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <html lang="en">
   {% include 'templates/head.html' %}
   <body>
@@ -10,28 +11,28 @@
           <div id="dashboard-header">
             <div id="dashboard-target-dropdown" class="dropdown">
               <button id="dashboard-target-dropdown-button" class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
-                Target
+                {% trans 'product.dashboard.target' %}
               </button>
               <ul id="dashboard-target-dropdown-list" class="dropdown-menu dropdown-menu-dark">
               </ul>
             </div>
-            <h1 id="dashboard-headline">Dashboard</h1>
+            <h1 id="dashboard-headline">{% trans 'product.dashboard.headline' %}</h1>
           </div>
           <div id="dashboard-progress">
             <div class="dashboard-progress-entry">
-              <h4 class="dashboard-progress-entry-headline">Workflows</h4>
+              <h4 class="dashboard-progress-entry-headline">{% trans 'product.dashboard.workflows' %}</h4>
               <div id="dashboard-workflow-progress-circle" class="dashboard-progress-entry-circle"></div>
             </div>
             <div class="dashboard-progress-entry">
-              <h4 class="dashboard-progress-entry-headline">Failing Workflows</h4>
+              <h4 class="dashboard-progress-entry-headline">{% trans 'product.dashboard.workflows.failing' %}</h4>
               <div id="dashboard-failing-workflow-progress-circle" class="dashboard-progress-entry-circle"></div>
             </div>
             <div class="dashboard-progress-entry">
-              <h4 class="dashboard-progress-entry-headline">Organization Members</h4>
+              <h4 class="dashboard-progress-entry-headline">{% trans 'product.dashboard.organization.members' %}</h4>
               <div id="dashboard-organization-progress-circle" class="dashboard-progress-entry-circle"></div>
             </div>
             <div class="dashboard-progress-entry">
-              <h4 class="dashboard-progress-entry-headline">Linked Accounts</h4>
+              <h4 class="dashboard-progress-entry-headline">{% trans 'product.dashboard.linked.accounts' %}</h4>
               <div id="dashboard-account-progress-circle" class="dashboard-progress-entry-circle"></div>
             </div>
           </div>
@@ -52,8 +53,8 @@
             </div>
           </div>
           <div id="dashboard-statistics-unavailable">
-            <span id="dashboard-statistics-unavailable-headline">Unfortunately, no further statistics are currently available.</span><br><br>
-            <span>This is because you have not yet created any workflows on this account. Would you like to create workflows? You can do that </span><a id="dashboard-statistics-unavailable-link" href="/workflows/">here</a>
+            <span id="dashboard-statistics-unavailable-headline">{% trans 'product.dashboard.statistics.unavailable.headline' %}</span><br><br>
+            <span>{% trans 'product.dashboard.statistics.unavailable.content' %}</span><a id="dashboard-statistics-unavailable-link" href="/workflows/">{% trans 'product.dashboard.statistics.unavailable.link' %}</a>
           </div>
         </div>
       </div>
@@ -103,7 +104,7 @@
 
   function selectDashboardTarget(target) {
     Cookie.create("taskwolf-organization-target", target.id, 12 * 30 * 24 * 60 * 60);
-    document.getElementById("dashboard-target-dropdown-button").innerHTML = "Target: " + target.name;
+    document.getElementById("dashboard-target-dropdown-button").innerHTML = " {% trans 'product.dashboard.target' %}: " + target.name;
     displayDashboard();
   }
 
@@ -172,11 +173,13 @@
 
   function drawWorkflowGraph(workflowNumberOccurrence, workflowExecutionsOccurrence) {
     var container = document.getElementById("dashboard-workflow-chart-container");
-    var workflows = Object.keys(workflowNumberOccurrence).map((key) => workflowNumberOccurrence[key]);
-    workflows = workflows.filter(function(item, pos) {
-      return workflows.indexOf(item) === pos;
-    });
-    if (workflows.length === 1) {
+    var isEmpty = true;
+    for (var i = 0; i < Object.keys(workflowNumberOccurrence).length; i++) {
+      if (workflowNumberOccurrence[i] !== 0) {
+        isEmpty = false;
+      }
+    }
+    if (isEmpty) {
       container.classList.add("d-none");
       return;
     } else {
@@ -184,13 +187,13 @@
     }
     const xValues = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dez"];
     const workflowAmountDataset = {
-      label: "Workflows",
+      label: "{% trans 'product.dashboard.workflows' %}",
       data: Object.keys(workflowNumberOccurrence).map((key) => workflowNumberOccurrence[key]),
       borderColor: "#235bd1",
       fill: false
     };
     const executionsAmountDataset = {
-      label: "Executions",
+      label: "{% trans 'product.dashboard.executions' %}",
       data: Object.keys(workflowExecutionsOccurrence).map((key) => workflowExecutionsOccurrence[key]),
       borderColor: "#cebc54",
       fill: false
@@ -207,7 +210,7 @@
         plugins: {
           title: {
             display: true,
-            text: 'Workflows',
+            text: "{% trans 'product.dashboard.workflows' %}",
             color: '#ffffff',
             font: {
               size: 22,
@@ -290,7 +293,7 @@
           },
           title: {
             display: true,
-            text: 'Apps',
+            text: "{% trans 'product.dashboard.apps' %}",
             color: '#ffffff',
             font: {
               size: 22
@@ -315,11 +318,13 @@
 
   function drawGrowthGraph(workflowNumberGrowth) {
     var container = document.getElementById("dashboard-growth-chart-container");
-    var growth = Object.keys(workflowNumberGrowth).map((key) => workflowNumberGrowth[key]);
-    growth = growth.filter(function(item, pos) {
-      return growth.indexOf(item) === pos;
-    });
-    if (growth.length === 1) {
+    var isEmpty = true;
+    for (var i = 0; i < Object.keys(workflowNumberGrowth).length; i++) {
+      if (workflowNumberGrowth[i] !== 0) {
+        isEmpty = false;
+      }
+    }
+    if (isEmpty) {
       container.classList.add("d-none");
       return;
     } else {
@@ -350,7 +355,7 @@
           },
           title: {
             display: true,
-            text: 'Growth',
+            text: "{% trans 'product.dashboard.growth' %}",
             color: '#ffffff',
             font: {
               size: 22,
@@ -442,7 +447,7 @@
         plugins: {
           title: {
             display: true,
-            text: 'Staff',
+            text: "{% trans 'product.dashboard.staffs' %}",
             color: '#ffffff',
             font: {
               size: 22

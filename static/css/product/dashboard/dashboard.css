@@ -4,7 +4,7 @@
 }
 
 #dashboard-container {
-  width: min(1380px, 100%);
+  width: min(1460px, 100%);
   margin: auto;
 }
 
@@ -41,7 +41,7 @@
 }
 
 .dashboard-progress-entry {
-  width: 300px;
+  width: 320px;
   display: inline-block;
   background-color: rgba(31, 31, 33, 0.52);
   margin-left: 20px;
@@ -76,7 +76,7 @@
 }
 
 #dashboard-workflow-chart {
-  width: 900px;
+  width: 940px;
   height: 380px;
   margin: auto;
   color: white;
@@ -91,7 +91,7 @@
 }
 
 #dashboard-app-chart {
-  width: 380px;
+  width: 420px;
   height: 380px;
   margin: auto;
   color: white;
@@ -109,7 +109,7 @@
 }
 
 #dashboard-growth-chart {
-  width: 800px;
+  width: 840px;
   height: 400px;
   margin: auto;
   color: white;
@@ -124,7 +124,7 @@
 }
 
 #dashboard-user-chart {
-  width: 480px;
+  width: 520px;
   height: 400px;
   margin: auto;
   color: white;
@@ -134,7 +134,7 @@
 }
 
 #dashboard-statistics-unavailable {
-  width: 50%;
+  width: 40%;
   margin: auto;
   margin-top: 5%;
   color: white;
@@ -152,4 +152,10 @@
 
 #dashboard-statistics-unavailable-link {
   text-decoration: none;
+}
+
+@media (max-width: 1500px) {
+  #dashboard-statistics-unavailable {
+    width: 90%;
+  }
 }
