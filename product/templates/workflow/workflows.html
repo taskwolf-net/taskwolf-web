@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <html lang="en">
   {% include 'templates/head.html' %}
   <body>
@@ -6,50 +7,50 @@
     {% include 'templates/product-sidebar.html' %}
     <div class="sidebar-influenced">
       <div id="workflows-wrapper">
-        <h1 id="workflows-headline">Your Workflows</h1>
+        <h1 id="workflows-headline">{% trans 'product.workflows.headline' %}</h1>
         <div id="workflows-header">
           <div id="workflows-owner-dropdown" class="dropdown">
             <button id="workflows-owner-dropdown-button" class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
-              Owner
+              {% trans 'product.workflows.owner' %}
             </button>
             <ul id="workflows-owner-dropdown-list" class="dropdown-menu dropdown-menu-dark">
             </ul>
           </div>
           <div id="workflows-search-box">
-            <input id="workflows-search-input" placeholder="Search for workflows..." type="text" class="form-control" value="" autocomplete="off">
+            <input id="workflows-search-input" placeholder=" {% trans 'product.workflows.search' %}" type="text" class="form-control" value="" autocomplete="off">
             <button type="button">
               <i class="fa fa-search"></i>
             </button>
           </div>
-          <button type="button" id="workflow-create" class="btn btn-primary btn-block">CREATE</button>
+          <button type="button" id="workflow-create" class="btn btn-primary btn-block">{% trans 'product.workflows.create' %}</button>
         </div>
         <ul id="workflows-table-description">
           <li id="workflows-table-description-name">
             <div>
-              <span>Name</span>
+              <span>{% trans 'product.workflows.name' %}</span>
             </div>
           </li>
           <li>
             <div>
-              <span>Creator</span>
+              <span>{% trans 'product.workflows.creator' %}</span>
             </div>
           </li>
           <li>
             <div>
-              <span>Creation Date</span>
+              <span>{% trans 'product.workflows.date' %}</span>
             </div>
           </li>
           <li id="workflows-table-description-is-running">
             <div>
-              <span>Running</span>
+              <span>{% trans 'product.workflows.running' %}</span>
             </div>
           </li>
         </ul>
         <ul id="workflows-list">
         </ul>
         <div id="workflows-empty">
-          <span id="workflows-empty-headline">You have not yet created any workflows.</span>
-          <span>Why don't you just create one&nbsp;</span><a id="workflows-empty-link" href="javascript:createWorkflow()">here</a><span>?</span>
+          <span id="workflows-empty-headline">{% trans 'product.workflows.empty.headline' %}</span>
+          <span>{% trans 'product.workflows.empty.text' %}</span><a id="workflows-empty-link" href="javascript:createWorkflow()">{% trans 'product.workflows.empty.link' %}</a><span>?</span>
         </div>
       </div>
     </div>
@@ -99,7 +100,7 @@
   }
 
   function selectWorkflowOwner(owner) {
-    document.getElementById("workflows-owner-dropdown-button").innerHTML = "Owner: " + owner.name;
+    document.getElementById("workflows-owner-dropdown-button").innerHTML = "{% trans 'product.workflows.owner' %}: " + owner.name;
     Cookie.create("taskwolf-organization-target", owner.id, 12 * 30 * 24 * 60 * 60);
     fetchWorkflowsData(function() {
       displayWorkflows();
@@ -173,13 +174,13 @@
     runIcon.classList.add("fa-solid", "fa-play");
     runButton.appendChild(runIcon);
     var runLabel = document.createElement("label");
-    runLabel.innerHTML = "RUN";
+    runLabel.innerHTML = "{% trans 'product.workflows.execute' %}";
     runButton.appendChild(runLabel);
     runButton.onclick = function (event) {
       let request = new HttpRequest("https://api.taskwolf.net/workflow/manual/execute/", "POST", [{key: "Content-Type", value: "application/json"},
         {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {workflow: id});
       request.send(function (status, responseText) {
-        swal("Executed!", "You have successfully executed that workflow", "success");
+        swal("{% trans 'product.workflows.executed.title' %}", "{% trans 'product.workflows.executed.body' %}", "success");
       });
     }
     return runButton;

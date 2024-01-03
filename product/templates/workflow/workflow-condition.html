@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <html lang="en">
   {% include 'templates/head.html' %}
   <body>
@@ -6,10 +7,10 @@
     {% include 'templates/product-sidebar.html' %}
     <div class="sidebar-influenced">
       <div id="workflow-condition-container">
-        <h1 id="workflow-condition-headline">Workflow Condition</h1>
+        <h1 id="workflow-condition-headline">{% trans 'product.workflow.condition.headline' %}</h1>
         <div id="workflow-condition-wrapper">
           <div id="workflow-condition-inputs">
-            <h5 id="workflow-condition-inputs-headline" class="text-center">Inputs</h5>
+            <h5 id="workflow-condition-inputs-headline" class="text-center">{% trans 'product.workflow.condition.inputs' %}</h5>
             <hr class="w-100 hr"/>
             <div id="workflow-condition-input-list">
             </div>
@@ -18,17 +19,17 @@
             <div class="vr"></div>
           </div>
           <div id="workflow-condition-placeholders">
-            <h5 id="workflow-condition-placeholders-headline" class="text-center">Placeholders</h5>
+            <h5 id="workflow-condition-placeholders-headline" class="text-center">{% trans 'product.workflow.condition.placeholders' %}</h5>
             <hr class="w-100 hr"/>
             <ul id="workflow-condition-placeholders-tabs" class="nav nav-tabs d-none">
             </ul>
-            <p id="workflow-condition-placeholders-empty" class="text-center d-none">Unfortunately there are no placeholders available for this condition.</p>
+            <p id="workflow-condition-placeholders-empty" class="text-center d-none">{% trans 'product.workflow.condition.placeholders.tabs.empty' %}</p>
             <ul id="workflow-condition-placeholders-list">
             </ul>
           </div>
         </div>
         <div id="workflow-condition-adopt">
-          <button id="workflow-condition-adopt-button" type="button" class="btn btn-success disabled">ADOPT</button>
+          <button id="workflow-condition-adopt-button" type="button" class="btn btn-success disabled">{% trans 'product.workflow.condition.adopt' %}</button>
         </div>
       </div>
     </div>
@@ -73,9 +74,9 @@
   function fillConditionInputs() {
     var inputListElement = document.getElementById("workflow-condition-input-list");
     inputListElement.innerHTML = "";
-    addConditionInput("condition-input-value", "Input Value", "The input value that is subsequently used for comparison");
-    addConditionSelect("condition-type", "Condition Type", "The type of comparison you want to make");
-    addConditionInput("condition-comparative-value", "Comparative Value", "The value with which the input value is to be compared");
+    addConditionInput("condition-input-value", "{% trans 'product.workflow.condition.input.value' %}", "{% trans 'product.workflow.condition.input.value.tooltip' %}");
+    addConditionSelect("condition-type", "{% trans 'product.workflow.condition.condition.type' %}", "{% trans 'product.workflow.condition.condition.type.tooltip' %}");
+    addConditionInput("condition-comparative-value", "{% trans 'product.workflow.condition.comparative.value' %}", "{% trans 'product.workflow.condition.comparative.value.tooltip' %}");
     updateTooltips();
     createResetButton(inputListElement, function() {
       selectButtons = [];
@@ -242,7 +243,7 @@
       linkElement.classList.add("nav-link-active");
       displayPlaceholders(index);
     }
-    linkElement.innerHTML = (index < 0) ? "Trigger" : ((index + 1) + ". Action");
+    linkElement.innerHTML = (index < 0) ? "{% trans 'product.workflow.condition.placeholders.trigger' %}" : ((index + 1) + ". {% trans 'product.workflow.condition.placeholders.action' %}");
     tabElement.appendChild(linkElement);
     tabElement.onclick = function (event) {
       clickPlaceholdersTab(index, linkElement);
@@ -282,7 +283,7 @@
       if (outputVariables.length === 0) {
         var noPlaceholdersAvailableElement = document.createElement("p");
         noPlaceholdersAvailableElement.classList.add("text-center", "mt-4");
-        noPlaceholdersAvailableElement.innerHTML = "This component does not have a placeholder.";
+        noPlaceholdersAvailableElement.innerHTML = "{% trans 'product.workflow.condition.placeholders.empty' %}";
         document.getElementById("workflow-condition-placeholders-list").appendChild(noPlaceholdersAvailableElement);
       }
     });
@@ -355,7 +356,7 @@
     var resetButton = document.createElement("button");
     resetButton.type = "button";
     resetButton.classList.add("btn", "btn-danger");
-    resetButton.innerHTML = "RESET";
+    resetButton.innerHTML = "{% trans 'product.workflow.condition.reset' %}";
     resetButtonContainer.appendChild(resetButton);
     container.appendChild(resetButtonContainer);
     resetButton.onclick = function (event) {

@@ -40,7 +40,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/settings/language/change/", "POST", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {language: code});
     request.send(function (status, responseText) {
-      swal("{% trans 'settings.language.changed.title' %}", "{% trans 'settings.language.changed.body' %}", "success").then(success => window.location.reload());
+      window.location.reload();
     });
   }
 </script>

@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <html lang="en">
   {% include 'templates/head.html' %}
   <body>
@@ -6,20 +7,20 @@
     {% include 'templates/product-sidebar.html' %}
     <div class="sidebar-influenced">
       <div id="workflow-component-container">
-        <h1 id="workflow-component-headline">Workflow {{typename}}</h1>
+        <h1 id="workflow-component-headline">{% with "product.workflow.component.headline."|add:type as value %}{% trans value %}{% endwith %}</h1>
         <div class="accordion accordion-flush" id="workflow-component-accordion">
           <div class="accordion-item">
             <h2 class="accordion-header">
               <button class="accordion-button show" type="button" data-bs-toggle="collapse" data-bs-target="#workflow-component-application" aria-expanded="false" aria-controls="workflow-component-application">
-                Application
+                {% trans 'product.workflow.component.application.headline' %}
               </button>
             </h2>
             <div id="workflow-component-application" class="accordion-collapse collapse show" data-bs-parent="#workflow-component-accordion">
               <div id="workflow-component-application-body" class="accordion-body">
-                <h4 class="text-center">Select {{typename}} Application</h4>
+                <h4 class="text-center">{% with "product.workflow.component.application.subline."|add:type as value %}{% trans value %}{% endwith %}</h4>
                 <div id="workflow-component-application-name" class="form-outline mb-4">
-                  <label for="name" class="form-label">Name</label>
-                  <input id="workflow-component-application-name-input" type="name" id="name" class="form-control" placeholder="Application Name">
+                  <label for="name" class="form-label">{% trans 'product.workflow.component.application.name' %}</label>
+                  <input id="workflow-component-application-name-input" type="name" id="name" class="form-control" placeholder="{% trans 'product.workflow.component.application.name' %}">
                 </div>
                 <hr id="workflow-component-application-divider" class="hr"/>
                 <ul id="workflow-component-application-list">
@@ -30,81 +31,77 @@
           <div class="accordion-item">
             <h2 class="accordion-header">
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#workflow-component-account" aria-expanded="false" aria-controls="workflow-component-account">
-                Account
+                {% trans 'product.workflow.component.account.headline' %}
               </button>
             </h2>
             <div id="workflow-component-account" class="accordion-collapse collapse" data-bs-parent="#workflow-component-accordion">
               <div id="workflow-component-account-body" class="accordion-body">
-                <h4 class="text-center">Select {{typename}} Account</h4>
+                <h4 class="text-center">{% with "product.workflow.component.account.subline."|add:type as value %}{% trans value %}{% endwith %}</h4>
                 <div id="workflow-component-account-content">
                 </div>
-                <h6 id="workflow-component-account-unable" class="mt-5 text-center">You must first select an application in order to be able to select the account.</h6>
+                <h6 id="workflow-component-account-unable" class="mt-5 text-center">{% trans 'product.workflow.component.account.unable' %}</h6>
               </div>
             </div>
           </div>
           <div class="accordion-item">
             <h2 class="accordion-header">
               <button id="workflow-component-event-button" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#workflow-component-event" aria-expanded="false" aria-controls="workflow-component-event">
-                Event
+                {% trans 'product.workflow.component.event.headline' %}
               </button>
             </h2>
             <div id="workflow-component-event" class="accordion-collapse collapse" data-bs-parent="#workflow-component-accordion">
               <div id="workflow-component-event-body" class="accordion-body">
-                <h4 class="text-center">Select {{typename}} Event</h4>
+                <h4 class="text-center">{% with "product.workflow.component.event.subline."|add:type as value %}{% trans value %}{% endwith %}</h4>
                 <div id="workflow-component-event-dropdown" class="dropdown">
                   <button class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
-                    Event
+                    {% trans 'product.workflow.component.event.headline' %}
                   </button>
                   <ul id="workflow-component-event-dropdown-list" class="dropdown-menu dropdown-menu-dark">
                   </ul>
                 </div>
                 <div id="workflow-component-event-selected">
                 </div>
-                <h6 id="workflow-component-event-unable" class="mt-5 text-center">You must first select an application in order to be able to select the event.</h6>
+                <h6 id="workflow-component-event-unable" class="mt-5 text-center">{% trans 'product.workflow.component.event.unable' %}</h6>
               </div>
             </div>
           </div>
           <div class="accordion-item">
             <h2 class="accordion-header">
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#workflow-component-specifications" aria-expanded="false" aria-controls="workflow-component-specifications">
-                Specifications
+                {% trans 'product.workflow.component.specifications.headline' %}
               </button>
             </h2>
             <div id="workflow-component-specifications" class="accordion-collapse collapse" data-bs-parent="#workflow-component-accordion">
               <div id="workflow-component-specifications-body" class="accordion-body">
-                <h4 class="text-center">Select {{typename}} Specifications</h4>
+                <h4 class="text-center">{% with "product.workflow.component.specifications.subline."|add:type as value %}{% trans value %}{% endwith %}</h4>
                 <div id="workflow-component-specifications-container">
                   <div id="workflow-component-specifications-inputs">
-                    <h5 id="workflow-component-specifications-inputs-headline" class="text-center">Inputs</h5>
+                    <h5 id="workflow-component-specifications-inputs-headline" class="text-center">{% trans 'product.workflow.component.specifications.inputs.title' %}</h5>
                     <hr class="w-100 hr"/>
                     <div id="workflow-component-specifications-input-list">
-                      <div id="workflow-component-specifications-channel-name" class="form-outline mb-4">
-                        <label class="form-label">Channel Name</label>
-                        <input id="workflow-component-application-channel-name" type="name" class="form-control" placeholder="Channel Name">
-                      </div>
                     </div>
                   </div>
                   <div id="workflow-component-specifications-divider">
                     <div class="vr"></div>
                   </div>
                   <div id="workflow-component-specifications-placeholders">
-                    <h5 id="workflow-component-specifications-placeholders-headline" class="text-center">Placeholders</h5>
+                    <h5 id="workflow-component-specifications-placeholders-headline" class="text-center">{% trans 'product.workflow.component.specifications.placeholders.title' %}</h5>
                     <hr class="w-100 hr"/>
                     <ul id="workflow-component-specifications-placeholders-tabs" class="nav nav-tabs d-none">
                     </ul>
-                    <p id="workflow-component-specifications-placeholders-empty" class="text-center d-none">Unfortunately there are no placeholders available for this event.</p>
+                    <p id="workflow-component-specifications-placeholders-empty" class="text-center d-none">{% trans 'product.workflow.component.specifications.placeholders.tabs.empty' %}</p>
                     <ul id="workflow-component-specifications-placeholders-list">
                     </ul>
                   </div>
                 </div>
-                <h6 id="workflow-component-specifications-unable" class="mt-5 text-center">You must first select an application and event in order to be able to select the specifications.</h6>
-                <h6 id="workflow-component-specifications-redundant" class="mt-5 text-center">You do not need to enter any further specifications to use this event. When you are ready, you can simply click on the "Adopt" button.</h6>
+                <h6 id="workflow-component-specifications-unable" class="mt-5 text-center">{% trans 'product.workflow.component.event.unable' %}</h6>
+                <h6 id="workflow-component-specifications-redundant" class="mt-5 text-center">{% trans 'product.workflow.component.event.redundant' %}</h6>
               </div>
             </div>
           </div>
         </div>
         <div id="workflow-component-adopt">
-          <button id="workflow-component-adopt-button" type="button" class="btn btn-success disabled">ADOPT</button>
+          <button id="workflow-component-adopt-button" type="button" class="btn btn-success disabled">{% trans 'product.workflow.component.adopt' %}</button>
         </div>
       </div>
     </div>
@@ -243,12 +240,13 @@
     var resetButton = document.createElement("button");
     resetButton.type = "button";
     resetButton.classList.add("btn", "btn-danger");
-    resetButton.innerHTML = "RESET";
+    resetButton.innerHTML = "{% trans 'product.workflow.component.reset' %}";
     resetButtonContainer.appendChild(resetButton);
     container.appendChild(resetButtonContainer);
     resetButton.onclick = function (event) {
       resetCallback();
     }
+    return resetButtonContainer;
   }
 </script>
 
@@ -275,7 +273,7 @@
       }
       var logoElement = document.createElement("img");
       logoElement.src = "{% static '' %}" + "img/applications/" + selectedApplicationLogo;
-      applyTooltips(logoElement, "Click to link account.");
+      applyTooltips(logoElement, " {% trans 'product.workflow.component.account.link.tooltop' %}");
       logoLinkElement.appendChild(logoElement);
       accountContentElement.appendChild(logoLinkElement);
       var descriptionContainerElement = document.createElement("div");
@@ -297,8 +295,8 @@
     var skipButton = document.createElement("button");
     skipButton.type = "button";
     skipButton.classList.add("btn", "btn-info");
-    skipButton.innerHTML = "SKIP";
-    applyTooltips(skipButton, "You already have linked an account. Would you like to skip this process?");
+    skipButton.innerHTML = "{% trans 'product.workflow.component.account.skip' %}";
+    applyTooltips(skipButton, "{% trans 'product.workflow.component.account.skip.tooltip' %}");
     resetButtonContainer.appendChild(skipButton);
     skipButton.onclick = function (event) {
       clickSkipButton(true);
@@ -477,7 +475,7 @@
         specificationValues = {};
         updateAdoptability(false);
         fillSpecificationsInputs();
-      });
+      }).classList.add("w-50");
     });
   }
 
@@ -622,7 +620,8 @@
   }
 
   function displayPlaceholdersTabs() {
-    if (sessionStorage.getItem("workflow-trigger") == null) {
+    var trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
+    if (trigger.content === "" && trigger.type === "") {
       document.getElementById("workflow-component-specifications-placeholders-empty").classList.remove("d-none");
       return;
     }
@@ -643,7 +642,7 @@
       linkElement.classList.add("nav-link-active");
       displayPlaceholders(index);
     }
-    linkElement.innerHTML = (index < 0) ? "Trigger" : ((index + 1) + ". Action");
+    linkElement.innerHTML = (index < 0) ? "{% trans 'product.workflow.component.specifications.placeholders.trigger' %}" : ((index + 1) + ". {% trans 'product.workflow.component.specifications.placeholders.action' %}");
     tabElement.appendChild(linkElement);
     tabElement.onclick = function (event) {
       clickPlaceholdersTab(index, linkElement);
@@ -683,7 +682,7 @@
       if (outputVariables.length === 0) {
         var noPlaceholdersAvailableElement = document.createElement("p");
         noPlaceholdersAvailableElement.classList.add("text-center", "mt-4");
-        noPlaceholdersAvailableElement.innerHTML = "This component does not have a placeholder.";
+        noPlaceholdersAvailableElement.innerHTML = "{% trans 'product.workflow.component.specifications.placeholders.empty' %}";
         document.getElementById("workflow-component-specifications-placeholders-list").appendChild(noPlaceholdersAvailableElement);
       }
     });

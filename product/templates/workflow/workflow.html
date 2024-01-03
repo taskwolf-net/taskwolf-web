@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <html lang="en">
   {% include 'templates/head.html' %}
   <body>
@@ -7,21 +8,21 @@
     <div class="sidebar-influenced">
       <div id="workflow-container">
         <div id="workflow-header">
-          <h1 id="workflow-headline">Workflow</h1>
-          <button id="workflow-delete" type="button" class="btn btn-danger d-none">DELETE</button>
-          <button id="workflow-publish" type="button" class="btn btn-success disabled">PUBLISH</button>
+          <h1 id="workflow-headline">{% trans 'product.workflow.headline' %}</h1>
+          <button id="workflow-delete" type="button" class="btn btn-danger d-none">{% trans 'product.workflow.delete' %}</button>
+          <button id="workflow-publish" type="button" class="btn btn-success disabled">{% trans 'product.workflow.publish' %}</button>
         </div>
         <div id="workflow-timeline" class="d-none">
           <i id="workflow-timeline-button" class="fa-solid fa-clock-rotate-left"></i>
         </div>
         <div id="workflow-inputs">
           <div class="form-outline mb-4">
-            <label for="workflow-name" class="form-label">Name</label>
-            <input type="name" id="workflow-name" class="form-control" placeholder="Name">
+            <label for="workflow-name" class="form-label">{% trans 'product.workflow.name' %}</label>
+            <input type="name" id="workflow-name" class="form-control" placeholder="{% trans 'product.workflow.name' %}">
           </div>
           <div class="form-outline mb-5">
-            <label for="workflow-description" class="form-label">Description</label>
-            <input type="description" id="workflow-description" class="form-control" placeholder="Description">
+            <label for="workflow-description" class="form-label">{% trans 'product.workflow.description' %}</label>
+            <input type="description" id="workflow-description" class="form-control" placeholder="{% trans 'product.workflow.description' %}">
           </div>
           <hr id="workflow-divider" class="hr mb-5"/>
         </div>
@@ -46,12 +47,12 @@
       document.getElementById("workflow-description").value = sessionStorage.getItem("workflow-description");
     }
     if (sessionStorage.getItem("workflow-trigger") === null) {
-      sessionStorage.setItem("workflow-trigger", JSON.stringify(createEmptyComponent("Starts the workflow and triggers the chain of further actions")));
+      sessionStorage.setItem("workflow-trigger", JSON.stringify(createEmptyComponent("{% trans 'product.workflow.trigger.description' %}")));
     }
     var trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
-    createComponentElement("Trigger", trigger.typeDescription, trigger.moduleLogo, "trigger", 0, trigger.selected);
+    createComponentElement("{% trans 'product.workflow.trigger' %}", trigger.typeDescription, trigger.moduleLogo, "trigger", 0, trigger.selected);
     if (sessionStorage.getItem("workflow-actions") === null) {
-      var component = createEmptyComponent("Is executed as soon as the workflow is triggered");
+      var component = createEmptyComponent("{% trans 'product.workflow.action.description' %}");
       component.actionIndex = 0;
       sessionStorage.setItem("workflow-actions", JSON.stringify({actions: [component]}));
     }
@@ -70,7 +71,7 @@
     for (let i = 0; i < actions.length; i++) {
       var action = actions.filter(element => element.actionIndex === i)[0];
       var arrow = drawArrow(i);
-      createComponentElement((i + 1) + ". Action", action.typeDescription, action.moduleLogo, "action", i, action.selected);
+      createComponentElement((i + 1) + ". {% trans 'product.workflow.action' %}", action.typeDescription, action.moduleLogo, "action", i, action.selected);
       var actionConditions = conditions.filter(element => element.actionIndex === i);
       for (var j = 0; j < actionConditions.length; j++) {
         var condition = actionConditions[j];
@@ -193,7 +194,7 @@
     var componentHeadline = document.createElement("div");
     componentHeadline.classList.add("workflow-headline");
     var componentHeadlineContent = document.createElement("h1");
-    componentHeadlineContent.innerHTML = "Condition";
+    componentHeadlineContent.innerHTML = "{% trans 'product.workflow.condition' %}";
     if (selected) {
       componentContainer.classList.add("workflow-entry-selected");
       componentHeadline.classList.add("workflow-headline-selected");
@@ -202,7 +203,7 @@
     componentContainer.appendChild(componentHeadline);
     componentContainer.appendChild(document.createElement("br"));
     var componentDescription = document.createElement("span");
-    componentDescription.innerHTML = "Can influence the behavior of the following actions";
+    componentDescription.innerHTML = "{% trans 'product.workflow.condition.description' %}";
     componentDescription.classList.add("workflow-entry-description");
     componentContainer.appendChild(componentDescription);
     componentContainer.appendChild(document.createElement("br"));
@@ -249,7 +250,7 @@
     buttonContainer.appendChild(iconContainer);
     iconContainer.addEventListener("click", function(event) {
       var actions = JSON.parse(sessionStorage.getItem("workflow-actions")).actions;
-      var component = createEmptyComponent("Is executed as soon as the workflow is triggered");
+      var component = createEmptyComponent("{% trans 'product.workflow.action.description' %}");
       component.actionIndex = actions.length;
       actions.push(component);
       sessionStorage.setItem("workflow-actions", JSON.stringify({actions: actions}));
@@ -386,8 +387,8 @@
 
   function openDeleteMenu() {
     swal({
-      title: "Delete Workflow?",
-      text: "Are you sure that you want to delete that workflow?",
+      title: "{% trans 'product.workflow.delete.title' %}",
+      text: "{% trans 'product.workflow.delete.body' %}",
       icon: "warning",
       dangerMode: true,
       buttons: true,
@@ -396,7 +397,7 @@
         let request = new HttpRequest("https://api.taskwolf.net/workflow/remove/", "POST", [{key: "Content-Type", value: "application/json"},
           {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {workflow: sessionStorage.getItem("workflow-id")});
         request.send(function (status, responseText) {
-          swal("Deleted!", "That workflow has been successfully deleted!", "success").then(success => window.location.href = "/workflows/");
+          swal("{% trans 'product.workflow.delete.successful.title' %}", "{% trans 'product.workflow.delete.successful.body' %}", "success").then(success => window.location.href = "/workflows/");
         });
       }
     });

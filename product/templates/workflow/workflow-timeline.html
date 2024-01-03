@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <html lang="en">
   {% include 'templates/head.html' %}
   <body>
@@ -6,7 +7,7 @@
     {% include 'templates/product-sidebar.html' %}
     <div class="sidebar-influenced">
       <div id="workflow-timeline-container">
-        <h1 id="workflow-timeline-headline">Workflow Timeline</h1>
+        <h1 id="workflow-timeline-headline">{% trans 'product.workflow.timeline.headline' %}</h1>
         <hr id="workflow-timeline-divider" class="hr"/>
         <section id="workflow-timeline-section">
           <ul id="workflow-timeline" class="timeline">
