@@ -7,8 +7,8 @@
     <div class="settings-container">
       {% include 'templates/settings-sidebar.html' %}
       <div class="settings-content">
-        <h1 class="settings-headline">Language Settings</h1>
-        <h3 id="settings-language-select-headline">Select your language</h3>
+        <h1 class="settings-headline">{% trans 'settings.language.headline' %}</h1>
+        <h3 id="settings-language-select-headline">{% trans 'settings.language.select' %}</h3>
         <div id="settings-language-container">
           <input id="settings-language-en" class="settings-language" src="{% static 'img/languages/en.png' %}" type="image"/>
           <input id="settings-language-de" class="settings-language" src="{% static 'img/languages/de.png' %}" type="image"/>
@@ -40,7 +40,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/settings/language/change/", "POST", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {language: code});
     request.send(function (status, responseText) {
-      swal("Changed!", "Language has been successfully changed!", "success").then(success => window.location.reload());
+      swal("{% trans 'settings.language.changed.title' %}", "{% trans 'settings.language.changed.body' %}", "success").then(success => window.location.reload());
     });
   }
 </script>

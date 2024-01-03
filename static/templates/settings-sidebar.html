@@ -1,23 +1,24 @@
 {% load static %}
+{% load i18n %}
 <div id="sidebar">
   <div id="sidebar-content">
     <ul class="navbar-nav ml-auto d-flex align-items-center">
       <li class="sidebar-item">
-        <a href="/settings/profile/" class="sidebar-link nav-link {% if request.path == '/settings/profile/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-user" aria-hidden="true"></i>Profile</a>
+        <a href="/settings/profile/" class="sidebar-link nav-link {% if request.path == '/settings/profile/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-user" aria-hidden="true"></i>{% trans 'settings.sidebar.profile' %}</a>
       </li>
       <li class="sidebar-item">
-        <a href="/settings/account/" class="sidebar-link nav-link {% if request.path == '/settings/account/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-gear" aria-hidden="true"></i>Account</a>
+        <a href="/settings/account/" class="sidebar-link nav-link {% if request.path == '/settings/account/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-gear" aria-hidden="true"></i>{% trans 'settings.sidebar.account' %}</a>
       </li>
       <li class="sidebar-item">
-        <a href="/settings/language/" class="sidebar-link nav-link {% if request.path == '/settings/language/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-globe" aria-hidden="true"></i>Language</a>
+        <a href="/settings/language/" class="sidebar-link nav-link {% if request.path == '/settings/language/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-globe" aria-hidden="true"></i>{% trans 'settings.sidebar.language' %}</a>
       </li>
       <li class="sidebar-item">
-        <a href="/settings/notifications/" class="sidebar-link nav-link {% if request.path == '/settings/notifications/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-bell" aria-hidden="true"></i>Notifications</a>
+        <a href="/settings/notifications/" class="sidebar-link nav-link {% if request.path == '/settings/notifications/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-bell" aria-hidden="true"></i>{% trans 'settings.sidebar.notifications' %}</a>
       </li>
       <li class="border border-1 border-top border-dark my-2 w-100"></li>
-      <h6 class="sidebar-section text-secondary">Access</h6>
+      <h6 class="sidebar-section text-secondary">{% trans 'settings.sidebar.access' %}</h6>
       <li class="sidebar-item">
-        <a href="/settings/billing/" class="sidebar-link nav-link {% if request.path == '/settings/billing/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-money-bill" aria-hidden="true"></i>Billing</a>
+        <a href="/settings/billing/" class="sidebar-link nav-link {% if request.path == '/settings/billing/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-money-bill" aria-hidden="true"></i>{% trans 'settings.sidebar.billing' %}</a>
       </li>
     </ul>
   </div>

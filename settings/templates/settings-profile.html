@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <html lang="en">
   {% include 'templates/head.html' %}
   <body>
@@ -6,21 +7,21 @@
     <div class="settings-container">
       {% include 'templates/settings-sidebar.html' %}
       <div class="settings-content">
-        <h1 class="settings-headline">Profile Settings</h1>
+        <h1 class="settings-headline">{% trans 'settings.profile.headline' %}</h1>
         <form>
           <div class="form-outline mb-4">
-            <label for="settings-profile-name" class="form-label">Profile Name</label>
-            <input id="settings-profile-name" type="name" class="form-control" placeholder="Name">
-            <button id="settings-profile-update-button" type="button" class="btn btn-success mt-4">UPDATE</button>
+            <label for="settings-profile-name" class="form-label">{% trans 'settings.profile.name' %}</label>
+            <input id="settings-profile-name" type="name" class="form-control" placeholder="{% trans 'settings.profile.name' %}">
+            <button id="settings-profile-update-button" type="button" class="btn btn-success mt-4">{% trans 'settings.profile.name.update' %}</button>
           </div>
           <div id="settings-profile-picture-container" class="form-outline mb-4">
             <div>
-              <label for="settings-profile-picture" class="form-label">Profile Picture</label>
+              <label for="settings-profile-picture" class="form-label">{% trans 'settings.profile.picture' %}</label>
               <img id="settings-profile-picture">
             </div>
             <div id="settings-profile-picture-button-container">
               <input id="settings-profile-picture-input" type="file" name="img" accept="image/*" class="d-none"/>
-              <button id="settings-profile-picture-button" type="button" class="btn btn-primary">EDIT</button>
+              <button id="settings-profile-picture-button" type="button" class="btn btn-primary">{% trans 'settings.profile.picture.edit' %}</button>
             </div>
           </div>
         </form>
@@ -55,7 +56,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/settings/profile/username/change/", "POST", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {username: document.getElementById("settings-profile-name").value});
     request.send(function (status, responseText) {
-      swal("Changed!", "Username has been successfully changed!", "success");
+      swal("{% trans 'settings.profile.name.changed.title' %}", "{% trans 'settings.profile.name.changed.body' %}", "success");
     });
   };
 
@@ -69,7 +70,7 @@
       let request = new HttpRequest("https://api.taskwolf.net/settings/profile/picture/change/", "POST", [{key: "Content-Type", value: "application/json"},
         {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {picture: event.target.result});
       request.send(function (status, responseText) {
-        swal("Edited!", "Profile picture has been successfully edited!", "success").then(success => window.location.reload());
+        swal("{% trans 'settings.profile.picture.edited.title' %}", "{% trans 'settings.profile.picture.edited.body' %}", "success").then(success => window.location.reload());
       });
     });
     fileReader.readAsDataURL(this.files[0]);
