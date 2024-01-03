@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <html lang="en">
   {% include 'templates/head.html' %}
   <body>
@@ -9,15 +10,15 @@
         <div id="account-apps-header">
           <div id="account-apps-target-dropdown" class="dropdown">
             <button id="account-apps-target-dropdown-button" class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
-              Target
+              {% trans 'target' %}
             </button>
             <ul id="account-apps-target-dropdown-list" class="dropdown-menu dropdown-menu-dark">
             </ul>
           </div>
-          <h1 id="account-apps-headline">Apps</h1>
+          <h1 id="account-apps-headline">{% trans 'account.apps.headline' %}</h1>
         </div>
         <div id="account-apps-search-box">
-          <input id="account-apps-search-input" placeholder="Search for app..." type="text" class="form-control" value="" autocomplete="off">
+          <input id="account-apps-search-input" placeholder="{% trans 'account.apps.search' %}" type="text" class="form-control" value="" autocomplete="off">
           <button type="button">
             <i class="fa fa-search"></i>
           </button>
@@ -25,7 +26,7 @@
         <ul id="account-apps-list">
         </ul>
         <div id="account-apps-empty">
-          <b id="account-apps-empty-headline">You have not yet linked any accounts.</b>
+          <b id="account-apps-empty-headline">{% trans 'account.apps.empty' %}</b>
         </div>
       </div>
     </div>
@@ -75,7 +76,7 @@
 
   function selectAccountTarget(target) {
     Cookie.create("taskwolf-organization-target", target.id, 12 * 30 * 24 * 60 * 60);
-    document.getElementById("account-apps-target-dropdown-button").innerHTML = "Target: " + target.name;
+    document.getElementById("account-apps-target-dropdown-button").innerHTML = "{% trans 'target' %}: " + target.name;
     displayAccountApps();
   }
 

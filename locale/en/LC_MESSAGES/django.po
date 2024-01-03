@@ -27,11 +27,13 @@ msgstr "Accounts"
 msgid "product.sidebar.help"
 msgstr "Get Help"
 
+# GENERAL
+msgid "target"
+msgstr "Target"
+
 # DASHBOARD
 msgid "product.dashboard.headline"
 msgstr "Dashboard"
-msgid "product.dashboard.target"
-msgstr "Target"
 msgid "product.dashboard.workflows"
 msgstr "Workflows"
 msgid "product.dashboard.workflows.failing"
@@ -54,6 +56,30 @@ msgid "product.dashboard.growth"
 msgstr "Growth"
 msgid "product.dashboard.staffs"
 msgstr "Staffs"
+
+# ACCOUNT - APPS
+msgid "account.apps.headline"
+msgstr "Apps"
+msgid "account.apps.search"
+msgstr "Search for app..."
+msgid "account.apps.empty"
+msgstr "You have not yet linked any accounts."
+
+# ACCOUNTS
+msgid "accounts.headline"
+msgstr "Accounts"
+msgid "accounts.empty"
+msgstr "You currently have no linked %APP% accounts."
+msgid "accounts.account.delete"
+msgstr "DELETE"
+msgid "accounts.account.delete.title"
+msgstr "Delete Account?"
+msgid "accounts.account.delete.body"
+msgstr "Are you sure that you want to delete that account?\\n\\nDeleting this account may result in workflows being broken. Are you aware of this?"
+msgid "accounts.account.delete.successful.title"
+msgstr "Deleted!"
+msgid "accounts.account.delete.successful.body"
+msgstr "That account has been successfully deleted!"
 
 # SETTINGS
 

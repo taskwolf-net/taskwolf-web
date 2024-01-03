@@ -11,7 +11,7 @@
           <div id="dashboard-header">
             <div id="dashboard-target-dropdown" class="dropdown">
               <button id="dashboard-target-dropdown-button" class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
-                {% trans 'product.dashboard.target' %}
+                {% trans 'target' %}
               </button>
               <ul id="dashboard-target-dropdown-list" class="dropdown-menu dropdown-menu-dark">
               </ul>
@@ -104,7 +104,7 @@
 
   function selectDashboardTarget(target) {
     Cookie.create("taskwolf-organization-target", target.id, 12 * 30 * 24 * 60 * 60);
-    document.getElementById("dashboard-target-dropdown-button").innerHTML = " {% trans 'product.dashboard.target' %}: " + target.name;
+    document.getElementById("dashboard-target-dropdown-button").innerHTML = " {% trans 'target' %}: " + target.name;
     displayDashboard();
   }
 
