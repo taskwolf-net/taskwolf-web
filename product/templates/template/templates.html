@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <html lang="en">
   {% include 'templates/head.html' %}
   <body>
@@ -6,17 +7,17 @@
     {% include 'templates/product-sidebar.html' %}
     <div class="sidebar-influenced">
       <div id="templates-wrapper">
-        <h1 id="templates-headline">Templates</h1>
+        <h1 id="templates-headline">{% trans 'product.templates.headline' %}</h1>
         <div id="templates-header">
           <div id="templates-modules-dropdown" class="dropdown">
             <button id="templates-modules-dropdown-button" class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
-              App: All
+              {% trans 'product.templates.app' %}: {% trans 'product.templates.all' %}
             </button>
             <ul id="templates-modules-dropdown-list" class="dropdown-menu dropdown-menu-dark">
             </ul>
           </div>
           <div id="templates-search-box">
-            <input id="templates-search-input" placeholder="Search for template..." type="text" class="form-control" value="" autocomplete="off">
+            <input id="templates-search-input" placeholder="{% trans 'product.templates.search' %}" type="text" class="form-control" value="" autocomplete="off">
             <button type="button">
               <i class="fa fa-search"></i>
             </button>
@@ -25,7 +26,7 @@
         <ul id="templates-list">
         </ul>
         <div id="templates-empty">
-          <b id="templates-empty-headline">Unfortunately no templates could be found.</b>
+          <b id="templates-empty-headline">{% trans 'product.templates.empty' %}</b>
         </div>
       </div>
     </div>
@@ -34,13 +35,13 @@
 
 <script>
   var modules;
-  var currentSelectedModule = "all";
+  var currentSelectedModule = "{% trans 'product.templates.all' %}";
   var templates;
   var templatesCurrentNameFilter = "";
 
   $(document).ready(function() {
     fetchModulesData(function () {
-      addTemplateModule("All");
+      addTemplateModule("{% trans 'product.templates.all' %}");
       for (var i = 0; i < modules.length; i++) {
         addTemplateModule(modules[i].name);
       }
@@ -72,7 +73,7 @@
   }
 
   function selectTemplateModule(module) {
-    document.getElementById("templates-modules-dropdown-button").innerHTML = "App: " + module;
+    document.getElementById("templates-modules-dropdown-button").innerHTML = "{% trans 'product.templates.app' %}: " + module;
     currentSelectedModule = module.toLowerCase();
     displayTemplates();
   }
@@ -106,7 +107,7 @@
   }
 
   function shouldDisplayTemplateEntry(entry) {
-    if (currentSelectedModule !== "all" && !entry.modules.some((module) => module.toLowerCase() === currentSelectedModule)) {
+    if (currentSelectedModule !== "{% trans 'product.templates.all' %}" && !entry.modules.some((module) => module.toLowerCase() === currentSelectedModule)) {
       return false;
     }
     return templatesCurrentNameFilter.length === 0 ||
@@ -127,7 +128,7 @@
     entryElement.onclick = function(event) {
       clickTemplate(name, description, trigger, actions);
     }
-    applyTooltips(entryElement, "Click to try out template!");
+    applyTooltips(entryElement, "{% trans 'product.templates.tooltip' %}");
     document.getElementById("templates-list").appendChild(entryElement);
   }
 
