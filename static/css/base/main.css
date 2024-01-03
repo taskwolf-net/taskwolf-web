@@ -34,4 +34,5 @@ body::-webkit-scrollbar-thumb {
 
 .swal-title, .swal-text {
   color: white;
+  text-align: center;
 }

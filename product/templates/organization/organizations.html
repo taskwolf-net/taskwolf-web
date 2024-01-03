@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <html lang="en">
   {% include 'templates/head.html' %}
   <body>
@@ -6,38 +7,38 @@
     {% include 'templates/product-sidebar.html' %}
     <div class="sidebar-influenced">
       <div id="organizations-wrapper">
-        <h1 id="organizations-headline">Your Organizations</h1>
+        <h1 id="organizations-headline">{% trans 'product.organizations.headline' %}</h1>
         <div id="organizations-header">
           <div id="organizations-search-box">
-            <input id="organizations-search-input" placeholder="Search for organization..." type="text" class="form-control" value="" autocomplete="off">
+            <input id="organizations-search-input" placeholder="{% trans 'product.organizations.search' %}" type="text" class="form-control" value="" autocomplete="off">
             <button type="button">
               <i class="fa fa-search"></i>
             </button>
           </div>
-          <button type="button" id="organizations-create" class="btn btn-primary btn-block">CREATE</button>
+          <button type="button" id="organizations-create" class="btn btn-primary btn-block">{% trans 'product.organizations.create' %}</button>
         </div>
         <ul id="organizations-table-description">
           <li>
             <div>
-              <span>Name</span> <button id="organizations-filter-name" class="organizations-filter"><span class="fa-solid fa-sort"></span></button>
+              <span>{% trans 'product.organizations.name' %}</span> <button id="organizations-filter-name" class="organizations-filter"><span class="fa-solid fa-sort"></span></button>
             </div>
           </li>
           <li>
             <div>
-              <span>Owner</span> <button id="organizations-filter-owner" class="organizations-filter"><span class="fa-solid fa-sort"></span></button>
+              <span>{% trans 'product.organizations.owner' %}</span> <button id="organizations-filter-owner" class="organizations-filter"><span class="fa-solid fa-sort"></span></button>
             </div>
           </li>
           <li>
             <div>
-              <span>Members</span> <button id="organizations-filter-members" class="organizations-filter"><span class="fa-solid fa-sort"></span></button>
+              <span>{% trans 'product.organizations.members' %}</span> <button id="organizations-filter-members" class="organizations-filter"><span class="fa-solid fa-sort"></span></button>
             </div>
           </li>
         </ul>
         <ul id="organizations-list">
         </ul>
         <div id="organizations-not-a-member">
-          <span id="organizations-not-a-member-headline">You are not currently a member of an organization.</span>
-          <span>Why don't you just create one&nbsp;</span><a id="organizations-not-a-member-link" href="/organization/add/">here</a><span>?</span>
+          <span id="organizations-not-a-member-headline">{% trans 'product.organizations.empty.headline' %}</span>
+          <span>{% trans 'product.organizations.empty.text' %}</span><a id="organizations-not-a-member-link" href="/organization/add/">{% trans 'product.organizations.empty.link' %}</a><span>?</span>
         </div>
       </div>
     </div>
@@ -108,7 +109,7 @@
       window.location.href = "/organization/" + id + "/";
     });
     appendOrganizationsCell(entry, "name", name, "span");
-    var ownerSpan = appendOrganizationsCell(entry, "owner", isOwner ? "You" : owner, "span");
+    var ownerSpan = appendOrganizationsCell(entry, "owner", isOwner ? "{% trans 'product.organizations.owner.you' %}" : owner, "span");
     if (isOwner) {
       ownerSpan.classList.add("fw-bold");
     }

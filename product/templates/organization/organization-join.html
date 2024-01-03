@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <html lang="en">
   {% include 'templates/head.html' %}
   <body>
@@ -39,19 +40,19 @@
         setTimeout(function () {
           document.getElementById("organization-join-error").classList.add("toggle");
         }, 100);
-        document.getElementById("organization-join-headline").innerText = "The accession has failed";
+        document.getElementById("organization-join-headline").innerText = "{% trans 'product.organization.join.failed.headline' %}";
         var descriptionElement = document.getElementById("organization-join-description");
         if (response.errorCode === 1000) {
-          descriptionElement.innerHTML = "The desired organization does not exist";
+          descriptionElement.innerHTML = "{% trans 'product.organization.join.failed.not.exists' %}";
         } else if (response.errorCode === 1001) {
-          descriptionElement.innerHTML = "You are already a member of this organization";
+          descriptionElement.innerHTML = "{% trans 'product.organization.join.failed.already.member' %}";
         } else if (response.errorCode === 1002) {
-          descriptionElement.innerHTML = "The invitation link has expired";
+          descriptionElement.innerHTML = "{% trans 'product.organization.join.failed.link.expired' %}";
         }
       } else {
         document.getElementById("organization-join-success").classList.remove("d-none");
-        document.getElementById("organization-join-headline").innerText = "The accession was successful";
-        document.getElementById("organization-join-description").innerHTML = "You are now a member of the Organization";
+        document.getElementById("organization-join-headline").innerText = "{% trans 'product.organization.join.successful.headline' %}";
+        document.getElementById("organization-join-description").innerHTML = "{% trans 'product.organization.join.successful.description' %}";
       }
     });
   });

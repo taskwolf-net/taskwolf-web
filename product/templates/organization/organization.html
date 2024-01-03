@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <html lang="en">
   {% include 'templates/head.html' %}
   <body>
@@ -11,18 +12,18 @@
             <h1 id="organization-name"></h1>
             <button id="organization-modification" class="btn btn-danger btn-block"></button>
           </div>
-          <h2 id="organization-owner-headline">Owner:</h2>
+          <h2 id="organization-owner-headline">{% trans 'product.organization.owner' %}</h2>
           <ul id="organization-owner">
           </ul>
           <div id="organization-members-header">
-            <h2 id="organization-members-headline">Members:</h2>
-            <button type="button" id="organization-invite" class="btn btn-primary btn-block">COPY LINK</button>
+            <h2 id="organization-members-headline">{% trans 'product.organization.members' %}</h2>
+            <button type="button" id="organization-invite" class="btn btn-primary btn-block">{% trans 'product.organization.copy.link' %}</button>
             <button type="button" id="organization-link-regenerate" class="btn btn-secondary btn-block"><span class="fa-solid fa-rotate-right"></span></button>
           </div>
           <ul id="organization-members">
           </ul>
           <div id="organization-members-empty">
-            <span id="organization-members-empty-headline">Currently your organization has no members.</span>
+            <span id="organization-members-empty-headline">{% trans 'product.organization.empty' %}</span>
           </div>
         </div>
       </div>
@@ -40,8 +41,8 @@
       displayModificationButton();
       removeLoader();
     });
-    applyTooltips(document.getElementById("organization-invite"), "Copy Invitation Link");
-    applyTooltips(document.getElementById("organization-link-regenerate"), "Regenerate Link");
+    applyTooltips(document.getElementById("organization-invite"), "{% trans 'product.organization.copy.link.tooltip' %}");
+    applyTooltips(document.getElementById("organization-link-regenerate"), "{% trans 'product.organization.regenerate.link.tooltip' %}");
     updateTooltips();
   });
 
@@ -106,10 +107,10 @@
   function displayModificationButton() {
     var element = document.getElementById("organization-modification");
     if (organization.isOwner === true) {
-      element.innerHTML = "DELETE";
+      element.innerHTML = "{% trans 'product.organization.delete' %}";
       return;
     }
-    element.innerHTML = "LEAVE";
+    element.innerHTML = "{% trans 'product.organization.leave' %}";
   }
 
   function displayLoader() {
@@ -129,7 +130,7 @@
     linkButton.classList.remove("btn-primary");
     linkButton.classList.add("btn-success");
     $('#organization-invite').tooltip('hide');
-    applyTooltips(linkButton, "Copied!");
+    applyTooltips(linkButton, "{% trans 'product.organization.copied.link.tooltip' %}");
     updateTooltips();
     $('#organization-invite').tooltip('show');
     let request = new HttpRequest("https://api.taskwolf.net/organization/link/", "POST", [{key: "Content-Type", value: "application/json"},
@@ -144,7 +145,7 @@
     linkButton.classList.remove("btn-success");
     linkButton.classList.add("btn-primary");
     $('#organization-link-regenerate').tooltip('hide');
-    applyTooltips(linkButton, "Copy Invitation Link");
+    applyTooltips(linkButton, "{% trans 'product.organization.copy.link.tooltip' %}");
     updateTooltips();
     let request = new HttpRequest("https://api.taskwolf.net/organization/link/regenerate/", "POST", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {organization: organization.id});
@@ -163,8 +164,8 @@
 
   function openDeleteMenu(organization) {
     swal({
-      title: "Delete Organization?",
-      text: "Are you sure that you want to delete that organization?",
+      title: "{% trans 'product.organization.delete.title' %}",
+      text: "{% trans 'product.organization.delete.body' %}",
       icon: "warning",
       dangerMode: true,
       buttons: true,
@@ -173,7 +174,7 @@
         let request = new HttpRequest("https://api.taskwolf.net/organization/delete/", "POST", [{key: "Content-Type", value: "application/json"},
           {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {organization: organization});
         request.send(function (status, responseText) {
-          swal("Deleted!", "That organization has been successfully deleted!", "success").then(success => window.location.href = "/organizations/");
+          swal("{% trans 'product.organization.delete.successful.title' %}", "{% trans 'product.organization.delete.successful.body' %}", "success").then(success => window.location.href = "/organizations/");
         });
       }
     });
@@ -181,8 +182,8 @@
 
   function openLeaveMenu(organization) {
     swal({
-      title: "Leave Organization?",
-      text: "Are you sure that you want to leave that organization?",
+      title: "{% trans 'product.organization.leave.title' %}",
+      text: "{% trans 'product.organization.leave.body' %}",
       icon: "warning",
       dangerMode: true,
       buttons: true,
@@ -191,7 +192,7 @@
         let request = new HttpRequest("https://api.taskwolf.net/organization/leave/", "POST", [{key: "Content-Type", value: "application/json"},
           {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {organization: organization});
         request.send(function (status, responseText) {
-          swal("Left!", "You have successfully left that organization!", "success").then(success => window.location.href = "/organizations/");
+          swal("{% trans 'product.organization.leave.successful.title' %}", "{% trans 'product.organization.leave.successful.body' %}", "success").then(success => window.location.href = "/organizations/");
         });
       }
     });

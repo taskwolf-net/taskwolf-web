@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <html lang="en">
   {% include 'templates/head.html' %}
   <body>
@@ -6,12 +7,12 @@
     {% include 'templates/product-sidebar.html' %}
     <div class="sidebar-influenced">
       <form>
-        <h1 class="text-light">Create Organization</h1></br>
+        <h1 class="text-light">{% trans 'product.organization.create.headline' %}</h1></br>
         <div class="form-outline mb-4">
-          <label for="name" class="form-label">Name</label>
-          <input type="name" id="name" class="form-control" placeholder="Name">
+          <label for="name" class="form-label">{% trans 'product.organization.create.name' %}</label>
+          <input type="name" id="name" class="form-control" placeholder="{% trans 'product.organization.create.name' %}">
         </div>
-        <button type="button" id="create" class="btn btn-primary mb-4">CREATE</button></br>
+        <button type="button" id="create" class="btn btn-primary mb-4">{% trans 'product.organization.create.button' %}</button></br>
       </form>
     </div>
   </body>

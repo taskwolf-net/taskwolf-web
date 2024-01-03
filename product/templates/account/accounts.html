@@ -11,7 +11,7 @@
           <img id="accounts-logo" width="80px" height="80px"></img>
           <h1 id="accounts-headline"></h1>
         </div>
-        <h1 id="accounts-list-headline">{% trans 'accounts.headline' %}</h1>
+        <h1 id="accounts-list-headline">{% trans 'product.accounts.headline' %}</h1>
         <ul id="accounts-list">
         </ul>
         <div id="accounts-empty">
@@ -34,7 +34,7 @@
       displayAccounts();
       if (accounts.length === 0) {
         document.getElementById("accounts-empty").style.display = "block";
-        document.getElementById("accounts-empty-headline").innerHTML = "{% trans 'accounts.empty' %}".replace("%APP%", sessionStorage.getItem("account-app-name"));
+        document.getElementById("accounts-empty-headline").innerHTML = "{% trans 'product.accounts.empty' %}".replace("%APP%", sessionStorage.getItem("account-app-name"));
       }
     });
   });
@@ -68,7 +68,7 @@
     var deleteButton = document.createElement("button");
     deleteButton.classList.add("btn", "btn-danger");
     deleteButton.type = "button";
-    deleteButton.innerHTML = "{% trans 'accounts.account.delete' %}";
+    deleteButton.innerHTML = "{% trans 'product.accounts.account.delete' %}";
     deleteButton.onclick = function (event) {
       openDeleteMenu(identifier);
     }
@@ -78,8 +78,8 @@
 
   function openDeleteMenu(identifier) {
     swal({
-      title: "{% trans 'accounts.account.delete.title' %}",
-      text: "{% trans 'accounts.account.delete.body' %}",
+      title: "{% trans 'product.accounts.account.delete.title' %}",
+      text: "{% trans 'product.accounts.account.delete.body' %}",
       icon: "warning",
       dangerMode: true,
       buttons: true,
@@ -88,7 +88,7 @@
         let request = new HttpRequest("https://api.taskwolf.net/account/remove/", "POST", [{key: "Content-Type", value: "application/json"},
           {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {target: Cookie.find("taskwolf-organization-target"), module: sessionStorage.getItem("account-app-identifier"), identifier: identifier});
         request.send(function (status, responseText) {
-          swal("{% trans 'accounts.account.delete.successful.title' %}", "{% trans 'accounts.account.delete.successful.body' %}", "success").then(success => window.location.href = "/account/apps/");
+          swal("{% trans 'product.accounts.account.delete.successful.title' %}", "{% trans 'product.accounts.account.delete.successful.body' %}", "success").then(success => window.location.href = "/account/apps/");
         });
       }
     });
