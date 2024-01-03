@@ -35,7 +35,7 @@
 
 <script>
   var modules;
-  var currentSelectedModule = "{% trans 'product.templates.all' %}";
+  var currentSelectedModule = "{% trans 'product.templates.all' %}".toLowerCase();
   var templates;
   var templatesCurrentNameFilter = "";
 
@@ -107,7 +107,7 @@
   }
 
   function shouldDisplayTemplateEntry(entry) {
-    if (currentSelectedModule !== "{% trans 'product.templates.all' %}" && !entry.modules.some((module) => module.toLowerCase() === currentSelectedModule)) {
+    if (currentSelectedModule !== "{% trans 'product.templates.all' %}".toLowerCase() && !entry.modules.some((module) => module.toLowerCase() === currentSelectedModule)) {
       return false;
     }
     return templatesCurrentNameFilter.length === 0 ||
