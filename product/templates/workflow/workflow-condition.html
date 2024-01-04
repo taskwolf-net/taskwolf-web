@@ -85,7 +85,7 @@
       comparativeValue = "";
       updateAdoptability(false);
       fillConditionInputs();
-    });
+    }).classList.add("w-50");
   }
 
   function addConditionInput(identifier, name, description) {
@@ -362,6 +362,7 @@
     resetButton.onclick = function (event) {
       resetCallback();
     }
+    return resetButtonContainer;
   }
 
   function applyTooltips(element, text) {
