@@ -7,7 +7,7 @@ msgstr ""
 
 # HEADER
 msgid "product.header.dashboard"
-msgstr "Dashboard"
+msgstr "Übersicht"
 msgid "product.header.settings"
 msgstr "Einstellungen"
 msgid "product.header.logout"
@@ -15,7 +15,7 @@ msgstr "Ausloggen"
 
 # SIDEBAR
 msgid "product.sidebar.dashboard"
-msgstr "Dashboard"
+msgstr "Übersicht"
 msgid "product.sidebar.workflows"
 msgstr "Workflows"
 msgid "product.sidebar.templates"
@@ -33,7 +33,7 @@ msgstr "Ziel"
 
 # DASHBOARD
 msgid "product.dashboard.headline"
-msgstr "Dashboard"
+msgstr "Übersicht"
 msgid "product.dashboard.workflows"
 msgstr "Workflows"
 msgid "product.dashboard.workflows.failing"
@@ -339,7 +339,7 @@ msgstr "Das Konto wurde erfolgreich gelöscht!"
 
 # HEADER
 msgid "settings.header.dashboard"
-msgstr "Dashboard"
+msgstr "Übersicht"
 msgid "settings.header.settings"
 msgstr "Einstellungen"
 msgid "settings.header.logout"
