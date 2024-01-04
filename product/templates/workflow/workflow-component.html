@@ -141,7 +141,7 @@
   });
 
   function fetchApplicationsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/modules/all/", "GET", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/v1/modules/all/", "GET", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
     request.send(function (status, responseText) {
       applications = JSON.parse(responseText).modules;
@@ -260,7 +260,7 @@
   function displayAccountInformation() {
     var accountContentElement = document.getElementById("workflow-component-account-content");
     accountContentElement.innerHTML = "";
-    let request = new HttpRequest("https://api.taskwolf.net/account/information/", "POST", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/v1/account/information/", "POST", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {target: Cookie.find("taskwolf-organization-target"), module: selectedApplication.toLowerCase()});
     request.send(function (status, responseText) {
       var information = JSON.parse(responseText);
@@ -339,7 +339,7 @@
 
   function fillEventDropdown() {
     document.getElementById("workflow-component-event-dropdown-list").innerHTML = "";
-    let request = new HttpRequest("https://api.taskwolf.net/components/find/", "POST", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/v1/components/find/", "POST", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {componentType: "{{type}}", module: selectedApplication.toLowerCase()});
     request.send(function (status, responseText) {
       var events = JSON.parse(responseText).components;
@@ -446,7 +446,7 @@
   }
 
   function fillSpecificationsInputs() {
-    let request = new HttpRequest("https://api.taskwolf.net/component/find/", "POST", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/v1/component/find/", "POST", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {componentType: "{{type}}", module: selectedApplication.toLowerCase(), type: selectedEvent});
     request.send(function (status, responseText) {
       document.getElementById("workflow-component-specifications-input-list").innerHTML = "";
@@ -571,7 +571,7 @@
 
   function clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton, index, inputsLength) {
     dropdownList.innerHTML = "";
-    let request = new HttpRequest("https://api.taskwolf.net/component/select/items/", "POST", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/v1/component/select/items/", "POST", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {componentType: "{{type}}", target: Cookie.find("taskwolf-organization-target"), module: selectedApplication.toLowerCase(), type: selectedEvent, previousInputs: specificationValues, select: identifier});
     request.send(function (status, responseText) {
       var items = JSON.parse(responseText).items;
@@ -671,7 +671,7 @@
     }
     var module = component.module;
     var type = component.type;
-    let request = new HttpRequest("https://api.taskwolf.net/component/find/", "POST", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/v1/component/find/", "POST", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {componentType: componentType, module: module, type: type});
     request.send(function (status, responseText) {
       var outputVariables = JSON.parse(responseText).outputVariables;

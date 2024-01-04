@@ -40,7 +40,7 @@
   });
 
   function fetchAccountsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/accounts/", "POST", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/v1/accounts/", "POST", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {target: Cookie.find("taskwolf-organization-target"), module: sessionStorage.getItem("account-app-identifier")});
     request.send(function (status, responseText) {
       accounts = JSON.parse(responseText).accounts;
@@ -85,7 +85,7 @@
       buttons: true,
     }).then(willDelete => {
       if (willDelete) {
-        let request = new HttpRequest("https://api.taskwolf.net/account/remove/", "POST", [{key: "Content-Type", value: "application/json"},
+        let request = new HttpRequest("https://api.taskwolf.net/v1/account/remove/", "POST", [{key: "Content-Type", value: "application/json"},
           {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {target: Cookie.find("taskwolf-organization-target"), module: sessionStorage.getItem("account-app-identifier"), identifier: identifier});
         request.send(function (status, responseText) {
           swal("{% trans 'product.accounts.account.delete.successful.title' %}", "{% trans 'product.accounts.account.delete.successful.body' %}", "success").then(success => window.location.href = "/account/apps/");

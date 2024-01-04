@@ -37,7 +37,7 @@
   });
 
   function displayCurrentUsername() {
-    let request = new HttpRequest("https://api.taskwolf.net/settings/profile/username/", "GET", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/username/", "GET", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
     request.send(function (status, responseText) {
       document.getElementById("settings-profile-name").value = JSON.parse(responseText).username;
@@ -45,7 +45,7 @@
   }
 
   function displayCurrentProfilePicture() {
-    let request = new HttpRequest("https://api.taskwolf.net/settings/profile/picture/", "GET", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/picture/", "GET", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
     request.send(function (status, responseText) {
       document.getElementById("settings-profile-picture").src = JSON.parse(responseText).picture;
@@ -53,7 +53,7 @@
   }
 
   document.getElementById("settings-profile-update-button").onclick = function(event) {
-    let request = new HttpRequest("https://api.taskwolf.net/settings/profile/username/change/", "POST", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/username/change/", "POST", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {username: document.getElementById("settings-profile-name").value});
     request.send(function (status, responseText) {
       swal("{% trans 'settings.profile.name.changed.title' %}", "{% trans 'settings.profile.name.changed.body' %}", "success");
@@ -67,7 +67,7 @@
   document.getElementById("settings-profile-picture-input").onchange = function(event) {
     const fileReader = new FileReader();
     fileReader.addEventListener("load", function(event) {
-      let request = new HttpRequest("https://api.taskwolf.net/settings/profile/picture/change/", "POST", [{key: "Content-Type", value: "application/json"},
+      let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/picture/change/", "POST", [{key: "Content-Type", value: "application/json"},
         {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {picture: event.target.result});
       request.send(function (status, responseText) {
         swal("{% trans 'settings.profile.picture.edited.title' %}", "{% trans 'settings.profile.picture.edited.body' %}", "success").then(success => window.location.reload());

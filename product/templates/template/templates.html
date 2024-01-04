@@ -52,7 +52,7 @@
   });
 
   function fetchModulesData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/modules/all/", "GET", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/v1/modules/all/", "GET", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
     request.send(function (status, responseText) {
       modules = JSON.parse(responseText).modules;
@@ -79,7 +79,7 @@
   }
 
   function fetchTemplatesData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/templates/all/", "GET", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/v1/templates/all/", "GET", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
     request.send(function (status, responseText) {
       templates = JSON.parse(responseText).templates;

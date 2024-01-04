@@ -20,7 +20,7 @@
 
 <script>
   $(document).ready(function() {
-    let request = new HttpRequest("https://api.taskwolf.net/settings/language/", "GET", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/language/", "GET", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
     request.send(function (status, responseText) {
       var language = JSON.parse(responseText).language;
@@ -37,7 +37,7 @@
   }
 
   function changeLanguage(code) {
-    let request = new HttpRequest("https://api.taskwolf.net/settings/language/change/", "POST", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/language/change/", "POST", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {language: code});
     request.send(function (status, responseText) {
       window.location.reload();

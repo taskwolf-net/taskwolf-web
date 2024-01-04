@@ -22,7 +22,7 @@ async def isAuthenticated(request):
   if (token is None):
     return False
   response = await asyncio.get_event_loop().run_in_executor(None,
-    partial(requests.post, "http://127.0.0.1:10101/verification/isValid/",
+    partial(requests.post, "http://127.0.0.1:10101/v1/verification/isValid/",
       json = {"token": token}))
   text = response.text
   jsonText = json.loads(text)
@@ -36,7 +36,7 @@ async def applyLanguage(request):
   if (token is None):
     return False
   response = await asyncio.get_event_loop().run_in_executor(None,
-    partial(requests.get, "http://127.0.0.1:10101/settings/language/",
+    partial(requests.get, "http://127.0.0.1:10101/v1/settings/language/",
     headers = {"Authorization": "Bearer " + token}))
   text = response.text
   jsonText = json.loads(text)
