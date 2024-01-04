@@ -175,6 +175,7 @@
     runIcon.classList.add("fa-solid", "fa-play");
     runButton.appendChild(runIcon);
     var runLabel = document.createElement("label");
+    runLabel.role = "button";
     runLabel.innerHTML = "{% trans 'product.workflows.execute' %}";
     runButton.appendChild(runLabel);
     runButton.onclick = function (event) {
