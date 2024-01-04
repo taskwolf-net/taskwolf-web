@@ -105,6 +105,7 @@
 
   function displayOrganization(id, name, owner, isOwner, members) {
     var entry = document.createElement('li');
+    entry.role = "button";
     entry.addEventListener("click", event => {
       window.location.href = "/organization/" + id + "/";
     });

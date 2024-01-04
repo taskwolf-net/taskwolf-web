@@ -13,7 +13,7 @@
           <button id="workflow-publish" type="button" class="btn btn-success disabled">{% trans 'product.workflow.publish' %}</button>
         </div>
         <div id="workflow-timeline" class="d-none">
-          <i id="workflow-timeline-button" class="fa-solid fa-clock-rotate-left"></i>
+          <i id="workflow-timeline-button" class="fa-solid fa-clock-rotate-left" role="button"></i>
         </div>
         <div id="workflow-inputs">
           <div class="form-outline mb-4">
@@ -83,6 +83,7 @@
 
   function createComponentElement(title, description, logo, type, index, selected) {
     var componentContainer = document.createElement("div");
+    componentContainer.role = "button";
     componentContainer.classList.add("workflow-entry", "workflow-" + type);
     if (type === "action" && ((sessionStorage.getItem("workflow-actions") != null && JSON.parse(sessionStorage.getItem("workflow-actions")).actions.length > 1) || (!selected && index > 0))) {
       createActionRemoveButton(index, componentContainer);
@@ -189,6 +190,7 @@
 
   function createConditionElement(arrowElement, actionIndex, conditionIndex, selected) {
     var componentContainer = document.createElement("div");
+    componentContainer.role = "button";
     componentContainer.classList.add("workflow-entry", "workflow-condition");
     createConditionRemoveButton(actionIndex, conditionIndex, componentContainer);
     var componentHeadline = document.createElement("div");

@@ -141,6 +141,7 @@
 
   function displayWorkflow(id, name, creator, created, armed, triggerType) {
     var entry = document.createElement('li');
+    entry.role = "button";
     entry.classList.add("workflow-entry");
     var nameDiv = document.createElement("div");
     nameDiv.classList.add("workflows-entry-name");

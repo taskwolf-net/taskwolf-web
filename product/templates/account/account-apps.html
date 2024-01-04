@@ -118,6 +118,7 @@
 
   function displayApp(name, logo) {
     var entryElement = document.createElement("li");
+    entryElement.role = "button";
     entryElement.classList.add("account-application-entry");
     var logoElement = document.createElement("img");
     logoElement.src = "{% static '' %}" + "img/applications/" + logo;

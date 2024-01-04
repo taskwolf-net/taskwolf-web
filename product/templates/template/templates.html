@@ -117,6 +117,7 @@
 
   function displayTemplate(name, description, trigger, actions) {
     var entryElement = document.createElement("li");
+    entryElement.role = "button";
     entryElement.classList.add("template-entry");
     entryElement.appendChild(createWorkflowElement(trigger, actions));
     var nameElement = document.createElement("b");
