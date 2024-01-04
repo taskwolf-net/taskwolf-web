@@ -29,9 +29,6 @@
         <label class="form-check-label" for="notification-check">I would like to be informed about news to improve my experience with Taskwolf</label>
       </div>
       <button type="button" id="register" class="btn btn-primary mb-4">REGISTER</button></br>
-      <div>
-        <h id="registration-failed" class="text-danger"></h>
-      </div>
     </form>
   </body>
 </html>
@@ -49,11 +46,11 @@
 
   document.getElementById('register').onclick = function() {
     if (emailInput.value === "" || usernameInput.value === "" || passwordInput.value === "") {
-      document.getElementById("registration-failed").innerHTML = "Please fill in all entries";
+      swal("Registration failed!", "Please fill in all fields", "error");
       return;
     }
     if (!document.getElementById("legal-check").checked) {
-      document.getElementById("registration-failed").innerHTML = "You have to accept the terms of service and privacy policy to continue!";
+      swal("Registration failed!", "You have to accept the terms of service and privacy policy to continue!", "error");
       return;
     }
     let request = new HttpRequest("https://api.taskwolf.net/v1/verification/register/", "POST", [{key: "Content-Type", value: "application/json"}],
@@ -63,7 +60,7 @@
       if (response.success === true) {
         window.location.href = "/register/email/";
       } else {
-        document.getElementById("registration-failed").innerHTML = "There is already an account with this email!";
+        swal("Registration failed!", "There is already an account with this email!", "error");
       }
     });
   };

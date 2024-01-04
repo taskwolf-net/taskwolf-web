@@ -22,9 +22,6 @@
       </div>
       <button type="button" id="login" class="btn btn-primary mb-4">LOG IN</button></br>
       <p class="text-light">Not yet registered? <a id="not-registered" class="text-decoration-none" href="/register/">Create account</a>
-      <div>
-        <h id="authentication-failed" class="text-danger"></h>
-      </div>
     </form>
   </body>
 </html>
@@ -46,7 +43,7 @@
         Cookie.destroy("taskwolf-organization-target");
         window.location.href = "/dashboard/";
       } else {
-        document.getElementById("authentication-failed").innerHTML = "Authentication Failed!";
+        swal("Authentication failed!", "The password entered is incorrect!", "error");
         document.getElementById("password").value = "";
       }
     });
