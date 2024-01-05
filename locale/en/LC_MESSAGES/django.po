@@ -3,6 +3,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+# NEUTRAL
+
+# HEADER
+msgid "neutral.header.dashboard"
+msgstr "Dashboard"
+msgid "neutral.header.settings"
+msgstr "Settings"
+msgid "neutral.header.tickets"
+msgstr "Tickets"
+msgid "neutral.header.logout"
+msgstr "Log out"
+
 # PRODUCT
 
 # HEADER
@@ -10,6 +22,8 @@ msgid "product.header.dashboard"
 msgstr "Dashboard"
 msgid "product.header.settings"
 msgstr "Settings"
+msgid "product.header.tickets"
+msgstr "Tickets"
 msgid "product.header.logout"
 msgstr "Log out"
 
@@ -340,14 +354,6 @@ msgid "product.help.headline"
 msgstr "Help"
 
 # SETTINGS
-
-# HEADER
-msgid "settings.header.dashboard"
-msgstr "Dashboard"
-msgid "settings.header.settings"
-msgstr "Settings"
-msgid "settings.header.logout"
-msgstr "Log out"
 
 # SIDEBAR
 msgid "settings.sidebar.profile"

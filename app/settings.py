@@ -26,6 +26,7 @@ INSTALLED_APPS = [
   'verification.apps.VerificationConfig',
   'product.apps.ProductConfig',
   'settings.apps.SettingsConfig',
+  'ticket.apps.TicketConfig',
   'django.contrib.admin',
   'django.contrib.auth',
   'django.contrib.contenttypes',

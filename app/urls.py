@@ -10,4 +10,5 @@ urlpatterns = [
   path('', include('verification.urls')),
   path('', include('product.urls')),
   path('', include('settings.urls')),
+  path('', include('ticket.urls')),
 ]

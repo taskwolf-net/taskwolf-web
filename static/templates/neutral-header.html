@@ -15,10 +15,11 @@
           <img id="profile-picture" class="d-none">
         </button>
         <div class="dropdown-menu dropdown-menu-dark dropdown-menu-center" aria-labelledby="profile-button-wrapper">
-          <button class="dropdown-item" id="dashboard-button" type="button">{% trans 'settings.header.dashboard' %}</button>
-          <button class="dropdown-item" id="settings-button" type="button">{% trans 'settings.header.settings' %}</button>
+          <button class="dropdown-item" id="dashboard-button" type="button">{% trans 'neutral.header.dashboard' %}</button>
+          <button class="dropdown-item" id="settings-button" type="button">{% trans 'neutral.header.settings' %}</button>
+          <button class="dropdown-item" id="tickets-button" type="button">{% trans 'neutral.header.tickets' %}</button>
           <div class="dropdown-divider"></div>
-          <button class="dropdown-item" id="logout-button" type="button">{% trans 'settings.header.logout' %}</button>
+          <button class="dropdown-item" id="logout-button" type="button">{% trans 'neutral.header.logout' %}</button>
         </div>
       </div>
     </div>
@@ -46,6 +47,9 @@
   };
   document.getElementById('settings-button').onclick = function() {
     window.location.href = "/settings/profile/";
+  };
+  document.getElementById('tickets-button').onclick = function() {
+    window.location.href = "/tickets/";
   };
   document.getElementById('logout-button').onclick = function() {
     Cookie.destroy("token");
