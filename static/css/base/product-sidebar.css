@@ -34,3 +34,15 @@
   background-color: #666666;
   border-radius: 10px;
 }
+
+.sidebar-item-bottom {
+  position: absolute;
+  bottom: 110px;
+}
+
+.sidebar-divider-bottom {
+  position: absolute;
+  bottom: 170px;
+  width: 100%;
+  border-bottom: 2px #4a4a4a solid;
+}

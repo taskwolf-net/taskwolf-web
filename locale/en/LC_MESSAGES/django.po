@@ -335,6 +335,10 @@ msgstr "Deleted!"
 msgid "product.accounts.account.delete.successful.body"
 msgstr "That account has been successfully deleted!"
 
+# HELP
+msgid "product.help.headline"
+msgstr "Help"
+
 # SETTINGS
 
 # HEADER

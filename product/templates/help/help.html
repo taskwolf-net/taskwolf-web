@@ -1,0 +1,40 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body>
+    {% include 'templates/product-header.html' %}
+    {% include 'templates/product-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="help-wrapper">
+        <h1 id="help-headline">{% trans 'product.help.headline' %}</h1>
+        <div id="help-accordion" class="accordion">
+          <div class="accordion-item">
+            <h2 id="help-first-question-headline" class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#help-first-question" aria-expanded="true" aria-controls="help-first-question">
+                First Question
+              </button>
+            </h2>
+            <div id="help-first-question" class="accordion-collapse collapse show" aria-labelledby="help-first-question-headline" data-bs-parent="#help-accordion">
+              <div class="accordion-body">
+                <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 id="help-second-question-headline" class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#help-second-question" aria-expanded="true" aria-controls="help-second-question">
+                Second Question
+              </button>
+            </h2>
+            <div id="help-second-question" class="accordion-collapse collapse" aria-labelledby="help-second-question-headline" data-bs-parent="#help-accordion">
+              <div class="accordion-body">
+                <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

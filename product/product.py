@@ -11,3 +11,8 @@ async def dashboard(request):
 async def templates(request):
   return render(request, 'template/templates.html', {'title': 'Taskwolf - Templates',
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/template/templates.css']})
+
+@authentication_required
+async def help(request):
+  return render(request, 'help/help.html', {'title': 'Taskwolf - Help',
+    'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/help/help.css']})

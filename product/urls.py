@@ -17,4 +17,5 @@ urlpatterns = [
   path('organization/join/<str:organization>/<str:token>/', organization.organizationJoin),
   path('account/apps/', account.accountApps),
   path('accounts/', account.accounts),
+  path('help/', product.help),
 ]

@@ -1,0 +1,38 @@
+#help-wrapper {
+  width: min(calc(1500px - 15vw), 95%);
+  margin: auto;
+}
+
+#help-headline {
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 2%;
+}
+
+.accordion-item {
+  border: none !important;
+  background-color: #0d1117 !important;
+}
+
+.accordion-button {
+  color: white !important;
+  background-color: #0d1117 !important;
+  border-bottom: 2px #4a4a4a solid !important;
+  font-size: 25px !important;
+  font-weight: bold;
+}
+
+.accordion-button:after {
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>") !important;
+}
+
+.accordion-collapse {
+  color: white !important;
+  background-color: #0d1117 !important;
+}
+
+:focus {
+  outline: 0 !important;
+  box-shadow: none !important;
+}
