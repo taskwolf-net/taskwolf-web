@@ -4,5 +4,127 @@
   {% include 'templates/head.html' %}
   <body>
     {% include 'templates/neutral-header.html' %}
+    <div id="tickets-wrapper">
+      <h1 id="tickets-headline">{% trans 'tickets.headline' %}</h1>
+      <div id="tickets-header">
+        <div id="tickets-search-box">
+          <input id="tickets-search-input" placeholder=" {% trans 'tickets.search' %}" type="text" class="form-control" value="" autocomplete="off">
+          <button type="button">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+        <button type="button" id="ticket-create" class="btn btn-primary btn-block">{% trans 'tickets.create' %}</button>
+      </div>
+      <ul id="tickets-table-description">
+        <li id="tickets-table-description-title">
+          <div>
+            <span>{% trans 'tickets.title' %}</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <span>{% trans 'tickets.type' %}</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <span>{% trans 'tickets.status' %}</span>
+          </div>
+        </li>
+      </ul>
+      <ul id="tickets-list">
+      </ul>
+      <div id="tickets-empty">
+        <span id="tickets-empty-headline">{% trans 'tickets.empty.headline' %}</span>
+        <span>{% trans 'tickets.empty.text' %}</span><a id="tickets-empty-link" href="/ticket/create/">{% trans 'tickets.empty.link' %}</a><span>?</span>
+      </div>
+    </div>
   </body>
 </html>
+
+<script>
+  var tickets;
+  var ticketsCurrentNameFilter = "";
+
+  $(document).ready(function() {
+    fetchTicketsData(function() {
+      displayTickets();
+    });
+  });
+
+  function fetchTicketsData(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/tickets/personal/", "GET", [{key: "Content-Type", value: "application/json"},
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
+    request.send(function (status, responseText) {
+      tickets = JSON.parse(responseText).tickets;
+      callback();
+    });
+  }
+
+  function displayTickets() {
+    document.getElementById("tickets-list").innerHTML = "";
+    var displayedTickets = 0;
+    for (var i = 0; i < tickets.length; i++) {
+      var entry = tickets[i];
+      if(!(shouldDisplayTicketEntry(entry))) {
+        continue;
+      }
+      displayTicket(entry.id, entry.title, entry.type, entry.status);
+      displayedTickets++;
+    }
+    if (displayedTickets === 0) {
+      document.getElementById("tickets-empty").style.display = "flex";
+    } else {
+      document.getElementById("tickets-empty").style.display = "none";
+    }
+  }
+
+  function shouldDisplayTicketEntry(entry) {
+    return ticketsCurrentNameFilter.length === 0 ||
+      entry.title.toLowerCase().includes(ticketsCurrentNameFilter.toLowerCase()) ||
+      entry.type.toLowerCase().includes(ticketsCurrentNameFilter.toLowerCase()) ||
+      entry.status.toLowerCase().includes(ticketsCurrentNameFilter.toLowerCase());
+  }
+
+  function displayTicket(id, title, type, status) {
+    var entry = document.createElement('li');
+    entry.role = "button";
+    entry.classList.add("ticket-entry");
+    var titleDiv = document.createElement("div");
+    titleDiv.classList.add("ticket-entry-title");
+    var nameElement = document.createElement("span");
+    nameElement.innerText = title;
+    nameElement.classList.add("tickets-list-title");
+    titleDiv.appendChild(nameElement);
+    entry.appendChild(titleDiv);
+    appendTicketsCell(entry, "type", type, "span");
+    appendTicketsCell(entry, "status", status, "span");
+    entry.onclick = function (event) {
+      clickTicket(id);
+    }
+    document.getElementById("tickets-list").appendChild(entry);
+  }
+
+  function clickTicket(id) {
+    window.location.href = "/ticket/" + id + "/";
+  }
+
+  function appendTicketsCell(entry, identifier, information, elementType) {
+    var div = document.createElement("div");
+    var element = document.createElement(elementType);
+    element.innerText = information;
+    element.classList.add("tickets-list-" + identifier);
+    div.appendChild(element);
+    entry.appendChild(div);
+    return element;
+  }
+
+  document.getElementById("tickets-search-input").oninput = function(event) {
+    ticketsCurrentNameFilter = event.target.value;
+    displayTickets();
+  };
+
+  document.getElementById("ticket-create").onclick = function(event) {
+    window.location.href = "/ticket/create/";
+  };
+</script>
