@@ -99,19 +99,16 @@
   padding: 3%;
   display: flex;
   flex-direction: column;
-  width: 25%;
-  max-width: 25%;
+  width: 24%;
   text-align: left;
 }
 
 .workflows-entry-name {
   width: 40% !important;
-  max-width: 40% !important;
 }
 
 .workflows-entry-is-running {
-  width: 10% !important;
-  max-width: 10% !important;
+  width: 12% !important;
 }
 
 #workflows-table-description {
@@ -128,33 +125,69 @@
 }
 
 #workflows-table-description li {
-  width: 25%;
-  max-width: 25%;
-  padding-left: 2%;
+  width: 24%;
+  padding: 2% 3%;
   font-weight: bold;
   font-size: 20px;
 }
 
 #workflows-table-description-name {
   width: 40% !important;
-  max-width: 40% !important;
 }
 
 #workflows-table-description-is-running {
-  width: 10% !important;
-  max-width: 10% !important;
-  padding-left: 0 !important;
+  width: 12% !important;
   text-align: center;
-}
-
-#workflows-table-description li div {
-  padding: 3%;
 }
 
 #workflows-table-description button {
   border: none;
   background-color: #222b38;
   color: #9b9b9b;
+}
+
+@media (max-width: 2000px) {
+  #workflows-list li div {
+    width: 20%;
+  }
+
+  .workflows-entry-is-running {
+    width: 20% !important;
+  }
+
+  #workflows-table-description li {
+    width: 20%;
+  }
+
+  #workflows-table-description-is-running {
+    width: 20% !important;
+  }
+}
+
+@media (max-width: 1000px) {
+  #workflows-list li div {
+    width: 24%;
+  }
+
+  .workflows-entry-name {
+    width: 28% !important;
+  }
+
+  .workflows-entry-is-running {
+    width: 24% !important;
+  }
+
+  #workflows-table-description li {
+    width: 24%;
+  }
+
+  #workflows-table-description-name {
+    width: 28% !important;
+  }
+
+  #workflows-table-description-is-running {
+    width: 24% !important;
+  }
 }
 
 @media (max-width: 400px) {
