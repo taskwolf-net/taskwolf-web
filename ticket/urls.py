@@ -3,5 +3,6 @@ from . import ticket
 
 urlpatterns = [
   path('tickets/', ticket.tickets),
-  path('ticket/', ticket.ticket),
+  path('ticket/create/', ticket.createTicket),
+  path('ticket/<str:id>/', ticket.ticket),
 ]

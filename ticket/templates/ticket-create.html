@@ -1,0 +1,92 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body>
+    {% include 'templates/neutral-header.html' %}
+    <div id="ticket-create-container">
+      <h1 id="ticket-create-headline">{% trans 'ticket.create.headline' %}</h1>
+      <div class="form-outline mb-4">
+        <label for="ticket-title" class="form-label">{% trans 'ticket.create.title' %}</label>
+        <input type="title" id="ticket-title" class="form-control" placeholder="{% trans 'ticket.create.title' %}">
+      </div>
+      <div class="form-outline mb-4">
+        <label class="form-label">{% trans 'ticket.create.type' %}</label>
+        <div id="ticket-create-type-dropdown" class="dropdown">
+          <button id="ticket-create-type-dropdown-button" class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
+            {% trans 'ticket.create.type' %}
+          </button>
+          <ul id="ticket-create-type-dropdown-list" class="dropdown-menu dropdown-menu-dark">
+            <li><a id="ticket-create-type-request" class="dropdown-item">{% trans 'ticket.create.type.request' %}</a></li>
+            <li><a id="ticket-create-type-bug" class="dropdown-item">{% trans 'ticket.create.type.bug' %}</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="form-outline mb-4">
+        <label for="ticket-message" class="form-label">{% trans 'ticket.create.message' %}</label>
+        <div id="ticket-message">
+        </div>
+      </div>
+      <p id="ticket-create-note" class="text-secondary my-3">{% trans 'ticket.create.note' %}</p>
+      <button type="button" id="ticket-create" class="btn btn-primary btn-block disabled">{% trans 'ticket.create.create' %}</button>
+    </div>
+  </body>
+</html>
+
+<script>
+  var ticketType = "";
+
+  var quill = new Quill('#ticket-message', {
+    modules: {
+      toolbar: [
+        [{'size': ['huge', 'large', false, 'small']}],
+        ['bold', 'italic', 'underline'],
+        ['image'],
+        [{'list': 'ordered'}, {'list': 'bullet'}],
+        [{'align': []}],
+        [{'color': []}],
+      ]
+    },
+    theme: 'snow'
+  });
+
+  document.getElementById("ticket-title").oninput = function(event) {
+    checkTicketCreatable();
+  }
+
+  document.getElementById("ticket-create-type-request").onclick = function(event) {
+    ticketType = "REQUEST";
+    document.getElementById("ticket-create-type-dropdown-button").innerText = "{% trans 'ticket.create.type.request' %}";
+    checkTicketCreatable();
+  }
+
+  document.getElementById("ticket-create-type-bug").onclick = function(event) {
+    ticketType = "BUG";
+    document.getElementById("ticket-create-type-dropdown-button").innerText = "{% trans 'ticket.create.type.bug' %}";
+    checkTicketCreatable();
+  }
+
+  quill.on('text-change', function(delta, oldDelta, source) {
+    checkTicketCreatable();
+  });
+
+  function checkTicketCreatable() {
+    if (document.getElementById("ticket-title").value !== "" && ticketType !== "" &&
+      document.getElementsByClassName("ql-editor")[0].innerHTML !== "<p><br></p>"
+    ) {
+      document.getElementById("ticket-create").classList.remove("disabled");
+    } else {
+      document.getElementById("ticket-create").classList.add("disabled");
+    }
+  }
+
+  document.getElementById("ticket-create").onclick = function(event) {
+    var title = document.getElementById("ticket-title").value;
+    var message =  document.getElementsByClassName("ql-editor")[0].innerHTML;
+    let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/create/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {title: title, type: ticketType, message: message});
+    request.send(function (status, responseText) {
+      swal("{% trans 'ticket.create.successful.title' %}", "{% trans 'ticket.create.successful.body' %}", "success").then(success => window.location.href = "/tickets/");
+    });
+  }
+</script>
