@@ -4,5 +4,212 @@
   {% include 'templates/head.html' %}
   <body>
     {% include 'templates/neutral-header.html' %}
+    <div id="ticket-container">
+      <h1 id="ticket-headline">{% trans 'ticket.headline' %}</h1>
+      <label class="form-label">{% trans 'ticket.title' %}</label>
+      <div id="ticket-title-wrapper" class="form-outline">
+        <input type="title" id="ticket-title" class="form-control" placeholder="{% trans 'ticket.title' %}">
+        <button type="button" id="ticket-title-change" class="btn btn-primary btn-block">{% trans 'ticket.title.change' %}</button>
+      </div>
+      <hr class="hr border-white my-4"/>
+      <ul id="ticket-messages">
+      </ul>
+      <div id="ticket-operations">
+        <button type="button" id="ticket-message-add" class="btn btn-primary disabled">{% trans 'ticket.message.add' %}</button>
+        <button type="button" id="ticket-delete" class="btn btn-danger">{% trans 'ticket.delete' %}</button>
+      </div>
+    </div>
   </body>
 </html>
+
+<script>
+  var ticket;
+  var profilePicture;
+  var username;
+
+  $(document).ready(function() {
+    fetchProfilePicture(function() {
+      fetchUsername(function() {
+        fetchTicketsData(function() {
+          displayTicket();
+        });
+      });
+    });
+  });
+
+  function fetchProfilePicture(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/picture/", "GET", [{key: "Content-Type", value: "application/json"},
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
+    request.send(function (status, responseText) {
+      profilePicture = JSON.parse(responseText).picture;
+      callback();
+    });
+  }
+
+  function fetchUsername(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/username/", "GET", [{key: "Content-Type", value: "application/json"},
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
+    request.send(function (status, responseText) {
+      username = JSON.parse(responseText).username;
+      callback();
+    });
+  }
+
+  function fetchTicketsData(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/find/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {ticket: "{{ticket}}"});
+    request.send(function (status, responseText) {
+      ticket = JSON.parse(responseText);
+      callback();
+    });
+  }
+
+  function displayTicket() {
+    document.getElementById("ticket-title").value = ticket.title;
+    for (var i = 0; i < ticket.messages.length; i++) {
+      displayMessage(ticket.messages[i], i);
+    }
+    displayAnswerField();
+  }
+
+  function displayMessage(message, index) {
+    var messageElement = document.createElement("div");
+    messageElement.classList.add("ticket-message", "ql-editor");
+    messageElement.innerHTML = message.message;
+    var entry = displayEntry(message.selfWritten ? profilePicture : "", message.author,
+      message.time.split(" ")[0], message.time.split(" ")[1], messageElement);
+    if (index > 0 && message.selfWritten) {
+      var deleteButton = document.createElement("button");
+      deleteButton.type = "button";
+      deleteButton.classList.add("ticket-message-delete");
+      var deleteIcon = document.createElement("span");
+      deleteButton.classList.add("fa-solid", "fa-trash-can");
+      deleteButton.appendChild(deleteIcon);
+      deleteButton.onclick = function() {
+        deleteMessage(message.id);
+      }
+      entry.appendChild(deleteButton);
+    }
+  }
+
+  function deleteMessage(id) {
+    swal({
+      title: "{% trans 'ticket.message.delete.title' %}",
+      text: "{% trans 'ticket.message.delete.body' %}",
+      icon: "warning",
+      dangerMode: true,
+      buttons: true,
+    }).then(willDelete => {
+      if (willDelete) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/message/delete/", "POST", [{key: "Content-Type", value: "application/json"},
+          {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {ticket: ticket.id, message: id});
+        request.send(function (status, responseText) {
+          swal("{% trans 'ticket.message.delete.successful.title' %}", "{% trans 'ticket.message.delete.successful.body' %}", "success").then(success => window.location.reload());
+        });
+      }
+    });
+  }
+
+  function displayAnswerField() {
+    var answerField = document.createElement("div");
+    answerField.id = "ticket-answer-field";
+    displayEntry(profilePicture, username, "", "", answerField);
+    var quill = new Quill('#ticket-answer-field', {
+      modules: {
+        toolbar: [
+          [{'size': ['huge', 'large', false, 'small']}],
+          ['bold', 'italic', 'underline'],
+          ['image'],
+          [{'list': 'ordered'}, {'list': 'bullet'}],
+          [{'align': []}],
+          [{'color': []}],
+        ]
+      },
+      theme: 'snow'
+    });
+    quill.on('text-change', function(delta, oldDelta, source) {
+      if (answerField.firstElementChild.innerHTML !== "<p><br></p>") {
+        document.getElementById("ticket-message-add").classList.remove("disabled");
+      } else {
+        document.getElementById("ticket-message-add").classList.add("disabled");
+      }
+    });
+  }
+
+  function displayEntry(picture, author, date, time, contentElement) {
+    var messageContainer = document.createElement("li");
+    messageContainer.classList.add("ticket-message-container");
+    var messageDescription = document.createElement("div");
+    messageDescription.classList.add("ticket-message-description")
+    var messagePicture = document.createElement("img");
+    messagePicture.classList.add("ticket-message-picture");
+    messagePicture.src = picture;
+    messageDescription.appendChild(messagePicture);
+    messageDescription.appendChild(document.createElement("br"));
+    messageDescription.appendChild(document.createElement("br"));
+    var messageAuthor = document.createElement("b");
+    messageAuthor.classList.add("ticket-message-author");
+    messageAuthor.innerHTML = author;
+    messageDescription.appendChild(messageAuthor);
+    messageDescription.appendChild(document.createElement("br"));
+    messageDescription.appendChild(document.createElement("br"));
+    var messageDate = document.createElement("label");
+    messageDate.classList.add("ticket-message-date");
+    messageDate.innerHTML = date;
+    messageDescription.appendChild(messageDate);
+    messageDescription.appendChild(document.createElement("br"));
+    messageContainer.appendChild(messageDescription);
+    var messageTime = document.createElement("label");
+    messageTime.classList.add("ticket-message-time");
+    messageTime.innerHTML = time;
+    messageDescription.appendChild(messageTime);
+    messageDescription.appendChild(document.createElement("br"));
+    messageDescription.appendChild(document.createElement("br"));
+    messageContainer.appendChild(messageDescription);
+    var divider = document.createElement("div");
+    divider.classList.add("ticket-message-divider");
+    messageContainer.appendChild(divider);
+    var messageContent = document.createElement("div");
+    messageContent.classList.add("ticket-message-content");
+    messageContent.appendChild(contentElement);
+    messageContainer.appendChild(messageContent);
+    document.getElementById("ticket-messages").appendChild(messageContainer);
+    return messageContainer;
+  }
+
+  document.getElementById("ticket-title-change").onclick = function(event) {
+    var title = document.getElementById("ticket-title").value;
+    let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/rename/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {ticket: ticket.id, title: title});
+    request.send(function (status, responseText) {
+      swal("{% trans 'ticket.title.change.successful.title' %}", "{% trans 'ticket.title.change.successful.body' %}", "success").then(success => window.location.reload());
+    });
+  }
+
+  document.getElementById("ticket-message-add").onclick = function(event) {
+    var message = document.getElementById("ticket-answer-field").firstElementChild.innerHTML;
+    let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/message/add/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {ticket: ticket.id, message: message});
+    request.send(function (status, responseText) {
+      swal("{% trans 'ticket.message.add.successful.title' %}", "{% trans 'ticket.message.add.successful.body' %}", "success").then(success => window.location.reload());
+    });
+  }
+
+  document.getElementById("ticket-delete").onclick = function(event) {
+    swal({
+      title: "{% trans 'ticket.delete.title' %}",
+      text: "{% trans 'ticket.delete.body' %}",
+      icon: "warning",
+      dangerMode: true,
+      buttons: true,
+    }).then(willDelete => {
+      if (willDelete) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/delete/", "POST", [{key: "Content-Type", value: "application/json"},
+          {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {ticket: ticket.id});
+        request.send(function (status, responseText) {
+          swal("{% trans 'ticket.delete.successful.title' %}", "{% trans 'ticket.delete.successful.body' %}", "success").then(success => window.location.href = "/tickets/");
+        });
+      }
+    });
+  }
+</script>
