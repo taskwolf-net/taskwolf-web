@@ -87,13 +87,11 @@
   display: flex;
   flex-direction: column;
   width: 20%;
-  max-width: 20%;
   text-align: left;
 }
 
-.tickets-entry-title {
+.ticket-entry-title {
   width: 60% !important;
-  max-width: 60% !important;
 }
 
 #tickets-table-description {
@@ -111,19 +109,13 @@
 
 #tickets-table-description li {
   width: 20%;
-  max-width: 20%;
-  padding-left: 2%;
+  padding: 2% 3%;
   font-weight: bold;
   font-size: 20px;
 }
 
 #tickets-table-description-title {
   width: 60% !important;
-  max-width: 60% !important;
-}
-
-#tickets-table-description li div {
-  padding: 3%;
 }
 
 #tickets-table-description button {

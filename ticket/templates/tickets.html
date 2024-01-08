@@ -69,7 +69,14 @@
       if(!(shouldDisplayTicketEntry(entry))) {
         continue;
       }
-      displayTicket(entry.id, entry.title, entry.type, entry.status);
+      var type = "";
+      if (entry.type.toUpperCase() === "REQUEST") {
+        type = "{% trans 'tickets.type.request' %}";
+      }
+      if (entry.type.toUpperCase() === "BUG") {
+        type = "{% trans 'tickets.type.bug' %}";
+      }
+      displayTicket(entry.id, entry.title, type, entry.status);
       displayedTickets++;
     }
     if (displayedTickets === 0) {
@@ -98,7 +105,11 @@
     titleDiv.appendChild(nameElement);
     entry.appendChild(titleDiv);
     appendTicketsCell(entry, "type", type, "span");
-    appendTicketsCell(entry, "status", status, "span");
+    if (status.toUpperCase() === "OPEN") {
+      appendTicketsCell(entry, "status", "{% trans 'tickets.status.open' %}", "span").classList.add("text-success");
+    } else {
+      appendTicketsCell(entry, "status", "{% trans 'tickets.status.closed' %}", "span").classList.add("text-danger");
+    }
     entry.onclick = function (event) {
       clickTicket(id);
     }
