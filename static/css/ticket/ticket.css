@@ -155,6 +155,7 @@ input:-webkit-autofill:active{
 
 #ticket-operations {
   display: flex;
+  margin-bottom: 2%;
 }
 
 #ticket-message-add {
