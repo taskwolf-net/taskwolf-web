@@ -77,7 +77,6 @@
     addConditionInput("condition-input-value", "{% trans 'product.workflow.condition.input.value' %}", "{% trans 'product.workflow.condition.input.value.tooltip' %}");
     addConditionSelect("condition-type", "{% trans 'product.workflow.condition.condition.type' %}", "{% trans 'product.workflow.condition.condition.type.tooltip' %}");
     addConditionInput("condition-comparative-value", "{% trans 'product.workflow.condition.comparative.value' %}", "{% trans 'product.workflow.condition.comparative.value.tooltip' %}");
-    updateTooltips();
     createResetButton(inputListElement, function() {
       selectButtons = [];
       inputValue = "";
@@ -97,7 +96,7 @@
     inputContainerElement.appendChild(labelElement);
     var informationElement = document.createElement("h5");
     informationElement.classList.add("workflow-condition-information", "fa", "fa-question-circle");
-    applyTooltips(informationElement, description);
+    applyTooltips(informationElement, inputContainerElement, description);
     inputContainerElement.appendChild(informationElement);
     var inputElement = document.createElement("input");
     inputElement.type = "name";
@@ -145,7 +144,7 @@
     dropdownContainer.appendChild(labelElement);
     var informationElement = document.createElement("h5");
     informationElement.classList.add("workflow-condition-information", "fa", "fa-question-circle");
-    applyTooltips(informationElement, description);
+    applyTooltips(informationElement, dropdownContainer, description);
     dropdownContainer.appendChild(informationElement);
     dropdownContainer.classList.add("workflow-condition-select-container", "dropdown");
     var dropdownButton = document.createElement("button");
@@ -365,16 +364,13 @@
     return resetButtonContainer;
   }
 
-  function applyTooltips(element, text) {
+  function applyTooltips(element, container, text) {
     $(element).attr("data-bs-toggle", "tooltip");
     $(element).attr("data-bs-placement", "top");
     $(element).attr("data-bs-title", text);
-  }
-
-  function updateTooltips() {
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-      return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
+    container.classList.add("position-relative");
+    new bootstrap.Tooltip(element, {
+      container: container
+    });
   }
 </script>

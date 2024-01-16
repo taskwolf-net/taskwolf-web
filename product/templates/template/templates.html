@@ -98,7 +98,6 @@
       displayTemplate(entry.name, entry.description, entry.trigger, entry.actions);
       displayedEntries++;
     }
-    updateTooltips();
     if (displayedEntries === 0) {
       document.getElementById("templates-empty").style.display = "block";
     } else {
@@ -129,7 +128,7 @@
     entryElement.onclick = function(event) {
       clickTemplate(name, description, trigger, actions);
     }
-    applyTooltips(entryElement, "{% trans 'product.templates.tooltip' %}");
+    applyTooltips(entryElement, document.getElementById("templates-list"), "{% trans 'product.templates.tooltip' %}");
     document.getElementById("templates-list").appendChild(entryElement);
   }
 
@@ -194,17 +193,14 @@
     return arrow;
   }
 
-  function applyTooltips(element, text) {
+  function applyTooltips(element, container, text) {
     $(element).attr("data-bs-toggle", "tooltip");
     $(element).attr("data-bs-placement", "top");
     $(element).attr("data-bs-title", text);
-  }
-
-  function updateTooltips() {
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-      return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
+    container.classList.add("position-relative");
+    new bootstrap.Tooltip(element, {
+      container: container
+    });
   }
 
   document.getElementById("templates-search-input").oninput = function(event) {

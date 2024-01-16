@@ -273,7 +273,7 @@
       }
       var logoElement = document.createElement("img");
       logoElement.src = "{% static '' %}" + "img/applications/" + selectedApplicationLogo;
-      applyTooltips(logoElement, " {% trans 'product.workflow.component.account.link.tooltop' %}");
+      applyTooltips(logoElement, logoLinkElement, " {% trans 'product.workflow.component.account.link.tooltop' %}");
       logoLinkElement.appendChild(logoElement);
       accountContentElement.appendChild(logoLinkElement);
       var descriptionContainerElement = document.createElement("div");
@@ -282,7 +282,6 @@
       descriptionElement.innerHTML = information.linkDescription;
       descriptionContainerElement.appendChild(descriptionElement);
       accountContentElement.appendChild(descriptionContainerElement);
-      updateTooltips();
       if (information.accountExists === true) {
         displaySkipButton();
       }
@@ -296,13 +295,12 @@
     skipButton.type = "button";
     skipButton.classList.add("btn", "btn-info");
     skipButton.innerHTML = "{% trans 'product.workflow.component.account.skip' %}";
-    applyTooltips(skipButton, "{% trans 'product.workflow.component.account.skip.tooltip' %}");
+    applyTooltips(skipButton, resetButtonContainer, "{% trans 'product.workflow.component.account.skip.tooltip' %}");
     resetButtonContainer.appendChild(skipButton);
     skipButton.onclick = function (event) {
       clickSkipButton(true);
     }
     document.getElementById("workflow-component-account-content").appendChild(resetButtonContainer);
-    updateTooltips();
     if (!(_.isEqual(selectedComponent, {}))) {
       clickSkipButton(false);
     }
@@ -469,7 +467,6 @@
           requiredSpecificationVariables.push(inputVariable.identifier);
         }
       }
-      updateTooltips();
       createResetButton(document.getElementById("workflow-component-specifications-input-list"), function() {
         specificationSelectButtons = [];
         specificationValues = {};
@@ -488,7 +485,7 @@
     inputContainerElement.appendChild(labelElement);
     var informationElement = document.createElement("h5");
     informationElement.classList.add("workflow-component-specification-information", "fa", "fa-question-circle");
-    applyTooltips(informationElement, description);
+    applyTooltips(informationElement, inputContainerElement, description);
     inputContainerElement.appendChild(informationElement);
     var inputElement = document.createElement("input");
     inputElement.type = "name";
@@ -542,7 +539,7 @@
     dropdownContainer.appendChild(labelElement);
     var informationElement = document.createElement("h5");
     informationElement.classList.add("workflow-component-specification-information", "fa", "fa-question-circle");
-    applyTooltips(informationElement, description);
+    applyTooltips(informationElement, dropdownContainer, description);
     dropdownContainer.appendChild(informationElement);
     dropdownContainer.classList.add("workflow-component-specifications-select-container", "dropdown");
     var dropdownButton = document.createElement("button");
@@ -776,16 +773,13 @@
     };
   }
 
-  function applyTooltips(element, text) {
+  function applyTooltips(element, container, text) {
     $(element).attr("data-bs-toggle", "tooltip");
     $(element).attr("data-bs-placement", "top");
     $(element).attr("data-bs-title", text);
-  }
-
-  function updateTooltips() {
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
+    container.classList.add("position-relative");
+    new bootstrap.Tooltip(element, {
+      container: container
+    });
   }
 </script>

@@ -41,9 +41,9 @@
       displayModificationButton();
       removeLoader();
     });
-    applyTooltips(document.getElementById("organization-invite"), "{% trans 'product.organization.copy.link.tooltip' %}");
-    applyTooltips(document.getElementById("organization-link-regenerate"), "{% trans 'product.organization.regenerate.link.tooltip' %}");
-    updateTooltips();
+    var membersHeader = document.getElementById("organization-members-header");
+    applyTooltips(document.getElementById("organization-invite"), membersHeader, "{% trans 'product.organization.copy.link.tooltip' %}");
+    applyTooltips(document.getElementById("organization-link-regenerate"), membersHeader, "{% trans 'product.organization.regenerate.link.tooltip' %}");
   });
 
   function fetchOrganizationData(callback) {
@@ -130,8 +130,7 @@
     linkButton.classList.remove("btn-primary");
     linkButton.classList.add("btn-success");
     $('#organization-invite').tooltip('hide');
-    applyTooltips(linkButton, "{% trans 'product.organization.copied.link.tooltip' %}");
-    updateTooltips();
+    applyTooltips(linkButton, document.getElementById("organization-members-header"), "{% trans 'product.organization.copied.link.tooltip' %}");
     $('#organization-invite').tooltip('show');
     let request = new HttpRequest("https://api.taskwolf.net/v1/organization/link/", "POST", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {organization: organization.id});
@@ -145,8 +144,7 @@
     linkButton.classList.remove("btn-success");
     linkButton.classList.add("btn-primary");
     $('#organization-link-regenerate').tooltip('hide');
-    applyTooltips(linkButton, "{% trans 'product.organization.copy.link.tooltip' %}");
-    updateTooltips();
+    applyTooltips(linkButton, document.getElementById("organization-members-header"), "{% trans 'product.organization.copy.link.tooltip' %}");
     let request = new HttpRequest("https://api.taskwolf.net/v1/organization/link/regenerate/", "POST", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {organization: organization.id});
     request.send(function (status, responseText) {
@@ -198,16 +196,13 @@
     });
   }
 
-  function applyTooltips(element, text) {
+  function applyTooltips(element, container, text) {
     $(element).attr("data-bs-toggle", "tooltip");
     $(element).attr("data-bs-placement", "top");
     $(element).attr("data-bs-title", text);
-  }
-
-  function updateTooltips() {
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-      return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
+    container.classList.add("position-relative");
+    new bootstrap.Tooltip(element, {
+      container: container
+    });
   }
 </script>
