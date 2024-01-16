@@ -273,7 +273,7 @@
       }
       var logoElement = document.createElement("img");
       logoElement.src = "{% static '' %}" + "img/applications/" + selectedApplicationLogo;
-      applyTooltips(logoElement, logoLinkElement, " {% trans 'product.workflow.component.account.link.tooltop' %}");
+      applyTooltips(logoElement, accountContentElement, " {% trans 'product.workflow.component.account.link.tooltop' %}");
       logoLinkElement.appendChild(logoElement);
       accountContentElement.appendChild(logoLinkElement);
       var descriptionContainerElement = document.createElement("div");
