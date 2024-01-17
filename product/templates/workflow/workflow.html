@@ -61,6 +61,8 @@
     if (sessionStorage.getItem("workflow-selected") !== null) {
       document.getElementById("workflow-delete").classList.remove("d-none");
       document.getElementById("workflow-timeline").classList.remove("d-none");
+      applyTooltips(document.getElementById("workflow-timeline-button"),
+        document.getElementById("workflow-timeline"), "Watch Workflow Timeline");
     }
   }
 
@@ -407,5 +409,15 @@
 
   document.getElementById("workflow-timeline-button").onclick = function (event) {
     window.location.href = "/workflow/timeline/";
+  }
+
+  function applyTooltips(element, container, text) {
+    $(element).attr("data-bs-toggle", "tooltip");
+    $(element).attr("data-bs-placement", "top");
+    $(element).attr("data-bs-title", text);
+    container.classList.add("position-relative");
+    new bootstrap.Tooltip(element, {
+      container: container
+    });
   }
 </script>
