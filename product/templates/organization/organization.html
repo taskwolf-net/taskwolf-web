@@ -59,24 +59,26 @@
 
   function displayInformation() {
     document.getElementById("organization-name").innerHTML = organization.name;
-    document.getElementById("organization-owner").appendChild(createUserEntry(organization.owner, "li"));
+    document.getElementById("organization-owner").appendChild(createUserEntry(organization.owner, organization.ownerProfilePicture, "li"));
     var memberListElement = document.getElementById("organization-members");
     if (organization.members.length === 0) {
       document.getElementById("organization-members-empty").style.display = "flex";
     }
     for (let i = 0; i < organization.members.length; i++) {
-      var memberElement = createUserEntry(organization.members[i], "li");
+      var member = organization.members[i];
+      var memberElement = createUserEntry(member.name, member.profilePicture, "li");
       if (organization.isOwner === true) {
         var memberKickElement = document.createElement("span");
         memberKickElement.classList.add("organization-member-kick", "fa", "fa-ban", "text-danger");
         memberKickElement.onclick = function (event) {
           let request = new HttpRequest("https://api.taskwolf.net/v1/organization/kick/", "POST",
             [{key: "Content-Type", value: "application/json"}, {key: "Authorization", value: "Bearer " + Cookie.find("token")}],
-            {organization: organization.id, target: organization.memberIds[i]});
+            {organization: organization.id, target: member.id});
           request.send(function (status, responseText) {
             location.reload();
           });
         }
+        applyTooltips(memberKickElement, memberElement, "{% trans 'product.organization.kick' %}")
         memberElement.appendChild(memberKickElement);
       }
       memberListElement.appendChild(memberElement);
@@ -87,14 +89,14 @@
     }
   }
 
-  function createUserEntry(user, elementType) {
+  function createUserEntry(user, profilePicture, elementType) {
     var memberElement = document.createElement(elementType);
     memberElement.classList.add("organization-user");
     var memberInformationContainer = document.createElement("div");
     memberInformationContainer.classList.add("organization-user-information");
-    var memberIconElement = document.createElement("span");
+    var memberIconElement = document.createElement("img");
     memberIconElement.classList.add("organization-user-icon");
-    memberIconElement.innerHTML = user[0];
+    memberIconElement.src = profilePicture;
     memberInformationContainer.appendChild(memberIconElement);
     var memberNameElement = document.createElement("span");
     memberNameElement.classList.add("organization-user-name");

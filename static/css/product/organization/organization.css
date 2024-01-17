@@ -84,18 +84,10 @@
 }
 
 .organization-user-icon {
-  color: black;
-  border-radius: 50%;
   width: 64px;
   height: 64px;
   min-width: 64px;
-  text-align: center;
-  background-color: white !important;
-  display: flex;
-  font-size: 20px;
-  font-weight: bold;
-  align-items: center;
-  justify-content: center;
+  border-radius: 40%;
 }
 
 .organization-user-name {
