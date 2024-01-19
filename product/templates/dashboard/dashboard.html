@@ -74,7 +74,12 @@
       }
       var targetCookie = Cookie.find("taskwolf-organization-target");
       if (targetCookie != null) {
-        selectDashboardTarget(targets.filter((target) => target.id === targetCookie)[0]);
+        var target = targets.filter((target) => target.id === targetCookie);
+        if (target.length !== 0) {
+          selectDashboardTarget(target[0]);
+        } else {
+          selectDashboardTarget(targets[0]);
+        }
       } else {
         selectDashboardTarget(targets[0]);
       }
