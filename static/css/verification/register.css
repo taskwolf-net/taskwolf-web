@@ -1,5 +1,5 @@
 form {
-  width: 30%;
+  width: min(calc(800px - 5vw), 95%);
   text-align: center;
   margin-top: 5%;
   margin-left: auto;
@@ -50,17 +50,12 @@ input:-webkit-autofill:active{
 }
 
 #register {
-  margin-top: 5%;
-  width: 50%;
+  margin-top: 2%;
+  width: 400px;
 }
 
-@media (max-width: 800px) {
-  form {
-    width: 80%;
-    margin-top: 10%;
-  }
-
+@media (max-width: 500px) {
   #register {
-    width: 80%;
+    width: 300px;
   }
 }

@@ -1,5 +1,5 @@
 form {
-  width: 30%;
+  width: min(calc(800px - 5vw), 95%);
   text-align: center;
   margin-top: 5%;
   margin-left: auto;
@@ -56,17 +56,75 @@ input:-webkit-autofill:active{
 }
 
 #login {
-  margin-top: 5%;
-  width: 50%;
+  margin-top: 2%;
+  width: 400px;
 }
 
-@media (max-width: 800px) {
-  form {
-    width: 80%;
-    margin-top: 10%;
+#login-alternative {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4%;
+  margin-bottom: 4%;
+  color: white;
+  font-weight: bold;
+}
+
+.login-alternative-divider {
+  width: 100%;
+  height: 2px;
+  background-color: #464646;
+}
+
+#login-external-services {
+  display: block;
+  text-align: center;
+  margin-top: 2%;
+}
+
+.login-external-service-button {
+  position: relative;
+  width: 400px;
+  margin-bottom: 2%;
+  padding: 10px !important;
+  color: white !important;
+  font-weight: bold !important;
+  border-radius: 5px !important;
+  transition: 0.2s;
+}
+
+.login-external-service-logo {
+  position: absolute;
+  left: 12px;
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+}
+
+#login-external-service-google {
+  background-color: #327eca;
+  border: 1px #2865a2 solid !important;
+}
+
+#login-external-service-google:hover {
+  background-color: #2865a2;
+}
+
+#login-external-service-microsoft {
+  background-color: #151515;
+  border: 1px #272727 solid !important;
+}
+
+#login-external-service-microsoft:hover {
+  background-color: #272727;
+}
+
+@media (max-width: 500px) {
+  #login {
+    width: 300px;
   }
 
-  #login {
-    width: 80%;
+  .login-external-service-button {
+    width: 300px;
   }
 }
