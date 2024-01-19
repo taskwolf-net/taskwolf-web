@@ -102,20 +102,11 @@ input:-webkit-autofill:active{
 }
 
 #login-external-service-google {
-  background-color: #327eca;
-  border: 1px #2865a2 solid !important;
+  background-color: #151515;
+  border: 1px #383838 solid !important;
 }
 
 #login-external-service-google:hover {
-  background-color: #2865a2;
-}
-
-#login-external-service-microsoft {
-  background-color: #151515;
-  border: 1px #272727 solid !important;
-}
-
-#login-external-service-microsoft:hover {
   background-color: #272727;
 }
 
