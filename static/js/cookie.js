@@ -27,6 +27,7 @@ var Cookie = {
       name: escape(value),
       expires: expires_at.toGMTString(),
       path: '/',
+      domain: '.' + location.host,
       secure: true,
     }, function (value, key) {
       return [(key == 'name') ? name : key, value].join('=');
