@@ -16,6 +16,18 @@ body::-webkit-scrollbar-thumb {
   border: 3px solid #322e25;
 }
 
+h1 {
+  font-size: 44px !important;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+@media(max-width: 800px) {
+  h1 {
+    font-size: 36px !important;
+  }
+}
+
 .swal-overlay {
   background-color: rgba(44, 54, 70, 0.59);
 }
