@@ -53,7 +53,11 @@
   var isSidebarShown;
 
   window.onload = function() {
-    isSidebarShown = window.innerWidth > 575;
+    if (sessionStorage.getItem("taskwolf-sidebar") === null) {
+      sessionStorage.setItem("taskwolf-sidebar", "true");
+    }
+    var sidebarSetting = sessionStorage.getItem("taskwolf-sidebar").toLowerCase() === "true";
+    isSidebarShown = window.innerWidth > 575 && sidebarSetting;
     if (isSidebarShown) {
       document.getElementById("sidebar").classList.add("show");
     }
@@ -62,8 +66,8 @@
   };
 
   document.getElementById('sidebar-button').onclick = function() {
-    console.log("Click");
     isSidebarShown = !isSidebarShown;
+    sessionStorage.setItem("taskwolf-sidebar", isSidebarShown);
     updateSidebarSpacing();
     updateSidebarButtonIcon();
   };
