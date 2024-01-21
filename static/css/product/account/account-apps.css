@@ -14,6 +14,12 @@
   width: 100%;
 }
 
+@media (max-width: 1000px) {
+  #account-apps-target-dropdown {
+    margin: 60px auto 10px;
+  }
+}
+
 @media (max-width: 575px) {
   #account-apps-target-dropdown {
     margin: 50px auto 10px;
