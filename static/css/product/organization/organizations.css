@@ -44,18 +44,7 @@
 }
 
 #organizations-create {
-  width: 20%;
   margin-left: 5%;
-}
-
-@media (max-width: 400px) {
-  #organizations-header {
-    margin-bottom: 5%;
-  }
-
-  #organizations-create {
-    width: 30%;
-  }
 }
 
 #organizations-list {
