@@ -77,21 +77,21 @@
   }
 
   .account-entry b {
-    width: 65%;
-  }
-
-  .account-entry button {
-    width: 30%;
-  }
-}
-
-@media (max-width: 375px) {
-  .account-entry b {
     width: 55%;
   }
 
   .account-entry button {
     width: 40%;
+  }
+}
+
+@media (max-width: 375px) {
+  .account-entry b {
+    width: 50%;
+  }
+
+  .account-entry button {
+    width: 45%;
   }
 }
 
