@@ -113,3 +113,9 @@
     margin-right: 0;
   }
 }
+
+@media (max-width: 375px) {
+  #organization-modification {
+    margin: 50px auto 10px;
+  }
+}
