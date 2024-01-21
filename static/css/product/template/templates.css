@@ -62,8 +62,7 @@
 #templates-list {
   width: min(calc(2000px - 15vw), 95%);
   list-style-type: none;
-  margin: auto;
-  margin-top: 2%;
+  margin: 2% auto;
   padding: 0;
   align-items: stretch;
   display: grid;
@@ -127,6 +126,19 @@
 }
 
 @media (max-width: 1000px) {
+  #templates-header {
+    display: block;
+  }
+
+  #templates-modules-dropdown {
+    margin: 20px auto 20px;
+    width: fit-content;
+  }
+
+  #templates-search-box {
+    width: 100%;
+  }
+
   #templates-list {
     grid-template-columns: repeat(1, 1fr);
   }
