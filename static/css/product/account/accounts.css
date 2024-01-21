@@ -1,7 +1,7 @@
 #accounts-header {
   margin: auto;
   margin-top: 2%;
-  width: min(calc(1500px - 15vw), 95%);
+  width: min(calc(1500px - 15vw), 80%);
 }
 
 #accounts-logo {
@@ -19,17 +19,17 @@
 
 #accounts-list-headline {
   color: white;
-  width: min(calc(1500px - 15vw), 95%);
+  width: min(calc(1500px - 15vw), 80%);
   margin: auto;
   margin-top: 2%;
   border-bottom: 2px #4a4a4a solid;
 }
 
 #accounts-list {
-  width: min(calc(1500px - 15vw), 95%);
-  margin: auto;
-  margin-top: 1%;
+  width: min(calc(1500px - 15vw), 80%);
+  margin: 1% auto auto;
   list-style-type: none;
+  padding: 0;
 }
 
 .account-entry {
@@ -55,6 +55,44 @@
 
 .account-entry button {
   width: 10%;
+}
+
+@media (max-width: 1100px) {
+  .account-entry b {
+    width: 75%;
+  }
+
+  .account-entry span {
+    display: none;
+  }
+
+  .account-entry button {
+    width: 20%;
+  }
+}
+
+@media (max-width: 575px) {
+  #accounts-list-headline {
+    margin-top: 5%;
+  }
+
+  .account-entry b {
+    width: 65%;
+  }
+
+  .account-entry button {
+    width: 30%;
+  }
+}
+
+@media (max-width: 375px) {
+  .account-entry b {
+    width: 55%;
+  }
+
+  .account-entry button {
+    width: 40%;
+  }
 }
 
 #accounts-empty {
