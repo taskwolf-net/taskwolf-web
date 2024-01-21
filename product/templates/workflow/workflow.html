@@ -9,8 +9,10 @@
       <div id="workflow-container">
         <div id="workflow-header">
           <h1 id="workflow-headline">{% trans 'product.workflow.headline' %}</h1>
-          <button id="workflow-delete" type="button" class="btn btn-danger d-none">{% trans 'product.workflow.delete' %}</button>
-          <button id="workflow-publish" type="button" class="btn btn-success disabled">{% trans 'product.workflow.publish' %}</button>
+          <div id="workflow-modification">
+            <button id="workflow-delete" type="button" class="btn btn-danger d-none">{% trans 'product.workflow.delete' %}</button>
+            <button id="workflow-publish" type="button" class="btn btn-success disabled">{% trans 'product.workflow.publish' %}</button>
+          </div>
         </div>
         <div id="workflow-timeline" class="d-none">
           <i id="workflow-timeline-button" class="fa-solid fa-clock-rotate-left" role="button"></i>
@@ -50,7 +52,7 @@
       sessionStorage.setItem("workflow-trigger", JSON.stringify(createEmptyComponent("{% trans 'product.workflow.trigger.description' %}")));
     }
     var trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
-    createComponentElement("{% trans 'product.workflow.trigger' %}", trigger.typeDescription, trigger.moduleLogo, "trigger", 0, trigger.selected);
+    createComponentElement("{% trans 'product.workflow.trigger' %}", trigger.typeDescription, trigger.moduleLogo, "trigger", -1, trigger.selected);
     if (sessionStorage.getItem("workflow-actions") === null) {
       var component = createEmptyComponent("{% trans 'product.workflow.action.description' %}");
       component.actionIndex = 0;
@@ -118,9 +120,7 @@
       if (event.target.classList.contains("workflow-action-remove-container") || event.target.classList.contains("workflow-action-remove")) {
         return;
       }
-      if (type === "action") {
-        sessionStorage.setItem("workflow-action-index", index.toString());
-      }
+      sessionStorage.setItem("workflow-action-index", index.toString());
       window.location.href = "/workflow/" + type + "/";
     }
     document.getElementById("workflow-components").appendChild(componentContainer);

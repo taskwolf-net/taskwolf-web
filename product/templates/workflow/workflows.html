@@ -16,13 +16,15 @@
             <ul id="workflows-owner-dropdown-list" class="dropdown-menu dropdown-menu-dark">
             </ul>
           </div>
-          <div id="workflows-search-box">
-            <input id="workflows-search-input" placeholder=" {% trans 'product.workflows.search' %}" type="text" class="form-control" value="" autocomplete="off">
-            <button type="button">
-              <i class="fa fa-search"></i>
-            </button>
+          <div class="d-flex w-100">
+            <div id="workflows-search-box">
+              <input id="workflows-search-input" placeholder=" {% trans 'product.workflows.search' %}" type="text" class="form-control" value="" autocomplete="off">
+              <button type="button">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+            <button type="button" id="workflow-create" class="btn btn-primary btn-block">{% trans 'product.workflows.create' %}</button>
           </div>
-          <button type="button" id="workflow-create" class="btn btn-primary btn-block">{% trans 'product.workflows.create' %}</button>
         </div>
         <ul id="workflows-table-description">
           <li id="workflows-table-description-name">

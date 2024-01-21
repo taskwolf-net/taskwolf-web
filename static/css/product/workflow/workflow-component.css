@@ -171,18 +171,18 @@ input:-webkit-autofill:active{
 
 #workflow-component-account-skip {
   float: right;
+  width: 200px;
   margin-top: 2%;
   margin-right: 2%;
-  width: 25%;
 }
 
 #workflow-component-account-skip button {
   width: 100%;
 }
 
-@media (max-width: 1000px) {
-  #workflow-component-account-skip {
-    width: 50%;
+@media (max-width: 800px) {
+  #workflow-component-account-description {
+    width: 90%;
   }
 }
 
@@ -201,7 +201,7 @@ input:-webkit-autofill:active{
 }
 
 .dropdown-item {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .workflow-component-event-description {
@@ -305,6 +305,13 @@ input:-webkit-autofill:active{
   margin: auto;
 }
 
+@media (max-width: 500px) {
+  .workflow-component-specifications-input-container, .workflow-component-specifications-select-container {
+    width: 95%;
+  }
+}
+
+
 .workflow-component-specifications-select-container button {
   width: 100%;
 }
@@ -363,6 +370,7 @@ input:-webkit-autofill:active{
   list-style-type: none;
   width: 50%;
   margin: auto;
+  padding: 0;
   text-align: center;
 }
 
@@ -386,33 +394,33 @@ input:-webkit-autofill:active{
   display: none;
 }
 
+@media (max-width: 1200px) {
+  .workflow-component-specifications-selected-item p {
+    display: none;
+  }
+
+  #workflow-component-specifications-placeholders-list {
+    width: 80%;
+  }
+}
+
+@media (max-width: 575px) {
+    #workflow-component-specifications-placeholders-list {
+        width: 90%;
+    }
+}
+
 .workflow-component-reset {
   float: right;
   margin-top: 2%;
   margin-right: 2%;
-  width: 25%;
-}
-
-.workflow-component-reset button {
-  width: 100%;
-}
-
-@media (max-width: 1000px) {
-  .workflow-component-reset {
-    width: 50%;
-  }
 }
 
 #workflow-component-adopt {
-  width: 20%;
-  margin: auto;
+  text-align: center;
   margin-top: 5%;
   margin-bottom: 2%;
   transition-duration: 1s;
-}
-
-#workflow-component-adopt button {
-  width: 100%;
 }
 
 .workflow-component-adopt-enabled {

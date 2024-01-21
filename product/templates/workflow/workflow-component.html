@@ -472,7 +472,7 @@
         specificationValues = {};
         updateAdoptability(false);
         fillSpecificationsInputs();
-      }).classList.add("w-50");
+      });
     });
   }
 
@@ -618,7 +618,7 @@
 
   function displayPlaceholdersTabs() {
     var trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
-    if (trigger.content === "" && trigger.type === "") {
+    if ((trigger.content === "" && trigger.type === "") || sessionStorage.getItem("workflow-action-index") === "-1") {
       document.getElementById("workflow-component-specifications-placeholders-empty").classList.remove("d-none");
       return;
     }

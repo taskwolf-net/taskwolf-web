@@ -46,6 +46,11 @@ input:-webkit-autofill:active{
   font-weight: bold;
 }
 
+#workflow-modification {
+  display: flex;
+  width: 100%;
+}
+
 #workflow-publish {
   margin-left: auto;
 }
@@ -70,6 +75,28 @@ input:-webkit-autofill:active{
 
 #workflow-delete {
   margin-right: auto;
+}
+
+@media (max-width: 1000px) {
+  #workflow-header {
+    margin-bottom: 2%;
+  }
+
+  #workflow-modification {
+    display: block;
+    margin-top: 50px;
+  }
+
+  #workflow-delete, #workflow-publish {
+    display: block;
+    margin: 20px auto 20px;
+  }
+}
+
+@media (max-width: 575px) {
+  #workflow-modification {
+    margin-top: 30px;
+  }
 }
 
 #workflow-timeline {

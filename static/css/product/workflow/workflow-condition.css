@@ -57,6 +57,12 @@ input:-webkit-autofill:active{
   margin: auto;
 }
 
+@media (max-width: 500px) {
+  .workflow-condition-input-container, .workflow-condition-select-container {
+    width: 95%;
+  }
+}
+
 .workflow-condition-select-container button {
   width: 100%;
 }
@@ -115,6 +121,7 @@ input:-webkit-autofill:active{
   list-style-type: none;
   width: 50%;
   margin: auto;
+  padding: 0;
   text-align: center;
 }
 
@@ -138,29 +145,25 @@ input:-webkit-autofill:active{
   float: right;
   margin-top: 2%;
   margin-right: 2%;
-  width: 20%;
 }
 
-.workflow-condition-reset button {
-  width: 100%;
+@media (max-width: 1200px) {
+  #workflow-condition-placeholders-list {
+    width: 80%;
+  }
 }
 
 @media (max-width: 575px) {
-  .workflow-condition-reset {
-    width: 30%;
+  #workflow-condition-placeholders-list {
+    width: 90%;
   }
 }
 
 #workflow-condition-adopt {
-  width: 20%;
-  margin: auto;
+  text-align: center;
   margin-top: 5%;
   margin-bottom: 2%;
   transition-duration: 1s;
-}
-
-#workflow-condition-adopt button {
-  width: 100%;
 }
 
 .workflow-condition-adopt-enabled {
