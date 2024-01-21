@@ -271,7 +271,7 @@ msgstr "here"
 
 # ORGANIZATION
 msgid "product.organization.owner"
-msgstr "Owner"
+msgstr "Owner:"
 msgid "product.organization.members"
 msgstr "Members:"
 msgid "product.organization.copy.link"
