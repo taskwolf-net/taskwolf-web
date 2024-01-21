@@ -1,6 +1,6 @@
 #sidebar {
   position: fixed;
-  width: 300px;
+  width: 300px !important;
   color: white;
   height: 100%;
   transition: 0s;
