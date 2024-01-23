@@ -35,6 +35,13 @@
 </html>
 
 <script>
+  $(document).ready(function() {
+    var rememberMe = Cookie.find("taskwolf-remember-me");
+    if (rememberMe != null) {
+      document.getElementById("email").value = rememberMe;
+    }
+  });
+
   document.getElementById("password").addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -43,6 +50,10 @@
   });
 
   document.getElementById('login').onclick = function(event) {
+    if (document.getElementById("remember-check").checked) {
+      Cookie.create("taskwolf-remember-me", document.getElementById("email").value,
+        12 * 30 * 24 * 60 * 60);
+    }
     let request = new HttpRequest("https://api.taskwolf.net/v1/verification/login/", "POST", [{key: "Content-Type", value: "application/json"}],
       {email: document.getElementById("email").value, password: document.getElementById("password").value});
     request.send(function (status, responseText) {
