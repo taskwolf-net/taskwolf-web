@@ -6,7 +6,7 @@
     {% include 'templates/neutral-header.html' %}
     <div class="settings-container">
       {% include 'templates/settings-sidebar.html' %}
-      <div class="settings-content">
+      <div id="settings-account-content" class="settings-content d-none">
         <h1 class="settings-headline">{% trans 'settings.account.headline' %}</h1>
         <div id="settings-account-password-container">
           <h3 id="settings-account-password-headline">{% trans 'settings.account.password.headline' %}</h3>
@@ -46,11 +46,32 @@
           <button id="settings-account-delete-button" type="button" class="btn btn-danger">{% trans 'settings.account.delete' %}</button>
         </div>
       </div>
+      <div id="settings-account-locked" class="settings-content d-none">
+        <h1 class="settings-headline">{% trans 'settings.account.headline' %}</h1>
+        <div id="settings-account-locked-information">
+          <h3>{% trans 'settings.account.password.set.title' %}</h3>
+          <p>{% trans 'settings.account.password.set.description' %}</p>
+          <button id="settings-account-set-password" type="button" class="btn btn-primary">{% trans 'settings.account.password.set' %}</button>
+        </div>
+      </div>
     </div>
   </body>
 </html>
 
 <script>
+  $(document).ready(function() {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/unlocked/", "GET", [{key: "Content-Type", value: "application/json"},
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
+    request.send(function (status, responseText) {
+      var unlocked = JSON.parse(responseText).unlocked;
+      if (unlocked) {
+        document.getElementById("settings-account-content").classList.remove("d-none");
+      } else {
+        document.getElementById("settings-account-locked").classList.remove("d-none");
+      }
+    });
+  });
+
   document.getElementById("settings-account-password-button").onclick = function(event) {
     var currentPasswordElement = document.getElementById("settings-account-current-password");
     var newPasswordElement = document.getElementById("settings-account-new-password");
@@ -137,4 +158,15 @@
       }
     });
   }
+
+  document.getElementById("settings-account-set-password").onclick = function(event) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/unlock/", "GET", [{key: "Content-Type", value: "application/json"},
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
+    request.send(function (status, responseText) {
+      swal("{% trans 'settings.account.password.set.successful.title' %}", "{% trans 'settings.account.password.set.successful.body' %}", "success").then(success => {
+        Cookie.destroy("token");
+        window.location.href = "/";
+      });
+    });
+  };
 </script>

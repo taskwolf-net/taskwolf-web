@@ -45,6 +45,21 @@
   display: block;
 }
 
+#settings-account-locked-information {
+  width: min(calc(800px - 5vw), 100%);
+  margin: auto;
+  margin-top: 5%;
+  text-align: center;
+}
+
+#settings-account-locked-information p {
+  margin-top: 4%;
+}
+
+#settings-account-locked-information button {
+  margin-top: 2%;
+}
+
 .swal-content__input {
   color: white;
   background-color: #34435a;
