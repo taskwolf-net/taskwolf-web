@@ -34,50 +34,49 @@
 </html>
 
 <script>
-  var targets;
   var apps;
   var appsCurrentNameFilter = "";
 
   $(document).ready(function() {
-    fetchTargetsData(function() {
+    fetchTargetsData(function(response) {
+      var targets = response.targets;
+      var currentTarget = response.currentTarget;
       for (var i = 0; i < targets.length; i++) {
-        addAccountTarget(targets[i]);
+        addTarget(targets[i]);
       }
-      var targetCookie = Cookie.find("taskwolf-organization-target");
-      if (targetCookie != null) {
-        selectAccountTarget(targets.filter((target) => target.id === targetCookie)[0]);
-      } else {
-        selectAccountTarget(targets[0]);
-      }
+      selectTarget(targets.filter((target) => target.id === currentTarget)[0]);
     });
     displayAccountApps();
   });
 
   function fetchTargetsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/owners/all/", "GET", [{key: "Content-Type", value: "application/json"},
+    let request = new HttpRequest("https://api.taskwolf.net/v1/targets/all/", "GET", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
     request.send(function (status, responseText) {
-      targets = JSON.parse(responseText).owners;
-      callback();
+      console.log(responseText);
+      callback(JSON.parse(responseText));
     });
   }
 
-  function addAccountTarget(target) {
+  function addTarget(target) {
     var targetElement = document.createElement("li");
     targetElement.classList.add("dropdown-item");
     var targetNameName = document.createElement("b");
     targetNameName.innerHTML = target.name;
     targetElement.appendChild(targetNameName);
     targetElement.onclick = function(event) {
-      selectAccountTarget(target);
+      selectTarget(target);
     }
     document.getElementById("account-apps-target-dropdown-list").appendChild(targetElement);
   }
 
-  function selectAccountTarget(target) {
-    Cookie.create("taskwolf-organization-target", target.id, 12 * 30 * 24 * 60 * 60);
-    document.getElementById("account-apps-target-dropdown-button").innerHTML = "{% trans 'target' %}: " + target.name;
-    displayAccountApps();
+  function selectTarget(target) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {target: target.id});
+    request.send(function (status, responseText) {
+      document.getElementById("account-apps-target-dropdown-button").innerHTML = "{% trans 'target' %}: " + target.name;
+      displayAccountApps();
+    });
   }
 
   function displayAccountApps() {
@@ -92,8 +91,8 @@
   }
 
   function fetchAppsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/account/apps/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {target: Cookie.find("taskwolf-organization-target")});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/account/apps/", "GET", [{key: "Content-Type", value: "application/json"},
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
     request.send(function (status, responseText) {
       apps = JSON.parse(responseText).apps;
       callback();

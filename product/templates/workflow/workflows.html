@@ -67,50 +67,49 @@
 
   $(document).ready(function() {
     workflows = [];
-    fetchOwnersData(function() {
-      for (var i = 0; i < owners.length; i++) {
-        addWorkflowOwner(owners[i]);
+    fetchTargetsData(function(response) {
+      var targets = response.targets;
+      var currentTarget = response.currentTarget;
+      for (var i = 0; i < targets.length; i++) {
+        addTarget(targets[i]);
       }
-      var ownerCookie = Cookie.find("taskwolf-organization-target");
-      if (ownerCookie != null) {
-        selectWorkflowOwner(owners.filter((owner) => owner.id === ownerCookie)[0]);
-      } else {
-        selectWorkflowOwner(owners[0]);
-      }
+      selectTarget(targets.filter((target) => target.id === currentTarget)[0]);
     });
   });
 
-  function fetchOwnersData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/owners/all/", "GET", [{key: "Content-Type", value: "application/json"},
+  function fetchTargetsData(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/targets/all/", "GET", [{key: "Content-Type", value: "application/json"},
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
     request.send(function (status, responseText) {
-      owners = JSON.parse(responseText).owners;
-      callback();
+      callback(JSON.parse(responseText));
     });
   }
 
-  function addWorkflowOwner(owner) {
-    var ownerElement = document.createElement("li");
-    ownerElement.classList.add("dropdown-item");
-    var ownerNameName = document.createElement("b");
-    ownerNameName.innerHTML = owner.name;
-    ownerElement.appendChild(ownerNameName);
-    ownerElement.onclick = function(event) {
-      selectWorkflowOwner(owner);
+  function addTarget(target) {
+    var targetElement = document.createElement("li");
+    targetElement.classList.add("dropdown-item");
+    var targetNameName = document.createElement("b");
+    targetNameName.innerHTML = target.name;
+    targetElement.appendChild(targetNameName);
+    targetElement.onclick = function(event) {
+      selectTarget(target);
     }
-    document.getElementById("workflows-owner-dropdown-list").appendChild(ownerElement);
+    document.getElementById("workflows-owner-dropdown-list").appendChild(targetElement);
   }
 
-  function selectWorkflowOwner(owner) {
-    document.getElementById("workflows-owner-dropdown-button").innerHTML = "{% trans 'product.workflows.owner' %}: " + owner.name;
-    Cookie.create("taskwolf-organization-target", owner.id, 12 * 30 * 24 * 60 * 60);
-    fetchWorkflowsData(function() {
-      displayWorkflows();
-      if (workflows.length === 0) {
-        document.getElementById("workflows-empty").style.display = "flex";
-      } else {
-        document.getElementById("workflows-empty").style.display = "none";
-      }
+  function selectTarget(target) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST", [{key: "Content-Type", value: "application/json"},
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {target: target.id});
+    request.send(function (status, responseText) {
+      document.getElementById("workflows-owner-dropdown-button").innerHTML = "{% trans 'target' %}: " + target.name;
+      fetchWorkflowsData(function() {
+        displayWorkflows();
+        if (workflows.length === 0) {
+          document.getElementById("workflows-empty").style.display = "flex";
+        } else {
+          document.getElementById("workflows-empty").style.display = "none";
+        }
+      });
     });
   }
 
