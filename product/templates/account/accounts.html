@@ -41,7 +41,7 @@
 
   function fetchAccountsData(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/accounts/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {target: Cookie.find("taskwolf-organization-target"), module: sessionStorage.getItem("account-app-identifier")});
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {module: sessionStorage.getItem("account-app-identifier")});
     request.send(function (status, responseText) {
       accounts = JSON.parse(responseText).accounts;
       callback();

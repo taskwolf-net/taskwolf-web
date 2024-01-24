@@ -22,7 +22,6 @@
       {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {user: "{{user}}", token: "{{token}}"});
     request.send(function (status, responseText) {
       Cookie.destroy("token");
-      Cookie.destroy("taskwolf-organization-target");
     });
   });
 </script>

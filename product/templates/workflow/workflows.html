@@ -114,8 +114,8 @@
   }
 
   function fetchWorkflowsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/selected/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {owner: Cookie.find("taskwolf-organization-target")});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/selected/", "GET", [{key: "Content-Type", value: "application/json"},
+      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
     request.send(function (status, responseText) {
       workflows = JSON.parse(responseText).workflows;
       callback();

@@ -365,8 +365,6 @@
     var requestBody = {name: name, description: description, trigger: trigger, actions: actions, conditions: conditions};
     if (isSelected) {
       requestBody.workflow = sessionStorage.getItem("workflow-id");
-    } else {
-      requestBody.owner = Cookie.find("taskwolf-organization-target");
     }
     console.log(requestBody);
     let request = new HttpRequest("https://api.taskwolf.net/v1/workflow" + (isSelected ? "/update/" : "/add/"), "POST", [{key: "Content-Type", value: "application/json"},

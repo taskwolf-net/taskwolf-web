@@ -129,7 +129,6 @@
           var success = JSON.parse(responseText).success;
           if (success === true) {
             Cookie.destroy("token");
-            Cookie.destroy("taskwolf-organization-target");
             swal("{% trans 'settings.account.delete.successful.title' %}", "{% trans 'settings.account.delete.successful.body' %}", "success").then(success => window.location.href = "/");
           } else {
             swal("{% trans 'settings.account.delete.failed.title' %}", "{% trans 'settings.account.delete.failed.body' %}", "error");
