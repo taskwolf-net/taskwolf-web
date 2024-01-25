@@ -78,8 +78,8 @@
   });
 
   function fetchTargetsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/targets/all/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
+    let request = new HttpRequest("https://api.taskwolf.net/v1/targets/all/", "GET",
+      []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });
@@ -98,8 +98,8 @@
   }
 
   function selectTarget(target) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {target: target.id});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST",
+      [], {target: target.id});
     request.send(function (status, responseText) {
       document.getElementById("dashboard-target-dropdown-button").innerHTML = "{% trans 'target' %}: " + target.name;
       displayDashboard();
@@ -136,8 +136,8 @@
   }
 
   function fetchStatisticsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/statistics/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
+    let request = new HttpRequest("https://api.taskwolf.net/v1/statistics/", "GET",
+      []);
     request.send(function (status, responseText) {
       statistics = JSON.parse(responseText);
       callback();

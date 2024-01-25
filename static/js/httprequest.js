@@ -7,6 +7,15 @@ class HttpRequest {
   }
 
   send(callback) {
+    this.headers.push({key: "Content-Type", value: "application/json"});
+    var token = Cookie.find("token");
+    if (token !== null) {
+      this.headers.push({key: "Authorization", value: "Bearer " + token});
+    }
+    var whitelistKey = Cookie.find("taskwolf-whitelist-key");
+    if (whitelistKey !== null) {
+      this.headers.push({key: "WHITELIST_KEY", value: whitelistKey});
+    }
     const xhr = new XMLHttpRequest();
     xhr.open(this.method, this.url);
     for (const entry of this.headers) {

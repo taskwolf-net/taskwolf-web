@@ -83,8 +83,8 @@
   document.getElementById("ticket-create").onclick = function(event) {
     var title = document.getElementById("ticket-title").value;
     var message =  document.getElementsByClassName("ql-editor")[0].innerHTML;
-    let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/create/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {title: title, type: ticketType, message: message});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/create/", "POST",
+      [], {title: title, type: ticketType, message: message});
     request.send(function (status, responseText) {
       swal("{% trans 'ticket.create.successful.title' %}", "{% trans 'ticket.create.successful.body' %}", "success").then(success => window.location.href = "/tickets/");
     });

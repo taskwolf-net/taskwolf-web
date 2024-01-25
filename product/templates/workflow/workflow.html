@@ -367,8 +367,8 @@
       requestBody.workflow = sessionStorage.getItem("workflow-id");
     }
     console.log(requestBody);
-    let request = new HttpRequest("https://api.taskwolf.net/v1/workflow" + (isSelected ? "/update/" : "/add/"), "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], requestBody);
+    let request = new HttpRequest("https://api.taskwolf.net/v1/workflow" + (isSelected ? "/update/" : "/add/"), "POST",
+      [], requestBody);
     request.send(function (status, responseText) {
       sessionStorage.removeItem("workflow-name");
       sessionStorage.removeItem("workflow-description");
@@ -396,8 +396,8 @@
       buttons: true,
     }).then(willDelete => {
       if (willDelete) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/remove/", "POST", [{key: "Content-Type", value: "application/json"},
-          {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {workflow: sessionStorage.getItem("workflow-id")});
+        let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/remove/", "POST",
+          [], {workflow: sessionStorage.getItem("workflow-id")});
         request.send(function (status, responseText) {
           swal("{% trans 'product.workflow.delete.successful.title' %}", "{% trans 'product.workflow.delete.successful.body' %}", "success").then(success => window.location.href = "/workflows/");
         });

@@ -53,8 +53,8 @@
   });
 
   function fetchTicketsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/tickets/personal/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
+    let request = new HttpRequest("https://api.taskwolf.net/v1/tickets/personal/", "GET",
+      []);
     request.send(function (status, responseText) {
       tickets = JSON.parse(responseText).tickets;
       callback();

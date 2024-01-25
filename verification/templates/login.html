@@ -54,7 +54,7 @@
       Cookie.create("taskwolf-remember-me", document.getElementById("email").value,
         12 * 30 * 24 * 60 * 60);
     }
-    let request = new HttpRequest("https://api.taskwolf.net/v1/verification/login/", "POST", [{key: "Content-Type", value: "application/json"}],
+    let request = new HttpRequest("https://api.taskwolf.net/v1/verification/login/", "POST", [],
       {email: document.getElementById("email").value, password: document.getElementById("password").value});
     request.send(function (status, responseText) {
       if (status == 200) {

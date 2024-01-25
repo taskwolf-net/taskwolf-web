@@ -38,8 +38,8 @@
   });
 
   function fetchProfilePicture(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/picture/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/picture/", "GET",
+      []);
     request.send(function (status, responseText) {
       profilePicture = JSON.parse(responseText).picture;
       callback();
@@ -47,8 +47,8 @@
   }
 
   function fetchUsername(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/username/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/username/", "GET",
+      []);
     request.send(function (status, responseText) {
       username = JSON.parse(responseText).username;
       callback();
@@ -56,8 +56,8 @@
   }
 
   function fetchTicketsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/find/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {ticket: "{{ticket}}"});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/find/", "POST",
+      [], {ticket: "{{ticket}}"});
     request.send(function (status, responseText) {
       ticket = JSON.parse(responseText);
       callback();
@@ -101,8 +101,8 @@
       buttons: true,
     }).then(willDelete => {
       if (willDelete) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/message/delete/", "POST", [{key: "Content-Type", value: "application/json"},
-          {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {ticket: ticket.id, message: id});
+        let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/message/delete/", "POST",
+          [], {ticket: ticket.id, message: id});
         request.send(function (status, responseText) {
           swal("{% trans 'ticket.message.delete.successful.title' %}", "{% trans 'ticket.message.delete.successful.body' %}", "success").then(success => window.location.reload());
         });
@@ -179,8 +179,8 @@
 
   document.getElementById("ticket-title-change").onclick = function(event) {
     var title = document.getElementById("ticket-title").value;
-    let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/rename/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {ticket: ticket.id, title: title});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/rename/", "POST",
+      [], {ticket: ticket.id, title: title});
     request.send(function (status, responseText) {
       swal("{% trans 'ticket.title.change.successful.title' %}", "{% trans 'ticket.title.change.successful.body' %}", "success").then(success => window.location.reload());
     });
@@ -188,8 +188,8 @@
 
   document.getElementById("ticket-message-add").onclick = function(event) {
     var message = document.getElementById("ticket-answer-field").firstElementChild.innerHTML;
-    let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/message/add/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {ticket: ticket.id, message: message});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/message/add/", "POST",
+      [], {ticket: ticket.id, message: message});
     request.send(function (status, responseText) {
       swal("{% trans 'ticket.message.add.successful.title' %}", "{% trans 'ticket.message.add.successful.body' %}", "success").then(success => window.location.reload());
     });
@@ -204,8 +204,8 @@
       buttons: true,
     }).then(willDelete => {
       if (willDelete) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/delete/", "POST", [{key: "Content-Type", value: "application/json"},
-          {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {ticket: ticket.id});
+        let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/delete/", "POST",
+          [], {ticket: ticket.id});
         request.send(function (status, responseText) {
           swal("{% trans 'ticket.delete.successful.title' %}", "{% trans 'ticket.delete.successful.body' %}", "success").then(success => window.location.href = "/tickets/");
         });

@@ -78,8 +78,8 @@
   });
 
   function fetchTargetsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/targets/all/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
+    let request = new HttpRequest("https://api.taskwolf.net/v1/targets/all/", "GET",
+      []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });
@@ -98,8 +98,8 @@
   }
 
   function selectTarget(target) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {target: target.id});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST",
+      [], {target: target.id});
     request.send(function (status, responseText) {
       document.getElementById("workflows-owner-dropdown-button").innerHTML = "{% trans 'target' %}: " + target.name;
       fetchWorkflowsData(function() {
@@ -114,8 +114,7 @@
   }
 
   function fetchWorkflowsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/selected/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
+    let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/selected/", "GET", []);
     request.send(function (status, responseText) {
       workflows = JSON.parse(responseText).workflows;
       callback();
@@ -180,8 +179,8 @@
     runLabel.innerHTML = "{% trans 'product.workflows.execute' %}";
     runButton.appendChild(runLabel);
     runButton.onclick = function (event) {
-      let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/manual/execute/", "POST", [{key: "Content-Type", value: "application/json"},
-        {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {workflow: id});
+      let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/manual/execute/", "POST",
+        [], {workflow: id});
       request.send(function (status, responseText) {
         swal("{% trans 'product.workflows.executed.title' %}", "{% trans 'product.workflows.executed.body' %}", "success");
       });
@@ -214,8 +213,7 @@
   }
 
   function clickWorkflow(id) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/find/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {workflow: id});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/find/", "POST", [], {workflow: id});
     request.send(function (status, responseText) {
       var workflow = JSON.parse(responseText);
       sessionStorage.setItem("workflow-selected", "true");
@@ -261,8 +259,7 @@
 
   function updateWorkflowState(id, state) {
     changeStateBlocked = true;
-    let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/state/change/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {workflow: id, armed: state});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/state/change/", "POST", [], {workflow: id, armed: state});
     request.send(function (status, responseText) {
       changeStateBlocked = false;
     });

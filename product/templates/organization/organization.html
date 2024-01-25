@@ -49,8 +49,8 @@
   function fetchOrganizationData(callback) {
     var location = window.location;
     var id = location.href.replace(location.host, "").replace(location.protocol, "").replace("organization", "").replaceAll("/", "");
-    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/selected/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {id: id});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/selected/", "POST",
+      [], {id: id});
     request.send(function (status, responseText) {
       organization = JSON.parse(responseText);
       callback();
@@ -72,7 +72,7 @@
         memberKickElement.classList.add("organization-member-kick", "fa", "fa-ban", "text-danger");
         memberKickElement.onclick = function (event) {
           let request = new HttpRequest("https://api.taskwolf.net/v1/organization/kick/", "POST",
-            [{key: "Content-Type", value: "application/json"}, {key: "Authorization", value: "Bearer " + Cookie.find("token")}],
+            [],
             {organization: organization.id, target: member.id});
           request.send(function (status, responseText) {
             location.reload();
@@ -134,8 +134,7 @@
     $('#organization-invite').tooltip('hide');
     applyTooltips(linkButton, document.getElementById("organization-members-header"), "{% trans 'product.organization.copied.link.tooltip' %}");
     $('#organization-invite').tooltip('show');
-    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/link/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {organization: organization.id});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/link/", "POST", [], {organization: organization.id});
     request.send(function (status, responseText) {
       navigator.clipboard.writeText(JSON.parse(responseText).link);
     });
@@ -147,8 +146,8 @@
     linkButton.classList.add("btn-primary");
     $('#organization-link-regenerate').tooltip('hide');
     applyTooltips(linkButton, document.getElementById("organization-members-header"), "{% trans 'product.organization.copy.link.tooltip' %}");
-    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/link/regenerate/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {organization: organization.id});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/link/regenerate/", "POST",
+      [], {organization: organization.id});
     request.send(function (status, responseText) {
 
     });
@@ -171,8 +170,8 @@
       buttons: true,
     }).then(willDelete => {
       if (willDelete) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/organization/delete/", "POST", [{key: "Content-Type", value: "application/json"},
-          {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {organization: organization});
+        let request = new HttpRequest("https://api.taskwolf.net/v1/organization/delete/", "POST",
+          [], {organization: organization});
         request.send(function (status, responseText) {
           swal("{% trans 'product.organization.delete.successful.title' %}", "{% trans 'product.organization.delete.successful.body' %}", "success").then(success => window.location.href = "/organizations/");
         });
@@ -189,8 +188,8 @@
       buttons: true,
     }).then(willDelete => {
       if (willDelete) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/organization/leave/", "POST", [{key: "Content-Type", value: "application/json"},
-          {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {organization: organization});
+        let request = new HttpRequest("https://api.taskwolf.net/v1/organization/leave/", "POST",
+          [], {organization: organization});
         request.send(function (status, responseText) {
           swal("{% trans 'product.organization.leave.successful.title' %}", "{% trans 'product.organization.leave.successful.body' %}", "success").then(success => window.location.href = "/organizations/");
         });

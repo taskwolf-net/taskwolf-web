@@ -25,8 +25,8 @@
   });
 
   function displayProfilePicture() {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/picture/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/picture/", "GET",
+      []);
     request.send(function (status, responseText) {
       var pictureElement = document.getElementById("profile-picture");
       pictureElement.src = JSON.parse(responseText).picture;

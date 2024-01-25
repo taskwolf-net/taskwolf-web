@@ -141,8 +141,8 @@
   });
 
   function fetchApplicationsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/modules/all/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
+    let request = new HttpRequest("https://api.taskwolf.net/v1/modules/all/", "GET",
+      []);
     request.send(function (status, responseText) {
       applications = JSON.parse(responseText).modules;
       callback();
@@ -260,8 +260,8 @@
   function displayAccountInformation() {
     var accountContentElement = document.getElementById("workflow-component-account-content");
     accountContentElement.innerHTML = "";
-    let request = new HttpRequest("https://api.taskwolf.net/v1/account/information/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {module: selectedApplication.toLowerCase()});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/account/information/", "POST",
+      [], {module: selectedApplication.toLowerCase()});
     request.send(function (status, responseText) {
       var information = JSON.parse(responseText);
       var logoLinkElement = document.createElement("a");
@@ -337,8 +337,8 @@
 
   function fillEventDropdown() {
     document.getElementById("workflow-component-event-dropdown-list").innerHTML = "";
-    let request = new HttpRequest("https://api.taskwolf.net/v1/components/find/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {componentType: "{{type}}", module: selectedApplication.toLowerCase()});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/components/find/", "POST",
+      [], {componentType: "{{type}}", module: selectedApplication.toLowerCase()});
     request.send(function (status, responseText) {
       var events = JSON.parse(responseText).components;
       for (var i = 0; i < events.length; i++) {
@@ -444,8 +444,8 @@
   }
 
   function fillSpecificationsInputs() {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/component/find/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {componentType: "{{type}}", module: selectedApplication.toLowerCase(), type: selectedEvent});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/component/find/", "POST",
+      [], {componentType: "{{type}}", module: selectedApplication.toLowerCase(), type: selectedEvent});
     request.send(function (status, responseText) {
       document.getElementById("workflow-component-specifications-input-list").innerHTML = "";
       var component = JSON.parse(responseText);
@@ -568,8 +568,8 @@
 
   function clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton, index, inputsLength) {
     dropdownList.innerHTML = "";
-    let request = new HttpRequest("https://api.taskwolf.net/v1/component/select/items/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {componentType: "{{type}}", module: selectedApplication.toLowerCase(), type: selectedEvent, previousInputs: specificationValues, select: identifier});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/component/select/items/", "POST",
+      [], {componentType: "{{type}}", module: selectedApplication.toLowerCase(), type: selectedEvent, previousInputs: specificationValues, select: identifier});
     request.send(function (status, responseText) {
       var items = JSON.parse(responseText).items;
       for (var i = 0; i < items.length; i++) {
@@ -668,8 +668,8 @@
     }
     var module = component.module;
     var type = component.type;
-    let request = new HttpRequest("https://api.taskwolf.net/v1/component/find/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {componentType: componentType, module: module, type: type});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/component/find/", "POST",
+      [], {componentType: componentType, module: module, type: type});
     request.send(function (status, responseText) {
       var outputVariables = JSON.parse(responseText).outputVariables;
       for (var i = 0; i < outputVariables.length; i++) {

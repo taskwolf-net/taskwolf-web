@@ -60,8 +60,8 @@
 
 <script>
   $(document).ready(function() {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/unlocked/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/unlocked/", "GET",
+      []);
     request.send(function (status, responseText) {
       var unlocked = JSON.parse(responseText).unlocked;
       if (unlocked) {
@@ -85,8 +85,8 @@
       swal("{% trans 'settings.account.password.mismatch.title' %}", "{% trans 'settings.account.password.mismatch.body' %}", "error");
       return;
     }
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/password/change/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {currentPassword: currentPasswordElement.value, newPassword: newPasswordElement.value});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/password/change/", "POST",
+      [], {currentPassword: currentPasswordElement.value, newPassword: newPasswordElement.value});
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
       if (response.success === false) {
@@ -106,8 +106,8 @@
     if (passwordElement.value === "" || emailElement.value === "") {
       return;
     }
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/email/change/request/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {password: passwordElement.value, newEmail: emailElement.value});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/email/change/request/", "POST",
+      [], {password: passwordElement.value, newEmail: emailElement.value});
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
       if (response.success === false) {
@@ -144,8 +144,8 @@
       buttons: true,
     }).then(result => {
       if (result != null) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/delete/", "POST", [{key: "Content-Type", value: "application/json"},
-          {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {password: result});
+        let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/delete/", "POST",
+          [], {password: result});
         request.send(function (status, responseText) {
           var success = JSON.parse(responseText).success;
           if (success === true) {
@@ -160,8 +160,8 @@
   }
 
   document.getElementById("settings-account-set-password").onclick = function(event) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/unlock/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/unlock/", "GET",
+      []);
     request.send(function (status, responseText) {
       swal("{% trans 'settings.account.password.set.successful.title' %}", "{% trans 'settings.account.password.set.successful.body' %}", "success").then(success => {
         Cookie.destroy("token");

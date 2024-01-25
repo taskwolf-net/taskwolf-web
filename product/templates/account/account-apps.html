@@ -50,8 +50,8 @@
   });
 
   function fetchTargetsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/targets/all/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
+    let request = new HttpRequest("https://api.taskwolf.net/v1/targets/all/", "GET",
+      []);
     request.send(function (status, responseText) {
       console.log(responseText);
       callback(JSON.parse(responseText));
@@ -71,8 +71,8 @@
   }
 
   function selectTarget(target) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}], {target: target.id});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST",
+      [], {target: target.id});
     request.send(function (status, responseText) {
       document.getElementById("account-apps-target-dropdown-button").innerHTML = "{% trans 'target' %}: " + target.name;
       displayAccountApps();
@@ -91,8 +91,8 @@
   }
 
   function fetchAppsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/account/apps/", "GET", [{key: "Content-Type", value: "application/json"},
-      {key: "Authorization", value: "Bearer " + Cookie.find("token")}]);
+    let request = new HttpRequest("https://api.taskwolf.net/v1/account/apps/", "GET",
+      []);
     request.send(function (status, responseText) {
       apps = JSON.parse(responseText).apps;
       callback();

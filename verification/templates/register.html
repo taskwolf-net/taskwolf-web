@@ -64,7 +64,7 @@
       swal("Registration failed!", "You have to accept the terms of service and privacy policy to continue!", "error");
       return;
     }
-    let request = new HttpRequest("https://api.taskwolf.net/v1/verification/register/", "POST", [{key: "Content-Type", value: "application/json"}],
+    let request = new HttpRequest("https://api.taskwolf.net/v1/verification/register/", "POST", [],
       {email: emailInput.value, name: usernameInput.value, password: passwordInput.value});
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
