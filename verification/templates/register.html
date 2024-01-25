@@ -14,13 +14,20 @@
         <label for="username" class="form-label">Username</label>
         <input type="username" id="username" class="form-control" placeholder="Username">
       </div>
-      <div class="form-outline mb-4">
+      <div class="form-outline mb-4 was-validated">
         <label for="password" class="form-label">Password</label>
-        <input type="password" id="password" class="form-control" placeholder="Password"/>
+        <input type="password" class="form-control" id="password" minlength="8" name="password" placeholder="Password" required>
+        <div class="progress mt-3" style="height: 5px;">
+          <div id="progressbar" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 1%;">
+          </div>
+        </div>
+        <div id="feedbackin" class="valid-feedback"></div>
+        <div id="feedbackirn" class="invalid-feedback">8 more characters, Special characters, Upper case letters, Numbers, Lower case letters</div>
       </div>
       <div class="form-check">
         <input type="checkbox" class="form-check-input" id="legal-check">
-        <label class="form-check-label" for="legal-check">By creating your account, you agree to the
+        <label class="form-check-label" for="legal-check">
+          By creating your account, you agree to the
           <a class="text-decoration-none" href="/">Terms of Service</a> and
           <a class="text-decoration-none" href="/">Privacy Policy</a></label>
       </div>
@@ -49,6 +56,10 @@
       swal("Registration failed!", "Please fill in all fields", "error");
       return;
     }
+    if (!passwordInput.checkValidity()) {
+      swal("Registration failed!", "The password entered does not meet the requirements!", "error");
+      return;
+    }
     if (!document.getElementById("legal-check").checked) {
       swal("Registration failed!", "You have to accept the terms of service and privacy policy to continue!", "error");
       return;
@@ -64,4 +75,80 @@
       }
     });
   };
+
+  passwordInput.addEventListener('keypress', function(event) {
+    updatePasswordProgress()
+  });
+
+  passwordInput.addEventListener('keyup', function(event) {
+    updatePasswordProgress();
+  });
+
+  var passwordMatchedCases = [];
+  passwordMatchedCases.push("[!@#$%&*_?]");
+  passwordMatchedCases.push("[A-Z]");
+  passwordMatchedCases.push("[0-9]");
+  passwordMatchedCases.push("[a-z]");
+
+  var passwordMessageCases = [];
+  passwordMessageCases.push(" Special characters");
+  passwordMessageCases.push(" Upper case letters");
+  passwordMessageCases.push(" Numbers");
+  passwordMessageCases.push(" Lower case letters");
+
+  function updatePasswordProgress() {
+    var messageCases = passwordMessageCases.slice();
+    var status = 0;
+    for (var i = 0; i < passwordMatchedCases.length; i++) {
+      if (new RegExp(passwordMatchedCases[i]).test(passwordInput.value)) {
+        messageCases.splice(messageCases.indexOf(passwordMessageCases[i]), 1);
+        status++;
+      }
+    }
+    if (passwordInput.value.length >= 8) {
+      status++;
+    }
+    var progress;
+    var strength;
+    switch (status) {
+      case 0:
+        strength = "";
+        progress = 1;
+        break;
+      case 1:
+        strength = "Too Weak";
+        progress = 15;
+        break;
+      case 2:
+        strength = "Very Weak";
+        progress = 30;
+        break;
+      case 3:
+        strength = "Weak";
+        progress = 45;
+        break;
+      default:
+        strength = "Strong";
+        progress = 75;
+        break;
+    }
+    progress += passwordInput.value.length;
+    var information = "";
+    var progressBarClass;
+    if (progress >= 75 && passwordInput.value.length >= 8) {
+      passwordInput.setCustomValidity("");
+      progressBarClass = "bg-success";
+      information = "Strong";
+    } else {
+      passwordInput.setCustomValidity(strength);
+      progressBarClass = "bg-danger";
+      if(passwordInput.value.length < 8) {
+        information += (8 - passwordInput.value.length) + " more characters, ";
+      }
+      information += messageCases;
+    }
+    $("#feedbackin, #feedbackirn").text(information);
+    $("#progressbar").removeClass("bg-danger bg-warning bg-success").addClass(progressBarClass);
+    $("#progressbar").width(progress + "%");
+  }
 </script>
