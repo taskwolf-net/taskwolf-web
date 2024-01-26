@@ -14,7 +14,7 @@ class HttpRequest {
     }
     var whitelistKey = Cookie.find("taskwolf-whitelist-key");
     if (whitelistKey !== null) {
-      this.headers.push({key: "WHITELIST_KEY", value: whitelistKey});
+      this.headers.push({key: "WHITELIST-KEY", value: whitelistKey});
     }
     const xhr = new XMLHttpRequest();
     xhr.open(this.method, this.url);

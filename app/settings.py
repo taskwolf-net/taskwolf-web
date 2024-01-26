@@ -21,6 +21,7 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
 INSTALLED_APPS = [
   'base.apps.BaseConfig',
+  'whitelist.apps.WhitelistConfig',
   'errors.apps.ErrorsConfig',
   'home.apps.HomeConfig',
   'verification.apps.VerificationConfig',
@@ -46,6 +47,7 @@ MIDDLEWARE = [
   'django.contrib.messages.middleware.MessageMiddleware',
   'django.middleware.clickjacking.XFrameOptionsMiddleware',
   'corsheaders.middleware.CorsMiddleware',
+  'whitelist.middleware.WhitelistMiddleware',
 ]
 
 CSRF_TRUSTED_ORIGINS = ["https://taskwolf.net"]
@@ -119,3 +121,5 @@ LANGUAGES = (
   ('en', 'English'),
   ('de', 'Deutsch'),
 )
+
+WHITELIST = True

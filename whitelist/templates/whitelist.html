@@ -1,0 +1,40 @@
+{% load static %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body>
+    <form id="whitelist-container">
+      <h1 class="text-light">Whitelist</h1></br>
+      <div class="form-outline mb-4">
+        <label for="key" class="form-label">Key</label>
+        <input type="password" id="key" class="form-control" placeholder="Key">
+      </div>
+      <button type="button" id="verify" class="btn btn-primary mb-4">VERIFY</button></br>
+      <label id="password-reset-status" class="text-danger"></label>
+    </form>
+  </body>
+</html>
+
+<script>
+  document.getElementById("key").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      document.getElementById("verify").click();
+    }
+  });
+
+  document.getElementById('verify').onclick = function() {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/whitelist/isValid/", "POST", [],
+      {key: document.getElementById("key").value});
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      if (response.isValid === true) {
+        Cookie.create("taskwolf-whitelist-key", document.getElementById("key").value,
+          12 * 30 * 24 * 60 * 60);
+        window.location.href = "/";
+      } else {
+        document.getElementById("password-reset-status").innerText = "Unfortunately, the key you entered was incorrect. Please try again!";
+        document.getElementById("key").value = "";
+      }
+    });
+  };
+</script>
