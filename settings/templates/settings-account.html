@@ -15,9 +15,15 @@
               <label for="settings-account-current-password" class="form-label">{% trans 'settings.account.password.current.password' %}</label>
               <input id="settings-account-current-password" type="password" class="form-control" placeholder="{% trans 'settings.account.password.current.password' %}">
             </div>
-            <div class="form-outline mb-4">
+            <div class="form-outline mb-4 was-validated">
               <label for="settings-account-new-password" class="form-label">{% trans 'settings.account.password.new.password' %}</label>
-              <input id="settings-account-new-password" type="password" class="form-control" placeholder="{% trans 'settings.account.password.new.password' %}">
+              <input type="password" class="form-control" id="settings-account-new-password" minlength="8" name="password" placeholder="{% trans 'settings.account.password.new.password' %}" required>
+              <div class="progress mt-3" style="height: 5px;">
+                <div id="progressbar" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 1%;">
+                </div>
+              </div>
+              <div id="feedbackin" class="valid-feedback"></div>
+              <div id="feedbackirn" class="invalid-feedback">8 more characters, Special characters, Upper case letters, Numbers, Lower case letters</div>
             </div>
             <div class="form-outline mb-4">
               <label for="settings-account-new-password-repetition" class="form-label">{% trans 'settings.account.password.new.password.repetition' %}</label>
@@ -82,7 +88,15 @@
     if (newPasswordElement.value !== newPasswordRepetitionElement.value) {
       newPasswordElement.value = "";
       newPasswordRepetitionElement.value = "";
+      updatePasswordProgress();
       swal("{% trans 'settings.account.password.mismatch.title' %}", "{% trans 'settings.account.password.mismatch.body' %}", "error");
+      return;
+    }
+    if (!newPasswordElement.checkValidity()) {
+      newPasswordElement.value = "";
+      newPasswordRepetitionElement.value = "";
+      updatePasswordProgress();
+      swal("{% trans 'settings.account.password.insecure.title' %}", "{% trans 'settings.account.password.insecure.body' %}", "error");
       return;
     }
     let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/password/change/", "POST",
@@ -97,6 +111,7 @@
       currentPasswordElement.value = "";
       newPasswordElement.value = "";
       newPasswordRepetitionElement.value = "";
+      updatePasswordProgress();
     });
   };
 
@@ -169,4 +184,82 @@
       });
     });
   };
+
+  let passwordInput = document.getElementById("settings-account-new-password");
+
+  passwordInput.addEventListener('keypress', function(event) {
+    updatePasswordProgress()
+  });
+
+  passwordInput.addEventListener('keyup', function(event) {
+    updatePasswordProgress();
+  });
+
+  var passwordMatchedCases = [];
+  passwordMatchedCases.push("[!@#$%&*_?]");
+  passwordMatchedCases.push("[A-Z]");
+  passwordMatchedCases.push("[0-9]");
+  passwordMatchedCases.push("[a-z]");
+
+  var passwordMessageCases = [];
+  passwordMessageCases.push(" Special characters");
+  passwordMessageCases.push(" Upper case letters");
+  passwordMessageCases.push(" Numbers");
+  passwordMessageCases.push(" Lower case letters");
+
+  function updatePasswordProgress() {
+    var messageCases = passwordMessageCases.slice();
+    var status = 0;
+    for (var i = 0; i < passwordMatchedCases.length; i++) {
+      if (new RegExp(passwordMatchedCases[i]).test(passwordInput.value)) {
+        messageCases.splice(messageCases.indexOf(passwordMessageCases[i]), 1);
+        status++;
+      }
+    }
+    if (passwordInput.value.length >= 8) {
+      status++;
+    }
+    var progress;
+    var strength;
+    switch (status) {
+      case 0:
+        strength = "";
+        progress = 1;
+        break;
+      case 1:
+        strength = "Too Weak";
+        progress = 15;
+        break;
+      case 2:
+        strength = "Very Weak";
+        progress = 30;
+        break;
+      case 3:
+        strength = "Weak";
+        progress = 45;
+        break;
+      default:
+        strength = "Strong";
+        progress = 75;
+        break;
+    }
+    progress += passwordInput.value.length;
+    var information = "";
+    var progressBarClass;
+    if (progress >= 75 && passwordInput.value.length >= 8) {
+      passwordInput.setCustomValidity("");
+      progressBarClass = "bg-success";
+      information = "Strong";
+    } else {
+      passwordInput.setCustomValidity(strength);
+      progressBarClass = "bg-danger";
+      if(passwordInput.value.length < 8) {
+        information += (8 - passwordInput.value.length) + " more characters, ";
+      }
+      information += messageCases;
+    }
+    $("#feedbackin, #feedbackirn").text(information);
+    $("#progressbar").removeClass("bg-danger bg-warning bg-success").addClass(progressBarClass);
+    $("#progressbar").width(progress + "%");
+  }
 </script>
