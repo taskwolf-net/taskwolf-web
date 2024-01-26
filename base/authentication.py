@@ -21,7 +21,7 @@ def authentication_required(function):
 async def isAuthenticated(request):
   token = request.COOKIES.get('token')
   if (token is None):
-    return None
+    return False
   headers = {}
   applyWhitelistKey(request, headers)
   response = await asyncio.get_event_loop().run_in_executor(None,
