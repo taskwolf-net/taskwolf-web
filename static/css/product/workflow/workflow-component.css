@@ -334,6 +334,10 @@ input:-webkit-autofill:active{
   white-space: pre;
 }
 
+.workflow-component-specification-select-empty:hover {
+  background-color: rgba(0,0,0,0) !important;
+}
+
 .workflow-component-specification-headline {
   position: absolute;
 }

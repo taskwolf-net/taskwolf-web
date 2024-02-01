@@ -594,6 +594,15 @@
           selectedComponent = {};
         }
       }
+      if (items.length === 0) {
+        var itemElement = document.createElement("li");
+        itemElement.classList.add("dropdown-item");
+        itemElement.classList.add("workflow-component-specification-select-empty");
+        var itemNameName = document.createElement("b");
+        itemNameName.innerHTML = "{% trans 'product.workflow.component.specifications.empty' %}";
+        itemElement.appendChild(itemNameName);
+        dropdownList.appendChild(itemElement);
+      }
     });
   }
 
