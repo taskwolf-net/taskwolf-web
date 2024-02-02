@@ -3,34 +3,36 @@
 <html lang="en">
   {% include 'templates/head.html' %}
   <body>
-    {% include 'templates/neutral-header.html' %}
+    {% include 'templates/settings-header.html' %}
     <div class="settings-container">
       {% include 'templates/settings-sidebar.html' %}
-      <div class="settings-content">
-        <h1 class="settings-headline">{% trans 'settings.notification.headline' %}</h1>
-        <div id="settings-notification-general-container">
-          <h3 id="settings-notification-general-headline">{% trans 'settings.notification.general.headline' %}</h3>
-          <form>
-            <div class="form-outline mb-4 d-flex">
-              <label id="settings-notification-general" class="switch">
-                <input id="settings-notification-general-input" type="checkbox">
-                <span class="slider slider-green round"></span>
-              </label>
-              <label class="switch-label">{% trans 'settings.notification.general' %}</label>
-            </div>
-          </form>
-        </div>
-        <div id="settings-notification-specific-container">
-          <h3 id="settings-notification-specific-headline">{% trans 'settings.notification.specific.headline' %}</h3>
-          <form>
-            <div class="form-outline mb-4 d-flex">
-              <label id="settings-notification-workflow-fail" class="switch">
-                <input id="settings-notification-workflow-fail-input" type="checkbox">
-                <span class="slider round"></span>
-              </label>
-              <label class="switch-label">{% trans 'settings.notification.workflow.fail' %}</label>
-            </div>
-          </form>
+      <div class="sidebar-influenced">
+        <div class="settings-content">
+          <h1 class="settings-headline">{% trans 'settings.notification.headline' %}</h1>
+          <div id="settings-notification-general-container">
+            <h3 id="settings-notification-general-headline">{% trans 'settings.notification.general.headline' %}</h3>
+            <form>
+              <div class="form-outline mb-4 d-flex justify-content-between">
+                <label id="settings-notification-general" class="switch">
+                  <input id="settings-notification-general-input" type="checkbox">
+                  <span class="slider slider-green round"></span>
+                </label>
+                <label class="switch-label">{% trans 'settings.notification.general' %}</label>
+              </div>
+            </form>
+          </div>
+          <div id="settings-notification-specific-container">
+            <h3 id="settings-notification-specific-headline">{% trans 'settings.notification.specific.headline' %}</h3>
+            <form>
+              <div class="form-outline mb-4 d-flex justify-content-between">
+                <label id="settings-notification-workflow-fail" class="switch">
+                  <input id="settings-notification-workflow-fail-input" type="checkbox">
+                  <span class="slider round"></span>
+                </label>
+                <label class="switch-label">{% trans 'settings.notification.workflow.fail' %}</label>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>

@@ -2,13 +2,13 @@
   width: min(calc(1500px - 15vw), 95%);
   display: flex;
   margin: auto;
-  margin-top: 2%;
   color: white;
 }
 
 .settings-content {
   width: 100%;
   margin-left: 5%;
+  margin-top: 2%;
 }
 
 .settings-headline {
@@ -46,8 +46,36 @@ form input:-webkit-autofill:active{
   font-size: 20px;
 }
 
+@media(max-width: 1400px) {
+  .settings-container {
+    width: 100%;
+  }
+
+  .settings-content {
+    width: 90%;
+    margin: auto;
+    margin-top: 2%;
+  }
+}
+
 @media (max-width: 1200px) {
   form {
     width: 90%;
+  }
+
+  .settings-headline {
+    font-size: clamp(26px, 3.5vw, 36px) !important;
+  }
+}
+
+@media (max-width: 575px) {
+  .settings-headline {
+    font-size: 24px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .settings-headline {
+    font-size: 22px !important;
   }
 }

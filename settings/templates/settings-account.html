@@ -3,61 +3,63 @@
 <html lang="en">
   {% include 'templates/head.html' %}
   <body>
-    {% include 'templates/neutral-header.html' %}
+    {% include 'templates/settings-header.html' %}
     <div class="settings-container">
       {% include 'templates/settings-sidebar.html' %}
-      <div id="settings-account-content" class="settings-content d-none">
-        <h1 class="settings-headline">{% trans 'settings.account.headline' %}</h1>
-        <div id="settings-account-password-container">
-          <h3 id="settings-account-password-headline">{% trans 'settings.account.password.headline' %}</h3>
-          <form>
-            <div class="form-outline mb-4">
-              <label for="settings-account-current-password" class="form-label">{% trans 'settings.account.password.current.password' %}</label>
-              <input id="settings-account-current-password" type="password" class="form-control" placeholder="{% trans 'settings.account.password.current.password' %}">
-            </div>
-            <div class="form-outline mb-4 was-validated">
-              <label for="settings-account-new-password" class="form-label">{% trans 'settings.account.password.new.password' %}</label>
-              <input type="password" class="form-control" id="settings-account-new-password" minlength="8" name="password" placeholder="{% trans 'settings.account.password.new.password' %}" required>
-              <div class="progress mt-3" style="height: 5px;">
-                <div id="progressbar" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 1%;">
-                </div>
+      <div class="sidebar-influenced">
+        <div id="settings-account-content" class="settings-content d-none">
+          <h1 class="settings-headline">{% trans 'settings.account.headline' %}</h1>
+          <div id="settings-account-password-container">
+            <h3 id="settings-account-password-headline">{% trans 'settings.account.password.headline' %}</h3>
+            <form>
+              <div class="form-outline mb-4">
+                <label for="settings-account-current-password" class="form-label">{% trans 'settings.account.password.current.password' %}</label>
+                <input id="settings-account-current-password" type="password" class="form-control" placeholder="{% trans 'settings.account.password.current.password' %}">
               </div>
-              <div id="feedbackin" class="valid-feedback"></div>
-              <div id="feedbackirn" class="invalid-feedback">8 more characters, Special characters, Upper case letters, Numbers, Lower case letters</div>
-            </div>
-            <div class="form-outline mb-4">
-              <label for="settings-account-new-password-repetition" class="form-label">{% trans 'settings.account.password.new.password.repetition' %}</label>
-              <input id="settings-account-new-password-repetition" type="password" class="form-control" placeholder="{% trans 'settings.account.password.new.password.repetition' %}">
-            </div>
-          </form>
-          <button id="settings-account-password-button" type="button" class="btn btn-success">{% trans 'settings.account.password.submit' %}</button>
+              <div class="form-outline mb-4 was-validated">
+                <label for="settings-account-new-password" class="form-label">{% trans 'settings.account.password.new.password' %}</label>
+                <input type="password" class="form-control" id="settings-account-new-password" minlength="8" name="password" placeholder="{% trans 'settings.account.password.new.password' %}" required>
+                <div class="progress mt-3" style="height: 5px;">
+                  <div id="progressbar" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 1%;">
+                  </div>
+                </div>
+                <div id="feedbackin" class="valid-feedback"></div>
+                <div id="feedbackirn" class="invalid-feedback">8 more characters, Special characters, Upper case letters, Numbers, Lower case letters</div>
+              </div>
+              <div class="form-outline mb-4">
+                <label for="settings-account-new-password-repetition" class="form-label">{% trans 'settings.account.password.new.password.repetition' %}</label>
+                <input id="settings-account-new-password-repetition" type="password" class="form-control" placeholder="{% trans 'settings.account.password.new.password.repetition' %}">
+              </div>
+            </form>
+            <button id="settings-account-password-button" type="button" class="btn btn-success">{% trans 'settings.account.password.submit' %}</button>
+          </div>
+          <div id="settings-account-email-container">
+            <h3 id="settings-account-email-headline">{% trans 'settings.account.email.headline' %}</h3>
+            <form>
+              <div class="form-outline mb-4">
+                <label for="settings-account-password" class="form-label">{% trans 'settings.account.email.password' %}</label>
+                <input id="settings-account-password" type="password" class="form-control" placeholder="{% trans 'settings.account.email.password' %}">
+              </div>
+              <div class="form-outline mb-4">
+                <label for="settings-account-email" class="form-label">{% trans 'settings.account.email.new.email' %}</label>
+                <input id="settings-account-email" type="email" class="form-control" placeholder="{% trans 'settings.account.email.new.email' %}">
+              </div>
+            </form>
+            <button id="settings-account-email-button" type="button" class="btn btn-success">{% trans 'settings.account.email.change' %}</button>
+          </div>
+          <div id="settings-account-delete-container">
+            <h3 id="settings-account-delete-headline">{% trans 'settings.account.delete.headline' %}</h3>
+            <p id="settings-account-delete-disclaimer" class="text-secondary my-3">{% trans 'settings.account.delete.disclaimer' %}</p>
+            <button id="settings-account-delete-button" type="button" class="btn btn-danger">{% trans 'settings.account.delete' %}</button>
+          </div>
         </div>
-        <div id="settings-account-email-container">
-          <h3 id="settings-account-email-headline">{% trans 'settings.account.email.headline' %}</h3>
-          <form>
-            <div class="form-outline mb-4">
-              <label for="settings-account-password" class="form-label">{% trans 'settings.account.email.password' %}</label>
-              <input id="settings-account-password" type="password" class="form-control" placeholder="{% trans 'settings.account.email.password' %}">
-            </div>
-            <div class="form-outline mb-4">
-              <label for="settings-account-email" class="form-label">{% trans 'settings.account.email.new.email' %}</label>
-              <input id="settings-account-email" type="email" class="form-control" placeholder="{% trans 'settings.account.email.new.email' %}">
-            </div>
-          </form>
-          <button id="settings-account-email-button" type="button" class="btn btn-success">{% trans 'settings.account.email.change' %}</button>
-        </div>
-        <div id="settings-account-delete-container">
-          <h3 id="settings-account-delete-headline">{% trans 'settings.account.delete.headline' %}</h3>
-          <p id="settings-account-delete-disclaimer" class="text-secondary my-3">{% trans 'settings.account.delete.disclaimer' %}</p>
-          <button id="settings-account-delete-button" type="button" class="btn btn-danger">{% trans 'settings.account.delete' %}</button>
-        </div>
-      </div>
-      <div id="settings-account-locked" class="settings-content d-none">
-        <h1 class="settings-headline">{% trans 'settings.account.headline' %}</h1>
-        <div id="settings-account-locked-information">
-          <h3>{% trans 'settings.account.password.set.title' %}</h3>
-          <p>{% trans 'settings.account.password.set.description' %}</p>
-          <button id="settings-account-set-password" type="button" class="btn btn-primary">{% trans 'settings.account.password.set' %}</button>
+        <div id="settings-account-locked" class="settings-content d-none">
+          <h1 class="settings-headline">{% trans 'settings.account.headline' %}</h1>
+          <div id="settings-account-locked-information">
+            <h3>{% trans 'settings.account.password.set.title' %}</h3>
+            <p>{% trans 'settings.account.password.set.description' %}</p>
+            <button id="settings-account-set-password" type="button" class="btn btn-primary">{% trans 'settings.account.password.set' %}</button>
+          </div>
         </div>
       </div>
     </div>

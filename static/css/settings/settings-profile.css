@@ -35,10 +35,3 @@
     margin-top: 5%;
   }
 }
-
-@media (max-width: 575px) {
-  #settings-profile-picture {
-    width: 90%;
-    height: fit-content;
-  }
-}

@@ -478,6 +478,10 @@ msgid "settings.language.headline"
 msgstr "Language Settings"
 msgid "settings.language.select"
 msgstr "Select your language"
+msgid "settings.language.english"
+msgstr "English"
+msgid "settings.language.german"
+msgstr "German"
 
 # NOTIFICATION
 msgid "settings.notification.headline"

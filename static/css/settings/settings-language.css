@@ -4,14 +4,20 @@
 }
 
 #settings-language-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 3%;
-  gap: 10%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  row-gap: 30px;
+  margin-top: 30px;
 }
 
 .settings-language {
+  position: relative;
+  display: grid;
+  text-align: center;
+  margin: auto;
+}
+
+.settings-language-flag {
   width: 192px;
   height: 108px;
   border: 2px #6d6d6d solid;
@@ -20,4 +26,10 @@
 
 .settings-language-selected {
   border: 4px #ffffff solid;
+}
+
+@media (max-width: 1000px) {
+  #settings-language-container {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
