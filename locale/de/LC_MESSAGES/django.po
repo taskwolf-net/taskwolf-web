@@ -46,6 +46,8 @@ msgid "target"
 msgstr "Ziel"
 
 # DASHBOARD
+msgid "product.dashboard.title"
+msgstr "Übersicht - Taskwolf"
 msgid "product.dashboard.headline"
 msgstr "Übersicht"
 msgid "product.dashboard.workflows"
@@ -72,6 +74,8 @@ msgid "product.dashboard.staffs"
 msgstr "Mitarbeiter"
 
 # WORKFLOWS
+msgid "product.workflows.title"
+msgstr "Workflows - Taskwolf"
 msgid "product.workflows.headline"
 msgstr "Deine Workflows"
 msgid "product.workflows.owner"
@@ -102,6 +106,10 @@ msgid "product.workflows.executed.body"
 msgstr "Du hast den workflow erfolgreich ausgeführt!"
 
 # WORKFLOW
+msgid "product.workflow.title"
+msgstr "Workflow - Taskwolf"
+msgid "product.workflow.create.title"
+msgstr "Workflow erstellen - Taskwolf"
 msgid "product.workflow.headline"
 msgstr "Workflow"
 msgid "product.workflow.delete"
@@ -136,6 +144,10 @@ msgid "product.workflow.condition.description"
 msgstr "Kann das Verhalten der folgenden Aktionen beeinflussen"
 
 # WORKFLOW - COMPONENT
+msgid "product.workflow.component.trigger.title"
+msgstr "Workflow Auslöser - Taskwolf"
+msgid "product.workflow.component.action.title"
+msgstr "Workflow Aktion - Taskwolf"
 msgid "product.workflow.component.headline.trigger"
 msgstr "Workflow Auslöser"
 msgid "product.workflow.component.headline.action"
@@ -200,6 +212,8 @@ msgid "product.workflow.component.adopt"
 msgstr "ÜBERNEHMEN"
 
 # WORKFLOW - CONDITION
+msgid "product.workflow.condition.title"
+msgstr "Workflow Bedingung - Taskwolf"
 msgid "product.workflow.condition.headline"
 msgstr "Workflow Bedingung"
 msgid "product.workflow.condition.inputs"
@@ -232,10 +246,14 @@ msgid "product.workflow.condition.adopt"
 msgstr "ÜBERNEHMEN"
 
 # WORKFLOW - TIMELINE
+msgid "product.workflow.timeline.title"
+msgstr "Workflow Verlauf - Taskwolf"
 msgid "product.workflow.timeline.headline"
 msgstr "Workflow Verlauf"
 
 # TEMPLATES
+msgid "product.templates.title"
+msgstr "Vorlagen - Taskwolf"
 msgid "product.templates.headline"
 msgstr "Vorlagen"
 msgid "product.templates.search"
@@ -250,6 +268,8 @@ msgid "product.templates.all"
 msgstr "Alle"
 
 # ORGANIZATIONS
+msgid "product.organizations.title"
+msgstr "Organisationen - Taskwolf"
 msgid "product.organizations.headline"
 msgstr "Deine Organisationen"
 msgid "product.organizations.search"
@@ -272,6 +292,8 @@ msgid "product.organizations.empty.link"
 msgstr "hier"
 
 # ORGANIZATION
+msgid "product.organization.title"
+msgstr "Organisation - Taskwolf"
 msgid "product.organization.owner"
 msgstr "Besitzer:"
 msgid "product.organization.members"
@@ -310,6 +332,8 @@ msgid "product.organization.leave.successful.body"
 msgstr "Du hast die Organisation erfolgreich verlassen!"
 
 # ORGANIZATION - CREATE
+msgid "product.organization.create.title"
+msgstr "Organisation erstellen - Taskwolf"
 msgid "product.organization.create.headline"
 msgstr "Organisation erstellen"
 msgid "product.organization.create.name"
@@ -318,6 +342,8 @@ msgid "product.organization.create.button"
 msgstr "ERSTELLEN"
 
 # ORGANIZATION - JOIN
+msgid "product.organization.join.title"
+msgstr "Organisation beitreten - Taskwolf"
 msgid "product.organization.join.successful.headline"
 msgstr "Der Beitritt war erfolgreich"
 msgid "product.organization.join.successful.description"
@@ -332,6 +358,8 @@ msgid "product.organization.join.failed.link.expired"
 msgstr "Der Einladungslink ist abgelaufen"
 
 # ACCOUNT - APPS
+msgid "product.account.apps.title"
+msgstr "Anwendungen - Taskwolf"
 msgid "product.account.apps.headline"
 msgstr "Anwendungen"
 msgid "product.account.apps.search"
@@ -340,6 +368,8 @@ msgid "product.account.apps.empty"
 msgstr "Du hast bisher noch keine Konten verknüpft."
 
 # ACCOUNTS
+msgid "product.accounts.title"
+msgstr "Konten - Taskwolf"
 msgid "product.accounts.headline"
 msgstr "Konten"
 msgid "product.accounts.empty"
@@ -356,6 +386,8 @@ msgid "product.accounts.account.delete.successful.body"
 msgstr "Das Konto wurde erfolgreich gelöscht!"
 
 # HELP
+msgid "product.help.title"
+msgstr "Hilfe - Taskwolf"
 msgid "product.help.headline"
 msgstr "Hilfe"
 
@@ -374,6 +406,8 @@ msgid "settings.sidebar.notifications"
 msgstr "Mitteilungen"
 
 # PROFILE
+msgid "settings.profile.title"
+msgstr "Profileinstellungen - Taskwolf"
 msgid "settings.profile.headline"
 msgstr "Profileinstellungen"
 msgid "settings.profile.name"
@@ -394,6 +428,8 @@ msgid "settings.profile.picture.edited.body"
 msgstr "Profilbild wurde erfolgreich bearbeitet!"
 
 # ACCOUNT
+msgid "settings.account.title"
+msgstr "Kontoeinstellungen - Taskwolf"
 msgid "settings.account.headline"
 msgstr "Kontoeinstellungen"
 msgid "settings.account.password.headline"
@@ -422,6 +458,8 @@ msgid "settings.account.password.successful.title"
 msgstr "Geändert!"
 msgid "settings.account.password.successful.body"
 msgstr "Dein Passwort wurde erfolgreich geändert!"
+msgid "settings.account.email.title"
+msgstr "Email ändern - Taskwolf"
 msgid "settings.account.email.headline"
 msgstr "Email ändern"
 msgid "settings.account.email.password"
@@ -474,6 +512,8 @@ msgid "settings.account.password.set.successful.body"
 msgstr "Sie haben die Anfrage zur Festlegung Ihres Passworts erfolgreich abgeschickt. Im Zuge dessen haben wir Ihnen eine E-Mail mit weiteren Anweisungen geschickt. Aus Sicherheitsgründen werden Sie nun von Ihrem Konto abgemeldet."
 
 # LANGUAGE
+msgid "settings.language.title"
+msgstr "Spracheinstellungen - Taskwolf"
 msgid "settings.language.headline"
 msgstr "Spracheinstellungen"
 msgid "settings.language.select"
@@ -484,6 +524,8 @@ msgid "settings.language.german"
 msgstr "Deutsch"
 
 # NOTIFICATION
+msgid "settings.notification.title"
+msgstr "Mitteilungseinstellungen - Taskwolf"
 msgid "settings.notification.headline"
 msgstr "Mitteilungseinstellungen"
 msgid "settings.notification.general.headline"
@@ -496,6 +538,8 @@ msgid "settings.notification.workflow.fail"
 msgstr "Benachrichtigungen über fehlgeschlagene Workflows"
 
 # TICKETS
+msgid "tickets.page.title"
+msgstr "Tickets - Taskwolf"
 msgid "tickets.headline"
 msgstr "Deine Tickets"
 msgid "tickets.search"
@@ -524,6 +568,8 @@ msgid "tickets.empty.link"
 msgstr "hier"
 
 # TICKET - CREATE
+msgid "ticket.create.page.title"
+msgstr "Ticket erstellen - Taskwolf"
 msgid "ticket.create.headline"
 msgstr "Ticket erstellen"
 msgid "ticket.create.title"
@@ -546,6 +592,8 @@ msgid "ticket.create.successful.body"
 msgstr "Du hast das Ticket erfolgreich erstellt!"
 
 # TICKET
+msgid "ticket.page.title"
+msgstr "Ticket - Taskwolf"
 msgid "ticket.headline"
 msgstr "Ticket"
 msgid "ticket.title"

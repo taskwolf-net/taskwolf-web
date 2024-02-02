@@ -1,40 +1,41 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from base.authentication import authentication_required, isAuthenticated
+from django.utils.translation import gettext
 
 @authentication_required
 async def workflows(request):
-  return render(request, 'workflow/workflows.html', {'title': 'Taskwolf - Workflows',
+  return render(request, 'workflow/workflows.html', {'title': gettext('product.workflows.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflows.css']})
 
 @authentication_required
 async def workflow(request, id):
-  return render(request, 'workflow/workflow.html', {'title': 'Taskwolf - Workflow',
+  return render(request, 'workflow/workflow.html', {'title': gettext('product.workflow.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflow.css']})
 
 @authentication_required
 async def workflowCreate(request):
-  return render(request, 'workflow/workflow.html', {'title': 'Taskwolf - Workflow - Create',
+  return render(request, 'workflow/workflow.html', {'title': gettext('product.workflow.create.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflow.css']})
 
 @authentication_required
 async def workflowTrigger(request):
-  return render(request, 'workflow/workflow-component.html', {'title': 'Taskwolf - Trigger',
+  return render(request, 'workflow/workflow-component.html', {'title': gettext('product.workflow.component.trigger.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflow-component.css'],
     'type': 'trigger', 'typename': "Trigger"})
 
 @authentication_required
 async def workflowAction(request):
-  return render(request, 'workflow/workflow-component.html', {'title': 'Taskwolf - Action',
+  return render(request, 'workflow/workflow-component.html', {'title': gettext('product.workflow.component.action.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflow-component.css'],
     'type': 'action', 'typename': "Action"})
 
 @authentication_required
 async def workflowCondition(request):
-  return render(request, 'workflow/workflow-condition.html', {'title': 'Taskwolf - Condition',
+  return render(request, 'workflow/workflow-condition.html', {'title': gettext('product.workflow.condition.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflow-condition.css']})
 
 @authentication_required
 async def workflowTimeline(request):
-  return render(request, 'workflow/workflow-timeline.html', {'title': 'Taskwolf - Timeline',
+  return render(request, 'workflow/workflow-timeline.html', {'title': gettext('product.workflow.timeline.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflow-timeline.css']})
