@@ -251,6 +251,40 @@ msgstr "Workflow Timeline - Taskwolf"
 msgid "product.workflow.timeline.headline"
 msgstr "Workflow Timeline"
 
+# DATABASES
+msgid "product.databases.title"
+msgstr "Databases - Taskwolf"
+msgid "product.databases.headline"
+msgstr "Your Databases"
+msgid "product.databases.owner"
+msgstr "Owner"
+msgid "product.databases.search"
+msgstr "Search for database..."
+msgid "product.databases.create"
+msgstr "CREATE"
+msgid "product.databases.name"
+msgstr "Name"
+msgid "product.databases.size"
+msgstr "Size"
+msgid "product.databases.empty.headline"
+msgstr "You have not yet created any databases."
+msgid "product.databases.empty.text"
+msgstr "Why don't you just create one "
+msgid "product.databases.empty.link"
+msgstr "here"
+
+# DATABASE
+
+# DATABASE - CREATE
+msgid "product.database.create.title"
+msgstr "Database create - Taskwolf"
+msgid "product.database.create.headline"
+msgstr "Create Database"
+msgid "product.database.create.name"
+msgstr "Name"
+msgid "product.database.create.button"
+msgstr "CREATE"
+
 # TEMPLATES
 msgid "product.templates.title"
 msgstr "Templates - Taskwolf"

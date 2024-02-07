@@ -1,5 +1,5 @@
 from django.urls import path, include
-from . import product, workflow, organization, account, template
+from . import product, workflow, database, organization, account, template
 
 urlpatterns = [
   path('dashboard/', product.dashboard),
@@ -10,6 +10,9 @@ urlpatterns = [
   path('workflow/timeline/', workflow.workflowTimeline),
   path('workflow/<str:id>/', workflow.workflow),
   path('workflow/', workflow.workflowCreate),
+  path('databases/', database.databases),
+  path('database/create/', database.databaseCreate),
+  path('database/<str:id>/', database.database),
   path('templates/', template.templates),
   path('organizations/', organization.organizations),
   path('organization/add/', organization.organizationCreate),
