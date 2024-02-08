@@ -103,7 +103,6 @@
   function fetchDatabasesData(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/tables/find/", "GET", []);
     request.send(function (status, responseText) {
-      console.log(responseText);
       databases = JSON.parse(responseText).tables;
       callback();
     });
@@ -136,7 +135,7 @@
     nameElement.classList.add("databases-list-name");
     nameDiv.appendChild(nameElement);
     entry.appendChild(nameDiv);
-    appendWorkflowsCell(entry, "size", size, "span");
+    appendDatabasesCell(entry, "size", size, "span");
     entry.onclick = function (event) {
 
     }
