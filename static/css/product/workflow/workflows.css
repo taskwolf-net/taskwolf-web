@@ -299,6 +299,7 @@ input:checked + .slider:before {
   justify-content: center;
   text-align: center;
   margin-top: 5%;
+  white-space: pre;
 }
 
 #workflows-empty-headline {
