@@ -13,7 +13,7 @@
         <a href="/" class="sidebar-link nav-link {% if 'process' in request.path %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-diagram-project" aria-hidden="true"></i>{% trans 'product.sidebar.processes' %}</a>
       </li>
       <li class="sidebar-item">
-        <a href="/databases/" class="sidebar-link nav-link {% if 'table' in request.path %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-database" aria-hidden="true"></i>{% trans 'product.sidebar.databases' %}</a>
+        <a href="/databases/" class="sidebar-link nav-link {% if 'database' in request.path %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-database" aria-hidden="true"></i>{% trans 'product.sidebar.databases' %}</a>
       </li>
       <li class="sidebar-item">
         <a href="/templates/" class="sidebar-link nav-link {% if request.path == '/templates/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-sheet-plastic" aria-hidden="true"></i>{% trans 'product.sidebar.templates' %}</a>
