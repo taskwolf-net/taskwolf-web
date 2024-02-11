@@ -11,7 +11,6 @@
         <div id="databases-header">
           <div id="databases-owner-dropdown" class="dropdown">
             <button id="databases-owner-dropdown-button" class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
-              {% trans 'product.databases.owner' %}
             </button>
             <ul id="databases-owner-dropdown-list" class="dropdown-menu dropdown-menu-dark">
             </ul>
@@ -34,8 +33,14 @@
           </li>
           <li>
             <div>
+              <span>{% trans 'product.databases.entries' %}</span>
+            </div>
+          </li>
+          <li>
+            <div>
               <span>{% trans 'product.databases.size' %}</span>
             </div>
+          </li>
         </ul>
         <ul id="databases-list">
         </ul>
@@ -115,7 +120,7 @@
       if(!(shouldDisplayDatabaseEntry(entry))) {
         continue;
       }
-      displayDatabase(entry.id, entry.name, entry.size);
+      displayDatabase(entry.id, entry.name, entry.entries, entry.size);
     }
   }
 
@@ -124,7 +129,7 @@
       entry.name.toLowerCase().includes(databasesCurrentNameFilter.toLowerCase());
   }
 
-  function displayDatabase(id, name, size) {
+  function displayDatabase(id, name, entries, size) {
     var entry = document.createElement('li');
     entry.role = "button";
     entry.classList.add("database-entry");
@@ -135,9 +140,10 @@
     nameElement.classList.add("databases-list-name");
     nameDiv.appendChild(nameElement);
     entry.appendChild(nameDiv);
+    appendDatabasesCell(entry, "entries", entries, "span");
     appendDatabasesCell(entry, "size", size, "span");
     entry.onclick = function (event) {
-
+      window.location.href = "/database/" + id + "/";
     }
     document.getElementById("databases-list").appendChild(entry);
   }

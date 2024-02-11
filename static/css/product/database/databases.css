@@ -100,15 +100,16 @@
 }
 
 #databases-list li div {
-  padding: 3%;
   display: flex;
+  width: 20%;
+  padding: 3%;
+  text-align: center;
   flex-direction: column;
-  width: 24%;
-  text-align: left;
 }
 
 .databases-entry-name {
-  width: 40% !important;
+  width: 60% !important;
+  text-align: left !important;
 }
 
 #databases-table-description {
@@ -125,53 +126,16 @@
 }
 
 #databases-table-description li {
-  width: 24%;
+  width: 20%;
   padding: 2% 3%;
+  text-align: center;
   font-weight: bold;
   font-size: 20px;
 }
 
 #databases-table-description-name {
-  width: 40% !important;
-}
-
-#databases-table-description-is-running {
-  width: 12% !important;
-  text-align: center;
-}
-
-#databases-table-description button {
-  border: none;
-  background-color: #222b38;
-  color: #9b9b9b;
-}
-
-@media (max-width: 2000px) {
-  #databases-list li div {
-    width: 20%;
-  }
-
-  #databases-table-description li {
-    width: 20%;
-  }
-}
-
-@media (max-width: 1000px) {
-  #databases-list li div {
-    width: 24%;
-  }
-
-  .databases-entry-name {
-    width: 28% !important;
-  }
-
-  #databases-table-description li {
-    width: 24%;
-  }
-
-  #databases-table-description-name {
-    width: 28% !important;
-  }
+  width: 60% !important;
+  text-align: left !important;
 }
 
 @media (max-width: 575px) {
