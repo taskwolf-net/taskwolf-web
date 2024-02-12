@@ -1,0 +1,217 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body>
+    {% include 'templates/product-header.html' %}
+    {% include 'templates/product-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="database-container">
+        <div id="database-header">
+          <h1 id="database-name"></h1>
+          <div id="database-modification">
+            <button id="database-delete" type="button" class="btn btn-danger">{% trans 'product.database.delete' %}</button>
+            <button id="database-rename" type="button" class="fa-solid fa-pen-to-square"></button>
+          </div>
+        </div>
+        <div id="database-table-container" class="table-responsive">
+          <table id="database-table" class="table dt-responsive nowrap">
+            <thead>
+              <tr>
+                <td><input class="form-check-input" type="checkbox"></td>
+                <th>Symbol</th>
+                <th>Company</th>
+                <th>Industry</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="table-body">
+              <tr>
+                <td><input class="form-check-input" type="checkbox"></td>
+                <td>Symbol</td>
+                <td>Company</td>
+                <td>Industry</td>
+                <td>Price</td>
+                <td>Status</td>
+                <td>
+                  <button type="button" class="database-row-settings fa-solid fa-ellipsis-vertical" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                  <ul class="dropdown-menu dropdown-menu-dark">
+                    <li class="d-flex justify-content-center mb-2"><h5>Row</h5></li>
+                    <li class="w-100 d-flex justify-content-center"><button type="button" class="w-75 btn btn-primary">EDIT</button></li>
+                    <li class="my-3"></li>
+                    <li class="w-100 d-flex justify-content-center" ><button type="button" class="w-75 btn btn-danger">DELETE</button></li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><input class="form-check-input" type="checkbox"></td>
+                <td>Symbol</td>
+                <td>Company</td>
+                <td>Industry</td>
+                <td>Price</td>
+                <td>Status</td>
+                <td>
+                  <button type="button" class="database-row-settings fa-solid fa-ellipsis-vertical" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                  <ul class="dropdown-menu dropdown-menu-dark">
+                    <li class="d-flex justify-content-center mb-2"><h5>Row</h5></li>
+                    <li class="w-100 d-flex justify-content-center"><button type="button" class="w-75 btn btn-primary">EDIT</button></li>
+                    <li class="my-3"></li>
+                    <li class="w-100 d-flex justify-content-center" ><button type="button" class="w-75 btn btn-danger">DELETE</button></li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><input class="form-check-input" type="checkbox"></td>
+                <td>Symbol</td>
+                <td>Company</td>
+                <td>Industry</td>
+                <td>Price</td>
+                <td>Status</td>
+                <td>
+                  <button type="button" class="database-row-settings fa-solid fa-ellipsis-vertical" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                  <ul class="dropdown-menu dropdown-menu-dark">
+                    <li class="d-flex justify-content-center mb-2"><h5>Row</h5></li>
+                    <li class="w-100 d-flex justify-content-center"><button type="button" class="w-75 btn btn-primary">EDIT</button></li>
+                    <li class="my-3"></li>
+                    <li class="w-100 d-flex justify-content-center" ><button type="button" class="w-75 btn btn-danger">DELETE</button></li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><input class="form-check-input" type="checkbox"></td>
+                <td>Symbol</td>
+                <td>Company</td>
+                <td>Industry</td>
+                <td>Price</td>
+                <td>Status</td>
+                <td>
+                  <button type="button" class="database-row-settings fa-solid fa-ellipsis-vertical" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                  <ul class="dropdown-menu dropdown-menu-dark">
+                    <li class="d-flex justify-content-center mb-2"><h5>Row</h5></li>
+                    <li class="w-100 d-flex justify-content-center"><button type="button" class="w-75 btn btn-primary">EDIT</button></li>
+                    <li class="my-3"></li>
+                    <li class="w-100 d-flex justify-content-center" ><button type="button" class="w-75 btn btn-danger">DELETE</button></li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td><input class="form-check-input" type="checkbox"></td>
+                <td>Symbol</td>
+                <td>Company</td>
+                <td>Industry</td>
+                <td>Price</td>
+                <td>Status</td>
+                <td>
+                  <button type="button" class="database-row-settings fa-solid fa-ellipsis-vertical" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                  <ul class="dropdown-menu dropdown-menu-dark">
+                    <li class="d-flex justify-content-center mb-2"><h5>Row</h5></li>
+                    <li class="w-100 d-flex justify-content-center"><button type="button" class="w-75 btn btn-primary">EDIT</button></li>
+                    <li class="my-3"></li>
+                    <li class="w-100 d-flex justify-content-center" ><button type="button" class="w-75 btn btn-danger">DELETE</button></li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div id="database-table-paginate">
+            <a class="paginate_button paginate_page_button previous"><</a>
+            <span>
+              <a class="paginate_button current">1</a>
+              <a class="paginate_button ">2</a>
+            </span>
+            <a class="paginate_button paginate_page_button next">></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  var database;
+
+  $(document).ready(function() {
+    fetchDatabaseData(function() {
+      document.getElementById("database-name").innerHTML = database.name;
+      displayTable();
+    });
+  });
+
+  function fetchDatabaseData(callback) {
+    var location = window.location;
+    var id = location.href.replace(location.host, "").replace(location.protocol, "").replace("database", "").replaceAll("/", "");
+    let request = new HttpRequest("https://api.taskwolf.net/v1/table/find/", "POST",
+      [], {table: id, page: "1"});
+    request.send(function (status, responseText) {
+      database = JSON.parse(responseText);
+      callback();
+    });
+  }
+
+  function displayTable() {
+    $('#database-table').DataTable({
+      responsive: true,
+      searching: false,
+      info: false,
+      paging: false,
+      ordering: false,
+      columns: [
+        { "width": "5%" },
+        null,
+        null,
+        null,
+        null,
+        null,
+        { "width": "5%" },
+      ]
+    });
+  }
+
+  document.getElementById("database-delete").onclick = function (event) {
+    swal({
+      title: "{% trans 'product.database.delete.title' %}",
+      text: "{% trans 'product.database.delete.body' %}",
+      icon: "warning",
+      dangerMode: true,
+      buttons: true,
+    }).then(willDelete => {
+      if (willDelete) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/table/delete/", "POST",
+          [], {table: database.id});
+        request.send(function (status, responseText) {
+          swal("{% trans 'product.database.delete.successful.title' %}", "{% trans 'product.database.delete.successful.body' %}", "success").then(success => window.location.href = "/databases/");
+        });
+      }
+    });
+  }
+
+  document.getElementById("database-rename").onclick = function (event) {
+    swal({
+      title: "{% trans 'product.database.rename.title' %}",
+      text: "{% trans 'product.database.rename.body' %}",
+      content: {
+        element: "input",
+        attributes: {
+          placeholder: "{% trans 'product.database.rename.name' %}",
+          type: "name",
+        },
+      },
+      icon: "info",
+      buttons: true,
+    }).then(result => {
+      if (result != null) {
+        if (result.replace(" ", "") === "") {
+          swal("{% trans 'product.database.rename.empty.title' %}", "{% trans 'product.database.rename.empty.body' %}", "error");
+          return;
+        }
+        let request = new HttpRequest("https://api.taskwolf.net/v1/table/rename/", "POST",
+          [], {table: database.id, name: result});
+        request.send(function (status, responseText) {
+          swal("{% trans 'product.database.rename.successful.title' %}", "{% trans 'product.database.rename.successful.body' %}", "success").then(success => window.location.reload());
+        });
+      }
+    });
+  }
+</script>
