@@ -29,7 +29,7 @@
   font-size: 28px;
 }
 
-#database-table_wrapper {
+#database-table-wrapper {
   background: #212529;
   color: white;
   border: transparent 1px solid;
@@ -41,7 +41,7 @@
 #database-table {
   background-color: #212529;
   color: white;
-  width: 100%;
+  width: min(calc(1500px - 15vw), 100%);
 }
 
 .dataTables_length select, .dataTables_length select option {
@@ -62,46 +62,107 @@ thead {
 }
 
 th {
-  padding: 1.5rem !important;
-}
-
-td, th {
-  border-color: #373e45 !important;
+  padding: 1.5rem 1.0rem !important;
 }
 
 td {
   color: white !important;
-  padding: 1.5rem !important;
+  padding: 1.5rem 1.0rem !important;
+  white-space: nowrap;
+  text-overflow:ellipsis;
+  overflow: hidden;
+}
+
+tr {
+  border-bottom: #373e45 1px solid !important;
 }
 
 .form-check-input {
   background-color: #212529 !important;
   border-color: white !important;
   scale: 1.2;
+  margin-left: 10px;
 }
 
 .form-check-input:checked {
   background-color: #0d6efd !important;
 }
 
+.database-column-head {
+  display: flex;
+  align-items: center;
+}
+
+.database-column-remove {
+  background-color: #212529 !important;
+  border: none;
+  color: #ff5454;
+  margin-left: 10px;
+  scale: 1.2;
+}
+
+#database-column-add-head {
+  padding: 0 1.0rem !important;
+  vertical-align: middle;
+  text-align: right;
+}
+
+#database-column-add {
+  margin-right: 10px;
+}
+
+.database-row-settings-container {
+  display: block;
+}
+
 .database-row-settings {
   background-color: #212529 !important;
   border: none;
   color: white;
+  float: right;
+  margin-right: 10px;
 }
 
 #database-table-paginate {
   background-color: #212529;
   color: white;
   width: 100%;
-  text-align: center !important;
   padding-top: 20px;
   padding-bottom: 20px;
   border-bottom-right-radius: .5rem;
   border-bottom-left-radius: .5rem;
 }
 
-.paginate_button {
+#database-insert {
+  position: absolute;
+  margin-left: 20px;
+}
+
+.database-insert-cell {
+  padding: 1.0rem 1.0rem !important;
+}
+
+.database-insert-cell-input {
+  background-color: #212529;
+  color: white;
+  width: 100%;
+  border: #66727f 1px solid;
+  border-radius: 5px;
+  outline: none;
+  padding: 0.5rem 0.5rem !important;
+}
+
+.database-insert-submit {
+  padding: 0 1.0rem !important;
+  vertical-align: middle;
+  text-align: right;
+}
+
+.database-insert-submit button {
+  margin-right: 10px !important;
+}
+
+.database-table-paginate-button {
   padding: .5em !important;
   width: 40px !important;
   height: 40px !important;
@@ -114,27 +175,36 @@ td {
   text-decoration: none;
 }
 
-.paginate_button:hover {
+.database-table-paginate-button:hover {
   color: white;
   border-color: transparent !important;
   background: #434b53 !important;
   text-decoration: none;
 }
 
-.paginate_page_button {
+.database-table-paginate-page-button {
   font-weight: bold;
 }
 
-.current {
+.paginate-button-disabled {
+  transition: all 0s !important;
+  color: #545454 !important;
+}
+
+.paginate-button-disabled:hover {
+  background-color: #212529 !important;
+}
+
+.database-table-paginate-current {
   background: #33393f !important;
   font-weight: bold;
 }
 
-.previous {
+.database-table-paginate-previous {
   margin-right: 20px !important;
 }
 
-.next {
+.database-table-paginate-next {
   margin-left: 20px !important;
 }
 
