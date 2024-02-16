@@ -22,13 +22,14 @@
             </tbody>
           </table>
           <div id="database-table-paginate">
-            <button id="database-insert" type="button" class="btn btn-primary">{% trans 'product.database.insert' %}</button>
-            <div class="text-center">
+            <button id="database-remove" type="button" class="btn btn-danger disabled">{% trans 'product.database.remove' %}</button>
+            <div class="text-center position-absolute">
               <a id="database-table-previous-page" class="database-table-paginate-button database-table-paginate-page-button database-table-paginate-previous"><</a>
               <span id="database-table-pages">
               </span>
               <a id="database-table-next-page" class="database-table-paginate-button database-table-paginate-page-button database-table-paginate-next">></a>
             </div>
+            <button id="database-insert" type="button" class="btn btn-primary">{% trans 'product.database.insert' %}</button>
           </div>
         </div>
       </div>
@@ -40,6 +41,7 @@
   var database;
   var currentPage = 1;
   var inserting = false;
+  var rowCheckboxes = [];
 
   $(document).ready(function() {
     fetchDatabaseData(function() {
@@ -54,6 +56,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/table/find/", "POST",
       [], {table: id, page: currentPage});
     request.send(function (status, responseText) {
+      console.log(responseText);
       database = JSON.parse(responseText);
       callback();
     });
@@ -67,15 +70,30 @@
 
   function fillTableHead() {
     var head = document.createElement("tr");
-    head.appendChild(createCheckboxElement(function(event) {
-
-    }));
+    var checkbox = createCheckboxElement(function(event) {
+      clickGlobalCheckbox();
+    });
+    checkbox.firstChild.id = "database-table-checkbox-global";
+    head.appendChild(checkbox);
     var columns = database.columns;
     for (var i = 0; i < columns.length; i++) {
       head.appendChild(createTableColumnHead(columns[i].name));
     }
     head.appendChild(createTableAddColumnButton());
     document.getElementById("database-table-head").appendChild(head);
+  }
+
+  function clickGlobalCheckbox() {
+    var checkboxSelected = document.getElementById("database-table-checkbox-global").checked;
+    for (var i = 0; i < rowCheckboxes.length; i++) {
+      rowCheckboxes[i].checkbox.checked = checkboxSelected;
+    }
+    var removeButton = document.getElementById("database-remove");
+    if (!checkboxSelected) {
+      removeButton.classList.add("disabled");
+    } else {
+      removeButton.classList.remove("disabled");
+    }
   }
 
   function createTableColumnHead(name) {
@@ -171,9 +189,11 @@
 
   function displayTableRow(entry) {
     var row = document.createElement("tr");
-    row.appendChild(createCheckboxElement(function(event) {
-
-    }));
+    var checkbox = createCheckboxElement(function(event) {
+      clickRowCheckbox();
+    });
+    rowCheckboxes.push({checkbox: checkbox.firstChild, row: entry})
+    row.appendChild(checkbox);
     var columns = database.columns;
     var cellWidth = ((document.getElementById("database-table-container").offsetWidth - 240) / database.columns.length) + "px";
     var cells = entry.cells;
@@ -187,11 +207,36 @@
     var submitEdit = function(event) {
 
     };
-    var submitDelete = function(event) {
-
-    };
-    row.appendChild(createTableRowSettingsElement(submitEdit, submitDelete));
+    row.appendChild(createTableRowSettingsElement(submitEdit, () => deleteTableRow(entry)));
     return row;
+  }
+
+  function editTableRow() {
+
+  }
+
+  function deleteTableRow(entry) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/table/entry/remove/", "POST",
+      [], {table: database.id, row: findRowId(entry)});
+    request.send(function (status, responseText) {
+      swal("{% trans 'product.database.row.delete.successful.title' %}", "{% trans 'product.database.row.delete.successful.body' %}", "success").then(success => window.location.reload());
+    });
+  }
+
+  function clickRowCheckbox() {
+    var checkboxSelected = false;
+    for (var i = 0; i < rowCheckboxes.length; i++) {
+      if (rowCheckboxes[i].checkbox.checked) {
+        checkboxSelected = true;
+        break;
+      }
+    }
+    var removeButton = document.getElementById("database-remove");
+    if (!checkboxSelected) {
+      removeButton.classList.add("disabled");
+    } else {
+      removeButton.classList.remove("disabled");
+    }
   }
 
   function createTableRowSettingsElement(submitEdit, submitDelete) {
@@ -230,7 +275,7 @@
     dropdownEditEntry.classList.add("w-100", "d-flex", "justify-content-center");
     var dropdownEditButton = document.createElement("button");
     dropdownEditButton.type = "button";
-    dropdownEditButton.classList.add("w-75", "btn", "btn-primary");
+    dropdownEditButton.classList.add("w-75", "btn", "btn-success");
     dropdownEditButton.innerText = "{% trans 'product.database.row.settings.edit' %}";
     dropdownEditButton.onclick = submitEdit;
     dropdownEditEntry.appendChild(dropdownEditButton);
@@ -260,7 +305,7 @@
     var input = document.createElement("input");
     input.classList.add("form-check-input");
     input.type = "checkbox";
-    input.onclick = click;
+    input.onchange = click;
     entry.appendChild(input);
     return entry;
   }
@@ -278,6 +323,7 @@
       if (currentPage === i) {
         pageElement.classList.add("database-table-paginate-current");
       }
+      pageElement.type = "button";
       pageElement.innerText = i + "";
       pageElement.onclick = function(event) {
         currentPage = i;
@@ -323,6 +369,9 @@
 
   function refreshTableContent() {
     fetchDatabaseData(function() {
+      document.getElementById("database-table-checkbox-global").checked = false;
+      rowCheckboxes = [];
+      document.getElementById("database-remove").classList.add("disabled");
       fillTableContent();
       displayTablePages();
     });
@@ -374,6 +423,32 @@
     });
   }
 
+  document.getElementById("database-remove").onclick = function (event) {
+    for (var i = 0; i < rowCheckboxes.length; i++) {
+      var entry = rowCheckboxes[i];
+      if (entry.checkbox.checked) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/table/entry/remove/", "POST",
+          [], {table: database.id, row: findRowId(entry.row)});
+        request.send(function (status, responseText) {
+        });
+      }
+    }
+    swal("{% trans 'product.database.remove.successful.title' %}", "{% trans 'product.database.remove.successful.body' %}", "success").then(success => window.location.reload());
+  }
+
+  function findRowId(row) {
+    var id;
+    var cells = row.cells;
+    for (var i = 0; i < cells.length; i++) {
+      var cell = cells[i];
+      if (cell.column === "id") {
+        id = cell.value;
+        break;
+      }
+    }
+    return id;
+  }
+
   document.getElementById("database-insert").onclick = function (event) {
     if (inserting) {
       return;
@@ -397,31 +472,48 @@
       row.appendChild(cell);
       cells.push({column: columns[i].name, input: input})
     }
-    var submitInsert = function(event) {
-      var rowData = {};
-      for (var i = 0; i < cells.length; i++) {
-        var cell = cells[i];
-        rowData[cell.column] = cell.input.value;
-      }
-      let request = new HttpRequest("https://api.taskwolf.net/v1/table/entry/insert/", "POST",
-        [], {table: database.id, row: rowData});
-      request.send(function (status, responseText) {
-        swal("{% trans 'product.database.insert.successful.title' %}", "{% trans 'product.database.insert.successful.body' %}", "success").then(success => window.location.reload());
-      });
-    };
-    row.appendChild(createTableInsertSubmitButton(submitInsert));
+    var modificationCell = document.createElement("td");
+    modificationCell.classList.add("database-insert-modification");
+    modificationCell.appendChild(createTableInsertSubmitButton(() => submitTableInsert(cells)));
+    modificationCell.appendChild(createTableInsertExitButton(() => exitTableInsert(row)));
+    row.appendChild(modificationCell);
     document.getElementById("database-table-body").appendChild(row);
   }
 
+  function submitTableInsert(cells) {
+    var rowData = {};
+    for (var i = 0; i < cells.length; i++) {
+      var cell = cells[i];
+      rowData[cell.column] = cell.input.value;
+    }
+    let request = new HttpRequest("https://api.taskwolf.net/v1/table/entry/insert/", "POST",
+      [], {table: database.id, row: rowData});
+    request.send(function (status, responseText) {
+      swal("{% trans 'product.database.insert.successful.title' %}", "{% trans 'product.database.insert.successful.body' %}", "success").then(success => window.location.reload());
+    });
+  }
+
+  function exitTableInsert(row) {
+    document.getElementById("database-table-body").removeChild(row);
+    inserting = false;
+    document.getElementById("database-insert").classList.remove("disabled");
+  }
+
   function createTableInsertSubmitButton(click) {
-    var entry = document.createElement("td");
-    entry.classList.add("database-insert-submit");
     var button = document.createElement("button");
-    button.classList.add("btn", "btn-success");
+    button.classList.add("database-insert-submit", "btn", "btn-success");
     button.type = "button";
     button.innerText = "{% trans 'product.database.insert.submit' %}";
     button.onclick = click;
-    entry.appendChild(button);
-    return entry;
+    return button;
+  }
+
+  function createTableInsertExitButton(click) {
+    var exitButton = document.createElement("button");
+    exitButton.type = "button";
+    exitButton.classList.add("database-insert-exit", "fa-regular",
+      "fa-circle-xmark");
+    exitButton.onclick = click;
+    return exitButton;
   }
 </script>

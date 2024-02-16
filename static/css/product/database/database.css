@@ -29,19 +29,12 @@
   font-size: 28px;
 }
 
-#database-table-wrapper {
-  background: #212529;
-  color: white;
-  border: transparent 1px solid;
-  border-top-right-radius: .5rem;
-  border-top-left-radius: .5rem;
-  overflow-x: hidden;
-}
-
 #database-table {
   background-color: #212529;
   color: white;
   width: min(calc(1500px - 15vw), 100%);
+  border-top-right-radius: .5rem;
+  border-top-left-radius: .5rem;
 }
 
 .dataTables_length select, .dataTables_length select option {
@@ -124,6 +117,8 @@ tr {
 }
 
 #database-table-paginate {
+  display: flex;
+  justify-content: center;
   background-color: #212529;
   color: white;
   width: 100%;
@@ -131,11 +126,16 @@ tr {
   padding-bottom: 20px;
   border-bottom-right-radius: .5rem;
   border-bottom-left-radius: .5rem;
+  user-select: none;
+}
+
+#database-remove {
+  margin-left: 20px;
 }
 
 #database-insert {
-  position: absolute;
-  margin-left: 20px;
+  margin-left: auto;
+  margin-right: 20px;
 }
 
 .database-insert-cell {
@@ -152,14 +152,21 @@ tr {
   padding: 0.5rem 0.5rem !important;
 }
 
-.database-insert-submit {
+.database-insert-modification {
   padding: 0 1.0rem !important;
   vertical-align: middle;
   text-align: right;
 }
 
-.database-insert-submit button {
+.database-insert-submit {
   margin-right: 10px !important;
+}
+
+.database-insert-exit {
+  background-color: #212529 !important;
+  border: none;
+  color: #ff5454;
+  scale: 1.2;
 }
 
 .database-table-paginate-button {
@@ -173,6 +180,7 @@ tr {
   transition: all 0.3s ease-in-out !important;
   color: white;
   text-decoration: none;
+  user-select: none;
 }
 
 .database-table-paginate-button:hover {
