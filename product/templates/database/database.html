@@ -90,7 +90,7 @@
     var removeButton = document.getElementById("database-remove");
     if (!checkboxSelected) {
       removeButton.classList.add("disabled");
-    } else {
+    } else if (database.entries > 0) {
       removeButton.classList.remove("disabled");
     }
   }
@@ -183,6 +183,9 @@
     var rows = database.rows;
     for (var i = 0; i < rows.length; i++) {
       body.appendChild(displayTableRow(rows[i]));
+    }
+    if (rows.length === 0) {
+      displayTableEmptyLabel();
     }
   }
 
@@ -496,6 +499,7 @@
     displayTableInsertRow();
     inserting = true;
     document.getElementById("database-insert").classList.add("disabled");
+    removeTableEmptyLabel();
   }
 
   function displayTableInsertRow() {
@@ -537,6 +541,9 @@
     document.getElementById("database-table-body").removeChild(row);
     inserting = false;
     document.getElementById("database-insert").classList.remove("disabled");
+    if (database.entries === 0) {
+      displayTableEmptyLabel();
+    }
   }
 
   function createRowEditSubmitButton(click) {
@@ -555,5 +562,18 @@
       "fa-circle-xmark");
     exitButton.onclick = click;
     return exitButton;
+  }
+
+  function displayTableEmptyLabel() {
+    var emptyLabel = document.createElement("h5");
+    emptyLabel.id = "database-table-empty";
+    emptyLabel.innerText = "{% trans 'product.database.empty' %}";
+    document.getElementById("database-table-container").insertBefore(emptyLabel,
+      document.getElementById("database-table-paginate"));
+  }
+
+  function removeTableEmptyLabel() {
+    document.getElementById("database-table-container").removeChild(
+      document.getElementById("database-table-empty"));
   }
 </script>
