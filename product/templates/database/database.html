@@ -56,7 +56,6 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/table/find/", "POST",
       [], {table: id, page: currentPage});
     request.send(function (status, responseText) {
-      console.log(responseText);
       database = JSON.parse(responseText);
       callback();
     });
@@ -204,15 +203,53 @@
       cell.innerText = cells.filter((cell) => cell.column === column)[0].value;
       row.appendChild(cell);
     }
-    var submitEdit = function(event) {
-
-    };
-    row.appendChild(createTableRowSettingsElement(submitEdit, () => deleteTableRow(entry)));
+    row.appendChild(createTableRowSettingsElement(() => editTableRow(entry, row),
+      () => deleteTableRow(entry)));
     return row;
   }
 
-  function editTableRow() {
+  function editTableRow(entry, row) {
+    var originalContent = [...row.childNodes];
+    row.innerHTML = "";
+    row.appendChild(document.createElement("td"));
+    var columns = database.columns;
+    var cells = [];
+    for (var i = 0; i < columns.length; i++) {
+      var column = columns[i].name;
+      var cell = document.createElement("td");
+      cell.classList.add("database-row-edit-cell");
+      var input = document.createElement("input");
+      input.classList.add("database-row-edit-cell-input");
+      input.value = entry.cells.filter((cell) => cell.column === column)[0].value;
+      cell.appendChild(input);
+      row.appendChild(cell);
+      cells.push({column: column, input: input})
+    }
+    var modificationCell = document.createElement("td");
+    modificationCell.classList.add("database-row-edit-modification");
+    modificationCell.appendChild(createRowEditSubmitButton(() => submitTableEdit(entry, cells)));
+    modificationCell.appendChild(createRowEditExitButton(() => exitTableEdit(row, originalContent)));
+    row.appendChild(modificationCell);
+  }
 
+  function submitTableEdit(entry, cells) {
+    var rowData = {};
+    for (var i = 0; i < cells.length; i++) {
+      var cell = cells[i];
+      rowData[cell.column] = cell.input.value;
+    }
+    let request = new HttpRequest("https://api.taskwolf.net/v1/table/entry/update/", "POST",
+      [], {table: database.id, row: findRowId(entry), content: rowData});
+    request.send(function (status, responseText) {
+      swal("{% trans 'product.database.row.edit.successful.title' %}", "{% trans 'product.database.row.edit.successful.body' %}", "success").then(success => window.location.reload());
+    });
+  }
+
+  function exitTableEdit(row, originalContent) {
+    row.innerHTML = "";
+    for (var i = 0; i < originalContent.length; i++) {
+      row.appendChild(originalContent[i]);
+    }
   }
 
   function deleteTableRow(entry) {
@@ -253,7 +290,7 @@
     var dropdown = document.createElement("ul");
     dropdown.classList.add("dropdown-menu", "dropdown-menu-dark");
     dropdown.appendChild(createTableRowSettingsHeadline());
-    dropdown.appendChild(createTableRowSettingsEditButton(submitEdit));
+    dropdown.appendChild(createTableRowSettingsEditButton(dropdown, submitEdit));
     dropdown.appendChild(createTableRowSettingsDivider());
     dropdown.appendChild(createTableRowSettingsDeleteButton(submitDelete));
     entryDiv.appendChild(dropdown);
@@ -270,14 +307,17 @@
     return dropdownTitleEntry;
   }
 
-  function createTableRowSettingsEditButton(submitEdit) {
+  function createTableRowSettingsEditButton(dropdown, submitEdit) {
     var dropdownEditEntry = document.createElement("li");
     dropdownEditEntry.classList.add("w-100", "d-flex", "justify-content-center");
     var dropdownEditButton = document.createElement("button");
     dropdownEditButton.type = "button";
     dropdownEditButton.classList.add("w-75", "btn", "btn-success");
     dropdownEditButton.innerText = "{% trans 'product.database.row.settings.edit' %}";
-    dropdownEditButton.onclick = submitEdit;
+    dropdownEditButton.onclick = function (event) {
+      $(dropdown).dropdown('toggle');
+      submitEdit();
+    };
     dropdownEditEntry.appendChild(dropdownEditButton);
     return dropdownEditEntry;
   }
@@ -465,17 +505,17 @@
     var cells = [];
     for (var i = 0; i < columns.length; i++) {
       var cell = document.createElement("td");
-      cell.classList.add("database-insert-cell");
+      cell.classList.add("database-row-edit-cell");
       var input = document.createElement("input");
-      input.classList.add("database-insert-cell-input");
+      input.classList.add("database-row-edit-cell-input");
       cell.appendChild(input);
       row.appendChild(cell);
       cells.push({column: columns[i].name, input: input})
     }
     var modificationCell = document.createElement("td");
-    modificationCell.classList.add("database-insert-modification");
-    modificationCell.appendChild(createTableInsertSubmitButton(() => submitTableInsert(cells)));
-    modificationCell.appendChild(createTableInsertExitButton(() => exitTableInsert(row)));
+    modificationCell.classList.add("database-row-edit-modification");
+    modificationCell.appendChild(createRowEditSubmitButton(() => submitTableInsert(cells)));
+    modificationCell.appendChild(createRowEditExitButton(() => exitTableInsert(row)));
     row.appendChild(modificationCell);
     document.getElementById("database-table-body").appendChild(row);
   }
@@ -499,19 +539,19 @@
     document.getElementById("database-insert").classList.remove("disabled");
   }
 
-  function createTableInsertSubmitButton(click) {
+  function createRowEditSubmitButton(click) {
     var button = document.createElement("button");
-    button.classList.add("database-insert-submit", "btn", "btn-success");
+    button.classList.add("database-row-edit-submit", "btn", "btn-success");
     button.type = "button";
     button.innerText = "{% trans 'product.database.insert.submit' %}";
     button.onclick = click;
     return button;
   }
 
-  function createTableInsertExitButton(click) {
+  function createRowEditExitButton(click) {
     var exitButton = document.createElement("button");
     exitButton.type = "button";
-    exitButton.classList.add("database-insert-exit", "fa-regular",
+    exitButton.classList.add("database-row-edit-exit", "fa-regular",
       "fa-circle-xmark");
     exitButton.onclick = click;
     return exitButton;

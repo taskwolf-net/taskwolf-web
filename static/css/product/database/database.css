@@ -1,5 +1,5 @@
 #database-container {
-  width: min(calc(1500px - 15vw), 95%);
+  width: min(calc(1800px - 15vw), 95%);
   margin: auto;
 }
 
@@ -32,7 +32,7 @@
 #database-table {
   background-color: #212529;
   color: white;
-  width: min(calc(1500px - 15vw), 100%);
+  width: min(calc(1800px - 15vw), 100%);
   border-top-right-radius: .5rem;
   border-top-left-radius: .5rem;
 }
@@ -138,11 +138,11 @@ tr {
   margin-right: 20px;
 }
 
-.database-insert-cell {
+.database-row-edit-cell {
   padding: 1.0rem 1.0rem !important;
 }
 
-.database-insert-cell-input {
+.database-row-edit-cell-input {
   background-color: #212529;
   color: white;
   width: 100%;
@@ -152,17 +152,17 @@ tr {
   padding: 0.5rem 0.5rem !important;
 }
 
-.database-insert-modification {
+.database-row-edit-modification {
   padding: 0 1.0rem !important;
   vertical-align: middle;
   text-align: right;
 }
 
-.database-insert-submit {
+.database-row-edit-submit {
   margin-right: 10px !important;
 }
 
-.database-insert-exit {
+.database-row-edit-exit {
   background-color: #212529 !important;
   border: none;
   color: #ff5454;
