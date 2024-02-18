@@ -104,14 +104,17 @@
     var columnName = document.createElement("b");
     columnName.innerText = name;
     head.appendChild(columnName);
-    var columnRemoveButton = document.createElement("button");
-    columnRemoveButton.type = "button";
-    columnRemoveButton.classList.add("database-column-remove", "fa-solid",
-      "fa-square-minus")
-    columnRemoveButton.onclick = function(event) {
-      openRemoveColumnMenu(name);
-    }
-    head.appendChild(columnRemoveButton);
+    var settingsButton = document.createElement("button");
+    settingsButton.type = "button";
+    settingsButton.classList.add("database-column-settings", "fa-solid",
+      "fa-angle-down");
+    settingsButton.setAttribute("data-bs-toggle", "dropdown");
+    settingsButton.setAttribute("aria-expanded", "false");
+    head.appendChild(settingsButton);
+    var dropdown = createTableSettingsDropdown([
+        {icon: "fa-trash", content: "{% trans 'product.database.column.settings.delete' %}", color: "text-danger", click: () => openRemoveColumnMenu(name)}
+      ], []);
+    head.appendChild(dropdown);
     entry.appendChild(head);
     return entry;
   }
@@ -164,7 +167,7 @@
       buttons: true,
     }).then(result => {
       if (result != null) {
-        if (result.replace(" ", "") === "") {
+        if (result.replaceAll(" ", "") === "") {
           swal("{% trans 'product.database.rename.empty.title' %}", "{% trans 'product.database.column.add.empty.body' %}", "error");
           return;
         }
@@ -290,57 +293,56 @@
     settingsButton.setAttribute("data-bs-toggle", "dropdown");
     settingsButton.setAttribute("aria-expanded", "false");
     entryDiv.appendChild(settingsButton);
-    var dropdown = document.createElement("ul");
-    dropdown.classList.add("dropdown-menu", "dropdown-menu-dark");
-    dropdown.appendChild(createTableRowSettingsHeadline());
-    dropdown.appendChild(createTableRowSettingsEditButton(dropdown, submitEdit));
-    dropdown.appendChild(createTableRowSettingsDivider());
-    dropdown.appendChild(createTableRowSettingsDeleteButton(submitDelete));
+    var dropdown = createTableSettingsDropdown([
+        {icon: "fa-pen", content: "{% trans 'product.database.row.settings.edit' %}", click: submitEdit},
+        {icon: "fa-trash", content: "{% trans 'product.database.row.settings.delete' %}", color: "text-danger", click: submitDelete}
+      ], [1]);
     entryDiv.appendChild(dropdown);
     entry.appendChild(entryDiv);
     return entry;
   }
 
-  function createTableRowSettingsHeadline() {
-    var dropdownTitleEntry = document.createElement("li");
-    dropdownTitleEntry.classList.add("d-flex", "justify-content-center", "mb-2");
-    var dropdownTitle = document.createElement("h5");
-    dropdownTitle.innerText = "{% trans 'product.database.row.settings.headline' %}";
-    dropdownTitleEntry.appendChild(dropdownTitle);
-    return dropdownTitleEntry;
+  function createTableSettingsDropdown(buttons, dividers) {
+    var dropdown = document.createElement("ul");
+    dropdown.classList.add("database-table-settings-dropdown", "dropdown-menu", "dropdown-menu-dark");
+    for (var i = 0; i < buttons.length; i++) {
+      for (var j = 0; j < dividers.length; j++) {
+        if (dividers[j] === i) {
+          dropdown.appendChild(createTableSettingsDropdownDivider());
+          break;
+        }
+      }
+      var button = buttons[i];
+      dropdown.appendChild(createTableSettingsDropdownButton(dropdown, button.icon,
+        button.content, button.color, button.click));
+    }
+    return dropdown;
   }
 
-  function createTableRowSettingsEditButton(dropdown, submitEdit) {
-    var dropdownEditEntry = document.createElement("li");
-    dropdownEditEntry.classList.add("w-100", "d-flex", "justify-content-center");
-    var dropdownEditButton = document.createElement("button");
-    dropdownEditButton.type = "button";
-    dropdownEditButton.classList.add("w-75", "btn", "btn-success");
-    dropdownEditButton.innerText = "{% trans 'product.database.row.settings.edit' %}";
-    dropdownEditButton.onclick = function (event) {
-      $(dropdown).dropdown('toggle');
-      submitEdit();
-    };
-    dropdownEditEntry.appendChild(dropdownEditButton);
-    return dropdownEditEntry;
-  }
-
-  function createTableRowSettingsDivider() {
+  function createTableSettingsDropdownDivider() {
     var dropdownDivider = document.createElement("li");
-    dropdownDivider.classList.add("my-3");
+    dropdownDivider.classList.add("database-table-settings-dropdown-divider");
     return dropdownDivider;
   }
 
-  function createTableRowSettingsDeleteButton(submitDelete) {
-    var dropdownDeleteEntry = document.createElement("li");
-    dropdownDeleteEntry.classList.add("w-100", "d-flex", "justify-content-center");
-    var dropdownDeleteButton = document.createElement("button");
-    dropdownDeleteButton.type = "button";
-    dropdownDeleteButton.classList.add("w-75", "btn", "btn-danger");
-    dropdownDeleteButton.innerText = "{% trans 'product.database.row.settings.delete' %}";
-    dropdownDeleteButton.onclick = submitDelete;
-    dropdownDeleteEntry.appendChild(dropdownDeleteButton);
-    return dropdownDeleteEntry;
+  function createTableSettingsDropdownButton(dropdown, icon, content, color, click) {
+    var dropdownEntry = document.createElement("li");
+    dropdownEntry.classList.add("database-table-settings-dropdown-entry", "dropdown-item");
+    var dropdownEntryIcon = document.createElement("i");
+    dropdownEntryIcon.classList.add("fa-solid", icon);
+    dropdownEntry.appendChild(dropdownEntryIcon);
+    var dropdownEntryLabel = document.createElement("label");
+    dropdownEntryLabel.innerText = content;
+    dropdownEntry.appendChild(dropdownEntryLabel);
+    if (color !== undefined) {
+      dropdownEntryIcon.classList.add(color);
+      dropdownEntryLabel.classList.add(color);
+    }
+    dropdownEntry.onclick = function (event) {
+      $(dropdown).dropdown('toggle');
+      click();
+    };
+    return dropdownEntry;
   }
 
   function createCheckboxElement(click) {
@@ -453,7 +455,7 @@
       buttons: true,
     }).then(result => {
       if (result != null) {
-        if (result.replace(" ", "") === "") {
+        if (result.replaceAll(" ", "") === "") {
           swal("{% trans 'product.database.rename.empty.title' %}", "{% trans 'product.database.rename.empty.body' %}", "error");
           return;
         }

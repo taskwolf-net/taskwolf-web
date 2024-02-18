@@ -86,10 +86,10 @@ tr {
   align-items: center;
 }
 
-.database-column-remove {
+.database-column-settings {
   background-color: #212529 !important;
   border: none;
-  color: #ff5454;
+  color: #b7b7b7;
   margin-left: 10px;
   scale: 1.2;
 }
@@ -125,6 +125,30 @@ tr {
   color: white;
   float: right;
   margin-right: 10px;
+}
+
+.database-table-settings-dropdown {
+  padding: 10px !important;
+  background-color: #3d444c !important;
+}
+
+.database-table-settings-dropdown-entry {
+  padding: 10px !important;
+  border-radius: 4px;
+}
+
+.database-table-settings-dropdown-entry i {
+  width: 20px;
+}
+
+.database-table-settings-dropdown-entry label {
+  margin-left: 15px;
+}
+
+.database-table-settings-dropdown-divider {
+  width: 100%;
+  margin: 10px auto;
+  border-bottom: #626e7b 2px solid;
 }
 
 #database-table-paginate {
