@@ -45,7 +45,18 @@
 
 .account-entry b {
   margin-left: 5%;
+  margin-right: 5%;
   font-size: 18px;
+  white-space: nowrap;
+  text-overflow:ellipsis;
+  overflow: hidden;
+}
+
+@media (max-width: 650px) {
+  .account-entry b {
+    margin-left: 2%;
+    font-size: 16px;
+  }
 }
 
 .account-entry button {
