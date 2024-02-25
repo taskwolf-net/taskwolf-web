@@ -200,10 +200,6 @@ input:-webkit-autofill:active{
   width: 40%;
 }
 
-.dropdown-item {
-  margin-bottom: 10px;
-}
-
 .workflow-component-event-description {
   width: 100%;
   font-size: 12px;
@@ -322,11 +318,6 @@ input:-webkit-autofill:active{
 
 .workflow-component-specifications-select-list {
   width: 100%;
-}
-
-.workflow-component-specifications-select-item-identifier {
-  margin-left: 5%;
-  font-size: 13px;
 }
 
 .workflow-component-specifications-selected-item p {

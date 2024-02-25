@@ -579,10 +579,6 @@
         var itemNameName = document.createElement("b");
         itemNameName.innerHTML = item.name;
         itemElement.appendChild(itemNameName);
-        var itemIdentifierName = document.createElement("p");
-        itemIdentifierName.classList.add("workflow-component-specifications-select-item-identifier");
-        itemIdentifierName.innerHTML = item.identifier;
-        itemElement.appendChild(itemIdentifierName);
         itemElement.onclick = function (event) {
           selectSpecificationSelect(identifier, item.identifier, item.name, dropdownContainer, dropdownButton, dropdownList);
         }
@@ -615,9 +611,6 @@
     var itemNameElement = document.createElement("b");
     itemNameElement.innerHTML = itemName;
     itemElement.appendChild(itemNameElement);
-    var itemIdentifierElement = document.createElement("p");
-    itemIdentifierElement.innerHTML = " (" + itemIdentifier + ")";
-    itemElement.appendChild(itemIdentifierElement);
     dropdownContainer.appendChild(itemElement);
     if (specificationSelectButtons.length > 0) {
       specificationSelectButtons.shift().removeAttribute("disabled");
