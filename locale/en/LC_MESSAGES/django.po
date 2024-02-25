@@ -15,6 +15,26 @@ msgstr "Tickets"
 msgid "neutral.header.logout"
 msgstr "Log out"
 
+# PASSWORD
+msgid "neutral.password.special.characters"
+msgstr " Special characters"
+msgid "neutral.password.upper.case.letters"
+msgstr " Upper case letters"
+msgid "neutral.password.lower.case.letters"
+msgstr " Lower case letters"
+msgid "neutral.password.numbers"
+msgstr " Numbers"
+msgid "neutral.password.letters.remaining"
+msgstr " more characters, "
+msgid "neutral.password.too.weak"
+msgstr "Too Weak"
+msgid "neutral.password.very.weak"
+msgstr "Very Weak"
+msgid "neutral.password.weak"
+msgstr "Weak"
+msgid "neutral.password.strong"
+msgstr "Strong"
+
 # PRODUCT
 
 # HEADER

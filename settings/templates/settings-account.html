@@ -24,7 +24,7 @@
                   </div>
                 </div>
                 <div id="feedbackin" class="valid-feedback"></div>
-                <div id="feedbackirn" class="invalid-feedback">8 more characters, Special characters, Upper case letters, Numbers, Lower case letters</div>
+                <div id="feedbackirn" class="invalid-feedback">8 {% trans 'neutral.password.letters.remaining' %}, {% trans 'neutral.password.special.characters' %}, {% trans 'neutral.password.upper.case.letters' %}, {% trans 'neutral.password.lower.case.letters' %}, {% trans 'neutral.password.numbers' %}</div>
               </div>
               <div class="form-outline mb-4">
                 <label for="settings-account-new-password-repetition" class="form-label">{% trans 'settings.account.password.new.password.repetition' %}</label>
@@ -200,14 +200,13 @@
   var passwordMatchedCases = [];
   passwordMatchedCases.push("[!@#$%&*_?]");
   passwordMatchedCases.push("[A-Z]");
-  passwordMatchedCases.push("[0-9]");
   passwordMatchedCases.push("[a-z]");
-
+  passwordMatchedCases.push("[0-9]");
   var passwordMessageCases = [];
-  passwordMessageCases.push(" Special characters");
-  passwordMessageCases.push(" Upper case letters");
-  passwordMessageCases.push(" Numbers");
-  passwordMessageCases.push(" Lower case letters");
+  passwordMessageCases.push("{% trans 'neutral.password.special.characters' %}");
+  passwordMessageCases.push("{% trans 'neutral.password.upper.case.letters' %}");
+  passwordMessageCases.push("{% trans 'neutral.password.lower.case.letters' %}");
+  passwordMessageCases.push("{% trans 'neutral.password.numbers' %}");
 
   function updatePasswordProgress() {
     var messageCases = passwordMessageCases.slice();
@@ -229,19 +228,19 @@
         progress = 1;
         break;
       case 1:
-        strength = "Too Weak";
+        strength = "{% trans 'neutral.password.too.weak' %}";
         progress = 15;
         break;
       case 2:
-        strength = "Very Weak";
+        strength = "{% trans 'neutral.password.very.weak' %}";
         progress = 30;
         break;
       case 3:
-        strength = "Weak";
+        strength = "{% trans 'neutral.password.weak' %}";
         progress = 45;
         break;
       default:
-        strength = "Strong";
+        strength = "{% trans 'neutral.password.strong' %}";
         progress = 75;
         break;
     }
@@ -251,12 +250,12 @@
     if (progress >= 75 && passwordInput.value.length >= 8) {
       passwordInput.setCustomValidity("");
       progressBarClass = "bg-success";
-      information = "Strong";
+      information = "{% trans 'neutral.password.strong' %}";
     } else {
       passwordInput.setCustomValidity(strength);
       progressBarClass = "bg-danger";
       if(passwordInput.value.length < 8) {
-        information += (8 - passwordInput.value.length) + " more characters, ";
+        information += (8 - passwordInput.value.length) + "{% trans 'neutral.password.letters.remaining' %}";
       }
       information += messageCases;
     }
