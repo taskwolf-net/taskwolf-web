@@ -1,0 +1,177 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body>
+    {% include 'templates/product-header.html' %}
+    {% include 'templates/product-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="processes-wrapper">
+        <h1 id="processes-headline">{% trans 'product.processes.headline' %}</h1>
+        <div id="processes-header">
+          <div id="processes-owner-dropdown" class="dropdown">
+            <button id="processes-owner-dropdown-button" class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
+            </button>
+            <ul id="processes-owner-dropdown-list" class="dropdown-menu dropdown-menu-dark">
+            </ul>
+          </div>
+          <div class="d-flex w-100">
+            <div id="processes-search-box">
+              <input id="processes-search-input" placeholder=" {% trans 'product.processes.search' %}" type="text" class="form-control" value="" autocomplete="off">
+              <button type="button">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+            <button type="button" id="process-create" class="btn btn-primary btn-block">{% trans 'product.processes.create' %}</button>
+          </div>
+        </div>
+        <ul id="processes-table-description">
+          <li id="processes-table-description-name">
+            <div>
+              <span>{% trans 'product.processes.name' %}</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span>{% trans 'product.processes.creator' %}</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span>{% trans 'product.processes.date' %}</span>
+            </div>
+          </li>
+          <li id="processes-table-description-optimization">
+            <div>
+              <span>{% trans 'product.processes.optimization' %}</span>
+            </div>
+          </li>
+        </ul>
+        <ul id="processes-list">
+        </ul>
+        <div id="processes-empty">
+          <span id="processes-empty-headline">{% trans 'product.processes.empty.headline' %}</span>
+          <span>{% trans 'product.processes.empty.text' %}</span><a id="processes-empty-link" href="/process/">{% trans 'product.processes.empty.link' %}</a><span>?</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  var owners;
+  var processes;
+  var processesCurrentNameFilter = "";
+
+  $(document).ready(function() {
+    processes = [];
+    fetchTargetsData(function(response) {
+      var targets = response.targets;
+      var currentTarget = response.currentTarget;
+      for (var i = 0; i < targets.length; i++) {
+        addTarget(targets[i]);
+      }
+      selectTarget(targets.filter((target) => target.id === currentTarget)[0]);
+    });
+  });
+
+  function fetchTargetsData(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/targets/all/", "GET",
+      []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function addTarget(target) {
+    var targetElement = document.createElement("li");
+    targetElement.classList.add("dropdown-item");
+    var targetNameName = document.createElement("b");
+    targetNameName.innerHTML = target.name;
+    targetElement.appendChild(targetNameName);
+    targetElement.onclick = function(event) {
+      selectTarget(target);
+    }
+    document.getElementById("processes-owner-dropdown-list").appendChild(targetElement);
+  }
+
+  function selectTarget(target) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST",
+      [], {target: target.id});
+    request.send(function (status, responseText) {
+      document.getElementById("processes-owner-dropdown-button").innerHTML = "{% trans 'target' %}: " + target.name;
+      fetchProcessesData(function() {
+        displayProcesses();
+        if (processes.length === 0) {
+          document.getElementById("processes-empty").style.display = "flex";
+        } else {
+          document.getElementById("processes-empty").style.display = "none";
+        }
+      });
+    });
+  }
+
+  function fetchProcessesData(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/processes/selected/", "GET", []);
+    request.send(function (status, responseText) {
+      processes = JSON.parse(responseText).processes;
+      callback();
+    });
+  }
+
+  function displayProcesses() {
+    document.getElementById("processes-list").innerHTML = "";
+    for (var i = 0; i < processes.length; i++) {
+      var entry = processes[i];
+      if(!(shouldDisplayProcessEntry(entry))) {
+        continue;
+      }
+      displayProcess(entry.id, entry.name, entry.creator, entry.created);
+    }
+  }
+
+  function shouldDisplayProcessEntry(entry) {
+    return processesCurrentNameFilter.length === 0 ||
+      entry.name.toLowerCase().includes(processesCurrentNameFilter.toLowerCase()) ||
+      entry.creator.toLowerCase().includes(processesCurrentNameFilter.toLowerCase()) ||
+      entry.created.toLowerCase().includes(processesCurrentNameFilter.toLowerCase());
+  }
+
+  function displayProcess(id, name, creator, created) {
+    var entry = document.createElement('li');
+    entry.role = "button";
+    entry.classList.add("process-entry");
+    var nameDiv = document.createElement("div");
+    nameDiv.classList.add("processes-entry-name");
+    var nameElement = document.createElement("span");
+    nameElement.innerText = name;
+    nameElement.classList.add("processes-list-name");
+    nameDiv.appendChild(nameElement);
+    entry.appendChild(nameDiv);
+    appendProcessesCell(entry, "creator", creator, "span");
+    appendProcessesCell(entry, "created", created, "span");
+    entry.onclick = function (event) {
+      window.location.href = "/process/" + id + "/";
+    }
+    document.getElementById("processes-list").appendChild(entry);
+  }
+
+  function appendProcessesCell(entry, identifier, information, elementType) {
+    var div = document.createElement("div");
+    var element = document.createElement(elementType);
+    element.innerText = information;
+    element.classList.add("processes-list-" + identifier);
+    div.appendChild(element);
+    entry.appendChild(div);
+    return element;
+  }
+
+  document.getElementById("processes-search-input").oninput = function(event) {
+    processesCurrentNameFilter = event.target.value;
+    displayProcesses();
+  };
+
+  document.getElementById("process-create").onclick = function(event) {
+    window.location.href = "/process/";
+  };
+</script>
