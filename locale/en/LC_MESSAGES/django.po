@@ -304,6 +304,8 @@ msgid "product.process.delete"
 msgstr "DELETE"
 msgid "product.process.publish"
 msgstr "PUBLISH"
+msgid "product.process.step.add"
+msgstr "ADD STEP"
 
 # DATABASES
 msgid "product.databases.title"
