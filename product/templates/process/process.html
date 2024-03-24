@@ -1,0 +1,349 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+{% include 'templates/head.html' %}
+  <body>
+    {% include 'templates/product-header.html' %}
+    {% include 'templates/product-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="process-wrapper">
+        <div id="process-modification">
+          <div id="process-delete-wrapper">
+            <button id="process-delete" type="button" class="btn btn-danger">{% trans 'product.process.delete' %}</button>
+          </div>
+          <div id="process-component-wrapper">
+            <button id="process-add-step" type="button" class="btn btn-primary">{% trans 'product.process.step.add' %}</button>
+          </div>
+          <div id="process-publish-wrapper">
+            <button id="process-publish" type="button" class="btn btn-success">{% trans 'product.process.publish' %}</button>
+          </div>
+        </div>
+        <div class="graph">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  var draw = SVG().addTo($(".graph").get(0))
+    .size("100%", "100%")
+    .viewbox('-500 -500 1000 1000')
+    .panZoom({ zoomMin: 0.5, zoomMax: 3, zoomFactor: 0.1});
+
+  draw.on('panning', event => {
+    var box = event.detail.box;
+    display(box);
+  });
+
+  function resetFocus() {
+    document.activeElement.scrollTop = 0;
+    document.activeElement.blur();
+  }
+
+  draw.on("mousedown", function (event) {
+    resetFocus();
+  });
+
+  class Step {
+    constructor(draw, x, y, title, description) {
+      this.draw = draw;
+      this.x = x;
+      this.y = y;
+      this.title = title;
+      this.description = description;
+      this.incomingConnectingPoint = new ConnectionPoint(draw, this, -150, 0, "origin");
+      this.outgoingConnectingPoint = new ConnectionPoint(draw, this, 150, 0, "destination");
+    }
+
+    display() {
+      var self = this;
+      var group = self.draw.group();
+      var outerRect = group.rect(300, 150).move(-150, -75).radius(10).fill("#1b232f");
+      var innerRect = group.rect(290, 140).move(-145, -70).radius(10).fill("#3d4b5a");
+      var divider = group.rect(250, 2).move(-125, -15).radius(10).fill("#4b5c6f");
+      group.on("mouseover", function() {
+        outerRect.animate(300, '<>').fill('#334056');
+        innerRect.animate(300, '<>').fill('#4b5c6f');
+        divider.animate(300, '<>').fill('#6b84a0');
+      }).on("mouseout", function() {
+        outerRect.animate(300, '<>').fill('#1b232f');
+        innerRect.animate(300, '<>').fill('#3d4b5a');
+        divider.animate(300, '<>').fill('#4b5c6f');
+      });
+      self.displayContent(group);
+      self.displayRemoveButton(group);
+      self.incomingConnectingPoint.display(group);
+      self.outgoingConnectingPoint.display(group);
+      group.move(self.x, self.y).draggable().on('dragmove', e => {
+        if (mouseDown) {
+          e.preventDefault();
+          return;
+        }
+        self.x = e.detail.box.x;
+        self.y = e.detail.box.y;
+      });
+    }
+
+    displayContent(group) {
+      var self = this;
+      self.displayTitle(group);
+      self.displayDescription(group);
+      group.on("mousedown", function (event) {
+        resetFocus();
+      });
+    }
+
+    displayTitle(group) {
+      var self = this;
+      var title = group.foreignObject(300, 40).move(-150, -65)
+        .add(SVG('<input class="process-step-title" type="text">', true))
+        .node.childNodes[0];
+      title.value = self.title;
+      title.addEventListener("click", function() {
+        title.focus();
+        var value = title.value;
+        title.value = "";
+        title.value = value;
+      });
+      title.addEventListener("keyup", function(event) {
+        self.title = title.value;
+        if (event.key === "Enter") {
+          document.activeElement.blur();
+        }
+      });
+    }
+
+    displayDescription(group) {
+      var self = this;
+      var description = group.foreignObject(300, 90).move(-150, 0)
+        .add(SVG('<textarea class="process-step-description"></textarea>', true))
+        .node.childNodes[0];
+      description.innerText = self.description;
+      description.addEventListener("click", function() {
+        description.focus();
+        var value = description.value;
+        description.value = "";
+        description.value = value;
+      });
+      description.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+        }
+      });
+      description.addEventListener("keyup", function(event) {
+        self.description = description.value;
+        if (event.key === "Enter") {
+          document.activeElement.blur();
+        }
+      });
+    }
+
+    displayRemoveButton(group) {
+      var self = this;
+      var button = group.foreignObject(32, 32).move(128, -80)
+        .add(SVG('<div class="process-step-remove"><i class="fa-solid fa-xmark"></i></div>', true))
+        .node.childNodes[0];
+      button.addEventListener("click", function() {
+        group.remove();
+        steps.splice(steps.indexOf(self), 1);
+      });
+    }
+  }
+
+  class ConnectionPoint {
+    constructor(draw, step, x, y, type) {
+      this.draw = draw;
+      this.step = step;
+      this.x = x;
+      this.y = y;
+      this.type = type;
+      this.connecting = false;
+      this.line = null;
+      this.outerCircleColor = "#484848";
+      this.innerCircleColor = "#898989";
+    }
+
+    display(group) {
+      var self = this;
+      var outerCircle = group.circle(30).move(self.x - 15, self.y - 15).fill(self.outerCircleColor);
+      var innerCircle = group.circle(26).move(self.x - 13, self.y - 13).fill(self.innerCircleColor);
+      innerCircle.on('mousedown', function () {
+        mouseDown = true;
+        if (self.checkConnectionExistence()) {
+          return;
+        }
+        self.connecting = true;
+      }).on('mouseover', function () {
+        outerCircle.animate(300, '<>').fill('#b0b0b0');
+        innerCircle.animate(300, '<>').fill('#e1e1e1');
+        if (mouseDown) {
+          aimedConnectionPoint = self;
+        }
+      }).on('mouseout', function () {
+        if (self.connecting) {
+          return;
+        }
+        outerCircle.animate(300, '<>').fill(self.outerCircleColor);
+        innerCircle.animate(300, '<>').fill(self.innerCircleColor);
+        if (aimedConnectionPoint != null) {
+          aimedConnectionPoint = null;
+        }
+      }).on('click', function() {
+        for (var i = 0; i < connections.length; i++) {
+          var connection = connections[i];
+          if ((self.type === "origin" && connection.origin === self.step) ||
+            (self.type === "destination" && connection.destination === self.step)
+          ) {
+            connections.splice(i, 1);
+            connection.remove();
+            break;
+          }
+        }
+      });
+      group.on('dragmove', event => {
+        var mouseX = event.detail.box.x;
+        var mouseY = event.detail.box.y;
+        self.drag(mouseX, mouseY);
+      });
+      self.draw.on("mouseup", event => {
+        self.releaseMouse(outerCircle, innerCircle);
+      });
+    }
+
+    drag(mouseX, mouseY) {
+      for (var i = 0; i < connections.length; i++) {
+        connections[i].display();
+      }
+      var self = this;
+      if (!self.connecting) {
+        return;
+      }
+      if (self.line != null) {
+        self.line.remove();
+      }
+      var originX = self.step.x + 165 + self.x;
+      var originY = self.step.y + 75;
+      var destinationX = mouseX + 165 + self.x;
+      var destinationY = mouseY + 75;
+      var diffX = destinationX - originX;
+      var diffY = destinationY - originY;
+      var length = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
+      var nX = diffX * (1 / length) * (length - 10);
+      var nY = diffY * (1 / length) * (length - 10);
+      destinationX = nX + originX;
+      destinationY = nY + originY;
+      self.line = self.draw.line(originX, originY, destinationX, destinationY).stroke({
+        color: '#ffffff',
+        width: 4,
+        linecap: 'round',
+        dasharray: '30,30'
+      });
+    }
+
+    releaseMouse(outerCircle, innerCircle) {
+      var self = this;
+      outerCircle.animate(300, '<>').fill(self.outerCircleColor);
+      innerCircle.animate(300, '<>').fill(self.innerCircleColor);
+      if (!self.connecting) {
+        return;
+      }
+      mouseDown = false;
+      self.connecting = false;
+      if (self.line != null) {
+        self.line.remove();
+      }
+      self.line = null;
+      if (aimedConnectionPoint == null) {
+        return;
+      }
+      self.connect();
+    }
+
+    connect() {
+      var self = this;
+      if (aimedConnectionPoint.step === self.step || aimedConnectionPoint.type === self.type) {
+        aimedConnectionPoint = null;
+        return;
+      }
+      var origin = this.type === "origin" ? self.step : aimedConnectionPoint.step;
+      var destination = this.type === "destination" ? self.step : aimedConnectionPoint.step;
+      var connection = new Connection(draw, origin, destination);
+      connection.display();
+      connections.push(connection);
+    }
+
+    checkConnectionExistence() {
+      var self = this;
+      for (var i = 0; i < connections.length; i++) {
+        var connection = connections[i];
+        if (self.type === "origin" && connection.origin === self.step ||
+          self.type === "destination" && connection.destination === self.step
+        ) {
+          return true;
+        }
+      }
+      return false;
+    }
+  }
+
+  class Connection {
+    constructor(draw, origin, destination) {
+      this.draw = draw;
+      this.origin = origin;
+      this.destination = destination;
+      this.line = null;
+    }
+
+    display() {
+      var self = this;
+      if (self.line != null) {
+        self.remove();
+      }
+      self.line = self.draw.line(self.origin.x, self.origin.y + 75, self.destination.x + 330, self.destination.y + 75).stroke({
+        color: '#ffffff',
+        width: 4,
+        linecap: 'round',
+      });
+    }
+
+    remove() {
+      this.line.remove();
+    }
+  }
+
+  var steps = [];
+  steps.push(new Step(draw, -150, -75, "Step", "Description"));
+  var connections = [];
+  var previousBox;
+  var mouseDown = false;
+  var aimedConnectionPoint = null;
+
+  display({width: 4000, height: 4000, x: -2000, y: -2000});
+
+  function display(box) {
+    previousBox = box;
+    draw.clear();
+    displayBackground(box);
+    for (var i = 0; i < steps.length; i++) {
+      steps[i].display();
+    }
+    for (var i = 0; i < connections.length; i++) {
+      connections[i].display();
+    }
+  }
+
+  function displayBackground(box) {
+    var background = draw.pattern(100, 100, function(add) {
+      add.rect(8, 2).move(46, 49).radius(2).fill("#636d7d");
+      add.rect(2, 8).move(49, 46).radius(2).fill("#636d7d");
+    });
+    draw.rect(10000, 10000).move(box.x - 5000, box.y - 5000).fill(background);
+  }
+
+  document.getElementById("process-add-step").onclick = function (event) {
+    var step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "Step", "Description");
+    step.display();
+    steps.push(step);
+  }
+</script>
