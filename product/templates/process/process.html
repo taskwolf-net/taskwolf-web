@@ -147,6 +147,13 @@
       button.addEventListener("click", function() {
         group.remove();
         steps.splice(steps.indexOf(self), 1);
+        for (var i = connections.length - 1; i >= 0; i--) {
+          var connection = connections[i];
+          if (connection.origin === self || connection.destination === self) {
+            connections.splice(i, 1);
+            connection.remove();
+          }
+        }
       });
     }
   }
