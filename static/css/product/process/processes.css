@@ -107,11 +107,18 @@
   text-align: left;
 }
 
+#processes-list li div span {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 .processes-entry-name {
   width: 40% !important;
 }
 
 .processes-entry-optimization {
+  width: 20% !important;
   padding: 0 !important;
 }
 
@@ -158,37 +165,36 @@
   width: 40% !important;
 }
 
+#processes-table-description-optimization {
+  width: 20% !important;
+  text-align: center;
+}
+
 #processes-table-description button {
   border: none;
   background-color: #222b38;
   color: #9b9b9b;
 }
 
-@media (max-width: 2000px) {
-  #processes-list li div {
-    width: 20%;
-  }
-
-  #processes-table-description li {
-    width: 20%;
-  }
-}
-
-@media (max-width: 1000px) {
+@media (max-width: 1200px) {
   #processes-list li div {
     width: 20%;
   }
 
   .processes-entry-name {
-    width: 40% !important;
+    width: 30% !important;
   }
 
-  #processes-table-description li {
-    width: 20%;
+  .processes-entry-optimization {
+    width: 30% !important;
   }
 
   #processes-table-description-name {
-    width: 40% !important;
+    width: 30% !important;
+  }
+
+  #processes-table-description-optimization {
+    width: 30% !important;
   }
 }
 
@@ -199,6 +205,16 @@
 
   #processes-list li div span {
     font-size: .8em;
+  }
+
+  #processes-table-description-optimization {
+    text-align: right;
+  }
+
+  .processes-list-optimization {
+    padding: 5px;
+    margin-left: auto;
+    margin-right: 0;
   }
 }
 
