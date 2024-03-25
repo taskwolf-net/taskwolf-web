@@ -103,7 +103,7 @@
   padding: 3%;
   display: flex;
   flex-direction: column;
-  width: 24%;
+  width: 20%;
   text-align: left;
 }
 
@@ -112,7 +112,26 @@
 }
 
 .processes-entry-optimization {
-  width: 12% !important;
+  padding: 0 !important;
+}
+
+.processes-list-optimization {
+  width: fit-content;
+  margin: auto;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.processes-list-optimized {
+  background-color: #3c7b35;
+  border: 2px #47923f solid;
+}
+
+.processes-list-unoptimized {
+  background-color: #7b3535;
+  border: 2px #923f3f solid;
 }
 
 #processes-table-description {
@@ -129,7 +148,7 @@
 }
 
 #processes-table-description li {
-  width: 24%;
+  width: 20%;
   padding: 2% 3%;
   font-weight: bold;
   font-size: 20px;
@@ -137,11 +156,6 @@
 
 #processes-table-description-name {
   width: 40% !important;
-}
-
-#processes-table-description-optimization {
-  width: 12% !important;
-  text-align: center;
 }
 
 #processes-table-description button {
@@ -155,42 +169,26 @@
     width: 20%;
   }
 
-  .processes-entry-optimization {
-    width: 20% !important;
+  #processes-table-description li {
+    width: 20%;
+  }
+}
+
+@media (max-width: 1000px) {
+  #processes-list li div {
+    width: 20%;
+  }
+
+  .processes-entry-name {
+    width: 40% !important;
   }
 
   #processes-table-description li {
     width: 20%;
   }
 
-  #processes-table-description-optimization {
-    width: 20% !important;
-  }
-}
-
-@media (max-width: 1000px) {
-  #processes-list li div {
-    width: 24%;
-  }
-
-  .processes-entry-name {
-    width: 28% !important;
-  }
-
-  .processes-entry-optimization {
-    width: 24% !important;
-  }
-
-  #processes-table-description li {
-    width: 24%;
-  }
-
   #processes-table-description-name {
-    width: 28% !important;
-  }
-
-  #processes-table-description-optimization {
-    width: 24% !important;
+    width: 40% !important;
   }
 }
 
