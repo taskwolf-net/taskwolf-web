@@ -9,16 +9,34 @@
       <div id="process-wrapper">
         <div id="process-modification">
           <div id="process-delete-wrapper">
-            <button id="process-delete" type="button" class="btn btn-danger">{% trans 'product.process.delete' %}</button>
+            <button id="process-delete" type="button" class="btn btn-danger d-none">{% trans 'product.process.delete' %}</button>
           </div>
           <div id="process-component-wrapper">
+            <button id="process-add-start" type="button" class="btn btn-primary">{% trans 'product.process.start.add' %}</button>
             <button id="process-add-step" type="button" class="btn btn-primary">{% trans 'product.process.step.add' %}</button>
+            <button id="process-add-end" type="button" class="btn btn-primary">{% trans 'product.process.end.add' %}</button>
           </div>
           <div id="process-publish-wrapper">
             <button id="process-publish" type="button" class="btn btn-success">{% trans 'product.process.publish' %}</button>
+            <button id="process-sidebar-button" type="button" data-bs-toggle="collapse" data-bs-target="#process-sidebar" aria-expanded="true" aria-controls="process-sidebar" class=""><i class="fa-solid fa-xmark"></i></button>
           </div>
         </div>
-        <div class="graph">
+        <div id="process-content">
+          <div id="process-graph">
+          </div>
+          <div class="bg-dark collapse collapse-horizontal show" id="process-sidebar">
+            <div id="process-sidebar-content">
+              <h3 class="text-center font-weight-bold mt-4">Process</h3>
+              <div class="process-sidebar-entry">
+                <label class="form-label">Title</label>
+                <input id="process-title" class="form-control" placeholder="Title">
+              </div>
+              <div class="process-sidebar-entry">
+                <label class="form-label">Description</label>
+                <textarea id="process-description" class="form-control" placeholder="Description"></textarea>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -26,7 +44,11 @@
 </html>
 
 <script>
-  var draw = SVG().addTo($(".graph").get(0))
+  var process = null;
+  var steps = [];
+  var connections = [];
+
+  var draw = SVG().addTo(document.getElementById("process-graph"))
     .size("100%", "100%")
     .viewbox('-500 -500 1000 1000')
     .panZoom({ zoomMin: 0.5, zoomMax: 3, zoomFactor: 0.1});
@@ -45,15 +67,65 @@
     resetFocus();
   });
 
+  $(document).ready(function() {
+    var location = window.location;
+    var id = location.href.replace(location.host, "").replace(location.protocol, "").replace("process", "").replaceAll("/", "");
+    if (id === "") {
+      steps.push(new Step(draw, -850, -75, "START", "Start", "Description"));
+      steps.push(new Step(draw, -150, -75, "TASK", "Step", "Description"));
+      steps.push(new Step(draw, 500, -75, "END", "End", "Description"));
+      initialDisplay();
+      return;
+    }
+    fetchProcessData(id, function() {
+      displayProcess();
+    });
+  });
+
+  function fetchProcessData(id, callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/process/find/", "POST",
+      [], {process: id});
+    request.send(function (status, responseText) {
+      process = JSON.parse(responseText);
+      callback();
+    });
+  }
+
+  function displayProcess() {
+    document.getElementById("process-title").value = process.name;
+    document.getElementById("process-description").value = process.description;
+    document.getElementById("process-delete").classList.remove("d-none");
+    var stepIdRelation = [];
+    for (var i = 0; i < process.steps.length; i++) {
+      var entry = process.steps[i];
+      var step = new Step(draw, entry.stepXCoordinate, entry.stepYCoordinate,
+        entry.stepType, entry.stepName, entry.stepDescription);
+      steps.push(step);
+      stepIdRelation.push({id: entry.stepId, step: step});
+    }
+    for (var i = 0; i < process.connections.length; i++) {
+      var entry = process.connections[i];
+      var origin = stepIdRelation.filter((step) => step.id === entry.connectionOriginStep)[0].step;
+      var destination = stepIdRelation.filter((step) => step.id === entry.connectionDestinationStep)[0].step;
+      connections.push(new Connection(draw, origin, destination));
+    }
+    initialDisplay();
+  }
+
   class Step {
-    constructor(draw, x, y, title, description) {
+    constructor(draw, x, y, type, title, description) {
       this.draw = draw;
       this.x = x;
       this.y = y;
+      this.type = type.toUpperCase();
       this.title = title;
       this.description = description;
-      this.incomingConnectingPoint = new ConnectionPoint(draw, this, -150, 0, "origin");
-      this.outgoingConnectingPoint = new ConnectionPoint(draw, this, 150, 0, "destination");
+      if (this.type === "TASK" || this.type === "END") {
+        this.incomingConnectingPoint = new ConnectionPoint(draw, this, -150, 0, "destination");
+      }
+      if (this.type === "TASK" || this.type === "START") {
+        this.outgoingConnectingPoint = new ConnectionPoint(draw, this, 150, 0, "origin");
+      }
     }
 
     display() {
@@ -72,9 +144,13 @@
         divider.animate(300, '<>').fill('#4b5c6f');
       });
       self.displayContent(group);
+      if (self.type === "TASK" || self.type === "END") {
+        self.incomingConnectingPoint.display(group);
+      }
+      if (self.type === "TASK" || self.type === "START") {
+        self.outgoingConnectingPoint.display(group);
+      }
       self.displayRemoveButton(group);
-      self.incomingConnectingPoint.display(group);
-      self.outgoingConnectingPoint.display(group);
       group.move(self.x, self.y).draggable().on('dragmove', e => {
         if (mouseDown) {
           e.preventDefault();
@@ -230,9 +306,13 @@
         self.line.remove();
       }
       var originX = self.step.x + 165 + self.x;
-      var originY = self.step.y + 75;
+      var originY = self.step.y + 80;
       var destinationX = mouseX + 165 + self.x;
-      var destinationY = mouseY + 75;
+      var destinationY = mouseY + 80;
+      if (self.step.type === "START") {
+        originX -= 15;
+        destinationX -= 15;
+      }
       var diffX = destinationX - originX;
       var diffY = destinationY - originY;
       var length = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
@@ -265,7 +345,7 @@
         return;
       }
       self.connect();
-    }
+    }end
 
     connect() {
       var self = this;
@@ -307,7 +387,14 @@
       if (self.line != null) {
         self.remove();
       }
-      self.line = self.draw.line(self.origin.x, self.origin.y + 75, self.destination.x + 330, self.destination.y + 75).stroke({
+      var originX = self.origin.x + 330;
+      if (self.origin.type === "START") {
+        originX -= 15;
+      }
+      var originY = self.origin.y + 80;
+      var destinationX = self.destination.x;
+      var destinationY = self.destination.y + 80;
+      self.line = self.draw.line(originX, originY, destinationX, destinationY).stroke({
         color: '#ffffff',
         width: 4,
         linecap: 'round',
@@ -319,14 +406,13 @@
     }
   }
 
-  var steps = [];
-  steps.push(new Step(draw, -150, -75, "Step", "Description"));
-  var connections = [];
   var previousBox;
   var mouseDown = false;
   var aimedConnectionPoint = null;
 
-  display({width: 4000, height: 4000, x: -2000, y: -2000});
+  function initialDisplay() {
+    display({width: 4000, height: 4000, x: -2000, y: -2000});
+  }
 
   function display(box) {
     previousBox = box;
@@ -348,9 +434,115 @@
     draw.rect(10000, 10000).move(box.x - 5000, box.y - 5000).fill(background);
   }
 
-  document.getElementById("process-add-step").onclick = function (event) {
-    var step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "Step", "Description");
+  document.getElementById("process-add-start").onclick = function (event) {
+    var step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "START", "Start", "Description");
     step.display();
     steps.push(step);
+  }
+
+  document.getElementById("process-add-step").onclick = function (event) {
+    var step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "TASK", "Step", "Description");
+    step.display();
+    steps.push(step);
+  }
+
+  document.getElementById("process-add-end").onclick = function (event) {
+    var step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "END", "End", "Description");
+    step.display();
+    steps.push(step);
+  }
+
+  var isProcessSidebarShown = true;
+
+  document.getElementById('process-sidebar-button').onclick = function() {
+    isProcessSidebarShown = !isProcessSidebarShown;
+    updateProcessSidebarButtonIcon();
+  };
+
+
+  function updateProcessSidebarButtonIcon() {
+    if (isProcessSidebarShown) {
+      document.getElementById("process-sidebar-button").innerHTML ='<i class="fa-solid fa-xmark"></i>';
+      return;
+    }
+    document.getElementById("process-sidebar-button").innerHTML ='<i class="fa-solid fa-bars"></i>';
+  }
+
+  document.getElementById("process-publish").onclick = function (event) {
+    if (process == null) {
+      addProcess();
+      return;
+    }
+    updateProcess();
+  }
+
+  function addProcess() {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/process/add/", "POST",
+      [], createProcessPayload());
+    request.send(function (status, responseText) {
+      window.location.href = "/processes/";
+    });
+  }
+
+  function updateProcess() {
+    var payload = createProcessPayload();
+    payload.process = process.id;
+    let request = new HttpRequest("https://api.taskwolf.net/v1/process/update/", "POST",
+      [], payload);
+    request.send(function (status, responseText) {
+      window.location.href = "/processes/";
+    });
+  }
+
+  function createProcessPayload() {
+    var stepsPayload = [];
+    for (var i = 0; i < steps.length; i++) {
+      stepsPayload[i] = createStepPayload(steps[i]);
+    }
+    var connectionsPayload = [];
+    for (var i = 0; i < connections.length; i++) {
+      connectionsPayload[i] = createConnectionPayload(connections[i]);
+    }
+    return {
+      name: document.getElementById("process-title").value,
+      description: document.getElementById("process-description").value,
+      steps: stepsPayload,
+      connections: connectionsPayload
+    }
+  }
+
+  function createStepPayload(step) {
+    return {
+      name: step.title,
+      description: step.description,
+      type: step.type,
+      xCoordinate: step.x,
+      yCoordinate: step.y
+    }
+  }
+
+  function createConnectionPayload(connection) {
+    return {
+      originStep: steps.indexOf(connection.origin),
+      destinationStep: steps.indexOf(connection.destination)
+    }
+  }
+
+  document.getElementById("process-delete").onclick = function (event) {
+    swal({
+      title: "{% trans 'product.process.delete.title' %}",
+      text: "{% trans 'product.process.delete.body' %}",
+      icon: "warning",
+      dangerMode: true,
+      buttons: true,
+    }).then(willDelete => {
+      if (willDelete) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/process/remove/", "POST",
+          [], {process: process.id});
+        request.send(function (status, responseText) {
+          swal("{% trans 'product.process.delete.successful.title' %}", "{% trans 'product.process.delete.successful.body' %}", "success").then(success => window.location.href = "/processes/");
+        });
+      }
+    });
   }
 </script>
