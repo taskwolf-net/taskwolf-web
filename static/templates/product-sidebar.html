@@ -4,31 +4,34 @@
   <div id="sidebar-content">
     <ul class="navbar-nav ml-auto mt-4 h-100 d-flex align-items-center">
       <li class="sidebar-item">
-        <a href="/dashboard/" class="sidebar-link nav-link {% if request.path == '/dashboard/' or request.path == '/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-home" aria-hidden="true"></i><span>{% trans 'product.sidebar.dashboard' %}</span></a>
+        <a href="/dashboard/" class="sidebar-link nav-link {% if request.path == '/dashboard/' or request.path == '/' %}sidebar-active{% endif %}" aria-current="page"><span class="sidebar-icon material-symbols-outlined">house</span><span>{% trans 'product.sidebar.dashboard' %}</span></a>
       </li>
       <li class="sidebar-divider"></li>
       <li class="sidebar-item">
-        <a href="/workflows/" class="sidebar-link nav-link {% if 'workflow' in request.path %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-tasks" aria-hidden="true"></i><span>{% trans 'product.sidebar.workflows' %}</span></a>
+        <a href="/workflows/" class="sidebar-link nav-link {% if 'workflow' in request.path %}sidebar-active{% endif %}" aria-current="page"><span class="sidebar-icon material-symbols-outlined">rebase</span><span>{% trans 'product.sidebar.workflows' %}</span></a>
       </li>
       <li class="sidebar-item">
-        <a href="/processes/" class="sidebar-link nav-link {% if 'process' in request.path %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-diagram-project" aria-hidden="true"></i><span>{% trans 'product.sidebar.processes' %}</span></a>
+        <a href="/templates/" class="sidebar-link nav-link {% if request.path == '/templates/' %}sidebar-active{% endif %}" aria-current="page"><span class="sidebar-icon material-symbols-outlined">draft</span><span>{% trans 'product.sidebar.templates' %}</span></a>
       </li>
       <li class="sidebar-item">
-        <a href="/databases/" class="sidebar-link nav-link {% if 'database' in request.path %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-database" aria-hidden="true"></i><span>{% trans 'product.sidebar.databases' %}</span></a>
+        <a href="/processes/" class="sidebar-link nav-link {% if 'process' in request.path %}sidebar-active{% endif %}" aria-current="page"><span class="sidebar-icon material-symbols-outlined">account_tree</span><span>{% trans 'product.sidebar.processes' %}</span></a>
       </li>
       <li class="sidebar-item">
-        <a href="/templates/" class="sidebar-link nav-link {% if request.path == '/templates/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-sheet-plastic" aria-hidden="true"></i><span>{% trans 'product.sidebar.templates' %}</span></a>
-      </li>
-      <li class="sidebar-divider"></li>
-      <li class="sidebar-item">
-        <a href="/organizations/" class="sidebar-link nav-link {% if 'organization' in request.path %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-users" aria-hidden="true"></i><span>{% trans 'product.sidebar.organizations' %}</span></a>
+        <a href="/databases/" class="sidebar-link nav-link {% if 'database' in request.path %}sidebar-active{% endif %}" aria-current="page"><span class="sidebar-icon material-symbols-outlined">database</span><span>{% trans 'product.sidebar.databases' %}</span></a>
       </li>
       <li class="sidebar-item">
-        <a href="/account/apps/" class="sidebar-link nav-link {% if request.path == '/account/apps/' or request.path == '/accounts/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-link" aria-hidden="true"></i><span>{% trans 'product.sidebar.accounts' %}</span></a>
+        <a href="/webhooks/" class="sidebar-link nav-link {% if 'webhook' in request.path %}sidebar-active{% endif %}" aria-current="page"><span class="sidebar-icon material-symbols-outlined">webhook</span><span>{% trans 'product.sidebar.webhooks' %}</span></a>
       </li>
       <li class="sidebar-divider"></li>
       <li class="sidebar-item">
-        <a href="/help/" class="sidebar-link nav-link {% if request.path == '/help/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-question-circle" aria-hidden="true"></i><span>{% trans 'product.sidebar.help' %}</span></a>
+        <a href="/organizations/" class="sidebar-link nav-link {% if 'organization' in request.path %}sidebar-active{% endif %}" aria-current="page"><span class="sidebar-icon material-symbols-outlined">groups</span><span>{% trans 'product.sidebar.organizations' %}</span></a>
+      </li>
+      <li class="sidebar-item">
+        <a href="/account/apps/" class="sidebar-link nav-link {% if request.path == '/account/apps/' or request.path == '/accounts/' %}sidebar-active{% endif %}" aria-current="page"><span class="sidebar-icon material-symbols-outlined">link</span><span>{% trans 'product.sidebar.accounts' %}</span></a>
+      </li>
+      <li class="sidebar-divider"></li>
+      <li class="sidebar-item">
+        <a href="/help/" class="sidebar-link nav-link {% if request.path == '/help/' %}sidebar-active{% endif %}" aria-current="page"><span class="sidebar-icon material-symbols-outlined">help</span><span>{% trans 'product.sidebar.help' %}</span></a>
       </li>
     </ul>
   </div>
