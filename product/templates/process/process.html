@@ -47,6 +47,9 @@
   var process = null;
   var steps = [];
   var connections = [];
+  var previousBox;
+  var mouseDown = false;
+  var aimedConnectionPoint = null;
 
   var draw = SVG().addTo(document.getElementById("process-graph"))
     .size("100%", "100%")
@@ -280,6 +283,7 @@
           ) {
             connections.splice(i, 1);
             connection.remove();
+            checkPublishability();
             break;
           }
         }
@@ -290,6 +294,7 @@
         self.drag(mouseX, mouseY);
       });
       self.draw.on("mouseup", event => {
+        mouseDown = false;
         self.releaseMouse(outerCircle, innerCircle);
       });
     }
@@ -335,7 +340,6 @@
       if (!self.connecting) {
         return;
       }
-      mouseDown = false;
       self.connecting = false;
       if (self.line != null) {
         self.line.remove();
@@ -358,6 +362,7 @@
       var connection = new Connection(draw, origin, destination);
       connection.display();
       connections.push(connection);
+      checkPublishability();
     }
 
     checkConnectionExistence() {
@@ -406,11 +411,8 @@
     }
   }
 
-  var previousBox;
-  var mouseDown = false;
-  var aimedConnectionPoint = null;
-
   function initialDisplay() {
+    checkPublishability();
     display({width: 4000, height: 4000, x: -2000, y: -2000});
   }
 
@@ -459,13 +461,77 @@
     updateProcessSidebarButtonIcon();
   };
 
-
   function updateProcessSidebarButtonIcon() {
     if (isProcessSidebarShown) {
       document.getElementById("process-sidebar-button").innerHTML ='<i class="fa-solid fa-xmark"></i>';
       return;
     }
     document.getElementById("process-sidebar-button").innerHTML ='<i class="fa-solid fa-bars"></i>';
+  }
+
+  document.getElementById("process-title").oninput = function (event) {
+    checkPublishability();
+  }
+
+  document.getElementById("process-description").oninput = function (event) {
+    checkPublishability();
+  }
+
+  function checkPublishability() {
+    if (document.getElementById("process-title").value === "" ||
+      document.getElementById("process-description").value === "" ||
+      !checkProcessIntegrity()
+    ) {
+      updatePublishability(false);
+      return;
+    }
+    updatePublishability(true);
+  }
+
+  function checkProcessIntegrity() {
+    var start = null;
+    for (var i = 0; i < steps.length; i++) {
+      var step = steps[i];
+      if (step.type === "START") {
+        start = step;
+        break;
+      }
+    }
+    if (start == null) {
+      return false;
+    }
+    var currentStep = start;
+    while (currentStep != null) {
+      var connection = findStepConnection(currentStep);
+      if (connection == null) {
+        currentStep = null;
+        continue;
+      }
+      currentStep = connection.destination;
+      if (currentStep.type === "END") {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function findStepConnection(step) {
+    for (var i = 0; i < connections.length; i++) {
+      var connection = connections[i];
+      if (connection.origin === step) {
+        return connection;
+      }
+    }
+    return null;
+  }
+
+  function updatePublishability(isPublishable) {
+    var publishButton = document.getElementById("process-publish");
+    if (isPublishable) {
+      publishButton.classList.remove("disabled");
+    } else {
+      publishButton.classList.add("disabled");
+    }
   }
 
   document.getElementById("process-publish").onclick = function (event) {
