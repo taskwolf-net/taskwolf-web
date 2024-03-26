@@ -53,7 +53,6 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/targets/all/", "GET",
       []);
     request.send(function (status, responseText) {
-      console.log(responseText);
       callback(JSON.parse(responseText));
     });
   }

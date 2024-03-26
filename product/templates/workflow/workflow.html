@@ -366,7 +366,6 @@
     if (isSelected) {
       requestBody.workflow = sessionStorage.getItem("workflow-id");
     }
-    console.log(requestBody);
     let request = new HttpRequest("https://api.taskwolf.net/v1/workflow" + (isSelected ? "/update/" : "/add/"), "POST",
       [], requestBody);
     request.send(function (status, responseText) {
