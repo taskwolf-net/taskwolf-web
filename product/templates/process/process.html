@@ -133,12 +133,18 @@
       if (this.type === "TASK" || this.type === "START") {
         this.outgoingConnectingPoint = new ConnectionPoint(draw, this, 150, 0, "origin");
       }
+      this.state = "INACTIVE";
     }
 
     display() {
       var self = this;
       var group = self.draw.group();
-      var outerRect = group.rect(300, 150).move(-150, -75).radius(10).fill("#1b232f");
+      var outerRect = group.rect(300, 150).move(-150, -75).radius(10);
+      if (this.state === "ACTIVE") {
+        outerRect.fill("#49ff1d");
+      } else {
+        outerRect.fill("#1b232f")
+      }
       var innerRect = group.rect(290, 140).move(-145, -70).radius(10).fill("#3d4b5a");
       var divider = group.rect(250, 2).move(-125, -15).radius(10).fill("#4b5c6f");
       group.on("mouseover", function() {
@@ -238,6 +244,14 @@
           }
         }
       });
+    }
+
+    activate() {
+      this.state = "ACTIVE";
+    }
+
+    deactivate() {
+      this.state = "INACTIVE";
     }
   }
 
@@ -353,7 +367,7 @@
         return;
       }
       self.connect();
-    }end
+    }
 
     connect() {
       var self = this;
@@ -389,6 +403,7 @@
       this.origin = origin;
       this.destination = destination;
       this.line = null;
+      this.state = "INACTIVE";
     }
 
     display() {
@@ -403,8 +418,12 @@
       var originY = self.origin.y + 80;
       var destinationX = self.destination.x;
       var destinationY = self.destination.y + 80;
+      var color = "#ffffff";
+      if (this.state === "ACTIVE") {
+        color = "#49ff1d";
+      }
       self.line = self.draw.line(originX, originY, destinationX, destinationY).stroke({
-        color: '#ffffff',
+        color: color,
         width: 4,
         linecap: 'round',
       });
@@ -412,6 +431,14 @@
 
     remove() {
       this.line.remove();
+    }
+
+    activate() {
+      this.state = "ACTIVE";
+    }
+
+    deactivate() {
+      this.state = "INACTIVE";
     }
   }
 
@@ -481,6 +508,27 @@
     checkPublishability();
   }
 
+  document.getElementById("process-run").onclick = function (event) {
+    activeStep(findStartStep());
+  }
+
+  function activeStep(step) {
+    step.activate();
+    display(previousBox);
+    setTimeout(function() {
+      step.deactivate();
+      var connection = findStepConnection(step);
+      if (connection != null) {
+        connection.activate();
+        setTimeout(function() {
+          connection.deactivate();
+          activeStep(connection.destination);
+        }, 800);
+      }
+      display(previousBox);
+    }, 800);
+  }
+
   function checkPublishability() {
     if (document.getElementById("process-title").value === "" ||
       document.getElementById("process-description").value === "" ||
@@ -493,18 +541,7 @@
   }
 
   function checkProcessIntegrity() {
-    var start = null;
-    for (var i = 0; i < steps.length; i++) {
-      var step = steps[i];
-      if (step.type === "START") {
-        start = step;
-        break;
-      }
-    }
-    if (start == null) {
-      return false;
-    }
-    var currentStep = start;
+    var currentStep = findStartStep();
     while (currentStep != null) {
       var connection = findStepConnection(currentStep);
       if (connection == null) {
@@ -517,6 +554,16 @@
       }
     }
     return false;
+  }
+
+  function findStartStep() {
+    for (var i = 0; i < steps.length; i++) {
+      var step = steps[i];
+      if (step.type === "START") {
+        return step;
+      }
+    }
+    return null;
   }
 
   function findStepConnection(step) {
