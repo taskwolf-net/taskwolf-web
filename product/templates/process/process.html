@@ -148,11 +148,15 @@
       var innerRect = group.rect(290, 140).move(-145, -70).radius(10).fill("#3d4b5a");
       var divider = group.rect(250, 2).move(-125, -15).radius(10).fill("#4b5c6f");
       group.on("mouseover", function() {
-        outerRect.animate(300, '<>').fill('#334056');
+        if (this.state === "INACTIVE") {
+          outerRect.animate(300, '<>').fill('#334056');
+        }
         innerRect.animate(300, '<>').fill('#4b5c6f');
         divider.animate(300, '<>').fill('#6b84a0');
       }).on("mouseout", function() {
-        outerRect.animate(300, '<>').fill('#1b232f');
+        if (this.state === "INACTIVE") {
+          outerRect.animate(300, '<>').fill('#1b232f');
+        }
         innerRect.animate(300, '<>').fill('#3d4b5a');
         divider.animate(300, '<>').fill('#4b5c6f');
       });
