@@ -17,7 +17,7 @@
             <button id="process-add-end" type="button" class="btn btn-primary">{% trans 'product.process.end.add' %}</button>
           </div>
           <div id="process-publish-wrapper">
-            <button id="process-publish" type="button" class="btn btn-success">{% trans 'product.process.publish' %}</button>
+            <button id="process-run" type="button" class="btn btn-success">{% trans 'product.process.run' %}</button>
             <button id="process-sidebar-button" type="button" data-bs-toggle="collapse" data-bs-target="#process-sidebar" aria-expanded="true" aria-controls="process-sidebar" class=""><i class="fa-solid fa-xmark"></i></button>
           </div>
         </div>
@@ -34,6 +34,10 @@
               <div class="process-sidebar-entry">
                 <label class="form-label">Description</label>
                 <textarea id="process-description" class="form-control" placeholder="Description"></textarea>
+              </div>
+              <div class="process-sidebar-entry text-center">
+                <button id="process-publish" type="button" class="btn btn-success">{% trans 'product.process.publish' %}</button>
+                <p id="process-publish-note" class="text-secondary my-3">{% trans 'product.process.publish.note' %}</p>
               </div>
             </div>
           </div>
