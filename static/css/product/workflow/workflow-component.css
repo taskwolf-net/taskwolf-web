@@ -320,9 +320,9 @@ input:-webkit-autofill:active{
   width: 100%;
 }
 
-.workflow-component-specifications-selected-item p {
-  display: inline-block;
-  white-space: pre;
+.workflow-component-specifications-selected-item b {
+  word-wrap: break-word;
+  overflow: hidden;
 }
 
 .workflow-component-specification-select-empty:hover {
@@ -391,10 +391,6 @@ input:-webkit-autofill:active{
 }
 
 @media (max-width: 1200px) {
-  .workflow-component-specifications-selected-item p {
-    display: none;
-  }
-
   #workflow-component-specifications-placeholders-list {
     width: 80%;
   }
