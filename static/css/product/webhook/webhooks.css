@@ -1,0 +1,229 @@
+#webhooks-headline {
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 2%;
+}
+
+#webhooks-header {
+  width: min(calc(2000px - 15vw), 95%);
+  margin: auto;
+  margin-top: 2%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#webhooks-owner-dropdown {
+  margin-right: 2%;
+}
+
+#webhooks-owner-dropdown-button {
+  width: 100%;
+}
+
+#webhooks-owner-dropdown-list {
+  width: 100%;
+}
+
+#webhooks-search-box {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 5px;
+  background-color: #202428;
+}
+
+#webhooks-search-box input {
+  flex-grow: 2;
+  border: none;
+  border-radius: 5px;
+  background-color: #202428;
+  color: white;
+}
+
+#webhooks-search-box input:focus{
+  box-shadow: 0 0 0 rgb(255, 255, 255);
+}
+
+#webhooks-search-box button {
+  background-color: #202428;
+  color: #9b9b9b;
+  border: none;
+  border-radius: 5px;
+}
+
+#webhook-create {
+  width: 20%;
+  margin-left: 2%;
+}
+
+@media (max-width: 1200px) {
+  #webhooks-header {
+    display: block;
+  }
+
+  #webhooks-owner-dropdown {
+    margin: 20px auto 20px;
+    width: fit-content;
+  }
+
+  #webhook-create {
+    width: fit-content;
+  }
+}
+
+#webhooks-list {
+  width: min(calc(2000px - 15vw), 95%);
+  position: relative;
+  list-style-type: none;
+  padding: 0;
+  margin: auto;
+}
+
+#webhooks-list li {
+  border-bottom: 1px #4a4a4a solid;
+  width: 100%;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+  font-size: 18px;
+  transition-duration: 0.3s;
+}
+
+#webhooks-list li div {
+  padding: 3%;
+  display: flex;
+  flex-direction: column;
+  width: 18%;
+  text-align: left;
+}
+
+#webhooks-list li div span {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.webhooks-entry-url {
+  width: 40% !important;
+}
+
+.webhooks-list-url {
+  white-space: normal !important;
+  word-wrap: break-word;
+}
+
+.webhooks-entry-settings {
+  width: 6% !important;
+  padding: 0 !important;
+}
+
+.webhooks-list-settings {
+  background-color: transparent;
+  border: none;
+  color: white !important;
+  float: right;
+  width: 100% !important;
+}
+
+.webhook-settings-dropdown {
+  padding: 10px !important;
+}
+
+.webhook-settings-dropdown-entry {
+  padding: 10px !important;
+  border-radius: 4px;
+  border: none !important;
+}
+
+.webhook-settings-dropdown-entry:hover {
+  background-color: #464b54 !important;
+}
+
+.webhook-settings-dropdown-entry i {
+  width: 20px;
+}
+
+.webhook-settings-dropdown-entry label {
+  margin-left: 15px;
+}
+
+#webhooks-table-description {
+  width: min(calc(2000px - 15vw), 95%);
+  position: relative;
+  list-style-type: none;
+  margin: auto;
+  margin-top: 1%;
+  border-bottom: 4px #717171 solid;
+  padding: 0;
+  color: white;
+  display: flex;
+  flex-direction: row;
+}
+
+#webhooks-table-description li {
+  width: 18%;
+  padding: 2% 3%;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+#webhooks-table-description-url {
+  width: 40% !important;
+}
+
+#webhooks-table-description-settings {
+  width: 6% !important;
+}
+
+#webhooks-table-description button {
+  border: none;
+  background-color: #222b38;
+  color: #9b9b9b;
+}
+
+@media (max-width: 575px) {
+  #webhooks-table-description li {
+    font-size: .8em;
+  }
+
+  #webhooks-list li div span {
+    font-size: .8em;
+  }
+
+  #webhooks-table-description-optimization {
+    text-align: right;
+  }
+
+  .webhooks-list-optimization {
+    padding: 5px;
+    margin-left: auto;
+    margin-right: 0;
+  }
+}
+
+#webhooks-empty {
+  color: white;
+  display: none;
+  flex-flow: wrap;
+  justify-content: center;
+  text-align: center;
+  margin-top: 5%;
+  white-space: pre;
+}
+
+#webhooks-empty-headline {
+  font-size: 20px;
+  font-weight: bold;
+  width: 100%;
+  margin-bottom: 1%;
+}
+
+#webhooks-empty-link {
+  text-decoration: none;
+}

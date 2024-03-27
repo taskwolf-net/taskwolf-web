@@ -1,0 +1,245 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body>
+    {% include 'templates/product-header.html' %}
+    {% include 'templates/product-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="webhooks-wrapper">
+        <h1 id="webhooks-headline">{% trans 'product.webhooks.headline' %}</h1>
+        <div id="webhooks-header">
+          <div id="webhooks-owner-dropdown" class="dropdown">
+            <button id="webhooks-owner-dropdown-button" class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
+            </button>
+            <ul id="webhooks-owner-dropdown-list" class="dropdown-menu dropdown-menu-dark">
+            </ul>
+          </div>
+          <div class="d-flex w-100">
+            <div id="webhooks-search-box">
+              <input id="webhooks-search-input" placeholder=" {% trans 'product.webhooks.search' %}" type="text" class="form-control" value="" autocomplete="off">
+              <button type="button">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+            <button type="button" id="webhook-create" class="btn btn-primary btn-block">{% trans 'product.webhooks.create' %}</button>
+          </div>
+        </div>
+        <ul id="webhooks-table-description">
+          <li id="webhooks-table-description-url">
+            <div>
+              <span>{% trans 'product.webhooks.url' %}</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span>{% trans 'product.webhooks.creator' %}</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span>{% trans 'product.webhooks.date' %}</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span>{% trans 'product.webhooks.usages' %}</span>
+            </div>
+          </li>
+          <li id="webhooks-table-description-settings">
+            <div>
+              <span></span>
+            </div>
+          </li>
+        </ul>
+        <ul id="webhooks-list">
+        </ul>
+        <div id="webhooks-empty">
+          <span id="webhooks-empty-headline">{% trans 'product.webhooks.empty.headline' %}</span>
+          <span>{% trans 'product.webhooks.empty.text' %}</span><a id="webhooks-empty-link" href="javascript:createWebhook()">{% trans 'product.webhooks.empty.link' %}</a><span>?</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  var owners;
+  var webhooks;
+  var webhooksCurrentNameFilter = "";
+
+  $(document).ready(function() {
+    webhooks = [];
+    fetchTargetsData(function(response) {
+      var targets = response.targets;
+      var currentTarget = response.currentTarget;
+      for (var i = 0; i < targets.length; i++) {
+        addTarget(targets[i]);
+      }
+      selectTarget(targets.filter((target) => target.id === currentTarget)[0]);
+    });
+  });
+
+  function fetchTargetsData(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/targets/all/", "GET",
+      []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function addTarget(target) {
+    var targetElement = document.createElement("li");
+    targetElement.classList.add("dropdown-item");
+    var targetNameName = document.createElement("b");
+    targetNameName.innerHTML = target.name;
+    targetElement.appendChild(targetNameName);
+    targetElement.onclick = function(event) {
+      selectTarget(target);
+    }
+    document.getElementById("webhooks-owner-dropdown-list").appendChild(targetElement);
+  }
+
+  function selectTarget(target) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST",
+      [], {target: target.id});
+    request.send(function (status, responseText) {
+      document.getElementById("webhooks-owner-dropdown-button").innerHTML = "{% trans 'target' %}: " + target.name;
+      fetchWebhooksData(function() {
+        displayWebhooks();
+        if (webhooks.length === 0) {
+          document.getElementById("webhooks-empty").style.display = "flex";
+        } else {
+          document.getElementById("webhooks-empty").style.display = "none";
+        }
+      });
+    });
+  }
+
+  function fetchWebhooksData(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/webhooks/selected/", "GET", []);
+    request.send(function (status, responseText) {
+      webhooks = JSON.parse(responseText).webhooks;
+      callback();
+    });
+  }
+
+  function displayWebhooks() {
+    document.getElementById("webhooks-list").innerHTML = "";
+    for (var i = 0; i < webhooks.length; i++) {
+      var entry = webhooks[i];
+      if(!(shouldDisplayWebhookEntry(entry))) {
+        continue;
+      }
+      displayWebhook(entry.id, entry.url, entry.creator, entry.created, entry.usages);
+    }
+  }
+
+  function shouldDisplayWebhookEntry(entry) {
+    return webhooksCurrentNameFilter.length === 0 ||
+      entry.url.toLowerCase().includes(webhooksCurrentNameFilter.toLowerCase()) ||
+      entry.creator.toLowerCase().includes(webhooksCurrentNameFilter.toLowerCase()) ||
+      entry.created.toLowerCase().includes(webhooksCurrentNameFilter.toLowerCase());
+  }
+
+  function displayWebhook(id, url, creator, created, usages) {
+    var entry = document.createElement('li');
+    entry.classList.add("webhook-entry");
+    var urlDiv = document.createElement("div");
+    urlDiv.classList.add("webhooks-entry-url");
+    var urlElement = document.createElement("span");
+    urlElement.innerText = url;
+    urlElement.classList.add("webhooks-list-url");
+    urlDiv.appendChild(urlElement);
+    entry.appendChild(urlDiv);
+    appendWebhookCell(entry, "creator", creator, "span");
+    appendWebhookCell(entry, "created", created, "span");
+    appendWebhookCell(entry, "usages", usages, "span");
+    entry.appendChild(entry.appendChild(createSettingsDeleteButton(id)));
+    document.getElementById("webhooks-list").appendChild(entry);
+  }
+
+  function createSettingsDeleteButton(webhook) {
+    var settingsDiv = document.createElement("div");
+    settingsDiv.classList.add("webhooks-entry-settings");
+    var settingsButton = document.createElement("button");
+    settingsButton.type = "button";
+    settingsButton.classList.add("webhooks-list-settings", "fa-solid",
+      "fa-ellipsis-vertical");
+    settingsButton.setAttribute("data-bs-toggle", "dropdown");
+    settingsButton.setAttribute("aria-expanded", "false");
+    settingsDiv.appendChild(settingsButton);
+    var dropdown = document.createElement("ul");
+    dropdown.classList.add("webhook-settings-dropdown", "dropdown-menu", "dropdown-menu-dark");
+    dropdown.appendChild(createSettingsDropdownButton(dropdown, "fa-trash",
+      "{% trans 'product.webhooks.delete' %}", "text-danger",
+      function() {deleteWebhook(webhook)}));
+    settingsDiv.appendChild(dropdown);
+    return settingsDiv;
+  }
+
+  function createSettingsDropdownButton(dropdown, icon, content, color, click) {
+    var dropdownEntry = document.createElement("li");
+    dropdownEntry.classList.add("webhook-settings-dropdown-entry", "dropdown-item");
+    var dropdownEntryIcon = document.createElement("i");
+    dropdownEntryIcon.classList.add("fa-solid", icon);
+    dropdownEntry.appendChild(dropdownEntryIcon);
+    var dropdownEntryLabel = document.createElement("label");
+    dropdownEntryLabel.innerText = content;
+    dropdownEntry.appendChild(dropdownEntryLabel);
+    if (color !== undefined) {
+      dropdownEntryIcon.classList.add(color);
+      dropdownEntryLabel.classList.add(color);
+    }
+    dropdownEntry.onclick = function (event) {
+      $(dropdown).dropdown('toggle');
+      click();
+    };
+    return dropdownEntry;
+  }
+
+  function appendWebhookCell(entry, identifier, information, elementType) {
+    var div = document.createElement("div");
+    var element = document.createElement(elementType);
+    element.innerText = information;
+    element.classList.add("webhooks-list-" + identifier);
+    div.appendChild(element);
+    entry.appendChild(div);
+    return element;
+  }
+
+  document.getElementById("webhooks-search-input").oninput = function(event) {
+    webhooksCurrentNameFilter = event.target.value;
+    displayWebhooks();
+  };
+
+  document.getElementById("webhook-create").onclick = function(event) {
+    createWebhook();
+  };
+
+  function createWebhook() {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/webhook/add/", "GET",
+      [], {});
+    request.send(function (status, responseText) {
+      swal("{% trans 'product.webhooks.add.successful.title' %}", "{% trans 'product.webhooks.add.successful.body' %}", "success").then(success => window.location.href = "/webhooks/");
+    });
+  }
+
+  function deleteWebhook(webhook) {
+    swal({
+      title: "{% trans 'product.webhooks.delete.title' %}",
+      text: "{% trans 'product.webhooks.delete.body' %}",
+      icon: "warning",
+      dangerMode: true,
+      buttons: true,
+    }).then(willDelete => {
+      if (willDelete) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/webhook/remove/", "POST",
+          [], {webhook: webhook});
+        request.send(function (status, responseText) {
+          swal("{% trans 'product.webhooks.delete.successful.title' %}", "{% trans 'product.webhooks.delete.successful.body' %}", "success").then(success => window.location.href = "/webhooks/");
+        });
+      }
+    });
+  }
+</script>
