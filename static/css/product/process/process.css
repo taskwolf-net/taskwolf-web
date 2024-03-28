@@ -75,6 +75,12 @@
   }
 }
 
+@media (max-width: 575px) {
+  #process-modification {
+    height: 250px;
+  }
+}
+
 #process-content {
   display: flex;
   width: 100%;
