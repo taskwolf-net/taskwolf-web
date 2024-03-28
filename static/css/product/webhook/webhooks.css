@@ -187,6 +187,32 @@
   color: #9b9b9b;
 }
 
+@media (max-width: 1000px) {
+  #webhooks-table-description-url {
+    width: 30% !important;
+  }
+
+  .webhooks-entry-url {
+    width: 30% !important;
+  }
+
+  #webhooks-table-description-settings {
+    width: 10% !important;
+  }
+
+  .webhooks-entry-settings {
+    width: 10% !important;
+  }
+
+  #webhooks-table-description li {
+    width: 20%;
+  }
+
+  #webhooks-list li div {
+    width: 20%;
+  }
+}
+
 @media (max-width: 575px) {
   #webhooks-table-description li {
     font-size: .8em;
