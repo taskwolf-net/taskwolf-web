@@ -29,38 +29,11 @@
   display: none;
 }
 
-#navbar-logo {
-  width: 80px;
-  height: 80px;
-  margin-left: 50px;
-}
-
-#profile-picture {
-  width: 64px;
-  height: 64px;
-  border-radius: 40%;
-  background-color: #212529;
-}
-
-#profile-button-container {
+#close-settings {
+  color: white;
   margin-left: auto;
-  margin-right: 50px;
-  position: relative;
-}
-
-#profile-button-wrapper {
-  border-radius: 50%;
-  width: 64px;
-  height: 64px;
-  text-align: center;
-  background-color: white !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#profile-button-wrapper::after {
-  display: none;
+  margin-right: 35px;
+  font-size: 40px;
 }
 
 @media(max-width: 1400px) {
@@ -76,21 +49,5 @@
 @media (max-width: 575px) {
   #sidebar-button {
     margin-left: 20px;
-  }
-
-  #navbar-logo {
-    display: none;
-  }
-
-  #profile-button-container {
-    margin-right: 25px;
-  }
-}
-
-@media(min-width: 575px) {
-  .dropdown-menu-center {
-    left: 50% !important;
-    right: auto !important;
-    transform: translate(-50%, 40%) !important;
   }
 }

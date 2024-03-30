@@ -3,52 +3,12 @@
 <nav id="navbar" class="bg-dark">
   <button id="sidebar-button" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="false" aria-controls="sidebar"></button>
   <div id="navbar-content">
-    <a href="/" id="navbar-logo"><img src="{% static 'img/logo.png' %}" width="80px" height="80px" alt=""></a>
-    <div id="profile-button-container">
-      <button class="dropdown-toggle btn" id="profile-button-wrapper" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <img id="profile-picture" class="d-none">
-      </button>
-      <div class="dropdown-menu dropdown-menu-dark dropdown-menu-center" aria-labelledby="profile-button-wrapper">
-        <button class="dropdown-item" id="dashboard-button" type="button">{% trans 'product.header.dashboard' %}</button>
-        <button class="dropdown-item" id="settings-button" type="button">{% trans 'product.header.settings' %}</button>
-        <button class="dropdown-item" id="tickets-button" type="button">{% trans 'product.header.tickets' %}</button>
-        <div class="dropdown-divider"></div>
-        <button class="dropdown-item" id="logout-button" type="button">{% trans 'product.header.logout' %}</button>
-      </div>
-    </div>
+    <a href="/" id="close-settings"><i class="fa-solid fa-circle-xmark"></i></a>
   </div>
 </nav>
 <div id="header-space"></div>
 
 <script>
-  $(document).ready(function() {
-    displayProfilePicture();
-  });
-
-  function displayProfilePicture() {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/picture/", "GET",
-      []);
-    request.send(function (status, responseText) {
-      var pictureElement = document.getElementById("profile-picture");
-      pictureElement.src = JSON.parse(responseText).picture;
-      pictureElement.classList.remove("d-none");
-    });
-  }
-
-  document.getElementById('dashboard-button').onclick = function() {
-    window.location.href = "/dashboard/";
-  };
-  document.getElementById('settings-button').onclick = function() {
-    window.location.href = "/settings/profile/";
-  };
-  document.getElementById('tickets-button').onclick = function() {
-    window.location.href = "/tickets/";
-  };
-  document.getElementById('logout-button').onclick = function() {
-    Cookie.destroy("token");
-    window.location.href = "/";
-  };
-
   var isSidebarShown;
 
   window.onload = function() {
