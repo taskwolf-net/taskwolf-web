@@ -141,8 +141,8 @@
   });
 
   function fetchApplicationsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/modules/all/", "GET",
-      []);
+    let request = new HttpRequest("https://api.taskwolf.net/v1/modules/available/", "POST",
+      [], {componentType: "{{type}}"});
     request.send(function (status, responseText) {
       applications = JSON.parse(responseText).modules;
       callback();
