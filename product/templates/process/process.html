@@ -161,12 +161,7 @@
         divider.animate(300, '<>').fill('#4b5c6f');
       });
       self.displayContent(group);
-      if (self.type === "TASK" || self.type === "END") {
-        self.incomingConnectingPoint.display(group);
-      }
-      if (self.type === "TASK" || self.type === "START") {
-        self.outgoingConnectingPoint.display(group);
-      }
+      self.displayConnectionPoints(group);
       self.displayRemoveButton(group);
       group.move(self.x, self.y).draggable().on('dragmove', e => {
         if (mouseDown) {
@@ -176,6 +171,16 @@
         self.x = e.detail.box.x;
         self.y = e.detail.box.y;
       });
+    }
+
+    displayConnectionPoints(group) {
+      var self = this;
+      if (self.type === "TASK" || self.type === "END") {
+        self.incomingConnectingPoint.display(group);
+      }
+      if (self.type === "TASK" || self.type === "START") {
+        self.outgoingConnectingPoint.display(group);
+      }
     }
 
     displayContent(group) {
@@ -247,6 +252,7 @@
             connection.remove();
           }
         }
+        checkPublishability();
       });
     }
 
@@ -278,9 +284,6 @@
       var innerCircle = group.circle(26).move(self.x - 13, self.y - 13).fill(self.innerCircleColor);
       innerCircle.on('mousedown', function () {
         mouseDown = true;
-        if (self.checkConnectionExistence()) {
-          return;
-        }
         self.connecting = true;
       }).on('mouseover', function () {
         outerCircle.animate(300, '<>').fill('#b0b0b0');
@@ -296,18 +299,6 @@
         innerCircle.animate(300, '<>').fill(self.innerCircleColor);
         if (aimedConnectionPoint != null) {
           aimedConnectionPoint = null;
-        }
-      }).on('click', function() {
-        for (var i = 0; i < connections.length; i++) {
-          var connection = connections[i];
-          if ((self.type === "origin" && connection.origin === self.step) ||
-            (self.type === "destination" && connection.destination === self.step)
-          ) {
-            connections.splice(i, 1);
-            connection.remove();
-            checkPublishability();
-            break;
-          }
         }
       });
       group.on('dragmove', event => {
@@ -386,19 +377,6 @@
       connections.push(connection);
       checkPublishability();
     }
-
-    checkConnectionExistence() {
-      var self = this;
-      for (var i = 0; i < connections.length; i++) {
-        var connection = connections[i];
-        if (self.type === "origin" && connection.origin === self.step ||
-          self.type === "destination" && connection.destination === self.step
-        ) {
-          return true;
-        }
-      }
-      return false;
-    }
   }
 
   class Connection {
@@ -407,6 +385,7 @@
       this.origin = origin;
       this.destination = destination;
       this.line = null;
+      this.hitBox = null;
       this.state = "INACTIVE";
     }
 
@@ -426,15 +405,33 @@
       if (this.state === "ACTIVE") {
         color = "#49ff1d";
       }
-      self.line = self.draw.line(originX, originY, destinationX, destinationY).stroke({
+      self.line = self.draw.line(originX + 2, originY, destinationX - 2, destinationY).stroke({
         color: color,
         width: 4,
         linecap: 'round',
+      });
+      self.hitBox = self.draw.line(originX + 10, originY, destinationX - 10, destinationY).stroke({
+        color: "rgba(0,0,0,0)",
+        width: 20,
+        linecap: 'round',
+      }).on('mouseover', function () {
+        if (self.state === "INACTIVE") {
+          self.line.animate(300, '<>').stroke({color: "#ff3737"});
+        }
+      }).on('mouseout', function () {
+        if (self.state === "INACTIVE") {
+          self.line.animate(300, '<>').stroke({color: color});
+        }
+      }).on('click', function() {
+        connections.splice(connections.indexOf(self), 1);
+        self.remove();
+        checkPublishability();
       });
     }
 
     remove() {
       this.line.remove();
+      this.hitBox.remove();
     }
 
     activate() {
@@ -513,7 +510,10 @@
   }
 
   document.getElementById("process-run").onclick = function (event) {
-    activeStep(findStartStep());
+    var startSteps = findStartSteps();
+    for (var i = 0; i < startSteps.length; i++) {
+      activeStep(startSteps[i]);
+    }
   }
 
   function activeStep(step) {
@@ -521,12 +521,16 @@
     display(previousBox);
     setTimeout(function() {
       step.deactivate();
-      var connection = findStepConnection(step);
-      if (connection != null) {
-        connection.activate();
+      var stepConnections = findStepConnections(step);
+      if (stepConnections.length > 0) {
+        for (var i = 0; i < stepConnections.length; i++) {
+          stepConnections[i].activate();
+        }
         setTimeout(function() {
-          connection.deactivate();
-          activeStep(connection.destination);
+          for (var i = 0; i < stepConnections.length; i++) {
+            stepConnections[i].deactivate();
+            activeStep(stepConnections[i].destination);
+          }
         }, 800);
       }
       display(previousBox);
@@ -545,39 +549,44 @@
   }
 
   function checkProcessIntegrity() {
-    var currentStep = findStartStep();
-    while (currentStep != null) {
-      var connection = findStepConnection(currentStep);
-      if (connection == null) {
-        currentStep = null;
-        continue;
+    var currentSteps = findStartSteps();
+    while (currentSteps.length > 0) {
+      var newSteps = [];
+      for (var i = 0; i < currentSteps.length; i++) {
+        var stepConnections = findStepConnections(currentSteps[i]);
+        for (var j = 0; j < stepConnections.length; j++) {
+          var step = stepConnections[j].destination;
+          if (step.type === "END") {
+            return true;
+          }
+          newSteps.push(step);
+        }
       }
-      currentStep = connection.destination;
-      if (currentStep.type === "END") {
-        return true;
-      }
+      currentSteps = newSteps;
     }
     return false;
   }
 
-  function findStartStep() {
+  function findStartSteps() {
+    var startSteps = [];
     for (var i = 0; i < steps.length; i++) {
       var step = steps[i];
       if (step.type === "START") {
-        return step;
+        startSteps.push(step);
       }
     }
-    return null;
+    return startSteps;
   }
 
-  function findStepConnection(step) {
+  function findStepConnections(step) {
+    var stepConnection = [];
     for (var i = 0; i < connections.length; i++) {
       var connection = connections[i];
       if (connection.origin === step) {
-        return connection;
+        stepConnection.push(connection);
       }
     }
-    return null;
+    return stepConnection;
   }
 
   function updatePublishability(isPublishable) {
