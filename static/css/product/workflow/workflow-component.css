@@ -60,6 +60,10 @@ input:-webkit-autofill:active{
   box-shadow: none !important;
 }
 
+.workflow-component-new {
+  margin-left: 20px;
+}
+
 #workflow-component-application-name {
   width: 60%;
   margin: auto;

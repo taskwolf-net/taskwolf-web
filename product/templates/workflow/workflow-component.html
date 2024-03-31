@@ -160,7 +160,7 @@
       if(!(entry.name.toLowerCase().includes(workflowCurrentApplicationFilter.toLowerCase()))) {
         continue;
       }
-      displayApplication(entry.name, entry.logo);
+      displayApplication(entry.name, entry.logo, entry.novelty);
     }
   }
 
@@ -173,7 +173,7 @@
     displayApplication("Google Docs", "googledocs.png");
   }
 
-  function displayApplication(name, logo) {
+  function displayApplication(name, logo, novelty) {
     var entryElement = document.createElement("li");
     entryElement.classList.add("workflow-component-application-entry");
     var logoElement = document.createElement("img");
@@ -184,6 +184,13 @@
     var nameElement = document.createElement("label");
     nameElement.innerHTML = name;
     entryElement.appendChild(nameElement);
+    if (novelty === "NEW") {
+      var noveltyElement = document.createElement("span");
+      noveltyElement.classList.add("workflow-component-new", "badge",
+          "text-bg-success");
+      noveltyElement.innerHTML = "{% trans 'product.workflow.component.new' %}";
+      entryElement.appendChild(noveltyElement);
+    }
     entryElement.onclick = function(event) {
       selectApplication(name, logo, entryElement, true);
     }
@@ -343,18 +350,26 @@
       var events = JSON.parse(responseText).components;
       for (var i = 0; i < events.length; i++) {
         var event = events[i];
-        addEventDropdownEntry(event.identifier, event.name, event.description);
+        addEventDropdownEntry(event.identifier, event.name, event.description,
+          event.novelty);
       }
     });
   }
 
-  function addEventDropdownEntry(identifier, name, description) {
+  function addEventDropdownEntry(identifier, name, description, novelty) {
     var entryElement = document.createElement("li");
     entryElement.classList.add("dropdown-item");
     var nameElement = document.createElement("b");
     nameElement.classList.add("workflow-component-event-name");
     nameElement.innerHTML = name;
     entryElement.appendChild(nameElement);
+    if (novelty === "NEW") {
+      var noveltyElement = document.createElement("span");
+      noveltyElement.classList.add("workflow-component-new", "badge",
+        "text-bg-success");
+      noveltyElement.innerHTML = "{% trans 'product.workflow.component.new' %}";
+      entryElement.appendChild(noveltyElement);
+    }
     entryElement.appendChild(document.createElement("br"));
     var descriptionElement = document.createElement("span");
     descriptionElement.classList.add("workflow-component-event-description");
