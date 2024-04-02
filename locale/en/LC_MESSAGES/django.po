@@ -64,6 +64,8 @@ msgid "product.sidebar.organizations"
 msgstr "Organizations"
 msgid "product.sidebar.accounts"
 msgstr "Accounts"
+msgid "product.sidebar.devices"
+msgstr "Devices"
 msgid "product.sidebar.help"
 msgstr "Get Help"
 

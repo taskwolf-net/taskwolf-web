@@ -29,6 +29,9 @@
       <li class="sidebar-item">
         <a href="/account/apps/" class="sidebar-link nav-link {% if request.path == '/account/apps/' or request.path == '/accounts/' %}sidebar-active{% endif %}" aria-current="page"><span class="sidebar-icon material-symbols-outlined">link</span><span>{% trans 'product.sidebar.accounts' %}</span></a>
       </li>
+      <li class="sidebar-item">
+        <a href="/devices/" class="sidebar-link nav-link {% if 'device' in request.path %}sidebar-active{% endif %}" aria-current="page"><span class="sidebar-icon material-symbols-outlined">devices</span><span>{% trans 'product.sidebar.devices' %}</span></a>
+      </li>
       <li class="sidebar-divider"></li>
       <li class="sidebar-item">
         <a href="/help/" class="sidebar-link nav-link {% if request.path == '/help/' %}sidebar-active{% endif %}" aria-current="page"><span class="sidebar-icon material-symbols-outlined">help</span><span>{% trans 'product.sidebar.help' %}</span></a>
