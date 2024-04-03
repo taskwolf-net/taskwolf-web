@@ -1,0 +1,247 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body>
+    {% include 'templates/product-header.html' %}
+    {% include 'templates/product-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="devices-wrapper">
+        <h1 id="devices-headline">{% trans 'product.devices.headline' %}</h1>
+        <div id="devices-header">
+          <div id="devices-owner-dropdown" class="dropdown">
+            <button id="devices-owner-dropdown-button" class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
+            </button>
+            <ul id="devices-owner-dropdown-list" class="dropdown-menu dropdown-menu-dark">
+            </ul>
+          </div>
+          <div class="d-flex w-100">
+            <div id="devices-search-box">
+              <input id="devices-search-input" placeholder=" {% trans 'product.devices.search' %}" type="text" class="form-control" value="" autocomplete="off">
+              <button type="button">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <ul id="devices-table-description">
+          <li id="devices-table-description-url">
+            <div>
+              <span>{% trans 'product.devices.name' %}</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span>{% trans 'product.devices.owner' %}</span>
+            </div>
+          </li>
+          <li id="devices-table-description-type">
+            <div>
+              <span>{% trans 'product.devices.type' %}</span>
+            </div>
+          </li>
+          <li id="devices-table-description-settings">
+            <div>
+              <span></span>
+            </div>
+          </li>
+        </ul>
+        <ul id="devices-list">
+        </ul>
+        <div id="devices-empty">
+          <span id="devices-empty-headline">{% trans 'product.devices.empty.headline' %}</span>
+          <span>{% trans 'product.devices.empty.text' %}</span><a id="devices-empty-link" href="/">{% trans 'product.devices.empty.link' %}</a><span>.</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  var owners;
+  var currentOwner;
+  var devices;
+  var devicesCurrentNameFilter = "";
+
+  $(document).ready(function() {
+    devices = [];
+    fetchTargetsData(function(response) {
+      var targets = response.targets;
+      var currentTarget = response.currentTarget;
+      for (var i = 0; i < targets.length; i++) {
+        addTarget(targets[i]);
+      }
+      selectTarget(targets.filter((target) => target.id === currentTarget)[0]);
+    });
+  });
+
+  function fetchTargetsData(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/targets/all/", "GET",
+      []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function addTarget(target) {
+    var targetElement = document.createElement("li");
+    targetElement.classList.add("dropdown-item");
+    var targetNameName = document.createElement("b");
+    targetNameName.innerHTML = target.name;
+    targetElement.appendChild(targetNameName);
+    targetElement.onclick = function(event) {
+      selectTarget(target);
+    }
+    document.getElementById("devices-owner-dropdown-list").appendChild(targetElement);
+  }
+
+  function selectTarget(target) {
+    currentOwner = target;
+    let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST",
+      [], {target: target.id});
+    request.send(function (status, responseText) {
+      document.getElementById("devices-owner-dropdown-button").innerHTML = "{% trans 'target' %}: " + target.name;
+      fetchDevicesData(function() {
+        displayDevices();
+        if (devices.length === 0) {
+          document.getElementById("devices-empty").style.display = "flex";
+        } else {
+          document.getElementById("devices-empty").style.display = "none";
+        }
+      });
+    });
+  }
+
+  function fetchDevicesData(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/devices/selected/", "GET", []);
+    request.send(function (status, responseText) {
+      devices = JSON.parse(responseText).devices;
+      callback();
+    });
+  }
+
+  function displayDevices() {
+    document.getElementById("devices-list").innerHTML = "";
+    for (var i = 0; i < devices.length; i++) {
+      var entry = devices[i];
+      if(!(shouldDisplayDeviceEntry(entry))) {
+        continue;
+      }
+      displayDevice(entry.id, entry.information, entry.owner, entry.ownDevice,
+        entry.type);
+    }
+  }
+
+  function shouldDisplayDeviceEntry(entry) {
+    return devicesCurrentNameFilter.length === 0 ||
+      entry.information.toLowerCase().includes(devicesCurrentNameFilter.toLowerCase()) ||
+      entry.owner.toLowerCase().includes(devicesCurrentNameFilter.toLowerCase()) ||
+      entry.type.toLowerCase().includes(devicesCurrentNameFilter.toLowerCase());
+  }
+
+  function displayDevice(id, information, owner, ownDevice, type) {
+    var entry = document.createElement('li');
+    entry.classList.add("device-entry");
+    var urlDiv = document.createElement("div");
+    urlDiv.classList.add("devices-entry-name");
+    var urlElement = document.createElement("span");
+    urlElement.innerText = information;
+    urlElement.classList.add("devices-list-name");
+    urlDiv.appendChild(urlElement);
+    entry.appendChild(urlDiv);
+    appendDeviceCell(entry, "owner", owner, "span");
+    entry.appendChild(createDeviceTypeCell(type));
+    if (!ownDevice) {
+      entry.appendChild(createSettingsDeleteButton(id));
+    }
+    document.getElementById("devices-list").appendChild(entry);
+  }
+
+  function createDeviceTypeCell(type) {
+    var optimizationDiv = document.createElement("div");
+    optimizationDiv.classList.add("devices-entry-type");
+    var optimizationElement = document.createElement("span");
+    optimizationElement.classList.add("devices-list-type");
+    if (type.toLowerCase() === "linux") {
+      optimizationElement.innerHTML = "Linux";
+      optimizationElement.classList.add("devices-list-linux");
+    } else if (type.toLowerCase() === "android") {
+      optimizationElement.innerHTML = "Android";
+      optimizationElement.classList.add("devices-list-android");
+    }
+    optimizationDiv.appendChild(optimizationElement);
+    return optimizationDiv;
+  }
+
+  function createSettingsDeleteButton(device) {
+    var settingsDiv = document.createElement("div");
+    settingsDiv.classList.add("devices-entry-settings");
+    var settingsButton = document.createElement("button");
+    settingsButton.type = "button";
+    settingsButton.classList.add("devices-list-settings", "fa-solid",
+      "fa-ellipsis-vertical");
+    settingsButton.setAttribute("data-bs-toggle", "dropdown");
+    settingsButton.setAttribute("aria-expanded", "false");
+    settingsDiv.appendChild(settingsButton);
+    var dropdown = document.createElement("ul");
+    dropdown.classList.add("device-settings-dropdown", "dropdown-menu", "dropdown-menu-dark");
+    dropdown.appendChild(createSettingsDropdownButton(dropdown, "fa-trash",
+      "{% trans 'product.devices.delete' %}", "text-danger",
+      function() {deleteDevice(device)}));
+    settingsDiv.appendChild(dropdown);
+    return settingsDiv;
+  }
+
+  function createSettingsDropdownButton(dropdown, icon, content, color, click) {
+    var dropdownEntry = document.createElement("li");
+    dropdownEntry.classList.add("device-settings-dropdown-entry", "dropdown-item");
+    var dropdownEntryIcon = document.createElement("i");
+    dropdownEntryIcon.classList.add("fa-solid", icon);
+    dropdownEntry.appendChild(dropdownEntryIcon);
+    var dropdownEntryLabel = document.createElement("label");
+    dropdownEntryLabel.innerText = content;
+    dropdownEntry.appendChild(dropdownEntryLabel);
+    if (color !== undefined) {
+      dropdownEntryIcon.classList.add(color);
+      dropdownEntryLabel.classList.add(color);
+    }
+    dropdownEntry.onclick = function (event) {
+      $(dropdown).dropdown('toggle');
+      click();
+    };
+    return dropdownEntry;
+  }
+
+  function appendDeviceCell(entry, identifier, information, elementType) {
+    var div = document.createElement("div");
+    var element = document.createElement(elementType);
+    element.innerText = information;
+    element.classList.add("devices-list-" + identifier);
+    div.appendChild(element);
+    entry.appendChild(div);
+    return element;
+  }
+
+  document.getElementById("devices-search-input").oninput = function(event) {
+    devicesCurrentNameFilter = event.target.value;
+    displayDevices();
+  };
+
+  function deleteDevice(device) {
+    swal({
+      title: "{% trans 'product.devices.delete.title' %}",
+      text: "{% trans 'product.devices.delete.body' %}",
+      icon: "warning",
+      dangerMode: true,
+      buttons: true,
+    }).then(willDelete => {
+      if (willDelete) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/device/organization/remove/", "POST",
+          [], {device: device, organization: currentOwner.id});
+        request.send(function (status, responseText) {
+          swal("{% trans 'product.devices.delete.successful.title' %}", "{% trans 'product.devices.delete.successful.body' %}", "success").then(success => window.location.href = "/devices/");
+        });
+      }
+    });
+  }
+</script>

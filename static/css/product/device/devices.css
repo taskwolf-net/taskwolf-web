@@ -1,0 +1,263 @@
+#devices-headline {
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 2%;
+}
+
+#devices-header {
+  width: min(calc(2000px - 15vw), 95%);
+  margin: auto;
+  margin-top: 2%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#devices-owner-dropdown {
+  margin-right: 2%;
+}
+
+#devices-owner-dropdown-button {
+  width: 100%;
+}
+
+#devices-owner-dropdown-list {
+  width: 100%;
+}
+
+#devices-search-box {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 5px;
+  background-color: #202428;
+}
+
+#devices-search-box input {
+  flex-grow: 2;
+  border: none;
+  border-radius: 5px;
+  background-color: #202428;
+  color: white;
+}
+
+#devices-search-box input:focus{
+  box-shadow: 0 0 0 rgb(255, 255, 255);
+}
+
+#devices-search-box button {
+  background-color: #202428;
+  color: #9b9b9b;
+  border: none;
+  border-radius: 5px;
+}
+
+@media (max-width: 1200px) {
+  #devices-header {
+    display: block;
+  }
+
+  #devices-owner-dropdown {
+    margin: 20px auto 20px;
+    width: fit-content;
+  }
+}
+
+#devices-list {
+  width: min(calc(2000px - 15vw), 95%);
+  position: relative;
+  list-style-type: none;
+  padding: 0;
+  margin: auto;
+}
+
+#devices-list li {
+  border-bottom: 1px #4a4a4a solid;
+  width: 100%;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+  font-size: 18px;
+  transition-duration: 0.3s;
+}
+
+#devices-list li div {
+  padding: 3%;
+  display: flex;
+  flex-direction: column;
+  width: 27%;
+  text-align: left;
+}
+
+#devices-list li div span {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.devices-entry-name {
+  width: 40% !important;
+}
+
+.devices-list-name {
+  white-space: normal !important;
+  word-wrap: break-word;
+}
+
+.devices-entry-settings {
+  width: 6% !important;
+  padding: 0 !important;
+}
+
+.devices-list-settings {
+  background-color: transparent;
+  border: none;
+  color: white !important;
+  float: right;
+  width: 100% !important;
+}
+
+.device-settings-dropdown {
+  padding: 10px !important;
+}
+
+.device-settings-dropdown-entry {
+  padding: 10px !important;
+  border-radius: 4px;
+  border: none !important;
+}
+
+.device-settings-dropdown-entry:hover {
+  background-color: #464b54 !important;
+}
+
+.device-settings-dropdown-entry i {
+  width: 20px;
+}
+
+.device-settings-dropdown-entry label {
+  margin-left: 15px;
+}
+
+#devices-table-description {
+  width: min(calc(2000px - 15vw), 95%);
+  position: relative;
+  list-style-type: none;
+  margin: auto;
+  margin-top: 1%;
+  border-bottom: 4px #717171 solid;
+  padding: 0;
+  color: white;
+  display: flex;
+  flex-direction: row;
+}
+
+#devices-table-description li {
+  width: 27%;
+  padding: 2% 3%;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+#devices-table-description-url {
+  width: 40% !important;
+}
+
+#devices-table-description-type {
+  text-align: center;
+}
+
+#devices-table-description-settings {
+  width: 6% !important;
+}
+
+#devices-table-description button {
+  border: none;
+  background-color: #222b38;
+  color: #9b9b9b;
+}
+
+.devices-entry-type {
+  padding: 0 !important;
+}
+
+.devices-list-type {
+  width: fit-content;
+  margin: auto;
+  text-align: center;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.devices-list-linux {
+  color: black;
+  background-color: #ffffff;
+  border: 2px #b3b3b3 solid;
+}
+
+.devices-list-android {
+  background-color: #aac148;
+  border: 2px #768632 solid;
+}
+
+@media (max-width: 1000px) {
+  #devices-table-description-url {
+    width: 30% !important;
+  }
+
+  .devices-entry-name {
+    width: 30% !important;
+  }
+
+  #devices-table-description-settings {
+    width: 10% !important;
+  }
+
+  .devices-entry-settings {
+    width: 10% !important;
+  }
+
+  #devices-table-description li {
+    width: 20%;
+  }
+
+  #devices-list li div {
+    width: 20%;
+  }
+}
+
+@media (max-width: 575px) {
+  #devices-table-description li {
+    font-size: .8em;
+  }
+
+  #devices-list li div span {
+    font-size: .8em;
+  }
+}
+
+#devices-empty {
+  color: white;
+  display: none;
+  flex-flow: wrap;
+  justify-content: center;
+  text-align: center;
+  margin-top: 5%;
+  white-space: pre;
+}
+
+#devices-empty-headline {
+  font-size: 20px;
+  font-weight: bold;
+  width: 100%;
+  margin-bottom: 1%;
+}
+
+#devices-empty-link {
+  text-decoration: none;
+}
