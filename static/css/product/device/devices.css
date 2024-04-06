@@ -168,7 +168,7 @@
   width: 40% !important;
 }
 
-#devices-table-description-type {
+#devices-table-description-platform {
   text-align: center;
 }
 
@@ -182,11 +182,11 @@
   color: #9b9b9b;
 }
 
-.devices-entry-type {
+.devices-entry-platform {
   padding: 0 !important;
 }
 
-.devices-list-type {
+.devices-list-platform {
   width: fit-content;
   margin: auto;
   text-align: center;

@@ -35,9 +35,9 @@
               <span>{% trans 'product.devices.owner' %}</span>
             </div>
           </li>
-          <li id="devices-table-description-type">
+          <li id="devices-table-description-platform">
             <div>
-              <span>{% trans 'product.devices.type' %}</span>
+              <span>{% trans 'product.devices.platform' %}</span>
             </div>
           </li>
           <li id="devices-table-description-settings">
@@ -128,7 +128,7 @@
         continue;
       }
       displayDevice(entry.id, entry.information, entry.owner, entry.ownDevice,
-        entry.type);
+        entry.platform);
     }
   }
 
@@ -136,10 +136,10 @@
     return devicesCurrentNameFilter.length === 0 ||
       entry.information.toLowerCase().includes(devicesCurrentNameFilter.toLowerCase()) ||
       entry.owner.toLowerCase().includes(devicesCurrentNameFilter.toLowerCase()) ||
-      entry.type.toLowerCase().includes(devicesCurrentNameFilter.toLowerCase());
+      entry.platform.toLowerCase().includes(devicesCurrentNameFilter.toLowerCase());
   }
 
-  function displayDevice(id, information, owner, ownDevice, type) {
+  function displayDevice(id, information, owner, ownDevice, platform) {
     var entry = document.createElement('li');
     entry.classList.add("device-entry");
     var urlDiv = document.createElement("div");
@@ -150,22 +150,22 @@
     urlDiv.appendChild(urlElement);
     entry.appendChild(urlDiv);
     appendDeviceCell(entry, "owner", owner, "span");
-    entry.appendChild(createDeviceTypeCell(type));
+    entry.appendChild(createDevicePlatformCell(platform));
     if (!ownDevice) {
       entry.appendChild(createSettingsDeleteButton(id));
     }
     document.getElementById("devices-list").appendChild(entry);
   }
 
-  function createDeviceTypeCell(type) {
+  function createDevicePlatformCell(platform) {
     var optimizationDiv = document.createElement("div");
-    optimizationDiv.classList.add("devices-entry-type");
+    optimizationDiv.classList.add("devices-entry-platform");
     var optimizationElement = document.createElement("span");
-    optimizationElement.classList.add("devices-list-type");
-    if (type.toLowerCase() === "linux") {
+    optimizationElement.classList.add("devices-list-platform");
+    if (platform.toLowerCase() === "linux") {
       optimizationElement.innerHTML = "Linux";
       optimizationElement.classList.add("devices-list-linux");
-    } else if (type.toLowerCase() === "android") {
+    } else if (platform.toLowerCase() === "android") {
       optimizationElement.innerHTML = "Android";
       optimizationElement.classList.add("devices-list-android");
     }
