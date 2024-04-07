@@ -25,7 +25,12 @@
           </div>
         </div>
         <ul id="devices-table-description">
-          <li id="devices-table-description-url">
+          <li id="devices-table-description-id">
+            <div>
+              <span>{% trans 'product.devices.id' %}</span>
+            </div>
+          </li>
+          <li id="devices-table-description-name">
             <div>
               <span>{% trans 'product.devices.name' %}</span>
             </div>
@@ -134,6 +139,7 @@
 
   function shouldDisplayDeviceEntry(entry) {
     return devicesCurrentNameFilter.length === 0 ||
+      entry.id.toLowerCase().includes(devicesCurrentNameFilter.toLowerCase()) ||
       entry.information.toLowerCase().includes(devicesCurrentNameFilter.toLowerCase()) ||
       entry.owner.toLowerCase().includes(devicesCurrentNameFilter.toLowerCase()) ||
       entry.platform.toLowerCase().includes(devicesCurrentNameFilter.toLowerCase());
@@ -142,13 +148,14 @@
   function displayDevice(id, information, owner, ownDevice, platform) {
     var entry = document.createElement('li');
     entry.classList.add("device-entry");
-    var urlDiv = document.createElement("div");
-    urlDiv.classList.add("devices-entry-name");
-    var urlElement = document.createElement("span");
-    urlElement.innerText = information;
-    urlElement.classList.add("devices-list-name");
-    urlDiv.appendChild(urlElement);
-    entry.appendChild(urlDiv);
+    var idDiv = document.createElement("div");
+    idDiv.classList.add("devices-entry-id");
+    var idElement = document.createElement("span");
+    idElement.innerText = id;
+    idElement.classList.add("devices-list-id");
+    idDiv.appendChild(idElement);
+    entry.appendChild(idDiv);
+    appendDeviceCell(entry, "name", information, "span");
     appendDeviceCell(entry, "owner", owner, "span");
     entry.appendChild(createDevicePlatformCell(platform));
     if (!ownDevice) {
