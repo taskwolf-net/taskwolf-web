@@ -192,6 +192,22 @@
   text-align: center;
   padding: 10px;
   border-radius: 5px;
+  font-weight: bold;
+}
+
+.devices-list-android {
+  background-color: #aac148;
+  border: 2px #768632 solid;
+}
+
+.devices-list-ios {
+  background-color: #9148c1;
+  border: 2px #74399b solid;
+}
+
+.devices-list-windows {
+  background-color: #357EC7;
+  border: 2px #28619b solid;
 }
 
 .devices-list-linux {
@@ -200,9 +216,9 @@
   border: 2px #b3b3b3 solid;
 }
 
-.devices-list-android {
-  background-color: #aac148;
-  border: 2px #768632 solid;
+.devices-list-macos {
+  background-color: #e1853a;
+  border: 2px #bc6f30 solid;
 }
 
 @media (max-width: 1000px) {

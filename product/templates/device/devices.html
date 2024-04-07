@@ -162,12 +162,21 @@
     optimizationDiv.classList.add("devices-entry-platform");
     var optimizationElement = document.createElement("span");
     optimizationElement.classList.add("devices-list-platform");
-    if (platform.toLowerCase() === "linux") {
-      optimizationElement.innerHTML = "Linux";
-      optimizationElement.classList.add("devices-list-linux");
-    } else if (platform.toLowerCase() === "android") {
+    if (platform.toLowerCase() === "android") {
       optimizationElement.innerHTML = "Android";
       optimizationElement.classList.add("devices-list-android");
+    } else if (platform.toLowerCase() === "ios") {
+      optimizationElement.innerHTML = "IOS";
+      optimizationElement.classList.add("devices-list-ios");
+    } else if (platform.toLowerCase() === "windows") {
+      optimizationElement.innerHTML = "Windows";
+      optimizationElement.classList.add("devices-list-windows");
+    } else if (platform.toLowerCase() === "linux") {
+      optimizationElement.innerHTML = "Linux";
+      optimizationElement.classList.add("devices-list-linux");
+    } else if (platform.toLowerCase() === "macos") {
+      optimizationElement.innerHTML = "MAC OS";
+      optimizationElement.classList.add("devices-list-macos");
     }
     optimizationDiv.appendChild(optimizationElement);
     return optimizationDiv;
