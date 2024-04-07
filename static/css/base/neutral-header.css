@@ -19,54 +19,9 @@
   height: 100px;
 }
 
-#navbar-logo {
-  width: 80px;
-  height: 80px;
-  margin-left: 50px;
-}
-
-#profile-picture {
-  width: 64px;
-  height: 64px;
-  border-radius: 40%;
-  background-color: #212529;
-}
-
-#profile-button-container {
+#close-button {
+  color: white;
   margin-left: auto;
-  margin-right: 50px;
-  position: relative;
-}
-
-#profile-button-wrapper {
-  border-radius: 50%;
-  width: 64px;
-  height: 64px;
-  text-align: center;
-  background-color: white !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#profile-button-wrapper::after {
-  display: none;
-}
-
-@media (max-width: 575px) {
-  #navbar-logo {
-    margin-left: 25px;
-  }
-
-  #profile-button-container {
-    margin-right: 25px;
-  }
-}
-
-@media(min-width: 575px) {
-  .dropdown-menu-center {
-    left: 50% !important;
-    right: auto !important;
-    transform: translate(-50%, 40%) !important;
-  }
+  margin-right: 35px;
+  font-size: 40px;
 }
