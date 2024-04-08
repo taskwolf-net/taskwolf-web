@@ -26,9 +26,9 @@
           </div>
         </div>
         <ul id="webhooks-table-description">
-          <li id="webhooks-table-description-url">
+          <li id="webhooks-table-description-name">
             <div>
-              <span>{% trans 'product.webhooks.url' %}</span>
+              <span>{% trans 'product.webhooks.name' %}</span>
             </div>
           </li>
           <li>
@@ -46,17 +46,12 @@
               <span>{% trans 'product.webhooks.usages' %}</span>
             </div>
           </li>
-          <li id="webhooks-table-description-settings">
-            <div>
-              <span></span>
-            </div>
-          </li>
         </ul>
         <ul id="webhooks-list">
         </ul>
         <div id="webhooks-empty">
           <span id="webhooks-empty-headline">{% trans 'product.webhooks.empty.headline' %}</span>
-          <span>{% trans 'product.webhooks.empty.text' %}</span><a id="webhooks-empty-link" href="javascript:createWebhook()">{% trans 'product.webhooks.empty.link' %}</a><span>?</span>
+          <span>{% trans 'product.webhooks.empty.text' %}</span><a id="webhooks-empty-link" href="/webhook/add/">{% trans 'product.webhooks.empty.link' %}</a><span>?</span>
         </div>
       </div>
     </div>
@@ -131,71 +126,35 @@
       if(!(shouldDisplayWebhookEntry(entry))) {
         continue;
       }
-      displayWebhook(entry.id, entry.url, entry.creator, entry.created, entry.usages);
+      displayWebhook(entry.id, entry.name, entry.creator, entry.created, entry.usages);
     }
   }
 
   function shouldDisplayWebhookEntry(entry) {
     return webhooksCurrentNameFilter.length === 0 ||
-      entry.url.toLowerCase().includes(webhooksCurrentNameFilter.toLowerCase()) ||
+      entry.name.toLowerCase().includes(webhooksCurrentNameFilter.toLowerCase()) ||
       entry.creator.toLowerCase().includes(webhooksCurrentNameFilter.toLowerCase()) ||
       entry.created.toLowerCase().includes(webhooksCurrentNameFilter.toLowerCase());
   }
 
-  function displayWebhook(id, url, creator, created, usages) {
+  function displayWebhook(id, name, creator, created, usages) {
     var entry = document.createElement('li');
+    entry.role = "button";
     entry.classList.add("webhook-entry");
-    var urlDiv = document.createElement("div");
-    urlDiv.classList.add("webhooks-entry-url");
-    var urlElement = document.createElement("span");
-    urlElement.innerText = url;
-    urlElement.classList.add("webhooks-list-url");
-    urlDiv.appendChild(urlElement);
-    entry.appendChild(urlDiv);
+    var nameDiv = document.createElement("div");
+    nameDiv.classList.add("webhooks-entry-name");
+    var nameElement = document.createElement("span");
+    nameElement.innerText = name;
+    nameElement.classList.add("webhooks-list-name");
+    nameDiv.appendChild(nameElement);
+    entry.appendChild(nameDiv);
     appendWebhookCell(entry, "creator", creator, "span");
     appendWebhookCell(entry, "created", created, "span");
     appendWebhookCell(entry, "usages", usages, "span");
-    entry.appendChild(entry.appendChild(createSettingsDeleteButton(id)));
-    document.getElementById("webhooks-list").appendChild(entry);
-  }
-
-  function createSettingsDeleteButton(webhook) {
-    var settingsDiv = document.createElement("div");
-    settingsDiv.classList.add("webhooks-entry-settings");
-    var settingsButton = document.createElement("button");
-    settingsButton.type = "button";
-    settingsButton.classList.add("webhooks-list-settings", "fa-solid",
-      "fa-ellipsis-vertical");
-    settingsButton.setAttribute("data-bs-toggle", "dropdown");
-    settingsButton.setAttribute("aria-expanded", "false");
-    settingsDiv.appendChild(settingsButton);
-    var dropdown = document.createElement("ul");
-    dropdown.classList.add("webhook-settings-dropdown", "dropdown-menu", "dropdown-menu-dark");
-    dropdown.appendChild(createSettingsDropdownButton(dropdown, "fa-trash",
-      "{% trans 'product.webhooks.delete' %}", "text-danger",
-      function() {deleteWebhook(webhook)}));
-    settingsDiv.appendChild(dropdown);
-    return settingsDiv;
-  }
-
-  function createSettingsDropdownButton(dropdown, icon, content, color, click) {
-    var dropdownEntry = document.createElement("li");
-    dropdownEntry.classList.add("webhook-settings-dropdown-entry", "dropdown-item");
-    var dropdownEntryIcon = document.createElement("i");
-    dropdownEntryIcon.classList.add("fa-solid", icon);
-    dropdownEntry.appendChild(dropdownEntryIcon);
-    var dropdownEntryLabel = document.createElement("label");
-    dropdownEntryLabel.innerText = content;
-    dropdownEntry.appendChild(dropdownEntryLabel);
-    if (color !== undefined) {
-      dropdownEntryIcon.classList.add(color);
-      dropdownEntryLabel.classList.add(color);
+    entry.onclick = function (event) {
+      window.location.href = "/webhook/" + id + "/";
     }
-    dropdownEntry.onclick = function (event) {
-      $(dropdown).dropdown('toggle');
-      click();
-    };
-    return dropdownEntry;
+    document.getElementById("webhooks-list").appendChild(entry);
   }
 
   function appendWebhookCell(entry, identifier, information, elementType) {
@@ -214,32 +173,6 @@
   };
 
   document.getElementById("webhook-create").onclick = function(event) {
-    createWebhook();
+    window.location.href = "/webhook/add/";
   };
-
-  function createWebhook() {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/webhook/add/", "GET",
-      [], {});
-    request.send(function (status, responseText) {
-      swal("{% trans 'product.webhooks.add.successful.title' %}", "{% trans 'product.webhooks.add.successful.body' %}", "success").then(success => window.location.href = "/webhooks/");
-    });
-  }
-
-  function deleteWebhook(webhook) {
-    swal({
-      title: "{% trans 'product.webhooks.delete.title' %}",
-      text: "{% trans 'product.webhooks.delete.body' %}",
-      icon: "warning",
-      dangerMode: true,
-      buttons: true,
-    }).then(willDelete => {
-      if (willDelete) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/webhook/remove/", "POST",
-          [], {webhook: webhook});
-        request.send(function (status, responseText) {
-          swal("{% trans 'product.webhooks.delete.successful.title' %}", "{% trans 'product.webhooks.delete.successful.body' %}", "success").then(success => window.location.href = "/webhooks/");
-        });
-      }
-    });
-  }
 </script>
