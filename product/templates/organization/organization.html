@@ -10,7 +10,10 @@
         <div id="organization-wrapper" class="d-none">
           <div id="organization-header">
             <h1 id="organization-name"></h1>
-            <button id="organization-modification" class="btn btn-danger btn-block"></button>
+            <div id="organization-modification">
+              <button id="organization-reset" type="button" class="btn btn-danger"></button>
+              <button id="organization-rename" type="button" class="fa-solid fa-pen-to-square"></button>
+            </div>
           </div>
           <h2 id="organization-owner-headline">{% trans 'product.organization.owner' %}</h2>
           <ul id="organization-owner">
@@ -38,7 +41,7 @@
     displayLoader();
     fetchOrganizationData(function() {
       displayInformation();
-      displayModificationButton();
+      displayResetButton();
       removeLoader();
     });
     var membersHeader = document.getElementById("organization-members-header");
@@ -106,8 +109,8 @@
     return memberElement;
   }
 
-  function displayModificationButton() {
-    var element = document.getElementById("organization-modification");
+  function displayResetButton() {
+    var element = document.getElementById("organization-reset");
     if (organization.isOwner === true) {
       element.innerHTML = "{% trans 'product.organization.delete' %}";
       return;
@@ -153,7 +156,7 @@
     });
   }
 
-  document.getElementById("organization-modification").onclick = function (event) {
+  document.getElementById("organization-reset").onclick = function (event) {
     if (organization.isOwner === true) {
       openDeleteMenu(organization.id);
       return;
@@ -192,6 +195,34 @@
           [], {organization: organization});
         request.send(function (status, responseText) {
           swal("{% trans 'product.organization.leave.successful.title' %}", "{% trans 'product.organization.leave.successful.body' %}", "success").then(success => window.location.href = "/organizations/");
+        });
+      }
+    });
+  }
+
+  document.getElementById("organization-rename").onclick = function (event) {
+    swal({
+      title: "{% trans 'product.organization.rename.title' %}",
+      text: "{% trans 'product.organization.rename.body' %}",
+      content: {
+        element: "input",
+        attributes: {
+          placeholder: "{% trans 'product.organization.rename.name' %}",
+          type: "name",
+        },
+      },
+      icon: "info",
+      buttons: true,
+    }).then(result => {
+      if (result != null) {
+        if (result.replaceAll(" ", "") === "") {
+          swal("{% trans 'product.organization.rename.empty.title' %}", "{% trans 'product.organization.rename.empty.body' %}", "error");
+          return;
+        }
+        let request = new HttpRequest("https://api.taskwolf.net/v1/organization/rename/", "POST",
+          [], {organization: organization.id, name: result});
+        request.send(function (status, responseText) {
+          swal("{% trans 'product.organization.rename.successful.title' %}", "{% trans 'product.organization.rename.successful.body' %}", "success").then(success => window.location.reload());
         });
       }
     });
