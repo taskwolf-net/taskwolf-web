@@ -1,0 +1,75 @@
+#webhook-container {
+  width: min(calc(1800px - 15vw), 95%);
+  margin: auto;
+}
+
+#webhook-header {
+  display: flex;
+  justify-content: center;
+  margin-top: 5%;
+  margin-bottom: 10%;
+}
+
+#webhook-name {
+  color: white;
+  position: absolute;
+  font-weight: bold;
+}
+
+#webhook-modification {
+  display: flex;
+  width: 100%;
+}
+
+#webhook-rename {
+  margin-left: auto;
+  background-color: rgba(0,0,0,0) !important;
+  border: none;
+  color: white;
+  font-size: 28px;
+}
+
+.webhook-section-content input {
+  background-color: #0d1117 !important;
+  color: white !important;
+}
+
+.webhook-section-content input:-webkit-autofill,
+.webhook-section-content input:-webkit-autofill:hover,
+.webhook-section-content input:-webkit-autofill:focus,
+.webhook-section-content input:-webkit-autofill:active{
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: #ffffff;
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 20px 20px #23232329;
+}
+
+.form-label {
+  color: white;
+  text-align: left;
+  width: 100%;
+  font-size: 25px;
+  font-weight: bold;
+  border-bottom: 2px #4a4a4a solid;
+  padding-left: 10px;
+}
+
+.webhook-section {
+  margin-bottom: 3%;
+}
+
+.webhook-section-content {
+  display: flex;
+}
+
+#webhook-url-copy {
+  margin-left: 2%;
+}
+
+#webhook-key-copy {
+  margin-left: 2%;
+}
+
+#webhook-key-regenerate {
+  margin-left: 1%;
+}

@@ -17,6 +17,8 @@ urlpatterns = [
   path('database/create/', database.databaseCreate),
   path('database/<str:id>/', database.database),
   path('webhooks/', webhook.webhooks),
+  path('webhook/add/', webhook.addWebhook),
+  path('webhook/<str:id>/', webhook.webhook),
   path('templates/', template.templates),
   path('organizations/', organization.organizations),
   path('organization/add/', organization.organizationCreate),

@@ -1,0 +1,164 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body>
+    {% include 'templates/product-header.html' %}
+    {% include 'templates/product-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="webhook-container">
+        <div id="webhook-header">
+          <h1 id="webhook-name"></h1>
+          <div id="webhook-modification">
+            <button id="webhook-delete" type="button" class="btn btn-danger">{% trans 'product.webhook.delete' %}</button>
+            <button id="webhook-rename" type="button" class="fa-solid fa-pen-to-square"></button>
+          </div>
+        </div>
+        <div id="webhook-content">
+          <div id="webhook-url-section" class="webhook-section">
+            <label class="form-label">{% trans 'product.webhook.url' %}</label>
+            <div id="webhook-url-section-content" class="webhook-section-content">
+              <input id="webhook-url" class="form-control" readonly>
+              <button type="button" id="webhook-url-copy" class="btn btn-primary btn-block">{% trans 'product.webhook.url.copy' %}</button>
+            </div>
+          </div>
+          <div id="webhook-key-section" class="webhook-section">
+            <label class="form-label">{% trans 'product.webhook.key' %}</label>
+            <div id="webhook-key-section-content" class="webhook-section-content">
+              <input type="password" id="webhook-key" class="form-control" readonly>
+              <button type="button" id="webhook-key-copy" class="btn btn-primary btn-block">{% trans 'product.webhook.key.copy' %}</button>
+              <button type="button" id="webhook-key-regenerate" class="btn btn-secondary btn-block"><span class="fa-solid fa-rotate-right"></span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  var webhook;
+  var key;
+
+  $(document).ready(function() {
+    fetchWebhookData(function() {
+      key = webhook.key;
+      document.getElementById("webhook-name").innerHTML = webhook.name;
+      document.getElementById("webhook-url").value = webhook.url;
+      applyTooltips(document.getElementById("webhook-url-copy"),
+        document.getElementById("webhook-url-section-content"),
+        "{% trans 'product.webhook.url.copy.tooltip' %}");
+      document.getElementById("webhook-key").value = webhook.key;
+      applyTooltips(document.getElementById("webhook-key-copy"),
+        document.getElementById("webhook-key-section-content"),
+        "{% trans 'product.webhook.key.copy.tooltip' %}");
+      applyTooltips(document.getElementById("webhook-key-regenerate"),
+        document.getElementById("webhook-key-section-content"),
+        "{% trans 'product.webhook.key.regenerate.tooltip' %}");
+    });
+  });
+
+  function fetchWebhookData(callback) {
+    var location = window.location;
+    var id = location.href.replace(location.host, "").replace(location.protocol, "").replace("webhook", "").replaceAll("/", "");
+    let request = new HttpRequest("https://api.taskwolf.net/v1/webhook/find/", "POST",
+      [], {webhook: id});
+    request.send(function (status, responseText) {
+      webhook = JSON.parse(responseText);
+      callback();
+    });
+  }
+
+  document.getElementById("webhook-url-copy").onclick = function (event) {
+    var urlButton = document.getElementById("webhook-url-copy");
+    urlButton.classList.remove("btn-primary");
+    urlButton.classList.add("btn-success");
+    $('#webhook-url-copy').tooltip('hide');
+    applyTooltips(urlButton, document.getElementById("webhook-url-section-content"),
+      "{% trans 'product.webhook.url.copied.tooltip' %}");
+    $('#webhook-url-copy').tooltip('show');
+    navigator.clipboard.writeText(webhook.url);
+  }
+
+  document.getElementById("webhook-key-copy").onclick = function (event) {
+    var keyButton = document.getElementById("webhook-key-copy");
+    keyButton.classList.remove("btn-primary");
+    keyButton.classList.add("btn-success");
+    $('#webhook-key-copy').tooltip('hide');
+    applyTooltips(keyButton, document.getElementById("webhook-key-section-content"),
+      "{% trans 'product.webhook.key.copied.tooltip' %}");
+    $('#webhook-key-copy').tooltip('show');
+    navigator.clipboard.writeText(key);
+  }
+
+  document.getElementById("webhook-key-regenerate").onclick = function (event) {
+    var keyButton = document.getElementById("webhook-key-copy");
+    keyButton.classList.remove("btn-success");
+    keyButton.classList.add("btn-primary");
+    $('#webhook-key-regenerate').tooltip('hide');
+    applyTooltips(keyButton, document.getElementById("webhook-key-section-content"),
+      "{% trans 'product.webhook.key.copy.tooltip' %}");
+    let request = new HttpRequest("https://api.taskwolf.net/v1/webhook/key/regenerate/", "POST",
+      [], {webhook: webhook.id});
+    request.send(function (status, responseText) {
+      key = JSON.parse(responseText).key;
+      document.getElementById("webhook-key").value = key;
+    });
+  }
+
+  document.getElementById("webhook-delete").onclick = function (event) {
+    swal({
+      title: "{% trans 'product.webhook.delete.title' %}",
+      text: "{% trans 'product.webhook.delete.body' %}",
+      icon: "warning",
+      dangerMode: true,
+      buttons: true,
+    }).then(willDelete => {
+      if (willDelete) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/webhook/remove/", "POST",
+          [], {webhook: webhook.id});
+        request.send(function (status, responseText) {
+          swal("{% trans 'product.webhook.delete.successful.title' %}", "{% trans 'product.webhook.delete.successful.body' %}", "success").then(success => window.location.href = "/webhooks/");
+        });
+      }
+    });
+  }
+
+  document.getElementById("webhook-rename").onclick = function (event) {
+    swal({
+      title: "{% trans 'product.webhook.rename.title' %}",
+      text: "{% trans 'product.webhook.rename.body' %}",
+      content: {
+        element: "input",
+        attributes: {
+          placeholder: "{% trans 'product.webhook.rename.name' %}",
+          type: "name",
+        },
+      },
+      icon: "info",
+      buttons: true,
+    }).then(result => {
+      if (result != null) {
+        if (result.replaceAll(" ", "") === "") {
+          swal("{% trans 'product.webhook.rename.empty.title' %}", "{% trans 'product.webhook.rename.empty.body' %}", "error");
+          return;
+        }
+        let request = new HttpRequest("https://api.taskwolf.net/v1/webhook/rename/", "POST",
+          [], {webhook: webhook.id, name: result});
+        request.send(function (status, responseText) {
+          swal("{% trans 'product.webhook.rename.successful.title' %}", "{% trans 'product.webhook.rename.successful.body' %}", "success").then(success => window.location.reload());
+        });
+      }
+    });
+  }
+
+  function applyTooltips(element, container, text) {
+    $(element).attr("data-bs-toggle", "tooltip");
+    $(element).attr("data-bs-placement", "top");
+    $(element).attr("data-bs-title", text);
+    container.classList.add("position-relative");
+    new bootstrap.Tooltip(element, {
+      container: container
+    });
+  }
+</script>
