@@ -267,7 +267,7 @@
     if (componentType === "trigger") {
       component = JSON.parse(sessionStorage.getItem("workflow-trigger"));
     } else {
-      component = JSON.parse(sessionStorage.getItem("workflow-actions")).actions[index];
+      component = JSON.parse(sessionStorage.getItem("workflow-actions")).actions.filter(element => element.actionIndex === index)[0];
     }
     var module = component.module;
     var type = component.type;
