@@ -10,6 +10,11 @@
   font-weight: bold;
 }
 
+#workflow-timeline-reset {
+  margin: 3% auto 2%;
+  display: block;
+}
+
 #workflow-timeline-divider {
   color: white;
   width: 100%;
@@ -65,4 +70,12 @@
 .timeline-item-date {
   white-space: nowrap;
   margin-left: 20px;
+}
+
+#workflow-timeline-empty {
+  color: white;
+  display: none;
+  text-align: center;
+  font-weight: bold;
+  white-space: pre;
 }

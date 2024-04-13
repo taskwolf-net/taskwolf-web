@@ -8,11 +8,13 @@
     <div class="sidebar-influenced">
       <div id="workflow-timeline-container">
         <h1 id="workflow-timeline-headline">{% trans 'product.workflow.timeline.headline' %}</h1>
+        <button type="button" id="workflow-timeline-reset" class="btn btn-danger btn-block d-none">{% trans 'product.workflow.timeline.reset' %}</button>
         <hr id="workflow-timeline-divider" class="hr"/>
         <section id="workflow-timeline-section">
           <ul id="workflow-timeline" class="timeline">
           </ul>
         </section>
+        <span id="workflow-timeline-empty">{% trans 'product.workflow.timeline.empty' %}</span>
       </div>
     </div>
   </body>
@@ -26,7 +28,7 @@
       return;
     }
     fetchTimelineData(function() {
-        displayTimeline();
+      displayTimeline();
     });
   });
 
@@ -43,6 +45,11 @@
     document.getElementById("workflow-timeline").innerHTML = "";
     for (var i = 0; i < timeline.length; i++) {
       displayEntry(timeline[i]);
+    }
+    if (timeline.length === 0) {
+      document.getElementById("workflow-timeline-empty").style.display = "block";
+    } else {
+      document.getElementById("workflow-timeline-reset").classList.remove("d-none");
     }
   }
 
@@ -72,5 +79,23 @@
       entryTitleElement.classList.add("text-danger");
     }
     document.getElementById("workflow-timeline").appendChild(entryElement);
+  }
+
+  document.getElementById("workflow-timeline-reset").onclick = function (event) {
+    swal({
+      title: "{% trans 'product.workflow.timeline.reset.title' %}",
+      text: "{% trans 'product.workflow.timeline.reset.body' %}",
+      icon: "warning",
+      dangerMode: true,
+      buttons: true,
+    }).then(willDelete => {
+      if (willDelete) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/timeline/reset/", "POST",
+          [], {workflow: sessionStorage.getItem("workflow-id")});
+        request.send(function (status, responseText) {
+          swal("{% trans 'product.workflow.timeline.reset.successful.title' %}", "{% trans 'product.workflow.timeline.reset.successful.body' %}", "success").then(success => window.location.reload());
+        });
+      }
+    });
   }
 </script>
