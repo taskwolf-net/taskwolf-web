@@ -28,7 +28,7 @@ class WhitelistMiddleware(object):
     if (key is None):
       return False
     response = await asyncio.get_event_loop().run_in_executor(None,
-    partial(requests.post, "http://127.0.0.1:10101/v1/whitelist/isValid/",
+    partial(requests.post, "http://10.10.0.3:10101/v1/whitelist/isValid/",
       json = {"key": key}))
     text = response.text
     jsonText = json.loads(text)
