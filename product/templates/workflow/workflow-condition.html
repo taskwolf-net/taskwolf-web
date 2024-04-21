@@ -327,7 +327,7 @@
     } else {
       var conditions = JSON.parse(sessionStorage.getItem("workflow-conditions")).conditions;
       var indexes = sessionStorage.getItem("workflow-condition-index").split(":");
-      conditions = conditions.filter(item => !(item.actionIndex === parseInt(indexes[0]) && conditions.indexOf(item) === parseInt(indexes[1])));
+      conditions = conditions.filter(item => !(item.actionIndex === parseInt(indexes[0]) && item.conditionIndex === parseInt(indexes[1])));
       var component = createCondition();
       if (sessionStorage.getItem("workflow-condition-index") !== null) {
         sessionStorage.removeItem("workflow-condition-index");
@@ -341,6 +341,7 @@
     return {
       "type": conditionType,
       "actionIndex": parseInt(sessionStorage.getItem("workflow-condition-index").split(":")[0]),
+      "conditionIndex": parseInt(sessionStorage.getItem("workflow-condition-index").split(":")[1]),
       "content": JSON.stringify({
         "inputValue": inputValue,
         "comparativeValue": comparativeValue

@@ -245,7 +245,8 @@
       for (var i = 0; i < workflow.conditions.length; i++) {
         var workflowConditionInformation = workflow.conditions[i];
         conditions.push({
-          "actionIndex": workflowConditionInformation.conditionIndex,
+          "actionIndex": workflowConditionInformation.conditionActionIndex,
+          "conditionIndex": workflowConditionInformation.conditionConditionIndex,
           "type": workflowConditionInformation.conditionType,
           "content": workflowConditionInformation.conditionContent,
           "selected": true

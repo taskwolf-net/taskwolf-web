@@ -78,7 +78,7 @@
       createComponentElement((i + 1) + ". {% trans 'product.workflow.action' %}", action.typeDescription, action.moduleLogo, "action", i, action.selected);
       var actionConditions = conditions.filter(element => element.actionIndex === i);
       for (var j = 0; j < actionConditions.length; j++) {
-        var condition = actionConditions[j];
+        var condition = actionConditions.filter(element => element.conditionIndex === j)[0];
         arrow = createConditionElement(arrow, condition.actionIndex, j, condition.selected);
       }
     }
@@ -139,15 +139,21 @@
         var actionsBehindTarget = actions.actions.filter(item => item.actionIndex > index);
         actions.actions = actions.actions.filter(item => !(item.actionIndex > index));
         for (var i = 0; i < actionsBehindTarget.length; i++) {
-          actionsBehindTarget[i].actionIndex = actionsBehindTarget[i].actionIndex - 1;
+          actionsBehindTarget[i].actionIndex -= 1;
         }
         actions.actions = actions.actions.concat(actionsBehindTarget);
         sessionStorage.setItem("workflow-actions", JSON.stringify(actions));
       }
       if (sessionStorage.getItem("workflow-conditions") !== null) {
-        var conditions = JSON.parse(sessionStorage.getItem("workflow-conditions"));
-        conditions.conditions = conditions.conditions.filter(item => item.actionIndex !== index);
-        sessionStorage.setItem("workflow-conditions", JSON.stringify(conditions));
+        var conditions = JSON.parse(sessionStorage.getItem("workflow-conditions")).conditions;
+        conditions = conditions.filter(item => item.actionIndex !== index);
+        for (var i = 0; i < conditions.length; i++) {
+          var condition = conditions[i];
+          if (condition.actionIndex > index) {
+            condition.actionIndex -= 1;
+          }
+        }
+        sessionStorage.setItem("workflow-conditions", JSON.stringify({conditions: conditions}));
       }
       displayWorkflow();
     });
@@ -156,7 +162,7 @@
 
   function drawArrow(index) {
     var arrow = createArrow();
-    document.getElementById("workflow-components").appendChild(createConditionButton(arrow, index, 0));
+    document.getElementById("workflow-components").appendChild(createComponentAddButton(index, 0));
     document.getElementById("workflow-components").appendChild(arrow);
     return arrow;
   }
@@ -168,31 +174,101 @@
     return arrowContainer;
   }
 
-  function createConditionButton(arrowElement, actionIndex, conditionIndex) {
+  function createComponentAddButton(actionIndex, conditionIndex) {
     var buttonContainer = document.createElement("div");
-    buttonContainer.classList.add("workflow-condition-add-container");
+    buttonContainer.classList.add("workflow-component-add-container");
     var iconContainer = document.createElement("i");
-    iconContainer.classList.add("workflow-condition-add", "fa-solid", "fa-filter");
+    iconContainer.classList.add("workflow-component-add", "fa-solid", "fa-add");
     buttonContainer.appendChild(iconContainer);
     iconContainer.addEventListener("click", function(event) {
-      var condition = {
-        "type": "",
-        "actionIndex": actionIndex,
-        "content": "",
-        "selected": false
-      }
-      if (sessionStorage.getItem("workflow-conditions") === null) {
-        sessionStorage.setItem("workflow-conditions", JSON.stringify({conditions: [condition]}));
-      } else {
-        var conditions = JSON.parse(sessionStorage.getItem("workflow-conditions")).conditions;
-        var actionConditions = conditions.filter(item => item.actionIndex === actionIndex);
-        actionConditions.splice(conditionIndex, 0, condition);
-        conditions = conditions.filter(item => item.actionIndex !== actionIndex).concat(actionConditions);
-        sessionStorage.setItem("workflow-conditions", JSON.stringify({conditions: conditions}));
-      }
-      displayWorkflow();
+      openComponentAddMenu(actionIndex, conditionIndex);
     });
     return buttonContainer;
+  }
+
+  function openComponentAddMenu(actionIndex, conditionIndex) {
+    var content = document.createElement("div");
+    content.classList.add("workflow-component-add-menu");
+    content.appendChild(createComponentAddSelector("fa-square-caret-right",
+      "{% trans 'product.workflow.add.component.action' %}",
+      () => addActionInBetween(actionIndex, conditionIndex)));
+    content.appendChild(createComponentAddSelector("fa-filter",
+      "{% trans 'product.workflow.add.component.condition' %}",
+      () => addCondition(actionIndex, conditionIndex)));
+    swal({
+      title: "{% trans 'product.workflow.add.component.title' %}",
+      buttons: [true, false],
+      content: content,
+    });
+  }
+
+  function createComponentAddSelector(icon, label, click) {
+    var actionSelector = document.createElement("div");
+    actionSelector.role = "button";
+    actionSelector.classList.add("workflow-component-add-menu-selector");
+    var selectorIcon = document.createElement("i");
+    selectorIcon.classList.add("fa-solid", icon, "workflow-component-add-menu-icon");
+    actionSelector.appendChild(selectorIcon);
+    var selectorLabel = document.createElement("h3");
+    selectorLabel.classList.add("workflow-component-add-menu-label");
+    selectorLabel.innerText = label;
+    actionSelector.appendChild(selectorLabel);
+    actionSelector.onclick = function() {
+      swal.close();
+      click();
+    };
+    return actionSelector;
+  }
+
+  function addActionInBetween(actionIndex, conditionIndex) {
+    var actions = JSON.parse(sessionStorage.getItem("workflow-actions")).actions;
+    var actionsBehindTarget = actions.filter(item => item.actionIndex >= actionIndex);
+    for (var i = 0; i < actionsBehindTarget.length; i++) {
+      actionsBehindTarget[i].actionIndex = actionsBehindTarget[i].actionIndex + 1;
+    }
+    var component = createEmptyComponent("{% trans 'product.workflow.action.description' %}");
+    component.actionIndex = actionIndex;
+    actions.push(component);
+    sessionStorage.setItem("workflow-actions", JSON.stringify({actions: actions}));
+    if (sessionStorage.getItem("workflow-conditions") !== null) {
+      var conditions = JSON.parse(sessionStorage.getItem("workflow-conditions")).conditions;
+      for (var i = 0; i < conditions.length; i++) {
+        var condition = conditions[i];
+        if (condition.actionIndex > actionIndex) {
+          condition.actionIndex += 1;
+        }
+        if (condition.actionIndex === actionIndex && condition.conditionIndex >= conditionIndex) {
+          condition.actionIndex += 1;
+          condition.conditionIndex -= conditionIndex;
+        }
+      }
+      sessionStorage.setItem("workflow-conditions", JSON.stringify({conditions: conditions}));
+    }
+    displayWorkflow();
+  }
+
+  function addCondition(actionIndex, conditionIndex) {
+    var condition = {
+      "type": "",
+      "actionIndex": actionIndex,
+      "conditionIndex": conditionIndex,
+      "content": "",
+      "selected": false
+    }
+    if (sessionStorage.getItem("workflow-conditions") === null) {
+      sessionStorage.setItem("workflow-conditions", JSON.stringify({conditions: [condition]}));
+    } else {
+      var conditions = JSON.parse(sessionStorage.getItem("workflow-conditions")).conditions;
+      for (var i = 0; i < conditions.length; i++) {
+        var conditionEntry = conditions[i];
+        if (conditionEntry.actionIndex === actionIndex && conditionEntry.conditionIndex >= conditionIndex) {
+          conditionEntry.conditionIndex += 1;
+        }
+      }
+      conditions.push(condition);
+      sessionStorage.setItem("workflow-conditions", JSON.stringify({conditions: conditions}));
+    }
+    displayWorkflow();
   }
 
   function createConditionElement(arrowElement, actionIndex, conditionIndex, selected) {
@@ -226,7 +302,7 @@
     }
     arrowElement.parentNode.insertBefore(componentContainer, arrowElement.nextSibling);
     var newArrow = createArrow();
-    var conditionButton = createConditionButton(newArrow, actionIndex, conditionIndex + 1);
+    var conditionButton = createComponentAddButton(actionIndex, conditionIndex + 1);
     componentContainer.parentNode.insertBefore(conditionButton, componentContainer.nextSibling);
     conditionButton.parentNode.insertBefore(newArrow, conditionButton.nextSibling);
     return newArrow;
@@ -242,7 +318,13 @@
       if (sessionStorage.getItem("workflow-conditions") !== null) {
         var conditions = JSON.parse(sessionStorage.getItem("workflow-conditions"));
         var actionConditions = conditions.conditions.filter(item => item.actionIndex === actionIndex);
-        actionConditions = actionConditions.filter(item => actionConditions.indexOf(item) !== conditionIndex);
+        actionConditions = actionConditions.filter(item => item.conditionIndex !== conditionIndex);
+        for (var i = 0; i < actionConditions.length; i++) {
+          var condition = actionConditions[i];
+          if (condition.conditionIndex > conditionIndex) {
+            actionConditions[i].conditionIndex -= 1;
+          }
+        }
         conditions.conditions = conditions.conditions.filter(item => item.actionIndex !== actionIndex).concat(actionConditions);
         sessionStorage.setItem("workflow-conditions", JSON.stringify(conditions));
       }
@@ -357,7 +439,8 @@
     for (var i = 0; i < workflowConditionsInformation.length; i++) {
       var workflowConditionInformation = workflowConditionsInformation[i];
       workflowConditions.push({
-        "index": workflowConditionInformation["actionIndex"],
+        "actionIndex": workflowConditionInformation["actionIndex"],
+        "conditionIndex": workflowConditionInformation["conditionIndex"],
         "type": workflowConditionInformation["type"],
         "content": workflowConditionInformation["content"]
       });
