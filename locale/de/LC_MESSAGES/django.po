@@ -458,6 +458,10 @@ msgid "product.database.create.name"
 msgstr "Name"
 msgid "product.database.create.button"
 msgstr "ERSTELLEN"
+msgid "product.database.create.empty.title"
+msgstr "Name ist leer!"
+msgid "product.database.create.empty.body"
+msgstr "Bitte geben Sie einen Namen ein, der nicht leer ist"
 
 # WEBHOOKS
 msgid "product.webhooks.title"
