@@ -144,6 +144,11 @@
         actions.actions = actions.actions.concat(actionsBehindTarget);
         sessionStorage.setItem("workflow-actions", JSON.stringify(actions));
       }
+      if (sessionStorage.getItem("workflow-conditions") !== null) {
+        var conditions = JSON.parse(sessionStorage.getItem("workflow-conditions"));
+        conditions.conditions = conditions.conditions.filter(item => item.actionIndex !== index);
+        sessionStorage.setItem("workflow-conditions", JSON.stringify(conditions));
+      }
       displayWorkflow();
     });
     componentContainer.appendChild(actionRemoveContainer);
