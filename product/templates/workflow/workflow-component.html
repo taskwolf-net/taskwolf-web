@@ -478,6 +478,9 @@
         if (inputVariable.dataType === "SELECT") {
           addSpecificationSelect(inputVariable.identifier, inputVariable.name, inputVariable.description, i, inputVariables.length);
         }
+        if (inputVariable.dataType === "FILE") {
+          addSpecificationFile(inputVariable.identifier, inputVariable.name, inputVariable.description, i, inputVariables.length);
+        }
         if (inputVariable.type === "REQUIRED") {
           requiredSpecificationVariables.push(inputVariable.identifier);
         }
@@ -514,10 +517,10 @@
       event.preventDefault();
     };
     inputElement.ondrop = function (event) {
-        inputElement.value =  inputElement.value.substring(0, inputElement.selectionStart) +
-          "%" + event.dataTransfer.getData("placeholder-identifier") + "%" +
-          inputElement.value.substring(inputElement.selectionStart);
-        inputSpecificationInput(identifier, inputElement.value);
+      inputElement.value =  inputElement.value.substring(0, inputElement.selectionStart) +
+        "%" + event.dataTransfer.getData("placeholder-identifier") + "%" +
+        inputElement.value.substring(inputElement.selectionStart);
+      inputSpecificationInput(identifier, inputElement.value);
     };
     inputContainerElement.appendChild(inputElement);
     document.getElementById("workflow-component-specifications-input-list").appendChild(inputContainerElement);
@@ -630,6 +633,75 @@
     if (specificationSelectButtons.length > 0) {
       specificationSelectButtons.shift().removeAttribute("disabled");
     }
+    checkAdoptability();
+  }
+
+  function addSpecificationFile(identifier, name, description, index, inputsLength) {
+    var inputContainerElement = document.createElement("div");
+    inputContainerElement.classList.add("workflow-component-specifications-file-container", "form-outline", "mb-4");
+    var labelElement = document.createElement("h5");
+    labelElement.classList.add("workflow-component-specification-headline", "form-label");
+    labelElement.innerHTML = name + ":";
+    inputContainerElement.appendChild(labelElement);
+    var informationElement = document.createElement("h5");
+    informationElement.classList.add("workflow-component-specification-information", "fa", "fa-question-circle");
+    applyTooltips(informationElement, inputContainerElement, description);
+    inputContainerElement.appendChild(informationElement);
+    var fileSelectorElement = document.createElement("input");
+    fileSelectorElement.type = "file";
+    fileSelectorElement.classList.add("d-none");
+    fileSelectorElement.onchange = function (event) {
+      var reader = new FileReader();
+      reader.onload = function() {
+        var arrayBuffer = this.result;
+        var array = new Uint8Array(arrayBuffer);
+        var binaryString = String.fromCharCode.apply(null, array);
+        selectSpecificationFile(identifier, btoa(binaryString), fileButton);
+      }
+      reader.readAsArrayBuffer(this.files[0]);
+    }
+    var fileButton = document.createElement("button");
+    fileButton.type = "button";
+    fileButton.innerText = "{% trans 'product.workflow.component.specifications.file.pending' %}";
+    fileButton.classList.add("workflow-component-specifications-file", "btn", "btn-secondary");
+    fileButton.onclick = function (event) {
+      fileSelectorElement.click();
+    }
+    fileButton.ondragover = function (event) {
+      event.preventDefault();
+    };
+    fileButton.ondrop = function (event) {
+      var value = fileButton.value.substring(0, fileButton.selectionStart) +
+        "%" + event.dataTransfer.getData("placeholder-identifier") + "%" +
+        fileButton.value.substring(fileButton.selectionStart);
+      selectSpecificationFile(identifier, value, fileButton);
+    };
+    inputContainerElement.appendChild(fileButton);
+    document.getElementById("workflow-component-specifications-input-list").appendChild(inputContainerElement);
+    if (!(_.isEqual(selectedComponent, {})) && "content" in selectedComponent) {
+      var selectedComponentContent = JSON.parse(selectedComponent.content);
+      setTimeout(function() {
+        if (identifier in selectedComponentContent) {
+          selectSpecificationFile(identifier, selectedComponentContent[identifier],
+            fileButton);
+        }
+        if (index === inputsLength - 1) {
+          selectedComponent = {};
+        }
+      }, 200 * index);
+    }
+  }
+
+  function selectSpecificationFile(identifier, value, fileButton) {
+    if (value === "" && identifier in specificationValues) {
+      delete specificationValues[identifier];
+    }
+    if (value !== "") {
+      specificationValues[identifier] = value;
+    }
+    fileButton.classList.remove("btn-secondary");
+    fileButton.classList.add("btn-success");
+    fileButton.innerText = "{% trans 'product.workflow.component.specifications.file.selected' %}";
     checkAdoptability();
   }
 

@@ -305,8 +305,17 @@ input:-webkit-autofill:active{
   margin: auto;
 }
 
+.workflow-component-specifications-file-container {
+  width: 80%;
+  margin: auto;
+}
+
+.workflow-component-specifications-file {
+  width: 100%;
+}
+
 @media (max-width: 500px) {
-  .workflow-component-specifications-input-container, .workflow-component-specifications-select-container {
+  .workflow-component-specifications-input-container, .workflow-component-specifications-select-container, .workflow-component-specifications-file-container {
     width: 95%;
   }
 }
