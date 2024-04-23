@@ -24,6 +24,9 @@ class HttpRequest {
     xhr.onload = function (e) {
       callback(this.status, xhr.responseText);
     };
+    xhr.onerror = function (e) {
+      callback(-1, "");
+    };
     xhr.send(JSON.stringify(this.data));
   }
 }
