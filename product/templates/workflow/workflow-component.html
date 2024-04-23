@@ -653,10 +653,12 @@
     fileSelectorElement.onchange = function (event) {
       var reader = new FileReader();
       reader.onload = function() {
-        var arrayBuffer = this.result;
-        var array = new Uint8Array(arrayBuffer);
-        var binaryString = String.fromCharCode.apply(null, array);
-        selectSpecificationFile(identifier, btoa(binaryString), fileButton);
+        var binary = '';
+        var bytes = new Uint8Array(reader.result);
+        for (var i = 0; i < bytes.byteLength; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        selectSpecificationFile(identifier, btoa(binary), fileButton);
       }
       reader.readAsArrayBuffer(this.files[0]);
     }
