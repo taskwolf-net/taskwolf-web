@@ -58,7 +58,7 @@
       {email: document.getElementById("email").value, password: document.getElementById("password").value});
     request.send(function (status, responseText) {
       if (status == 200) {
-        Cookie.create("token", JSON.parse(responseText).apiKey, 60 * 60 * 24 * 30);
+        Cookie.create("token", JSON.parse(responseText).apiKey, 60 * 60 * 24 * 30, ".taskwolf.net");
         window.location.href = "/dashboard/";
       } else {
         swal("Authentication failed!", "The password entered is incorrect!", "error");

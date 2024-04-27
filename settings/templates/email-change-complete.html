@@ -21,7 +21,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/email/change/complete/", "POST",
       [], {user: "{{user}}", token: "{{token}}"});
     request.send(function (status, responseText) {
-      Cookie.destroy("token");
+      Cookie.destroy("token", ".taskwolf.net");
     });
   });
 </script>

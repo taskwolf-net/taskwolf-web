@@ -45,7 +45,7 @@
     window.location.href = "/tickets/";
   };
   document.getElementById('logout-button').onclick = function() {
-    Cookie.destroy("token");
+    Cookie.destroy("token", ".taskwolf.net");
     window.location.href = "/";
   };
 
