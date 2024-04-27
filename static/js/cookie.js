@@ -19,6 +19,10 @@ var Cookie = {
   },
 
   create: function (name, value, time) {
+    this.create(name, value, time, '.' + location.host);
+  },
+
+  create: function (name, value, time, domain) {
     var today = new Date(),
       offset = (typeof time == 'undefined') ? (1000 * 60 * 60 * 24) : (time * 1000),
       expires_at = new Date(today.getTime() + offset);
@@ -27,7 +31,7 @@ var Cookie = {
       name: escape(value),
       expires: expires_at.toGMTString(),
       path: '/',
-      domain: '.' + location.host,
+      domain: domain,
       secure: true,
     }, function (value, key) {
       return [(key == 'name') ? name : key, value].join('=');
@@ -39,5 +43,9 @@ var Cookie = {
 
   destroy: function (name) {
     this.create(name, "", -1);
+  },
+
+  destroy: function (name, domain) {
+    this.create(name, "", -1, domain);
   }
 };
