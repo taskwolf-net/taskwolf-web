@@ -41,7 +41,7 @@ iframe {
 
 @media (max-width: 1200px) {
   #dashboard-target-dropdown {
-    margin: 80px auto 0;
+    margin: 70px auto 0;
     width: fit-content;
   }
 }
