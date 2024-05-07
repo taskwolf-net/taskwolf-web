@@ -6,18 +6,20 @@
     {% include 'templates/product-header.html' %}
     {% include 'templates/product-sidebar.html' %}
     <div class="sidebar-influenced">
-      <div id="dashboard-wrapper">
-        <div id="dashboard-header">
-          <div id="dashboard-target-dropdown" class="dropdown">
-            <button id="dashboard-target-dropdown-button" class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
-              {% trans 'target' %}
-            </button>
-            <ul id="dashboard-target-dropdown-list" class="dropdown-menu dropdown-menu-dark">
-            </ul>
+      <div id="dashboard-container">
+        <div id="dashboard-wrapper" class="d-none">
+          <div id="dashboard-header">
+            <div id="dashboard-target-dropdown" class="dropdown">
+              <button id="dashboard-target-dropdown-button" class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
+                {% trans 'target' %}
+              </button>
+              <ul id="dashboard-target-dropdown-list" class="dropdown-menu dropdown-menu-dark">
+              </ul>
+            </div>
+            <h1 id="dashboard-headline">{% trans 'product.dashboard.headline' %}</h1>
           </div>
-          <h1 id="dashboard-headline">{% trans 'product.dashboard.headline' %}</h1>
-        </div>
-        <div id="dashboard-content">
+          <div id="dashboard-content">
+          </div>
         </div>
       </div>
     </div>
@@ -26,6 +28,7 @@
 
 <script>
   $(document).ready(function() {
+    displayLoader();
     fetchTargetsData(function(response) {
       var targets = response.targets;
       var currentTarget = response.currentTarget;
@@ -73,7 +76,22 @@
       Cookie.create("grafana_session", response.token, 60 * 10, ".taskwolf.net");
       var iframe = document.createElement("iframe");
       iframe.src = response.url;
+      iframe.onload = function(event) {
+        //Cookie.destroy("grafana_session", ".taskwolf.net");
+        removeLoader();
+      }
       document.getElementById("dashboard-content").appendChild(iframe);
     });
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("dashboard-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("dashboard-container").removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("dashboard-wrapper").classList.remove("d-none");
   }
 </script>

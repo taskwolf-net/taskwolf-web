@@ -7,8 +7,8 @@
   height: 4em;
   animation-delay: -0.16s;
   position: relative;
-  left: 50%;
-  top: 40%;
+  margin-left: 50%;
+  margin-top: calc(50vh - 80px + 2em);
 }
 .loader:before,
 .loader:after {
