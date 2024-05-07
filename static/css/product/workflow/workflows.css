@@ -103,7 +103,7 @@
   padding: 3%;
   display: flex;
   flex-direction: column;
-  width: 24%;
+  width: 22%;
   text-align: left;
 }
 
@@ -113,6 +113,41 @@
 
 .workflows-entry-is-running {
   width: 12% !important;
+}
+
+.workflows-entry-settings {
+  width: 4% !important;
+  padding: 0 !important;
+}
+
+.workflows-entry-settings-button {
+  background-color: transparent;
+  border: none;
+  color: white !important;
+  float: right;
+  width: 100% !important;
+}
+
+.workflows-entry-settings-dropdown {
+  padding: 10px !important;
+}
+
+.workflows-entry-settings-dropdown-entry {
+  padding: 10px !important;
+  border-radius: 4px;
+  border: none !important;
+}
+
+.workflows-entry-settings-dropdown-entry:hover {
+  background-color: #464b54 !important;
+}
+
+.workflows-entry-settings-dropdown-entry i {
+  width: 20px;
+}
+
+.workflows-entry-settings-dropdown-entry label {
+  margin-left: 15px;
 }
 
 #workflows-table-description {
@@ -129,7 +164,7 @@
 }
 
 #workflows-table-description li {
-  width: 24%;
+  width: 22%;
   padding: 2% 3%;
   font-weight: bold;
   font-size: 20px;
@@ -142,6 +177,11 @@
 #workflows-table-description-is-running {
   width: 12% !important;
   text-align: center;
+}
+
+#workflows-table-description-settings {
+  width: 4% !important;
+  padding: 0 !important;
 }
 
 #workflows-table-description button {
@@ -170,7 +210,7 @@
 
 @media (max-width: 1000px) {
   #workflows-list li div {
-    width: 24%;
+    width: 22%;
   }
 
   .workflows-entry-name {
@@ -182,7 +222,7 @@
   }
 
   #workflows-table-description li {
-    width: 24%;
+    width: 22%;
   }
 
   #workflows-table-description-name {

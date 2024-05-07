@@ -46,6 +46,11 @@
               <span>{% trans 'product.workflows.running' %}</span>
             </div>
           </li>
+          <li id="workflows-table-description-settings">
+            <div>
+              <span></span>
+            </div>
+          </li>
         </ul>
         <ul id="workflows-list">
         </ul>
@@ -59,7 +64,6 @@
 </html>
 
 <script>
-  var owners;
   var workflows;
   var workflowsCurrentNameFilter = "";
   var changeStateBlocked = false;
@@ -156,9 +160,12 @@
     } else {
       entry.appendChild(createRunningSwitch(id, armed));
     }
+    entry.appendChild(createSettingsButton(id));
     entry.onclick = function (event) {
       var target = event.target;
-      if (Boolean(target.closest(".switch")) || Boolean(target.closest(".workflow-run-button"))) {
+      if (Boolean(target.closest(".switch")) || Boolean(target.closest(".workflow-run-button")) ||
+          Boolean(target.closest(".workflows-entry-settings"))
+      ) {
         return;
       }
       clickWorkflow(id);
@@ -209,6 +216,67 @@
     isRunningElement.appendChild(isRunningSpan);
     isRunningDiv.appendChild(isRunningElement);
     return isRunningDiv;
+  }
+
+  function createSettingsButton(id) {
+    var settingsDiv = document.createElement("div");
+    settingsDiv.classList.add("workflows-entry-settings");
+    var settingsButton = document.createElement("button");
+    settingsButton.type = "button";
+    settingsButton.classList.add("workflows-entry-settings-button", "fa-solid",
+      "fa-ellipsis-vertical");
+    settingsButton.setAttribute("data-bs-toggle", "dropdown");
+    settingsButton.setAttribute("aria-expanded", "false");
+    settingsDiv.appendChild(settingsButton);
+    var dropdown = createSettingsDropdown([
+        {icon: "fa-copy", content: "{% trans 'product.workflows.duplicate' %}", click: function(){duplicateWorkflow(id)}},
+        {icon: "fa-trash", content: "{% trans 'product.workflows.delete' %}", color: "text-danger", click: function(){deleteWorkflow(id)}}
+      ], [1]);
+    settingsDiv.appendChild(dropdown);
+    return settingsDiv;
+  }
+
+  function createSettingsDropdown(buttons, dividers) {
+    var dropdown = document.createElement("ul");
+    dropdown.classList.add("workflows-entry-settings-dropdown", "dropdown-menu", "dropdown-menu-dark");
+    for (var i = 0; i < buttons.length; i++) {
+      for (var j = 0; j < dividers.length; j++) {
+        if (dividers[j] === i) {
+          dropdown.appendChild(createSettingsDropdownDivider());
+          break;
+        }
+      }
+      var button = buttons[i];
+      dropdown.appendChild(createSettingsDropdownButton(dropdown, button.icon,
+        button.content, button.color, button.click));
+    }
+    return dropdown;
+  }
+
+  function createSettingsDropdownDivider() {
+    var dropdownDivider = document.createElement("li");
+    dropdownDivider.classList.add("database-table-settings-dropdown-divider");
+    return dropdownDivider;
+  }
+
+  function createSettingsDropdownButton(dropdown, icon, content, color, click) {
+    var dropdownEntry = document.createElement("li");
+    dropdownEntry.classList.add("workflows-entry-settings-dropdown-entry", "dropdown-item");
+    var dropdownEntryIcon = document.createElement("i");
+    dropdownEntryIcon.classList.add("fa-solid", icon);
+    dropdownEntry.appendChild(dropdownEntryIcon);
+    var dropdownEntryLabel = document.createElement("label");
+    dropdownEntryLabel.innerText = content;
+    dropdownEntry.appendChild(dropdownEntryLabel);
+    if (color !== undefined) {
+      dropdownEntryIcon.classList.add(color);
+      dropdownEntryLabel.classList.add(color);
+    }
+    dropdownEntry.onclick = function (event) {
+      $(dropdown).dropdown('toggle');
+      click();
+    };
+    return dropdownEntry;
   }
 
   function clickWorkflow(id) {
@@ -293,5 +361,31 @@
     sessionStorage.removeItem("workflow-selected");
     sessionStorage.removeItem("workflow-id");
     window.location.href = "/workflow/";
+  }
+
+  function deleteWorkflow(id) {
+    swal({
+      title: "{% trans 'product.workflow.delete.title' %}",
+      text: "{% trans 'product.workflow.delete.body' %}",
+      icon: "warning",
+      dangerMode: true,
+      buttons: true,
+    }).then(willDelete => {
+      if (willDelete) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/remove/", "POST",
+          [], {workflow: id});
+        request.send(function (status, responseText) {
+          swal("{% trans 'product.workflow.delete.successful.title' %}", "{% trans 'product.workflow.delete.successful.body' %}", "success").then(success => window.location.href = "/workflows/");
+        });
+      }
+    });
+  }
+
+  function duplicateWorkflow(id) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/duplicate/", "POST",
+      [], {workflow: id});
+    request.send(function (status, responseText) {
+      swal("{% trans 'product.workflow.duplicate.successful.title' %}", "{% trans 'product.workflow.duplicate.successful.body' %}", "success").then(success => window.location.href = "/workflows/");
+    });
   }
 </script>
