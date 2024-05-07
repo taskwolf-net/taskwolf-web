@@ -3,7 +3,7 @@
   border-bottom: 1px #4a4a4a solid;
   position: fixed !important;
   width: 100%;
-  height: 100px;
+  height: 80px;
   display: flex;
   align-items: center;
 }
@@ -16,7 +16,7 @@
 }
 
 #header-space {
-  height: 100px;
+  height: 80px;
 }
 
 #sidebar-button {
@@ -29,9 +29,7 @@
 }
 
 #navbar-logo {
-  width: 80px;
-  height: 80px;
-  margin-left: 35px;
+  margin-left: 20px;
 }
 
 #profile-picture {

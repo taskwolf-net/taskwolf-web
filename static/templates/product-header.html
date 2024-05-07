@@ -3,7 +3,7 @@
 <nav id="navbar" class="bg-dark">
   <button id="sidebar-button" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="false" aria-controls="sidebar"></button>
   <div id="navbar-content">
-    <a href="/" id="navbar-logo"><img src="{% static 'img/logo.png' %}" width="80px" height="80px" alt=""></a>
+    <a href="/" id="navbar-logo"><img src="{% static 'img/logo.png' %}" width="70px" height="70px" alt=""></a>
     <div id="profile-button-container">
       <button class="dropdown-toggle btn" id="profile-button-wrapper" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <img id="profile-picture" class="d-none">
@@ -75,7 +75,7 @@
     var elements = document.getElementsByClassName('sidebar-influenced');
     for (var i = 0; i < elements.length; i++) {
       if (isSidebarShown && window.innerWidth > 800) {
-        elements[i].style.marginLeft = '300px';
+        elements[i].style.marginLeft = '250px';
       } else {
         elements[i].style.marginLeft = '0';
       }

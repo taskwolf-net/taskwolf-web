@@ -1,6 +1,6 @@
 #sidebar {
   position: fixed;
-  width: 300px !important;
+  width: 250px !important;
   color: white;
   height: 100%;
   transition: 0s;
@@ -28,7 +28,7 @@
 }
 
 .sidebar-icon {
-  margin-left: 10%;
+  margin-left: 5%;
   margin-right: 10%;
   width: 35px;
   height: 35px;
