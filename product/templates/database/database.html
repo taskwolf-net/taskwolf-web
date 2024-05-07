@@ -367,13 +367,14 @@
       pageElement.classList.add("database-table-paginate-button");
       if (currentPage === i) {
         pageElement.classList.add("database-table-paginate-current");
+      } else {
+        pageElement.onclick = function(event) {
+          currentPage = i;
+          refreshTableContent();
+        }
       }
       pageElement.type = "button";
       pageElement.innerText = i + "";
-      pageElement.onclick = function(event) {
-        currentPage = i;
-        refreshTableContent();
-      }
       pagesList.appendChild(pageElement);
     }
     updatePageArrows(pageNumber);
