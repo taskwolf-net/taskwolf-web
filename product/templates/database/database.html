@@ -398,7 +398,7 @@
   }
 
   previousPageElement.onclick = function (event) {
-    if(previousPageElement.classList.contains("disabled")) {
+    if(previousPageElement.classList.contains("paginate-button-disabled")) {
       return;
     }
     currentPage--;
@@ -406,7 +406,7 @@
   }
 
   nextPageElement.onclick = function (event) {
-    if (nextPageElement.classList.contains("disabled")) {
+    if (nextPageElement.classList.contains("paginate-button-disabled")) {
       return;
     }
     currentPage++;
