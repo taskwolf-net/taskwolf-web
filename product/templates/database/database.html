@@ -576,6 +576,9 @@
   }
 
   function removeTableEmptyLabel() {
+    if (database.entries > 0) {
+      return;
+    }
     document.getElementById("database-table-container").removeChild(
       document.getElementById("database-table-empty"));
   }
