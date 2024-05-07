@@ -473,7 +473,7 @@
       for (let i = 0; i < inputVariables.length; i++) {
         var inputVariable = inputVariables[i];
         if (inputVariable.dataType === "TEXT") {
-          addSpecificationInput(inputVariable.identifier, inputVariable.name, inputVariable.description, i, inputVariables.length);
+          addSpecificationInput(inputVariable.identifier, inputVariable.name, inputVariable.description, inputVariable.placeholder, i, inputVariables.length);
         }
         if (inputVariable.dataType === "SELECT") {
           addSpecificationSelect(inputVariable.identifier, inputVariable.name, inputVariable.description, i, inputVariables.length);
@@ -494,7 +494,7 @@
     });
   }
 
-  function addSpecificationInput(identifier, name, description, index, inputsLength) {
+  function addSpecificationInput(identifier, name, description, placeholder, index, inputsLength) {
     var inputContainerElement = document.createElement("div");
     inputContainerElement.classList.add("workflow-component-specifications-input-container", "form-outline", "mb-4");
     var labelElement = document.createElement("h5");
@@ -507,7 +507,7 @@
     inputContainerElement.appendChild(informationElement);
     var inputElement = document.createElement("input");
     inputElement.type = "name";
-    inputElement.placeholder = name;
+    inputElement.placeholder = placeholder;
     inputElement.id = "workflow-component-specifications-input-" + identifier;
     inputElement.classList.add("workflow-component-specifications-input", "form-control");
     inputElement.oninput = function (event) {
