@@ -18,28 +18,28 @@
           </div>
           <div id="process-publish-wrapper">
             <button id="process-run" type="button" class="btn btn-success">{% trans 'product.process.run' %}</button>
-            <button id="process-sidebar-button" type="button" data-bs-toggle="collapse" data-bs-target="#process-sidebar" aria-expanded="true" aria-controls="process-sidebar" class=""><i class="fa-solid fa-xmark"></i></button>
+            <button id="process-publish" type="button" class="btn btn-success">{% trans 'product.process.publish' %}</button>
           </div>
         </div>
         <div id="process-content">
           <div id="process-graph">
           </div>
-          <div class="bg-dark collapse collapse-horizontal show" id="process-sidebar">
-            <div id="process-sidebar-content">
-              <h3 class="text-center font-weight-bold mt-4">Process</h3>
-              <div class="process-sidebar-entry">
-                <label class="form-label">Title</label>
-                <input id="process-title" class="form-control" placeholder="Title">
-              </div>
-              <div class="process-sidebar-entry">
-                <label class="form-label">Description</label>
-                <textarea id="process-description" class="form-control" placeholder="Description"></textarea>
-              </div>
-              <div class="process-sidebar-entry text-center">
-                <button id="process-publish" type="button" class="btn btn-success">{% trans 'product.process.publish' %}</button>
-                <p id="process-publish-note" class="text-secondary my-3">{% trans 'product.process.publish.note' %}</p>
-              </div>
-            </div>
+          <div class="bg-dark collapse collapse-horizontal" id="process-step-sidebar">
+           <div id="process-step-sidebar-content">
+             <button id="process-step-sidebar-close"><i class="fa-solid fa-xmark"></i></button>
+             <h3 class="text-center font-weight-bold mt-3">{% trans 'product.process.step' %}</h3>
+             <div class="process-step-sidebar-entry">
+               <label class="form-label">{% trans 'product.process.step.title' %}</label>
+               <input id="process-step-title" class="form-control" placeholder="{% trans 'product.process.step.title' %}">
+             </div>
+             <div class="process-step-sidebar-entry">
+               <label class="form-label">{% trans 'product.process.step.description' %}</label>
+               <textarea id="process-step-description" class="form-control" placeholder="{% trans 'product.process.step.description' %}"></textarea>
+             </div>
+             <div class="process-step-sidebar-entry text-center">
+               <button id="process-step-adopt" type="button" class="btn btn-success">{% trans 'product.process.step.adopt' %}</button>
+             </div>
+           </div>
           </div>
         </div>
       </div>
@@ -54,6 +54,7 @@
   var previousBox;
   var mouseDown = false;
   var aimedConnectionPoint = null;
+  var currentSelectedStep = null;
 
   var draw = SVG().addTo(document.getElementById("process-graph"))
     .size("100%", "100%")
@@ -65,13 +66,8 @@
     display(box);
   });
 
-  function resetFocus() {
-    document.activeElement.scrollTop = 0;
-    document.activeElement.blur();
-  }
-
   draw.on("mousedown", function (event) {
-    resetFocus();
+    $("#process-step-sidebar").collapse("hide");
   });
 
   $(document).ready(function() {
@@ -99,8 +95,6 @@
   }
 
   function displayProcess() {
-    document.getElementById("process-title").value = process.name;
-    document.getElementById("process-description").value = process.description;
     document.getElementById("process-delete").classList.remove("d-none");
     var stepIdRelation = [];
     for (var i = 0; i < process.steps.length; i++) {
@@ -138,15 +132,18 @@
 
     display() {
       var self = this;
+      var moved = false;
       var group = self.draw.group();
-      var outerRect = group.rect(300, 150).move(-150, -75).radius(10);
+      var subGroup = self.draw.group();
+      group.add(subGroup);
+      var outerRect = subGroup.rect(300, 150).move(-150, -75).radius(10);
       if (this.state === "ACTIVE") {
         outerRect.fill("#49ff1d");
       } else {
         outerRect.fill("#1b232f")
       }
-      var innerRect = group.rect(290, 140).move(-145, -70).radius(10).fill("#3d4b5a");
-      var divider = group.rect(250, 2).move(-125, -15).radius(10).fill("#4b5c6f");
+      var innerRect = subGroup.rect(290, 140).move(-145, -70).radius(10).fill("#3d4b5a");
+      var divider = subGroup.rect(250, 2).move(-125, -25).radius(10).fill("#4b5c6f");
       group.on("mouseover", function() {
         if (this.state === "INACTIVE") {
           outerRect.animate(300, '<>').fill('#334056');
@@ -160,7 +157,13 @@
         innerRect.animate(300, '<>').fill('#3d4b5a');
         divider.animate(300, '<>').fill('#4b5c6f');
       });
-      self.displayContent(group);
+      subGroup.on("click", function() {
+        if (!moved) {
+          self.displayStepSidebar();
+        }
+        moved = false;
+      });
+      self.displayContent(subGroup);
       self.displayConnectionPoints(group);
       self.displayRemoveButton(group);
       group.move(self.x, self.y).draggable().on('dragmove', e => {
@@ -170,6 +173,7 @@
         }
         self.x = e.detail.box.x;
         self.y = e.detail.box.y;
+        moved = true;
       });
     }
 
@@ -187,54 +191,22 @@
       var self = this;
       self.displayTitle(group);
       self.displayDescription(group);
-      group.on("mousedown", function (event) {
-        resetFocus();
-      });
     }
 
     displayTitle(group) {
       var self = this;
       var title = group.foreignObject(300, 40).move(-150, -65)
-        .add(SVG('<input class="process-step-title" type="text">', true))
+        .add(SVG('<input class="process-step-title">', true))
         .node.childNodes[0];
       title.value = self.title;
-      title.addEventListener("click", function() {
-        title.focus();
-        var value = title.value;
-        title.value = "";
-        title.value = value;
-      });
-      title.addEventListener("keyup", function(event) {
-        self.title = title.value;
-        if (event.key === "Enter") {
-          document.activeElement.blur();
-        }
-      });
     }
 
     displayDescription(group) {
       var self = this;
-      var description = group.foreignObject(300, 90).move(-150, 0)
+      var description = group.foreignObject(300, 75).move(-150, -15)
         .add(SVG('<textarea class="process-step-description"></textarea>', true))
         .node.childNodes[0];
       description.innerText = self.description;
-      description.addEventListener("click", function() {
-        description.focus();
-        var value = description.value;
-        description.value = "";
-        description.value = value;
-      });
-      description.addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
-          event.preventDefault();
-        }
-      });
-      description.addEventListener("keyup", function(event) {
-        self.description = description.value;
-        if (event.key === "Enter") {
-          document.activeElement.blur();
-        }
-      });
     }
 
     displayRemoveButton(group) {
@@ -252,8 +224,15 @@
             connection.remove();
           }
         }
-        checkPublishability();
       });
+    }
+
+    displayStepSidebar() {
+      var self = this;
+      currentSelectedStep = self;
+      document.getElementById("process-step-title").value = self.title;
+      document.getElementById("process-step-description").value = self.description;
+      $("#process-step-sidebar").collapse("show");
     }
 
     activate() {
@@ -375,7 +354,6 @@
       var connection = new Connection(draw, origin, destination);
       connection.display();
       connections.push(connection);
-      checkPublishability();
     }
   }
 
@@ -425,7 +403,6 @@
       }).on('click', function() {
         connections.splice(connections.indexOf(self), 1);
         self.remove();
-        checkPublishability();
       });
     }
 
@@ -444,7 +421,6 @@
   }
 
   function initialDisplay() {
-    checkPublishability();
     display({width: 4000, height: 4000, x: -2000, y: -2000});
   }
 
@@ -486,27 +462,15 @@
     steps.push(step);
   }
 
-  var isProcessSidebarShown = true;
-
-  document.getElementById('process-sidebar-button').onclick = function() {
-    isProcessSidebarShown = !isProcessSidebarShown;
-    updateProcessSidebarButtonIcon();
-  };
-
-  function updateProcessSidebarButtonIcon() {
-    if (isProcessSidebarShown) {
-      document.getElementById("process-sidebar-button").innerHTML ='<i class="fa-solid fa-xmark"></i>';
-      return;
-    }
-    document.getElementById("process-sidebar-button").innerHTML ='<i class="fa-solid fa-bars"></i>';
+  document.getElementById("process-step-sidebar-close").onclick = function (event) {
+    $("#process-step-sidebar").collapse("hide");
   }
 
-  document.getElementById("process-title").oninput = function (event) {
-    checkPublishability();
-  }
-
-  document.getElementById("process-description").oninput = function (event) {
-    checkPublishability();
+  document.getElementById("process-step-adopt").onclick = function (event) {
+    currentSelectedStep.title = document.getElementById("process-step-title").value;
+    currentSelectedStep.description = document.getElementById("process-step-description").value;
+    $("#process-step-sidebar").collapse("hide");
+    display(previousBox);
   }
 
   document.getElementById("process-run").onclick = function (event) {
@@ -537,15 +501,49 @@
     }, 800);
   }
 
-  function checkPublishability() {
-    if (document.getElementById("process-title").value === "" ||
-      document.getElementById("process-description").value === "" ||
-      !checkProcessIntegrity()
-    ) {
-      updatePublishability(false);
+  document.getElementById("process-publish").onclick = function (event) {
+    if (!checkProcessIntegrity()) {
+      swal("{% trans 'product.process.publish.integrity.title' %}", "{% trans 'product.process.publish.integrity.body' %}", "error");
       return;
     }
-    updatePublishability(true);
+    var publishForm = document.createElement("div");
+    var processNameLabel = document.createElement("h5");
+    processNameLabel.classList.add("swal-content__label");
+    processNameLabel.innerText = "{% trans 'product.process.name' %}";
+    publishForm.appendChild(processNameLabel);
+    var processNameElement = document.createElement("input");
+    processNameElement.classList.add("swal-content__input");
+    processNameElement.value = process.name;
+    processNameElement.placeholder = "{% trans 'product.process.name' %}";
+    publishForm.appendChild(processNameElement);
+    var processDescriptionLabel = document.createElement("h5");
+    processDescriptionLabel.classList.add("swal-content__label");
+    processDescriptionLabel.innerText = "{% trans 'product.process.description' %}";
+    publishForm.appendChild(processDescriptionLabel);
+    var processDescriptionElement = document.createElement("input");
+    processDescriptionElement.classList.add("swal-content__input");
+    processDescriptionElement.value = process.description;
+    processDescriptionElement.placeholder = "{% trans 'product.process.description' %}";
+    publishForm.appendChild(processDescriptionElement);
+    swal({
+      title: "{% trans 'product.process.publish.title' %}",
+      content: publishForm,
+      icon: "warning",
+      buttons: true,
+    }).then(result => {
+      if (result == null) {
+        return;
+      }
+      if (processNameElement.value === "" || processDescriptionElement.value === "") {
+        swal("{% trans 'product.process.publish.incomplete.title' %}", "{% trans 'product.process.publish.incomplete.body' %}", "error");
+        return;
+      }
+      if (process == null) {
+        addProcess(processNameElement.value, processDescriptionElement.value);
+        return;
+      }
+      updateProcess(processNameElement.value, processDescriptionElement.value);
+    });
   }
 
   function checkProcessIntegrity() {
@@ -589,33 +587,16 @@
     return stepConnection;
   }
 
-  function updatePublishability(isPublishable) {
-    var publishButton = document.getElementById("process-publish");
-    if (isPublishable) {
-      publishButton.classList.remove("disabled");
-    } else {
-      publishButton.classList.add("disabled");
-    }
-  }
-
-  document.getElementById("process-publish").onclick = function (event) {
-    if (process == null) {
-      addProcess();
-      return;
-    }
-    updateProcess();
-  }
-
-  function addProcess() {
+  function addProcess(title, description) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/process/add/", "POST",
-      [], createProcessPayload());
+      [], createProcessPayload(title, description));
     request.send(function (status, responseText) {
       window.location.href = "/processes/";
     });
   }
 
-  function updateProcess() {
-    var payload = createProcessPayload();
+  function updateProcess(title, description) {
+    var payload = createProcessPayload(title, description);
     payload.process = process.id;
     let request = new HttpRequest("https://api.taskwolf.net/v1/process/update/", "POST",
       [], payload);
@@ -624,7 +605,7 @@
     });
   }
 
-  function createProcessPayload() {
+  function createProcessPayload(title, description) {
     var stepsPayload = [];
     for (var i = 0; i < steps.length; i++) {
       stepsPayload[i] = createStepPayload(steps[i]);
@@ -634,8 +615,8 @@
       connectionsPayload[i] = createConnectionPayload(connections[i]);
     }
     return {
-      name: document.getElementById("process-title").value,
-      description: document.getElementById("process-description").value,
+      name: title,
+      description: description,
       steps: stepsPayload,
       connections: connectionsPayload
     }
