@@ -166,6 +166,17 @@
   width: 299px !important;
 }
 
+ .process-step-sidebar-entry {
+  width: 90%;
+  margin: auto;
+  margin-top: 30px;
+}
+
+.process-step-sidebar-entry input, .process-step-sidebar-entry textarea {
+  background-color: #0d1117 !important;
+  color: white !important;
+}
+
 #process-step-sidebar-close {
   position: absolute;
   right: 10px;
@@ -180,18 +191,24 @@
   background-color: #a90000;
 }
 
-.process-step-sidebar-entry {
-  width: 90%;
-  margin: 30px auto;
-}
-
-.process-step-sidebar-entry input, .process-step-sidebar-entry textarea {
-  background-color: #0d1117 !important;
-  color: white !important;
-}
-
 #process-description {
   resize: none;
+}
+
+#process-step-todos li {
+  word-wrap: break-word;
+}
+
+#process-step-todo-add {
+  margin: 10px auto;
+  display: block;
+}
+
+.process-step-todo-remove {
+  color: #dc3545;
+  background-color: transparent;
+  border: none;
+  float: right;
 }
 
 @media (max-width: 1100px) {

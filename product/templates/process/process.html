@@ -36,6 +36,19 @@
                <label class="form-label">{% trans 'product.process.step.description' %}</label>
                <textarea id="process-step-description" class="form-control" placeholder="{% trans 'product.process.step.description' %}"></textarea>
              </div>
+             <div class="process-step-sidebar-entry">
+               <label class="form-label">{% trans 'product.process.step.todos' %}</label>
+               <p id="process-step-todos-empty" class="text-secondary d-none">{% trans 'product.process.step.todos.empty' %}</p>
+               <ul id="process-step-todos">
+               </ul>
+               <input id="process-step-todo-input" class="form-control" placeholder="{% trans 'product.process.step.todo' %}">
+               <button id="process-step-todo-add" type="button" class="btn btn-secondary">{% trans 'product.process.step.todo.add' %}</button>
+             </div>
+             <div class="process-step-sidebar-entry">
+               <label class="form-label">{% trans 'product.process.step.workflows' %}</label>
+               <ul id="process-step-workflows">
+               </ul>
+             </div>
              <div class="process-step-sidebar-entry text-center">
                <button id="process-step-adopt" type="button" class="btn btn-success">{% trans 'product.process.step.adopt' %}</button>
              </div>
@@ -74,9 +87,9 @@
     var location = window.location;
     var id = location.href.replace(location.host, "").replace(location.protocol, "").replace("process", "").replaceAll("/", "");
     if (id === "") {
-      steps.push(new Step(draw, -850, -75, "START", "Start", "Description"));
-      steps.push(new Step(draw, -150, -75, "TASK", "Step", "Description"));
-      steps.push(new Step(draw, 500, -75, "END", "End", "Description"));
+      steps.push(new Step(draw, -850, -75, "START", "Start", "Description", [], []));
+      steps.push(new Step(draw, -150, -75, "TASK", "Step", "Description", [], []));
+      steps.push(new Step(draw, 500, -75, "END", "End", "Description", [], []));
       initialDisplay();
       return;
     }
@@ -100,7 +113,8 @@
     for (var i = 0; i < process.steps.length; i++) {
       var entry = process.steps[i];
       var step = new Step(draw, entry.stepXCoordinate, entry.stepYCoordinate,
-        entry.stepType, entry.stepName, entry.stepDescription);
+        entry.stepType, entry.stepName, entry.stepDescription, entry.stepTodos,
+        entry.stepWorkflows);
       steps.push(step);
       stepIdRelation.push({id: entry.stepId, step: step});
     }
@@ -114,13 +128,15 @@
   }
 
   class Step {
-    constructor(draw, x, y, type, title, description) {
+    constructor(draw, x, y, type, title, description, todos, workflows) {
       this.draw = draw;
       this.x = x;
       this.y = y;
       this.type = type.toUpperCase();
       this.title = title;
       this.description = description;
+      this.todos = todos;
+      this.workflows = workflows;
       if (this.type === "TASK" || this.type === "END") {
         this.incomingConnectingPoint = new ConnectionPoint(draw, this, -150, 0, "destination");
       }
@@ -232,7 +248,32 @@
       currentSelectedStep = self;
       document.getElementById("process-step-title").value = self.title;
       document.getElementById("process-step-description").value = self.description;
+      document.getElementById("process-step-todos").innerHTML = "";
+      for (let i = 0; i < self.todos.length; i++) {
+        var todo = self.todos[i];
+        var entry = document.createElement("li");
+        entry.innerText = todo;
+        entry.appendChild(self.createTodoRemoveButton(i));
+        document.getElementById("process-step-todos").appendChild(entry);
+      }
+      if (self.todos.length === 0) {
+        document.getElementById("process-step-todos-empty").classList.remove("d-none");
+      } else {
+        document.getElementById("process-step-todos-empty").classList.add("d-none");
+      }
+      document.getElementById("process-step-todo-input").value = "";
       $("#process-step-sidebar").collapse("show");
+    }
+
+    createTodoRemoveButton(index) {
+      var self = this;
+      var button = document.createElement("button");
+      button.classList.add("process-step-todo-remove", "fa-solid", "fa-square-minus");
+      button.onclick = function (event) {
+        self.todos.splice(index, 1);
+        self.displayStepSidebar();
+      }
+      return button;
     }
 
     activate() {
@@ -445,25 +486,37 @@
   }
 
   document.getElementById("process-add-start").onclick = function (event) {
-    var step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "START", "Start", "Description");
+    var step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "START",
+      "Start", "Description", [], []);
     step.display();
     steps.push(step);
   }
 
   document.getElementById("process-add-step").onclick = function (event) {
-    var step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "TASK", "Step", "Description");
+    var step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "TASK",
+      "Step", "Description", [], []);
     step.display();
     steps.push(step);
   }
 
   document.getElementById("process-add-end").onclick = function (event) {
-    var step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "END", "End", "Description");
+    var step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "END",
+      "End", "Description", [], []);
     step.display();
     steps.push(step);
   }
 
   document.getElementById("process-step-sidebar-close").onclick = function (event) {
     $("#process-step-sidebar").collapse("hide");
+  }
+
+  document.getElementById("process-step-todo-add").onclick = function (event) {
+    var todo = document.getElementById("process-step-todo-input").value;
+    if (todo === "") {
+      return;
+    }
+    currentSelectedStep.todos.push(todo);
+    currentSelectedStep.displayStepSidebar();
   }
 
   document.getElementById("process-step-adopt").onclick = function (event) {
@@ -513,7 +566,9 @@
     publishForm.appendChild(processNameLabel);
     var processNameElement = document.createElement("input");
     processNameElement.classList.add("swal-content__input");
-    processNameElement.value = process.name;
+    if (process != null) {
+      processNameElement.value = process.name;
+    }
     processNameElement.placeholder = "{% trans 'product.process.name' %}";
     publishForm.appendChild(processNameElement);
     var processDescriptionLabel = document.createElement("h5");
@@ -522,7 +577,9 @@
     publishForm.appendChild(processDescriptionLabel);
     var processDescriptionElement = document.createElement("input");
     processDescriptionElement.classList.add("swal-content__input");
-    processDescriptionElement.value = process.description;
+    if (process != null) {
+      processDescriptionElement.value = process.description;
+    }
     processDescriptionElement.placeholder = "{% trans 'product.process.description' %}";
     publishForm.appendChild(processDescriptionElement);
     swal({
@@ -623,9 +680,15 @@
   }
 
   function createStepPayload(step) {
+    var todos = [];
+    for (var i = 0; i < step.todos.length; i++) {
+      todos[i] = {"todo": step.todos[i]}
+    }
     return {
       name: step.title,
       description: step.description,
+      todos: todos,
+      workflows: [],
       type: step.type,
       xCoordinate: step.x,
       yCoordinate: step.y
