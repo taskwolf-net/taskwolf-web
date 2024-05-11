@@ -17,7 +17,16 @@
             <button id="process-add-end" type="button" class="btn btn-primary">{% trans 'product.process.end.add' %}</button>
           </div>
           <div id="process-publish-wrapper">
-            <button id="process-run" type="button" class="btn btn-success">{% trans 'product.process.run' %}</button>
+            <div id="process-run-wrapper" class="btn-group">
+              <button id="process-run" type="button" class="btn btn-success">{% trans 'product.process.execution' %}</button>
+              <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">
+                <span class="sr-only"></span>
+              </button>
+              <div class="dropdown-menu dropdown-menu-dark">
+                <li id="process-execute-fast" class="dropdown-item"><i class="fa-solid fa-forward"></i><label class="mx-3">{% trans 'product.process.execution.fast' %}</label></li>
+                <li id="process-execution-abort" class="dropdown-item"><i class="fa-solid fa-rotate-right text-danger"></i><label class="text-danger mx-3">{% trans 'product.process.execution.abort' %}</label></li>
+              </div>
+            </div>
             <button id="process-publish" type="button" class="btn btn-success">{% trans 'product.process.publish' %}</button>
           </div>
         </div>
@@ -45,12 +54,17 @@
                <button id="process-step-todo-add" type="button" class="btn btn-secondary">{% trans 'product.process.step.todo.add' %}</button>
              </div>
              <div class="process-step-sidebar-entry">
-               <label class="form-label">{% trans 'product.process.step.workflows' %}</label>
-               <ul id="process-step-workflows">
-               </ul>
+               <label class="form-label">{% trans 'product.process.step.workflow' %}</label>
+               <div id="process-step-workflow" class="dropdown">
+                 <button id="process-step-workflow-button" class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
+                   {% trans 'product.process.step.workflow.select' %}
+                 </button>
+                 <ul id="process-step-workflow-list" class="dropdown-menu dropdown-menu-dark">
+                 </ul>
+               </div>
              </div>
              <div class="process-step-sidebar-entry text-center">
-               <button id="process-step-adopt" type="button" class="btn btn-success">{% trans 'product.process.step.adopt' %}</button>
+               <button id="process-step-adopt" type="button" class="btn btn-light mt-3">{% trans 'product.process.step.adopt' %}</button>
              </div>
            </div>
           </div>
@@ -61,74 +75,8 @@
 </html>
 
 <script>
-  var process = null;
-  var steps = [];
-  var connections = [];
-  var previousBox;
-  var mouseDown = false;
-  var aimedConnectionPoint = null;
-  var currentSelectedStep = null;
-
-  var draw = SVG().addTo(document.getElementById("process-graph"))
-    .size("100%", "100%")
-    .viewbox('-500 -500 1000 1000')
-    .panZoom({ zoomMin: 0.5, zoomMax: 3, zoomFactor: 0.1});
-
-  draw.on('panning', event => {
-    var box = event.detail.box;
-    display(box);
-  });
-
-  draw.on("mousedown", function (event) {
-    $("#process-step-sidebar").collapse("hide");
-  });
-
-  $(document).ready(function() {
-    var location = window.location;
-    var id = location.href.replace(location.host, "").replace(location.protocol, "").replace("process", "").replaceAll("/", "");
-    if (id === "") {
-      steps.push(new Step(draw, -850, -75, "START", "Start", "Description", [], []));
-      steps.push(new Step(draw, -150, -75, "TASK", "Step", "Description", [], []));
-      steps.push(new Step(draw, 500, -75, "END", "End", "Description", [], []));
-      initialDisplay();
-      return;
-    }
-    fetchProcessData(id, function() {
-      displayProcess();
-    });
-  });
-
-  function fetchProcessData(id, callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/process/find/", "POST",
-      [], {process: id});
-    request.send(function (status, responseText) {
-      process = JSON.parse(responseText);
-      callback();
-    });
-  }
-
-  function displayProcess() {
-    document.getElementById("process-delete").classList.remove("d-none");
-    var stepIdRelation = [];
-    for (var i = 0; i < process.steps.length; i++) {
-      var entry = process.steps[i];
-      var step = new Step(draw, entry.stepXCoordinate, entry.stepYCoordinate,
-        entry.stepType, entry.stepName, entry.stepDescription, entry.stepTodos,
-        entry.stepWorkflows);
-      steps.push(step);
-      stepIdRelation.push({id: entry.stepId, step: step});
-    }
-    for (var i = 0; i < process.connections.length; i++) {
-      var entry = process.connections[i];
-      var origin = stepIdRelation.filter((step) => step.id === entry.connectionOriginStep)[0].step;
-      var destination = stepIdRelation.filter((step) => step.id === entry.connectionDestinationStep)[0].step;
-      connections.push(new Connection(draw, origin, destination));
-    }
-    initialDisplay();
-  }
-
   class Step {
-    constructor(draw, x, y, type, title, description, todos, workflows) {
+    constructor(draw, x, y, type, title, description, todos, workflow) {
       this.draw = draw;
       this.x = x;
       this.y = y;
@@ -136,7 +84,7 @@
       this.title = title;
       this.description = description;
       this.todos = todos;
-      this.workflows = workflows;
+      this.workflow = workflow;
       if (this.type === "TASK" || this.type === "END") {
         this.incomingConnectingPoint = new ConnectionPoint(draw, this, -150, 0, "destination");
       }
@@ -262,6 +210,13 @@
         document.getElementById("process-step-todos-empty").classList.add("d-none");
       }
       document.getElementById("process-step-todo-input").value = "";
+      if (self.workflow != null) {
+        document.getElementById("process-step-workflow-button").innerText =
+          self.workflow.name;
+      } else {
+        document.getElementById("process-step-workflow-button").innerText =
+          "{% trans 'product.process.step.workflow.select' %}";
+      }
       $("#process-step-sidebar").collapse("show");
     }
 
@@ -278,6 +233,13 @@
 
     activate() {
       this.state = "ACTIVE";
+      if (this.workflow == null) {
+        return;
+      }
+      let request = new HttpRequest("https://api.taskwolf.net/v1/process/workflow/execute/", "POST",
+        [], {workflow: this.workflow.id});
+      request.send(function (status, responseText) {
+      });
     }
 
     deactivate() {
@@ -460,6 +422,73 @@
       this.state = "INACTIVE";
     }
   }
+</script>
+<script>
+  var process = null;
+  var steps = [];
+  var connections = [];
+  var previousBox;
+  var mouseDown = false;
+  var aimedConnectionPoint = null;
+  var currentSelectedStep = null;
+
+  var draw = SVG().addTo(document.getElementById("process-graph"))
+    .size("100%", "100%")
+    .viewbox('-500 -500 1000 1000')
+    .panZoom({ zoomMin: 0.5, zoomMax: 3, zoomFactor: 0.1});
+
+  draw.on('panning', event => {
+    var box = event.detail.box;
+    display(box);
+  });
+
+  draw.on("mousedown", function (event) {
+    $("#process-step-sidebar").collapse("hide");
+  });
+
+  $(document).ready(function() {
+    var location = window.location;
+    var id = location.href.replace(location.host, "").replace(location.protocol, "").replace("process", "").replaceAll("/", "");
+    if (id === "") {
+      steps.push(new Step(draw, -850, -75, "START", "Start", "Description", [], null));
+      steps.push(new Step(draw, -150, -75, "TASK", "Step", "Description", [], null));
+      steps.push(new Step(draw, 500, -75, "END", "End", "Description", [], null));
+      initialDisplay();
+      return;
+    }
+    fetchProcessData(id, function() {
+      displayProcess();
+    });
+  });
+
+  function fetchProcessData(id, callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/process/find/", "POST",
+      [], {process: id});
+    request.send(function (status, responseText) {
+      process = JSON.parse(responseText);
+      callback();
+    });
+  }
+
+  function displayProcess() {
+    document.getElementById("process-delete").classList.remove("d-none");
+    var stepIdRelation = [];
+    for (var i = 0; i < process.steps.length; i++) {
+      var entry = process.steps[i];
+      var step = new Step(draw, entry.stepXCoordinate, entry.stepYCoordinate,
+        entry.stepType, entry.stepName, entry.stepDescription, entry.stepTodos,
+        entry.stepWorkflow);
+      steps.push(step);
+      stepIdRelation.push({id: entry.stepId, step: step});
+    }
+    for (var i = 0; i < process.connections.length; i++) {
+      var entry = process.connections[i];
+      var origin = stepIdRelation.filter((step) => step.id === entry.connectionOriginStep)[0].step;
+      var destination = stepIdRelation.filter((step) => step.id === entry.connectionDestinationStep)[0].step;
+      connections.push(new Connection(draw, origin, destination));
+    }
+    initialDisplay();
+  }
 
   function initialDisplay() {
     display({width: 4000, height: 4000, x: -2000, y: -2000});
@@ -487,21 +516,21 @@
 
   document.getElementById("process-add-start").onclick = function (event) {
     var step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "START",
-      "Start", "Description", [], []);
+      "Start", "Description", [], null);
     step.display();
     steps.push(step);
   }
 
   document.getElementById("process-add-step").onclick = function (event) {
     var step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "TASK",
-      "Step", "Description", [], []);
+      "Step", "Description", [], null);
     step.display();
     steps.push(step);
   }
 
   document.getElementById("process-add-end").onclick = function (event) {
     var step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "END",
-      "End", "Description", [], []);
+      "End", "Description", [], null);
     step.display();
     steps.push(step);
   }
@@ -519,6 +548,40 @@
     currentSelectedStep.displayStepSidebar();
   }
 
+  document.getElementById("process-step-workflow-button").onclick = function (event) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/process/workflows/", "GET",
+      []);
+    request.send(function (status, responseText) {
+      var workflows = JSON.parse(responseText).workflows;
+      document.getElementById("process-step-workflow-list").innerHTML = "";
+      for (let i = 0; i < workflows.length; i++) {
+        let workflow = workflows[i];
+        createProcessWorkflowEntry(workflow.name, function() {
+          currentSelectedStep.workflow = workflow;
+          document.getElementById("process-step-workflow-button").innerText =
+            workflow.name;
+        });
+      }
+      createProcessWorkflowEntry("{% trans 'product.process.step.workflow.none' %}", function() {
+        currentSelectedStep.workflow = null;
+        document.getElementById("process-step-workflow-button").innerText =
+          "{% trans 'product.process.step.workflow.select' %}";
+      })
+    });
+  }
+
+  function createProcessWorkflowEntry(name, click) {
+    var workflowElement = document.createElement("li");
+    workflowElement.classList.add("dropdown-item");
+    var workflowNameName = document.createElement("b");
+    workflowNameName.innerHTML = name;
+    workflowElement.appendChild(workflowNameName);
+    workflowElement.onclick = function(event) {
+      click();
+    }
+    document.getElementById("process-step-workflow-list").appendChild(workflowElement);
+  }
+
   document.getElementById("process-step-adopt").onclick = function (event) {
     currentSelectedStep.title = document.getElementById("process-step-title").value;
     currentSelectedStep.description = document.getElementById("process-step-description").value;
@@ -526,32 +589,81 @@
     display(previousBox);
   }
 
+  var currentActiveSteps = [];
+
   document.getElementById("process-run").onclick = function (event) {
+    var afterFunction = function (next) {
+      if (findStepConnections(next).length === 0) {
+        next.deactivate();
+        display(previousBox);
+        return;
+      }
+      currentActiveSteps.push(next);
+    };
+    if (currentActiveSteps.length === 0) {
+      var startSteps = findStartSteps();
+      for (var i = 0; i < startSteps.length; i++) {
+        activateStep(startSteps[i], false, afterFunction);
+      }
+      return;
+    }
+    for (var i = 0; i < currentActiveSteps.length; i++) {
+      activateConnection(currentActiveSteps[i], false, afterFunction);
+    }
+    currentActiveSteps = [];
+  }
+
+  document.getElementById("process-execute-fast").onclick = function (event) {
     var startSteps = findStartSteps();
     for (var i = 0; i < startSteps.length; i++) {
-      activeStep(startSteps[i]);
+      activateStep(startSteps[i], true, function(next) {});
     }
   }
 
-  function activeStep(step) {
+  document.getElementById("process-execution-abort").onclick = function (event) {
+    for (var i = 0; i < steps.length; i++) {
+      steps[i].deactivate();
+    }
+    for (var i = 0; i < connections.length; i++) {
+      connections[i].deactivate();
+    }
+    currentActiveSteps = [];
+    display(previousBox);
+  }
+
+  function activateStep(step, loop, after) {
     step.activate();
     display(previousBox);
     setTimeout(function() {
-      step.deactivate();
-      var stepConnections = findStepConnections(step);
-      if (stepConnections.length > 0) {
-        for (var i = 0; i < stepConnections.length; i++) {
-          stepConnections[i].activate();
-        }
-        setTimeout(function() {
-          for (var i = 0; i < stepConnections.length; i++) {
-            stepConnections[i].deactivate();
-            activeStep(stepConnections[i].destination);
-          }
-        }, 800);
+      if (step.state === "INACTIVE") {
+        return;
       }
-      display(previousBox);
+      if (loop) {
+        activateConnection(step, loop, after);
+      } else {
+        after(step);
+      }
     }, 800);
+  }
+
+  function activateConnection(step, loop, after) {
+    step.deactivate();
+    var stepConnections = findStepConnections(step);
+    if (stepConnections.length > 0) {
+      for (var i = 0; i < stepConnections.length; i++) {
+        stepConnections[i].activate();
+      }
+      setTimeout(function() {
+        for (var i = 0; i < stepConnections.length; i++) {
+          if (stepConnections[i].state === "INACTIVE") {
+            continue;
+          }
+          stepConnections[i].deactivate();
+          activateStep(stepConnections[i].destination, loop, after);
+        }
+      }, 800);
+    }
+    display(previousBox);
   }
 
   document.getElementById("process-publish").onclick = function (event) {
@@ -684,15 +796,18 @@
     for (var i = 0; i < step.todos.length; i++) {
       todos[i] = {"todo": step.todos[i]}
     }
-    return {
+    var payload = {
       name: step.title,
       description: step.description,
       todos: todos,
-      workflows: [],
       type: step.type,
       xCoordinate: step.x,
       yCoordinate: step.y
+    };
+    if (step.workflow != null) {
+      payload.workflow = step.workflow.id;
     }
+    return payload;
   }
 
   function createConnectionPayload(connection) {

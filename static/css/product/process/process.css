@@ -40,7 +40,7 @@
   display: flex;
 }
 
-#process-publish, #process-run {
+#process-publish, #process-run-wrapper {
   margin-top: 5px;
   margin-bottom: 5px;
 }
@@ -209,6 +209,14 @@
   background-color: transparent;
   border: none;
   float: right;
+}
+
+#process-step-workflow-button {
+  width: 100%;
+}
+
+#process-step-workflow-list {
+  width: 100%;
 }
 
 @media (max-width: 1100px) {
