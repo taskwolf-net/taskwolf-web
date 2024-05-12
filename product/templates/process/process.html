@@ -535,137 +535,6 @@
     steps.push(step);
   }
 
-  document.getElementById("process-step-sidebar-close").onclick = function (event) {
-    $("#process-step-sidebar").collapse("hide");
-  }
-
-  document.getElementById("process-step-todo-add").onclick = function (event) {
-    var todo = document.getElementById("process-step-todo-input").value;
-    if (todo === "") {
-      return;
-    }
-    currentSelectedStep.todos.push(todo);
-    currentSelectedStep.displayStepSidebar();
-  }
-
-  document.getElementById("process-step-workflow-button").onclick = function (event) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/process/workflows/", "GET",
-      []);
-    request.send(function (status, responseText) {
-      var workflows = JSON.parse(responseText).workflows;
-      document.getElementById("process-step-workflow-list").innerHTML = "";
-      for (let i = 0; i < workflows.length; i++) {
-        let workflow = workflows[i];
-        createProcessWorkflowEntry(workflow.name, function() {
-          currentSelectedStep.workflow = workflow;
-          document.getElementById("process-step-workflow-button").innerText =
-            workflow.name;
-        });
-      }
-      createProcessWorkflowEntry("{% trans 'product.process.step.workflow.none' %}", function() {
-        currentSelectedStep.workflow = null;
-        document.getElementById("process-step-workflow-button").innerText =
-          "{% trans 'product.process.step.workflow.select' %}";
-      })
-    });
-  }
-
-  function createProcessWorkflowEntry(name, click) {
-    var workflowElement = document.createElement("li");
-    workflowElement.classList.add("dropdown-item");
-    var workflowNameName = document.createElement("b");
-    workflowNameName.innerHTML = name;
-    workflowElement.appendChild(workflowNameName);
-    workflowElement.onclick = function(event) {
-      click();
-    }
-    document.getElementById("process-step-workflow-list").appendChild(workflowElement);
-  }
-
-  document.getElementById("process-step-adopt").onclick = function (event) {
-    currentSelectedStep.title = document.getElementById("process-step-title").value;
-    currentSelectedStep.description = document.getElementById("process-step-description").value;
-    $("#process-step-sidebar").collapse("hide");
-    display(previousBox);
-  }
-
-  var currentActiveSteps = [];
-
-  document.getElementById("process-run").onclick = function (event) {
-    var afterFunction = function (next) {
-      if (findStepConnections(next).length === 0) {
-        next.deactivate();
-        display(previousBox);
-        return;
-      }
-      currentActiveSteps.push(next);
-    };
-    if (currentActiveSteps.length === 0) {
-      var startSteps = findStartSteps();
-      for (var i = 0; i < startSteps.length; i++) {
-        activateStep(startSteps[i], false, afterFunction);
-      }
-      return;
-    }
-    for (var i = 0; i < currentActiveSteps.length; i++) {
-      activateConnection(currentActiveSteps[i], false, afterFunction);
-    }
-    currentActiveSteps = [];
-  }
-
-  document.getElementById("process-execute-fast").onclick = function (event) {
-    var startSteps = findStartSteps();
-    for (var i = 0; i < startSteps.length; i++) {
-      activateStep(startSteps[i], true, function(next) {});
-    }
-  }
-
-  document.getElementById("process-execution-abort").onclick = function (event) {
-    for (var i = 0; i < steps.length; i++) {
-      steps[i].deactivate();
-    }
-    for (var i = 0; i < connections.length; i++) {
-      connections[i].deactivate();
-    }
-    currentActiveSteps = [];
-    display(previousBox);
-  }
-
-  function activateStep(step, loop, after) {
-    step.activate();
-    display(previousBox);
-    setTimeout(function() {
-      if (step.state === "INACTIVE") {
-        return;
-      }
-      if (loop) {
-        activateConnection(step, loop, after);
-      } else {
-        after(step);
-      }
-    }, 800);
-  }
-
-  function activateConnection(step, loop, after) {
-    step.deactivate();
-    var stepConnections = findStepConnections(step);
-    if (stepConnections.length > 0) {
-      for (var i = 0; i < stepConnections.length; i++) {
-        stepConnections[i].activate();
-      }
-      setTimeout(function() {
-        for (var i = 0; i < stepConnections.length; i++) {
-          if (stepConnections[i].state === "INACTIVE") {
-            continue;
-          }
-          stepConnections[i].deactivate();
-          activateStep(stepConnections[i].destination, loop, after);
-        }
-      }, 800);
-    }
-    display(previousBox);
-  }
-
   document.getElementById("process-publish").onclick = function (event) {
     if (!checkProcessIntegrity()) {
       swal("{% trans 'product.process.publish.integrity.title' %}", "{% trans 'product.process.publish.integrity.body' %}", "error");
@@ -833,5 +702,171 @@
         });
       }
     });
+  }
+</script>
+
+<script>
+  document.getElementById("process-step-sidebar-close").onclick = function (event) {
+    $("#process-step-sidebar").collapse("hide");
+  }
+
+  document.getElementById("process-step-todo-add").onclick = function (event) {
+    var todo = document.getElementById("process-step-todo-input").value;
+    if (todo === "") {
+      return;
+    }
+    currentSelectedStep.todos.push(todo);
+    currentSelectedStep.displayStepSidebar();
+  }
+
+  document.getElementById("process-step-workflow-button").onclick = function (event) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/process/workflows/", "GET",
+      []);
+    request.send(function (status, responseText) {
+      var workflows = JSON.parse(responseText).workflows;
+      document.getElementById("process-step-workflow-list").innerHTML = "";
+      for (let i = 0; i < workflows.length; i++) {
+        let workflow = workflows[i];
+        createProcessWorkflowEntry(workflow.name, function() {
+          currentSelectedStep.workflow = workflow;
+          document.getElementById("process-step-workflow-button").innerText =
+            workflow.name;
+        });
+      }
+      createProcessWorkflowEntry("{% trans 'product.process.step.workflow.none' %}", function() {
+        currentSelectedStep.workflow = null;
+        document.getElementById("process-step-workflow-button").innerText =
+          "{% trans 'product.process.step.workflow.select' %}";
+      })
+    });
+  }
+
+  function createProcessWorkflowEntry(name, click) {
+    var workflowElement = document.createElement("li");
+    workflowElement.classList.add("dropdown-item");
+    var workflowNameName = document.createElement("b");
+    workflowNameName.innerHTML = name;
+    workflowElement.appendChild(workflowNameName);
+    workflowElement.onclick = function(event) {
+      click();
+    }
+    document.getElementById("process-step-workflow-list").appendChild(workflowElement);
+  }
+
+  document.getElementById("process-step-adopt").onclick = function (event) {
+    currentSelectedStep.title = document.getElementById("process-step-title").value;
+    currentSelectedStep.description = document.getElementById("process-step-description").value;
+    $("#process-step-sidebar").collapse("hide");
+    display(previousBox);
+  }
+</script>
+
+<script>
+  var currentActiveSteps = [];
+
+  document.getElementById("process-run").onclick = function (event) {
+    if (isConnectionActive()) {
+      return;
+    }
+    var afterFunction = function (next) {
+      if (findStepConnections(next).length > 0) {
+        currentActiveSteps.push(next);
+      }
+    };
+    if (currentActiveSteps.length === 0) {
+      if (isStepActive()) {
+        return;
+      }
+      var startSteps = findStartSteps();
+      for (var i = 0; i < startSteps.length; i++) {
+        activateStep(startSteps[i], false, afterFunction);
+      }
+      return;
+    }
+    for (var i = 0; i < currentActiveSteps.length; i++) {
+      activateConnection(currentActiveSteps[i], false, afterFunction);
+    }
+    currentActiveSteps = [];
+  }
+
+  function isConnectionActive() {
+    for (var i = 0; i < connections.length; i++) {
+      if (connections[i].state === "ACTIVE") {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function isStepActive() {
+    for (var i = 0; i < steps.length; i++) {
+      if (steps[i].state === "ACTIVE") {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  document.getElementById("process-execute-fast").onclick = function (event) {
+    abortProcessExecution();
+    var startSteps = findStartSteps();
+    for (var i = 0; i < startSteps.length; i++) {
+      activateStep(startSteps[i], true, function(next) {});
+    }
+  }
+
+  function activateStep(step, loop, after) {
+    step.activate();
+    display(previousBox);
+    if (!loop) {
+      after(step);
+    }
+    setTimeout(function() {
+      if (step.state === "INACTIVE") {
+        return;
+      }
+      if (findStepConnections(step).length === 0) {
+        step.deactivate();
+        display(previousBox);
+      }
+      if (loop) {
+        activateConnection(step, loop, after);
+      }
+    }, 800);
+  }
+
+  function activateConnection(step, loop, after) {
+    step.deactivate();
+    var stepConnections = findStepConnections(step);
+    if (stepConnections.length > 0) {
+      for (var i = 0; i < stepConnections.length; i++) {
+        stepConnections[i].activate();
+      }
+      setTimeout(function() {
+        for (var i = 0; i < stepConnections.length; i++) {
+          if (stepConnections[i].state === "INACTIVE") {
+            continue;
+          }
+          stepConnections[i].deactivate();
+          activateStep(stepConnections[i].destination, loop, after);
+        }
+      }, 800);
+    }
+    display(previousBox);
+  }
+
+  document.getElementById("process-execution-abort").onclick = function (event) {
+    abortProcessExecution();
+  }
+
+  function abortProcessExecution() {
+    for (var i = 0; i < steps.length; i++) {
+      steps[i].deactivate();
+    }
+    for (var i = 0; i < connections.length; i++) {
+      connections[i].deactivate();
+    }
+    currentActiveSteps = [];
+    display(previousBox);
   }
 </script>
