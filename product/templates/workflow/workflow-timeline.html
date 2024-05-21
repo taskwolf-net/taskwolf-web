@@ -82,18 +82,18 @@
   }
 
   document.getElementById("workflow-timeline-reset").onclick = function (event) {
-    swal({
+    Swal.fire({
       title: "{% trans 'product.workflow.timeline.reset.title' %}",
       text: "{% trans 'product.workflow.timeline.reset.body' %}",
       icon: "warning",
-      dangerMode: true,
-      buttons: true,
-    }).then(willDelete => {
-      if (willDelete) {
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
         let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/timeline/reset/", "POST",
           [], {workflow: sessionStorage.getItem("workflow-id")});
         request.send(function (status, responseText) {
-          swal("{% trans 'product.workflow.timeline.reset.successful.title' %}", "{% trans 'product.workflow.timeline.reset.successful.body' %}", "success").then(success => window.location.reload());
+          Swal.fire("{% trans 'product.workflow.timeline.reset.successful.title' %}", "{% trans 'product.workflow.timeline.reset.successful.body' %}", "success").then(success => window.location.reload());
         });
       }
     });

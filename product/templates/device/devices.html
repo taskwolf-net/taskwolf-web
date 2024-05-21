@@ -244,18 +244,18 @@
   };
 
   function deleteDevice(device) {
-    swal({
+    Swal.fire({
       title: "{% trans 'product.devices.delete.title' %}",
       text: "{% trans 'product.devices.delete.body' %}",
       icon: "warning",
-      dangerMode: true,
-      buttons: true,
-    }).then(willDelete => {
-      if (willDelete) {
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
         let request = new HttpRequest("https://api.taskwolf.net/v1/device/organization/remove/", "POST",
           [], {device: device, organization: currentOwner.id});
         request.send(function (status, responseText) {
-          swal("{% trans 'product.devices.delete.successful.title' %}", "{% trans 'product.devices.delete.successful.body' %}", "success").then(success => window.location.href = "/devices/");
+          Swal.fire("{% trans 'product.devices.delete.successful.title' %}", "{% trans 'product.devices.delete.successful.body' %}", "success").then(success => window.location.href = "/devices/");
         });
       }
     });

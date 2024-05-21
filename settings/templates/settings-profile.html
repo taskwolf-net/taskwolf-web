@@ -58,7 +58,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/username/change/", "POST",
       [], {username: document.getElementById("settings-profile-name").value});
     request.send(function (status, responseText) {
-      swal("{% trans 'settings.profile.name.changed.title' %}", "{% trans 'settings.profile.name.changed.body' %}", "success");
+      Swal.fire("{% trans 'settings.profile.name.changed.title' %}", "{% trans 'settings.profile.name.changed.body' %}", "success");
     });
   };
 
@@ -72,7 +72,7 @@
       let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/picture/change/", "POST",
         [], {picture: event.target.result});
       request.send(function (status, responseText) {
-        swal("{% trans 'settings.profile.picture.edited.title' %}", "{% trans 'settings.profile.picture.edited.body' %}", "success").then(success => window.location.reload());
+        Swal.fire("{% trans 'settings.profile.picture.edited.title' %}", "{% trans 'settings.profile.picture.edited.body' %}", "success").then(success => window.location.reload());
       });
     });
     fileReader.readAsDataURL(this.files[0]);

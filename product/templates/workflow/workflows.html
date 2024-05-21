@@ -188,7 +188,7 @@
       let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/manual/execute/", "POST",
         [], {workflow: id});
       request.send(function (status, responseText) {
-        swal("{% trans 'product.workflows.executed.title' %}", "{% trans 'product.workflows.executed.body' %}", "success");
+        Swal.fire("{% trans 'product.workflows.executed.title' %}", "{% trans 'product.workflows.executed.body' %}", "success");
       });
     }
     return runButton;
@@ -364,18 +364,18 @@
   }
 
   function deleteWorkflow(id) {
-    swal({
+    Swal.fire({
       title: "{% trans 'product.workflow.delete.title' %}",
       text: "{% trans 'product.workflow.delete.body' %}",
       icon: "warning",
-      dangerMode: true,
-      buttons: true,
-    }).then(willDelete => {
-      if (willDelete) {
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
         let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/remove/", "POST",
           [], {workflow: id});
         request.send(function (status, responseText) {
-          swal("{% trans 'product.workflow.delete.successful.title' %}", "{% trans 'product.workflow.delete.successful.body' %}", "success").then(success => window.location.href = "/workflows/");
+          Swal.fire("{% trans 'product.workflow.delete.successful.title' %}", "{% trans 'product.workflow.delete.successful.body' %}", "success").then(success => window.location.href = "/workflows/");
         });
       }
     });
@@ -385,7 +385,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/duplicate/", "POST",
       [], {workflow: id});
     request.send(function (status, responseText) {
-      swal("{% trans 'product.workflow.duplicate.successful.title' %}", "{% trans 'product.workflow.duplicate.successful.body' %}", "success").then(success => window.location.href = "/workflows/");
+      Swal.fire("{% trans 'product.workflow.duplicate.successful.title' %}", "{% trans 'product.workflow.duplicate.successful.body' %}", "success").then(success => window.location.href = "/workflows/");
     });
   }
 </script>

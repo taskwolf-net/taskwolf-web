@@ -229,20 +229,16 @@
   }
 }
 
-.swal-content__label {
+.process-publish-form input {
   color: white;
-  text-align: left;
-  width: 100%;
-}
-
-.swal-content__input {
-  color: white;
-  background-color: #34435a;
+  background-color: transparent;
+  border: 1px solid white;
   border-radius: 5px;
-  border-color: white !important;
-  margin-bottom: 5%;
+  box-shadow: none;
+  outline: none;
+  padding: 10px !important;
 }
 
-.swal-content__input::placeholder {
+.process-publish-form input::placeholder {
   color: #a5a5a5;
 }

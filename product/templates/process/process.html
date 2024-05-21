@@ -537,43 +537,41 @@
 
   document.getElementById("process-publish").onclick = function (event) {
     if (!checkProcessIntegrity()) {
-      swal("{% trans 'product.process.publish.integrity.title' %}", "{% trans 'product.process.publish.integrity.body' %}", "error");
+      Swal.fire("{% trans 'product.process.publish.integrity.title' %}", "{% trans 'product.process.publish.integrity.body' %}", "error");
       return;
     }
     var publishForm = document.createElement("div");
+    publishForm.classList.add("process-publish-form");
     var processNameLabel = document.createElement("h5");
-    processNameLabel.classList.add("swal-content__label");
     processNameLabel.innerText = "{% trans 'product.process.name' %}";
     publishForm.appendChild(processNameLabel);
     var processNameElement = document.createElement("input");
-    processNameElement.classList.add("swal-content__input");
+    processNameElement.classList.add("mb-2");
     if (process != null) {
       processNameElement.value = process.name;
     }
     processNameElement.placeholder = "{% trans 'product.process.name' %}";
     publishForm.appendChild(processNameElement);
     var processDescriptionLabel = document.createElement("h5");
-    processDescriptionLabel.classList.add("swal-content__label");
     processDescriptionLabel.innerText = "{% trans 'product.process.description' %}";
     publishForm.appendChild(processDescriptionLabel);
     var processDescriptionElement = document.createElement("input");
-    processDescriptionElement.classList.add("swal-content__input");
     if (process != null) {
       processDescriptionElement.value = process.description;
     }
     processDescriptionElement.placeholder = "{% trans 'product.process.description' %}";
     publishForm.appendChild(processDescriptionElement);
-    swal({
+    Swal.fire({
       title: "{% trans 'product.process.publish.title' %}",
-      content: publishForm,
+      html: publishForm,
       icon: "warning",
-      buttons: true,
+      showCancelButton: true,
     }).then(result => {
-      if (result == null) {
+      if (!result.isConfirmed) {
         return;
       }
       if (processNameElement.value === "" || processDescriptionElement.value === "") {
-        swal("{% trans 'product.process.publish.incomplete.title' %}", "{% trans 'product.process.publish.incomplete.body' %}", "error");
+        Swal.fire("{% trans 'product.process.publish.incomplete.title' %}", "{% trans 'product.process.publish.incomplete.body' %}", "error");
         return;
       }
       if (process == null) {
@@ -687,18 +685,18 @@
   }
 
   document.getElementById("process-delete").onclick = function (event) {
-    swal({
+    Swal.fire({
       title: "{% trans 'product.process.delete.title' %}",
       text: "{% trans 'product.process.delete.body' %}",
       icon: "warning",
-      dangerMode: true,
-      buttons: true,
-    }).then(willDelete => {
-      if (willDelete) {
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
         let request = new HttpRequest("https://api.taskwolf.net/v1/process/remove/", "POST",
           [], {process: process.id});
         request.send(function (status, responseText) {
-          swal("{% trans 'product.process.delete.successful.title' %}", "{% trans 'product.process.delete.successful.body' %}", "success").then(success => window.location.href = "/processes/");
+          Swal.fire("{% trans 'product.process.delete.successful.title' %}", "{% trans 'product.process.delete.successful.body' %}", "success").then(success => window.location.href = "/processes/");
         });
       }
     });

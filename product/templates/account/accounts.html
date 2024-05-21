@@ -74,18 +74,18 @@
   }
 
   function openDeleteMenu(identifier) {
-    swal({
+    Swal.fire({
       title: "{% trans 'product.accounts.account.delete.title' %}",
       text: "{% trans 'product.accounts.account.delete.body' %}",
       icon: "warning",
-      dangerMode: true,
-      buttons: true,
-    }).then(willDelete => {
-      if (willDelete) {
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
         let request = new HttpRequest("https://api.taskwolf.net/v1/account/remove/", "POST",
           [], {module: sessionStorage.getItem("account-app-identifier"), identifier: identifier});
         request.send(function (status, responseText) {
-          swal("{% trans 'product.accounts.account.delete.successful.title' %}", "{% trans 'product.accounts.account.delete.successful.body' %}", "success").then(success => window.location.href = "/account/apps/");
+          Swal.fire("{% trans 'product.accounts.account.delete.successful.title' %}", "{% trans 'product.accounts.account.delete.successful.body' %}", "success").then(success => window.location.href = "/account/apps/");
         });
       }
     });
