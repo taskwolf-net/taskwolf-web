@@ -86,7 +86,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/create/", "POST",
       [], {title: title, type: ticketType, message: message});
     request.send(function (status, responseText) {
-      swal("{% trans 'ticket.create.successful.title' %}", "{% trans 'ticket.create.successful.body' %}", "success").then(success => window.location.href = "/tickets/");
+      Swal.fire("{% trans 'ticket.create.successful.title' %}", "{% trans 'ticket.create.successful.body' %}", "success").then(success => window.location.href = "/tickets/");
     });
   }
 </script>

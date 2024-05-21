@@ -107,46 +107,47 @@
   }
 
   document.getElementById("webhook-delete").onclick = function (event) {
-    swal({
+    Swal.fire({
       title: "{% trans 'product.webhook.delete.title' %}",
       text: "{% trans 'product.webhook.delete.body' %}",
       icon: "warning",
-      dangerMode: true,
-      buttons: true,
-    }).then(willDelete => {
-      if (willDelete) {
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
         let request = new HttpRequest("https://api.taskwolf.net/v1/webhook/remove/", "POST",
           [], {webhook: webhook.id});
         request.send(function (status, responseText) {
-          swal("{% trans 'product.webhook.delete.successful.title' %}", "{% trans 'product.webhook.delete.successful.body' %}", "success").then(success => window.location.href = "/webhooks/");
+          Swal.fire("{% trans 'product.webhook.delete.successful.title' %}", "{% trans 'product.webhook.delete.successful.body' %}", "success").then(success => window.location.href = "/webhooks/");
         });
       }
     });
   }
 
   document.getElementById("webhook-rename").onclick = function (event) {
-    swal({
+    var content = document.createElement("div");
+    content.classList.add("webhook-rename-content");
+    var text = document.createElement("p");
+    text.innerText = "{% trans 'product.webhook.rename.body' %}";
+    content.appendChild(text);
+    var input = document.createElement("input");
+    input.placeholder = "{% trans 'product.webhook.rename.name' %}";
+    content.appendChild(input);
+    Swal.fire({
       title: "{% trans 'product.webhook.rename.title' %}",
-      text: "{% trans 'product.webhook.rename.body' %}",
-      content: {
-        element: "input",
-        attributes: {
-          placeholder: "{% trans 'product.webhook.rename.name' %}",
-          type: "name",
-        },
-      },
+      html: content,
       icon: "info",
-      buttons: true,
+      showCancelButton: true,
     }).then(result => {
-      if (result != null) {
-        if (result.replaceAll(" ", "") === "") {
-          swal("{% trans 'product.webhook.rename.empty.title' %}", "{% trans 'product.webhook.rename.empty.body' %}", "error");
+      if (result.isConfirmed) {
+        if (input.value.replaceAll(" ", "") === "") {
+          Swal.fire("{% trans 'product.webhook.rename.empty.title' %}", "{% trans 'product.webhook.rename.empty.body' %}", "error");
           return;
         }
         let request = new HttpRequest("https://api.taskwolf.net/v1/webhook/rename/", "POST",
-          [], {webhook: webhook.id, name: result});
+          [], {webhook: webhook.id, name: input.value});
         request.send(function (status, responseText) {
-          swal("{% trans 'product.webhook.rename.successful.title' %}", "{% trans 'product.webhook.rename.successful.body' %}", "success").then(success => window.location.reload());
+          Swal.fire("{% trans 'product.webhook.rename.successful.title' %}", "{% trans 'product.webhook.rename.successful.body' %}", "success").then(success => window.location.reload());
         });
       }
     });

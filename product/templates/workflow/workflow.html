@@ -195,7 +195,7 @@
     content.appendChild(createComponentAddSelector("fa-filter",
       "{% trans 'product.workflow.add.component.condition' %}",
       () => addCondition(actionIndex, conditionIndex)));
-    swal({
+    Swal.fire({
       title: "{% trans 'product.workflow.add.component.title' %}",
       buttons: [true, false],
       content: content,
@@ -458,7 +458,7 @@
       [], requestBody);
     request.send(function (status, responseText) {
       if (status !== 200) {
-        swal("{% trans 'product.workflow.publish.too.big.title' %}", "{% trans 'product.workflow.publish.too.big.body' %}", "error");
+        Swal.fire("{% trans 'product.workflow.publish.too.big.title' %}", "{% trans 'product.workflow.publish.too.big.body' %}", "error");
         return;
       }
       sessionStorage.removeItem("workflow-name");
@@ -479,18 +479,18 @@
   }
 
   function openDeleteMenu() {
-    swal({
+    Swal.fire({
       title: "{% trans 'product.workflow.delete.title' %}",
       text: "{% trans 'product.workflow.delete.body' %}",
       icon: "warning",
-      dangerMode: true,
-      buttons: true,
-    }).then(willDelete => {
-      if (willDelete) {
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
         let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/remove/", "POST",
           [], {workflow: sessionStorage.getItem("workflow-id")});
         request.send(function (status, responseText) {
-          swal("{% trans 'product.workflow.delete.successful.title' %}", "{% trans 'product.workflow.delete.successful.body' %}", "success").then(success => window.location.href = "/workflows/");
+          Swal.fire("{% trans 'product.workflow.delete.successful.title' %}", "{% trans 'product.workflow.delete.successful.body' %}", "success").then(success => window.location.href = "/workflows/");
         });
       }
     });

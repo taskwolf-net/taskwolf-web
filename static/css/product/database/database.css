@@ -251,13 +251,16 @@ tr {
   margin-left: 20px !important;
 }
 
-.swal-content__input {
+.database-rename-content input, .database-column-add-content input {
   color: white;
-  background-color: #34435a;
+  background-color: transparent;
+  border: 1px solid white;
   border-radius: 5px;
-  border-color: white !important;
+  box-shadow: none;
+  outline: none;
+  padding: 10px !important;
 }
 
-.swal-content__input::placeholder {
+.database-rename-content input::placeholder, .database-column-add-content input::placeholder {
   color: #a5a5a5;
 }

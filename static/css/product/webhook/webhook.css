@@ -73,3 +73,17 @@
 #webhook-key-regenerate {
   margin-left: 1%;
 }
+
+.webhook-rename-content input {
+  color: white;
+  background-color: transparent;
+  border: 1px solid white;
+  border-radius: 5px;
+  box-shadow: none;
+  outline: none;
+  padding: 10px !important;
+}
+
+.webhook-rename-content input::placeholder {
+  color: #a5a5a5;
+}

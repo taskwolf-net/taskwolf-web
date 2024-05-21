@@ -64,13 +64,16 @@
   margin-top: 2%;
 }
 
-.swal-content__input {
+.settings-account-delete-content input {
   color: white;
-  background-color: #34435a;
+  background-color: transparent;
+  border: 1px solid white;
   border-radius: 5px;
-  border-color: white !important;
+  box-shadow: none;
+  outline: none;
+  padding: 10px !important;
 }
 
-.swal-content__input::placeholder {
+.settings-account-delete-content input::placeholder {
   color: #a5a5a5;
 }

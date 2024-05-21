@@ -53,15 +53,15 @@
 
   document.getElementById('register').onclick = function() {
     if (emailInput.value === "" || usernameInput.value === "" || passwordInput.value === "") {
-      swal("Registration failed!", "Please fill in all fields", "error");
+      Swal.fire("Registration failed!", "Please fill in all fields", "error");
       return;
     }
     if (!passwordInput.checkValidity()) {
-      swal("Registration failed!", "The password entered does not meet the requirements!", "error");
+      Swal.fire("Registration failed!", "The password entered does not meet the requirements!", "error");
       return;
     }
     if (!document.getElementById("legal-check").checked) {
-      swal("Registration failed!", "You have to accept the terms of service and privacy policy to continue!", "error");
+      Swal.fire("Registration failed!", "You have to accept the terms of service and privacy policy to continue!", "error");
       return;
     }
     let request = new HttpRequest("https://api.taskwolf.net/v1/verification/register/", "POST", [],
@@ -71,7 +71,7 @@
       if (response.success === true) {
         window.location.href = "/register/email/";
       } else {
-        swal("Registration failed!", "There is already an account with this email!", "error");
+        Swal.fire("Registration failed!", "There is already an account with this email!", "error");
       }
     });
   };

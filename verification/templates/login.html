@@ -61,7 +61,7 @@
         Cookie.create("token", JSON.parse(responseText).apiKey, 60 * 60 * 24 * 30, ".taskwolf.net");
         window.location.href = "/dashboard/";
       } else {
-        swal("Authentication failed!", "The password entered is incorrect!", "error");
+        Swal.fire("Authentication failed!", "The password entered is incorrect!", "error");
         document.getElementById("password").value = "";
       }
     });
