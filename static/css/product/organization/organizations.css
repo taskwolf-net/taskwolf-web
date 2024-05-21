@@ -2,13 +2,13 @@
   color: white;
   text-align: center;
   font-weight: bold;
-  margin-top: 2%;
+  margin-top: 3%;
 }
 
 #organizations-header {
   width: min(calc(1500px - 15vw), 95%);
   margin: auto;
-  margin-top: 2%;
+  margin-top: 3%;
   display: flex;
   align-items: center;
   justify-content: center;

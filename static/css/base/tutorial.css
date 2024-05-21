@@ -1,10 +1,15 @@
 .tutorial-container {
-  background-color: rgba(0, 0, 0, 0.2) !important;
+  background-color: rgba(0, 0, 0, 0) !important;
+}
+
+.tutorial-popup {
+  padding-bottom: 10px;
 }
 
 .tutorial-actions {
   width: 100%;
   justify-content: start;
+  margin-top: 10px;
 }
 
 .tutorial-continue {

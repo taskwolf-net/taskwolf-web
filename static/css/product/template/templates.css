@@ -1,14 +1,14 @@
 #templates-headline {
   color: white;
   text-align: center;
-  margin-top: 2%;
+  margin-top: 3%;
   font-weight: bold;
 }
 
 #templates-header {
   width: min(calc(1500px - 15vw), 95%);
   margin: auto;
-  margin-top: 2%;
+  margin-top: 3%;
   display: flex;
   align-items: center;
   justify-content: center;

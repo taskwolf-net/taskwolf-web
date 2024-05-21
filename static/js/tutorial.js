@@ -1,29 +1,35 @@
+var highlightedElement = "";
+
 let request = new HttpRequest("https://api.taskwolf.net/v1/tutorial/", "GET", []);
 request.send(function (status, responseText) {
   var tutorial = JSON.parse(responseText);
   if (!tutorial.active) {
     return;
   }
-  console.log(window.location.href + ":" + tutorial.page);
   if (!window.location.href.includes(tutorial.page)) {
     return;
   }
-  displayTutorial(tutorial);
+  displayTutorial(tutorial, true);
 });
 
-function displayTutorial(tutorial) {
+function displayTutorial(tutorial, showCancel) {
   if (!window.location.href.includes(tutorial.page)) {
     window.location.href = tutorial.page;
     return;
   }
+  if (tutorial.shiftContentDown) {
+    document.getElementsByClassName("sidebar-influenced")[0].style.marginTop =
+      "150px";
+  }
   Swal.fire({
     title: tutorial.title,
     text: tutorial.description,
-    position: "top-end",
-    showCancelButton: true,
+    position: tutorial.position,
+    showCancelButton: showCancel,
     cancelButtonColor: "#dc3545",
     customClass: {
       container: "tutorial-container",
+      popup: "tutorial-popup",
       actions: "tutorial-actions",
       confirmButton: "tutorial-continue",
       cancelButton: "tutorial-cancel",
@@ -40,7 +46,13 @@ function displayTutorial(tutorial) {
       return;
     }
   });
-  document.querySelector(tutorial.element).classList.add("tutorial-highlight");
+  if (highlightedElement !== "") {
+    document.querySelector(highlightedElement).classList.remove("tutorial-highlight");
+  }
+  if (tutorial.element !== "") {
+    document.querySelector(tutorial.element).classList.add("tutorial-highlight");
+  }
+  highlightedElement = tutorial.element;
 }
 
 function cancelTutorial() {
@@ -50,7 +62,7 @@ function cancelTutorial() {
     if (!tutorial.active) {
       return;
     }
-    displayTutorial(tutorial);
+    displayTutorial(tutorial, false);
   });
 }
 
@@ -61,6 +73,6 @@ function continueTutorial() {
     if (!tutorial.active) {
       return;
     }
-    displayTutorial(tutorial);
+    displayTutorial(tutorial, false);
   });
 }
