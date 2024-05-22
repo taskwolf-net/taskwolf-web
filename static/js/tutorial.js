@@ -1,16 +1,18 @@
 var highlightedElement = "";
 
-let request = new HttpRequest("https://api.taskwolf.net/v1/tutorial/", "GET", []);
-request.send(function (status, responseText) {
-  var tutorial = JSON.parse(responseText);
-  if (!tutorial.active) {
-    return;
-  }
-  if (!window.location.href.includes(tutorial.page)) {
-    return;
-  }
-  displayTutorial(tutorial, true);
-});
+window.addEventListener('load', function () {
+  let request = new HttpRequest("https://api.taskwolf.net/v1/tutorial/", "GET", []);
+  request.send(function (status, responseText) {
+    var tutorial = JSON.parse(responseText);
+    if (!tutorial.active) {
+      return;
+    }
+    if (!window.location.href.includes(tutorial.page)) {
+      return;
+    }
+    displayTutorial(tutorial, true);
+  });
+})
 
 function displayTutorial(tutorial, showCancel) {
   if (!window.location.href.includes(tutorial.page)) {
