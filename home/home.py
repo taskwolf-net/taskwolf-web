@@ -2,11 +2,12 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from base.authentication import isAuthenticated
 from product.product import dashboard
+from django.shortcuts import redirect
 
 async def home(request):
   authenticated = await isAuthenticated(request)
   if (authenticated):
-    return await dashboard(request)
+    return redirect("/dashboard/")
   return render(request, 'home.html', {'title': 'Taskwolf - Home',
     'css': ['css/base/home-header.css', 'css/home/home.css']})
 
