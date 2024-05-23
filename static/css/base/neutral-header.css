@@ -8,6 +8,18 @@
   align-items: center;
 }
 
+.dark #navbar {
+  color: white;
+  background-color: #212529;
+  border-bottom: 1px #4a4a4a solid;
+}
+
+.light #navbar {
+  color: black;
+  background-color: #f8f9fa;
+  border-bottom: 1px #c8c8c8 solid;
+}
+
 #navbar-content {
   width: 100%;
   position: relative;
@@ -20,8 +32,15 @@
 }
 
 #close-button {
-  color: white;
   margin-left: auto;
   margin-right: 35px;
   font-size: 40px;
+}
+
+.dark #close-button {
+  color: white;
+}
+
+.light #close-button {
+  color: black;
 }

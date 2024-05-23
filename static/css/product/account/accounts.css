@@ -13,12 +13,10 @@
 #accounts-headline {
   display: inline-block;
   vertical-align: middle;
-  color: white;
   font-weight: bold;
 }
 
 #accounts-list-headline {
-  color: white;
   width: min(calc(1500px - 15vw), 80%);
   margin: auto;
   margin-top: 2%;
@@ -35,7 +33,6 @@
 .account-entry {
   display: flex;
   align-items: center;
-  color: white;
   margin-top: 1%;
   padding: 15px;
   border: 1px solid #5b5b5b;
@@ -67,7 +64,6 @@
   display: none;
   width: 100%;
   text-align: center;
-  color: white;
 }
 
 .swal-text {

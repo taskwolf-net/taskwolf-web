@@ -148,7 +148,7 @@
     dropdownContainer.appendChild(informationElement);
     dropdownContainer.classList.add("workflow-condition-select-container", "dropdown");
     var dropdownButton = document.createElement("button");
-    dropdownButton.classList.add("btn", "btn-secondary", "dropdown-toggle", "bg-dark");
+    dropdownButton.classList.add("btn", "dropdown-button", "dropdown-toggle");
     if (document.getElementsByClassName("workflow-condition-select-container").length > 0) {
       dropdownButton.setAttribute("disabled", "disabled");
       selectButtons.push(dropdownButton);
@@ -158,7 +158,7 @@
     dropdownButton.innerHTML = name;
     dropdownContainer.appendChild(dropdownButton);
     var dropdownList = document.createElement("ul");
-    dropdownList.classList.add("workflow-condition-select-list", "dropdown-menu", "dropdown-menu-dark");
+    dropdownList.classList.add("workflow-condition-select-list", "dropdown-menu");
     dropdownContainer.appendChild(dropdownList);
     dropdownButton.addEventListener("click", function (event) {
       clickConditionSelect(identifier, dropdownContainer, dropdownList, dropdownButton);

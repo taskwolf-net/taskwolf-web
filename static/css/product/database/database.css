@@ -11,7 +11,6 @@
 }
 
 #database-name {
-  color: white;
   position: absolute;
   font-weight: bold;
 }
@@ -25,24 +24,35 @@
   margin-left: auto;
   background-color: rgba(0,0,0,0) !important;
   border: none;
-  color: white;
   font-size: 28px;
 }
 
 #database-table {
-  background-color: #212529;
-  color: white;
   width: min(calc(1800px - 15vw), 100%);
-  border-top-right-radius: .5rem;
-  border-top-left-radius: .5rem;
 }
 
-.dataTables_length select, .dataTables_length select option {
+.dark #database-table {
+  background-color: #212529;
+}
+
+.light #database-table {
+  background-color: #212529;
+}
+
+.dark .dataTables_length select, .dark .dataTables_length select option {
   color: white !important;
 }
 
-.dataTables_length select option {
+.light .dataTables_length select, .light .dataTables_length select option {
+  color: black !important;
+}
+
+.dark .dataTables_length select option {
   background-color: #212529;
+}
+
+.light .dataTables_length select option {
+  background-color: #d7d7d7;
 }
 
 table {
@@ -54,27 +64,58 @@ thead {
   border-bottom: #686c76 2px solid !important;
 }
 
+.dark thead {
+  background-color: #212529;
+}
+
+.light thead {
+  background-color: #d7d7d7;
+}
+
 th {
   padding: 1.5rem 1.0rem !important;
 }
 
 td {
-  color: white !important;
   padding: 1.5rem 1.0rem !important;
   white-space: nowrap;
   text-overflow:ellipsis;
   overflow: hidden;
 }
 
+.dark td {
+  color: white !important;
+}
+
+.light td {
+  color: black !important;
+}
+
 tr {
   border-bottom: #373e45 1px solid !important;
 }
 
+.dark tr {
+  background-color: #212529;
+}
+
+.light tr {
+  background-color: #d7d7d7;
+}
+
 .form-check-input {
-  background-color: #212529 !important;
-  border-color: white !important;
   scale: 1.2;
   margin-left: 10px;
+}
+
+.dark .form-check-input {
+  background-color: #212529 !important;
+  border-color: white !important;
+}
+
+.light .form-check-input {
+  background-color: #d7d7d7 !important;
+  border-color: black !important;
 }
 
 .form-check-input:checked {
@@ -87,11 +128,19 @@ tr {
 }
 
 .database-column-settings {
-  background-color: #212529 !important;
   border: none;
-  color: #b7b7b7;
   margin-left: 10px;
   scale: 1.2;
+}
+
+.dark .database-column-settings {
+  background-color: #212529 !important;
+  color: #b7b7b7;
+}
+
+.light .database-column-settings {
+  background-color: #d7d7d7 !important;
+  color: #5b5b5b;
 }
 
 #database-column-add-head {
@@ -106,8 +155,6 @@ tr {
 
 #database-table-empty {
   width: 100%;
-  background-color: #212529;
-  color: white;
   margin: 0;
   padding: 20px;
   text-align: center;
@@ -115,21 +162,34 @@ tr {
   border-bottom: 1px #373e45 solid;
 }
 
+.dark #database-table-empty {
+  background-color: #212529;
+}
+
+.light #database-table-empty {
+  background-color: #d7d7d7;
+}
+
 .database-row-settings-container {
   display: block;
 }
 
 .database-row-settings {
-  background-color: #212529 !important;
   border: none;
-  color: white;
   float: right;
   margin-right: 10px;
 }
 
+.dark .database-row-settings {
+  background-color: #212529 !important;
+}
+
+.light .database-row-settings {
+  background-color: #d7d7d7 !important;
+}
+
 .database-table-settings-dropdown {
   padding: 10px !important;
-  background-color: #3d444c !important;
 }
 
 .database-table-settings-dropdown-entry {
@@ -154,14 +214,18 @@ tr {
 #database-table-paginate {
   display: flex;
   justify-content: center;
-  background-color: #212529;
-  color: white;
   width: 100%;
   padding-top: 20px;
   padding-bottom: 20px;
-  border-bottom-right-radius: .5rem;
-  border-bottom-left-radius: .5rem;
   user-select: none;
+}
+
+.dark #database-table-paginate {
+  background-color: #212529;
+}
+
+.light #database-table-paginate {
+  background-color: #d7d7d7;
 }
 
 #database-remove {
@@ -179,12 +243,19 @@ tr {
 
 .database-row-edit-cell-input {
   background-color: #212529;
-  color: white;
   width: 100%;
   border: #66727f 1px solid;
   border-radius: 5px;
   outline: none;
   padding: 0.5rem 0.5rem !important;
+}
+
+.dark .database-row-edit-cell-input {
+  background-color: #212529;
+}
+
+.light .database-row-edit-cell-input {
+  background-color: #d7d7d7;
 }
 
 .database-row-edit-modification {
@@ -198,10 +269,17 @@ tr {
 }
 
 .database-row-edit-exit {
-  background-color: #212529 !important;
   border: none;
   color: #ff5454;
   scale: 1.2;
+}
+
+.dark .database-row-edit-exit {
+  background-color: #212529 !important;
+}
+
+.light .database-row-edit-exit {
+  background-color: #d7d7d7 !important;
 }
 
 .database-table-paginate-button {
@@ -213,16 +291,29 @@ tr {
   align-items: center !important;
   justify-content: center !important;
   transition: all 0.3s ease-in-out !important;
-  color: white;
   text-decoration: none;
   user-select: none;
 }
 
-.database-table-paginate-button:hover {
+.dark .database-table-paginate-button {
   color: white;
+}
+
+.light .database-table-paginate-button {
+  color: black;
+}
+
+.database-table-paginate-button:hover {
   border-color: transparent !important;
-  background: #434b53 !important;
   text-decoration: none;
+}
+
+.dark .database-table-paginate-button:hover {
+  background: #434b53 !important;
+}
+
+.light .database-table-paginate-button:hover {
+  background: #b3b3b3 !important;
 }
 
 .database-table-paginate-page-button {
@@ -231,16 +322,34 @@ tr {
 
 .paginate-button-disabled {
   transition: all 0s !important;
+}
+
+.dark .paginate-button-disabled {
   color: #545454 !important;
 }
 
-.paginate-button-disabled:hover {
+.light .paginate-button-disabled {
+  color: #898989 !important;
+}
+
+.dark .paginate-button-disabled:hover {
   background-color: #212529 !important;
 }
 
+.light .paginate-button-disabled:hover {
+  background-color: #d7d7d7 !important;
+}
+
 .database-table-paginate-current {
-  background: #33393f !important;
   font-weight: bold;
+}
+
+.dark .database-table-paginate-current {
+  background: #33393f !important;
+}
+
+.light .database-table-paginate-current {
+  background: #878787 !important;
 }
 
 .database-table-paginate-previous {
@@ -252,13 +361,19 @@ tr {
 }
 
 .database-rename-content input, .database-column-add-content input {
-  color: white;
   background-color: transparent;
-  border: 1px solid white;
   border-radius: 5px;
   box-shadow: none;
   outline: none;
   padding: 10px !important;
+}
+
+.dark .database-rename-content input, .dark .database-column-add-content input {
+  border: 1px solid white;
+}
+
+.light .database-rename-content input, .light .database-column-add-content input {
+  border: 1px solid black;
 }
 
 .database-rename-content input::placeholder, .database-column-add-content input::placeholder {

@@ -1,7 +1,5 @@
 .loader {
-  color: #cccccc;
   font-size: 11px;
-  background: #cccccc;
   animation: escaleY 1s infinite ease-in-out;
   width: 1em;
   height: 4em;
@@ -10,17 +8,35 @@
   margin-left: 50%;
   margin-top: calc(50vh - 80px + 2em);
 }
-.loader:before,
-.loader:after {
+
+.dark .loader {
+  color: #cccccc;
+  background: #cccccc;
+}
+
+.light .loader {
+  color: #666666;
+  background: #666666;
+}
+
+.loader:before, .loader:after {
   content: '';
   position: absolute;
   top: 0;
   left: 2em;
-  background: #cccccc;
   width: 1em;
   height: 4em;
   animation: escaleY 1s infinite ease-in-out;
 }
+
+.dark .loader:before, .dark .loader:after {
+  background: #cccccc;
+}
+
+.light .loader:before, .light .loader:after {
+  background: #666666;
+}
+
 .loader:before {
   left: -2em;
   animation-delay: -0.32s;

@@ -1,5 +1,4 @@
 #templates-headline {
-  color: white;
   text-align: center;
   margin-top: 3%;
   font-weight: bold;
@@ -32,19 +31,28 @@
   flex-direction: row;
   align-items: center;
   border-radius: 5px;
+}
+
+.dark #templates-search-box {
   background-color: #202428;
+}
+
+.light #templates-search-box {
+  background-color: #d8d8d8;
 }
 
 #templates-search-box input {
   flex-grow: 2;
   border: none;
   border-radius: 5px;
-  background-color: #202428;
-  color: white;
 }
 
-#templates-search-box input::-webkit-input-placeholder {
-  color: #aeaeae;
+.dark #templates-search-box input {
+  background-color: #202428;
+}
+
+.light #templates-search-box input {
+  background-color: #d8d8d8;
 }
 
 #templates-search-box input:focus{
@@ -52,10 +60,18 @@
 }
 
 #templates-search-box button {
-  background-color: #202428;
-  color: #9b9b9b;
   border: none;
   border-radius: 5px;
+}
+
+.dark #templates-search-box button {
+  background-color: #202428;
+  color: #9b9b9b;
+}
+
+.light #templates-search-box button {
+  background-color: #d8d8d8;
+  color: #545454;
 }
 
 #templates-list {
@@ -71,7 +87,6 @@
 }
 
 .template-entry {
-  color: white;
   height: 350px;
   border: 1px solid #7f7f7f;
   border-radius: 10px;
@@ -84,13 +99,20 @@
 }
 
 .template-workflow {
-  background-color: #202428;
   padding: 50px 10px;
   margin-bottom: 10px;
   border-radius: 10px;
   display: flex;
   flex-direction: row;
   justify-content: center;
+}
+
+.dark .template-workflow {
+  background-color: #202428;
+}
+
+.light .template-workflow {
+  background-color: #d8d8d8;
 }
 
 .template-workflow-arrow {
@@ -114,7 +136,6 @@
   display: none;
   width: 100%;
   text-align: center;
-  color: white;
   margin-top: 2%;
 }
 

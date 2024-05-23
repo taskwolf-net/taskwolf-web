@@ -1,11 +1,21 @@
 #sidebar {
   position: fixed;
   width: 260px !important;
-  color: white;
   height: 100%;
   transition: 0s;
   z-index: 90;
+}
+
+.dark #sidebar {
+  color: white;
+  background-color: #212529;
   border-right: 1px #4a4a4a solid;
+}
+
+.light #sidebar {
+  color: black;
+  background-color: #f8f9fa;
+  border-right: 1px #c8c8c8 solid;
 }
 
 .sidebar-item {
@@ -17,8 +27,12 @@
   user-select: none;
 }
 
-.sidebar-item:hover {
+.dark .sidebar-item:hover {
   background-color: #4a4a4a;
+}
+
+.light .sidebar-item:hover {
+  background-color: #acacac;
 }
 
 .sidebar-link {
@@ -37,14 +51,29 @@
 }
 
 .sidebar-active {
-  background-color: #666666;
   border-radius: 10px;
+}
+
+.dark .sidebar-active {
+  background-color: #666666;
+}
+
+.light .sidebar-active {
+  background-color: #b7b7b7;
 }
 
 .sidebar-divider {
   width: 90%;
   margin: 2% auto;
   border-bottom: 1px #4a4a4a solid;
+}
+
+.dark .sidebar-divider {
+  border-bottom: 1px #4a4a4a solid;
+}
+
+.light .sidebar-divider {
+  border-bottom: 1px #9b9b9b solid;
 }
 
 @media(max-height: 700px) {

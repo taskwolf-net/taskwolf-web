@@ -1,11 +1,22 @@
 #navbar {
   z-index: 100;
-  border-bottom: 1px #4a4a4a solid;
   position: fixed !important;
   width: 100%;
   height: 80px;
   display: flex;
   align-items: center;
+}
+
+.dark #navbar {
+  color: white;
+  background-color: #212529;
+  border-bottom: 1px #4a4a4a solid;
+}
+
+.light #navbar {
+  color: black;
+  background-color: #f8f9fa;
+  border-bottom: 1px #c8c8c8 solid;
 }
 
 #navbar-content {
@@ -22,7 +33,6 @@
 #sidebar-button {
   width: 40px;
   margin-left: 35px;
-  color: white;
   background-color: transparent;
   border: none;
   font-size: 30px;
@@ -36,7 +46,14 @@
   width: 64px;
   height: 64px;
   border-radius: 40%;
+}
+
+.dark #profile-picture {
   background-color: #212529;
+}
+
+.light #profile-picture {
+  background-color: #f8f9fa;
 }
 
 #profile-button-container {

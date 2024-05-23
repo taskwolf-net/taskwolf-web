@@ -10,9 +10,9 @@
         <h1 id="devices-headline">{% trans 'product.devices.headline' %}</h1>
         <div id="devices-header">
           <div id="devices-owner-dropdown" class="dropdown">
-            <button id="devices-owner-dropdown-button" class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
+            <button id="devices-owner-dropdown-button" class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
             </button>
-            <ul id="devices-owner-dropdown-list" class="dropdown-menu dropdown-menu-dark">
+            <ul id="devices-owner-dropdown-list" class="dropdown-menu">
             </ul>
           </div>
           <div class="d-flex w-100">
@@ -200,7 +200,7 @@
     settingsButton.setAttribute("aria-expanded", "false");
     settingsDiv.appendChild(settingsButton);
     var dropdown = document.createElement("ul");
-    dropdown.classList.add("device-settings-dropdown", "dropdown-menu", "dropdown-menu-dark");
+    dropdown.classList.add("device-settings-dropdown", "dropdown-menu");
     dropdown.appendChild(createSettingsDropdownButton(dropdown, "fa-trash",
       "{% trans 'product.devices.delete' %}", "text-danger",
       function() {deleteDevice(device)}));

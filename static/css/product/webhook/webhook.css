@@ -11,7 +11,6 @@
 }
 
 #webhook-name {
-  color: white;
   position: absolute;
   font-weight: bold;
 }
@@ -25,13 +24,19 @@
   margin-left: auto;
   background-color: rgba(0,0,0,0) !important;
   border: none;
-  color: white;
   font-size: 28px;
 }
 
-.webhook-section-content input {
+.dark .webhook-section-content input {
   background-color: #0d1117 !important;
   color: white !important;
+  border: 1px solid #cecece !important;
+}
+
+.light .webhook-section-content input {
+  background-color: #eaeaea !important;
+  color: black !important;
+  border: 1px solid #4c4c4c !important;
 }
 
 .webhook-section-content input:-webkit-autofill,
@@ -39,13 +44,11 @@
 .webhook-section-content input:-webkit-autofill:focus,
 .webhook-section-content input:-webkit-autofill:active{
   -webkit-background-clip: text;
-  -webkit-text-fill-color: #ffffff;
   transition: background-color 5000s ease-in-out 0s;
   box-shadow: inset 0 0 20px 20px #23232329;
 }
 
 .form-label {
-  color: white;
   text-align: left;
   width: 100%;
   font-size: 25px;
@@ -75,13 +78,19 @@
 }
 
 .webhook-rename-content input {
-  color: white;
   background-color: transparent;
-  border: 1px solid white;
   border-radius: 5px;
   box-shadow: none;
   outline: none;
   padding: 10px !important;
+}
+
+.dark .webhook-rename-content input {
+  border: 1px solid white;
+}
+
+.light .webhook-rename-content input {
+  border: 1px solid black;
 }
 
 .webhook-rename-content input::placeholder {

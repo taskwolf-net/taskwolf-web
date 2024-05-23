@@ -1,5 +1,4 @@
 #databases-headline {
-  color: white;
   text-align: center;
   font-weight: bold;
   margin-top: 3%;
@@ -33,15 +32,28 @@
   flex-direction: row;
   align-items: center;
   border-radius: 5px;
+}
+
+.dark #databases-search-box {
   background-color: #202428;
+}
+
+.light #databases-search-box {
+  background-color: #d8d8d8;
 }
 
 #databases-search-box input {
   flex-grow: 2;
   border: none;
   border-radius: 5px;
+}
+
+.dark #databases-search-box input {
   background-color: #202428;
-  color: white;
+}
+
+.light #databases-search-box input {
+  background-color: #d8d8d8;
 }
 
 #databases-search-box input:focus{
@@ -49,10 +61,18 @@
 }
 
 #databases-search-box button {
-  background-color: #202428;
-  color: #9b9b9b;
   border: none;
   border-radius: 5px;
+}
+
+.dark #databases-search-box button {
+  background-color: #202428;
+  color: #9b9b9b;
+}
+
+.light #databases-search-box button {
+  background-color: #d8d8d8;
+  color: #545454;
 }
 
 #database-create {
@@ -86,7 +106,6 @@
 #databases-list li {
   border-bottom: 1px #4a4a4a solid;
   width: 100%;
-  color: white;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -95,8 +114,12 @@
   transition-duration: 0.3s;
 }
 
-#databases-list li:hover {
+.dark #databases-list li:hover {
   background-color: #19202c !important;
+}
+
+.light #databases-list li:hover {
+  background-color: #cecece !important;
 }
 
 #databases-list li div {
@@ -120,7 +143,6 @@
   margin-top: 1%;
   border-bottom: 4px #717171 solid;
   padding: 0;
-  color: white;
   display: flex;
   flex-direction: row;
 }
@@ -149,7 +171,6 @@
 }
 
 #databases-empty {
-  color: white;
   display: none;
   flex-flow: wrap;
   justify-content: center;

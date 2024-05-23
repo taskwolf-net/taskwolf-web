@@ -22,7 +22,6 @@ input:-webkit-autofill:active{
 }
 
 .form-label {
-  color: white;
   text-align: left;
   width: 100%;
   font-size: 20px;
@@ -44,7 +43,6 @@ input:-webkit-autofill:active{
 }
 
 .form-check-label {
-  color: white;
   width: 100%;
   text-align: left;
 }

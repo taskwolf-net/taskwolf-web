@@ -10,10 +10,10 @@
         <div id="dashboard-wrapper" class="d-none">
           <div id="dashboard-header">
             <div id="dashboard-target-dropdown" class="dropdown">
-              <button id="dashboard-target-dropdown-button" class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
+              <button id="dashboard-target-dropdown-button" class="btn dropdown-button dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
                 {% trans 'target' %}
               </button>
-              <ul id="dashboard-target-dropdown-list" class="dropdown-menu dropdown-menu-dark">
+              <ul id="dashboard-target-dropdown-list" class="dropdown-menu">
               </ul>
             </div>
             <h1 id="dashboard-headline">{% trans 'product.dashboard.headline' %}</h1>
@@ -75,9 +75,8 @@
       var response = JSON.parse(responseText);
       Cookie.create("grafana_session", response.token, 60 * 10, ".taskwolf.net");
       var iframe = document.createElement("iframe");
-      iframe.src = response.url;
+      iframe.src = response.url + "&theme=" + Cookie.find("taskwolf-theme");
       iframe.onload = function(event) {
-        //Cookie.destroy("grafana_session", ".taskwolf.net");
         removeLoader();
       }
       document.getElementById("dashboard-content").appendChild(iframe);

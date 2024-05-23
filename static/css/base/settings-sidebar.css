@@ -1,6 +1,5 @@
 #sidebar {
   width: 260px !important;
-  color: white;
   transition: 0s;
   margin-top: 2%;
 }
@@ -15,8 +14,12 @@
   transition-duration: 250ms;
 }
 
-.sidebar-item:hover {
+.dark .sidebar-item:hover {
   background-color: #1c2431;
+}
+
+.light .sidebar-item:hover {
+  background-color: #acacac;
 }
 
 .sidebar-section {
@@ -38,8 +41,13 @@
   height: 15px;
 }
 
-.sidebar-active {
+.dark .sidebar-active {
   background-color: #232d3e;
+  border-radius: 10px;
+}
+
+.light .sidebar-active {
+  background-color: #b7b7b7;
   border-radius: 10px;
 }
 
@@ -54,7 +62,16 @@
     height: 100%;
     z-index: 90;
     margin-top: 0;
+  }
+
+  .dark #sidebar {
     background-color: #212529;
+    border-right: 1px #4a4a4a solid;
+  }
+
+  .light #sidebar {
+    background-color: #fafafa;
+    border-right: 1px #c8c8c8 solid;
   }
 
   #sidebar-content {
@@ -74,7 +91,6 @@
   }
 
   .sidebar-section {
-    color: white;
     font-size: 22px;
   }
 

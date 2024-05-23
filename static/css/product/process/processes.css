@@ -1,5 +1,4 @@
 #processes-headline {
-  color: white;
   text-align: center;
   font-weight: bold;
   margin-top: 3%;
@@ -33,7 +32,14 @@
   flex-direction: row;
   align-items: center;
   border-radius: 5px;
+}
+
+.dark #processes-search-box {
   background-color: #202428;
+}
+
+.light #processes-search-box {
+  background-color: #d7d7d7;
 }
 
 #processes-search-box input {
@@ -41,7 +47,14 @@
   border: none;
   border-radius: 5px;
   background-color: #202428;
-  color: white;
+}
+
+.dark #processes-search-box input {
+  background-color: #202428;
+}
+
+.light #processes-search-box input {
+  background-color: #d8d8d8;
 }
 
 #processes-search-box input:focus{
@@ -49,10 +62,18 @@
 }
 
 #processes-search-box button {
-  background-color: #202428;
-  color: #9b9b9b;
   border: none;
   border-radius: 5px;
+}
+
+.dark #processes-search-box button {
+  background-color: #202428;
+  color: #9b9b9b;
+}
+
+.light #processes-search-box button {
+  background-color: #d8d8d8;
+  color: #545454;
 }
 
 #process-create {
@@ -86,7 +107,6 @@
 #processes-list li {
   border-bottom: 1px #4a4a4a solid;
   width: 100%;
-  color: white;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -95,8 +115,12 @@
   transition-duration: 0.3s;
 }
 
-#processes-list li:hover {
+.dark #processes-list li:hover {
   background-color: #19202c !important;
+}
+
+.light #processes-list li:hover {
+  background-color: #cecece !important;
 }
 
 #processes-list li div {
@@ -125,7 +149,6 @@
 .processes-list-optimization {
   width: fit-content;
   margin: auto;
-  color: white;
   text-align: center;
   padding: 10px;
   border-radius: 5px;
@@ -149,7 +172,6 @@
   margin-top: 1%;
   border-bottom: 4px #717171 solid;
   padding: 0;
-  color: white;
   display: flex;
   flex-direction: row;
 }
@@ -172,8 +194,16 @@
 
 #processes-table-description button {
   border: none;
+}
+
+.dark #processes-table-description button {
   background-color: #222b38;
   color: #9b9b9b;
+}
+
+.light #processes-table-description button {
+  background-color: #cacaca;
+  color: #232323;
 }
 
 @media (max-width: 1200px) {
@@ -219,7 +249,6 @@
 }
 
 #processes-empty {
-  color: white;
   display: none;
   flex-flow: wrap;
   justify-content: center;

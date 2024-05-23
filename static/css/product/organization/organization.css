@@ -4,7 +4,6 @@
   margin-top: 2%;
   margin-left: auto;
   margin-right: auto;
-  color: white;
 }
 
 #organization-header {
@@ -15,7 +14,6 @@
 }
 
 #organization-name {
-  color: white;
   position: absolute;
   font-weight: bold;
 }
@@ -29,7 +27,6 @@
   margin-left: auto;
   background-color: rgba(0,0,0,0) !important;
   border: none;
-  color: white;
   font-size: 28px;
 }
 
@@ -132,7 +129,6 @@
 }
 
 .organization-rename-content input {
-  color: white;
   background-color: transparent;
   border: 1px solid white;
   border-radius: 5px;

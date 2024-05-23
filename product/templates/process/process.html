@@ -1,70 +1,70 @@
 {% load static %}
 {% load i18n %}
 <html lang="en">
-{% include 'templates/head.html' %}
+{% include "templates/head.html" %}
   <body>
-    {% include 'templates/product-header.html' %}
-    {% include 'templates/product-sidebar.html' %}
+    {% include "templates/product-header.html" %}
+    {% include "templates/product-sidebar.html" %}
     <div class="sidebar-influenced">
       <div id="process-wrapper">
         <div id="process-modification">
           <div id="process-delete-wrapper">
-            <button id="process-delete" type="button" class="btn btn-danger d-none">{% trans 'product.process.delete' %}</button>
+            <button id="process-delete" type="button" class="btn btn-danger d-none">{% trans "product.process.delete" %}</button>
           </div>
           <div id="process-component-wrapper">
-            <button id="process-add-start" type="button" class="btn btn-primary">{% trans 'product.process.start.add' %}</button>
-            <button id="process-add-step" type="button" class="btn btn-primary">{% trans 'product.process.step.add' %}</button>
-            <button id="process-add-end" type="button" class="btn btn-primary">{% trans 'product.process.end.add' %}</button>
+            <button id="process-add-start" type="button" class="btn btn-primary">{% trans "product.process.start.add" %}</button>
+            <button id="process-add-step" type="button" class="btn btn-primary">{% trans "product.process.step.add" %}</button>
+            <button id="process-add-end" type="button" class="btn btn-primary">{% trans "product.process.end.add" %}</button>
           </div>
           <div id="process-publish-wrapper">
             <div id="process-run-wrapper" class="btn-group">
-              <button id="process-run" type="button" class="btn btn-success">{% trans 'product.process.execution' %}</button>
+              <button id="process-run" type="button" class="btn btn-success">{% trans "product.process.execution" %}</button>
               <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">
                 <span class="sr-only"></span>
               </button>
-              <div class="dropdown-menu dropdown-menu-dark">
-                <li id="process-execute-fast" class="dropdown-item"><i class="fa-solid fa-forward"></i><label class="mx-3">{% trans 'product.process.execution.fast' %}</label></li>
-                <li id="process-execution-abort" class="dropdown-item"><i class="fa-solid fa-rotate-right text-danger"></i><label class="text-danger mx-3">{% trans 'product.process.execution.abort' %}</label></li>
+              <div class="dropdown-menu">
+                <li id="process-execute-fast" class="dropdown-item"><i class="fa-solid fa-forward"></i><label class="mx-3">{% trans "product.process.execution.fast" %}</label></li>
+                <li id="process-execution-abort" class="dropdown-item"><i class="fa-solid fa-rotate-right text-danger"></i><label class="text-danger mx-3">{% trans "product.process.execution.abort" %}</label></li>
               </div>
             </div>
-            <button id="process-publish" type="button" class="btn btn-success">{% trans 'product.process.publish' %}</button>
+            <button id="process-publish" type="button" class="btn btn-success">{% trans "product.process.publish" %}</button>
           </div>
         </div>
         <div id="process-content">
           <div id="process-graph">
           </div>
-          <div class="bg-dark collapse collapse-horizontal" id="process-step-sidebar">
+          <div class="collapse collapse-horizontal" id="process-step-sidebar">
            <div id="process-step-sidebar-content">
              <button id="process-step-sidebar-close"><i class="fa-solid fa-xmark"></i></button>
-             <h3 class="text-center font-weight-bold mt-3">{% trans 'product.process.step' %}</h3>
+             <h3 class="text-center font-weight-bold mt-3">{% trans "product.process.step" %}</h3>
              <div class="process-step-sidebar-entry">
-               <label class="form-label">{% trans 'product.process.step.title' %}</label>
+               <label class="form-label">{% trans "product.process.step.title" %}</label>
                <input id="process-step-title" class="form-control" placeholder="{% trans 'product.process.step.title' %}">
              </div>
              <div class="process-step-sidebar-entry">
-               <label class="form-label">{% trans 'product.process.step.description' %}</label>
+               <label class="form-label">{% trans "product.process.step.description" %}</label>
                <textarea id="process-step-description" class="form-control" placeholder="{% trans 'product.process.step.description' %}"></textarea>
              </div>
              <div class="process-step-sidebar-entry">
-               <label class="form-label">{% trans 'product.process.step.todos' %}</label>
-               <p id="process-step-todos-empty" class="text-secondary d-none">{% trans 'product.process.step.todos.empty' %}</p>
+               <label class="form-label">{% trans "product.process.step.todos" %}</label>
+               <p id="process-step-todos-empty" class="text-secondary d-none">{% trans "product.process.step.todos.empty" %}</p>
                <ul id="process-step-todos">
                </ul>
                <input id="process-step-todo-input" class="form-control" placeholder="{% trans 'product.process.step.todo' %}">
-               <button id="process-step-todo-add" type="button" class="btn btn-secondary">{% trans 'product.process.step.todo.add' %}</button>
+               <button id="process-step-todo-add" type="button" class="btn btn-secondary">{% trans "product.process.step.todo.add" %}</button>
              </div>
              <div class="process-step-sidebar-entry">
-               <label class="form-label">{% trans 'product.process.step.workflow' %}</label>
+               <label class="form-label">{% trans "product.process.step.workflow" %}</label>
                <div id="process-step-workflow" class="dropdown">
-                 <button id="process-step-workflow-button" class="btn btn-secondary dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
-                   {% trans 'product.process.step.workflow.select' %}
+                 <button id="process-step-workflow-button" class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                   {% trans "product.process.step.workflow.select" %}
                  </button>
-                 <ul id="process-step-workflow-list" class="dropdown-menu dropdown-menu-dark">
+                 <ul id="process-step-workflow-list" class="dropdown-menu">
                  </ul>
                </div>
              </div>
              <div class="process-step-sidebar-entry text-center">
-               <button id="process-step-adopt" type="button" class="btn btn-light mt-3">{% trans 'product.process.step.adopt' %}</button>
+               <button id="process-step-adopt" type="button" class="btn btn-success mt-3">{% trans "product.process.step.adopt" %}</button>
              </div>
            </div>
           </div>
@@ -104,22 +104,22 @@
       if (this.state === "ACTIVE") {
         outerRect.fill("#49ff1d");
       } else {
-        outerRect.fill("#1b232f")
+        outerRect.fill(isDarkTheme ? "#1b232f" : "#808080")
       }
-      var innerRect = subGroup.rect(290, 140).move(-145, -70).radius(10).fill("#3d4b5a");
-      var divider = subGroup.rect(250, 2).move(-125, -25).radius(10).fill("#4b5c6f");
+      var innerRect = subGroup.rect(290, 140).move(-145, -70).radius(10).fill(isDarkTheme ? "#3d4b5a" : "#bebebe");
+      var divider = subGroup.rect(250, 2).move(-125, -25).radius(10).fill(isDarkTheme ? "#4b5c6f" : "#a2a2a2");
       group.on("mouseover", function() {
         if (this.state === "INACTIVE") {
-          outerRect.animate(300, '<>').fill('#334056');
+          outerRect.animate(300, "<>").fill(isDarkTheme ? "#334056" : "#6b6b6b");
         }
-        innerRect.animate(300, '<>').fill('#4b5c6f');
-        divider.animate(300, '<>').fill('#6b84a0');
+        innerRect.animate(300, "<>").fill(isDarkTheme ? "#4b5c6f" : "#a2a2a2");
+        divider.animate(300, "<>").fill(isDarkTheme ? "#6b84a0" : "#8b8b8b");
       }).on("mouseout", function() {
         if (this.state === "INACTIVE") {
-          outerRect.animate(300, '<>').fill('#1b232f');
+          outerRect.animate(300, "<>").fill(isDarkTheme ? "#1b232f" : "#808080");
         }
-        innerRect.animate(300, '<>').fill('#3d4b5a');
-        divider.animate(300, '<>').fill('#4b5c6f');
+        innerRect.animate(300, "<>").fill(isDarkTheme ? "#3d4b5a" : "#bebebe");
+        divider.animate(300, "<>").fill(isDarkTheme ? "#4b5c6f" : "#a2a2a2");
       });
       subGroup.on("click", function() {
         if (!moved) {
@@ -130,7 +130,7 @@
       self.displayContent(subGroup);
       self.displayConnectionPoints(group);
       self.displayRemoveButton(group);
-      group.move(self.x, self.y).draggable().on('dragmove', e => {
+      group.move(self.x, self.y).draggable().on("dragmove", e => {
         if (mouseDown) {
           e.preventDefault();
           return;
@@ -160,7 +160,7 @@
     displayTitle(group) {
       var self = this;
       var title = group.foreignObject(300, 40).move(-150, -65)
-        .add(SVG('<input class="process-step-title">', true))
+        .add(SVG("<input class='process-step-title'>", true))
         .node.childNodes[0];
       title.value = self.title;
     }
@@ -168,7 +168,7 @@
     displayDescription(group) {
       var self = this;
       var description = group.foreignObject(300, 75).move(-150, -15)
-        .add(SVG('<textarea class="process-step-description"></textarea>', true))
+        .add(SVG("<textarea class='process-step-description'></textarea>", true))
         .node.childNodes[0];
       description.innerText = self.description;
     }
@@ -176,7 +176,7 @@
     displayRemoveButton(group) {
       var self = this;
       var button = group.foreignObject(32, 32).move(128, -80)
-        .add(SVG('<div class="process-step-remove"><i class="fa-solid fa-xmark"></i></div>', true))
+        .add(SVG("<div class='process-step-remove'><i class='fa-solid fa-xmark'></i></div>", true))
         .node.childNodes[0];
       button.addEventListener("click", function() {
         group.remove();
@@ -264,26 +264,26 @@
       var self = this;
       var outerCircle = group.circle(30).move(self.x - 15, self.y - 15).fill(self.outerCircleColor);
       var innerCircle = group.circle(26).move(self.x - 13, self.y - 13).fill(self.innerCircleColor);
-      innerCircle.on('mousedown', function () {
+      innerCircle.on("mousedown", function () {
         mouseDown = true;
         self.connecting = true;
-      }).on('mouseover', function () {
-        outerCircle.animate(300, '<>').fill('#b0b0b0');
-        innerCircle.animate(300, '<>').fill('#e1e1e1');
+      }).on("mouseover", function () {
+        outerCircle.animate(300, "<>").fill("#b0b0b0");
+        innerCircle.animate(300, "<>").fill("#e1e1e1");
         if (mouseDown) {
           aimedConnectionPoint = self;
         }
-      }).on('mouseout', function () {
+      }).on("mouseout", function () {
         if (self.connecting) {
           return;
         }
-        outerCircle.animate(300, '<>').fill(self.outerCircleColor);
-        innerCircle.animate(300, '<>').fill(self.innerCircleColor);
+        outerCircle.animate(300, "<>").fill(self.outerCircleColor);
+        innerCircle.animate(300, "<>").fill(self.innerCircleColor);
         if (aimedConnectionPoint != null) {
           aimedConnectionPoint = null;
         }
       });
-      group.on('dragmove', event => {
+      group.on("dragmove", event => {
         var mouseX = event.detail.box.x;
         var mouseY = event.detail.box.y;
         self.drag(mouseX, mouseY);
@@ -321,17 +321,17 @@
       destinationX = nX + originX;
       destinationY = nY + originY;
       self.line = self.draw.line(originX, originY, destinationX, destinationY).stroke({
-        color: '#ffffff',
+        color: "#000000",
         width: 4,
-        linecap: 'round',
-        dasharray: '30,30'
+        linecap: "round",
+        dasharray: "30,30"
       });
     }
 
     releaseMouse(outerCircle, innerCircle) {
       var self = this;
-      outerCircle.animate(300, '<>').fill(self.outerCircleColor);
-      innerCircle.animate(300, '<>').fill(self.innerCircleColor);
+      outerCircle.animate(300, "<>").fill(self.outerCircleColor);
+      innerCircle.animate(300, "<>").fill(self.innerCircleColor);
       if (!self.connecting) {
         return;
       }
@@ -382,28 +382,28 @@
       var originY = self.origin.y + 80;
       var destinationX = self.destination.x;
       var destinationY = self.destination.y + 80;
-      var color = "#ffffff";
+      var color = "#000000";
       if (this.state === "ACTIVE") {
         color = "#49ff1d";
       }
       self.line = self.draw.line(originX + 2, originY, destinationX - 2, destinationY).stroke({
         color: color,
         width: 4,
-        linecap: 'round',
+        linecap: "round",
       });
       self.hitBox = self.draw.line(originX + 10, originY, destinationX - 10, destinationY).stroke({
         color: "rgba(0,0,0,0)",
         width: 20,
-        linecap: 'round',
-      }).on('mouseover', function () {
+        linecap: "round",
+      }).on("mouseover", function () {
         if (self.state === "INACTIVE") {
-          self.line.animate(300, '<>').stroke({color: "#ff3737"});
+          self.line.animate(300, "<>").stroke({color: "#ff3737"});
         }
-      }).on('mouseout', function () {
+      }).on("mouseout", function () {
         if (self.state === "INACTIVE") {
-          self.line.animate(300, '<>').stroke({color: color});
+          self.line.animate(300, "<>").stroke({color: color});
         }
-      }).on('click', function() {
+      }).on("click", function() {
         connections.splice(connections.indexOf(self), 1);
         self.remove();
       });
@@ -424,6 +424,7 @@
   }
 </script>
 <script>
+  var isDarkTheme = Cookie.find("taskwolf-theme") === "dark";
   var process = null;
   var steps = [];
   var connections = [];
@@ -434,10 +435,10 @@
 
   var draw = SVG().addTo(document.getElementById("process-graph"))
     .size("100%", "100%")
-    .viewbox('-500 -500 1000 1000')
+    .viewbox("-500 -500 1000 1000")
     .panZoom({ zoomMin: 0.5, zoomMax: 3, zoomFactor: 0.1});
 
-  draw.on('panning', event => {
+  draw.on("panning", event => {
     var box = event.detail.box;
     display(box);
   });
@@ -508,8 +509,8 @@
 
   function displayBackground(box) {
     var background = draw.pattern(100, 100, function(add) {
-      add.rect(8, 2).move(46, 49).radius(2).fill("#636d7d");
-      add.rect(2, 8).move(49, 46).radius(2).fill("#636d7d");
+      add.rect(8, 2).move(46, 49).radius(2).fill("#bababa");
+      add.rect(2, 8).move(49, 46).radius(2).fill("#bababa");
     });
     draw.rect(10000, 10000).move(box.x - 5000, box.y - 5000).fill(background);
   }

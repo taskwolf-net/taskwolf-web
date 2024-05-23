@@ -170,7 +170,7 @@
   function createArrow() {
     var arrowContainer = document.createElement("div");
     arrowContainer.classList.add("arrow-container");
-    arrowContainer.innerHTML = '<svg><defs><marker id="markerArrow" markerWidth="13" markerHeight="13" refX="2" refY="6" orient="auto"><path d="M2,2 L2,11 L10,6 L2,2" style="fill: #ffffff;" /></marker></defs><line x1="10" y1="0" x2="10" y2="100" class="arrow" /></svg>';
+    arrowContainer.innerHTML = '<svg><defs><marker id="markerArrow" markerWidth="13" markerHeight="13" refX="2" refY="6" orient="auto"><path d="M2,2 L2,11 L10,6 L2,2" class="arrow-top" /></marker></defs><line x1="10" y1="0" x2="10" y2="100" class="arrow" /></svg>';
     return arrowContainer;
   }
 
@@ -198,7 +198,7 @@
     Swal.fire({
       title: "{% trans 'product.workflow.add.component.title' %}",
       buttons: [true, false],
-      content: content,
+      html: content,
     });
   }
 

@@ -5,9 +5,16 @@ form {
   margin-right: auto;
 }
 
-input {
+.dark input {
   background-color: #0d1117 !important;
   color: white !important;
+  border: 1px solid #cecece !important;
+}
+
+.light input {
+  background-color: #eaeaea !important;
+  color: black !important;
+  border: 1px solid #4c4c4c !important;
 }
 
 input:-webkit-autofill,
@@ -15,7 +22,6 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active{
   -webkit-background-clip: text;
-  -webkit-text-fill-color: #ffffff;
   transition: background-color 5000s ease-in-out 0s;
   box-shadow: inset 0 0 20px 20px #23232329;
 }
@@ -26,7 +32,6 @@ input:-webkit-autofill:active{
 }
 
 #workflow-component-headline {
-  color: white;
   font-weight: bold;
   text-align: center;
   margin-top: 5%;
@@ -35,24 +40,45 @@ input:-webkit-autofill:active{
 
 .accordion-item {
   border: none !important;
+}
+
+.dark .accordion-item {
   background-color: #0d1117 !important;
 }
 
+.light .accordion-item {
+  background-color: #fafafa !important;
+}
+
 .accordion-button {
+  font-size: 25px !important;
+  font-weight: bold;
+}
+
+.dark .accordion-button {
   color: white !important;
   background-color: #0d1117 !important;
   border-bottom: 2px #4a4a4a solid !important;
-  font-size: 25px !important;
-  font-weight: bold;
+}
+
+.light .accordion-button {
+  color: black !important;
+  background-color: #fafafa !important;
+  border-bottom: 2px #878787 solid !important;
 }
 
 .accordion-button:after {
   background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>") !important;
 }
 
-.accordion-collapse {
+.dark .accordion-collapse {
   color: white !important;
   background-color: #0d1117 !important;
+}
+
+.white .accordion-collapse {
+  color: black !important;
+  background-color: #fafafa !important;
 }
 
 :focus {
@@ -90,8 +116,12 @@ input:-webkit-autofill:active{
   border-radius: 10px;
 }
 
-.workflow-component-application-entry:hover {
+.dark .workflow-component-application-entry:hover {
   background-color: #212b3a;
+}
+
+.light .workflow-component-application-entry:hover {
+  background-color: #bcbcbc;
 }
 
 .workflow-component-application-entry img {
@@ -211,7 +241,6 @@ input:-webkit-autofill:active{
 }
 
 #workflow-component-event-selected {
-  background-color: #212529;
   margin: auto;
   margin-top: 4%;
   margin-bottom: 2%;
@@ -224,6 +253,14 @@ input:-webkit-autofill:active{
   border: 1px solid #535353;
 }
 
+.dark #workflow-component-event-selected {
+  background-color: #212529;
+}
+
+.light #workflow-component-event-selected {
+  background-color: #cccccc;
+}
+
 #workflow-component-event-selected b {
   font-size: 22px;
 }
@@ -232,8 +269,12 @@ input:-webkit-autofill:active{
   font-size: 20px;
 }
 
-#workflow-component-event-selected:hover {
+.dark #workflow-component-event-selected:hover {
   background-color: #2f343a;
+}
+
+.light #workflow-component-event-selected:hover {
+  background-color: #a9a9a9;
 }
 
 #workflow-component-event-selected-description {
@@ -358,20 +399,38 @@ input:-webkit-autofill:active{
   margin-bottom: 4%;
 }
 
-.nav-tabs {
-  border-color: #646464 !important;
+#workflow-component-container .nav-tabs {
   width: 90%;
   margin: auto;
 }
 
-.nav-link-active {
+.dark #workflow-component-container .nav-tabs {
+  border-color: #646464 !important;
+}
+
+.light #workflow-component-container .nav-tabs {
+  border-color: #b7b7b7 !important;
+}
+
+.dark #workflow-component-container .nav-link-active {
   background-color: #646464 !important;
 }
 
-.nav-link {
-  color: white !important;
+.light #workflow-component-container .nav-link-active {
+  background-color: #b7b7b7 !important;
+}
+
+#workflow-component-container .nav-link {
   border: none !important;
   transition-duration: 0.3s;
+}
+
+.dark #workflow-component-container .nav-link {
+  color: white !important;
+}
+
+.light #workflow-component-container .nav-link {
+  color: black !important;
 }
 
 #workflow-component-specifications-placeholders-list {
@@ -386,13 +445,24 @@ input:-webkit-autofill:active{
   margin-top: 5%;
   border-radius: 10px;
   padding: 10px;
-  background-color: #323438;
   transition-duration: 0.3s;
   cursor: grab;
 }
 
-.workflow-component-specifications-placeholder:hover {
+.dark .workflow-component-specifications-placeholder {
+  background-color: #323438;
+}
+
+.light .workflow-component-specifications-placeholder {
+  background-color: #b2b2b2;
+}
+
+.dark .workflow-component-specifications-placeholder:hover {
   background-color: #45484d;
+}
+
+.light .workflow-component-specifications-placeholder:hover {
+  background-color: #959595;
 }
 
 #workflow-component-specifications-divider {

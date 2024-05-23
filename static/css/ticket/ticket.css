@@ -1,7 +1,13 @@
-input {
-  background-color: #212529 !important;
+.dark input {
+  background-color: #0d1117 !important;
   color: white !important;
-  border: 1px #373737 solid !important;
+  border: 1px solid #cecece !important;
+}
+
+.light input {
+  background-color: #eaeaea !important;
+  color: black !important;
+  border: 1px solid #4c4c4c !important;
 }
 
 input:-webkit-autofill,
@@ -9,13 +15,11 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active{
   -webkit-background-clip: text;
-  -webkit-text-fill-color: #ffffff;
   transition: background-color 5000s ease-in-out 0s;
   box-shadow: inset 0 0 20px 20px #23232329;
 }
 
 .form-label {
-  color: white;
   text-align: left;
   width: 100%;
   font-size: 20px;
@@ -25,7 +29,6 @@ input:-webkit-autofill:active{
   width: min(calc(1300px - 15vw), 95%);
   margin: auto;
   text-align: center;
-  color: white;
 }
 
 #ticket-headline {
@@ -53,9 +56,17 @@ input:-webkit-autofill:active{
   display: flex;
   width: 100%;
   margin-bottom: 4%;
-  background-color: #212529;
   border-radius: 10px;
+}
+
+.dark .ticket-message-container {
+  background-color: #212529;
   box-shadow: 0 2px 5px #212529;
+}
+
+.light .ticket-message-container {
+  background-color: #dcdcdc;
+  box-shadow: 0 2px 5px #dcdcdc;
 }
 
 .ticket-message-description {
@@ -87,17 +98,23 @@ input:-webkit-autofill:active{
 
 #ticket-answer-field {
   height: 300px;
-  color: white !important;
   border: 1px #787878 solid;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
+}
+
+.dark #ticket-answer-field {
+  color: white !important;
+}
+
+.light #ticket-answer-field {
+  color: black !important;
 }
 
 .ticket-message-delete {
   position: absolute;
   top: 0;
   right: 0;
-  color: white;
   border: none;
   background: none;
   cursor: pointer;
@@ -111,46 +128,90 @@ input:-webkit-autofill:active{
 }
 
 .ql-editor::-webkit-scrollbar {
-  width: 14px; /* width of the entire scrollbar */
+  width: 14px;
 }
 
-.ql-editor::-webkit-scrollbar-track {
-  background: #212529; /* color of the tracking area */
+.dark .ql-editor::-webkit-scrollbar-track {
+  background: #212529;
+}
+
+.light .ql-editor::-webkit-scrollbar-track {
+  background: #bebebe;
 }
 
 .ql-editor::-webkit-scrollbar-thumb {
   background-color: dimgray !important;
   border-radius: 15px;
-  border: 3px solid #212529;
+}
+
+.dark .ql-editor::-webkit-scrollbar-thumb {
+  border: 3px solid #0d1117;
+}
+
+.light .ql-editor::-webkit-scrollbar-thumb {
+  border: 3px solid #fafafa;
 }
 
 .ql-toolbar {
-  border: 1px #787878 solid !important;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   text-align: left;
 }
 
+.dark .ql-toolbar {
+  border: 1px white solid !important;
+}
+
+.light .ql-toolbar {
+  border: 1px black solid !important;
+}
+
 .ql-toolbar .ql-stroke {
   fill: none !important;
+}
+
+.dark .ql-toolbar .ql-stroke {
   stroke: #fff !important;
 }
 
+.light .ql-toolbar .ql-stroke {
+  stroke: #000 !important;
+}
+
 .ql-toolbar .ql-fill {
-  fill: #fff !important;
   stroke: none !important;
 }
 
-.ql-toolbar .ql-picker {
+.dark .ql-toolbar .ql-fil {
+  fill: #fff !important;
+}
+
+.light .ql-toolbar .ql-fil {
+  fill: #000 !important;
+}
+
+.dark .ql-toolbar .ql-picker {
   color: #fff !important;
 }
 
-.ql-picker-label:hover {
+.light .ql-toolbar .ql-picker {
+  color: #000 !important;
+}
+
+.dark .ql-picker-label:hover {
   color: #fff !important;
 }
 
-.ql-picker-options {
+.light .ql-picker-label:hover {
+  color: #000 !important;
+}
+
+.dark .ql-picker-options {
   background-color: #212529 !important;
+}
+
+.light .ql-picker-options {
+  background-color: #bebebe !important;
 }
 
 #ticket-operations {
