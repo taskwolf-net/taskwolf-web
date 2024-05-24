@@ -98,12 +98,21 @@ form input:-webkit-autofill:active{
 }
 
 .settings-account-delete-content input {
-  background-color: transparent;
-  border: 1px solid white;
+  background-color: transparent !important;
   border-radius: 5px;
   box-shadow: none;
   outline: none;
   padding: 10px !important;
+}
+
+.dark .settings-account-delete-content input {
+  color: white;
+  border: 1px solid white;
+}
+
+.light .settings-account-delete-content input {
+  color: black;
+  border: 1px solid black;
 }
 
 .settings-account-delete-content input::placeholder {

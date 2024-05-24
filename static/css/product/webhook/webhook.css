@@ -27,6 +27,14 @@
   font-size: 28px;
 }
 
+.dark #webhook-rename {
+  color: white;
+}
+
+.light #webhook-rename {
+  color: black;
+}
+
 .dark .webhook-section-content input {
   background-color: #0d1117 !important;
   color: white !important;
@@ -86,10 +94,12 @@
 }
 
 .dark .webhook-rename-content input {
+  color: white;
   border: 1px solid white;
 }
 
 .light .webhook-rename-content input {
+  color: black;
   border: 1px solid black;
 }
 

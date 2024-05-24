@@ -27,6 +27,14 @@
   font-size: 28px;
 }
 
+.dark #database-rename {
+  color: white;
+}
+
+.light #database-rename {
+  color: black;
+}
+
 #database-table {
   width: min(calc(1800px - 15vw), 100%);
 }
@@ -181,10 +189,12 @@ tr {
 }
 
 .dark .database-row-settings {
+  color: white;
   background-color: #212529 !important;
 }
 
 .light .database-row-settings {
+  color: black;
   background-color: #d7d7d7 !important;
 }
 
