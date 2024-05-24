@@ -21,17 +21,35 @@
   margin-right: 30px;
 }
 
-.tutorial-highlight {
-  animation: tutorial-highlight-animation 1.5s infinite;
+.dark .tutorial-highlight {
+  animation: dark-tutorial-highlight-animation 1.5s infinite;
 }
 
-@keyframes tutorial-highlight-animation  {
+.light .tutorial-highlight {
+  animation: light-tutorial-highlight-animation 1.5s infinite;
+}
+
+@keyframes dark-tutorial-highlight-animation  {
   from {
     box-shadow: 0 0 0 rgb(255, 255, 255);
   }
 
   50% {
     box-shadow: 0 0 60px rgba(255, 255, 255, 0.8);
+  }
+
+  to {
+    box-shadow: 0 0 0 rgb(0, 0, 0, 0);
+  }
+}
+
+@keyframes light-tutorial-highlight-animation  {
+  from {
+    box-shadow: 0 0 0 rgb(0, 0, 0);
+  }
+
+  50% {
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.8);
   }
 
   to {

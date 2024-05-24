@@ -21,10 +21,10 @@ function displayTutorial(tutorial, showCancel) {
   }
   if (tutorial.shiftContentDown) {
     document.getElementsByClassName("sidebar-influenced")[0].style.marginTop =
-      "150px";
+      "200px";
   }
   Swal.fire({
-    title: tutorial.title,
+    title: tutorial.title + "\n(" + tutorial.progress + " / " + tutorial.allSteps + ")",
     text: tutorial.description,
     position: tutorial.position,
     showCancelButton: showCancel,
