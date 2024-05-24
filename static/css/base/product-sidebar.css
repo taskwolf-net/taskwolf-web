@@ -1,9 +1,10 @@
 #sidebar {
   position: fixed;
   width: 260px !important;
-  height: 100%;
+  height: calc(100% - 80px);
   transition: 0s;
   z-index: 90;
+  overflow-y: auto;
 }
 
 .dark #sidebar {

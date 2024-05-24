@@ -2,8 +2,8 @@
 {% load i18n %}
 <div class="collapse collapse-horizontal" id="sidebar">
   <div id="sidebar-content">
-    <ul class="navbar-nav ml-auto mt-4 h-100 d-flex align-items-center">
-      <li class="sidebar-item">
+    <ul class="navbar-nav ml-auto h-100 d-flex align-items-center">
+      <li class="sidebar-item mt-4">
         <a href="/dashboard/" class="sidebar-link nav-link {% if request.path == '/dashboard/' or request.path == '/' %}sidebar-active{% endif %}" aria-current="page"><span class="sidebar-icon material-symbols-outlined">house</span><span>{% trans 'product.sidebar.dashboard' %}</span></a>
       </li>
       <li class="sidebar-divider"></li>
