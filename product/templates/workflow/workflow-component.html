@@ -157,23 +157,24 @@
     }
     for (var i = 0; i < applications.length; i++) {
       var entry = applications[i];
-      if(!(entry.name.toLowerCase().includes(workflowCurrentApplicationFilter.toLowerCase()))) {
+      if(!(entry.id.toLowerCase().includes(workflowCurrentApplicationFilter.toLowerCase()) ||
+          entry.name.toLowerCase().includes(workflowCurrentApplicationFilter.toLowerCase()))) {
         continue;
       }
-      displayApplication(entry.name, entry.logo, entry.novelty);
+      displayApplication(entry.id, entry.name, entry.logo, entry.novelty);
     }
   }
 
   function displayPopularApplications() {
-    displayApplication("Discord", "discord.png");
-    displayApplication("Gmail", "gmail.png");
-    displayApplication("Github", "github.png");
-    displayApplication("Google Calendar", "googlecalendar.png");
-    displayApplication("Google Drive", "googledrive.png");
-    displayApplication("Google Docs", "googledocs.png");
+    displayApplication("discord", "Discord", "discord.png");
+    displayApplication("gmail", "Gmail", "gmail.png");
+    displayApplication("github", "Github", "github.png");
+    displayApplication("google calendar", "Google Calendar", "googlecalendar.png");
+    displayApplication("google-drive", "Google Drive", "googledrive.png");
+    displayApplication("google-drive", "Google Docs", "googledocs.png");
   }
 
-  function displayApplication(name, logo, novelty) {
+  function displayApplication(id, name, logo, novelty) {
     var entryElement = document.createElement("li");
     entryElement.classList.add("workflow-component-application-entry");
     var logoElement = document.createElement("img");
@@ -192,16 +193,16 @@
       entryElement.appendChild(noveltyElement);
     }
     entryElement.onclick = function(event) {
-      selectApplication(name, logo, entryElement, true);
+      selectApplication(id, logo, entryElement, true);
     }
     document.getElementById("workflow-component-application-list").appendChild(entryElement);
-    if (!(_.isEqual(selectedComponent, {})) && selectedComponent.module === name.toLowerCase()) {
-      selectApplication(name, logo, entryElement, false);
+    if (!(_.isEqual(selectedComponent, {})) && selectedComponent.module === id.toLowerCase()) {
+      selectApplication(id, logo, entryElement, false);
     }
   }
 
-  function selectApplication(name, logo, entryElement, collapse) {
-    selectedApplication = name.toLowerCase();
+  function selectApplication(id, logo, entryElement, collapse) {
+    selectedApplication = id.toLowerCase();
     selectedApplicationLogo = logo;
     document.getElementById("workflow-component-application-list").style.display = "none";
     entryElement.classList.add("workflow-component-application-entry-selected");
