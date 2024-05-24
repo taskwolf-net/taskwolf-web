@@ -38,6 +38,14 @@
   font-size: 30px;
 }
 
+.dark #sidebar-button {
+  color: white;
+}
+
+.light #sidebar-button {
+  color: black;
+}
+
 #navbar-logo {
   margin-left: 25px;
 }
@@ -60,6 +68,14 @@
   margin-left: auto;
   margin-right: 50px;
   position: relative;
+}
+
+.dark #profile-button-container .dropdown-menu {
+  background-color: #2f343a;
+}
+
+.dark #profile-button-container .dropdown-item:hover {
+  background-color: #414851;
 }
 
 #profile-button-wrapper {
