@@ -48,7 +48,7 @@ h1 {
   text-align: center !important;
 }
 
-.dark .swal2-title, .light .swal2-html-container {
+.dark .swal2-title, .dark .swal2-html-container {
   color: white !important;
 }
 

@@ -794,6 +794,8 @@ msgid "settings.sidebar.personalization"
 msgstr "Personalization"
 msgid "settings.sidebar.language"
 msgstr "Language"
+msgid "settings.sidebar.theme"
+msgstr "Theme"
 msgid "settings.sidebar.notifications"
 msgstr "Notifications"
 
@@ -914,6 +916,18 @@ msgid "settings.language.english"
 msgstr "English"
 msgid "settings.language.german"
 msgstr "German"
+
+# THEME
+msgid "settings.theme.title"
+msgstr "Theme Settings - Taskwolf"
+msgid "settings.theme.headline"
+msgstr "Theme Settings"
+msgid "settings.theme.select"
+msgstr "Select your theme"
+msgid "settings.theme.dark"
+msgstr "Dark"
+msgid "settings.theme.light"
+msgstr "Light"
 
 # NOTIFICATION
 msgid "settings.notification.title"
