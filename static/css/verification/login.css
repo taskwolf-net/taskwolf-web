@@ -6,9 +6,16 @@ form {
   margin-right: auto;
 }
 
-input {
+.dark input[type = "email"], .dark input[type = "password"] {
   background-color: #0d1117 !important;
   color: white !important;
+  border: 1px solid #cecece !important;
+}
+
+.light input[type = "email"], .light input[type = "password"] {
+  background-color: #eaeaea !important;
+  color: black !important;
+  border: 1px solid #4c4c4c !important;
 }
 
 input:-webkit-autofill,
@@ -16,7 +23,6 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active{
   -webkit-background-clip: text;
-  -webkit-text-fill-color: #ffffff;
   transition: background-color 5000s ease-in-out 0s;
   box-shadow: inset 0 0 20px 20px #23232329;
 }
@@ -34,7 +40,6 @@ input:-webkit-autofill:active{
 }
 
 #remember-check {
-  border-color: white !important;
   text-align: center !important;
 }
 

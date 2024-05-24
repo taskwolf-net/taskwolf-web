@@ -15,18 +15,33 @@ body {
 }
 
 #home-headline {
-  text-shadow:
-    -2px -2px 0 #0d1117,
-    0   -2px 0 #0d1117,
-    2px -2px 0 #0d1117,
-    2px  0   0 #0d1117,
-    2px  2px 0 #0d1117,
-    0    2px 0 #0d1117,
-    -2px  2px 0 #0d1117,
-    -2px  0   0 #0d1117;
   font-size: 5vw;
   font-weight: bold;
 }
+
+.dark #home-headline {
+   text-shadow:
+     -2px -2px 0 #0d1117,
+     0   -2px 0 #0d1117,
+     2px -2px 0 #0d1117,
+     2px  0   0 #0d1117,
+     2px  2px 0 #0d1117,
+     0    2px 0 #0d1117,
+     -2px  2px 0 #0d1117,
+     -2px  0   0 #0d1117;
+ }
+
+.light #home-headline {
+   text-shadow:
+     -2px -2px 0 #fafafa,
+     0   -2px 0 #fafafa,
+     2px -2px 0 #fafafa,
+     2px  0   0 #fafafa,
+     2px  2px 0 #fafafa,
+     0    2px 0 #fafafa,
+     -2px  2px 0 #fafafa,
+     -2px  0   0 #fafafa;
+ }
 
 #home-logo {
   transition: transform .3s;
