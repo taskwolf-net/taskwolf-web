@@ -1,0 +1,44 @@
+{% load static %}
+{% load i18n %}
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+  {% include 'templates/head.html' %}
+  <body>
+    {% include 'templates/settings-header.html' %}
+    <div class="settings-container">
+      {% include 'templates/settings-sidebar.html' %}
+      <div class="sidebar-influenced">
+        <div class="settings-content">
+          <h1 class="settings-headline">{% trans 'settings.theme.headline' %}</h1>
+          <h3 id="settings-theme-select-headline">{% trans 'settings.theme.select' %}</h3>
+          <div id="settings-theme-container">
+            <div class="settings-theme">
+              <button id="settings-theme-dark" class="fa-regular fa-moon settings-theme-button"></button>
+              <h4>{% trans 'settings.theme.dark' %}</h4>
+            </div>
+            <div class="settings-theme">
+              <button id="settings-theme-light" class="fa-regular fa-sun settings-theme-button"></button>
+              <h4>{% trans 'settings.theme.light' %}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    var theme = Cookie.find("taskwolf-theme");
+    document.getElementById("settings-theme-" + theme).classList.add("settings-theme-selected");
+  });
+
+  document.getElementById("settings-theme-dark").onclick = function(event) {
+    Cookie.create("taskwolf-theme", "dark", 60 * 60 * 24 * 365, ".taskwolf.net");
+    window.location.reload();
+  }
+
+  document.getElementById("settings-theme-light").onclick = function(event) {
+    Cookie.create("taskwolf-theme", "light", 60 * 60 * 24 * 365, ".taskwolf.net");
+    window.location.reload();
+  }
+</script>

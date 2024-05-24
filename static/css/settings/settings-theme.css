@@ -1,0 +1,47 @@
+#settings-theme-select-headline {
+  text-align: center;
+  margin-top: 3%;
+}
+
+#settings-theme-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  row-gap: 30px;
+  margin-top: 30px;
+}
+
+.settings-theme {
+  position: relative;
+  display: grid;
+  text-align: center;
+  margin: auto;
+}
+
+.settings-theme-button {
+  font-size: 64px;
+  width: 128px;
+  height: 128px;
+  margin-bottom: 32px;
+  border: 2px #6d6d6d solid;
+  border-radius: 10px;
+}
+
+.dark .settings-theme-button {
+  color: white;
+  background-color: #25272f;
+}
+
+.light .settings-theme-button {
+  color: black;
+  background-color: #cecece;
+}
+
+.settings-theme-selected {
+  box-shadow: 0 0 15px 5px #49dc47;
+}
+
+@media (max-width: 1000px) {
+  #settings-theme-container {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}

@@ -40,6 +40,14 @@
   display: none;
 }
 
+.dark #sidebar-button {
+  color: white;
+}
+
+.light #sidebar-button {
+  color: black;
+}
+
 #close-settings {
   margin-left: auto;
   margin-right: 35px;

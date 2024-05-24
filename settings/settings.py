@@ -24,6 +24,11 @@ async def languageSettings(request):
     'css': ['css/base/settings-header.css', 'css/base/settings-sidebar.css', 'css/base/settings.css', 'css/settings/settings-language.css']})
 
 @authentication_required
+async def themeSettings(request):
+  return render(request, 'settings-theme.html', {'title': gettext('settings.theme.title'),
+    'css': ['css/base/settings-header.css', 'css/base/settings-sidebar.css', 'css/base/settings.css', 'css/settings/settings-theme.css']})
+
+@authentication_required
 async def notificationsSettings(request):
   return render(request, 'settings-notifications.html', {'title': gettext('settings.notification.title'),
     'css': ['css/base/settings-header.css', 'css/base/settings-sidebar.css', 'css/base/settings.css', 'css/settings/settings-notifications.css']})

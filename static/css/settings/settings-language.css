@@ -25,7 +25,7 @@
 }
 
 .settings-language-selected {
-  border: 4px #ffffff solid;
+  box-shadow: 0 0 15px 5px #49dc47;
 }
 
 @media (max-width: 1000px) {

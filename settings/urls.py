@@ -7,5 +7,6 @@ urlpatterns = [
   path('settings/account/', settings.accountSettings),
   path('email/change/complete/<str:user>/<str:token>/', settings.changeEmailComplete),
   path('settings/language/', settings.languageSettings),
+  path('settings/theme/', settings.themeSettings),
   path('settings/notifications/', settings.notificationsSettings),
 ]
