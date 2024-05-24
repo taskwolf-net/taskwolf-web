@@ -72,6 +72,8 @@ msgstr "Hilfe"
 # GENERAL
 msgid "target"
 msgstr "Ziel"
+msgid "target.personal"
+msgstr "Ziel: Du / Persönlich"
 
 # DASHBOARD
 msgid "product.dashboard.title"

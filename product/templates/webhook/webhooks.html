@@ -11,6 +11,7 @@
         <div id="webhooks-header">
           <div id="webhooks-owner-dropdown" class="dropdown">
             <button id="webhooks-owner-dropdown-button" class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
+              {% trans 'target.personal' %}
             </button>
             <ul id="webhooks-owner-dropdown-list" class="dropdown-menu">
             </ul>
@@ -49,6 +50,8 @@
         </ul>
         <ul id="webhooks-list">
         </ul>
+        <div id="webhooks-loader">
+        </div>
         <div id="webhooks-empty">
           <span id="webhooks-empty-headline">{% trans 'product.webhooks.empty.headline' %}</span>
           <span>{% trans 'product.webhooks.empty.text' %}</span><a id="webhooks-empty-link" href="/webhook/add/">{% trans 'product.webhooks.empty.link' %}</a><span>?</span>
@@ -59,7 +62,6 @@
 </html>
 
 <script>
-  var owners;
   var webhooks;
   var webhooksCurrentNameFilter = "";
 
@@ -96,6 +98,7 @@
   }
 
   function selectTarget(target) {
+    displayLoader();
     let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST",
       [], {target: target.id});
     request.send(function (status, responseText) {
@@ -115,6 +118,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/webhooks/selected/", "GET", []);
     request.send(function (status, responseText) {
       webhooks = JSON.parse(responseText).webhooks;
+      removeLoader();
       callback();
     });
   }
@@ -175,4 +179,15 @@
   document.getElementById("webhook-create").onclick = function(event) {
     window.location.href = "/webhook/add/";
   };
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader", "loader-list");
+    document.getElementById("webhooks-loader").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("webhooks-loader").removeChild(
+      document.getElementsByClassName("loader")[0]);
+  }
 </script>

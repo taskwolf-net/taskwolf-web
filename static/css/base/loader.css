@@ -19,6 +19,10 @@
   background: #666666;
 }
 
+.loader-list {
+  margin-top: 200px;
+}
+
 .loader:before, .loader:after {
   content: '';
   position: absolute;

@@ -11,6 +11,7 @@
         <div id="devices-header">
           <div id="devices-owner-dropdown" class="dropdown">
             <button id="devices-owner-dropdown-button" class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
+              {% trans 'target.personal' %}
             </button>
             <ul id="devices-owner-dropdown-list" class="dropdown-menu">
             </ul>
@@ -53,6 +54,8 @@
         </ul>
         <ul id="devices-list">
         </ul>
+        <div id="devices-loader">
+        </div>
         <div id="devices-empty">
           <span id="devices-empty-headline">{% trans 'product.devices.empty.headline' %}</span>
           <span>{% trans 'product.devices.empty.text' %}</span><a id="devices-empty-link" href="/">{% trans 'product.devices.empty.link' %}</a><span>.</span>
@@ -63,7 +66,6 @@
 </html>
 
 <script>
-  var owners;
   var currentOwner;
   var devices;
   var devicesCurrentNameFilter = "";
@@ -101,6 +103,7 @@
   }
 
   function selectTarget(target) {
+    displayLoader();
     currentOwner = target;
     let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST",
       [], {target: target.id});
@@ -121,6 +124,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/devices/selected/", "GET", []);
     request.send(function (status, responseText) {
       devices = JSON.parse(responseText).devices;
+      removeLoader();
       callback();
     });
   }
@@ -259,5 +263,16 @@
         });
       }
     });
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader", "loader-list");
+    document.getElementById("devices-loader").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("devices-loader").removeChild(
+      document.getElementsByClassName("loader")[0]);
   }
 </script>

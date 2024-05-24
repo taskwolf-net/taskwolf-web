@@ -36,6 +36,8 @@
         </ul>
         <ul id="organizations-list">
         </ul>
+        <div id="organizations-loader">
+        </div>
         <div id="organizations-not-a-member">
           <span id="organizations-not-a-member-headline">{% trans 'product.organizations.empty.headline' %}</span>
           <span>{% trans 'product.organizations.empty.text' %}</span><a id="organizations-not-a-member-link" href="/organization/add/">{% trans 'product.organizations.empty.link' %}</a><span>?</span>
@@ -67,10 +69,12 @@
   });
 
   function fetchOrganizationsData(callback) {
+    displayLoader();
     let request = new HttpRequest("https://api.taskwolf.net/v1/organizations/all/", "GET",
       []);
     request.send(function (status, responseText) {
       organizations = JSON.parse(responseText).organizations;
+      removeLoader();
       for (let i = 0; i < organizations.length; i++) {
         let organization = organizations[i];
         organization.members = Number(organization.members.length);
@@ -176,4 +180,15 @@
   document.getElementById("organizations-create").onclick = function(event) {
     window.location.href = "/organization/add/";
   };
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader", "loader-list");
+    document.getElementById("organizations-loader").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("organizations-loader").removeChild(
+      document.getElementsByClassName("loader")[0]);
+  }
 </script>

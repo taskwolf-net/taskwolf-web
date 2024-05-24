@@ -11,6 +11,7 @@
         <div id="databases-header">
           <div id="databases-owner-dropdown" class="dropdown">
             <button id="databases-owner-dropdown-button" class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
+              {% trans 'target.personal' %}
             </button>
             <ul id="databases-owner-dropdown-list" class="dropdown-menu">
             </ul>
@@ -44,6 +45,8 @@
         </ul>
         <ul id="databases-list">
         </ul>
+        <div id="databases-loader">
+        </div>
         <div id="databases-empty">
           <span id="databases-empty-headline">{% trans 'product.databases.empty.headline' %}</span>
           <span>{% trans 'product.databases.empty.text' %}</span><a id="databases-empty-link" href="/database/create/">{% trans 'product.databases.empty.link' %}</a><span>?</span>
@@ -54,7 +57,6 @@
 </html>
 
 <script>
-  var owners;
   var databases;
   var databasesCurrentNameFilter = "";
 
@@ -90,6 +92,7 @@
   }
 
   function selectTarget(target) {
+    displayLoader();
     let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST",
       [], {target: target.id});
     request.send(function (status, responseText) {
@@ -109,6 +112,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/tables/find/", "GET", []);
     request.send(function (status, responseText) {
       databases = JSON.parse(responseText).tables;
+      removeLoader();
       callback();
     });
   }
@@ -166,4 +170,15 @@
   document.getElementById("database-create").onclick = function(event) {
     window.location.href = "/database/create/";
   };
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader", "loader-list");
+    document.getElementById("databases-loader").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("databases-loader").removeChild(
+      document.getElementsByClassName("loader")[0]);
+  }
 </script>

@@ -11,6 +11,7 @@
         <div id="processes-header">
           <div id="processes-owner-dropdown" class="dropdown">
             <button id="processes-owner-dropdown-button" class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
+              {% trans 'target.personal' %}
             </button>
             <ul id="processes-owner-dropdown-list" class="dropdown-menu">
             </ul>
@@ -49,6 +50,8 @@
         </ul>
         <ul id="processes-list">
         </ul>
+        <div id="processes-loader">
+        </div>
         <div id="processes-empty">
           <span id="processes-empty-headline">{% trans 'product.processes.empty.headline' %}</span>
           <span>{% trans 'product.processes.empty.text' %}</span><a id="processes-empty-link" href="/process/">{% trans 'product.processes.empty.link' %}</a><span>?</span>
@@ -59,7 +62,6 @@
 </html>
 
 <script>
-  var owners;
   var processes;
   var processesCurrentNameFilter = "";
 
@@ -96,6 +98,7 @@
   }
 
   function selectTarget(target) {
+    displayLoader();
     let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST",
       [], {target: target.id});
     request.send(function (status, responseText) {
@@ -115,6 +118,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/processes/selected/", "GET", []);
     request.send(function (status, responseText) {
       processes = JSON.parse(responseText).processes;
+      removeLoader();
       callback();
     });
   }
@@ -175,4 +179,15 @@
   document.getElementById("process-create").onclick = function(event) {
     window.location.href = "/process/";
   };
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader", "loader-list");
+    document.getElementById("processes-loader").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("processes-loader").removeChild(
+      document.getElementsByClassName("loader")[0]);
+  }
 </script>

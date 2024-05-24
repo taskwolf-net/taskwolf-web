@@ -10,7 +10,7 @@
         <div id="account-apps-header">
           <div id="account-apps-target-dropdown" class="dropdown">
             <button id="account-apps-target-dropdown-button" class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
-              {% trans 'target' %}
+              {% trans 'target.personal' %}
             </button>
             <ul id="account-apps-target-dropdown-list" class="dropdown-menu">
             </ul>
@@ -25,6 +25,8 @@
         </div>
         <ul id="account-apps-list">
         </ul>
+        <div id="account-apps-loader">
+        </div>
         <div id="account-apps-empty">
           <b id="account-apps-empty-headline">{% trans 'product.account.apps.empty' %}</b>
         </div>
@@ -46,7 +48,6 @@
       }
       selectTarget(targets.filter((target) => target.id === currentTarget)[0]);
     });
-    displayAccountApps();
   });
 
   function fetchTargetsData(callback) {
@@ -70,6 +71,7 @@
   }
 
   function selectTarget(target) {
+    displayLoader();
     let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST",
       [], {target: target.id});
     request.send(function (status, responseText) {
@@ -94,6 +96,7 @@
       []);
     request.send(function (status, responseText) {
       apps = JSON.parse(responseText).apps;
+      removeLoader();
       callback();
     });
   }
@@ -142,4 +145,15 @@
     appsCurrentNameFilter = event.target.value;
     displayApps();
   };
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader", "loader-list");
+    document.getElementById("account-apps-loader").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("account-apps-loader").removeChild(
+      document.getElementsByClassName("loader")[0]);
+  }
 </script>
