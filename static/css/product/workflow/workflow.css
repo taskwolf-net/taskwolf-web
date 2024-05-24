@@ -160,11 +160,11 @@ input:-webkit-autofill:active{
 }
 
 .light .workflow-entry {
-  background-color: #b0b0b0;
+  background-color: #c5c5c5;
 }
 
 .light .workflow-entry:hover {
-  background-color: #959595 !important;
+  background-color: #b9b9b9 !important;
 }
 
 .dark .workflow-entry-selected {
@@ -176,11 +176,11 @@ input:-webkit-autofill:active{
 }
 
 .light .workflow-entry-selected {
-  background-color: #e1e1e1 !important;
+  background-color: #e5e5e5 !important;
 }
 
 .light .workflow-entry-selected:hover {
-  background-color: #bcbcbc !important;
+  background-color: #d0d0d0 !important;
 }
 
 .workflow-headline {
@@ -200,7 +200,7 @@ input:-webkit-autofill:active{
 }
 
 .light .workflow-headline {
-  background-color: #878787;
+  background-color: #a2a2a2;
 }
 
 .workflow-headline img {
@@ -213,18 +213,11 @@ input:-webkit-autofill:active{
 }
 
 .dark .workflow-headline-selected {
-  background-color: #34435a;
-}
-.dark .workflow-headline-selected:hover {
-  background-color: #3e506b;
+  background-color: #34435a !important;
 }
 
 .light .workflow-headline-selected {
-  background-color: #cacaca;
-}
-
-.light .workflow-headline-selected:hover {
-  background-color: #a5a5a5;
+  background-color: #c1c1c1 !important;
 }
 
 .workflow-entry-description {

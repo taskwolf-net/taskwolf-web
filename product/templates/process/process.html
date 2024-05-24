@@ -104,21 +104,21 @@
       if (this.state === "ACTIVE") {
         outerRect.fill("#49ff1d");
       } else {
-        outerRect.fill(isDarkTheme ? "#1b232f" : "#808080")
+        outerRect.fill(isDarkTheme ? "#1b232f" : "#c5c5c5")
       }
-      var innerRect = subGroup.rect(290, 140).move(-145, -70).radius(10).fill(isDarkTheme ? "#3d4b5a" : "#bebebe");
+      var innerRect = subGroup.rect(290, 140).move(-145, -70).radius(10).fill(isDarkTheme ? "#3d4b5a" : "#e5e5e5");
       var divider = subGroup.rect(250, 2).move(-125, -25).radius(10).fill(isDarkTheme ? "#4b5c6f" : "#a2a2a2");
       group.on("mouseover", function() {
-        if (this.state === "INACTIVE") {
-          outerRect.animate(300, "<>").fill(isDarkTheme ? "#334056" : "#6b6b6b");
+        if (self.state === "INACTIVE") {
+          outerRect.animate(300, "<>").fill(isDarkTheme ? "#334056" : "#787878");
         }
-        innerRect.animate(300, "<>").fill(isDarkTheme ? "#4b5c6f" : "#a2a2a2");
-        divider.animate(300, "<>").fill(isDarkTheme ? "#6b84a0" : "#8b8b8b");
+        innerRect.animate(300, "<>").fill(isDarkTheme ? "#4b5c6f" : "#bebebe");
+        divider.animate(300, "<>").fill(isDarkTheme ? "#6b84a0" : "#9b9b9b");
       }).on("mouseout", function() {
-        if (this.state === "INACTIVE") {
-          outerRect.animate(300, "<>").fill(isDarkTheme ? "#1b232f" : "#808080");
+        if (self.state === "INACTIVE") {
+          outerRect.animate(300, "<>").fill(isDarkTheme ? "#1b232f" : "#c5c5c5");
         }
-        innerRect.animate(300, "<>").fill(isDarkTheme ? "#3d4b5a" : "#bebebe");
+        innerRect.animate(300, "<>").fill(isDarkTheme ? "#3d4b5a" : "#e5e5e5");
         divider.animate(300, "<>").fill(isDarkTheme ? "#4b5c6f" : "#a2a2a2");
       });
       subGroup.on("click", function() {
@@ -256,8 +256,8 @@
       this.type = type;
       this.connecting = false;
       this.line = null;
-      this.outerCircleColor = "#484848";
-      this.innerCircleColor = "#898989";
+      this.outerCircleColor = isDarkTheme ? "#484848" : "#979797";
+      this.innerCircleColor = isDarkTheme ? "#898989" : "#c5c5c5";
     }
 
     display(group) {
