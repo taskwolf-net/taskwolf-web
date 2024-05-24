@@ -41,9 +41,9 @@
               <span>{% trans 'product.processes.date' %}</span>
             </div>
           </li>
-          <li id="processes-table-description-optimization">
+          <li>
             <div>
-              <span>{% trans 'product.processes.optimization' %}</span>
+                <span>{% trans 'product.processes.steps' %}</span>
             </div>
           </li>
         </ul>
@@ -126,7 +126,7 @@
       if(!(shouldDisplayProcessEntry(entry))) {
         continue;
       }
-      displayProcess(entry.id, entry.name, entry.creator, entry.created);
+      displayProcess(entry.id, entry.name, entry.creator, entry.created, entry.steps.length);
     }
   }
 
@@ -137,7 +137,7 @@
       entry.created.toLowerCase().includes(processesCurrentNameFilter.toLowerCase());
   }
 
-  function displayProcess(id, name, creator, created) {
+  function displayProcess(id, name, creator, created, steps) {
     var entry = document.createElement('li');
     entry.role = "button";
     entry.classList.add("process-entry");
@@ -150,27 +150,11 @@
     entry.appendChild(nameDiv);
     appendProcessesCell(entry, "creator", creator, "span");
     appendProcessesCell(entry, "created", created, "span");
-    entry.appendChild(createProcessOptimizationCell(true));
+    appendProcessesCell(entry, "steps", steps, "span");
     entry.onclick = function (event) {
       window.location.href = "/process/" + id + "/";
     }
     document.getElementById("processes-list").appendChild(entry);
-  }
-
-  function createProcessOptimizationCell(optimized) {
-    var optimizationDiv = document.createElement("div");
-    optimizationDiv.classList.add("processes-entry-optimization");
-    var optimizationElement = document.createElement("span");
-    optimizationElement.classList.add("processes-list-optimization");
-    if (optimized) {
-      optimizationElement.innerHTML = "{% trans 'product.processes.optimized' %}";
-      optimizationElement.classList.add("processes-list-optimized");
-    } else {
-      optimizationElement.innerHTML = "{% trans 'product.processes.unoptimized' %}";
-      optimizationElement.classList.add("processes-list-unoptimized");
-    }
-    optimizationDiv.appendChild(optimizationElement);
-    return optimizationDiv;
   }
 
   function appendProcessesCell(entry, identifier, information, elementType) {
