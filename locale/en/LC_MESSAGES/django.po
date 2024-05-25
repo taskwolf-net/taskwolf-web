@@ -76,6 +76,10 @@ msgid "target.personal"
 msgstr "Target: You / Personal"
 
 # DASHBOARD
+msgid "product.dashboard.title"
+msgstr "Dashboard - Taskwolf"
+msgid "product.dashboard.headline"
+msgstr "Dashboard"
 
 # WORKFLOWS
 msgid "product.workflows.title"
