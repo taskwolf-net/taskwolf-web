@@ -1,9 +1,26 @@
+from functools import wraps
+from functools import partial
 from django.shortcuts import render
 from django.http import HttpResponse
 from base.authentication import isAuthenticated
 from product.product import dashboard
 from django.shortcuts import redirect
+from django.utils import translation
 
+def home_page(function):
+  @wraps(function)
+  async def home_page(request, *args, **kwargs):
+    applyLanguage(request)
+    return await function(request, *args, **kwargs)
+  return home_page
+
+def applyLanguage(request):
+  language = request.COOKIES.get("taskwolf-home-language")
+  if (language is None):
+    translation.activate("en")
+  translation.activate(language)
+
+@home_page
 async def home(request):
   authenticated = await isAuthenticated(request)
   if (authenticated):
@@ -11,14 +28,12 @@ async def home(request):
   return render(request, 'home.html', {'title': 'Taskwolf - Home',
     'css': ['css/base/home-header.css', 'css/home/home.css']})
 
+@home_page
 async def product(request):
   return render(request, 'product.html', {'title': 'Taskwolf - Product',
     'css': ['css/base/home-header.css', 'css/home/product.css']})
 
-async def features(request):
-  return render(request, 'features.html', {'title': 'Taskwolf - Features',
-    'css': ['css/base/home-header.css', 'css/home/features.css']})
-
-async def aboutUs(request):
-  return render(request, 'about-us.html', {'title': 'Taskwolf - About us',
-    'css': ['css/base/home-header.css', 'css/home/about-us.css']})
+@home_page
+async def pricing(request):
+  return render(request, 'pricing.html', {'title': 'Taskwolf - Pricing',
+    'css': ['css/base/home-header.css', 'css/home/pricing.css']})

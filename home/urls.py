@@ -4,6 +4,5 @@ from . import home
 urlpatterns = [
   path('', home.home),
   path('product/', home.product),
-  path('features/', home.features),
-  path('about-us/', home.aboutUs)
+  path('pricing/', home.pricing),
 ]
