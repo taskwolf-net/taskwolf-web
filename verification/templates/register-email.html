@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <html lang="en">
   {% include 'templates/head.html' %}
   <body>
@@ -10,8 +11,8 @@
           <div class="success-icon__long"></div>
         </div>
       </div>
-      <h1 id="register-email-headline">Confirmation email has been sent</h1>
-      <p id="register-email-description">Check your mailbox now and look for our confirmation email. It is possible that this was mistakenly classified as spam. Therefore, please also check your spam folder. If you have found the mail you will find all further instructions there</p>
+      <h1 id="register-email-headline">{% trans 'home.registration.email.headline' %}</h1>
+      <p id="register-email-description">{% trans 'home.registration.email.description' %}</p>
     </div>
   </body>
 </html>

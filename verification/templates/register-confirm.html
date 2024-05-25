@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <html lang="en">
   {% include 'templates/head.html' %}
   <body>
@@ -10,8 +11,8 @@
           <div class="success-icon__long"></div>
         </div>
       </div>
-      <h1 id="register-confirm-headline">Registration completed</h1>
-      <p id="register-confirm-description">You have successfully verified your account. You can now continue with the login.</p>
+      <h1 id="register-confirm-headline">{% trans 'home.registration.confirm.headline' %}</h1>
+      <p id="register-confirm-description">{% trans 'home.registration.confirm.description' %}</p>
     </div>
   </body>
 </html>

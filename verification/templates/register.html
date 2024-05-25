@@ -1,41 +1,42 @@
 {% load static %}
+{% load i18n %}
 <html lang="en">
   {% include 'templates/head.html' %}
   <body>
     {% include 'templates/home-header.html' %}
     <form>
       <img id="register-logo" src="{% static 'img/logo.png' %}"></br></br>
-      <h1>Registration</h1></br>
+      <h1>{% trans 'home.registration.headline' %}</h1></br>
       <div class="form-outline mb-4">
-        <label for="email" class="form-label">Email address</label>
-        <input type="email" id="email" class="form-control" placeholder="Email">
+        <label for="email" class="form-label">{% trans 'home.registration.email' %}</label>
+        <input type="email" id="email" class="form-control" placeholder="{% trans 'home.registration.email' %}">
       </div>
       <div class="form-outline mb-4">
-        <label for="username" class="form-label">Username</label>
-        <input type="username" id="username" class="form-control" placeholder="Username">
+        <label for="username" class="form-label">{% trans 'home.registration.username' %}</label>
+        <input type="username" id="username" class="form-control" placeholder="{% trans 'home.registration.username' %}">
       </div>
       <div class="form-outline mb-4 was-validated">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="password" minlength="8" name="password" placeholder="Password" required>
+        <label for="password" class="form-label">{% trans 'home.registration.password' %}</label>
+        <input type="password" class="form-control" id="password" minlength="8" name="password" placeholder="{% trans 'home.registration.password' %}" required>
         <div class="progress mt-3" style="height: 5px;">
           <div id="progressbar" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 1%;">
           </div>
         </div>
         <div id="feedbackin" class="valid-feedback"></div>
-        <div id="feedbackirn" class="invalid-feedback">8 more characters, Special characters, Upper case letters, Numbers, Lower case letters</div>
+        <div id="feedbackirn" class="invalid-feedback">8 {% trans 'neutral.password.letters.remaining' %}, {% trans 'neutral.password.special.characters' %}, {% trans 'neutral.password.upper.case.letters' %}, {% trans 'neutral.password.lower.case.letters' %}, {% trans 'neutral.password.numbers' %}</div>
       </div>
       <div class="form-check">
         <input type="checkbox" class="form-check-input" id="legal-check">
         <label class="form-check-label" for="legal-check">
-          By creating your account, you agree to the
-          <a class="text-decoration-none" href="/">Terms of Service</a> and
-          <a class="text-decoration-none" href="/">Privacy Policy</a></label>
+          {% trans 'home.registration.legal.check' %}
+          <a class="text-decoration-none" href="/">{% trans 'home.registration.terms.of.service' %}</a> {% trans 'home.registration.and' %}
+          <a class="text-decoration-none" href="/">{% trans 'home.registration.privacy.policy' %}</a></label>
       </div>
       <div class="form-check mb-3">
         <input type="checkbox" class="form-check-input" id="notification-check">
-        <label class="form-check-label" for="notification-check">I would like to be informed about news to improve my experience with Taskwolf</label>
+        <label class="form-check-label" for="notification-check">{% trans 'home.registration.news' %}</label>
       </div>
-      <button type="button" id="register" class="btn btn-primary">REGISTER</button>
+      <button type="button" id="register" class="btn btn-primary">{% trans 'home.registration.button' %}</button>
     </form>
   </body>
 </html>
@@ -53,15 +54,15 @@
 
   document.getElementById('register').onclick = function() {
     if (emailInput.value === "" || usernameInput.value === "" || passwordInput.value === "") {
-      Swal.fire("Registration failed!", "Please fill in all fields", "error");
+      Swal.fire("{% trans 'home.registration.failed.title' %}", "{% trans 'home.registration.failed.incomplete' %}", "error");
       return;
     }
     if (!passwordInput.checkValidity()) {
-      Swal.fire("Registration failed!", "The password entered does not meet the requirements!", "error");
+      Swal.fire("{% trans 'home.registration.failed.title' %}", "{% trans 'home.registration.failed.password' %}", "error");
       return;
     }
     if (!document.getElementById("legal-check").checked) {
-      Swal.fire("Registration failed!", "You have to accept the terms of service and privacy policy to continue!", "error");
+      Swal.fire("{% trans 'home.registration.failed.title' %}", "{% trans 'home.registration.failed.legal' %}", "error");
       return;
     }
     let request = new HttpRequest("https://api.taskwolf.net/v1/verification/register/", "POST", [],
@@ -71,7 +72,7 @@
       if (response.success === true) {
         window.location.href = "/register/email/";
       } else {
-        Swal.fire("Registration failed!", "There is already an account with this email!", "error");
+        Swal.fire("{% trans 'home.registration.failed.title' %}", "{% trans 'home.registration.failed.already.exists' %}", "error");
       }
     });
   };
@@ -87,14 +88,13 @@
   var passwordMatchedCases = [];
   passwordMatchedCases.push("[!@#$%&*_?]");
   passwordMatchedCases.push("[A-Z]");
-  passwordMatchedCases.push("[0-9]");
   passwordMatchedCases.push("[a-z]");
-
+  passwordMatchedCases.push("[0-9]");
   var passwordMessageCases = [];
-  passwordMessageCases.push(" Special characters");
-  passwordMessageCases.push(" Upper case letters");
-  passwordMessageCases.push(" Numbers");
-  passwordMessageCases.push(" Lower case letters");
+  passwordMessageCases.push("{% trans 'neutral.password.special.characters' %}");
+  passwordMessageCases.push("{% trans 'neutral.password.upper.case.letters' %}");
+  passwordMessageCases.push("{% trans 'neutral.password.lower.case.letters' %}");
+  passwordMessageCases.push("{% trans 'neutral.password.numbers' %}");
 
   function updatePasswordProgress() {
     var messageCases = passwordMessageCases.slice();
@@ -116,19 +116,19 @@
         progress = 1;
         break;
       case 1:
-        strength = "Too Weak";
+        strength = "{% trans 'neutral.password.too.weak' %}";
         progress = 15;
         break;
       case 2:
-        strength = "Very Weak";
+        strength = "{% trans 'neutral.password.very.weak' %}";
         progress = 30;
         break;
       case 3:
-        strength = "Weak";
+        strength = "{% trans 'neutral.password.weak' %}";
         progress = 45;
         break;
       default:
-        strength = "Strong";
+        strength = "{% trans 'neutral.password.strong' %}";
         progress = 75;
         break;
     }
@@ -138,12 +138,12 @@
     if (progress >= 75 && passwordInput.value.length >= 8) {
       passwordInput.setCustomValidity("");
       progressBarClass = "bg-success";
-      information = "Strong";
+      information = "{% trans 'neutral.password.strong' %}";
     } else {
       passwordInput.setCustomValidity(strength);
       progressBarClass = "bg-danger";
       if(passwordInput.value.length < 8) {
-        information += (8 - passwordInput.value.length) + " more characters, ";
+        information += (8 - passwordInput.value.length) + "{% trans 'neutral.password.letters.remaining' %}";
       }
       information += messageCases;
     }

@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <html lang="en">
   {% include 'templates/head.html' %}
   <body>
@@ -6,29 +7,29 @@
     <form>
       <img id="login-logo" src="{% static 'img/logo.png' %}"></br></br></br>
       <div class="form-outline mb-4">
-        <label for="email" class="form-label">Email address</label>
-        <input type="email" id="email" class="form-control" placeholder="Email">
+        <label for="email" class="form-label">{% trans 'home.login.email' %}</label>
+        <input type="email" id="email" class="form-control" placeholder="{% trans 'home.login.email' %}">
       </div>
       <div class="form-outline mb-4">
         <div class="d-flex">
-          <label for="password" class="form-label">Password</label>
-          <a id="forgot-password" href="/password/reset/request/">Forgot your password?</a>
+          <label for="password" class="form-label">{% trans 'home.login.password' %}</label>
+          <a id="forgot-password" href="/password/reset/request/">{% trans 'home.login.password.forgot' %}</a>
         </div>
-        <input type="password" id="password" class="form-control" placeholder="Password"/>
+        <input type="password" id="password" class="form-control" placeholder="{% trans 'home.login.password' %}"/>
       </div>
       <div class="form-check mb-3">
         <input type="checkbox" class="form-check-input" id="remember-check">
-        <label class="form-check-label" for="remember-check" id="remember-check-label">Remember me</label>
+        <label class="form-check-label" for="remember-check" id="remember-check-label">{% trans 'home.login.remember' %}</label>
       </div>
-      <button type="button" id="login" class="btn btn-primary mb-4">LOG IN</button></br>
-      <p>Not yet registered? <a id="not-registered" class="text-decoration-none" href="/register/">Create account</a>
+      <button type="button" id="login" class="btn btn-primary mb-4">{% trans 'home.login.button' %}</button></br>
+      <p>{% trans 'home.login.register' %} <a id="not-registered" class="text-decoration-none" href="/register/">{% trans 'home.login.account.create' %}</a>
       <div id="login-alternative">
         <div class="login-alternative-divider"></div>
-        <label class="text-muted mx-4">OR</label>
+        <label class="text-muted mx-4">{% trans 'home.login.alternative' %}</label>
         <div class="login-alternative-divider"></div>
       </div>
       <div id="login-external-services">
-        <button id="login-external-service-google" class="btn login-external-service-button" type="button"><img class="login-external-service-logo" src="{% static 'img/verification/google.jpg' %}">Continue with Google</button>
+        <button id="login-external-service-google" class="btn login-external-service-button" type="button"><img class="login-external-service-logo" src="{% static 'img/verification/google.jpg' %}">{% trans 'home.login.google' %}</button>
       </div>
     </form>
   </body>
@@ -61,7 +62,7 @@
         Cookie.create("token", JSON.parse(responseText).apiKey, 60 * 60 * 24 * 30, ".taskwolf.net");
         window.location.href = "/dashboard/";
       } else {
-        Swal.fire("Authentication failed!", "The password entered is incorrect!", "error");
+        Swal.fire("{% trans 'home.login.failed.title' %}", "{% trans 'home.login.failed.body' %}", "error");
         document.getElementById("password").value = "";
       }
     });
