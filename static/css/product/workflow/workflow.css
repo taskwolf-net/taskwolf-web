@@ -9,13 +9,25 @@ form {
 .dark input {
   background-color: #0d1117 !important;
   color: white !important;
+  -webkit-text-fill-color: white;
   border: 1px solid #cecece !important;
+}
+
+.dark input::placeholder {
+  color: #828282 !important;
+  -webkit-text-fill-color: #828282;
 }
 
 .light input {
   background-color: #eaeaea !important;
   color: black !important;
+  -webkit-text-fill-color: black;
   border: 1px solid #4c4c4c !important;
+}
+
+.light input::placeholder {
+  color: #949494 !important;
+  -webkit-text-fill-color: #949494;
 }
 
 input:-webkit-autofill,

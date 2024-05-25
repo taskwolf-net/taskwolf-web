@@ -9,13 +9,25 @@ form {
 .dark input[type = "email"], .dark input[type = "password"] {
   background-color: #0d1117 !important;
   color: white !important;
+  -webkit-text-fill-color: white;
   border: 1px solid #cecece !important;
+}
+
+.dark input[type = "email"]::placeholder, .dark input[type = "password"]::placeholder {
+  color: #828282 !important;
+  -webkit-text-fill-color: #828282;
 }
 
 .light input[type = "email"], .light input[type = "password"] {
   background-color: #eaeaea !important;
   color: black !important;
+  -webkit-text-fill-color: black;
   border: 1px solid #4c4c4c !important;
+}
+
+.light input[type = "email"]::placeholder, .light input[type = "password"]::placeholder {
+  color: #949494 !important;
+  -webkit-text-fill-color: #949494;
 }
 
 input:-webkit-autofill,
