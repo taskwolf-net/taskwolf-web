@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <nav class="navbar navbar-expand-sm" id="navbar">
   <div class="container-fluid">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-content"
@@ -9,13 +10,28 @@
     <div class="collapse navbar-collapse justify-content-center" id="navbar-content">
       <ul class="navbar-nav ml-auto d-flex align-items-center">
         <li class="nav-item d-none d-lg-block"><a href="/"><img class="nav-link" src="{% static 'img/logo.png' %}" width="70px" height="70px" alt=""></a></li>
-        <li class="nav-item" id="home-nav-item"><a class="nav-link {% if request.path == '/' %}active{% endif %}" aria-current="page" href="/">Home</a></li>
-        <li class="nav-item"><a class="nav-link {% if request.path == '/product/' %}active{% endif %}" href="/product/">Product</a></li>
-        <li class="nav-item"><a class="nav-link {% if request.path == '/features/' %}active{% endif %}" href="/features/">Features</a></li>
-        <li class="nav-item"><a class="text-nowrap nav-link {% if request.path == '/about-us/' %}active{% endif %}" href="/about-us/">About us</a></li>
+        <li class="nav-item" id="home-nav-item"><a class="nav-link {% if request.path == '/' %}active{% endif %}" aria-current="page" href="/">{% trans 'home.header.home' %}</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.path == '/product/' %}active{% endif %}" href="/product/">{% trans 'home.header.product' %}</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.path == '/pricing/' %}active{% endif %}" href="/pricing/">{% trans 'home.header.pricing' %}</a></li>
       </ul>
-      <a href="/login/" class="btn btn-info" id="login-button" role="button">Login</a>
+      <div id="home-languages">
+        <input id="home-language-en" class="home-language-flag" src="{% static 'img/languages/en.png' %}" type="image"/>
+        <input id="home-language-de" class="home-language-flag" src="{% static 'img/languages/de.png' %}" type="image"/>
+      </div>
+      <a href="/login/" class="btn btn-info" id="login-button" role="button">{% trans 'home.header.login' %}</a>
     </div>
   </div>
 </nav>
 <div id="header-space"></div>
+
+<script>
+  document.getElementById("home-language-en").onclick = function (event) {
+    Cookie.create("taskwolf-home-language", "en", 60 * 60 * 24 * 365, ".taskwolf.net");
+    window.location.reload();
+  }
+
+  document.getElementById("home-language-de").onclick = function (event) {
+    Cookie.create("taskwolf-home-language", "de", 60 * 60 * 24 * 365, ".taskwolf.net");
+    window.location.reload();
+  }
+</script>
