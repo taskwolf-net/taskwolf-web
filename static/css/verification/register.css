@@ -58,6 +58,16 @@ input:-webkit-autofill:active{
   text-align: center !important;
 }
 
+.dark .form-check-input {
+  background-color: #0d1117;
+  border: 1px solid #cecece;
+}
+
+.light .form-check-input {
+  background-color: #eaeaea;
+  border: 1px solid #4c4c4c;
+}
+
 .form-check-label {
   width: 100%;
   text-align: left;

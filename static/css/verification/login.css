@@ -45,6 +45,16 @@ input:-webkit-autofill:active{
   font-size: 20px;
 }
 
+.dark .form-check-input {
+  background-color: #0d1117;
+  border: 1px solid #cecece;
+}
+
+.light .form-check-input {
+  background-color: #eaeaea;
+  border: 1px solid #4c4c4c;
+}
+
 #forgot-password {
   text-align: right;
   width: 100%;
