@@ -25,6 +25,10 @@
                 <hr id="workflow-component-application-divider" class="hr"/>
                 <ul id="workflow-component-application-list">
                 </ul>
+                <div id="workflow-component-application-page">
+                  <a id="workflow-component-application-previous-page" class="workflow-component-application-page-button workflow-component-application-page-button-disabled"><</a>
+                  <a id="workflow-component-application-next-page" class="workflow-component-application-page-button workflow-component-application-page-button-disabled">></a>
+                </div>
               </div>
             </div>
           </div>
@@ -111,9 +115,12 @@
 <script>
   var selectedComponent = {};
   var applications;
+  var hotApplications;
   var workflowCurrentApplicationFilter = "";
   var selectedApplication;
   var selectedApplicationLogo;
+  var currentApplicationPage = 0;
+  var selectedComponentSetup = false;
 
   $(document).ready(function() {
     if ("{{type}}" === "trigger" && sessionStorage.getItem("workflow-trigger") !== null) {
@@ -131,8 +138,11 @@
         selectedComponent = action;
       }
     }
+    if (!(_.isEqual(selectedComponent, {}))) {
+      selectedComponentSetup = true;
+    }
     fetchApplicationsData(function() {
-      if (!(_.isEqual(selectedComponent, {}))) {
+      if (selectedComponentSetup) {
         workflowCurrentApplicationFilter = selectedComponent.module;
       }
       displayApplications();
@@ -141,20 +151,24 @@
   });
 
   function fetchApplicationsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/modules/available/", "POST",
+    let applicationsRequest = new HttpRequest("https://api.taskwolf.net/v1/modules/available/", "POST",
       [], {componentType: "{{type}}"});
-    request.send(function (status, responseText) {
-      applications = JSON.parse(responseText).modules;
-      callback();
+    applicationsRequest.send(function (status, applicationsResponseText) {
+      applications = JSON.parse(applicationsResponseText).modules;
+      let hotApplicationsRequest = new HttpRequest("https://api.taskwolf.net/v1/modules/{{type}}/hot/", "GET", []);
+      hotApplicationsRequest.send(function (status, hotApplicationsResponseText) {
+        hotApplications = JSON.parse(hotApplicationsResponseText).modules;
+        callback();
+      });
     });
   }
 
   function displayApplications() {
-    document.getElementById("workflow-component-application-list").innerHTML = "";
     if (workflowCurrentApplicationFilter === "") {
-      displayPopularApplications();
+      switchApplicationPage(currentApplicationPage);
       return;
     }
+    document.getElementById("workflow-component-application-list").innerHTML = "";
     for (var i = 0; i < applications.length; i++) {
       var entry = applications[i];
       if(!(entry.id.toLowerCase().includes(workflowCurrentApplicationFilter.toLowerCase()) ||
@@ -163,15 +177,6 @@
       }
       displayApplication(entry.id, entry.name, entry.logo, entry.novelty);
     }
-  }
-
-  function displayPopularApplications() {
-    displayApplication("discord", "Discord", "discord.png");
-    displayApplication("gmail", "Gmail", "gmail.png");
-    displayApplication("github", "Github", "github.png");
-    displayApplication("google calendar", "Google Calendar", "googlecalendar.png");
-    displayApplication("google-drive", "Google Drive", "googledrive.png");
-    displayApplication("google-drive", "Google Docs", "googledocs.png");
   }
 
   function displayApplication(id, name, logo, novelty) {
@@ -188,7 +193,7 @@
     if (novelty === "NEW") {
       var noveltyElement = document.createElement("span");
       noveltyElement.classList.add("workflow-component-new", "badge",
-          "text-bg-success");
+        "text-bg-success");
       noveltyElement.innerHTML = "{% trans 'product.workflow.component.new' %}";
       entryElement.appendChild(noveltyElement);
     }
@@ -196,7 +201,7 @@
       selectApplication(id, logo, entryElement, true);
     }
     document.getElementById("workflow-component-application-list").appendChild(entryElement);
-    if (!(_.isEqual(selectedComponent, {})) && selectedComponent.module === id.toLowerCase()) {
+    if (selectedComponentSetup && selectedComponent.module === id.toLowerCase()) {
       selectApplication(id, logo, entryElement, false);
     }
   }
@@ -205,6 +210,7 @@
     selectedApplication = id.toLowerCase();
     selectedApplicationLogo = logo;
     document.getElementById("workflow-component-application-list").style.display = "none";
+    document.getElementById("workflow-component-application-page").classList.add("d-none");
     entryElement.classList.add("workflow-component-application-entry-selected");
     document.getElementById("workflow-component-application-body").appendChild(entryElement);
     createResetButton(document.getElementById("workflow-component-application-body"), function() {
@@ -212,7 +218,7 @@
     });
     entryElement.onclick = function(event) {}
     prepareAccount();
-    if (_.isEqual(selectedComponent, {})) {
+    if (!selectedComponentSetup) {
       prepareEvent();
     }
     if (collapse) {
@@ -222,9 +228,46 @@
     }
   }
 
+  var nextPageElement = document.getElementById("workflow-component-application-next-page");
+  nextPageElement.onclick = function (event) {
+    if (!nextPageElement.classList.contains("workflow-component-application-page-button-disabled")) {
+      switchApplicationPage(currentApplicationPage + 1);
+    }
+  }
+
+  var previousPageElement = document.getElementById("workflow-component-application-previous-page");
+  previousPageElement.onclick = function (event) {
+    if (!previousPageElement.classList.contains("workflow-component-application-page-button-disabled")) {
+      switchApplicationPage(currentApplicationPage - 1);
+    }
+  }
+
+  function switchApplicationPage(page) {
+    var selectableApplications = hotApplications.concat(applications.filter(application =>
+      hotApplications.filter(hotApplication => hotApplication.id === application.id)
+        .length === 0));
+    document.getElementById("workflow-component-application-list").innerHTML = "";
+    for (var i = 6 * page; i < Math.min(6 * (page + 1), selectableApplications.length); i++) {
+      var entry = selectableApplications[i];
+      displayApplication(entry.id, entry.name, entry.logo, entry.novelty);
+    }
+    currentApplicationPage = page;
+    if ((currentApplicationPage + 1) * 6 >= selectableApplications.length) {
+      nextPageElement.classList.add("workflow-component-application-page-button-disabled");
+    } else {
+      nextPageElement.classList.remove("workflow-component-application-page-button-disabled");
+    }
+    if (currentApplicationPage - 1 < 0) {
+      previousPageElement.classList.add("workflow-component-application-page-button-disabled");
+    } else {
+      previousPageElement.classList.remove("workflow-component-application-page-button-disabled");
+    }
+  }
+
   function resetApplication(entryElement) {
     document.getElementById("workflow-component-application-body").removeChild(entryElement);
     document.getElementById("workflow-component-application-list").style.display = "block";
+    document.getElementById("workflow-component-application-page").classList.remove("d-none");
     var resetButtons = document.getElementById("workflow-component-application-body").getElementsByClassName("workflow-component-reset");
     for (var i = 0; i < resetButtons.length; i++) {
       document.getElementById("workflow-component-application-body").removeChild(resetButtons[i]);
@@ -309,13 +352,13 @@
       clickSkipButton(true);
     }
     document.getElementById("workflow-component-account-content").appendChild(resetButtonContainer);
-    if (!(_.isEqual(selectedComponent, {}))) {
+    if (selectedComponentSetup) {
       clickSkipButton(false);
     }
   }
 
   function clickSkipButton(collapse) {
-    if (!(_.isEqual(selectedComponent, {}))) {
+    if (selectedComponentSetup) {
       prepareEvent();
     }
     if (collapse) {
@@ -380,7 +423,7 @@
       selectEvent(identifier, name, description);
     }
     document.getElementById("workflow-component-event-dropdown-list").appendChild(entryElement);
-    if (!(_.isEqual(selectedComponent, {})) && selectedComponent.type === identifier) {
+    if (selectedComponentSetup && selectedComponent.type === identifier) {
       selectEvent(identifier, name, description);
     }
   }
@@ -467,9 +510,11 @@
       var component = JSON.parse(responseText);
       var inputVariables = component.inputVariables;
       if (inputVariables.length === 0) {
-          document.getElementById("workflow-component-specifications-container").style.display = "none";
-          document.getElementById("workflow-component-specifications-redundant").style.display = "block";
-          updateAdoptability(true);
+        document.getElementById("workflow-component-specifications-container").style.display = "none";
+        document.getElementById("workflow-component-specifications-redundant").style.display = "block";
+        updateAdoptability(true);
+        selectedComponentSetup = false;
+        return;
       }
       for (let i = 0; i < inputVariables.length; i++) {
         var inputVariable = inputVariables[i];
@@ -525,7 +570,7 @@
     };
     inputContainerElement.appendChild(inputElement);
     document.getElementById("workflow-component-specifications-input-list").appendChild(inputContainerElement);
-    if (!(_.isEqual(selectedComponent, {})) && "content" in selectedComponent) {
+    if (selectedComponentSetup && "content" in selectedComponent) {
       var selectedComponentContent = JSON.parse(selectedComponent.content);
       setTimeout(function() {
         if (identifier in selectedComponentContent) {
@@ -533,7 +578,7 @@
           inputSpecificationInput(identifier, inputElement.value);
         }
         if (index === inputsLength - 1) {
-          selectedComponent = {};
+          selectedComponentSetup = false;
         }
       }, 200 * index);
     }
@@ -578,7 +623,7 @@
       clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton, index, inputsLength);
     });
     document.getElementById("workflow-component-specifications-input-list").appendChild(dropdownContainer);
-    if (!(_.isEqual(selectedComponent, {})) && "content" in selectedComponent) {
+    if (selectedComponentSetup && "content" in selectedComponent) {
       setTimeout(function(){
         clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton, index, inputsLength);
       }, 200 * index);
@@ -602,11 +647,11 @@
           selectSpecificationSelect(identifier, item.identifier, item.name, dropdownContainer, dropdownButton, dropdownList);
         }
         dropdownList.appendChild(itemElement);
-        if (!(_.isEqual(selectedComponent, {})) && selectedComponent.content !== undefined && JSON.parse(selectedComponent.content)[identifier] === item.identifier) {
+        if (selectedComponentSetup && selectedComponent.content !== undefined && JSON.parse(selectedComponent.content)[identifier] === item.identifier) {
           selectSpecificationSelect(identifier, item.identifier, item.name, dropdownContainer, dropdownButton, dropdownList);
         }
         if (index === inputsLength - 1) {
-          selectedComponent = {};
+          selectedComponentSetup = false;
         }
       }
       if (items.length === 0) {
@@ -681,16 +726,14 @@
     };
     inputContainerElement.appendChild(fileButton);
     document.getElementById("workflow-component-specifications-input-list").appendChild(inputContainerElement);
-    if (!(_.isEqual(selectedComponent, {})) && "content" in selectedComponent) {
+    if (selectedComponentSetup && "content" in selectedComponent) {
       var selectedComponentContent = JSON.parse(selectedComponent.content);
       setTimeout(function() {
         if (identifier in selectedComponentContent) {
           selectSpecificationFile(identifier, selectedComponentContent[identifier],
             fileButton);
         }
-        if (index === inputsLength - 1) {
-          selectedComponent = {};
-        }
+        selectedComponentSetup = false;
       }, 200 * index);
     }
   }
