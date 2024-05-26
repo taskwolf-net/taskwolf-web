@@ -47,7 +47,23 @@ msgstr "Produkt"
 msgid "home.header.pricing"
 msgstr "Preise"
 
+# HOME
+msgid "home.home.title"
+msgstr "Startseite - Taskwolf"
+
+# PRODUCT
+msgid "home.product.title"
+msgstr "Produkt - Taskwolf"
+
+# PRICING
+msgid "home.pricing.title"
+msgstr "Preise - Taskwolf"
+msgid "home.pricing.headline"
+msgstr "Preise"
+
 # LOGIN
+msgid "home.login.title"
+msgstr "Anmeldung - Taskwolf"
 msgid "home.login.email"
 msgstr "E-Mail Adresse"
 msgid "home.login.password"
@@ -72,6 +88,8 @@ msgid "home.login.failed.body"
 msgstr "Das eingegebene Passwort ist falsch"
 
 # REGISTRATION
+msgid "home.registration.title"
+msgstr "Registrierung - Taskwolf"
 msgid "home.registration.headline"
 msgstr "Registrierung"
 msgid "home.registration.email"
@@ -104,18 +122,24 @@ msgid "home.registration.failed.already.exists"
 msgstr "Es gibt bereits ein Konto mit dieser E-Mail"
 
 # REGISTRATION EMAIL
+msgid "home.registration.email.title"
+msgstr "Registrierung - Taskwolf"
 msgid "home.registration.email.headline"
 msgstr "Die Bestätigungs-E-Mail wurde gesendet"
 msgid "home.registration.email.description"
 msgstr "Prüfen Sie jetzt Ihr Postfach und suchen Sie nach unserer Bestätigungs-E-Mail. Es ist möglich, dass diese fälschlicherweise als Spam eingestuft wurde. Bitte überprüfen Sie daher auch Ihren Spam-Ordner. Wenn Sie die Mail gefunden haben, finden Sie dort alle weiteren Anweisungen."
 
 # REGISTRATION CONFIRM
+msgid "home.registration.confirm.title"
+msgstr "Registrierung - Taskwolf"
 msgid "home.registration.confirm.headline"
 msgstr "Registrierung abgeschlossen"
 msgid "home.registration.confirm.description"
 msgstr "Sie haben Ihr Konto erfolgreich verifiziert. Sie können nun mit der Anmeldung fortfahren."
 
 # PASSWORD RESET REQUEST
+msgid "home.password.reset.request.title"
+msgstr "Passwort Zurücksetzung - Taskwolf"
 msgid "home.password.reset.request.headline"
 msgstr "Haben Sie Ihr Passwort vergessen?"
 msgid "home.password.reset.request.email"
@@ -130,6 +154,8 @@ msgid "home.password.reset.request.success"
 msgstr "Sie haben eine E-Mail erhalten, um Ihr Passwort zurückzusetzen. Bitte werfen Sie einen Blick in Ihre Mailbox."
 
 # PASSWORD RESET COMPLETE
+msgid "home.password.reset.complete.title"
+msgstr "Passwort Zurücksetzung - Taskwolf"
 msgid "home.password.reset.complete.headline"
 msgstr "Passwort zurücksetzen"
 msgid "home.password.reset.complete.new.password"

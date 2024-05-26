@@ -1,35 +1,36 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from home.home import home_page
+from django.utils.translation import gettext
 
 @home_page
 async def login(request):
-  return render(request, 'login.html', {'title': 'Taskwolf - Login',
+  return render(request, 'login.html', {'title': gettext("home.login.title"),
     'css': ['css/base/home-header.css', 'css/verification/login.css']})
 
 @home_page
 async def register(request):
-  return render(request, 'register.html', {'title': 'Taskwolf - Register',
+  return render(request, 'register.html', {'title': gettext("home.registration.title"),
     'css': ['css/base/home-header.css', 'css/verification/register.css']})
 
 @home_page
 async def registerEmail(request):
-  return render(request, 'register-email.html', {'title': 'Taskwolf - Register Email',
+  return render(request, 'register-email.html', {'title': gettext("home.registration.email.title"),
     'css': ['css/base/home-header.css', 'css/verification/register-email.css']})
 
 @home_page
 async def registerConfirm(request, user, token):
-  return render(request, 'register-confirm.html', {'title': 'Taskwolf - Registration Confirm',
+  return render(request, 'register-confirm.html', {'title': gettext("home.registration.confirm.title"),
     'css': ['css/base/home-header.css', 'css/verification/register-confirm.css'],
     'user': user, 'token': token})
 
 @home_page
 async def passwordResetRequest(request):
-  return render(request, 'password-reset-request.html', {'title': 'Taskwolf - Password Reset',
+  return render(request, 'password-reset-request.html', {'title': gettext("home.password.reset.request.title"),
     'css': ['css/base/home-header.css', 'css/verification/password-reset-request.css']})
 
 @home_page
 async def passwordResetComplete(request, user, token):
-  return render(request, 'password-reset-complete.html', {'title': 'Taskwolf - Password Reset',
+  return render(request, 'password-reset-complete.html', {'title': gettext("home.password.reset.complete.title"),
     'css': ['css/base/home-header.css', 'css/verification/password-reset-complete.css'],
     'user': user, 'token': token})

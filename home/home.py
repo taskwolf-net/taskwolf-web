@@ -6,6 +6,7 @@ from base.authentication import isAuthenticated
 from product.product import dashboard
 from django.shortcuts import redirect
 from django.utils import translation
+from django.utils.translation import gettext
 
 def home_page(function):
   @wraps(function)
@@ -25,15 +26,15 @@ async def home(request):
   authenticated = await isAuthenticated(request)
   if (authenticated):
     return redirect("/dashboard/")
-  return render(request, 'home.html', {'title': 'Taskwolf - Home',
+  return render(request, 'home.html', {'title': gettext("home.home.title"),
     'css': ['css/base/home-header.css', 'css/home/home.css']})
 
 @home_page
 async def product(request):
-  return render(request, 'product.html', {'title': 'Taskwolf - Product',
+  return render(request, 'product.html', {'title': gettext("home.product.title"),
     'css': ['css/base/home-header.css', 'css/home/product.css']})
 
 @home_page
 async def pricing(request):
-  return render(request, 'pricing.html', {'title': 'Taskwolf - Pricing',
+  return render(request, 'pricing.html', {'title': gettext("home.pricing.title"),
     'css': ['css/base/home-header.css', 'css/home/pricing.css']})
