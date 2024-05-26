@@ -50,9 +50,13 @@
   margin-left: 25px;
 }
 
+#navbar-logo img {
+  padding: 5px;
+}
+
 #profile-picture {
-  width: 64px;
-  height: 64px;
+  width: 60px;
+  height: 60px;
   border-radius: 40%;
 }
 
@@ -80,13 +84,20 @@
 
 #profile-button-wrapper {
   border-radius: 50%;
-  width: 64px;
-  height: 64px;
+  width: 60px;
+  height: 60px;
   text-align: center;
-  background-color: white !important;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.dark #profile-button-wrapper {
+  background-color: white !important;
+}
+
+.light #profile-button-wrapper {
+  background-color: black !important;
 }
 
 #profile-button-wrapper::after {
