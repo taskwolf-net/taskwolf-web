@@ -110,7 +110,7 @@
 .pricing-package-price {
   margin-top: 10%;
   font-weight: bold;
-  width: 100%;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
