@@ -132,6 +132,12 @@
   transform: translate(-50%, 0);
 }
 
+#pricing-package-free, #pricing-package-professional, #pricing-package-team, #pricing-package-enterprise {
+  position: sticky !important;
+  top: 84px !important;
+  z-index: 100 !important;
+}
+
 #pricing-package-free {
   background-color: #162a33;
 }
