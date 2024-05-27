@@ -321,7 +321,7 @@
       destinationX = nX + originX;
       destinationY = nY + originY;
       self.line = self.draw.line(originX, originY, destinationX, destinationY).stroke({
-        color: "#000000",
+        color: isDarkTheme ? "#ffffff" : "#000000",
         width: 4,
         linecap: "round",
         dasharray: "30,30"
