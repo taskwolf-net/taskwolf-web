@@ -1,12 +1,13 @@
+#pricing-container {
+  width: min(calc(1500px), 95%);
+  margin: auto;
+}
+
+
 #pricing-headline {
   text-align: center;
   font-weight: bold;
   margin-top: 3%;
-}
-
-#pricing-container {
-  width: min(calc(1500px), 95%);
-  margin: auto;
 }
 
 #pricing-table {
