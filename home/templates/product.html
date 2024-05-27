@@ -4,5 +4,35 @@
   {% include 'templates/head.html' %}
   <body>
      {% include 'templates/home-header.html' %}
+     <div id="product-container">
+       <h1 id="product-headline">{% trans 'home.product.headline' %}</h1>
+       <iframe id="product-video" src="https://www.youtube-nocookie.com/embed/ZCUOXfwDnx4?si=8DeTtAbcwb_7nGs-&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+       <hr class="product-divider"/>
+       <div class="product-content">
+         <div class="product-content-text">
+           <h1 class="product-content-text-headline">Workflows</h1>
+           <p>Workflows are used to automate small processes within their environment. They enable the replication and complete removal of repetitive tasks.</p>
+           <ul>
+             <li><h5><b>Triggers</b></h5><p>They are the root of every workflow. This is because the triggers set the workflow in motion and initiate the chain of actions or conditions. The list of all possible triggers appears when you specify the trigger in the workflow menu.</p></li>
+             <li><h5><b>Action</b></h5><p>The actions are the actual heart of every workflow. They fulfill a task selected by you when the workflow is triggered. The order in which the actions are executed is sequential and can be freely selected by you.</p></li>
+             <li><h5><b>Condition</b></h5><p>Conditions can also be integrated into the workflow as required. The conditions control the sequential process and can, for example, interrupt the further execution of actions</p></li>
+           </ul>
+         </div>
+         <img class="product-content-image" src="{% static 'img/home/workflow.png' %}">
+       </div>
+       <hr class="product-divider"/>
+       <div class="product-content">
+         <img class="product-content-image" src="{% static 'img/home/process.png' %}">
+         <div class="product-content-text">
+           <h1 class="product-content-text-headline">Processes</h1>
+           <p>Now that you know what a workflow is, we ask you to take a step backwards. Because when workflows automate certain processes, in many cases it is an interplay of workflows that enables the most efficient automation. This is exactly what processes are used for. Each process is a sequence of so-called "steps". Each step has the ability to execute a workflow.</p>
+           <ul>
+             <li><p>Step</p></li>
+             <li><p>Connection</p></li>
+             <li><p>Execution</p></li>
+           </ul>
+         </div>
+       </div>
+     </div>
   </body>
 </html>

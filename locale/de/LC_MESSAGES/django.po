@@ -54,6 +54,8 @@ msgstr "Startseite - Taskwolf"
 # PRODUCT
 msgid "home.product.title"
 msgstr "Produkt - Taskwolf"
+msgid "home.product.headline"
+msgstr "Produkt"
 
 # PRICING
 msgid "home.pricing.title"
