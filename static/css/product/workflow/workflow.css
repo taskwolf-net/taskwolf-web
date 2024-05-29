@@ -161,6 +161,7 @@ input:-webkit-autofill:active{
   border-radius: 8px;
   text-align: center;
   transition-duration: 0.3s;
+  position: relative;
 }
 
 .dark .workflow-entry {
@@ -242,7 +243,7 @@ input:-webkit-autofill:active{
   width: 32px;
   height: 32px;
   margin-top: 5px;
-  margin-left: min(calc(800px - 42px), calc(95% - 42px));
+  margin-left: calc(100% - 52px);
   display: flex;
   align-items: center;
   justify-content: center;
