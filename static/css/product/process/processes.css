@@ -64,6 +64,7 @@
 #processes-search-box button {
   border: none;
   border-radius: 5px;
+  padding: 10px;
 }
 
 .dark #processes-search-box button {

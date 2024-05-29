@@ -63,6 +63,7 @@
 #databases-search-box button {
   border: none;
   border-radius: 5px;
+  padding: 10px;
 }
 
 .dark #databases-search-box button {

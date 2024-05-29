@@ -63,6 +63,7 @@
 #devices-search-box button {
   border: none;
   border-radius: 5px;
+  padding: 10px;
 }
 
 .dark #devices-search-box button {

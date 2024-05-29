@@ -74,6 +74,7 @@
 #account-apps-search-box button {
   border: none;
   border-radius: 5px;
+  padding: 10px;
 }
 
 .dark #account-apps-search-box button {
