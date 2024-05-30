@@ -13,28 +13,28 @@
               <h2>{% trans 'home.pricing.advantages' %}</h2>
             </div>
           </th>
-          <th id="pricing-package-free">
+          <th id="pricing-package-free" class="pricing-package">
             <h2 class="pricing-package-title">{% trans 'home.pricing.free.title' %}</h2>
             <p class="pricing-package-description">{% trans 'home.pricing.free.description' %}</p>
             <h1 class="pricing-package-price">0 €</h1>
             <p class="pricing-package-time">{% trans 'home.pricing.free.time' %}</p>
             <button type="button" class="pricing-get-button btn btn-outline-light">{% trans 'home.pricing.free.try' %}</button>
           </th>
-          <th id="pricing-package-professional">
+          <th id="pricing-package-professional" class="pricing-package">
             <h2 class="pricing-package-title">{% trans 'home.pricing.professional.title' %}</h2>
             <p class="pricing-package-description">{% trans 'home.pricing.professional.description' %}</p>
             <h1 class="pricing-package-price">14,99 €</h1>
             <p class="pricing-package-time">{% trans 'home.pricing.professional.time' %}</p>
             <button type="button" class="pricing-get-button btn btn-outline-light">{% trans 'home.pricing.buy' %}</button>
           </th>
-          <th id="pricing-package-team">
+          <th id="pricing-package-team" class="pricing-package">
             <h2 class="pricing-package-title">{% trans 'home.pricing.team.title' %}</h2>
             <p class="pricing-package-description">{% trans 'home.pricing.team.description' %}</p>
             <h1 class="pricing-package-price">39,99 €</h1>
             <p class="pricing-package-time">{% trans 'home.pricing.team.time' %}</p>
             <button type="button" class="pricing-get-button btn btn-outline-light">{% trans 'home.pricing.buy' %}</button>
           </th>
-          <th id="pricing-package-enterprise">
+          <th id="pricing-package-enterprise" class="pricing-package">
             <h2 class="pricing-package-title">{% trans 'home.pricing.enterprise.title' %}</h2>
             <p class="pricing-package-description">{% trans 'home.pricing.enterprise.description' %}</p>
             <h2 id="pricing-package-enterprise-price" class="pricing-package-price">{% trans 'home.pricing.enterprise.price.contact' %}</h2>
@@ -219,5 +219,17 @@
         container: tooltipTriggerEl
       });
     });
+    observeStickiness(document.getElementById("pricing-package-free"));
+    observeStickiness(document.getElementById("pricing-package-professional"));
+    observeStickiness(document.getElementById("pricing-package-team"));
+    observeStickiness(document.getElementById("pricing-package-enterprise"));
   });
+
+  function observeStickiness(element) {
+    window.addEventListener("scroll", () => {
+      const stickyTop = parseInt(window.getComputedStyle(element).top);
+      const currentTop = element.getBoundingClientRect().top;
+      element.classList.toggle("pricing-package-stuck", currentTop <= stickyTop);
+    });
+  }
 </script>

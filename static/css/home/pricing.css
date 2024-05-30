@@ -44,10 +44,14 @@
 
 .pricing-table-advantages {
   width: 20% !important;
+  position: relative;
 }
 
 .pricing-table-advantages div {
-  margin-top: 100% !important;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .dark .pricing-table-advantages {
@@ -88,6 +92,7 @@
 .pricing-package-title {
   font-weight: bold;
   width: 100%;
+  margin-top: 10px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -133,10 +138,31 @@
   transform: translate(-50%, 0);
 }
 
-#pricing-package-free, #pricing-package-professional, #pricing-package-team, #pricing-package-enterprise {
+.pricing-package {
   position: sticky !important;
   top: 84px !important;
   z-index: 100 !important;
+  vertical-align: top;
+}
+
+.pricing-package-stuck {
+  padding-bottom: 20px !important;
+}
+
+.pricing-package-stuck .pricing-package-description {
+  display: none;
+}
+
+.pricing-package-stuck #pricing-package-enterprise-price {
+  margin-bottom: 0 !important;
+}
+
+.pricing-package-stuck .pricing-package-time {
+  margin-bottom: 0 !important;
+}
+
+.pricing-package-stuck .pricing-get-button {
+  display: none;
 }
 
 #pricing-package-free {
