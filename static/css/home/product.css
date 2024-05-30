@@ -34,7 +34,11 @@ p {
   justify-content: space-between;
   align-items: center;
   margin: auto;
-  margin-bottom: 1%;
+  margin-bottom: 2%;
+}
+
+#product-header-content-text {
+  width: min(750px, 100%);
 }
 
 @media (max-width: 1200px) {

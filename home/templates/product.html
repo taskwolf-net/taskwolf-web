@@ -6,11 +6,11 @@
     {% include 'templates/home-header.html' %}
     <div id="product-header">
       <div id="product-header-content">
-        <div>
+        <div id="product-header-content-text">
           <h3 id="product-headline">{% trans 'home.product.headline' %}</h3>
-          <h1 id="product-slogan"><b>Automate your apps</b></h1>
-          <h5 class="text-center mt-4 mb-1">We offer a code-free environment for automation for everyone.</h5>
-          <h5 class="text-center">Dive deeper into our offer.</h5>
+          <h1 id="product-slogan"><b>{% trans 'home.product.slogan' %}</b></h1>
+          <h5 class="text-center mt-4 mb-1">{% trans 'home.product.description.1' %}</h5>
+          <h5 class="text-center">{% trans 'home.product.description.2' %}</h5>
           <div id="product-video-container">
             <button id="product-video-button" onclick="window.open('https://www.youtube.com/watch?v=ZCUOXfwDnx4');"></button>
           </div>
@@ -23,26 +23,26 @@
     </div>
     <div class="product-content product-animation-opacity">
      <div id="product-workflow-content">
-       <h3 class="text-center">Workflows</h3>
-       <h1 class="product-content-text-headline">We take on repetitive tasks for you</h1>
-       <p class="text-center mt-3 mb-0">Workflows are used to automate small processes within their environment.</p>
-       <p class="text-center">They enable the replication and complete removal of repetitive tasks.</p>
+       <h3 class="text-center">{% trans 'home.product.workflows.headline' %}</h3>
+       <h1 class="product-content-text-headline">{% trans 'home.product.workflows.slogan' %}</h1>
+       <p class="text-center mt-3 mb-0">{% trans 'home.product.workflows.description.1' %}</p>
+       <p class="text-center">{% trans 'home.product.workflows.description.2' %}</p>
        <div id="product-workflow-content-desktop" class="mt-5">
          <div class="product-workflow-content-text">
            <div id="product-workflow-trigger" class="product-animation-left">
-             <h5><b>Trigger</b></h5>
-             <label>They are the root of every workflow. This is because the triggers set the workflow in motion and initiate the chain of actions or conditions.</label>
+             <h5><b>{% trans 'home.product.workflows.trigger.headline' %}</b></h5>
+             <label>{% trans 'home.product.workflows.trigger.description' %}</label>
            </div>
            <div id="product-workflow-action" class="product-animation-left">
-             <h5><b>Action</b></h5>
-             <label>Actions fulfill a task selected by you when the workflow is triggered. The order in which the actions are executed is sequential.</label>
+             <h5><b>{% trans 'home.product.workflows.action.headline' %}</b></h5>
+             <label>{% trans 'home.product.workflows.action.description' %}</label>
            </div>
          </div>
          <img class="product-workflow-content-image" src="{% static 'img/home/workflow.png' %}">
          <div class="product-workflow-content-text">
            <div id="product-workflow-condition" class="product-animation-right">
-             <h5><b>Condition</b></h5>
-             <label>The conditions control the sequential process and can, for example, interrupt the further execution of actions.</label>
+             <h5><b>{% trans 'home.product.workflows.condition.headline' %}</b></h5>
+             <label>{% trans 'home.product.workflows.condition.description' %}</label>
            </div>
          </div>
        </div>
@@ -50,16 +50,16 @@
          <div class="product-workflow-content-text">
            <ul class="product-content-text-list">
              <li>
-               <h5><b>Trigger</b></h5>
-               <p>They are the root of every workflow. This is because the triggers set the workflow in motion and initiate the chain of actions or conditions.</p>
+               <h5><b>{% trans 'home.product.workflows.trigger.headline' %}</b></h5>
+               <label>{% trans 'home.product.workflows.trigger.description' %}</label>
              </li>
              <li>
-               <h5><b>Action</b></h5>
-               <p>Actions fulfill a task selected by you when the workflow is triggered. The order in which the actions are executed is sequential.</p>
+               <h5><b>{% trans 'home.product.workflows.action.headline' %}</b></h5>
+               <label>{% trans 'home.product.workflows.action.description' %}</label>
              </li>
              <li>
-               <h5><b>Condition</b></h5>
-               <p>The conditions control the sequential process and can, for example, interrupt the further execution of actions.</p>
+               <h5><b>{% trans 'home.product.workflows.condition.headline' %}</b></h5>
+               <label>{% trans 'home.product.workflows.condition.description' %}</label>
              </li>
            </ul>
            <img class="product-workflow-content-image" src="{% static 'img/home/workflow.png' %}">
@@ -75,21 +75,21 @@
     <div class="product-content product-animation-down">
       <div id="product-process-content">
         <div id="product-process-content-text">
-          <h3 class="text-center">Processes</h3>
-          <h1 class="product-content-text-headline">Connect workflows with each other</h1>
-          <p>In many cases it is an interplay of workflows that enables the most efficient automation. This is exactly what processes are used for. Each process is a sequence of so-called "steps".</p>
+          <h3 class="text-center">{% trans 'home.product.processes.headline' %}</h3>
+          <h1 class="product-content-text-headline">{% trans 'home.product.processes.slogan' %}</h1>
+          <p>{% trans 'home.product.processes.description' %}</p>
           <ul class="product-content-text-list">
            <li>
-             <h5><b>Step</b></h5>
-             <p>A step consists of a title, a description and to-dos. Furthermore, each step can execute a workflow.</p>
+             <h5><b>{% trans 'home.product.processes.step.headline' %}</b></h5>
+             <p>{% trans 'home.product.processes.step.description' %}</p>
            </li>
            <li>
-             <h5><b>Connection</b></h5>
-             <p>The steps can be linked to each other via connections, allowing the execution to be controlled. To publish a workflow, there must be a connection from the start step to the end step.</p>
+             <h5><b>{% trans 'home.product.processes.connection.headline' %}</b></h5>
+             <p>{% trans 'home.product.processes.connection.description' %}</p>
            </li>
            <li>
-             <h5><b>Execution</b></h5>
-             <p>Processes can be executed in different ways. The steps are run through one after the other and the workflows are executed in the specified order.</p>
+             <h5><b>{% trans 'home.product.processes.execution.headline' %}</b></h5>
+             <p>{% trans 'home.product.processes.execution.description' %}</p>
            </li>
           </ul>
         </div>
@@ -104,17 +104,17 @@
     <div class="product-content">
       <div id="product-organization-content">
        <div id="product-organization-content-text" class="product-animation-left">
-         <h3 class="text-center">Organizations</h3>
-         <h1 class="product-content-text-headline">Working together to advance automation</h1>
-         <p>An organization is a group of several Taskwolf users. They can automate together and thus save all members a lot of time. Because none of us is as smart as all of us.</p>
+         <h3 class="text-center">{% trans 'home.product.organizations.headline' %}</h3>
+         <h1 class="product-content-text-headline">{% trans 'home.product.organizations.slogan' %}</h1>
+         <p>{% trans 'home.product.organizations.description' %}</p>
          <ul class="product-content-text-list">
            <li>
-             <h5><b>Owner</b></h5>
-             <p>Manages the organization.</p>
+             <h5><b>{% trans 'home.product.organizations.owner.headline' %}</b></h5>
+             <p>{% trans 'home.product.organizations.owner.description' %}</p>
            </li>
            <li>
-             <h5><b>Member</b></h5>
-             <p>Is part of the team and has access to shared workflows, processes, databases, webhooks, accounts and devices.</p>
+             <h5><b>{% trans 'home.product.organizations.member.headline' %}</b></h5>
+             <p>{% trans 'home.product.organizations.member.description' %}</p>
            </li>
          </ul>
        </div>
@@ -130,10 +130,10 @@
       <div id="product-device-content">
         <img id="product-device-content-image" class="product-animation-left" src="{% static 'img/home/device.png' %}">
         <div id="product-device-content-text" class="product-animation-right">
-          <h3 class="text-center">Devices</h3>
-          <h1 class="product-content-text-headline">Integrate your devices into the automation</h1>
-          <p>For many applications, it is helpful to integrate your devices into workflows. We enable you to do this with the Taskwolf app.</p>
-          <p>It allows you to send notifications through workflow, execute commands on your device or manage files on your devices.</p>
+          <h3 class="text-center">{% trans 'home.product.devices.headline' %}</h3>
+          <h1 class="product-content-text-headline">{% trans 'home.product.devices.slogan' %}</h1>
+          <p>{% trans 'home.product.devices.description.1' %}</p>
+          <p>{% trans 'home.product.devices.description.2' %}</p>
         </div>
       </div>
     </div>
@@ -145,10 +145,10 @@
     <div class="product-content">
       <div id="product-get-content">
         <div id="product-get-content-text" class="product-animation-opacity">
-          <h3 class="text-center">Interested?</h3>
-          <h1 class="product-content-text-headline">Get Taskwolf now!</h1>
-          <p>If you are now interested in our product, you can find out about our various offers and packages. There is sure to be something for you.</p>
-          <button class="btn btn-block btn-primary mt-5" onclick="window.location.href = '/pricing/'">GET IT NOW</button>
+          <h3 class="text-center">{% trans 'home.product.get.headline' %}</h3>
+          <h1 class="product-content-text-headline">{% trans 'home.product.get.slogan' %}</h1>
+          <p>{% trans 'home.product.get.description' %}</p>
+          <button class="btn btn-block btn-primary mt-5" onclick="window.location.href = '/pricing/'">{% trans 'home.product.get.button' %}</button>
         </div>
       </div>
     </div>
