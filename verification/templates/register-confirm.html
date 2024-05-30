@@ -4,16 +4,6 @@
   {% include 'templates/head.html' %}
   <body>
     {% include 'templates/home-header.html' %}
-    <div id="register-confirm">
-      <div class="success-icon-wrapper">
-        <div class="success-icon">
-          <div class="success-icon__tip"></div>
-          <div class="success-icon__long"></div>
-        </div>
-      </div>
-      <h1 id="register-confirm-headline">{% trans 'home.registration.confirm.headline' %}</h1>
-      <p id="register-confirm-description">{% trans 'home.registration.confirm.description' %}</p>
-    </div>
   </body>
 </html>
 
@@ -22,7 +12,13 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/verification/complete/", "POST",
       [], {user: "{{user}}", token: "{{token}}"});
     request.send(function (status, responseText) {
-
+      var response = JSON.parse(responseText);
+      if (response.success === false) {
+        window.location.href = "/";
+        return;
+      }
+      Cookie.create("token", response.token, 60 * 60 * 24 * 30, ".taskwolf.net");
+      window.location.href = "/dashboard/";
     });
   });
 </script>
