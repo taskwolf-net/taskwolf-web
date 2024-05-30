@@ -3,36 +3,167 @@
 <html lang="en">
   {% include 'templates/head.html' %}
   <body>
-     {% include 'templates/home-header.html' %}
-     <div id="product-container">
-       <h1 id="product-headline">{% trans 'home.product.headline' %}</h1>
-       <iframe id="product-video" src="https://www.youtube-nocookie.com/embed/ZCUOXfwDnx4?si=8DeTtAbcwb_7nGs-&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-       <hr class="product-divider"/>
-       <div class="product-content">
-         <div class="product-content-text">
-           <h1 class="product-content-text-headline">Workflows</h1>
-           <p>Workflows are used to automate small processes within their environment. They enable the replication and complete removal of repetitive tasks.</p>
-           <ul>
-             <li><h5><b>Triggers</b></h5><p>They are the root of every workflow. This is because the triggers set the workflow in motion and initiate the chain of actions or conditions. The list of all possible triggers appears when you specify the trigger in the workflow menu.</p></li>
-             <li><h5><b>Action</b></h5><p>The actions are the actual heart of every workflow. They fulfill a task selected by you when the workflow is triggered. The order in which the actions are executed is sequential and can be freely selected by you.</p></li>
-             <li><h5><b>Condition</b></h5><p>Conditions can also be integrated into the workflow as required. The conditions control the sequential process and can, for example, interrupt the further execution of actions</p></li>
-           </ul>
+    {% include 'templates/home-header.html' %}
+    <div id="product-header">
+      <div id="product-header-content">
+        <div>
+          <h3 id="product-headline">{% trans 'home.product.headline' %}</h3>
+          <h1 id="product-slogan"><b>Automate your apps</b></h1>
+          <h5 class="text-center mt-4 mb-1">We offer a code-free environment for automation for everyone.</h5>
+          <h5 class="text-center">Dive deeper into our offer.</h5>
+          <div id="product-video-container">
+            <button id="product-video-button" onclick="window.open('https://www.youtube.com/watch?v=ZCUOXfwDnx4');"></button>
+          </div>
+        </div>
+        <img id="product-logo" src="{% static 'img/logo.png' %}">
+      </div>
+      <svg x="0px" y="0px" viewBox="0 0 1440 110">
+        <path d="M685.6,38.8C418.7-11.1,170.2,9.9,0,30v96h1440V30C1252.7,52.2,1010,99.4,685.6,38.8z"/>
+      </svg>
+    </div>
+    <div class="product-content product-animation-opacity">
+     <div id="product-workflow-content">
+       <h3 class="text-center">Workflows</h3>
+       <h1 class="product-content-text-headline">We take on repetitive tasks for you</h1>
+       <p class="text-center mt-3 mb-0">Workflows are used to automate small processes within their environment.</p>
+       <p class="text-center">They enable the replication and complete removal of repetitive tasks.</p>
+       <div class="d-flex mt-5">
+         <div class="product-workflow-content-text">
+           <div id="product-workflow-trigger" class="product-animation-left">
+             <h5><b>Trigger</b></h5>
+             <label>They are the root of every workflow. This is because the triggers set the workflow in motion and initiate the chain of actions or conditions.</label>
+           </div>
+           <div id="product-workflow-action" class="product-animation-left">
+             <h5><b>Action</b></h5>
+             <label>Actions fulfill a task selected by you when the workflow is triggered. The order in which the actions are executed is sequential.</label>
+           </div>
          </div>
-         <img class="product-content-image" src="{% static 'img/home/workflow.png' %}">
-       </div>
-       <hr class="product-divider"/>
-       <div class="product-content">
-         <img class="product-content-image" src="{% static 'img/home/process.png' %}">
-         <div class="product-content-text">
-           <h1 class="product-content-text-headline">Processes</h1>
-           <p>Now that you know what a workflow is, we ask you to take a step backwards. Because when workflows automate certain processes, in many cases it is an interplay of workflows that enables the most efficient automation. This is exactly what processes are used for. Each process is a sequence of so-called "steps". Each step has the ability to execute a workflow.</p>
-           <ul>
-             <li><p>Step</p></li>
-             <li><p>Connection</p></li>
-             <li><p>Execution</p></li>
-           </ul>
+         <img id="product-workflow-content-image" src="{% static 'img/home/workflow.png' %}">
+         <div class="product-workflow-content-text">
+           <div id="product-workflow-condition" class="product-animation-right">
+             <h5><b>Condition</b></h5>
+             <label>The conditions control the sequential process and can, for example, interrupt the further execution of actions.</label>
+           </div>
          </div>
        </div>
      </div>
+    </div>
+    <div class="product-divider">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill-opacity="1" d="M0,192L60,192C120,192,240,192,360,186.7C480,181,600,171,720,192C840,213,960,267,1080,250.7C1200,235,1320,149,1380,106.7L1440,64L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+      <div class="product-divider-background"></div>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill-opacity="1" d="M0,256L60,224C120,192,240,128,360,128C480,128,600,192,720,186.7C840,181,960,107,1080,74.7C1200,43,1320,53,1380,58.7L1440,64L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path></svg>
+    </div>
+    <div class="product-content product-animation-down">
+      <div id="product-process-content">
+        <div id="product-process-content-text">
+          <h3 class="text-center">Processes</h3>
+          <h1 class="product-content-text-headline">Connect workflows with each other</h1>
+          <p>In many cases it is an interplay of workflows that enables the most efficient automation. This is exactly what processes are used for. Each process is a sequence of so-called "steps".</p>
+          <ul class="product-content-text-list">
+           <li>
+             <h5><b>Step</b></h5>
+             <p>A step consists of a title, a description and to-dos. Furthermore, each step can execute a workflow.</p>
+           </li>
+           <li>
+             <h5><b>Connection</b></h5>
+             <p>The steps can be linked to each other via connections, allowing the execution to be controlled. To publish a workflow, there must be a connection from the start step to the end step.</p>
+           </li>
+           <li>
+             <h5><b>Execution</b></h5>
+             <p>Processes can be executed in different ways. The steps are run through one after the other and the workflows are executed in the specified order.</p>
+           </li>
+          </ul>
+        </div>
+        <img id="product-process-content-image" src="{% static 'img/home/process.gif' %}">
+      </div>
+    </div>
+    <div class="product-divider">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill-opacity="1" d="M0,224L60,197.3C120,171,240,117,360,128C480,139,600,213,720,234.7C840,256,960,224,1080,218.7C1200,213,1320,235,1380,245.3L1440,256L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+      <div class="product-divider-background"></div>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill-opacity="1" d="M0,160L60,170.7C120,181,240,203,360,197.3C480,192,600,160,720,128C840,96,960,64,1080,48C1200,32,1320,32,1380,32L1440,32L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path></svg>
+    </div>
+    <div class="product-content">
+      <div id="product-organization-content">
+       <div id="product-organization-content-text" class="product-animation-left">
+         <h3 class="text-center">Organizations</h3>
+         <h1 class="product-content-text-headline">Working together to advance automation</h1>
+         <p>An organization is a group of several Taskwolf users. They can automate together and thus save all members a lot of time. Because none of us is as smart as all of us.</p>
+         <ul class="product-content-text-list">
+           <li>
+             <h5><b>Owner</b></h5>
+             <p>Manages the organization.</p>
+           </li>
+           <li>
+             <h5><b>Member</b></h5>
+             <p>Is part of the team and has access to shared workflows, processes, databases, webhooks, accounts and devices.</p>
+           </li>
+         </ul>
+       </div>
+       <img id="product-organization-content-image" class="product-animation-right" src="{% static 'img/home/organization.png' %}">
+     </div>
+    </div>
+    <div class="product-divider">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill-opacity="1" d="M0,96L60,80C120,64,240,32,360,26.7C480,21,600,43,720,90.7C840,139,960,213,1080,213.3C1200,213,1320,139,1380,101.3L1440,64L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+      <div class="product-divider-background"></div>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill-opacity="1" d="M0,128L60,154.7C120,181,240,235,360,218.7C480,203,600,117,720,85.3C840,53,960,75,1080,80C1200,85,1320,75,1380,69.3L1440,64L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path></svg>
+    </div>
+    <div class="product-content">
+      <div id="product-device-content">
+        <img id="product-device-content-image" class="product-animation-left" src="{% static 'img/home/device.png' %}">
+        <div id="product-device-content-text" class="product-animation-right">
+          <h3 class="text-center">Devices</h3>
+          <h1 class="product-content-text-headline">Integrate your devices into the automation</h1>
+          <p>For many applications, it is helpful to integrate your devices into workflows. We enable you to do this with the Taskwolf app.</p>
+          <p>It allows you to send notifications through workflow, execute commands on your device or manage files on your devices.</p>
+        </div>
+      </div>
+    </div>
+    <div class="product-divider">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill-opacity="1" d="M0,288L80,282.7C160,277,320,267,480,245.3C640,224,800,192,960,192C1120,192,1280,224,1360,240L1440,256L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
+      <div class="product-divider-background"></div>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill-opacity="1" d="M0,160L80,165.3C160,171,320,181,480,181.3C640,181,800,171,960,186.7C1120,203,1280,245,1360,266.7L1440,288L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"></path></svg>
+    </div>
+    <div class="product-content">
+      <div id="product-get-content">
+        <div id="product-get-content-text" class="product-animation-opacity">
+          <h3 class="text-center">Interested?</h3>
+          <h1 class="product-content-text-headline">Get Taskwolf now!</h1>
+          <p>If you are now interested in our product, you can find out about our various offers and packages. There is sure to be something for you.</p>
+          <button class="btn btn-block btn-primary mt-5" onclick="window.location.href = '/pricing/'">GET IT NOW</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
+
+ <script>
+  $(document).ready(function() {
+    checkAnimations();
+    $(window).scroll( function(){
+      checkAnimations();
+    });
+  });
+
+  function checkAnimations() {
+    checkAnimation("product-animation-opacity", "product-animation-opacity-show");
+    checkAnimation("product-animation-left", "product-animation-left-show");
+    checkAnimation("product-animation-right", "product-animation-right-show");
+    checkAnimation("product-animation-down", "product-animation-down-show");
+  }
+
+  function checkAnimation(elementClass, animationClass) {
+    var elements = document.getElementsByClassName(elementClass);
+    for (var i = 0; i < elements.length; i++) {
+      let element = elements[i];
+      var bottom_of_object = element.getBoundingClientRect().top - window.screen.height;
+      console.log(bottom_of_object)
+      if (bottom_of_object < -window.screen.height / 6) {
+        element.classList.remove(elementClass);
+        element.classList.add(animationClass);
+        setTimeout(function () {
+          element.classList.remove(animationClass);
+        }, 1500)
+      }
+    }
+  }
+ </script>
