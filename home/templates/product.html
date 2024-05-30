@@ -27,7 +27,7 @@
        <h1 class="product-content-text-headline">We take on repetitive tasks for you</h1>
        <p class="text-center mt-3 mb-0">Workflows are used to automate small processes within their environment.</p>
        <p class="text-center">They enable the replication and complete removal of repetitive tasks.</p>
-       <div class="d-flex mt-5">
+       <div id="product-workflow-content-desktop" class="mt-5">
          <div class="product-workflow-content-text">
            <div id="product-workflow-trigger" class="product-animation-left">
              <h5><b>Trigger</b></h5>
@@ -38,12 +38,31 @@
              <label>Actions fulfill a task selected by you when the workflow is triggered. The order in which the actions are executed is sequential.</label>
            </div>
          </div>
-         <img id="product-workflow-content-image" src="{% static 'img/home/workflow.png' %}">
+         <img class="product-workflow-content-image" src="{% static 'img/home/workflow.png' %}">
          <div class="product-workflow-content-text">
            <div id="product-workflow-condition" class="product-animation-right">
              <h5><b>Condition</b></h5>
              <label>The conditions control the sequential process and can, for example, interrupt the further execution of actions.</label>
            </div>
+         </div>
+       </div>
+       <div id="product-workflow-content-mobile" class="mt-5">
+         <div class="product-workflow-content-text">
+           <ul class="product-content-text-list">
+             <li>
+               <h5><b>Trigger</b></h5>
+               <p>They are the root of every workflow. This is because the triggers set the workflow in motion and initiate the chain of actions or conditions.</p>
+             </li>
+             <li>
+               <h5><b>Action</b></h5>
+               <p>Actions fulfill a task selected by you when the workflow is triggered. The order in which the actions are executed is sequential.</p>
+             </li>
+             <li>
+               <h5><b>Condition</b></h5>
+               <p>The conditions control the sequential process and can, for example, interrupt the further execution of actions.</p>
+             </li>
+           </ul>
+           <img class="product-workflow-content-image" src="{% static 'img/home/workflow.png' %}">
          </div>
        </div>
      </div>

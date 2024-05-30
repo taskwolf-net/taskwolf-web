@@ -10,6 +10,18 @@ p {
   font-size: 20px;
 }
 
+@media (max-width: 1000px) {
+  p {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 800px) {
+  p {
+    font-size: 16px;
+  }
+}
+
 #product-header {
   width: 100%;
   background-image: linear-gradient(to bottom right, #232d3e, #586882);
@@ -187,21 +199,24 @@ p {
   margin: auto;
 }
 
-#product-workflow-content-image {
+#product-workflow-content-desktop {
+  display: flex;
+}
+
+#product-workflow-content-desktop .product-workflow-content-image {
   width: 45%;
   height: fit-content;
   margin-left: 2%;
   margin-right: 2%;
 }
 
-.product-workflow-content-text {
+#product-workflow-content-desktop .product-workflow-content-text {
   width: 30%;
-  height: 100%;
   position: relative;
   text-align: center;
 }
 
-.product-workflow-content-text label {
+#product-workflow-content-desktop .product-workflow-content-text label {
   font-size: 20px;
 }
 
@@ -219,38 +234,64 @@ p {
 }
 
 @media (max-width: 1750px) {
-  .product-workflow-content-text label {
+  #product-workflow-content-desktop .product-workflow-content-text label {
     font-size: 19px;
   }
 }
 
 @media (max-width: 1600px) {
-  .product-workflow-content-text label {
+  #product-workflow-content-desktop .product-workflow-content-text label {
     font-size: 17px;
   }
 }
 
 @media (max-width: 1450px) {
-  .product-workflow-content-text label {
+  #product-workflow-content-desktop .product-workflow-content-text label {
     font-size: 16px;
   }
 }
 
 @media (max-width: 1200px) {
-  .product-workflow-content-text label {
+  #product-workflow-content-desktop .product-workflow-content-text label {
     font-size: 15px;
   }
 
-  .product-workflow-trigger {
+  #product-workflow-trigger {
     margin-top: 0;
   }
 
-  .product-workflow-action {
+  #product-workflow-action {
     margin-top: 130%;
   }
 
-  .product-workflow-condition {
+  #product-workflow-condition {
     margin-top: 65%;
+  }
+}
+
+#product-workflow-content-mobile {
+  display: none;
+}
+
+#product-workflow-content-mobile .product-workflow-content-text {
+  width: 100%;
+}
+
+#product-workflow-content-mobile .product-workflow-content-image {
+  width: 80%;
+  height: fit-content;
+  display: block;
+  margin: auto;
+  margin-top: 5%;
+}
+
+@media (max-width: 1000px) {
+  #product-workflow-content-desktop {
+    display: none;
+  }
+
+  #product-workflow-content-mobile {
+    display: block;
   }
 }
 
