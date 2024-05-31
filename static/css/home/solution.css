@@ -340,6 +340,77 @@ p {
   }
 }
 
+#solution-apps-content {
+  width: min(calc(1500px), 100%);
+  margin: auto;
+}
+
+.solution-apps-constellations-slider {
+  margin: auto;
+  overflow: hidden;
+  position: relative;
+  width: 1140px;
+}
+
+.solution-apps-constellations-slider::before, .solution-apps-constellations-slider::after {
+  background: linear-gradient(to right, #0d1117 0%, rgba(255, 255, 255, 0) 100%);
+  content: "";
+  height: 100%;
+  position: absolute;
+  width: 100px;
+  z-index: 2;
+}
+
+.solution-apps-constellations-slider::after {
+  right: 0;
+  top: 0;
+  -webkit-transform: rotateZ(180deg);
+  transform: rotateZ(180deg);
+}
+
+.solution-apps-constellations-slider::before {
+  left: 0;
+  top: 0;
+}
+
+.solution-apps-constellations-app {
+  width: 128px;
+  height: 128px;
+  border-radius: 25%;
+  margin: 10px;
+}
+
+#solution-apps-constellations-triggers {
+  animation: solution-apps-constellations-trigger-animation 20s linear infinite;
+  display: flex;
+  width: calc(148px * 22);
+}
+
+@keyframes solution-apps-constellations-trigger-animation {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-148px * 11));
+  }
+}
+
+#solution-apps-constellations-actions {
+  animation: solution-apps-constellations-action-animation calc(20s * (7 / 11)) linear infinite;
+  display: flex;
+  width: calc(148px * 14);
+  margin-left: calc(-148px * 7);
+}
+
+@keyframes solution-apps-constellations-action-animation {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(148px * 7));
+  }
+}
+
 #solution-get-content {
   margin-bottom: 5%;
 }
