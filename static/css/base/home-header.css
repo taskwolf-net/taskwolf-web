@@ -1,42 +1,42 @@
-.navbar {
+#navbar {
   z-index: 100;
   position: fixed !important;
   width: 100%;
 }
 
-.dark .navbar {
+.dark #navbar {
   color: white;
   background-color: #212529;
   border-bottom: 1px #4a4a4a solid;
 }
 
-.light .navbar {
+.light #navbar {
   color: black;
   background-color: #f8f9fa;
   border-bottom: 1px #c8c8c8 solid;
 }
 
-.dark .nav-link {
+.dark #navbar .nav-link {
   color: #bcbcbc;
 }
 
-.dark .nav-link:hover {
+.dark #navbar .nav-link:hover {
   color: #d1d1d1;
 }
 
-.light .nav-link {
+.light #navbar .nav-link {
   color: #585858;
 }
 
-.light nav-link:hover {
+.light #navbar .nav-link:hover {
   color: #2c2c2c;
 }
 
-.dark .active {
+.dark #navbar .active {
   color: white !important;
 }
 
-.light .active {
+.light #navbar .active {
   color: black !important;
 }
 
