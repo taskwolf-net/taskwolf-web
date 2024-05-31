@@ -35,6 +35,11 @@ async def product(request):
     'css': ['css/base/home-header.css', 'css/home/product.css']})
 
 @home_page
+async def solution(request):
+  return render(request, 'solution.html', {'title': gettext("home.solution.title"),
+    'css': ['css/base/home-header.css', 'css/home/solution.css']})
+
+@home_page
 async def pricing(request):
   return render(request, 'pricing.html', {'title': gettext("home.pricing.title"),
     'css': ['css/base/home-header.css', 'css/home/pricing.css']})
