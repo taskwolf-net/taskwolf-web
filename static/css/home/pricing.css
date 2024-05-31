@@ -24,6 +24,14 @@
   color: black;
 }
 
+.dark #pricing-table thead tr {
+  background-color: #0d1117 !important;
+}
+
+.light #pricing-table thead tr {
+  background-color: #fafafa !important;
+}
+
 #pricing-table th {
   position: relative;
   width: 20%;
