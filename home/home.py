@@ -27,19 +27,19 @@ async def home(request):
   if (authenticated):
     return redirect("/dashboard/")
   return render(request, 'home.html', {'title': gettext("home.home.title"),
-    'css': ['css/base/home-header.css', 'css/home/home.css']})
+    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/home.css']})
 
 @home_page
 async def product(request):
   return render(request, 'product.html', {'title': gettext("home.product.title"),
-    'css': ['css/base/home-header.css', 'css/home/product.css']})
+    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/product.css']})
 
 @home_page
 async def solution(request):
   return render(request, 'solution.html', {'title': gettext("home.solution.title"),
-    'css': ['css/base/home-header.css', 'css/home/solution.css']})
+    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/solution.css']})
 
 @home_page
 async def pricing(request):
   return render(request, 'pricing.html', {'title': gettext("home.pricing.title"),
-    'css': ['css/base/home-header.css', 'css/home/pricing.css']})
+    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/pricing.css']})
