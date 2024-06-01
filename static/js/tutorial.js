@@ -1,6 +1,13 @@
 var highlightedElement = "";
 
 window.addEventListener('load', function () {
+  var url = window.location.href.replace("https://taskwolf.net/", "").replace("/", "");
+  if (url === "" || url === "product" || url === "solution" || url === "pricing" ||
+    url.includes("login") || url.includes("register") || url.includes("password") ||
+    url === "whitelist"
+  ) {
+    return;
+  }
   let request = new HttpRequest("https://api.taskwolf.net/v1/tutorial/", "GET", []);
   request.send(function (status, responseText) {
     var tutorial = JSON.parse(responseText);
