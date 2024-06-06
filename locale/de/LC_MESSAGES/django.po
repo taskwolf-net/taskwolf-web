@@ -441,6 +441,10 @@ msgstr "Unsere E-Mail-Adresse finden Sie oben im Impressum."
 msgid "home.imprint.dispute.information.3"
 msgstr "Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen."
 
+# PRIVACY POLICY
+msgid "home.privacy.policy.title"
+msgstr "Datenschutzerklärung - Taskwolf"
+
 # LOGIN
 msgid "home.login.title"
 msgstr "Anmeldung - Taskwolf"

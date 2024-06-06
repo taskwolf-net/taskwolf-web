@@ -441,6 +441,10 @@ msgstr "You can find our e-mail address in the imprint above."
 msgid "home.imprint.dispute.information.3"
 msgstr "We are not willing or obliged to participate in dispute resolution proceedings before a consumer arbitration board."
 
+# PRIVACY POLICY
+msgid "home.privacy.policy.title"
+msgstr "Privacy Policy - Taskwolf"
+
 # LOGIN
 msgid "home.login.title"
 msgstr "Login - Taskwolf"
