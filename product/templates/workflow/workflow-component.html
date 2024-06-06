@@ -479,6 +479,7 @@
   var specificationValues = {};
   var currentPlaceholderElement;
   var requiredSpecificationVariables = [];
+  var componentsOutputVariables = [];
 
   $(document).ready(function() {
     new ResizeObserver(() => updateSpecificationsDividerHeight())
@@ -499,6 +500,14 @@
       displayPlaceholdersTabs();
     } else {
       document.getElementById("workflow-component-specifications-placeholders-empty").classList.remove("d-none");
+    }
+    findOutputVariables(-1, function(outputVariables) {
+      componentsOutputVariables = componentsOutputVariables.concat(outputVariables);
+    });
+    for (var i = 0; i < sessionStorage.getItem("workflow-action-index"); i++) {
+      findOutputVariables(i, function(outputVariables) {
+        componentsOutputVariables = componentsOutputVariables.concat(outputVariables);
+      });
     }
   }
 
@@ -558,16 +567,16 @@
     inputElement.id = "workflow-component-specifications-input-" + identifier;
     inputElement.classList.add("workflow-component-specifications-input", "form-control");
     inputElement.oninput = function (event) {
-      inputSpecificationInput(identifier, event.target.innerText);
+      inputSpecificationInput(identifier, event.target.innerHTML);
     }
     inputElement.ondragover = function (event) {
       event.preventDefault();
     };
     inputElement.ondrop = function (event) {
-      inputElement.innerText = inputElement.innerText.substring(0, getCaretPosition(inputElement)) +
-        "%" + event.dataTransfer.getData("placeholder-identifier") + "%" +
-        inputElement.innerText.substring(getCaretPosition(inputElement));
-      inputSpecificationInput(identifier, inputElement.innerText);
+      inputElement.innerHTML = inputElement.innerHTML +
+        '<span class="workflow-component-specifications-input-placeholder" contenteditable="false">' +
+        event.dataTransfer.getData("placeholder-name") + '</span>';
+      inputSpecificationInput(identifier, inputElement.innerHTML);
     };
     inputContainerElement.appendChild(inputElement);
     document.getElementById("workflow-component-specifications-input-list").appendChild(inputContainerElement);
@@ -575,8 +584,15 @@
       var selectedComponentContent = JSON.parse(selectedComponent.content);
       setTimeout(function() {
         if (identifier in selectedComponentContent) {
-          inputElement.innerText = selectedComponentContent[identifier];
-          inputSpecificationInput(identifier, inputElement.innerText);
+          for (var i = 0; i < componentsOutputVariables.length; i++) {
+            var variable = componentsOutputVariables[i];
+            selectedComponentContent[identifier] = selectedComponentContent[identifier].replace(
+              "%" + variable.identifier + "%",
+              '<span class="workflow-component-specifications-input-placeholder" contenteditable="false">' +
+                variable.name + '</span>')
+          }
+          inputElement.innerHTML = selectedComponentContent[identifier];
+          inputSpecificationInput(identifier, inputElement.innerHTML);
         }
         if (index === inputsLength - 1) {
           selectedComponentSetup = false;
@@ -585,32 +601,22 @@
     }
   }
 
-  function getCaretPosition(editableDiv) {
-    var caretPos = 0,
-      sel, range;
-    if (window.getSelection) {
-      sel = window.getSelection();
-      if (sel.rangeCount) {
-        range = sel.getRangeAt(0);
-        if (range.commonAncestorContainer.parentNode == editableDiv) {
-          caretPos = range.endOffset;
-        }
-      }
-    } else if (document.selection && document.selection.createRange) {
-      range = document.selection.createRange();
-      if (range.parentElement() == editableDiv) {
-        var tempEl = document.createElement("span");
-        editableDiv.insertBefore(tempEl, editableDiv.firstChild);
-        var tempRange = range.duplicate();
-        tempRange.moveToElementText(tempEl);
-        tempRange.setEndPoint("EndToEnd", range);
-        caretPos = tempRange.text.length;
-      }
-    }
-    return caretPos;
-  }
-
   function inputSpecificationInput(identifier, value) {
+    for (var i = 0; i < componentsOutputVariables.length; i++) {
+      var variable = componentsOutputVariables[i];
+      value = value.replace('<span class="workflow-component-specifications-input-placeholder" contenteditable="false">' +
+        variable.name + '</span>', "%" + variable.identifier + "%")
+    }
+    value = value.replace("&nbsp;", " ");
+    value = value.replace("&quot;", "\"");
+    value = value.replace("&apos;", "'");
+    value = value.replace("&amp;", "&");
+    value = value.replace("&gt;", ">");
+    value = value.replace("&lt;", "<");
+    value = value.replace("&frasl;", "/");
+    value = value.replace("&nbsp;", " ");
+    value = value.replace("&reg;", "®");
+    value = value.replace("&copy;", "©");
     if (value === "" && identifier in specificationValues) {
       delete specificationValues[identifier];
     }
@@ -820,19 +826,7 @@
 
   function displayPlaceholders(index) {
     document.getElementById("workflow-component-specifications-placeholders-list").innerHTML = "";
-    var componentType = (index < 0) ? "trigger" : "action";
-    var component;
-    if (componentType === "trigger") {
-      component = JSON.parse(sessionStorage.getItem("workflow-trigger"));
-    } else {
-      component = JSON.parse(sessionStorage.getItem("workflow-actions")).actions.filter(element => element.actionIndex === index)[0];
-    }
-    var module = component.module;
-    var type = component.type;
-    let request = new HttpRequest("https://api.taskwolf.net/v1/component/find/", "POST",
-      [], {componentType: componentType, module: module, type: type});
-    request.send(function (status, responseText) {
-      var outputVariables = JSON.parse(responseText).outputVariables;
+    findOutputVariables(index, function(outputVariables) {
       for (var i = 0; i < outputVariables.length; i++) {
         let variable = outputVariables[i];
         displayPlaceholder(variable.identifier, variable.name);
@@ -846,12 +840,30 @@
     });
   }
 
+  function findOutputVariables(index, callback) {
+    var componentType = (index < 0) ? "trigger" : "action";
+    var component;
+    if (componentType === "trigger") {
+      component = JSON.parse(sessionStorage.getItem("workflow-trigger"));
+    } else {
+      component = JSON.parse(sessionStorage.getItem("workflow-actions")).actions.filter(element => element.actionIndex === index)[0];
+    }
+    var module = component.module;
+    var type = component.type;
+    let request = new HttpRequest("https://api.taskwolf.net/v1/component/find/", "POST",
+      [], {componentType: componentType, module: module, type: type});
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText).outputVariables);
+    });
+  }
+
   function displayPlaceholder(identifier, name) {
     var placeholderElement = document.createElement("li");
     placeholderElement.classList.add("workflow-component-specifications-placeholder");
     placeholderElement.draggable= "true";
     placeholderElement.ondragstart = function (event) {
       event.dataTransfer.setData("placeholder-identifier", identifier);
+      event.dataTransfer.setData("placeholder-name", name);
     }
     var placeholderNameElement = document.createElement("b");
     placeholderNameElement.innerHTML = name;
