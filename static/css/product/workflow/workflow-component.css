@@ -5,26 +5,32 @@ form {
   margin-right: auto;
 }
 
-.dark input {
+[contenteditable=true]:empty:before{
+  content: attr(placeholder);
+  pointer-events: none;
+  display: block;
+}
+
+.dark input, .dark .workflow-component-specifications-input {
   background-color: #0d1117 !important;
   color: white !important;
   -webkit-text-fill-color: white;
   border: 1px solid #cecece !important;
 }
 
-.dark input::placeholder {
+.dark input::placeholder, .dark [contenteditable=true]:empty:before {
   color: #828282 !important;
   -webkit-text-fill-color: #828282;
 }
 
-.light input {
+.light input, .light .workflow-component-specifications-input {
   background-color: #eaeaea !important;
   color: black !important;
   -webkit-text-fill-color: black;
   border: 1px solid #4c4c4c !important;
 }
 
-.light input::placeholder {
+.light input::placeholder, .light [contenteditable=true]:empty:before {
   color: #949494 !important;
   -webkit-text-fill-color: #949494;
 }

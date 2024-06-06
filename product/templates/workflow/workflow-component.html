@@ -551,22 +551,23 @@
     informationElement.classList.add("workflow-component-specification-information", "fa", "fa-question-circle");
     applyTooltips(informationElement, inputContainerElement, description);
     inputContainerElement.appendChild(informationElement);
-    var inputElement = document.createElement("input");
+    var inputElement = document.createElement("div");
     inputElement.type = "name";
-    inputElement.placeholder = placeholder;
+    inputElement.setAttribute("placeholder", placeholder);
+    inputElement.contentEditable = "true";
     inputElement.id = "workflow-component-specifications-input-" + identifier;
     inputElement.classList.add("workflow-component-specifications-input", "form-control");
     inputElement.oninput = function (event) {
-      inputSpecificationInput(identifier, event.target.value);
+      inputSpecificationInput(identifier, event.target.innerText);
     }
     inputElement.ondragover = function (event) {
       event.preventDefault();
     };
     inputElement.ondrop = function (event) {
-      inputElement.value =  inputElement.value.substring(0, inputElement.selectionStart) +
+      inputElement.innerText = inputElement.innerText.substring(0, getCaretPosition(inputElement)) +
         "%" + event.dataTransfer.getData("placeholder-identifier") + "%" +
-        inputElement.value.substring(inputElement.selectionStart);
-      inputSpecificationInput(identifier, inputElement.value);
+        inputElement.innerText.substring(getCaretPosition(inputElement));
+      inputSpecificationInput(identifier, inputElement.innerText);
     };
     inputContainerElement.appendChild(inputElement);
     document.getElementById("workflow-component-specifications-input-list").appendChild(inputContainerElement);
@@ -574,14 +575,39 @@
       var selectedComponentContent = JSON.parse(selectedComponent.content);
       setTimeout(function() {
         if (identifier in selectedComponentContent) {
-          inputElement.value = selectedComponentContent[identifier];
-          inputSpecificationInput(identifier, inputElement.value);
+          inputElement.innerText = selectedComponentContent[identifier];
+          inputSpecificationInput(identifier, inputElement.innerText);
         }
         if (index === inputsLength - 1) {
           selectedComponentSetup = false;
         }
       }, 200 * index);
     }
+  }
+
+  function getCaretPosition(editableDiv) {
+    var caretPos = 0,
+      sel, range;
+    if (window.getSelection) {
+      sel = window.getSelection();
+      if (sel.rangeCount) {
+        range = sel.getRangeAt(0);
+        if (range.commonAncestorContainer.parentNode == editableDiv) {
+          caretPos = range.endOffset;
+        }
+      }
+    } else if (document.selection && document.selection.createRange) {
+      range = document.selection.createRange();
+      if (range.parentElement() == editableDiv) {
+        var tempEl = document.createElement("span");
+        editableDiv.insertBefore(tempEl, editableDiv.firstChild);
+        var tempRange = range.duplicate();
+        tempRange.moveToElementText(tempEl);
+        tempRange.setEndPoint("EndToEnd", range);
+        caretPos = tempRange.text.length;
+      }
+    }
+    return caretPos;
   }
 
   function inputSpecificationInput(identifier, value) {
