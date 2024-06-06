@@ -6,4 +6,5 @@ urlpatterns = [
   path('product/', home.product),
   path('solution/', home.solution),
   path('pricing/', home.pricing),
+  path('imprint/', home.imprint),
 ]

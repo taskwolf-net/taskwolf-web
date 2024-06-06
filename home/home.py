@@ -43,3 +43,8 @@ async def solution(request):
 async def pricing(request):
   return render(request, 'pricing.html', {'title': gettext("home.pricing.title"),
     'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/pricing.css']})
+
+@home_page
+async def imprint(request):
+  return render(request, 'imprint.html', {'title': gettext("home.imprint.title"),
+    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/imprint.css']})
