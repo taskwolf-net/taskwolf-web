@@ -2,7 +2,7 @@
 {% load i18n %}
 <html lang="en">
   {% include 'templates/head.html' %}
-  <body>
+  <body class="dark">
     {% include 'templates/product-header.html' %}
     {% include 'templates/product-sidebar.html' %}
     <div class="sidebar-influenced">
@@ -108,7 +108,7 @@
       if(!(shouldDisplayAppEntry(entry))) {
         continue;
       }
-      displayApp(entry.name, entry.logo);
+      displayApp(entry.id, entry.name, entry.logo);
     }
   }
 
@@ -117,7 +117,7 @@
       entry.name.toLowerCase().includes(appsCurrentNameFilter.toLowerCase());
   }
 
-  function displayApp(name, logo) {
+  function displayApp(id, name, logo) {
     var entryElement = document.createElement("li");
     entryElement.role = "button";
     entryElement.classList.add("account-application-entry");
@@ -130,8 +130,8 @@
     nameElement.innerHTML = name;
     entryElement.appendChild(nameElement);
     entryElement.onclick = function(event) {
-      sessionStorage.setItem("account-app-identifier", name.toLowerCase());
-      sessionStorage.setItem("account-app-name", name.charAt(0).toUpperCase() + name.slice(1));
+      sessionStorage.setItem("account-app-identifier", id);
+      sessionStorage.setItem("account-app-name", name);
       sessionStorage.setItem("account-app-logo", logo);
       window.location.href = "/accounts/";
     }

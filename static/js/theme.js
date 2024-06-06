@@ -1,4 +1,11 @@
 window.addEventListener('load', function () {
+  var url = window.location.href.replace("https://taskwolf.net/", "").replace("/", "");
+  if (url === "" || url === "product" || url === "solution" || url === "pricing" ||
+    url.includes("login") || url.includes("register") || url.includes("password") ||
+    url === "whitelist"
+  ) {
+    return;
+  }
   if (Cookie.find("taskwolf-theme") == null) {
     Cookie.create("taskwolf-theme", "dark", 60 * 60 * 24 * 365, ".taskwolf.net");
   }
@@ -6,6 +13,7 @@ window.addEventListener('load', function () {
   if (theme === "dark") {
     document.body.classList.add("dark");
   } else {
+    document.body.classList.remove("dark");
     document.body.classList.add("light");
   }
 });
