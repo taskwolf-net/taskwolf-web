@@ -48,3 +48,8 @@ async def pricing(request):
 async def imprint(request):
   return render(request, 'imprint.html', {'title': gettext("home.imprint.title"),
     'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/imprint.css']})
+
+@home_page
+async def privacyPolicy(request):
+  return render(request, 'privacy-policy.html', {'title': gettext("home.privacy.policy.title"),
+    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/privacy-policy.css']})
