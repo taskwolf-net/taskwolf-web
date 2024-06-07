@@ -111,3 +111,7 @@ h1 {
   background-color: #e6e6e6 !important;
   color: black;
 }
+
+.cookie-banner-container {
+  text-align: left !important;
+}
