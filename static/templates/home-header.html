@@ -10,8 +10,7 @@
     <div class="collapse navbar-collapse justify-content-center" id="navbar-content">
       <ul class="navbar-nav ml-auto d-flex align-items-center">
         <li class="nav-item d-none d-lg-block"><a href="/"><img class="nav-link" src="{% static 'img/logo.png' %}" width="70px" height="70px" alt=""></a></li>
-        <li class="nav-item" id="home-nav-item"><a class="nav-link {% if request.path == '/' %}active{% endif %}" aria-current="page" href="/">{% trans 'home.header.home' %}</a></li>
-        <li class="nav-item"><a class="nav-link {% if request.path == '/product/' %}active{% endif %}" href="/product/">{% trans 'home.header.product' %}</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.path == '/product/' or request.path == '/' %}active{% endif %}" href="/product/">{% trans 'home.header.product' %}</a></li>
         <li class="nav-item"><a class="nav-link {% if request.path == '/solution/' %}active{% endif %}" href="/solution/">{% trans 'home.header.solution' %}</a></li>
         <li class="nav-item"><a class="nav-link {% if request.path == '/pricing/' %}active{% endif %}" href="/pricing/">{% trans 'home.header.pricing' %}</a></li>
       </ul>

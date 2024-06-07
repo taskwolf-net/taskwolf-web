@@ -40,8 +40,6 @@ msgstr "Stark"
 # HEADER
 msgid "home.header.login"
 msgstr "Anmelden"
-msgid "home.header.home"
-msgstr "Startseite"
 msgid "home.header.product"
 msgstr "Produkt"
 msgid "home.header.solution"
@@ -68,10 +66,6 @@ msgid "home.footer.terms.of.service"
 msgstr "Nutzungsbedingungen"
 msgid "home.footer.privacy.policy"
 msgstr "Datenschutzerklärung"
-
-# HOME
-msgid "home.home.title"
-msgstr "Startseite - Taskwolf"
 
 # PRODUCT
 msgid "home.product.title"

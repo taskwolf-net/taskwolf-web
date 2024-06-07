@@ -22,15 +22,10 @@ def applyLanguage(request):
   translation.activate(language)
 
 @home_page
-async def home(request):
+async def product(request):
   authenticated = await isAuthenticated(request)
   if (authenticated):
     return redirect("/dashboard/")
-  return render(request, 'home.html', {'title': gettext("home.home.title"),
-    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/home.css']})
-
-@home_page
-async def product(request):
   return render(request, 'product.html', {'title': gettext("home.product.title"),
     'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/product.css']})
 
