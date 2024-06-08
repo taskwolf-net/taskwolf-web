@@ -104,6 +104,10 @@
   border-radius: 10px;
 }
 
+.account-application-entry img {
+  border-radius: 25%;
+}
+
 .account-application-entry b {
   margin-left: 5%;
   font-size: 20px;
