@@ -143,16 +143,24 @@ p {
   margin-top: 100px;
 }
 
-.product-content-text-list {
-  list-style-type: circle;
+.product-content-text-headline {
+  width: fit-content;
+  background-color: #2f333a;
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin: auto;
 }
 
-.product-content-text-headline {
+.product-content-text-slogan {
   margin-top: 20px;
   margin-bottom: 40px;
   font-weight: bold;
   text-align: center;
   font-size: 48px !important;
+}
+
+.product-content-text-list {
+  list-style-type: circle;
 }
 
 .product-animation-opacity, .product-animation-left, .product-animation-right, .product-animation-down {
