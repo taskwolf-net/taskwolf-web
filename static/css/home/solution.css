@@ -203,6 +203,14 @@ p {
 }
 
 .solution-content-text-headline {
+  width: fit-content;
+  background-color: #2f333a;
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin: auto;
+}
+
+.solution-content-text-slogan {
   margin-top: 20px;
   margin-bottom: 40px;
   font-weight: bold;
@@ -312,9 +320,9 @@ p {
   width: calc(100% / 3);
   margin-left: 2%;
   margin-right: 2%;
-  background-color: #181f2a;
+  background-color: #1f252e;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
 @media (max-width: 1200px) {
