@@ -42,11 +42,21 @@
   var conditionType = "";
   var comparativeValue = "";
   var currentPlaceholderElement;
+  var conditionOutputVariables = [];
 
   $(document).ready(function() {
-    performAutoCompletion();
-    fillConditionInputs();
-    displayPlaceholdersTabs();
+    var actionIndex = parseInt(sessionStorage.getItem("workflow-condition-index").split(":")[0]);
+    var fetchedVariables = -1;
+    for (let i = -1; i < actionIndex; i++) {
+      findOutputVariables(i, function(outputVariables) {
+        conditionOutputVariables = conditionOutputVariables.concat(outputVariables);
+        fetchedVariables++;
+        if (fetchedVariables === actionIndex) {
+          performAutoCompletion();
+          displayPlaceholdersTabs();
+        }
+      });
+    }
   });
 
   function performAutoCompletion() {
@@ -54,21 +64,36 @@
     var actionIndex = parseInt(indexes[0]);
     var conditionIndex = parseInt(indexes[1]);
     if (sessionStorage.getItem("workflow-conditions") === null) {
+      fillConditionInputs();
       return;
     }
     var actionConditions = JSON.parse(sessionStorage.getItem("workflow-conditions"))
       .conditions.filter(item => item.actionIndex === actionIndex);
     if (actionConditions.length <= conditionIndex) {
+      fillConditionInputs();
       return;
     }
     var condition = actionConditions[conditionIndex];
     if (condition.selected === false) {
+      fillConditionInputs();
       return;
     }
     var content = JSON.parse(condition.content);
-    inputConditionInput("condition-input-value", content.inputValue);
-    inputConditionInput("condition-comparative-value", content.comparativeValue);
     conditionType = condition.type;
+    fillConditionInputs();
+    autoCompleteInput("condition-input-value", content.inputValue);
+    autoCompleteInput("condition-comparative-value", content.comparativeValue);
+  }
+
+  function autoCompleteInput(identifier, value) {
+    for (var i = 0; i < conditionOutputVariables.length; i++) {
+      var variable = conditionOutputVariables[i];
+      value = value.replace("%" + variable.identifier + "%",
+        '<span class="workflow-condition-input-placeholder" contenteditable="false">' + variable.name + '</span>')
+    }
+    var element = document.getElementById("workflow-condition-input-" + identifier);
+    element.innerHTML = value;
+    inputConditionInput(identifier, element.innerHTML);
   }
 
   function fillConditionInputs() {
@@ -98,9 +123,10 @@
     informationElement.classList.add("workflow-condition-information", "fa", "fa-question-circle");
     applyTooltips(informationElement, inputContainerElement, description);
     inputContainerElement.appendChild(informationElement);
-    var inputElement = document.createElement("input");
+    var inputElement = document.createElement("div");
     inputElement.type = "name";
-    inputElement.placeholder = name;
+    inputElement.setAttribute("placeholder", name);
+    inputElement.contentEditable = "true";
     inputElement.id = "workflow-condition-input-" + identifier;
     inputElement.classList.add("workflow-condition-input", "form-control");
     if (identifier === "condition-input-value" && inputValue !== "") {
@@ -110,22 +136,37 @@
       inputElement.value = comparativeValue;
     }
     inputElement.oninput = function (event) {
-      inputConditionInput(identifier, event.target.value);
+      inputConditionInput(identifier, event.target.innerHTML);
     }
     inputElement.ondragover = function (event) {
       event.preventDefault();
     };
     inputElement.ondrop = function (event) {
-      inputElement.value =  inputElement.value.substring(0, inputElement.selectionStart) +
-        "%" + event.dataTransfer.getData("placeholder-identifier") + "%" +
-        inputElement.value.substring(inputElement.selectionStart);
-      inputConditionInput(identifier, inputElement.value);
+      inputElement.innerHTML = inputElement.innerHTML +
+        '<span class="workflow-condition-input-placeholder" contenteditable="false">' +
+        event.dataTransfer.getData("placeholder-name") + '</span>';
+      inputConditionInput(identifier, inputElement.innerHTML);
     };
     inputContainerElement.appendChild(inputElement);
     document.getElementById("workflow-condition-input-list").appendChild(inputContainerElement);
   }
 
   function inputConditionInput(identifier, value) {
+    for (var i = 0; i < conditionOutputVariables.length; i++) {
+      var variable = conditionOutputVariables[i];
+      value = value.replace('<span class="workflow-condition-input-placeholder" contenteditable="false">' +
+        variable.name + '</span>', "%" + variable.identifier + "%")
+    }
+    value = value.replace("&nbsp;", " ");
+    value = value.replace("&quot;", "\"");
+    value = value.replace("&apos;", "'");
+    value = value.replace("&amp;", "&");
+    value = value.replace("&gt;", ">");
+    value = value.replace("&lt;", "<");
+    value = value.replace("&frasl;", "/");
+    value = value.replace("&nbsp;", " ");
+    value = value.replace("&reg;", "®");
+    value = value.replace("&copy;", "©");
     if (identifier === "condition-input-value") {
       inputValue = value;
     }
@@ -184,12 +225,12 @@
         itemElement.appendChild(itemNameName);
         itemElement.onclick = function (event) {
           selectConditionSelect(identifier, item.identifier, item.name,
-              dropdownContainer, dropdownButton, dropdownList);
+            dropdownContainer, dropdownButton, dropdownList);
         }
         dropdownList.appendChild(itemElement);
         if (conditionType !== "" && item.identifier === conditionType) {
           selectConditionSelect(identifier, item.identifier, item.name,
-              dropdownContainer, dropdownButton, dropdownList);
+            dropdownContainer, dropdownButton, dropdownList);
         }
       }
     });
@@ -262,19 +303,7 @@
 
   function displayPlaceholders(index) {
     document.getElementById("workflow-condition-placeholders-list").innerHTML = "";
-    var componentType = (index < 0) ? "trigger" : "action";
-    var component;
-    if (componentType === "trigger") {
-      component = JSON.parse(sessionStorage.getItem("workflow-trigger"));
-    } else {
-      component = JSON.parse(sessionStorage.getItem("workflow-actions")).actions.filter(element => element.actionIndex === index)[0];
-    }
-    var module = component.module;
-    var type = component.type;
-    let request = new HttpRequest("https://api.taskwolf.net/v1/component/find/", "POST",
-      [], {componentType: componentType, module: module, type: type});
-    request.send(function (status, responseText) {
-      var outputVariables = JSON.parse(responseText).outputVariables;
+    findOutputVariables(index, function(outputVariables) {
       for (var i = 0; i < outputVariables.length; i++) {
         let variable = outputVariables[i];
         displayPlaceholder(variable.identifier, variable.name);
@@ -288,12 +317,30 @@
     });
   }
 
+  function findOutputVariables(index, callback) {
+    var componentType = (index < 0) ? "trigger" : "action";
+    var component;
+    if (componentType === "trigger") {
+      component = JSON.parse(sessionStorage.getItem("workflow-trigger"));
+    } else {
+      component = JSON.parse(sessionStorage.getItem("workflow-actions")).actions.filter(element => element.actionIndex === index)[0];
+    }
+    var module = component.module;
+    var type = component.type;
+    let request = new HttpRequest("https://api.taskwolf.net/v1/component/find/", "POST",
+      [], {componentType: componentType, module: module, type: type});
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText).outputVariables);
+    });
+  }
+
   function displayPlaceholder(identifier, name) {
     var placeholderElement = document.createElement("li");
     placeholderElement.classList.add("workflow-condition-placeholder");
     placeholderElement.draggable= "true";
     placeholderElement.ondragstart = function (event) {
       event.dataTransfer.setData("placeholder-identifier", identifier);
+      event.dataTransfer.setData("placeholder-name", name);
     }
     var placeholderNameElement = document.createElement("b");
     placeholderNameElement.innerHTML = name;
