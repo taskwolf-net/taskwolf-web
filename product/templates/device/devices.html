@@ -162,9 +162,7 @@
     appendDeviceCell(entry, "name", information, "span");
     appendDeviceCell(entry, "owner", owner, "span");
     entry.appendChild(createDevicePlatformCell(platform));
-    if (!ownDevice) {
-      entry.appendChild(createSettingsDeleteButton(id));
-    }
+    entry.appendChild(createSettingsDropdown(id, ownDevice));
     document.getElementById("devices-list").appendChild(entry);
   }
 
@@ -193,7 +191,7 @@
     return optimizationDiv;
   }
 
-  function createSettingsDeleteButton(device) {
+  function createSettingsDropdown(device, ownDevice) {
     var settingsDiv = document.createElement("div");
     settingsDiv.classList.add("devices-entry-settings");
     var settingsButton = document.createElement("button");
@@ -205,9 +203,15 @@
     settingsDiv.appendChild(settingsButton);
     var dropdown = document.createElement("ul");
     dropdown.classList.add("device-settings-dropdown", "dropdown-menu");
-    dropdown.appendChild(createSettingsDropdownButton(dropdown, "fa-trash",
-      "{% trans 'product.devices.delete' %}", "text-danger",
-      function() {deleteDevice(device)}));
+    if (ownDevice) {
+      dropdown.appendChild(createSettingsDropdownButton(dropdown, "fa-trash",
+        "{% trans 'product.devices.delete' %}", "text-danger",
+        function() {deleteDevice(device)}));
+    } else {
+      dropdown.appendChild(createSettingsDropdownButton(dropdown, "fa-circle-minus",
+        "{% trans 'product.devices.remove' %}", "text-danger",
+        function() {removeDevice(device)}));
+    }
     settingsDiv.appendChild(dropdown);
     return settingsDiv;
   }
@@ -247,10 +251,10 @@
     displayDevices();
   };
 
-  function deleteDevice(device) {
+  function removeDevice(device) {
     Swal.fire({
-      title: "{% trans 'product.devices.delete.title' %}",
-      text: "{% trans 'product.devices.delete.body' %}",
+      title: "{% trans 'product.devices.remove.title' %}",
+      text: "{% trans 'product.devices.remove.body' %}",
       icon: "warning",
       confirmButtonColor: "#dc3545",
       showCancelButton: true,
@@ -259,7 +263,40 @@
         let request = new HttpRequest("https://api.taskwolf.net/v1/device/organization/remove/", "POST",
           [], {device: device, organization: currentOwner.id});
         request.send(function (status, responseText) {
-          Swal.fire("{% trans 'product.devices.delete.successful.title' %}", "{% trans 'product.devices.delete.successful.body' %}", "success").then(success => window.location.href = "/devices/");
+          Swal.fire("{% trans 'product.devices.remove.successful.title' %}", "{% trans 'product.devices.remove.successful.body' %}", "success").then(success => window.location.href = "/devices/");
+        });
+      }
+    });
+  }
+
+  function deleteDevice(device) {
+    var content = document.createElement("div");
+    content.classList.add("devices-delete-content");
+    var text = document.createElement("p");
+    text.innerText = "{% trans 'product.devices.delete.body' %}";
+    content.appendChild(text);
+    var input = document.createElement("input");
+    input.classList.add("mt-3")
+    input.placeholder = "{% trans 'product.devices.delete.password' %}";
+    input.type = "password";
+    content.appendChild(input);
+    Swal.fire({
+      title: "{% trans 'product.devices.delete.title' %}",
+      html: content,
+      icon: "warning",
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/device/delete/", "POST",
+          [], {device: device, password: input.value});
+        request.send(function (status, responseText) {
+          var success = JSON.parse(responseText).success;
+          if (success === true) {
+            Swal.fire("{% trans 'product.devices.delete.successful.title' %}", "{% trans 'product.devices.delete.successful.body' %}", "success").then(success => window.location.href = "/devices/");
+          } else {
+            Swal.fire("{% trans 'product.devices.delete.failed.title' %}", "{% trans 'product.devices.delete.failed.body' %}", "error");
+          }
         });
       }
     });
