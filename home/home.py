@@ -35,6 +35,26 @@ async def solution(request):
     'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/solution.css']})
 
 @home_page
+async def downloadPlatform(request):
+  return render(request, 'download-platform.html', {'title': gettext("home.download.platform.title"),
+    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/download-platform.css']})
+
+@home_page
+async def downloadDesktop(request):
+  return render(request, 'download-desktop.html', {'title': gettext("home.download.desktop.title"),
+    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/download-desktop.css']})
+
+@home_page
+async def downloadMobile(request):
+  return render(request, 'download-mobile.html', {'title': gettext("home.download.mobile.title"),
+    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/download-mobile.css']})
+
+@home_page
+async def downloadCLI(request):
+  return render(request, 'download-cli.html', {'title': gettext("home.download.cli.title"),
+    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/download-cli.css']})
+
+@home_page
 async def pricing(request):
   return render(request, 'pricing.html', {'title': gettext("home.pricing.title"),
     'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/pricing.css']})

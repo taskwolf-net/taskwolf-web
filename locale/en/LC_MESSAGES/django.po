@@ -44,6 +44,8 @@ msgid "home.header.product"
 msgstr "Product"
 msgid "home.header.solution"
 msgstr "Solutions"
+msgid "home.header.download"
+msgstr "Download"
 msgid "home.header.pricing"
 msgstr "Pricing"
 
@@ -302,6 +304,30 @@ msgid "home.solution.get.description"
 msgstr "If you are now interested in our product, you can find out about our various offers and packages. There is sure to be something for you."
 msgid "home.solution.get.button"
 msgstr "GET IT NOW"
+
+# DOWNLOAD PLATFORM
+msgid "home.download.platform.title"
+msgstr "Download - Taskwolf"
+msgid "home.download.platform.headline"
+msgstr "Select your platform"
+
+# DOWNLOAD MOBILE
+msgid "home.download.mobile.title"
+msgstr "Mobile - Taskwolf"
+msgid "home.download.mobile.headline"
+msgstr "Mobile"
+
+# DOWNLOAD DESKTOP
+msgid "home.download.desktop.title"
+msgstr "Desktop - Taskwolf"
+msgid "home.download.desktop.headline"
+msgstr "Desktop"
+
+# DOWNLOAD CLI
+msgid "home.download.cli.title"
+msgstr "CLI - Taskwolf"
+msgid "home.download.cli.headline"
+msgstr "CLI"
 
 # PRICING
 msgid "home.pricing.title"

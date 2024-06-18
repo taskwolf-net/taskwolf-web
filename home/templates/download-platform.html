@@ -1,0 +1,12 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body class="dark">
+    {% include 'templates/home-header.html' %}
+    <div id="download-platform-container">
+      <h1 class="text-center fw-bold mt-5">{% trans 'home.download.platform.headline' %}</h1>
+    </div>
+    {% include 'templates/home-footer.html' %}
+  </body>
+</html>
