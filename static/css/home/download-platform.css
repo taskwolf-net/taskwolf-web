@@ -4,7 +4,17 @@
 }
 
 #download-platform-headline {
+  width: fit-content;
+  background-color: #2f333a;
+  border-radius: 10px;
+  padding: 10px 20px;
   margin-top: 20vh;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#download-platform-description {
+  margin-top: 2vh;
   text-align: center;
   font-weight: bold;
 }
@@ -45,13 +55,10 @@
 @media (max-width: 1000px) {
   #download-platform-list {
     grid-template-columns: repeat(1, 1fr);
+    margin-bottom: 30vh;
   }
 
   #download-platform-headline {
     margin-top: 10vh;
-  }
-
-  #download-platform-list {
-    margin-bottom: 30vh;
   }
 }

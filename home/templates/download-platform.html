@@ -5,21 +5,22 @@
   <body class="dark">
     {% include 'templates/home-header.html' %}
     <div id="download-platform-container">
-      <h1 id="download-platform-headline">{% trans 'home.download.platform.headline' %}</h1>
+      <h3 id="download-platform-headline">{% trans 'home.download.platform.headline' %}</h3>
+      <h1 id="download-platform-description">{% trans 'home.download.platform.description' %}</h1>
       <div id="download-platform-list">
         <div class="download-platform">
           <button onclick="location.href='/download/desktop/'" class="download-platform-button fa-solid fa-desktop"></button>
-          <h2 class="fw-bold">{% trans 'home.download.platform.desktop.headline' %}</h2>
+          <h2 class="fw-bold mb-2">{% trans 'home.download.platform.desktop.headline' %}</h2>
           <label>{% trans 'home.download.platform.desktop.precise' %}</label>
         </div>
         <div class="download-platform">
           <button onclick="location.href='/download/mobile/'" class="download-platform-button fa-solid fa-mobile-screen-button"></button>
-          <h2 class="fw-bold">{% trans 'home.download.platform.mobile.headline' %}</h2>
+          <h2 class="fw-bold mb-2">{% trans 'home.download.platform.mobile.headline' %}</h2>
           <label>{% trans 'home.download.platform.mobile.precise' %}</label>
         </div>
         <div class="download-platform">
           <button onclick="location.href='/download/cli/'" class="download-platform-button fa-solid fa-terminal"></button>
-          <h2 class="fw-bold">{% trans 'home.download.platform.cli.headline' %}</h2>
+          <h2 class="fw-bold mb-2">{% trans 'home.download.platform.cli.headline' %}</h2>
           <label>{% trans 'home.download.platform.cli.precise' %}</label>
         </div>
       </div>
