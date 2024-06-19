@@ -1,0 +1,57 @@
+#download-platform-container {
+  width: min(calc(1200px), 95%);
+  margin: auto;
+}
+
+#download-platform-headline {
+  margin-top: 20vh;
+  text-align: center;
+  font-weight: bold;
+}
+
+#download-platform-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 100px;
+  margin-top: 10vh;
+  margin-bottom: 50vh;
+}
+
+.download-platform {
+  position: relative;
+  display: grid;
+  text-align: center;
+  margin: auto;
+}
+
+.download-platform-button {
+  font-size: 64px;
+  width: 128px;
+  height: 128px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 32px;
+  border: 2px #6d6d6d solid;
+  border-radius: 10px;
+  color: white;
+  background-color: #25272f;
+  transition-duration: 0.2s;
+}
+
+.download-platform-button:hover {
+  background-color: #363945;
+}
+
+@media (max-width: 1000px) {
+  #download-platform-list {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  #download-platform-headline {
+    margin-top: 10vh;
+  }
+
+  #download-platform-list {
+    margin-bottom: 30vh;
+  }
+}
