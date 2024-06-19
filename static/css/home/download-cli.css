@@ -1,0 +1,52 @@
+#download-cli-container {
+  width: min(calc(1200px), 95%);
+  margin-bottom: 20vh;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#download-cli-headline {
+  width: fit-content;
+  background-color: #2f333a;
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin-top: 10vh;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#download-cli-description {
+  margin-top: 2vh;
+  text-align: center;
+  font-weight: bold;
+}
+
+.download-cli-code {
+  position: relative;
+  background-color: #000000;
+  border: 1px solid #3a3a3a;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.download-cli-code span {
+  display: inline-block;
+  width: calc(100% - 50px);
+}
+
+.download-cli-code-copy {
+  position: absolute;
+  color: white;
+  background-color: #272727;
+  top: 10px;
+  right: 10px;
+  width: 42px;
+  height: 42px;
+  border-radius: 5px;
+  border: none;
+  font-size: 20px;
+}
+
+.download-cli-code-copy:hover {
+  background-color: #383838;
+}
