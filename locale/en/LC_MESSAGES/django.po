@@ -330,6 +330,8 @@ msgid "home.download.mobile.title"
 msgstr "Mobile - Taskwolf"
 msgid "home.download.mobile.headline"
 msgstr "Mobile"
+msgid "home.download.mobile.description"
+msgstr "Download the Taskwolf app from the store of your choice"
 
 # DOWNLOAD DESKTOP
 msgid "home.download.desktop.title"
