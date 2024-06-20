@@ -10,7 +10,6 @@
         <div id="download-desktop-content-text">
           <h1 class="download-desktop-description mb-4">{% trans 'home.download.desktop.description' %}</h1>
           <p>{% trans 'home.download.desktop.instruction' %}</p>
-          <button id="download-desktop-button" class="btn btn-primary d-block mx-auto mt-5"><i class="fa-solid fa-download me-2"></i></button>
         </div>
         <img id="download-desktop-content-image" src="{% static 'img/home/desktop.png' %}">
       </div>
@@ -21,46 +20,100 @@
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill-opacity="1" d="M0,160L80,133.3C160,107,320,53,480,53.3C640,53,800,107,960,128C1120,149,1280,139,1360,133.3L1440,128L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"></path></svg>
     </div>
     <div class="download-desktop-container">
-      <h3 class="download-desktop-headline">{% trans 'home.download.desktop.alternative.headline' %}</h3>
+      <h3 class="download-desktop-headline mb-4">{% trans 'home.download.desktop.alternative.headline' %}</h3>
       <h1 class="download-desktop-description">{% trans 'home.download.desktop.alternative.description' %}</h1>
       <ul id="download-desktop-alternative-list" class="nav nav-tabs" role="tablist">
       </ul>
+      <div id="download-desktop-alternative-content" class="tab-content">
+      </div>
     </div>
     {% include 'templates/home-footer.html' %}
   </body>
 </html>
-<script>
-  var operatingSystem = "";
 
+<script>
   $(document).ready(function() {
     if (window.navigator.userAgent.indexOf("Win") !== -1) {
-      document.getElementById("download-desktop-button").innerHTML +=
-        "{% trans 'home.download.desktop.windows' %}";
-      operatingSystem = "Windows";
+      displayForOperatingSystem("WINDOWS", ["LINUX", "MACOS"]);
     } else if (window.navigator.userAgent.indexOf("Linux") !== -1) {
-      document.getElementById("download-desktop-button").innerHTML +=
-        "{% trans 'home.download.desktop.linux' %}";
-      operatingSystem = "Linux";
+      displayForOperatingSystem("LINUX", ["WINDOWS", "MACOS"]);
     } else if (window.navigator.userAgent.indexOf("Mac") !== -1) {
-      document.getElementById("download-desktop-button").innerHTML +=
-        "{% trans 'home.download.desktop.macos' %}";
-      operatingSystem = "MacOS";
+      displayForOperatingSystem("MACOS", ["WINDOWS", "LINUX"]);
     }
   });
 
-  function createAlternativeTab(id, target, name, selected) {
-    var entry = document.getElementById("li");
+  function displayForOperatingSystem(detected, tabs) {
+    if (detected === "WINDOWS") {
+      document.getElementById("download-desktop-content-text").appendChild(
+        createDownloadButton("{% trans 'home.download.desktop.windows.download' %}",
+          "https://taskwolf.net/static/download/taskwolf.deb"));
+    } else if (detected === "LINUX") {
+      document.getElementById("download-desktop-content-text").appendChild(
+        createDownloadButton("{% trans 'home.download.desktop.linux.download' %}",
+          "https://taskwolf.net/static/download/taskwolf.deb"));
+    } else if (detected === "MACOS") {
+      document.getElementById("download-desktop-content-text").appendChild(
+        createDownloadButton("{% trans 'home.download.desktop.macos.download' %}",
+          "https://taskwolf.net/static/download/taskwolf.deb"));
+    }
+    for (var i = 0; i < tabs.length; i++) {
+      if (tabs[i] === "WINDOWS") {
+        createAlternativeTab("download-desktop-windows",
+          "{% trans 'home.download.desktop.windows' %}",
+          "{% trans 'home.download.desktop.windows.download' %}",
+          "https://taskwolf.net/static/download/taskwolf.deb", i === 0);
+      } else if (tabs[i] === "LINUX") {
+        createAlternativeTab("download-desktop-linux",
+          "{% trans 'home.download.desktop.linux' %}",
+          "{% trans 'home.download.desktop.linux.download' %}",
+          "https://taskwolf.net/static/download/taskwolf.deb", i === 0);
+      } else if (tabs[i] === "MACOS") {
+        createAlternativeTab("download-desktop-macos",
+          "{% trans 'home.download.desktop.macos' %}",
+          "{% trans 'home.download.desktop.macos.download' %}",
+          "https://taskwolf.net/static/download/taskwolf.deb", i === 0);
+      }
+    }
+  }
+
+  function createAlternativeTab(id, title, downloadName, downloadFile, selected) {
+    var entry = document.createElement("li");
     entry.classList.add("nav-item");
     entry.setAttribute("role", "presentation");
     var button = document.createElement("button");
     button.id = id;
     button.type = "button";
     button.role = "tab";
-    button.innerHTML = name;
-    button.classList.add("nav-link")
+    button.innerHTML = title;
+    button.classList.add("nav-link");
+    if (selected) {
+      button.classList.add("active");
+    }
     button.setAttribute("data-bs-toggle", "tab");
-    button.setAttribute("data-bs-target", "#" + target);
-    button.setAttribute("aria-controls", target)
+    button.setAttribute("data-bs-target", "#" + id + "-pane");
+    button.setAttribute("aria-controls", id + "-pane")
     button.setAttribute("aria-selected", selected);
+    entry.appendChild(button);
+    document.getElementById("download-desktop-alternative-list").appendChild(entry);
+    var content = document.createElement("div");
+    content.id = id + "-pane";
+    content.classList.add("tab-pane", "fade");
+    if (selected) {
+      content.classList.add("show", "active");
+    }
+    content.role = "tabpanel";
+    content.setAttribute("aria-labelledby", id);
+    content.appendChild(createDownloadButton(downloadName));
+    document.getElementById("download-desktop-alternative-content")
+      .appendChild(content);
+  }
+
+  function createDownloadButton(name, downloadFile) {
+    var button = document.createElement("button");
+    button.classList.add("btn", "btn-primary", "d-block", "mx-auto", "mt-5");
+    button.innerHTML = '<i class="fa-solid fa-download me-2"></i>' + name;
+    button.href = downloadFile;
+    button.download = downloadFile.split('/').pop();
+    return button;
   }
 </script>
