@@ -1,0 +1,118 @@
+.download-desktop-container {
+  width: min(calc(1200px), 95%);
+  margin-bottom: 20vh;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.download-desktop-headline {
+  width: fit-content;
+  background-color: #2f333a;
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin-top: 20vh;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.download-desktop-description {
+  margin-bottom: 50px;
+  margin-left: 0;
+  margin-right: 0;
+  text-align: center;
+  font-weight: bold;
+}
+
+#download-desktop-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2vh;
+}
+
+#download-desktop-content-image {
+  width: 45%;
+}
+
+#download-desktop-content-text {
+  width: 45%;
+}
+
+@media (max-width: 1200px) {
+  #download-desktop-content {
+    display: block;
+  }
+
+  #download-desktop-content-image {
+    margin-top: 100%;
+  }
+
+  #download-desktop-content-text {
+    margin-top: 100%;
+  }
+}
+
+.download-desktop-divider {
+  transform: scaleY(0.5);
+  margin-top: -10%;
+  margin-bottom: -10%;
+}
+
+.download-desktop-divider svg path {
+  fill: #232d3e;
+  background-color: #0d1117 !important;
+}
+
+.download-desktop-divider-background {
+  background-color: #232d3e;
+  width: 100%;
+  height: 10px;
+  margin-top: -5px;
+  position: absolute;
+}
+
+@media (max-width: 1300px) {
+  .download-desktop-divider {
+    transform: scaleY(0.75);
+    margin-top: -5%;
+    margin-bottom: -5%;
+  }
+}
+
+@media (max-width: 1000px) {
+  .download-desktop-divider {
+    transform: scaleY(1);
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+.download-desktop-container {
+  width: min(calc(1500px), 100%);
+  margin: auto;
+  margin-bottom: 8%;
+}
+
+.download-desktop-container .nav-item {
+  width: calc(100% / 7);
+  margin-top: 1%;
+}
+
+.download-desktop-container .nav {
+  border: none !important;
+  margin-top: 5%;
+}
+
+.download-desktop-container .nav-link {
+  color: white;
+  width: 100%;
+  border: none !important;
+  border-bottom: 3px solid #1d2633 !important;
+}
+
+.download-desktop-container .nav-item .active {
+  background-color: #0d1117;
+  border-width: 3px;
+  border-style: solid;
+  border-image: linear-gradient(to right, #5374ab, #d5d779) 1 !important;
+}
