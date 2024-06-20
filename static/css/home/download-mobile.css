@@ -47,6 +47,12 @@
   height: 100%;
 }
 
+@media (max-width: 1750px) {
+  .download-mobile-button {
+    width: 256px;
+  }
+}
+
 @media (max-width: 1000px) {
   #download-mobile-list {
     grid-template-columns: repeat(1, 1fr);
