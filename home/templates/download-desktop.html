@@ -103,7 +103,7 @@
     }
     content.role = "tabpanel";
     content.setAttribute("aria-labelledby", id);
-    content.appendChild(createDownloadButton(downloadName));
+    content.appendChild(createDownloadButton(downloadName, downloadFile));
     document.getElementById("download-desktop-alternative-content")
       .appendChild(content);
   }
@@ -112,8 +112,9 @@
     var button = document.createElement("button");
     button.classList.add("btn", "btn-primary", "d-block", "mx-auto", "mt-5");
     button.innerHTML = '<i class="fa-solid fa-download me-2"></i>' + name;
-    button.href = downloadFile;
-    button.download = downloadFile.split('/').pop();
+    button.onclick = function (event) {
+      window.open(downloadFile);
+    }
     return button;
   }
 </script>
