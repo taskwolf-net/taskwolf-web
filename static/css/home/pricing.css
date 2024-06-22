@@ -1,6 +1,8 @@
 #pricing-container {
   width: min(calc(1500px), 95%);
-  margin: auto;
+  margin-bottom: 10vh;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #pricing-headline {
@@ -152,24 +154,26 @@
   vertical-align: top;
 }
 
-.pricing-package-stuck {
-  padding-bottom: 20px !important;
-}
+@media (min-width: 1000px) {
+  .pricing-package-stuck {
+    padding-bottom: 20px !important;
+  }
 
-.pricing-package-stuck .pricing-package-description {
-  display: none;
-}
+  .pricing-package-stuck .pricing-package-description {
+    display: none;
+  }
 
-.pricing-package-stuck #pricing-package-enterprise-price {
-  margin-bottom: 0 !important;
-}
+  .pricing-package-stuck #pricing-package-enterprise-price {
+    margin-bottom: 0 !important;
+  }
 
-.pricing-package-stuck .pricing-package-time {
-  margin-bottom: 0 !important;
-}
+  .pricing-package-stuck .pricing-package-time {
+    margin-bottom: 0 !important;
+  }
 
-.pricing-package-stuck .pricing-get-button {
-  display: none;
+  .pricing-package-stuck .pricing-get-button {
+    display: none;
+  }
 }
 
 #pricing-package-free {
@@ -221,7 +225,7 @@
   width: 20% !important;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1300px) {
   .pricing-package-title {
     font-size: 25px !important;
   }
@@ -236,46 +240,24 @@
 }
 
 @media (max-width: 1000px) {
-  .pricing-package-title {
-    font-size: 20px !important;
+  #pricing-container {
+    width: 97.5%;
+    margin-left: 2.5%;
   }
 
-  .pricing-package-description {
-    font-size: 14px !important;
+  #pricing-table-container {
+    width: 100%;
+    display: block;
+    overflow-x: auto;
   }
 
-  .pricing-package-price {
-    font-size: 20px !important;
+  #pricing-table {
+    width: 1000px;
   }
 
-  .pricing-table-advantages h2 {
-    font-size: 18px !important;
-  }
-
-  #pricing-table td {
-    font-size: 14px;
-    padding: 2px;
-  }
-}
-
-@media (max-width: 825px) {
-  .pricing-package-title {
-    font-size: 14px !important;
-  }
-
-  .pricing-package-description {
-    font-size: 12px !important;
-  }
-
-  .pricing-package-price {
-    font-size: 14px !important;
-  }
-
-  .pricing-table-advantages h2 {
-    font-size: 14px !important;
-  }
-
-  #pricing-table td {
-    font-size: 12px;
+  .pricing-package {
+    position: relative !important;
+    top: 0 !important;
+    z-index: 0 !important;
   }
 }

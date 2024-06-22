@@ -6,8 +6,9 @@
     {% include 'templates/home-header.html' %}
     <div id="pricing-container">
       <h1 id="pricing-headline">{% trans 'home.pricing.headline' %}</h1>
-      <table id="pricing-table">
-        <thead>
+      <div id="pricing-table-container">
+        <table id="pricing-table">
+          <thead>
           <th class="pricing-table-advantages">
             <div>
               <h2>{% trans 'home.pricing.advantages' %}</h2>
@@ -40,8 +41,8 @@
             <h2 id="pricing-package-enterprise-price" class="pricing-package-price">{% trans 'home.pricing.enterprise.price.contact' %}</h2>
             <button type="button" class="pricing-get-button btn btn-outline-light">{% trans 'home.pricing.enterprise.contact' %}</button>
           </th>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
           <tr>
             <td class="pricing-feature" data-bs-toggle="tooltip-parent">{% trans 'home.pricing.feature.time' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.time.tip' %}"></h5></td>
             <td>7 {% trans 'home.pricing.feature.time.days' %}</td>
@@ -56,8 +57,8 @@
             <td><i class="fa-solid fa-check"></i></td>
             <td><i class="fa-solid fa-check"></i></td>
           </tr>
-        </tbody>
-        <tbody>
+          </tbody>
+          <tbody>
           <tr class="pricing-feature-bundle-headline">
             <td>{% trans 'home.pricing.feature.workflows' %}</td>
             <td colspan="4"></td>
@@ -90,8 +91,8 @@
             <td><i class="fa-solid fa-check"></i></td>
             <td><i class="fa-solid fa-check"></i></td>
           </tr>
-        </tbody>
-        <tbody>
+          </tbody>
+          <tbody>
           <tr class="pricing-feature-bundle-headline">
             <td>{% trans 'home.pricing.feature.databases' %}</td>
             <td colspan="4"></td>
@@ -117,8 +118,8 @@
             <td>50 GB</td>
             <td>{% trans 'home.pricing.feature.negotiable' %}</td>
           </tr>
-        </tbody>
-        <tbody>
+          </tbody>
+          <tbody>
           <tr class="pricing-feature-bundle-headline">
             <td>{% trans 'home.pricing.feature.webhooks' %}</td>
             <td colspan="4"></td>
@@ -137,8 +138,8 @@
             <td>{% trans 'home.pricing.feature.unlimited' %}</td>
             <td>{% trans 'home.pricing.feature.unlimited' %}</td>
           </tr>
-        </tbody>
-        <tbody>
+          </tbody>
+          <tbody>
           <tr class="pricing-feature-bundle-headline">
             <td>{% trans 'home.pricing.feature.organizations' %}</td>
             <td colspan="4"></td>
@@ -157,8 +158,8 @@
             <td>20</td>
             <td>{% trans 'home.pricing.feature.unlimited' %}</td>
           </tr>
-        </tbody>
-        <tbody>
+          </tbody>
+          <tbody>
           <tr class="pricing-feature-bundle-headline">
             <td>{% trans 'home.pricing.feature.devices' %}</td>
             <td colspan="4"></td>
@@ -184,8 +185,8 @@
             <td>40</td>
             <td>{% trans 'home.pricing.feature.unlimited' %}</td>
           </tr>
-        </tbody>
-        <tbody>
+          </tbody>
+          <tbody>
           <tr class="pricing-feature-bundle-headline">
             <td>{% trans 'home.pricing.feature.accounts' %}</td>
             <td colspan="4"></td>
@@ -204,8 +205,9 @@
             <td>{% trans 'home.pricing.feature.unlimited' %}</td>
             <td>{% trans 'home.pricing.feature.unlimited' %}</td>
           </tr>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
     </div>
     {% include 'templates/home-footer.html' %}
   </body>
