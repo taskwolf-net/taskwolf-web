@@ -9,11 +9,11 @@
       <div id="dashboard-container">
         <div id="dashboard-wrapper" class="d-none">
           <div id="dashboard-header">
-            <div id="dashboard-target-dropdown" class="dropdown">
-              <button id="dashboard-target-dropdown-button" class="btn dropdown-button dropdown-toggle bg-dark" type="button" data-bs-toggle="dropdown">
-                {% trans 'target.personal' %}
+            <div id="target-dropdown" class="dropdown">
+              <button id="target-dropdown-button" class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                {% trans 'target' %}
               </button>
-              <ul id="dashboard-target-dropdown-list" class="dropdown-menu">
+              <ul id="target-dropdown-list" class="dropdown-menu">
               </ul>
             </div>
             <h1 id="dashboard-headline">{% trans 'product.dashboard.headline' %}</h1>
@@ -29,44 +29,10 @@
 <script>
   $(document).ready(function() {
     displayLoader();
-    fetchTargetsData(function(response) {
-      var targets = response.targets;
-      var currentTarget = response.currentTarget;
-      for (var i = 0; i < targets.length; i++) {
-        addTarget(targets[i]);
-      }
-      selectTarget(targets.filter((target) => target.id === currentTarget)[0]);
-    });
-  });
-
-  function fetchTargetsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/targets/all/", "GET",
-      []);
-    request.send(function (status, responseText) {
-      callback(JSON.parse(responseText));
-    });
-  }
-
-  function addTarget(target) {
-    var targetElement = document.createElement("li");
-    targetElement.classList.add("dropdown-item");
-    var targetNameName = document.createElement("b");
-    targetNameName.innerHTML = target.name;
-    targetElement.appendChild(targetNameName);
-    targetElement.onclick = function(event) {
-      selectTarget(target);
-    }
-    document.getElementById("dashboard-target-dropdown-list").appendChild(targetElement);
-  }
-
-  function selectTarget(target) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST",
-      [], {target: target.id});
-    request.send(function (status, responseText) {
-      document.getElementById("dashboard-target-dropdown-button").innerHTML = "{% trans 'target' %}: " + target.name;
+    setupTargetSelection(function() {
       displayDashboard();
     });
-  }
+  });
 
   function displayDashboard() {
     document.getElementById("dashboard-content").innerHTML = "";

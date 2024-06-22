@@ -6,27 +6,27 @@
   width: min(calc(1200px - 15vw), 95%);
 }
 
-#account-apps-target-dropdown {
+#target-dropdown {
   margin-left: auto;
 }
 
-#account-apps-target-dropdown-button {
+#target-dropdown-button {
   width: 100%;
 }
 
 @media (max-width: 1000px) {
-  #account-apps-target-dropdown {
+  #target-dropdown {
     margin: 60px auto 10px;
   }
 }
 
 @media (max-width: 575px) {
-  #account-apps-target-dropdown {
+  #target-dropdown {
     margin: 50px auto 10px;
   }
 }
 
-#account-apps-target-dropdown-list {
+#target-dropdown-list {
   width: 100%;
 }
 

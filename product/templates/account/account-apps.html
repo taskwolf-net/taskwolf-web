@@ -8,11 +8,11 @@
     <div class="sidebar-influenced">
       <div id="account-apps-wrapper">
         <div id="account-apps-header">
-          <div id="account-apps-target-dropdown" class="dropdown">
-            <button id="account-apps-target-dropdown-button" class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
-              {% trans 'target.personal' %}
+          <div id="target-dropdown" class="dropdown">
+            <button id="target-dropdown-button" class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
+              {% trans 'target' %}
             </button>
-            <ul id="account-apps-target-dropdown-list" class="dropdown-menu">
+            <ul id="target-dropdown-list" class="dropdown-menu">
             </ul>
           </div>
           <h1 id="account-apps-headline">{% trans 'product.account.apps.headline' %}</h1>
@@ -40,56 +40,18 @@
   var appsCurrentNameFilter = "";
 
   $(document).ready(function() {
-    fetchTargetsData(function(response) {
-      var targets = response.targets;
-      var currentTarget = response.currentTarget;
-      for (var i = 0; i < targets.length; i++) {
-        addTarget(targets[i]);
-      }
-      selectTarget(targets.filter((target) => target.id === currentTarget)[0]);
+    displayLoader();
+    setupTargetSelection(function() {
+      fetchAppsData(function() {
+        displayApps();
+        if (apps.length === 0) {
+          document.getElementById("account-apps-empty").style.display = "block";
+        } else {
+          document.getElementById("account-apps-empty").style.display = "none";
+        }
+      });
     });
   });
-
-  function fetchTargetsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/targets/all/", "GET",
-      []);
-    request.send(function (status, responseText) {
-      callback(JSON.parse(responseText));
-    });
-  }
-
-  function addTarget(target) {
-    var targetElement = document.createElement("li");
-    targetElement.classList.add("dropdown-item");
-    var targetNameName = document.createElement("b");
-    targetNameName.innerHTML = target.name;
-    targetElement.appendChild(targetNameName);
-    targetElement.onclick = function(event) {
-      selectTarget(target);
-    }
-    document.getElementById("account-apps-target-dropdown-list").appendChild(targetElement);
-  }
-
-  function selectTarget(target) {
-    displayLoader();
-    let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST",
-      [], {target: target.id});
-    request.send(function (status, responseText) {
-      document.getElementById("account-apps-target-dropdown-button").innerHTML = "{% trans 'target' %}: " + target.name;
-      displayAccountApps();
-    });
-  }
-
-  function displayAccountApps() {
-    fetchAppsData(function() {
-      displayApps();
-      if (apps.length === 0) {
-        document.getElementById("account-apps-empty").style.display = "block";
-      } else {
-        document.getElementById("account-apps-empty").style.display = "none";
-      }
-    });
-  }
 
   function fetchAppsData(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/account/apps/", "GET",

@@ -9,11 +9,11 @@
       <div id="workflows-wrapper">
         <h1 id="workflows-headline">{% trans 'product.workflows.headline' %}</h1>
         <div id="workflows-header">
-          <div id="workflows-owner-dropdown" class="dropdown">
-            <button id="workflows-owner-dropdown-button" class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
-              {% trans 'target.personal' %}
+          <div id="target-dropdown" class="dropdown">
+            <button id="target-dropdown-button" class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
+              {% trans 'target' %}
             </button>
-            <ul id="workflows-owner-dropdown-list" class="dropdown-menu">
+            <ul id="target-dropdown-list" class="dropdown-menu">
             </ul>
           </div>
           <div class="d-flex w-100">
@@ -73,42 +73,8 @@
 
   $(document).ready(function() {
     workflows = [];
-    fetchTargetsData(function(response) {
-      var targets = response.targets;
-      var currentTarget = response.currentTarget;
-      for (var i = 0; i < targets.length; i++) {
-        addTarget(targets[i]);
-      }
-      selectTarget(targets.filter((target) => target.id === currentTarget)[0]);
-    });
-  });
-
-  function fetchTargetsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/targets/all/", "GET",
-      []);
-    request.send(function (status, responseText) {
-      callback(JSON.parse(responseText));
-    });
-  }
-
-  function addTarget(target) {
-    var targetElement = document.createElement("li");
-    targetElement.classList.add("dropdown-item");
-    var targetNameName = document.createElement("b");
-    targetNameName.innerHTML = target.name;
-    targetElement.appendChild(targetNameName);
-    targetElement.onclick = function(event) {
-      selectTarget(target);
-    }
-    document.getElementById("workflows-owner-dropdown-list").appendChild(targetElement);
-  }
-
-  function selectTarget(target) {
     displayLoader();
-    let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST",
-      [], {target: target.id});
-    request.send(function (status, responseText) {
-      document.getElementById("workflows-owner-dropdown-button").innerHTML = "{% trans 'target' %}: " + target.name;
+    setupTargetSelection(function() {
       fetchWorkflowsData(function() {
         displayWorkflows();
         if (workflows.length === 0) {
@@ -118,7 +84,7 @@
         }
       });
     });
-  }
+  });
 
   function fetchWorkflowsData(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/selected/", "GET", []);

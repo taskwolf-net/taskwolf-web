@@ -20,16 +20,16 @@ iframe {
   margin-bottom: 20px;
 }
 
-#dashboard-target-dropdown {
+#target-dropdown {
   margin-left: auto;
   margin-right: 50px;
 }
 
-#dashboard-target-dropdown-button {
+#target-dropdown-button {
   width: 100%;
 }
 
-#dashboard-target-dropdown-list {
+#target-dropdown-list {
   width: 100%;
 }
 
@@ -39,7 +39,7 @@ iframe {
 }
 
 @media (max-width: 1200px) {
-  #dashboard-target-dropdown {
+  #target-dropdown {
     margin: 70px auto 0;
     width: fit-content;
   }
