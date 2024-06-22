@@ -358,6 +358,8 @@ msgid "home.download.desktop.alternative.headline"
 msgstr "Alternative download"
 msgid "home.download.desktop.alternative.description"
 msgstr "Here you can find the alternative download options for other operating systems"
+msgid "home.download.desktop.unsupported"
+msgstr "It seems that your operating system is not compatible with the Taskwolf desktop app. We apologize for this. Perhaps you will find something for you in the alternative download options below."
 
 # DOWNLOAD CLI
 msgid "home.download.cli.title"

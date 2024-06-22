@@ -357,7 +357,9 @@ msgstr "Herunterladen für MacOS"
 msgid "home.download.desktop.alternative.headline"
 msgstr "Alternativer Download"
 msgid "home.download.desktop.alternative.description"
-msgstr "Hier finden Sie die alternativen Downloadmöglichkeiten für andere Betriebssysteme"
+msgstr "Hier finden Sie die alternativen Download-Optionen für andere Betriebssysteme"
+msgid "home.download.desktop.unsupported"
+msgstr "Es scheint, dass Ihr Betriebssystem nicht mit der Taskwolf Desktop-App kompatibel ist. Wir entschuldigen uns dafür. Vielleicht finden Sie etwas für Sie in den alternativen Download-Optionen unten."
 
 # DOWNLOAD CLI
 msgid "home.download.cli.title"

@@ -9,7 +9,6 @@
       <div id="download-desktop-content">
         <div id="download-desktop-content-text">
           <h1 class="download-desktop-description mb-4">{% trans 'home.download.desktop.description' %}</h1>
-          <p>{% trans 'home.download.desktop.instruction' %}</p>
         </div>
         <img id="download-desktop-content-image" src="{% static 'img/home/desktop.png' %}">
       </div>
@@ -39,10 +38,20 @@
       displayForOperatingSystem("LINUX", ["WINDOWS", "MACOS"]);
     } else if (window.navigator.userAgent.indexOf("Mac") !== -1) {
       displayForOperatingSystem("MACOS", ["WINDOWS", "LINUX"]);
+    } else {
+      var errorText = document.createElement("p");
+      errorText.classList.add("text-danger");
+      errorText.innerHTML = "{% trans 'home.download.desktop.unsupported' %}";
+      document.getElementById("download-desktop-content-text").appendChild(errorText);
+      createWindowsAlternativeTab("calc(100% / 3)", true);
+      createLinuxAlternativeTab("calc(100% / 3)", false);
+      createMacOSAlternativeTab("calc(100% / 3)", false);
     }
   });
 
   function displayForOperatingSystem(detected, tabs) {
+    document.getElementById("download-desktop-content-text").innerHTML +=
+      "<p>{% trans 'home.download.desktop.instruction' %}</p>";
     if (detected === "WINDOWS") {
       document.getElementById("download-desktop-content-text").appendChild(
         createDownloadButton("{% trans 'home.download.desktop.windows.download' %}",
@@ -58,27 +67,42 @@
     }
     for (var i = 0; i < tabs.length; i++) {
       if (tabs[i] === "WINDOWS") {
-        createAlternativeTab("download-desktop-windows",
-          "{% trans 'home.download.desktop.windows' %}",
-          "{% trans 'home.download.desktop.windows.download' %}",
-          "https://taskwolf.net/static/download/taskwolf.deb", i === 0);
+        createWindowsAlternativeTab("calc(100% / 2)", i === 0);
       } else if (tabs[i] === "LINUX") {
-        createAlternativeTab("download-desktop-linux",
-          "{% trans 'home.download.desktop.linux' %}",
-          "{% trans 'home.download.desktop.linux.download' %}",
-          "https://taskwolf.net/static/download/taskwolf.deb", i === 0);
+        createLinuxAlternativeTab("calc(100% / 2)", i === 0);
       } else if (tabs[i] === "MACOS") {
-        createAlternativeTab("download-desktop-macos",
-          "{% trans 'home.download.desktop.macos' %}",
-          "{% trans 'home.download.desktop.macos.download' %}",
-          "https://taskwolf.net/static/download/taskwolf.deb", i === 0);
+        createMacOSAlternativeTab("calc(100% / 2)", i === 0);
       }
     }
   }
 
-  function createAlternativeTab(id, title, downloadName, downloadFile, selected) {
+  function createWindowsAlternativeTab(width, selected) {
+    createAlternativeTab("download-desktop-windows",
+      "{% trans 'home.download.desktop.windows' %}",
+      "{% trans 'home.download.desktop.windows.download' %}",
+      "https://taskwolf.net/static/download/taskwolf.deb", width, selected);
+  }
+
+  function createLinuxAlternativeTab(width, selected) {
+    createAlternativeTab("download-desktop-linux",
+      "{% trans 'home.download.desktop.linux' %}",
+      "{% trans 'home.download.desktop.linux.download' %}",
+      "https://taskwolf.net/static/download/taskwolf.deb", width, selected);
+  }
+
+  function createMacOSAlternativeTab(width, selected) {
+    createAlternativeTab("download-desktop-macos",
+      "{% trans 'home.download.desktop.macos' %}",
+      "{% trans 'home.download.desktop.macos.download' %}",
+      "https://taskwolf.net/static/download/taskwolf.deb", width, selected);
+  }
+
+  function createAlternativeTab(
+    id, title, downloadName, downloadFile, width, selected
+  ) {
     var entry = document.createElement("li");
     entry.classList.add("nav-item");
+    entry.style.width = width;
     entry.setAttribute("role", "presentation");
     var button = document.createElement("button");
     button.id = id;

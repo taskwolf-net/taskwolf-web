@@ -38,17 +38,42 @@
   width: 45%;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1300px) {
+  .download-desktop-container {
+    margin-bottom: 20vh;
+  }
+
+  .download-desktop-headline {
+    margin-top: 10vh;
+  }
+
   #download-desktop-content {
     display: block;
   }
 
   #download-desktop-content-image {
-    margin-top: 100%;
+    display: block;
+    width: 75%;
+    margin-top: 5vh;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   #download-desktop-content-text {
-    margin-top: 100%;
+    width: 75%;
+    margin-top: 5vh;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 800px) {
+  #download-desktop-content-image {
+    width: 95%;
+  }
+
+  #download-desktop-content-text {
+    width: 95%;
   }
 }
 
@@ -94,7 +119,6 @@
 }
 
 #download-desktop-alternative-list .nav-item {
-  width: calc(100% / 2);
   margin-top: 1%;
 }
 
