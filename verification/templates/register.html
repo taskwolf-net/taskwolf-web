@@ -15,7 +15,7 @@
         <label for="username" class="form-label">{% trans 'home.registration.username' %}</label>
         <input type="username" id="username" class="form-control" placeholder="{% trans 'home.registration.username' %}">
       </div>
-      <div class="form-outline mb-4 was-validated">
+      <div class="form-outline mb-3 was-validated">
         <label for="password" class="form-label">{% trans 'home.registration.password' %}</label>
         <input type="password" class="form-control" id="password" minlength="8" name="password" placeholder="{% trans 'home.registration.password' %}" required>
         <div class="progress mt-3" style="height: 5px;">
@@ -24,6 +24,10 @@
         </div>
         <div id="feedbackin" class="valid-feedback"></div>
         <div id="feedbackirn" class="invalid-feedback">8 {% trans 'neutral.password.letters.remaining' %}, {% trans 'neutral.password.special.characters' %}, {% trans 'neutral.password.upper.case.letters' %}, {% trans 'neutral.password.lower.case.letters' %}, {% trans 'neutral.password.numbers' %}</div>
+      </div>
+      <div class="form-outline mb-5" >
+        <label for="password-repetition" class="form-label">{% trans 'home.registration.password.repetition' %}</label>
+        <input type="password" id="password-repetition" class="form-control" placeholder="{% trans 'home.registration.password.repetition' %}">
       </div>
       <div class="form-check">
         <input type="checkbox" class="form-check-input" id="legal-check">
@@ -45,6 +49,7 @@
   let emailInput = document.getElementById("email");
   let usernameInput = document.getElementById("username");
   let passwordInput = document.getElementById("password");
+  let passwordRepetitionInput = document.getElementById("password-repetition");
   passwordInput.addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -53,16 +58,29 @@
   });
 
   document.getElementById('register').onclick = function() {
-    if (emailInput.value === "" || usernameInput.value === "" || passwordInput.value === "") {
-      Swal.fire("{% trans 'home.registration.failed.title' %}", "{% trans 'home.registration.failed.incomplete' %}", "error");
+    if (emailInput.value === "" || usernameInput.value === "" ||
+      passwordInput.value === "" || passwordRepetitionInput.value === ""
+    ) {
+      Swal.fire("{% trans 'home.registration.failed.title' %}",
+        "{% trans 'home.registration.failed.incomplete' %}", "error");
       return;
     }
     if (!passwordInput.checkValidity()) {
-      Swal.fire("{% trans 'home.registration.failed.title' %}", "{% trans 'home.registration.failed.password' %}", "error");
+      Swal.fire("{% trans 'home.registration.failed.title' %}",
+        "{% trans 'home.registration.failed.password' %}", "error");
+      return;
+    }
+    if (passwordInput.value !== passwordRepetitionInput.value) {
+      Swal.fire("{% trans 'home.registration.failed.title' %}",
+        "{% trans 'home.registration.failed.password.repetition' %}", "error");
+      passwordInput.value = "";
+      passwordRepetitionInput.value = "";
+      updatePasswordProgress();
       return;
     }
     if (!document.getElementById("legal-check").checked) {
-      Swal.fire("{% trans 'home.registration.failed.title' %}", "{% trans 'home.registration.failed.legal' %}", "error");
+      Swal.fire("{% trans 'home.registration.failed.title' %}",
+        "{% trans 'home.registration.failed.legal' %}", "error");
       return;
     }
     let request = new HttpRequest("https://api.taskwolf.net/v1/verification/register/", "POST", [],
@@ -72,7 +90,8 @@
       if (response.success === true) {
         window.location.href = "/register/email/";
       } else {
-        Swal.fire("{% trans 'home.registration.failed.title' %}", "{% trans 'home.registration.failed.already.exists' %}", "error");
+        Swal.fire("{% trans 'home.registration.failed.title' %}",
+          "{% trans 'home.registration.failed.already.exists' %}", "error");
       }
     });
   };
