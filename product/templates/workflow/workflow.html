@@ -457,8 +457,12 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/workflow" + (isSelected ? "/update/" : "/add/"), "POST",
       [], requestBody);
     request.send(function (status, responseText) {
-      if (status !== 200) {
+      if (status === 413) {
         Swal.fire("{% trans 'product.workflow.publish.too.big.title' %}", "{% trans 'product.workflow.publish.too.big.body' %}", "error");
+        return;
+      }
+      if (status === 400) {
+        Swal.fire("{% trans 'product.workflow.publish.limit.reached.title' %}", "{% trans 'product.workflow.publish.limit.reached.body' %}", "error");
         return;
       }
       sessionStorage.removeItem("workflow-name");
