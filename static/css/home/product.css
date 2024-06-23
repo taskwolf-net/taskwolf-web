@@ -252,16 +252,18 @@ p {
 }
 
 #product-workflow-trigger {
-  margin-top: 5%;
   position: absolute;
+  top: 2%;
 }
 
 #product-workflow-action {
-  margin-top: 140%;
+  position: absolute;
+  top: 72%;
 }
 
 #product-workflow-condition {
-  margin-top: 70%;
+  position: absolute;
+  top: 38%;
 }
 
 @media (max-width: 1750px) {
@@ -288,15 +290,15 @@ p {
   }
 
   #product-workflow-trigger {
-    margin-top: 0;
+    top: 0;
   }
 
   #product-workflow-action {
-    margin-top: 130%;
+    top: 68%;
   }
 
   #product-workflow-condition {
-    margin-top: 65%;
+    top: 34%;
   }
 }
 
