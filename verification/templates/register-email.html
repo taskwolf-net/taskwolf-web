@@ -12,7 +12,20 @@
         </div>
       </div>
       <h1 id="register-email-headline">{% trans 'home.registration.email.headline' %}</h1>
-      <p id="register-email-description">{% trans 'home.registration.email.description' %}</p>
+      <p class="register-email-description">{% trans 'home.registration.email.description' %}</p>
+      <p class="register-email-description">{% trans 'home.registration.email.resend.description' %}</p>
+      <button id="register-email-resend" type="button" class="btn btn-primary mt-3">{% trans 'home.registration.email.resend' %}</button>
     </div>
   </body>
 </html>
+
+<script>
+  document.getElementById("register-email-resend").onclick = function (event) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/verification/email/resend/", "POST", [],
+      {email: sessionStorage.getItem("registration-email")});
+    request.send(function (status, responseText) {
+      Swal.fire("{% trans 'home.registration.email.resend.success.title' %}",
+        "{% trans 'home.registration.email.resend.success.body' %}", "success");
+    });
+  }
+</script>

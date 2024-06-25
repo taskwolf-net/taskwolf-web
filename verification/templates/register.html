@@ -88,6 +88,7 @@
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
       if (response.success === true) {
+        sessionStorage.setItem("registration-email", emailInput.value);
         window.location.href = "/register/email/";
       } else {
         Swal.fire("{% trans 'home.registration.failed.title' %}",

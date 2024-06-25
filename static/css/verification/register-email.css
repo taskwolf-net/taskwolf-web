@@ -1,6 +1,6 @@
 #register-email {
   text-align: center;
-  width: min(calc(800px - 5vw), 95%);
+  width: min(calc(1000px - 5vw), 95%);
   margin: auto;
 }
 
@@ -98,6 +98,6 @@
   font-weight: bold;
 }
 
-#register-email-description {
+.register-email-description {
   margin-top: 5%;
 }
