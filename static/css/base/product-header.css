@@ -54,18 +54,49 @@
   padding: 5px;
 }
 
+#profile-button-wrapper {
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.dark #profile-button-wrapper:hover {
+  background-color: #30363b;
+}
+
+.light #profile-button-wrapper:hover {
+  background-color: #cccccc;
+}
+
 #profile-picture {
-  width: 60px;
-  height: 60px;
-  border-radius: 40%;
+  font-size: 26px;
 }
 
-.dark #profile-picture {
-  background-color: #212529;
+#profile-picture-arrow {
+  font-size: 18px;
+  padding-left: 10px;
 }
 
-.light #profile-picture {
-  background-color: #f8f9fa;
+
+.dropdown-toggle[aria-expanded="true"] #profile-picture-arrow {
+  transform: scaleY(-1);
+}
+
+.dropdown-toggle #profile-picture-arrow {
+  transition:all ease 0.2s;
+}
+
+.dark #profile-picture, .dark #profile-picture-arrow {
+  color: white;
+}
+
+.light #profile-picture, .light #profile-picture-arrow {
+  color: black;
+}
+
+#profile-button-wrapper::after {
+  display: none;
 }
 
 #profile-button-container {
@@ -80,28 +111,6 @@
 
 .dark #profile-button-container .dropdown-item:hover {
   background-color: #414851;
-}
-
-#profile-button-wrapper {
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.dark #profile-button-wrapper {
-  background-color: white !important;
-}
-
-.light #profile-button-wrapper {
-  background-color: black !important;
-}
-
-#profile-button-wrapper::after {
-  display: none;
 }
 
 @media (max-width: 575px) {
@@ -122,6 +131,6 @@
   .dropdown-menu-center {
     left: 50% !important;
     right: auto !important;
-    transform: translate(-50%, 40%) !important;
+    transform: translate(-50%, 30%) !important;
   }
 }

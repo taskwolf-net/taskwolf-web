@@ -24,27 +24,15 @@
 
 <script>
   var ticket;
-  var profilePicture;
   var username;
 
   $(document).ready(function() {
-    fetchProfilePicture(function() {
-      fetchUsername(function() {
-        fetchTicketsData(function() {
-          displayTicket();
-        });
+    fetchUsername(function() {
+      fetchTicketsData(function() {
+        displayTicket();
       });
     });
   });
-
-  function fetchProfilePicture(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/picture/", "GET",
-      []);
-    request.send(function (status, responseText) {
-      profilePicture = JSON.parse(responseText).picture;
-      callback();
-    });
-  }
 
   function fetchUsername(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/username/", "GET",
@@ -76,7 +64,7 @@
     var messageElement = document.createElement("div");
     messageElement.classList.add("ticket-message", "ql-editor");
     messageElement.innerHTML = message.message;
-    var entry = displayEntry(message.selfWritten ? profilePicture : "{% static 'img/tickets/taskwolf-profile-picture.png' %}", message.author,
+    var entry = displayEntry(!message.selfWritten, message.author,
       message.time.split(" ")[0], message.time.split(" ")[1], messageElement);
     if (index > 0 && message.selfWritten) {
       var deleteButton = document.createElement("button");
@@ -113,7 +101,7 @@
   function displayAnswerField() {
     var answerField = document.createElement("div");
     answerField.id = "ticket-answer-field";
-    displayEntry(profilePicture, username, "", "", answerField);
+    displayEntry(false, username, "", "", answerField);
     var quill = new Quill('#ticket-answer-field', {
       modules: {
         toolbar: [
@@ -136,15 +124,21 @@
     });
   }
 
-  function displayEntry(picture, author, date, time, contentElement) {
+  function displayEntry(taskwolfWritten, author, date, time, contentElement) {
     var messageContainer = document.createElement("li");
     messageContainer.classList.add("ticket-message-container");
     var messageDescription = document.createElement("div");
-    messageDescription.classList.add("ticket-message-description")
-    var messagePicture = document.createElement("img");
-    messagePicture.classList.add("ticket-message-picture");
-    messagePicture.src = picture;
-    messageDescription.appendChild(messagePicture);
+    messageDescription.classList.add("ticket-message-description");
+    if (taskwolfWritten) {
+      var taskwolfPicture = document.createElement("img");
+      taskwolfPicture.classList.add("ticket-message-profile-picture");
+      taskwolfPicture.src = "{% static 'img/tickets/taskwolf-profile-picture.png' %}";
+      messageDescription.appendChild(taskwolfPicture);
+    } else {
+      var userPicture = document.createElement("i");
+      userPicture.classList.add("ticket-message-profile-icon", "fa-regular", "fa-user");
+      messageDescription.appendChild(userPicture);
+    }
     messageDescription.appendChild(document.createElement("br"));
     messageDescription.appendChild(document.createElement("br"));
     var messageAuthor = document.createElement("b");
