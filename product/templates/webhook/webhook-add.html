@@ -31,6 +31,11 @@
       [],
       {name: document.getElementById("name").value});
     request.send(function (status, responseText) {
+      if (status === 400) {
+        Swal.fire("{% trans 'product.webhook.add.limit.reached.title' %}",
+          "{% trans 'product.webhook.add.limit.reached.body' %}", "error");
+        return;
+      }
       window.location.href = "/webhooks/";
     });
   };

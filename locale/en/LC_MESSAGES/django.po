@@ -1168,6 +1168,10 @@ msgid "product.webhook.add.name"
 msgstr "Name"
 msgid "product.webhook.add.button"
 msgstr "ADD"
+msgid "product.webhook.add.limit.reached.title"
+msgstr "Adding has failed"
+msgid "product.webhook.add.limit.reached.body"
+msgstr "You have reached the maximum number of webhooks available to you with your package. You can upgrade your package at any time to get additional webhooks."
 
 # WEBHOOK
 msgid "product.webhook.title"
