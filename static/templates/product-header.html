@@ -6,7 +6,7 @@
     <a href="/" id="navbar-logo"><img src="{% static 'img/logo.png' %}" width="70px" height="70px" alt=""></a>
     <div id="profile-button-container">
       <button class="dropdown-toggle btn" id="profile-button-wrapper" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <img id="profile-picture" class="d-none">
+        <i id="profile-picture" class="fa-regular fa-user"></i><i id="profile-picture-arrow" class="fa-solid fa-angle-down"></i>
       </button>
       <div class="dropdown-menu dropdown-menu-dark dropdown-menu-center" aria-labelledby="profile-button-wrapper">
         <button class="dropdown-item" id="dashboard-button" type="button">{% trans 'product.header.dashboard' %}</button>
@@ -21,20 +21,6 @@
 <div id="header-space"></div>
 
 <script>
-  $(document).ready(function() {
-    displayProfilePicture();
-  });
-
-  function displayProfilePicture() {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/picture/", "GET",
-      []);
-    request.send(function (status, responseText) {
-      var pictureElement = document.getElementById("profile-picture");
-      pictureElement.src = JSON.parse(responseText).picture;
-      pictureElement.classList.remove("d-none");
-    });
-  }
-
   document.getElementById('dashboard-button').onclick = function() {
     window.location.href = "/dashboard/";
   };

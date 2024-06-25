@@ -15,16 +15,6 @@
               <input id="settings-profile-name" type="name" class="form-control" placeholder="{% trans 'settings.profile.name' %}">
               <button id="settings-profile-update-button" type="button" class="btn btn-success mt-4">{% trans 'settings.profile.name.update' %}</button>
             </div>
-            <div id="settings-profile-picture-container" class="form-outline mb-4">
-              <div>
-                <label for="settings-profile-picture" class="form-label">{% trans 'settings.profile.picture' %}</label>
-                <img id="settings-profile-picture">
-              </div>
-              <div id="settings-profile-picture-button-container">
-                <input id="settings-profile-picture-input" type="file" name="img" accept="image/*" class="d-none"/>
-                <button id="settings-profile-picture-button" type="button" class="btn btn-primary">{% trans 'settings.profile.picture.edit' %}</button>
-              </div>
-            </div>
           </form>
         </div>
       </div>
@@ -35,7 +25,6 @@
 <script>
   $(document).ready(function() {
     displayCurrentUsername();
-    displayCurrentProfilePicture();
   });
 
   function displayCurrentUsername() {
@@ -46,35 +35,11 @@
     });
   }
 
-  function displayCurrentProfilePicture() {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/picture/", "GET",
-      []);
-    request.send(function (status, responseText) {
-      document.getElementById("settings-profile-picture").src = JSON.parse(responseText).picture;
-    });
-  }
-
   document.getElementById("settings-profile-update-button").onclick = function(event) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/username/change/", "POST",
       [], {username: document.getElementById("settings-profile-name").value});
     request.send(function (status, responseText) {
       Swal.fire("{% trans 'settings.profile.name.changed.title' %}", "{% trans 'settings.profile.name.changed.body' %}", "success");
     });
-  };
-
-  document.getElementById("settings-profile-picture-button").onclick = function(event) {
-    document.getElementById("settings-profile-picture-input").click();
-  };
-
-  document.getElementById("settings-profile-picture-input").onchange = function(event) {
-    const fileReader = new FileReader();
-    fileReader.addEventListener("load", function(event) {
-      let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/picture/change/", "POST",
-        [], {picture: event.target.result});
-      request.send(function (status, responseText) {
-        Swal.fire("{% trans 'settings.profile.picture.edited.title' %}", "{% trans 'settings.profile.picture.edited.body' %}", "success").then(success => window.location.reload());
-      });
-    });
-    fileReader.readAsDataURL(this.files[0]);
   };
 </script>

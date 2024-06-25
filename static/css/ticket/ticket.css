@@ -86,10 +86,14 @@ input:-webkit-autofill:active{
   margin-top: 2%;
 }
 
-.ticket-message-picture {
+.ticket-message-profile-picture {
   width: 64px;
   height: 64px;
   border-radius: 40%;
+}
+
+.ticket-message-profile-icon {
+  font-size: 32px;
 }
 
 .ticket-message-divider {
