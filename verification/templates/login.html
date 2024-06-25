@@ -58,11 +58,20 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/verification/login/", "POST", [],
       {email: document.getElementById("email").value, password: document.getElementById("password").value});
     request.send(function (status, responseText) {
-      if (status == 200) {
+      var response = JSON.parse(responseText);
+      var success = response.success;
+      if (success === true) {
         Cookie.create("token", JSON.parse(responseText).apiKey, 60 * 60 * 24 * 30, ".taskwolf.net");
         window.location.href = "/dashboard/";
       } else {
-        Swal.fire("{% trans 'home.login.failed.title' %}", "{% trans 'home.login.failed.body' %}", "error");
+        var error = response.error;
+        if (error === 1000) {
+          Swal.fire("{% trans 'home.login.failed.credentials.title' %}", "{% trans 'home.login.failed.credentials.body' %}", "error");
+        } else  if (error === 1001) {
+          Swal.fire("{% trans 'home.login.failed.confirmation.title' %}", "{% trans 'home.login.failed.confirmation.body' %}", "error");
+        } else  if (error === 1002) {
+          Swal.fire("{% trans 'home.login.failed.expired.title' %}", "{% trans 'home.login.failed.expired.body' %}", "error");
+        }
         document.getElementById("password").value = "";
       }
     });
