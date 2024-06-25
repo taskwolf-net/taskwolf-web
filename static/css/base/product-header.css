@@ -78,6 +78,15 @@
   padding-left: 10px;
 }
 
+
+.dropdown-toggle[aria-expanded="true"] #profile-picture-arrow {
+  transform: scaleY(-1);
+}
+
+.dropdown-toggle #profile-picture-arrow {
+  transition:all ease 0.2s;
+}
+
 .dark #profile-picture, .dark #profile-picture-arrow {
   color: white;
 }
@@ -122,6 +131,6 @@
   .dropdown-menu-center {
     left: 50% !important;
     right: auto !important;
-    transform: translate(-50%, 25%) !important;
+    transform: translate(-50%, 30%) !important;
   }
 }
