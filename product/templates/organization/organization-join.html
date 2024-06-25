@@ -48,6 +48,8 @@
           descriptionElement.innerHTML = "{% trans 'product.organization.join.failed.already.member' %}";
         } else if (response.errorCode === 1002) {
           descriptionElement.innerHTML = "{% trans 'product.organization.join.failed.link.expired' %}";
+        } else if (response.errorCode === 1003) {
+          descriptionElement.innerHTML = "{% trans 'product.organization.join.failed.full' %}";
         }
       } else {
         document.getElementById("organization-join-success").classList.remove("d-none");

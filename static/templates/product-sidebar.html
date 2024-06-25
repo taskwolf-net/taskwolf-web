@@ -23,7 +23,7 @@
         <a href="/webhooks/" class="sidebar-link nav-link {% if 'webhook' in request.path %}sidebar-active{% endif %}" aria-current="page"><span class="sidebar-icon material-symbols-outlined">webhook</span><span>{% trans 'product.sidebar.webhooks' %}</span></a>
       </li>
       <li class="sidebar-divider"></li>
-      <li class="sidebar-item">
+      <li id="sidebar-organizations" class="sidebar-item d-none">
         <a href="/organizations/" class="sidebar-link nav-link {% if 'organization' in request.path %}sidebar-active{% endif %}" aria-current="page"><span class="sidebar-icon material-symbols-outlined">groups</span><span>{% trans 'product.sidebar.organizations' %}</span></a>
       </li>
       <li class="sidebar-item">
@@ -39,3 +39,16 @@
     </ul>
   </div>
 </div>
+
+<script>
+  $(document).ready(function() {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/bundle/", "GET",
+      []);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      if (response.organizationAccess) {
+        document.getElementById("sidebar-organizations").classList.remove("d-none");
+      }
+    });
+  });
+</script>

@@ -1356,6 +1356,8 @@ msgid "product.organization.join.failed.already.member"
 msgstr "Du bist bereits ein Mitglied dieser Organisation"
 msgid "product.organization.join.failed.link.expired"
 msgstr "Der Einladungslink ist abgelaufen"
+msgid "product.organization.join.failed.full"
+msgstr "Die Organisation ist voll. Es können keine weiteren Mitglieder aufgenommen werden"
 
 # ACCOUNT - APPS
 msgid "product.account.apps.title"
