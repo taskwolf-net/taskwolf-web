@@ -35,6 +35,11 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/table/create/", "POST",
       [], {name: document.getElementById("name").value});
     request.send(function (status, responseText) {
+      if (status === 400) {
+        Swal.fire("{% trans 'product.database.create.limit.reached.title' %}",
+          "{% trans 'product.database.create.limit.reached.body' %}", "error");
+        return;
+      }
       window.location.href = "/databases/";
     });
   };

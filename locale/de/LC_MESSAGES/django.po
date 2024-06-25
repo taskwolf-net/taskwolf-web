@@ -1134,6 +1134,10 @@ msgid "product.database.create.empty.title"
 msgstr "Name ist leer!"
 msgid "product.database.create.empty.body"
 msgstr "Bitte geben Sie einen Namen ein, der nicht leer ist"
+msgid "product.database.create.limit.reached.title"
+msgstr "Die Erstellung ist fehlgeschlagen"
+msgid "product.database.create.limit.reached.body"
+msgstr "Sie haben die maximale Anzahl von Datenbanken erreicht, die Ihnen mit Ihrem Paket zur Verfügung stehen. Sie können Ihr Paket jederzeit aktualisieren, um zusätzliche Datenbanken zu erhalten."
 
 # WEBHOOKS
 msgid "product.webhooks.title"
