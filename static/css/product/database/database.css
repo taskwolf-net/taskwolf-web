@@ -274,6 +274,8 @@ tr {
   padding: 0 1.0rem !important;
   vertical-align: middle;
   text-align: right;
+  white-space: normal;
+  text-overflow: unset;
 }
 
 .database-row-edit-submit {
@@ -382,10 +384,12 @@ tr {
 
 .dark .database-rename-content input, .dark .database-column-add-content input {
   border: 1px solid white;
+  color: white;
 }
 
 .light .database-rename-content input, .light .database-column-add-content input {
   border: 1px solid black;
+  color: black;
 }
 
 .database-rename-content input::placeholder, .database-column-add-content input::placeholder {
