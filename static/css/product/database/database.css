@@ -262,10 +262,12 @@ tr {
 
 .dark .database-row-edit-cell-input {
   background-color: #212529;
+  color: white;
 }
 
 .light .database-row-edit-cell-input {
   background-color: #d7d7d7;
+  color: black;
 }
 
 .database-row-edit-modification {
