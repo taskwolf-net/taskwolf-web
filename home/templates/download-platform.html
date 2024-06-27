@@ -8,21 +8,21 @@
       <h3 id="download-platform-headline">{% trans 'home.download.platform.headline' %}</h3>
       <h1 id="download-platform-description">{% trans 'home.download.platform.description' %}</h1>
       <div id="download-platform-list">
-        <div class="download-platform">
-          <button onclick="location.href='/download/desktop/'" class="download-platform-button fa-solid fa-desktop"></button>
+        <button class="download-platform" onclick="location.href='/download/desktop/'">
+          <i class="download-platform-icon fa-solid fa-desktop"></i>
           <h2 class="fw-bold mb-2">{% trans 'home.download.platform.desktop.headline' %}</h2>
-          <label>{% trans 'home.download.platform.desktop.precise' %}</label>
-        </div>
-        <div class="download-platform">
-          <button onclick="location.href='/download/mobile/'" class="download-platform-button fa-solid fa-mobile-screen-button"></button>
+          <label class="mb-0">{% trans 'home.download.platform.desktop.precise' %}</label>
+        </button>
+        <button class="download-platform" onclick="location.href='/download/mobile/'">
+          <i class="download-platform-icon fa-solid fa-mobile-screen-button"></i>
           <h2 class="fw-bold mb-2">{% trans 'home.download.platform.mobile.headline' %}</h2>
-          <label>{% trans 'home.download.platform.mobile.precise' %}</label>
-        </div>
-        <div class="download-platform">
-          <button onclick="location.href='/download/cli/'" class="download-platform-button fa-solid fa-terminal"></button>
+          <label class="mb-0">{% trans 'home.download.platform.mobile.precise' %}</label>
+        </button>
+        <button class="download-platform" onclick="location.href='/download/cli/'">
+          <i class="download-platform-icon fa-solid fa-terminal"></i>
           <h2 class="fw-bold mb-2">{% trans 'home.download.platform.cli.headline' %}</h2>
-          <label>{% trans 'home.download.platform.cli.precise' %}</label>
-        </div>
+          <label class="mb-0">{% trans 'home.download.platform.cli.precise' %}</label>
+        </button>
       </div>
     </div>
     {% include 'templates/home-footer.html' %}

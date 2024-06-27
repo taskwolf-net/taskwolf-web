@@ -28,31 +28,34 @@
 }
 
 .download-platform {
-  position: relative;
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 320px;
+  height: 256px;
   text-align: center;
   margin: auto;
-}
-
-.download-platform-button {
-  font-size: 64px;
-  width: 128px;
-  height: 128px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 32px;
-  border: 2px #6d6d6d solid;
+  border: none;
   border-radius: 10px;
   color: white;
   background-color: #25272f;
   transition-duration: 0.2s;
 }
 
-.download-platform-button:hover {
+.download-platform:hover {
   background-color: #363945;
 }
 
-@media (max-width: 1000px) {
+.download-platform-icon {
+  font-size: 64px;
+  height: 96px;
+  margin-left: auto;
+  margin-right: auto;
+  color: white;
+}
+
+@media (max-width: 1200px) {
   #download-platform-list {
     grid-template-columns: repeat(1, 1fr);
     margin-bottom: 30vh;
