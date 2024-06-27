@@ -1,11 +1,5 @@
-iframe {
-  width: 100%;
-  height: 100%;
-}
-
 #dashboard-wrapper {
-  width: min(calc(2000px), 95%);
-  margin: auto;
+  width: 100%
 }
 
 #dashboard-container {
@@ -13,34 +7,103 @@ iframe {
   margin: auto;
 }
 
-#dashboard-header {
+#dashboard-headline {
+  text-align: center;
+  font-weight: bold;
+  padding-top: 8vh;
+  padding-bottom: 8vh;
+  margin-bottom: 8vh;
+  margin-left: 0;
+  margin-right: 0;
+  color: white;
+}
+
+.dark #dashboard-headline {
+  background-image: linear-gradient(to right, #232D3E, #586882);
+}
+
+.light #dashboard-headline {
+  background-image: linear-gradient(to right, #8697b5, #444d6d);
+}
+
+#dashboard-content {
+  width: min(calc(1200px), 95%);
+  margin: auto;
+}
+
+.dashboard-content-entry {
+  margin-bottom: 8vh;
+}
+
+#dashboard-target-list {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  border-radius: 5px;
+}
+
+.dark #dashboard-target-list {
+  background-color: #131820;
+  border: 1px #2b3441 solid;
+}
+
+.light #dashboard-target-list {
+  background-color: #dadada;
+  border: 1px #a0a0a0 solid;
+}
+
+.dashboard-target {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.dashboard-target-icon {
+  width: 32px;
+  height: 32px;
+  font-size: 24px;
   display: flex;
   justify-content: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  align-items: center;
 }
 
-#target-dropdown {
-  margin-left: auto;
-  margin-right: 50px;
+.dashboard-target-name {
+  margin-left: 30px;
+  font-size: 24px;
 }
 
-#target-dropdown-button {
+.dashboard-target .badge {
+  height: 38px;
+  display: flex;
+  align-items: center;
+}
+
+.dashboard-target-separator {
   width: 100%;
+  height: 0;
 }
 
-#target-dropdown-list {
-  width: 100%;
+.dark .dashboard-target-separator {
+  border-bottom: 1px #2b3441 solid;
 }
 
-#dashboard-headline {
-  position: absolute;
-  font-weight: bold;
+.light .dashboard-target-separator {
+  border-bottom: 1px #a0a0a0 solid;
 }
 
-@media (max-width: 1200px) {
-  #target-dropdown {
-    margin: 70px auto 0;
-    width: fit-content;
-  }
+.dashboard-tip-issue {
+  padding: 10px;
+  border-radius: 5px;
+  border: 2px #6f1212 solid;
+  background-color: #FF9898FF;
+  color: black;
+}
+
+.dashboard-tip-success {
+  padding: 10px;
+  border-radius: 5px;
+  border: 2px #1a6111 solid;
+  background-color: #89FF77FF;
+  color: black;
 }

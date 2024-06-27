@@ -8,17 +8,27 @@
     <div class="sidebar-influenced">
       <div id="dashboard-container">
         <div id="dashboard-wrapper" class="d-none">
-          <div id="dashboard-header">
-            <div id="target-dropdown" class="dropdown">
-              <button id="target-dropdown-button" class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                {% trans 'target' %}:
-              </button>
-              <ul id="target-dropdown-list" class="dropdown-menu">
+          <h1 id="dashboard-headline">{% trans 'product.dashboard.welcome' %} </h1>
+          <div id="dashboard-content">
+            <div class="dashboard-content-entry">
+              <h2 class="fw-bold mb-4">{% trans 'product.dashboard.target.headline' %}</h2>
+              <ul id="dashboard-target-list">
               </ul>
             </div>
-            <h1 id="dashboard-headline">{% trans 'product.dashboard.headline' %}</h1>
-          </div>
-          <div id="dashboard-content">
+            <div class="dashboard-content-entry">
+              <h2 class="fw-bold mb-4">{% trans 'product.dashboard.activity.headline' %}</h2>
+            </div>
+            <div class="dashboard-content-entry">
+              <h2 class="fw-bold mb-4">{% trans 'product.dashboard.tip.headline' %}</h2>
+              <div class="dashboard-tip-issue mb-4">
+                <h4>Zwei-Faktor-Authentifizierung</h4>
+                <span>Erhöhen Sie die Sicherheit für den Zugriff auf Ihren Account mit der Zwei-Faktor-Authentifizierung (2FA). Aktivieren Sie die 2FA ganz einfach in den Einstellungen.</span>
+              </div>
+              <div class="dashboard-tip-success">
+                <h4>Alles erledigt</h4>
+                <span>Ihr Konto ist auf dem neuesten Stand und vollständig geschützt. </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -29,23 +39,95 @@
 <script>
   $(document).ready(function() {
     displayLoader();
-    setupTargetSelection(function() {
-      displayDashboard();
+    fetchUsername(function(username) {
+      fetchTargets(function (targets, currentTarget) {
+        displayDashboard(username, targets, currentTarget);
+      });
     });
   });
 
-  function displayDashboard() {
-    document.getElementById("dashboard-content").innerHTML = "";
-    let request = new HttpRequest("https://api.taskwolf.net/v1/dashboard/", "GET", []);
+  function displayDashboard(username, targets, currentTarget) {
+    document.getElementById("dashboard-headline").innerText += username;
+    displayTargets(targets, currentTarget);
+    removeLoader();
+  }
+
+  function displayTargets(targets, currentTarget) {
+    for (var i = 0; i < targets.length; i++) {
+      var target = targets[i];
+      if (i > 0) {
+        var separatorElement = document.createElement("div");
+        separatorElement.classList.add("dashboard-target-separator");
+        document.getElementById("dashboard-target-list").appendChild(separatorElement);
+      }
+      var targetEntry = document.createElement("li");
+      targetEntry.classList.add("dashboard-target");
+      var targetDescription = document.createElement("div");
+      targetDescription.classList.add("d-flex", "align-items-center");
+      targetDescription.appendChild(createTargetIcon(target));
+      var targetNameElement = document.createElement("span");
+      targetNameElement.classList.add("dashboard-target-name");
+      targetNameElement.innerText = target.name;
+      targetDescription.appendChild(targetNameElement);
+      targetEntry.appendChild(targetDescription);
+      targetEntry.appendChild(createTargetButton(target, target.id === currentTarget));
+      document.getElementById("dashboard-target-list").appendChild(targetEntry);
+    }
+  }
+
+  function createTargetIcon(target) {
+    var targetIconContainerElement = document.createElement("div");
+    targetIconContainerElement.classList.add("dashboard-target-icon");
+    var targetIconElement = document.createElement("i");
+    if (target.type === "PERSONAL") {
+      targetIconElement.classList.add("fa-solid", "fa-user");
+    } else {
+      targetIconElement.classList.add("fa-solid", "fa-users");
+    }
+    targetIconContainerElement.appendChild(targetIconElement);
+    return targetIconContainerElement;
+  }
+
+  function createTargetButton(target, selected) {
+    if (selected) {
+      var selectedBadgeContainer = document.createElement("h4");
+      selectedBadgeContainer.classList.add("mb-0");
+      var selectedBadge = document.createElement("span");
+      selectedBadge.classList.add("badge", "text-bg-success", "d-inline-flex",
+        "justify-content-center");
+      selectedBadge.style.width = "150px";
+      selectedBadge.innerText = "{% trans 'product.dashboard.target.selected' %}";
+      selectedBadgeContainer.appendChild(selectedBadge);
+      return selectedBadgeContainer;
+    }
+    var selectButton = document.createElement("button");
+    selectButton.classList.add("btn", Cookie.find("taskwolf-theme") === "dark" ?
+      "btn-outline-light" : "btn-outline-dark");
+    selectButton.style.width = "150px";
+    selectButton.innerText = "{% trans 'product.dashboard.target.select' %}";
+    selectButton.onclick = function (event) {
+      let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST",
+        [], {target: target.id});
+      request.send(function (status, responseText) {
+        window.location.reload();
+      });
+    }
+    return selectButton;
+  }
+
+  function fetchUsername(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/username/", "GET", []);
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
-      Cookie.create("grafana_session", response.token, 60 * 10, ".taskwolf.net");
-      var iframe = document.createElement("iframe");
-      iframe.src = response.url + "&theme=" + Cookie.find("taskwolf-theme");
-      iframe.onload = function(event) {
-        removeLoader();
-      }
-      document.getElementById("dashboard-content").appendChild(iframe);
+      callback(response.username);
+    });
+  }
+
+  function fetchTargets(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/targets/all/", "GET", []);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      callback(response.targets, response.currentTarget);
     });
   }
 
