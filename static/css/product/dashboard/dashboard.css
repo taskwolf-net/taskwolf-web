@@ -95,15 +95,15 @@
 .dashboard-tip-issue {
   padding: 10px;
   border-radius: 5px;
-  border: 2px #6f1212 solid;
-  background-color: #FF9898FF;
+  border: 2px #b72a2a solid;
+  background-color: #ff9999;
   color: black;
 }
 
 .dashboard-tip-success {
   padding: 10px;
   border-radius: 5px;
-  border: 2px #1a6111 solid;
-  background-color: #89FF77FF;
+  border: 2px #2cac1f solid;
+  background-color: #89ff76;
   color: black;
 }

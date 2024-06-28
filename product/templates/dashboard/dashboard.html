@@ -20,13 +20,7 @@
             </div>
             <div class="dashboard-content-entry">
               <h2 class="fw-bold mb-4">{% trans 'product.dashboard.tip.headline' %}</h2>
-              <div class="dashboard-tip-issue mb-4">
-                <h4>Zwei-Faktor-Authentifizierung</h4>
-                <span>Erhöhen Sie die Sicherheit für den Zugriff auf Ihren Account mit der Zwei-Faktor-Authentifizierung (2FA). Aktivieren Sie die 2FA ganz einfach in den Einstellungen.</span>
-              </div>
-              <div class="dashboard-tip-success">
-                <h4>Alles erledigt</h4>
-                <span>Ihr Konto ist auf dem neuesten Stand und vollständig geschützt. </span>
+              <div id="dashboard-tip">
               </div>
             </div>
           </div>
@@ -41,14 +35,17 @@
     displayLoader();
     fetchUsername(function(username) {
       fetchTargets(function (targets, currentTarget) {
-        displayDashboard(username, targets, currentTarget);
+        fetchTutorial(function(tutorialActive) {
+          displayDashboard(username, targets, currentTarget, tutorialActive);
+        });
       });
     });
   });
 
-  function displayDashboard(username, targets, currentTarget) {
+  function displayDashboard(username, targets, currentTarget, tutorialActive) {
     document.getElementById("dashboard-headline").innerText += username;
     displayTargets(targets, currentTarget);
+    displayTip(tutorialActive);
     removeLoader();
   }
 
@@ -115,6 +112,30 @@
     return selectButton;
   }
 
+  function displayTip(tutorialActive) {
+    if (tutorialActive) {
+      document.getElementById("dashboard-tip").appendChild(createTip(
+        "{% trans 'product.dashboard.tip.tutorial.headline' %}",
+        "{% trans 'product.dashboard.tip.tutorial.description' %}", "dashboard-tip-issue"));
+    } else {
+      document.getElementById("dashboard-tip").appendChild(createTip(
+        "{% trans 'product.dashboard.tip.success.headline' %}",
+        "{% trans 'product.dashboard.tip.success.description' %}", "dashboard-tip-success"));
+    }
+  }
+
+  function createTip(headline, description, type) {
+    var tipElement = document.createElement("div");
+    tipElement.classList.add(type);
+    var headlineElement = document.createElement("h4");
+    headlineElement.innerText = headline;
+    tipElement.appendChild(headlineElement);
+    var descriptionElement = document.createElement("span");
+    descriptionElement.innerText = description;
+    tipElement.appendChild(descriptionElement);
+    return tipElement;
+  }
+
   function fetchUsername(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/username/", "GET", []);
     request.send(function (status, responseText) {
@@ -128,6 +149,14 @@
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
       callback(response.targets, response.currentTarget);
+    });
+  }
+
+  function fetchTutorial(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/tutorial/", "GET", []);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      callback(response.active);
     });
   }
 
