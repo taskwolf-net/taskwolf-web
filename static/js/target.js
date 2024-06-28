@@ -1,10 +1,12 @@
+var currentTarget;
+
 function setupTargetSelection(callback) {
   fetchTargetsData(function(response) {
     var targets = response.targets;
     for (var i = 0; i < targets.length; i++) {
       addTarget(targets[i]);
     }
-    var currentTarget = targets.filter((target) =>
+    currentTarget = targets.filter((target) =>
       target.id === response.currentTarget)[0];
     document.getElementById("target-dropdown-button").innerHTML +=
       currentTarget.name;

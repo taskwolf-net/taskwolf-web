@@ -66,7 +66,6 @@
 </html>
 
 <script>
-  var currentOwner;
   var devices;
   var devicesCurrentNameFilter = "";
 
@@ -226,7 +225,7 @@
     }).then(result => {
       if (result.isConfirmed) {
         let request = new HttpRequest("https://api.taskwolf.net/v1/device/organization/remove/", "POST",
-          [], {device: device, organization: currentOwner.id});
+          [], {device: device, organization: currentTarget.id});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.devices.remove.successful.title' %}", "{% trans 'product.devices.remove.successful.body' %}", "success").then(success => window.location.href = "/devices/");
         });
