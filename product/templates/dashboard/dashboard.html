@@ -10,6 +10,11 @@
         <div id="dashboard-wrapper" class="d-none">
           <h1 id="dashboard-headline">{% trans 'product.dashboard.welcome' %} </h1>
           <div id="dashboard-content">
+            <div id="dashboard-tip-container" class="dashboard-content-entry">
+              <h2 class="fw-bold mb-4">{% trans 'product.dashboard.tip.headline' %}</h2>
+              <div id="dashboard-tip">
+              </div>
+            </div>
             <div class="dashboard-content-entry">
               <h2 class="fw-bold mb-4">{% trans 'product.dashboard.target.headline' %}</h2>
               <ul id="dashboard-target-list">
@@ -19,11 +24,6 @@
               <h2 class="fw-bold mb-4">{% trans 'product.dashboard.activity.headline' %}</h2>
               <ul id="dashboard-activity-list">
               </ul>
-            </div>
-            <div class="dashboard-content-entry">
-              <h2 class="fw-bold mb-4">{% trans 'product.dashboard.tip.headline' %}</h2>
-              <div id="dashboard-tip">
-              </div>
             </div>
           </div>
         </div>
@@ -49,9 +49,9 @@
 
   function displayDashboard(username, targets, currentTarget, activities, tutorialActive) {
     document.getElementById("dashboard-headline").innerText += username;
+    displayTip(tutorialActive);
     displayTargets(targets, currentTarget);
     displayActivities(activities);
-    displayTip(tutorialActive);
     removeLoader();
   }
 
@@ -131,18 +131,19 @@
     activityElement.classList.add("dashboard-activity");
     var firstContainer = document.createElement("div");
     firstContainer.appendChild(createActivityIcon(activity));
-    var activityNameElement = document.createElement("h5");
+    var activityNameElement = document.createElement("h4");
     activityNameElement.classList.add("text-center", "fw-bold", "mb-3");
     activityNameElement.innerText = activity.title;
     firstContainer.appendChild(activityNameElement);
-    var activityDescriptionElement = document.createElement("span");
+    var activityDescriptionElement = document.createElement("p");
+    activityDescriptionElement.classList.add("text-center", "mb-0");
     activityDescriptionElement.innerText = activity.description;
     firstContainer.appendChild(activityDescriptionElement);
     firstContainer.appendChild(document.createElement("br"));
     activityElement.appendChild(firstContainer);
     var secondContainer = document.createElement("div");
     var activityTimeElement = document.createElement("p");
-    activityTimeElement.classList.add("text-center");
+    activityTimeElement.classList.add("text-center", "mb-0");
     activityTimeElement.innerText = activity.time;
     secondContainer.appendChild(activityTimeElement);
     activityElement.appendChild(secondContainer);
@@ -172,9 +173,7 @@
         "{% trans 'product.dashboard.tip.tutorial.headline' %}",
         "{% trans 'product.dashboard.tip.tutorial.description' %}", "dashboard-tip-issue"));
     } else {
-      document.getElementById("dashboard-tip").appendChild(createTip(
-        "{% trans 'product.dashboard.tip.success.headline' %}",
-        "{% trans 'product.dashboard.tip.success.description' %}", "dashboard-tip-success"));
+      document.getElementById("dashboard-tip-container").classList.add("d-none");
     }
   }
 

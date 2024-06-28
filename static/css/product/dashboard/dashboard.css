@@ -130,7 +130,7 @@
   width: calc(1160px / 3);
   height: 300px;
   border-radius: 5px;
-  padding: 20px;
+  padding: 30px;
   margin-right: 20px;
 }
 
@@ -153,17 +153,9 @@
 }
 
 .dashboard-tip-issue {
-  padding: 10px;
+  padding: 20px;
   border-radius: 5px;
   border: 2px #a94242 solid;
   background-color: #f8d7da;
   color: #721c24;
-}
-
-.dashboard-tip-success {
-  padding: 10px;
-  border-radius: 5px;
-  border: 2px #4ca044 solid;
-  background-color: #7cc773;
-  color: #0e480b;
 }
