@@ -8,7 +8,12 @@
     <div class="sidebar-influenced">
       <div id="dashboard-container">
         <div id="dashboard-wrapper" class="d-none">
-          <h1 id="dashboard-headline">{% trans 'product.dashboard.welcome' %} </h1>
+          <div id="dashboard-header">
+            <div id="dashboard-header-content">
+              <img id="dashboard-header-logo" src="{% static 'img/logo.png' %}">
+              <h1 id="dashboard-headline">{% trans 'product.dashboard.welcome' %}<br> </h1>
+            </div>
+          </div>
           <div id="dashboard-content">
             <div id="dashboard-tip-container" class="dashboard-content-entry">
               <h2 class="fw-bold mb-4">{% trans 'product.dashboard.tip.headline' %}</h2>
@@ -48,7 +53,7 @@
   });
 
   function displayDashboard(username, targets, currentTarget, activities, tutorialActive) {
-    document.getElementById("dashboard-headline").innerText += username;
+    document.getElementById("dashboard-headline").innerHTML += username;
     displayTip(tutorialActive);
     displayTargets(targets, currentTarget);
     displayActivities(activities);
