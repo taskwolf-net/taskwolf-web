@@ -10,8 +10,7 @@
 #dashboard-headline {
   text-align: center;
   font-weight: bold;
-  padding-top: 8vh;
-  padding-bottom: 8vh;
+  padding: 10vh 20px;
   margin-bottom: 8vh;
   margin-left: 0;
   margin-right: 0;
@@ -40,6 +39,7 @@
   padding: 0;
   margin: 0;
   border-radius: 5px;
+  list-style: none;
 }
 
 .dark #dashboard-target-list {
@@ -92,18 +92,78 @@
   border-bottom: 1px #a0a0a0 solid;
 }
 
+@media (max-width: 575px) {
+  .dashboard-target-icon {
+    font-size: 20px;
+  }
+
+  .dashboard-target-name {
+    font-size: 20px;
+    margin-left: 15px;
+  }
+}
+
+@media (max-width: 450px) {
+  .dashboard-target-icon {
+    display: none;
+  }
+
+  .dashboard-target-name {
+    margin-left: 0;
+  }
+}
+
+#dashboard-activity-list {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding: 0 0 10px;
+  margin: 0;
+  list-style: none;
+}
+
+.dashboard-activity {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 0 0 auto;
+  width: calc(1160px / 3);
+  height: 300px;
+  border-radius: 5px;
+  padding: 20px;
+  margin-right: 20px;
+}
+
+.dark .dashboard-activity {
+  background-color: #131820;
+  border: 1px #2b3441 solid;
+}
+
+.light .dashboard-activity {
+  background-color: #dadada;
+  border: 1px #a0a0a0 solid;
+}
+
+.dashboard-activity-icon {
+  font-size: 64px;
+  height: 96px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
 .dashboard-tip-issue {
   padding: 10px;
   border-radius: 5px;
-  border: 2px #b72a2a solid;
-  background-color: #ff9999;
-  color: black;
+  border: 2px #a94242 solid;
+  background-color: #f8d7da;
+  color: #721c24;
 }
 
 .dashboard-tip-success {
   padding: 10px;
   border-radius: 5px;
-  border: 2px #2cac1f solid;
-  background-color: #89ff76;
-  color: black;
+  border: 2px #4ca044 solid;
+  background-color: #7cc773;
+  color: #0e480b;
 }

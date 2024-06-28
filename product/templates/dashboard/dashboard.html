@@ -17,6 +17,8 @@
             </div>
             <div class="dashboard-content-entry">
               <h2 class="fw-bold mb-4">{% trans 'product.dashboard.activity.headline' %}</h2>
+              <ul id="dashboard-activity-list">
+              </ul>
             </div>
             <div class="dashboard-content-entry">
               <h2 class="fw-bold mb-4">{% trans 'product.dashboard.tip.headline' %}</h2>
@@ -36,15 +38,19 @@
     fetchUsername(function(username) {
       fetchTargets(function (targets, currentTarget) {
         fetchTutorial(function(tutorialActive) {
-          displayDashboard(username, targets, currentTarget, tutorialActive);
+          fetchActivities(function (activities) {
+            displayDashboard(username, targets, currentTarget, activities,
+              tutorialActive);
+          });
         });
       });
     });
   });
 
-  function displayDashboard(username, targets, currentTarget, tutorialActive) {
+  function displayDashboard(username, targets, currentTarget, activities, tutorialActive) {
     document.getElementById("dashboard-headline").innerText += username;
     displayTargets(targets, currentTarget);
+    displayActivities(activities);
     displayTip(tutorialActive);
     removeLoader();
   }
@@ -112,6 +118,54 @@
     return selectButton;
   }
 
+  function displayActivities(activities) {
+    for (var i = 0; i < activities.length; i++) {
+      var activity = activities[i];
+      document.getElementById("dashboard-activity-list").appendChild(
+        createActivity(activity));
+    }
+  }
+
+  function createActivity(activity) {
+    var activityElement = document.createElement("li");
+    activityElement.classList.add("dashboard-activity");
+    var firstContainer = document.createElement("div");
+    firstContainer.appendChild(createActivityIcon(activity));
+    var activityNameElement = document.createElement("h5");
+    activityNameElement.classList.add("text-center", "fw-bold", "mb-3");
+    activityNameElement.innerText = activity.title;
+    firstContainer.appendChild(activityNameElement);
+    var activityDescriptionElement = document.createElement("span");
+    activityDescriptionElement.innerText = activity.description;
+    firstContainer.appendChild(activityDescriptionElement);
+    firstContainer.appendChild(document.createElement("br"));
+    activityElement.appendChild(firstContainer);
+    var secondContainer = document.createElement("div");
+    var activityTimeElement = document.createElement("p");
+    activityTimeElement.classList.add("text-center");
+    activityTimeElement.innerText = activity.time;
+    secondContainer.appendChild(activityTimeElement);
+    activityElement.appendChild(secondContainer);
+    return activityElement;
+  }
+
+  function createActivityIcon(activity) {
+    var activityIconContainerElement = document.createElement("div");
+    activityIconContainerElement.classList.add("dashboard-activity-icon");
+    var activityIconElement = document.createElement("i");
+    if (activity.type === "SETTING") {
+      activityIconElement.classList.add("fa-solid", "fa-gear");
+    } else if (activity.type === "ORGANIZATION") {
+      activityIconElement.classList.add("fa-solid", "fa-users");
+    } else if (activity.type === "DEVICE") {
+      activityIconElement.classList.add("fa-solid", "fa-desktop");
+    } else if (activity.type === "TICKET") {
+      activityIconElement.classList.add("fa-solid", "fa-envelope-open-text");
+    }
+    activityIconContainerElement.appendChild(activityIconElement);
+    return activityIconContainerElement;
+  }
+
   function displayTip(tutorialActive) {
     if (tutorialActive) {
       document.getElementById("dashboard-tip").appendChild(createTip(
@@ -149,6 +203,14 @@
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
       callback(response.targets, response.currentTarget);
+    });
+  }
+
+  function fetchActivities(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/activities/", "GET", []);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      callback(response.activities);
     });
   }
 
