@@ -136,10 +136,14 @@
     activityElement.classList.add("dashboard-activity");
     var firstContainer = document.createElement("div");
     firstContainer.appendChild(createActivityIcon(activity));
-    var activityNameElement = document.createElement("h4");
-    activityNameElement.classList.add("text-center", "fw-bold", "mb-3");
+    var activityNameContainer = document.createElement("h4");
+    activityNameContainer.classList.add("text-center", "fw-bold", "mb-3");
+    var activityNameElement = document.createElement("span");
+    activityNameElement.classList.add("badge",
+      Cookie.find("taskwolf-theme") === "dark" ? "text-bg-light" : "text-bg-dark");
     activityNameElement.innerText = activity.title;
-    firstContainer.appendChild(activityNameElement);
+    activityNameContainer.appendChild(activityNameElement);
+    firstContainer.appendChild(activityNameContainer);
     var activityDescriptionElement = document.createElement("p");
     activityDescriptionElement.classList.add("text-center", "mb-0");
     activityDescriptionElement.innerText = activity.description;
