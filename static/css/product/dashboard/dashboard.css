@@ -181,6 +181,45 @@
   text-align: center;
 }
 
+.dashboard-activity-empty {
+  width: calc(1160px / 3);
+  height: 300px;
+  border-radius: 5px;
+  margin-right: 20px;
+}
+
+.dark .dashboard-activity-empty {
+  background-color: #131820;
+  border: 3px #5a6479 dashed;
+}
+
+.light .dashboard-activity {
+  background-color: #dadada;
+  border: 1px #666666 solid;
+}
+
+.dashboard-activity-title-empty {
+  margin: 110px auto auto;
+  width: 100px;
+  height: 30px;
+  border-radius: 10px;
+}
+
+.dashboard-activity-description-empty {
+  margin: 20px auto auto;
+  width: 200px;
+  height: 30px;
+  border-radius: 10px;
+}
+
+.dark .dashboard-activity-title-empty, .dark .dashboard-activity-description-empty {
+  background-color: #5a6479;
+}
+
+.light .dashboard-activity-title-empty, .light .dashboard-activity-description-empty {
+  background-color: #666666;
+}
+
 .dashboard-tip-issue {
   padding: 20px;
   border-radius: 5px;

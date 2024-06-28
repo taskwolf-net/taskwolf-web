@@ -129,6 +129,17 @@
       document.getElementById("dashboard-activity-list").appendChild(
         createActivity(activity));
     }
+    for (var i = activities.length; i < 3; i++) {
+      var emptyActivityElement = document.createElement("li");
+      emptyActivityElement.classList.add("dashboard-activity-empty");
+      var emptyTitleElement = document.createElement("div");
+      emptyTitleElement.classList.add("dashboard-activity-title-empty");
+      emptyActivityElement.appendChild(emptyTitleElement);
+      var emptyDescriptionElement = document.createElement("div");
+      emptyDescriptionElement.classList.add("dashboard-activity-description-empty");
+      emptyActivityElement.appendChild(emptyDescriptionElement);
+      document.getElementById("dashboard-activity-list").appendChild(emptyActivityElement);
+    }
   }
 
   function createActivity(activity) {
