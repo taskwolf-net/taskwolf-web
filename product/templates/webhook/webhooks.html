@@ -9,13 +9,6 @@
       <div id="webhooks-wrapper">
         <h1 id="webhooks-headline">{% trans 'product.webhooks.headline' %}</h1>
         <div id="webhooks-header">
-          <div id="target-dropdown" class="dropdown">
-            <button id="target-dropdown-button" class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
-              {% trans 'target' %}:
-            </button>
-            <ul id="target-dropdown-list" class="dropdown-menu">
-            </ul>
-          </div>
           <div class="d-flex w-100">
             <div id="webhooks-search-box">
               <input id="webhooks-search-input" placeholder=" {% trans 'product.webhooks.search' %}" type="text" class="form-control" value="" autocomplete="off">
@@ -68,15 +61,13 @@
   $(document).ready(function() {
     webhooks = [];
     displayLoader();
-    setupTargetSelection(function() {
-      fetchWebhooksData(function() {
-        displayWebhooks();
-        if (webhooks.length === 0) {
-          document.getElementById("webhooks-empty").style.display = "flex";
-        } else {
-          document.getElementById("webhooks-empty").style.display = "none";
-        }
-      });
+    fetchWebhooksData(function() {
+      displayWebhooks();
+      if (webhooks.length === 0) {
+        document.getElementById("webhooks-empty").style.display = "flex";
+      } else {
+        document.getElementById("webhooks-empty").style.display = "none";
+      }
     });
   });
 

@@ -54,63 +54,71 @@
   padding: 5px;
 }
 
-#profile-button-wrapper {
+#target-button-wrapper, #profile-button-wrapper {
   border: none;
   outline: none;
   border-radius: 10px;
   padding: 10px;
 }
 
-.dark #profile-button-wrapper:hover {
+.dark #target-button-wrapper:hover, .dark #profile-button-wrapper:hover {
   background-color: #30363b;
 }
 
-.light #profile-button-wrapper:hover {
+.light #target-button-wrapper:hover, .light #profile-button-wrapper:hover {
   background-color: #cccccc;
 }
 
-#profile-picture {
+#target-icon, #profile-picture {
   font-size: 26px;
 }
 
-#profile-picture-arrow {
+#target-icon-arrow, #profile-picture-arrow {
   font-size: 18px;
   padding-left: 10px;
 }
 
-
-.dropdown-toggle[aria-expanded="true"] #profile-picture-arrow {
+.dropdown-toggle[aria-expanded="true"] #target-icon-arrow, .dropdown-toggle[aria-expanded="true"] #profile-picture-arrow {
   transform: scaleY(-1);
 }
 
-.dropdown-toggle #profile-picture-arrow {
-  transition:all ease 0.2s;
+.dropdown-toggle #target-icon-arrow, .dropdown-toggle #profile-picture-arrow {
+  transition: all ease 0.2s;
 }
 
-.dark #profile-picture, .dark #profile-picture-arrow {
+.dark #target-icon, .dark #target-icon-arrow, .dark #profile-picture, .dark #profile-picture-arrow {
   color: white;
 }
 
-.light #profile-picture, .light #profile-picture-arrow {
+.light #target-icon, .light #target-icon-arrow, .light #profile-picture, .light #profile-picture-arrow {
   color: black;
 }
 
-#profile-button-wrapper::after {
+#target-button-wrapper::after, #profile-button-wrapper::after {
   display: none;
 }
 
-#profile-button-container {
+#header-control-container {
+  position: relative;
+  display: flex;
   margin-left: auto;
   margin-right: 50px;
-  position: relative;
 }
 
-.dark #profile-button-container .dropdown-menu {
+.dark #header-control-container .dropdown-menu {
   background-color: #2f343a;
 }
 
-.dark #profile-button-container .dropdown-item:hover {
+.dark #header-control-container .dropdown-item:hover {
   background-color: #414851;
+}
+
+.dark #header-control-container .active:hover {
+  background-color: #0e57ca;
+}
+
+.light #header-control-container .active:hover {
+  background-color: #5b9dff;
 }
 
 @media (max-width: 575px) {
@@ -122,7 +130,7 @@
     display: none;
   }
 
-  #profile-button-container {
+  #header-control-container {
     margin-right: 25px;
   }
 }

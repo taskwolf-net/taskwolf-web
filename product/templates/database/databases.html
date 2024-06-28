@@ -9,13 +9,6 @@
       <div id="databases-wrapper">
         <h1 id="databases-headline">{% trans 'product.databases.headline' %}</h1>
         <div id="databases-header">
-          <div id="target-dropdown" class="dropdown">
-            <button id="target-dropdown-button" class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
-              {% trans 'target' %}:
-            </button>
-            <ul id="target-dropdown-list" class="dropdown-menu">
-            </ul>
-          </div>
           <div class="d-flex w-100">
             <div id="databases-search-box">
               <input id="databases-search-input" placeholder=" {% trans 'product.databases.search' %}" type="text" class="form-control" value="" autocomplete="off">
@@ -62,15 +55,13 @@
 
   $(document).ready(function() {
     displayLoader();
-    setupTargetSelection(function() {
-      fetchDatabasesData(function() {
-        displayDatabases();
-        if (databases.length === 0) {
-          document.getElementById("databases-empty").style.display = "flex";
-        } else {
-          document.getElementById("databases-empty").style.display = "none";
-        }
-      });
+    fetchDatabasesData(function() {
+      displayDatabases();
+      if (databases.length === 0) {
+        document.getElementById("databases-empty").style.display = "flex";
+      } else {
+        document.getElementById("databases-empty").style.display = "none";
+      }
     });
   });
 

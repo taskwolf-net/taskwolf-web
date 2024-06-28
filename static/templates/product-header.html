@@ -4,16 +4,26 @@
   <button id="sidebar-button" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="false" aria-controls="sidebar"></button>
   <div id="navbar-content">
     <a href="/" id="navbar-logo"><img src="{% static 'img/logo.png' %}" width="70px" height="70px" alt=""></a>
-    <div id="profile-button-container">
-      <button class="dropdown-toggle btn" id="profile-button-wrapper" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i id="profile-picture" class="fa-regular fa-user"></i><i id="profile-picture-arrow" class="fa-solid fa-angle-down"></i>
-      </button>
-      <div class="dropdown-menu dropdown-menu-dark dropdown-menu-center" aria-labelledby="profile-button-wrapper">
-        <button class="dropdown-item" id="dashboard-button" type="button">{% trans 'product.header.dashboard' %}</button>
-        <button class="dropdown-item" id="settings-button" type="button">{% trans 'product.header.settings' %}</button>
-        <button class="dropdown-item" id="tickets-button" type="button">{% trans 'product.header.tickets' %}</button>
-        <div class="dropdown-divider"></div>
-        <button class="dropdown-item" id="logout-button" type="button">{% trans 'product.header.logout' %}</button>
+    <div id="header-control-container">
+      <div id="target-button-container" class="dropdown">
+        <button class="dropdown-toggle btn" id="target-button-wrapper" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i id="target-icon" class="fa-solid fa-sliders"></i><i id="target-icon-arrow" class="fa-solid fa-angle-down"></i>
+        </button>
+        <ul id="target-list" class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="target-button-wrapper">
+        </ul>
+      </div>
+      <div class="vr ms-3 me-3"></div>
+      <div id="profile-button-container" class="dropdown">
+        <button class="dropdown-toggle btn" id="profile-button-wrapper" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i id="profile-picture" class="fa-regular fa-user"></i><i id="profile-picture-arrow" class="fa-solid fa-angle-down"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="profile-button-wrapper">
+          <li><button class="dropdown-item" id="dashboard-button" type="button">{% trans 'product.header.dashboard' %}</button></li>
+          <li><button class="dropdown-item" id="settings-button" type="button">{% trans 'product.header.settings' %}</button></li>
+          <li><button class="dropdown-item" id="tickets-button" type="button">{% trans 'product.header.tickets' %}</button></li>
+          <li><div class="dropdown-divider"></div></li>
+          <li><button class="dropdown-item" id="logout-button" type="button">{% trans 'product.header.logout' %}</button></li>
+        </ul>
       </div>
     </div>
   </div>
@@ -21,6 +31,12 @@
 <div id="header-space"></div>
 
 <script>
+  var currentTarget;
+
+  $(document).ready(function() {
+    setupTargetSelection();
+  });
+
   document.getElementById('dashboard-button').onclick = function() {
     window.location.href = "/dashboard/";
   };
@@ -34,6 +50,48 @@
     Cookie.destroy("token", ".taskwolf.net");
     window.location.href = "/";
   };
+
+  function setupTargetSelection() {
+    fetchTargetsData(function(response) {
+      var targets = response.targets;
+      for (var i = 0; i < targets.length; i++) {
+        addTarget(targets[i], targets[i].id === response.currentTarget);
+      }
+      currentTarget = targets.filter((target) =>
+        target.id === response.currentTarget)[0];
+    });
+  }
+
+  function fetchTargetsData(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/targets/all/", "GET",
+      []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function addTarget(target, isActive) {
+    var targetElement = document.createElement("li");
+    targetElement.classList.add("dropdown-item");
+    if (isActive) {
+      targetElement.classList.add("active");
+    }
+    var targetNameName = document.createElement("span");
+    targetNameName.innerHTML = target.name;
+    targetElement.appendChild(targetNameName);
+    targetElement.onclick = function(event) {
+      selectTarget(target);
+    }
+    document.getElementById("target-list").appendChild(targetElement);
+  }
+
+  function selectTarget(target) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST",
+      [], {target: target.id});
+    request.send(function (status, responseText) {
+      window.location.reload();
+    });
+  }
 
   var isSidebarShown;
 

@@ -8,13 +8,6 @@
     <div class="sidebar-influenced">
       <div id="account-apps-wrapper">
         <div id="account-apps-header">
-          <div id="target-dropdown" class="dropdown">
-            <button id="target-dropdown-button" class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
-              {% trans 'target' %}:
-            </button>
-            <ul id="target-dropdown-list" class="dropdown-menu">
-            </ul>
-          </div>
           <h1 id="account-apps-headline">{% trans 'product.account.apps.headline' %}</h1>
         </div>
         <div id="account-apps-search-box">
@@ -41,15 +34,13 @@
 
   $(document).ready(function() {
     displayLoader();
-    setupTargetSelection(function() {
-      fetchAppsData(function() {
-        displayApps();
-        if (apps.length === 0) {
-          document.getElementById("account-apps-empty").style.display = "block";
-        } else {
-          document.getElementById("account-apps-empty").style.display = "none";
-        }
-      });
+    fetchAppsData(function() {
+      displayApps();
+      if (apps.length === 0) {
+        document.getElementById("account-apps-empty").style.display = "block";
+      } else {
+        document.getElementById("account-apps-empty").style.display = "none";
+      }
     });
   });
 

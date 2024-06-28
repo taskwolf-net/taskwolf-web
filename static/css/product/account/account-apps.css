@@ -6,32 +6,7 @@
   width: min(calc(1200px - 15vw), 95%);
 }
 
-#target-dropdown {
-  margin-left: auto;
-}
-
-#target-dropdown-button {
-  width: 100%;
-}
-
-@media (max-width: 1000px) {
-  #target-dropdown {
-    margin: 60px auto 10px;
-  }
-}
-
-@media (max-width: 575px) {
-  #target-dropdown {
-    margin: 50px auto 10px;
-  }
-}
-
-#target-dropdown-list {
-  width: 100%;
-}
-
 #account-apps-headline {
-  position: absolute;
   font-weight: bold;
 }
 

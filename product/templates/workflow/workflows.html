@@ -9,13 +9,6 @@
       <div id="workflows-wrapper">
         <h1 id="workflows-headline">{% trans 'product.workflows.headline' %}</h1>
         <div id="workflows-header">
-          <div id="target-dropdown" class="dropdown">
-            <button id="target-dropdown-button" class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
-              {% trans 'target' %}:
-            </button>
-            <ul id="target-dropdown-list" class="dropdown-menu">
-            </ul>
-          </div>
           <div class="d-flex w-100">
             <div id="workflows-search-box">
               <input id="workflows-search-input" placeholder=" {% trans 'product.workflows.search' %}" type="text" class="form-control" value="" autocomplete="off">
@@ -74,15 +67,13 @@
   $(document).ready(function() {
     workflows = [];
     displayLoader();
-    setupTargetSelection(function() {
-      fetchWorkflowsData(function() {
-        displayWorkflows();
-        if (workflows.length === 0) {
-          document.getElementById("workflows-empty").style.display = "flex";
-        } else {
-          document.getElementById("workflows-empty").style.display = "none";
-        }
-      });
+    fetchWorkflowsData(function() {
+      displayWorkflows();
+      if (workflows.length === 0) {
+        document.getElementById("workflows-empty").style.display = "flex";
+      } else {
+        document.getElementById("workflows-empty").style.display = "none";
+      }
     });
   });
 
