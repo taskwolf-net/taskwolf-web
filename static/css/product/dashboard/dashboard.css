@@ -146,7 +146,7 @@
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
-  padding: 0 0 10px;
+  padding: 0 0 30px;
   margin: 0;
   list-style: none;
 }
@@ -160,7 +160,6 @@
   height: 300px;
   border-radius: 5px;
   padding: 30px;
-  margin-right: 20px;
 }
 
 .dark .dashboard-activity {
@@ -182,10 +181,11 @@
 }
 
 .dashboard-activity-empty {
-  width: calc(1160px / 3);
+  width: calc((1200px - 3.5rem) / 3);
   height: 300px;
+  flex: 0 0 auto;
   border-radius: 5px;
-  margin-right: 20px;
+  padding: 30px;
 }
 
 .dark .dashboard-activity-empty {
@@ -193,13 +193,13 @@
   border: 3px #5a6479 dashed;
 }
 
-.light .dashboard-activity {
+.light .dashboard-activity-empty {
   background-color: #dadada;
   border: 1px #666666 solid;
 }
 
 .dashboard-activity-title-empty {
-  margin: 110px auto auto;
+  margin: 90px auto auto;
   width: 100px;
   height: 30px;
   border-radius: 10px;
