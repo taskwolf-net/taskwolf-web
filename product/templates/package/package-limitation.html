@@ -1,0 +1,41 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body class="dark">
+    {% include 'templates/product-header.html' %}
+    {% include 'templates/product-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="package-limitation-container">
+        <div id="package-limitation-wrapper" class="d-none">
+          <div>
+            <ul class="nav nav-tabs">
+              <li class="nav-item"><a class="nav-link" href="/package/general/">{% trans 'product.package.tab.general' %}</a></li>
+              <li class="nav-item"><a class="nav-link nav-link-active" href="/package/limitations/">{% trans 'product.package.tab.limitation' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/package/payments/">{% trans 'product.package.tab.payment' %}</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    displayLoader()
+    removeLoader();
+  });
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("package-limitation-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("package-limitation-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("package-limitation-wrapper").classList.remove("d-none");
+  }
+</script>
