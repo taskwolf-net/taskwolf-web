@@ -126,18 +126,12 @@
   function displayActivities(activities) {
     for (var i = 0; i < activities.length; i++) {
       var activity = activities[i];
-      var entry = createActivity(activity);
-      if (i !== activities.length - 1 || i < 3) {
-        entry.classList.add("me-4");
-      }
-      document.getElementById("dashboard-activity-list").appendChild(entry);
+      document.getElementById("dashboard-activity-list")
+        .appendChild(createActivity(activity));
     }
     for (var i = activities.length; i < 3; i++) {
       var emptyActivityElement = document.createElement("li");
       emptyActivityElement.classList.add("dashboard-activity-empty");
-      if (i !== 2) {
-        emptyActivityElement.classList.add("me-4");
-      }
       var emptyTitleElement = document.createElement("div");
       emptyTitleElement.classList.add("dashboard-activity-title-empty");
       emptyActivityElement.appendChild(emptyTitleElement);
