@@ -43,11 +43,13 @@
 }
 
 .dark #package-general-disclaimer {
-  background-color: #212529;
+  background-color: #131820;
+  border: 1px #2b3441 solid;
 }
 
 .light #package-general-disclaimer {
   background-color: #dadada;
+  border: 1px #a0a0a0 solid;
 }
 
 #package-general-information {
@@ -58,11 +60,13 @@
 }
 
 .dark #package-general-information {
-  background-color: #212529;
+  background-color: #131820;
+  border: 1px #2b3441 solid;
 }
 
 .light #package-general-information {
   background-color: #dadada;
+  border: 1px #a0a0a0 solid;
 }
 
 #package-general-information-entries {
@@ -71,7 +75,6 @@
   width: min(800px, 100%);
   margin: 20px auto auto;
   border-radius: 5px;
-
 }
 
 .dark #package-general-information-entries {
@@ -79,7 +82,8 @@
 }
 
 .light #package-general-information-entries {
-  border: 1px #999999 solid;
+  background-color: #dadada;
+  border: 1px #a0a0a0 solid;
 }
 
 .package-general-information-entry {

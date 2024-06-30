@@ -43,11 +43,13 @@
 }
 
 .dark #package-limitation-disclaimer {
-  background-color: #212529;
+  background-color: #131820;
+  border: 1px #2b3441 solid;
 }
 
 .light #package-limitation-disclaimer {
   background-color: #dadada;
+  border: 1px #a0a0a0 solid;
 }
 
 #package-limitation-list {
@@ -67,11 +69,13 @@
 }
 
 .dark .package-limitation-entry {
-  background-color: #212529;
+  background-color: #131820;
+  border: 1px #2b3441 solid;
 }
 
 .light .package-limitation-entry {
   background-color: #dadada;
+  border: 1px #a0a0a0 solid;
 }
 
 .package-limitation-entry-header {
