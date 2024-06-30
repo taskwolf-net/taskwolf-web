@@ -15,10 +15,175 @@
               <li class="nav-item"><a class="nav-link" href="/package/payments/">{% trans 'product.package.tab.payment' %}</a></li>
             </ul>
           </div>
-          <div id="package-general-icon-container">
-            <i id="package-general-icon"></i>
+          <div id="package-general-disclaimer">
+            <h4 class="fw-bold mb-4">{% trans 'product.package.general.headline' %}</h4>
+            <p class="mb-3">{% trans 'product.package.general.description.1' %}</p>
+            <p class="mb-0">{% trans 'product.package.general.description.2' %}</p>
           </div>
-          <h1 id="package-general-name" class="text-center mt-5 fw-bold"></h1>
+          <div id="package-general-information">
+            <h3 class="fw-bold">{% trans 'product.package.general.your.package' %}</h3>
+            <ul id="package-general-information-entries">
+              <li class="package-general-information-entry">
+                <div class="package-general-information-entry-description">
+                  <div class="package-general-information-entry-icon">
+                    <i class="fa-solid fa-box"></i>
+                  </div>
+                  <span>{% trans 'product.package.general.type' %}</span>
+                </div>
+                <span id="package-general-information-type"></span>
+              </li>
+              <div class="package-general-information-divider"></div>
+              <li class="package-general-information-entry">
+                <div class="package-general-information-entry-description">
+                  <div class="package-general-information-entry-icon">
+                    <i class="fa-solid fa-coins"></i>
+                  </div>
+                  <span>{% trans 'product.package.general.price' %}</span>
+                </div>
+                <span id="package-general-information-price"></span>
+              </li>
+              <div class="package-general-information-divider"></div>
+              <li class="package-general-information-entry">
+                <div class="package-general-information-entry-description">
+                  <div class="package-general-information-entry-icon">
+                    <i class="fa-regular fa-clock"></i>
+                  </div>
+                  <span>{% trans 'product.package.general.runtime' %}</span>
+                </div>
+                <span id="package-general-information-runtime"></span>
+              </li>
+              <div class="package-general-information-divider"></div>
+              <li class="package-general-information-entry">
+                <div class="package-general-information-entry-description">
+                  <div class="package-general-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'product.package.general.workflow.access' %}</span>
+                </div>
+                <span id="package-general-information-workflow-access"></span>
+              </li>
+              <div class="package-general-information-divider"></div>
+              <li class="package-general-information-entry">
+                <div class="package-general-information-entry-description">
+                  <div class="package-general-information-entry-icon">
+                    <i class="fa-solid fa-hashtag"></i>
+                  </div>
+                  <span>{% trans 'product.package.general.workflow.number' %}</span>
+                </div>
+                <span id="package-general-information-workflow-number"></span>
+              </li>
+              <div class="package-general-information-divider"></div>
+              <li class="package-general-information-entry">
+                <div class="package-general-information-entry-description">
+                  <div class="package-general-information-entry-icon">
+                    <i class="fa-solid fa-microchip"></i>
+                  </div>
+                  <span>{% trans 'product.package.general.workflow.operation' %}</span>
+                </div>
+                <span id="package-general-information-workflow-operation"></span>
+              </li>
+              <div class="package-general-information-divider"></div>
+              <li class="package-general-information-entry">
+                <div class="package-general-information-entry-description">
+                  <div class="package-general-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'product.package.general.template.access' %}</span>
+                </div>
+                <span id="package-general-information-template-access"></span>
+              </li>
+              <div class="package-general-information-divider"></div>
+              <li class="package-general-information-entry">
+                <div class="package-general-information-entry-description">
+                  <div class="package-general-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'product.package.general.database.access' %}</span>
+                </div>
+                <span id="package-general-information-database-access"></span>
+              </li>
+              <div class="package-general-information-divider"></div>
+              <li class="package-general-information-entry">
+                <div class="package-general-information-entry-description">
+                  <div class="package-general-information-entry-icon">
+                    <i class="fa-solid fa-hashtag"></i>
+                  </div>
+                  <span>{% trans 'product.package.general.database.number' %}</span>
+                </div>
+                <span id="package-general-information-database-number"></span>
+              </li>
+              <div class="package-general-information-divider"></div>
+              <li class="package-general-information-entry">
+                <div class="package-general-information-entry-description">
+                  <div class="package-general-information-entry-icon">
+                    <i class="fa-solid fa-database"></i>
+                  </div>
+                  <span>{% trans 'product.package.general.database.data' %}</span>
+                </div>
+                <span id="package-general-information-database-data"></span>
+              </li>
+              <div class="package-general-information-divider"></div>
+              <li class="package-general-information-entry">
+                <div class="package-general-information-entry-description">
+                  <div class="package-general-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'product.package.general.webhook.access' %}</span>
+                </div>
+                <span id="package-general-information-webhook-access"></span>
+              </li>
+              <div class="package-general-information-divider"></div>
+              <li class="package-general-information-entry">
+                <div class="package-general-information-entry-description">
+                  <div class="package-general-information-entry-icon">
+                    <i class="fa-solid fa-hashtag"></i>
+                  </div>
+                  <span>{% trans 'product.package.general.webhook.number' %}</span>
+                </div>
+                <span id="package-general-information-webhook-number"></span>
+              </li>
+              <div class="package-general-information-divider"></div>
+              <li class="package-general-information-entry">
+                <div class="package-general-information-entry-description">
+                  <div class="package-general-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'product.package.general.organization.access' %}</span>
+                </div>
+                <span id="package-general-information-organization-access"><i class='fa-solid fa-xmark'></i></span>
+              </li>
+              <div class="package-general-information-divider"></div>
+              <li class="package-general-information-entry">
+                <div class="package-general-information-entry-description">
+                  <div class="package-general-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'product.package.general.device.access' %}</span>
+                </div>
+                <span id="package-general-information-device-access"></span>
+              </li>
+              <div class="package-general-information-divider"></div>
+              <li class="package-general-information-entry">
+                <div class="package-general-information-entry-description">
+                  <div class="package-general-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'product.package.general.account.access' %}</span>
+                </div>
+                <span id="package-general-information-account-access"></span>
+              </li>
+              <div class="package-general-information-divider"></div>
+              <li class="package-general-information-entry">
+                <div class="package-general-information-entry-description">
+                  <div class="package-general-information-entry-icon">
+                    <i class="fa-solid fa-hashtag"></i>
+                  </div>
+                  <span>{% trans 'product.package.general.account.number' %}</span>
+                </div>
+                <span id="package-general-information-account-number"></span>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -35,20 +200,47 @@
   });
 
   function displayGeneralInformation(bundle) {
-    var iconElement = document.getElementById("package-general-icon");
-    var nameElement = document.getElementById("package-general-name");
+    document.getElementById("package-general-information-type").innerHTML =
+      findPackageName(bundle);
+    document.getElementById("package-general-information-price").innerHTML =
+      "14,99 €";
+    document.getElementById("package-general-information-runtime").innerHTML =
+      "1 Month";
+    document.getElementById("package-general-information-workflow-access").innerHTML =
+      bundle.workflowAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("package-general-information-workflow-number").innerHTML =
+      bundle.workflowNumberLimit < 0 ? "∞" : bundle.workflowNumberLimit;
+    document.getElementById("package-general-information-workflow-operation").innerHTML =
+      bundle.workflowOperationLimit;
+    document.getElementById("package-general-information-template-access").innerHTML =
+      true ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("package-general-information-database-access").innerHTML =
+      bundle.databaseAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("package-general-information-database-number").innerHTML =
+      bundle.databaseNumberLimit < 0 ? "<span class='h5 mb-0'>∞</span>" : bundle.databaseNumberLimit;
+    document.getElementById("package-general-information-database-data").innerHTML =
+      bundle.databaseDataLimit;
+    document.getElementById("package-general-information-webhook-access").innerHTML =
+      bundle.webhookAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("package-general-information-webhook-number").innerHTML =
+      bundle.webhookNumberLimit < 0 ? "<span class='h5 mb-0'>∞</span>" : bundle.webhookNumberLimit;
+    document.getElementById("package-general-information-device-access").innerHTML =
+      bundle.deviceAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("package-general-information-account-access").innerHTML =
+      bundle.accountsAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("package-general-information-account-number").innerHTML =
+      bundle.accountsNumberLimit < 0 ? "<span class='h5 mb-0'>∞</span>" : bundle.accountsNumberLimit;
+  }
+
+  function findPackageName(bundle) {
     if (bundle.type === "TRIAL") {
-      iconElement.classList.add("fa-regular", "fa-clock");
-      nameElement.innerText = "{% trans 'product.package.general.free' %}";
+      return "{% trans 'product.package.general.free' %}";
     } else if (bundle.type === "PROFESSIONAL") {
-      iconElement.classList.add("fa-solid", "fa-user-tie");
-      nameElement.innerText = "{% trans 'product.package.general.professional' %}";
+      return "{% trans 'product.package.general.professional' %}";
     } else if (bundle.type === "TEAM") {
-      iconElement.classList.add("fa-solid", "fa-people-group");
-      nameElement.innerText = "{% trans 'product.package.general.team' %}";
+      return "{% trans 'product.package.general.team' %}";
     } else if (bundle.type === "ENTERPRISE") {
-      iconElement.classList.add("fa-solid", "fa-city");
-      nameElement.innerText = "{% trans 'product.package.general.enterprise' %}";
+      return "{% trans 'product.package.general.enterprise' %}";
     }
   }
 

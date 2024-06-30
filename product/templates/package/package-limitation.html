@@ -15,6 +15,58 @@
               <li class="nav-item"><a class="nav-link" href="/package/payments/">{% trans 'product.package.tab.payment' %}</a></li>
             </ul>
           </div>
+          <div id="package-limitation-disclaimer">
+            <h4 class="fw-bold mb-4">{% trans 'product.package.limitation.headline' %}</h4>
+            <p class="mb-3">{% trans 'product.package.limitation.description.1' %}</p>
+            <p class="mb-0">{% trans 'product.package.limitation.description.2' %}</p>
+          </div>
+          <ul id="package-limitation-list">
+            <li class="package-limitation-entry">
+              <div id="package-limitation-workflow-number-entry" class="package-limitation-entry-header">
+                <h3 class="mb-0">{% trans 'product.package.limitation.workflow.number' %}</h3>
+                <span id="package-limitation-workflow-number-ratio"></span>
+              </div>
+              <div class="progress">
+                <div id="package-limitation-workflow-number-bar" class="progress-bar progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </li>
+            <li id="package-limitation-workflow-operation-entry" class="package-limitation-entry">
+              <div class="package-limitation-entry-header">
+                <h3 class="mb-0">{% trans 'product.package.limitation.workflow.operation' %}</h3>
+                <span id="package-limitation-workflow-operation-ratio"></span>
+              </div>
+              <div class="progress">
+                <div id="package-limitation-workflow-operation-bar" class="progress-bar progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </li>
+            <li id="package-limitation-database-number-entry" class="package-limitation-entry">
+              <div class="package-limitation-entry-header">
+                <h3 class="mb-0">{% trans 'product.package.limitation.database.number' %}</h3>
+                <span id="package-limitation-database-number-ratio"></span>
+              </div>
+              <div class="progress">
+                <div id="package-limitation-database-number-bar" class="progress-bar progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </li>
+            <li id="package-limitation-database-data-entry" class="package-limitation-entry">
+              <div class="package-limitation-entry-header">
+                <h3 class="mb-0">{% trans 'product.package.limitation.database.data' %}</h3>
+                <span id="package-limitation-database-data-ratio"></span>
+              </div>
+              <div class="progress">
+                <div id="package-limitation-database-data-bar" class="progress-bar progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </li>
+            <li id="package-limitation-webhook-number-entry" class="package-limitation-entry">
+              <div class="package-limitation-entry-header">
+                <h3 class="mb-0">{% trans 'product.package.limitation.webhook.number' %}</h3>
+                <span id="package-limitation-webhook-number-ratio"></span>
+              </div>
+              <div class="progress">
+                <div id="package-limitation-webhook-number-bar" class="progress-bar progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -24,8 +76,57 @@
 <script>
   $(document).ready(function() {
     displayLoader()
-    removeLoader();
+    fetchBundle(function (bundle) {
+      fetchBundleUsage(function (usage) {
+        displayLimitations(bundle, usage);
+        removeLoader();
+      });
+    });
   });
+
+  function displayLimitations(bundle, usage) {
+    displayLimitation(bundle.workflowNumberLimit, usage.workflowNumberUsage,
+      "package-limitation-workflow-number-entry", "package-limitation-workflow-number-ratio",
+      "package-limitation-workflow-number-bar", "");
+    displayLimitation(bundle.workflowOperationLimit, usage.workflowOperationUsage,
+      "package-limitation-workflow-operation-entry", "package-limitation-workflow-operation-ratio",
+      "package-limitation-workflow-operation-bar", "");
+    displayLimitation(bundle.databaseNumberLimit, usage.databaseNumberUsage,
+      "package-limitation-database-number-entry", "package-limitation-database-number-ratio",
+      "package-limitation-database-number-bar", "");
+    displayLimitation(bundle.databaseDataLimit, usage.databaseDataUsage,
+      "package-limitation-database-data-entry", "package-limitation-database-data-ratio",
+      "package-limitation-database-data-bar", "GB");
+    displayLimitation(bundle.webhookNumberLimit, usage.webhookNumberUsage,
+      "package-limitation-webhook-number-entry", "package-limitation-webhook-number-ratio",
+      "package-limitation-webhook-number-bar", "");
+  }
+
+  function displayLimitation(limit, usage, entryElementId, ratioElementId, progressBarElementId, unit) {
+    if (limit < 0) {
+      document.getElementById(entryElementId).classList.add("d-none");
+    }
+    var ratio = Math.round((usage / limit) * 100) + "%";
+    var ratioElement = document.getElementById(ratioElementId);
+    ratioElement.innerHTML = usage + " / " + limit + " " + unit;
+    var progressBarElement = document.getElementById(progressBarElementId);
+    progressBarElement.style.width = ratio;
+    progressBarElement.innerHTML = ratio;
+  }
+
+  function fetchBundle(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/bundle/", "GET", []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function fetchBundleUsage(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/bundle/usage/", "GET", []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
 
   function displayLoader() {
     var loader = document.createElement("div");

@@ -5,7 +5,7 @@
 
 #package-general-container .nav-tabs {
   width: min(1200px, 100%);
-  margin: 1% auto auto;
+  margin: 40px auto 75px auto;
   border: none;
 }
 
@@ -33,27 +33,86 @@
 }
 
 .light #package-general-container .nav-link-active {
-  color: #8fc0f1;
-  border-bottom: 2px #8fc0f1 solid;
+  color: #3f82c5;
+  border-bottom: 2px #3f82c5 solid;
 }
 
-#package-general-icon-container {
+#package-general-disclaimer {
+  padding: 30px;
+  border-radius: 5px;
+}
+
+.dark #package-general-disclaimer {
+  background-color: #212529;
+}
+
+.light #package-general-disclaimer {
+  background-color: #dadada;
+}
+
+#package-general-information {
+  padding: 30px;
+  border-radius: 5px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.dark #package-general-information {
+  background-color: #212529;
+}
+
+.light #package-general-information {
+  background-color: #dadada;
+}
+
+#package-general-information-entries {
+  list-style-type: none;
+  padding: 0;
+  width: min(800px, 100%);
+  margin: 20px auto auto;
+  border-radius: 5px;
+
+}
+
+.dark #package-general-information-entries {
+  border: 1px #596066 solid;
+}
+
+.light #package-general-information-entries {
+  border: 1px #999999 solid;
+}
+
+.package-general-information-entry {
   display: flex;
-  width: 192px;
-  height: 192px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.package-general-information-entry-description {
+  display: flex;
+  align-items: center;
+  width: 75%;
+}
+
+.package-general-information-entry-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
   justify-content: center;
   align-items: center;
-  margin: 5% auto auto;
-  border-radius: 50%;
-  font-size: 96px;
+  margin-right: 15px;
 }
 
-.dark #package-general-icon-container {
-  background-color: white;
-  color: black;
+.package-general-information-divider {
+  width: 100%;
+  height: 0;
 }
 
-.light #package-general-icon-container {
-  background-color: black;
-  color: white;
+.dark .package-general-information-divider {
+  border-bottom: 1px #596066 solid;
+}
+
+.light .package-general-information-divider {
+  border-bottom: 1px #999999 solid;
 }
