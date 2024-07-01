@@ -11,6 +11,44 @@
   margin-top: 3%;
 }
 
+#pricing-personalization {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pricing-switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 30px;
+  padding: 5px;
+}
+
+.dark .pricing-switch {
+  background-color: #fafafa;
+  color: black;
+}
+
+.light .pricing-switch {
+  background-color: #0d1117;
+  color: white;
+}
+
+.pricing-switch-entry {
+  border-radius: 30px;
+}
+
+.dark .pricing-switch-entry-active {
+  background-color: #0d1117;
+  color: white;
+}
+
+.light .pricing-switch-entry-active {
+  background-color: #fafafa;
+  color: black;
+}
+
 #pricing-table {
   width: 100%;
   margin: 3% auto;
