@@ -15,60 +15,60 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 2%;
+  margin-bottom: 5%;
 }
 
 .pricing-switch {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 30px;
+  border-radius: 50px;
   padding: 5px;
-}
-
-.dark .pricing-switch {
-  background-color: #fafafa;
-  color: black;
-}
-
-.light .pricing-switch {
-  background-color: #0d1117;
+  background-color: #131820;
+  border: 1px #2b3441 solid;
   color: white;
 }
 
 .pricing-switch-entry {
-  border-radius: 30px;
-}
-
-.dark .pricing-switch-entry-active {
-  background-color: #0d1117;
+  border-radius: 50px;
+  border: none;
+  outline: none;
+  padding: 10px 20px;
+  background-color: transparent;
   color: white;
 }
 
-.light .pricing-switch-entry-active {
-  background-color: #fafafa;
-  color: black;
+.pricing-switch-active {
+  background-color: #4b5868;
+}
+
+@media (max-width: 1000px) {
+  #pricing-personalization {
+    margin-right: 2.5%;
+    display: block;
+  }
+
+  #pricing-runtime-selection {
+    margin: auto auto 30px;
+    width: fit-content;
+  }
+
+  #pricing-class-selection {
+    margin: auto;
+    width: fit-content;
+  }
 }
 
 #pricing-table {
   width: 100%;
-  margin: 3% auto;
+  margin: auto;
   table-layout: fixed;
-}
-
-.dark #pricing-table {
   color: white;
 }
 
-.light #pricing-table {
-  color: black;
-}
-
-.dark #pricing-table thead tr {
+#pricing-table thead tr {
   background-color: #0d1117 !important;
-}
-
-.light #pricing-table thead tr {
-  background-color: #fafafa !important;
 }
 
 #pricing-table th {
@@ -79,14 +79,7 @@
   padding: 10px;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
-}
-
-.dark #pricing-table th {
   border: 5px solid #0d1117;
-}
-
-.light #pricing-table th {
-  border: 5px solid #fafafa;
 }
 
 .pricing-table-advantages {
@@ -99,16 +92,8 @@
   bottom: 0;
   left: 0;
   right: 0;
-}
-
-.dark .pricing-table-advantages {
   color: white !important;
   background-color: #0d1117 !important;
-}
-
-.light .pricing-table-advantages {
-  color: black !important;
-  background-color: #fafafa !important;
 }
 
 #pricing-table tr {
@@ -116,24 +101,13 @@
   text-align: center;
 }
 
-.dark #pricing-table tr:nth-child(odd) {
+#pricing-table tr:nth-child(odd) {
   background-color: #161d27;
-}
-
-.light #pricing-table tr:nth-child(odd) {
-  background-color: #d0d0d0;
 }
 
 #pricing-table td {
   padding: 20px;
-}
-
-.dark #pricing-table td {
   border: 1px solid #2b333f;
-}
-
-.light #pricing-table td {
-  border: 1px solid #ababab;
 }
 
 .pricing-package-title {
@@ -234,22 +208,13 @@
   margin-bottom: 60px;
 }
 
-.dark .pricing-feature-bundle-headline {
+.pricing-feature-bundle-headline {
   background-color: #0d1117 !important;
 }
 
-.light .pricing-feature-bundle-headline {
-  background-color: #fafafa !important;
-}
-
-.dark .pricing-feature-bundle-headline {
+.pricing-feature-bundle-headline {
   border-left: 1px solid #2b333f;
   border-right: 1px solid #2b333f;
-}
-
-.light .pricing-feature-bundle-headline {
-  border-right: 1px solid #ababab;
-  border-left: 1px solid #ababab;
 }
 
 .pricing-feature-bundle-headline td {

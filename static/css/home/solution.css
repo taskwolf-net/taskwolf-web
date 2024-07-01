@@ -461,14 +461,7 @@ p {
   font-size: 25px;
   margin-top: 3%;
   margin-bottom: 3%;
-}
-
-.dark #solution-apps-constellations-plus {
   background-color: #5c616a;
-}
-
-.light #solution-apps-constellations-plus {
-  background-color: #d8d8d8;
 }
 
 #solution-get-content {
