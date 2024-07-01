@@ -280,7 +280,8 @@
     displayPackageCell("pricing-workflow-templates-", packageName, packageData.workflowTemplateAccess);
     displayPackageCell("pricing-database-access-", packageName, packageData.databaseAccess);
     displayPackageCell("pricing-database-number-", packageName, packageData.databaseNumberLimit);
-    displayPackageCell("pricing-database-data-", packageName, packageData.databaseDataLimit);
+    var dataLimit = packageData.databaseDataLimit;
+    displayPackageCell("pricing-database-data-", packageName, dataLimit > 0 ? dataLimit + " GB" : dataLimit);
     displayPackageCell("pricing-webhooks-access-", packageName, packageData.webhookAccess);
     displayPackageCell("pricing-webhooks-number-", packageName, packageData.webhookNumberLimit);
     displayPackageCell("pricing-organization-access-", packageName, packageData.organizationAccess);

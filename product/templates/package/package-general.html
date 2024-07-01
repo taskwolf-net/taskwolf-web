@@ -13,6 +13,7 @@
               <li class="nav-item"><a class="nav-link nav-link-active" href="/package/general/">{% trans 'product.package.tab.general' %}</a></li>
               <li class="nav-item"><a class="nav-link" href="/package/limitations/">{% trans 'product.package.tab.limitation' %}</a></li>
               <li class="nav-item"><a class="nav-link" href="/package/payments/">{% trans 'product.package.tab.payment' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/package/upgrade/">{% trans 'product.package.tab.upgrade' %}</a></li>
             </ul>
           </div>
           <div id="package-general-disclaimer">
@@ -203,33 +204,35 @@
     document.getElementById("package-general-information-type").innerHTML =
       findPackageName(bundle);
     document.getElementById("package-general-information-price").innerHTML =
-      "14,99 €";
+      bundle.price + " €";
     document.getElementById("package-general-information-runtime").innerHTML =
-      "1 Month";
+      "1 " + (bundle.runtime === "WEEKLY" ? "{% trans 'product.package.general.runtime.week' %}" :
+        (bundle.runtime === "MONTHLY" ? "{% trans 'product.package.general.runtime.month' %}" :
+          "{% trans 'product.package.general.runtime.year' %}"));
     document.getElementById("package-general-information-workflow-access").innerHTML =
       bundle.workflowAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("package-general-information-workflow-number").innerHTML =
-      bundle.workflowNumberLimit < 0 ? "∞" : bundle.workflowNumberLimit;
+      bundle.workflowNumberLimit < 0 ? "{% trans 'product.package.general.unlimited' %}" : bundle.workflowNumberLimit;
     document.getElementById("package-general-information-workflow-operation").innerHTML =
-      bundle.workflowOperationLimit;
+      bundle.workflowOperationLimit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     document.getElementById("package-general-information-template-access").innerHTML =
       true ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("package-general-information-database-access").innerHTML =
       bundle.databaseAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("package-general-information-database-number").innerHTML =
-      bundle.databaseNumberLimit < 0 ? "<span class='h5 mb-0'>∞</span>" : bundle.databaseNumberLimit;
+      bundle.databaseNumberLimit < 0 ? "{% trans 'product.package.general.unlimited' %}" : bundle.databaseNumberLimit;
     document.getElementById("package-general-information-database-data").innerHTML =
-      bundle.databaseDataLimit;
+      bundle.databaseDataLimit + " GB";
     document.getElementById("package-general-information-webhook-access").innerHTML =
       bundle.webhookAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("package-general-information-webhook-number").innerHTML =
-      bundle.webhookNumberLimit < 0 ? "<span class='h5 mb-0'>∞</span>" : bundle.webhookNumberLimit;
+      bundle.webhookNumberLimit < 0 ? "{% trans 'product.package.general.unlimited' %}" : bundle.webhookNumberLimit;
     document.getElementById("package-general-information-device-access").innerHTML =
       bundle.deviceAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("package-general-information-account-access").innerHTML =
       bundle.accountsAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("package-general-information-account-number").innerHTML =
-      bundle.accountsNumberLimit < 0 ? "<span class='h5 mb-0'>∞</span>" : bundle.accountsNumberLimit;
+      bundle.accountsNumberLimit < 0 ? "{% trans 'product.package.general.unlimited' %}" : bundle.accountsNumberLimit;
   }
 
   function findPackageName(bundle) {

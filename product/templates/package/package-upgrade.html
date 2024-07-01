@@ -1,0 +1,42 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body class="dark">
+    {% include 'templates/product-header.html' %}
+    {% include 'templates/product-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="package-upgrade-container">
+        <div id="package-upgrade-wrapper" class="d-none">
+          <div>
+            <ul class="nav nav-tabs">
+              <li class="nav-item"><a class="nav-link" href="/package/general/">{% trans 'product.package.tab.general' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/package/limitations/">{% trans 'product.package.tab.limitation' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/package/payments/">{% trans 'product.package.tab.payment' %}</a></li>
+              <li class="nav-item"><a class="nav-link nav-link-active" href="/package/upgrade/">{% trans 'product.package.tab.upgrade' %}</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    displayLoader()
+    removeLoader();
+  });
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("package-upgrade-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("package-upgrade-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("package-upgrade-wrapper").classList.remove("d-none");
+  }
+</script>

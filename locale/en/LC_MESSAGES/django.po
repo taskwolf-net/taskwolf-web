@@ -1304,6 +1304,8 @@ msgid "product.package.tab.limitation"
 msgstr "LIMITATIONS"
 msgid "product.package.tab.payment"
 msgstr "PAYMENTS"
+msgid "product.package.tab.upgrade"
+msgstr "UPGRADE"
 
 # PACKAGE - GENERAL
 msgid "product.package.general.title"
@@ -1388,6 +1390,10 @@ msgstr "Webhook number"
 # PACKAGE - PAYMENT
 msgid "product.package.payment.title"
 msgstr "Package - Payments - Taskwolf"
+
+# PACKAGE - UPGRADE
+msgid "product.package.upgrade.title"
+msgstr "Package - Upgrade - Taskwolf"
 
 # ORGANIZATION
 msgid "product.organization.title"

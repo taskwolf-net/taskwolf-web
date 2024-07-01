@@ -17,3 +17,8 @@ async def packageLimitation(request):
 async def packagePayment(request):
   return render(request, 'package/package-payment.html', {'title': gettext('product.package.payment.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/package/package-payment.css']})
+
+@authentication_required
+async def packageUpgrade(request):
+  return render(request, 'package/package-upgrade.html', {'title': gettext('product.package.upgrade.title'),
+    'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/package/package-upgrade.css']})
