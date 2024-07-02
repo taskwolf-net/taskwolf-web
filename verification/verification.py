@@ -14,11 +14,6 @@ async def register(request):
     'css': ['css/base/home-header.css', 'css/verification/register.css']})
 
 @home_page
-async def registerEmail(request):
-  return render(request, 'register-email.html', {'title': gettext("home.registration.email.title"),
-    'css': ['css/base/home-header.css', 'css/verification/register-email.css']})
-
-@home_page
 async def registerConfirm(request, user, token):
   return render(request, 'register-confirm.html', {'title': gettext("home.registration.confirm.title"),
     'css': ['css/base/home-header.css', 'css/verification/register-confirm.css'],

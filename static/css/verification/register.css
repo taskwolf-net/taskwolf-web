@@ -1,9 +1,72 @@
-form {
-  width: min(calc(800px - 5vw), 95%);
-  text-align: center;
-  margin-top: 5%;
+#register-container {
+  width: min(1000px, 95%);
   margin-left: auto;
   margin-right: auto;
+}
+
+#register-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  height: 52px;
+  margin-top: 40px;
+  margin-bottom: 150px;
+}
+
+#register-page-back {
+  width: 52px;
+  height: 52px;
+  border: none;
+  color: #b5b5b5;
+  background-color: transparent;
+  border-radius: 50%;
+  font-size: 25px;
+}
+
+#register-page-back:hover {
+  background-color: #212937;
+}
+
+#register-logo {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 75px;
+  height: auto;
+  transition: transform .3s;
+}
+
+#register-logo:hover {
+  transform: scale(1.1);
+}
+
+#register-languages {
+  display: flex;
+  gap: 20px;
+}
+
+.register-language-flag {
+  width: 48px;
+  height: 27px;
+  border-radius: 5px;
+}
+
+#register-wrapper {
+  width: min(600px, 100%);
+  margin: auto;
+}
+
+#register-wrapper .loader {
+  margin-top: 20vh !important;
+}
+
+.register-headline {
+  margin-bottom: 40px;
+  text-align: center;
+  font-weight: bold;
 }
 
 .dark input[type = "email"], .dark input[type = "username"], .dark input[type = "password"] {
@@ -44,16 +107,6 @@ input:-webkit-autofill:active{
   font-size: 20px;
 }
 
-#register-logo {
-  transition: transform .3s;
-  width: 50%;
-  height: auto;
-}
-
-#register-logo:hover {
-  transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
-}
-
 .form-check-input {
   text-align: center !important;
 }
@@ -73,13 +126,90 @@ input:-webkit-autofill:active{
   text-align: left;
 }
 
-#register {
-  margin-top: 2%;
-  width: 400px;
+.success-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-@media (max-width: 500px) {
-  #register {
-    width: 300px;
+.success-icon {
+  display: inline-block;
+  width: 4em;
+  height: 4em;
+  font-size: 20px;
+  border-radius: 50%;
+  border: 4px solid #4cc93f;
+  position: relative;
+  overflow: hidden;
+  transform-origin: center;
+  animation: showSuccess 180ms ease-in-out;
+  transform: scale(1);
+}
+
+.success-icon__tip,
+.success-icon__long {
+  display: block;
+  position: absolute;
+  height: 4px;
+  background-color: #4cc93f;
+  border-radius: 10px;
+}
+
+.success-icon__tip {
+  width: 1.2em;
+  top: 2.15em;
+  left: 0.7em;
+  transform: rotate(45deg);
+  animation: tipInPlace 300ms ease-in-out;
+  animation-fill-mode: forwards;
+  animation-delay: 180ms;
+  visibility: hidden;
+}
+
+.success-icon__long {
+  width: 2em;
+  transform: rotate(-45deg);
+  top: 1.85em;
+  left: 1.375em;
+  animation: longInPlace 140ms ease-in-out;
+  animation-fill-mode: forwards;
+  visibility: hidden;
+  animation-delay: 440ms;
+}
+
+@keyframes showSuccess {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes tipInPlace {
+  from {
+    width: 0em;
+    top: 0em;
+    left: -0.8em;
+  }
+  to {
+    width: 1.2em;
+    top: 2.15em;
+    left: 0.7em;
+    visibility: visible;
+  }
+}
+
+@keyframes longInPlace {
+  from {
+    width: 0em;
+    top: 5.1em;
+    left: 3.2em;
+  }
+  to {
+    width: 2em;
+    top: 1.85em;
+    left: 1.375em;
+    visibility: visible;
   }
 }

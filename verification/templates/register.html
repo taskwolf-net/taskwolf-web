@@ -3,61 +3,151 @@
 <html lang="en">
   {% include 'templates/head.html' %}
   <body class="dark">
-    {% include 'templates/home-header.html' %}
-    <form>
-      <img id="register-logo" src="{% static 'img/logo.png' %}"></br></br>
-      <h1>{% trans 'home.registration.headline' %}</h1></br>
-      <div class="form-outline mb-4">
-        <label for="email" class="form-label">{% trans 'home.registration.email' %}</label>
-        <input type="email" id="email" class="form-control" placeholder="{% trans 'home.registration.email' %}">
-      </div>
-      <div class="form-outline mb-4">
-        <label for="username" class="form-label">{% trans 'home.registration.username' %}</label>
-        <input type="username" id="username" class="form-control" placeholder="{% trans 'home.registration.username' %}">
-      </div>
-      <div class="form-outline mb-3 was-validated">
-        <label for="password" class="form-label">{% trans 'home.registration.password' %}</label>
-        <input type="password" class="form-control" id="password" minlength="8" name="password" placeholder="{% trans 'home.registration.password' %}" required>
-        <div class="progress mt-3" style="height: 5px;">
-          <div id="progressbar" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 1%;">
-          </div>
+    <div id="register-container">
+      <div id="register-header">
+        <div><button id="register-page-back" class="d-none"><i class="fa-solid fa-arrow-left-long"></i></button></div>
+        <img id="register-logo" src="{% static 'img/logo.png' %}">
+        <div id="register-languages">
+          <input id="register-language-en" class="register-language-flag" src="{% static 'img/languages/en.png' %}" type="image"/>
+          <input id="register-language-de" class="register-language-flag" src="{% static 'img/languages/de.png' %}" type="image"/>
         </div>
-        <div id="feedbackin" class="valid-feedback"></div>
-        <div id="feedbackirn" class="invalid-feedback">8 {% trans 'neutral.password.letters.remaining' %}, {% trans 'neutral.password.special.characters' %}, {% trans 'neutral.password.upper.case.letters' %}, {% trans 'neutral.password.lower.case.letters' %}, {% trans 'neutral.password.numbers' %}</div>
       </div>
-      <div class="form-outline mb-5" >
-        <label for="password-repetition" class="form-label">{% trans 'home.registration.password.repetition' %}</label>
-        <input type="password" id="password-repetition" class="form-control" placeholder="{% trans 'home.registration.password.repetition' %}">
+      <div id="register-wrapper">
+        <div id="register-email-container" class="form-outline">
+          <h2 class="register-headline">{% trans 'home.registration.welcome.headline' %}</h2>
+          <label for="email" class="form-label">{% trans 'home.registration.email' %}</label>
+          <input type="email" id="email" class="form-control" placeholder="{% trans 'home.registration.email' %}">
+          <button type="button" id="register-email-continue" class="btn btn-primary d-block px-4 mt-5 mx-auto disabled">{% trans 'home.registration.continue' %}</button>
+        </div>
+        <div id="register-username-container" class="form-outline d-none">
+          <h2 class="register-headline">{% trans 'home.registration.username.headline' %}</h2>
+          <label for="username" class="form-label">{% trans 'home.registration.username' %}</label>
+          <input type="username" id="username" class="form-control" placeholder="{% trans 'home.registration.username' %}">
+          <button type="button" id="register-username-continue" class="btn btn-primary d-block px-4 mt-5 mx-auto disabled">{% trans 'home.registration.continue' %}</button>
+        </div>
+        <div id="register-password-container" class="form-outline d-none was-validated">
+          <h2 class="register-headline">{% trans 'home.registration.password.headline' %}</h2>
+          <label for="password" class="form-label">{% trans 'home.registration.password' %}</label>
+          <input type="password" class="form-control" id="password" minlength="8" name="password" placeholder="{% trans 'home.registration.password' %}" required>
+          <div class="progress mt-3" style="height: 5px;">
+            <div id="progressbar" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 1%;">
+            </div>
+          </div>
+          <div id="feedbackin" class="valid-feedback"></div>
+          <div id="feedbackirn" class="invalid-feedback">8 {% trans 'neutral.password.letters.remaining' %}, {% trans 'neutral.password.special.characters' %}, {% trans 'neutral.password.upper.case.letters' %}, {% trans 'neutral.password.lower.case.letters' %}, {% trans 'neutral.password.numbers' %}</div>
+          <button type="button" id="register-password-continue" class="btn btn-primary d-block px-4 mt-5 mx-auto disabled">{% trans 'home.registration.continue' %}</button>
+        </div>
+        <div id="register-password-repetition-container" class="form-outline d-none">
+          <h2 class="register-headline">{% trans 'home.registration.password.repetition.headline' %}</h2>
+          <label for="password-repetition" class="form-label">{% trans 'home.registration.password.repetition' %}</label>
+          <input type="password" id="password-repetition" class="form-control" placeholder="{% trans 'home.registration.password.repetition' %}">
+          <button type="button" id="register-password-repetition-continue" class="btn btn-primary d-block px-4 mt-5 mx-auto disabled">{% trans 'home.registration.continue' %}</button>
+        </div>
+        <div id="register-legal-container" class="form-outline d-none">
+          <h2 class="register-headline">{% trans 'home.registration.legal.headline' %}</h2>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="legal-check">
+            <label class="form-check-label" for="legal-check">
+              {% trans 'home.registration.legal.check' %}
+              <a class="text-decoration-none" href="/">{% trans 'home.registration.terms.of.service' %}</a> {% trans 'home.registration.and' %}
+              <a class="text-decoration-none" href="/privacy-policy/">{% trans 'home.registration.privacy.policy' %}</a></label>
+          </div>
+          <div class="form-check mb-3">
+            <input type="checkbox" class="form-check-input" id="notification-check">
+            <label class="form-check-label" for="notification-check">{% trans 'home.registration.news' %}</label>
+          </div>
+          <button type="button" id="register-legal-complete" class="btn btn-success d-block px-4 mt-5 mx-auto disabled">{% trans 'home.registration.complete' %}</button>
+        </div>
+        <div id="register-success-container" class="form-outline d-none">
+          <div class="success-icon-wrapper mb-5">
+            <div class="success-icon">
+              <div class="success-icon__tip"></div>
+              <div class="success-icon__long"></div>
+            </div>
+          </div>
+          <h2 class="register-headline">{% trans 'home.registration.success.headline' %}</h2>
+          <p>{% trans 'home.registration.success.email.description' %}</p>
+          <p>{% trans 'home.registration.success.email.resend.description' %}</p>
+          <button id="register-success-email-resend" type="button" class="btn btn-primary d-block px-4 mt-5 mx-auto">{% trans 'home.registration.success.email.resend' %}</button>
+        </div>
       </div>
-      <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="legal-check">
-        <label class="form-check-label" for="legal-check">
-          {% trans 'home.registration.legal.check' %}
-          <a class="text-decoration-none" href="/">{% trans 'home.registration.terms.of.service' %}</a> {% trans 'home.registration.and' %}
-          <a class="text-decoration-none" href="/privacy-policy/">{% trans 'home.registration.privacy.policy' %}</a></label>
-      </div>
-      <div class="form-check mb-3">
-        <input type="checkbox" class="form-check-input" id="notification-check">
-        <label class="form-check-label" for="notification-check">{% trans 'home.registration.news' %}</label>
-      </div>
-      <button type="button" id="register" class="btn btn-primary">{% trans 'home.registration.button' %}</button>
-    </form>
+    </div>
   </body>
 </html>
 
 <script>
+  var selectionContainers = [document.getElementById("register-email-container")];
+
   let emailInput = document.getElementById("email");
   let usernameInput = document.getElementById("username");
   let passwordInput = document.getElementById("password");
   let passwordRepetitionInput = document.getElementById("password-repetition");
-  passwordInput.addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      document.getElementById("register").click();
-    }
+
+  document.getElementById("register-page-back").onclick = function (event) {
+    selectionContainers[selectionContainers.length - 1].classList.add("d-none");
+    selectionContainers.pop();
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("register-wrapper").appendChild(loader);
+    document.getElementById("register-page-back").classList.add("d-none");
+    setTimeout(function () {
+      document.getElementById("register-wrapper")
+        .removeChild(document.getElementsByClassName("loader")[0]);
+      selectionContainers[selectionContainers.length - 1].classList.remove("d-none");
+      $(document.getElementById("register-page-back")).toggleClass("d-none",
+        selectionContainers.length === 1);
+      $(document.getElementById("register-languages")).toggleClass("d-none",
+        selectionContainers.length !== 1);
+    }, 500);
+  }
+
+  document.getElementById("email").addEventListener('keyup', function(event) {
+    $(document.getElementById("register-email-continue")).toggleClass("disabled",
+      document.getElementById("email").value.length === 0);
   });
 
-  document.getElementById('register').onclick = function() {
+  document.getElementById("register-email-continue").onclick = function (event) {
+    switchSelectionPageDelayed(document.getElementById("register-email-container"),
+      document.getElementById("register-username-container"));
+  }
+
+  document.getElementById("username").addEventListener('keyup', function(event) {
+    $(document.getElementById("register-username-continue")).toggleClass("disabled",
+      document.getElementById("username").value.length === 0);
+  });
+
+  document.getElementById("register-username-continue").onclick = function (event) {
+    switchSelectionPageDelayed(document.getElementById("register-username-container"),
+      document.getElementById("register-password-container"));
+  }
+
+  document.getElementById("register-password-continue").onclick = function (event) {
+    switchSelectionPageDelayed(document.getElementById("register-password-container"),
+      document.getElementById("register-password-repetition-container"));
+  }
+
+  document.getElementById("password-repetition").addEventListener('keyup', function(event) {
+    $(document.getElementById("register-password-repetition-continue")).toggleClass("disabled",
+      document.getElementById("password-repetition").value.length === 0);
+  });
+
+  document.getElementById("register-password-repetition-continue").onclick = function (event) {
+    if (passwordInput.value !== passwordRepetitionInput.value) {
+      Swal.fire("{% trans 'home.registration.password.repetition.failed.title' %}",
+        "{% trans 'home.registration.password.repetition.failed.body' %}", "error");
+      passwordRepetitionInput.value = "";
+      return;
+    }
+    switchSelectionPageDelayed(document.getElementById("register-password-repetition-container"),
+      document.getElementById("register-legal-container"));
+  }
+
+  document.getElementById("legal-check").addEventListener('change', (event) => {
+    $(document.getElementById("register-legal-complete")).toggleClass("disabled",
+      !event.currentTarget.checked);
+  })
+
+  document.getElementById("register-legal-complete").onclick = function (event) {
     if (emailInput.value === "" || usernameInput.value === "" ||
       passwordInput.value === "" || passwordRepetitionInput.value === ""
     ) {
@@ -83,19 +173,52 @@
         "{% trans 'home.registration.failed.legal' %}", "error");
       return;
     }
+    document.getElementById("register-legal-container").classList.add("d-none");
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("register-wrapper").appendChild(loader);
+    document.getElementById("register-page-back").classList.add("d-none");
     let request = new HttpRequest("https://api.taskwolf.net/v1/verification/register/", "POST", [],
       {email: emailInput.value, name: usernameInput.value, password: passwordInput.value});
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
+      document.getElementById("register-wrapper")
+        .removeChild(document.getElementsByClassName("loader")[0]);
       if (response.success === true) {
         sessionStorage.setItem("registration-email", emailInput.value);
-        window.location.href = "/register/email/";
+        switchSelectionPage(document.getElementById("register-legal-container"),
+          document.getElementById("register-success-container"))
       } else {
+        document.getElementById("register-page-back").classList.remove("d-none");
+        document.getElementById("register-legal-container").classList.remove("d-none");
         Swal.fire("{% trans 'home.registration.failed.title' %}",
-          "{% trans 'home.registration.failed.already.exists' %}", "error");
+            "{% trans 'home.registration.failed.already.exists' %}", "error")
+          .then(success => window.location.reload(true));
       }
     });
-  };
+  }
+
+  function switchSelectionPage(currentContainer, nextContainer) {
+    selectionContainers.push(nextContainer);
+    currentContainer.classList.add("d-none");
+    nextContainer.classList.remove("d-none");
+  }
+
+  function switchSelectionPageDelayed(currentContainer, nextContainer) {
+    selectionContainers.push(nextContainer);
+    currentContainer.classList.add("d-none");
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("register-wrapper").appendChild(loader);
+    document.getElementById("register-page-back").classList.add("d-none");
+    document.getElementById("register-languages").classList.add("d-none");
+    setTimeout(function () {
+      document.getElementById("register-page-back").classList.remove("d-none");
+      document.getElementById("register-wrapper")
+        .removeChild(document.getElementsByClassName("loader")[0]);
+      nextContainer.classList.remove("d-none");
+    }, 500);
+  }
 
   passwordInput.addEventListener('keypress', function(event) {
     updatePasswordProgress()
@@ -170,5 +293,30 @@
     $("#feedbackin, #feedbackirn").text(information);
     $("#progressbar").removeClass("bg-danger bg-warning bg-success").addClass(progressBarClass);
     $("#progressbar").width(progress + "%");
+    $(document.getElementById("register-password-continue")).toggleClass("disabled",
+      progressBarClass !== "bg-success");
+  }
+
+  document.getElementById("register-success-email-resend").onclick = function (event) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/verification/email/resend/", "POST", [],
+      {email: sessionStorage.getItem("registration-email")});
+    request.send(function (status, responseText) {
+      Swal.fire("{% trans 'home.registration.success.email.resend.success.title' %}",
+        "{% trans 'home.registration.success.email.resend.success.body' %}", "success");
+    });
+  }
+
+  document.getElementById("register-language-en").onclick = function (event) {
+    Cookie.create("taskwolf-home-language", "en", 60 * 60 * 24 * 365, ".taskwolf.net");
+    window.location.reload();
+  }
+
+  document.getElementById("register-language-de").onclick = function (event) {
+    Cookie.create("taskwolf-home-language", "de", 60 * 60 * 24 * 365, ".taskwolf.net");
+    window.location.reload();
+  }
+
+  document.getElementById("register-logo").onclick = function (event) {
+    window.location.href = "/";
   }
 </script>
