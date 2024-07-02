@@ -30,27 +30,27 @@
               <p class="pricing-package-description">{% trans 'home.pricing.free.description' %}</p>
               <h1 id="pricing-price-free" class="pricing-package-price">€</h1>
               <p class="pricing-package-time">{% trans 'home.pricing.free.time' %}</p>
-              <button type="button" class="pricing-get-button btn btn-outline-light">{% trans 'home.pricing.free.try' %}</button>
+              <button type="button" id="pricing-package-free-buy" class="pricing-get-button btn btn-outline-light">{% trans 'home.pricing.free.try' %}</button>
             </th>
             <th id="pricing-package-professional" class="pricing-package">
               <h2 class="pricing-package-title">{% trans 'home.pricing.professional.title' %}</h2>
               <p class="pricing-package-description">{% trans 'home.pricing.professional.description' %}</p>
               <h1 id="pricing-price-professional" class="pricing-package-price">€</h1>
               <p class="pricing-package-time">{% trans 'home.pricing.professional.time' %}</p>
-              <button type="button" class="pricing-get-button btn btn-outline-light">{% trans 'home.pricing.buy' %}</button>
+              <button type="button" id="pricing-package-professional-buy" class="pricing-get-button btn btn-outline-light">{% trans 'home.pricing.buy' %}</button>
             </th>
             <th id="pricing-package-team" class="pricing-package">
               <h2 class="pricing-package-title">{% trans 'home.pricing.team.title' %}</h2>
               <p class="pricing-package-description">{% trans 'home.pricing.team.description' %}</p>
               <h1 id="pricing-price-team" class="pricing-package-price">€</h1>
               <p class="pricing-package-time">{% trans 'home.pricing.team.time' %}</p>
-              <button type="button" class="pricing-get-button btn btn-outline-light">{% trans 'home.pricing.buy' %}</button>
+              <button type="button" id="pricing-package-team-buy" class="pricing-get-button btn btn-outline-light">{% trans 'home.pricing.buy' %}</button>
             </th>
             <th id="pricing-package-enterprise" class="pricing-package">
               <h2 class="pricing-package-title">{% trans 'home.pricing.enterprise.title' %}</h2>
               <p class="pricing-package-description">{% trans 'home.pricing.enterprise.description' %}</p>
               <h2 class="pricing-package-price">{% trans 'home.pricing.enterprise.price.contact' %}</h2>
-              <button type="button" class="pricing-get-button btn btn-outline-light">{% trans 'home.pricing.enterprise.contact' %}</button>
+              <button type="button" id="pricing-package-enterprise-buy" class="pricing-get-button btn btn-outline-light">{% trans 'home.pricing.enterprise.contact' %}</button>
             </th>
           </thead>
           <tbody>
@@ -354,5 +354,27 @@
     updatePricing();
     document.getElementById("pricing-runtime-monthly").classList.remove("pricing-switch-active");
     document.getElementById("pricing-runtime-yearly").classList.add("pricing-switch-active");
+  }
+
+  document.getElementById("pricing-package-free-buy").onclick = function (event) {
+    preparePurchase("free");
+  }
+
+  document.getElementById("pricing-package-professional-buy").onclick = function (event) {
+    preparePurchase("professional");
+  }
+
+  document.getElementById("pricing-package-team-buy").onclick = function (event) {
+    preparePurchase("team");
+  }
+
+  document.getElementById("pricing-package-enterprise-buy").onclick = function (event) {
+    window.location.href= "mailto:sales@taskwolf.net";
+  }
+
+  function preparePurchase(package) {
+    //TODO: SET SESSION STORAGE / COOKIES WITH PACKAGE, CLASS & TIME
+    window.location.href= "/register/";
+
   }
 </script>
