@@ -308,12 +308,12 @@
 
   document.getElementById("register-language-en").onclick = function (event) {
     Cookie.create("taskwolf-home-language", "en", 60 * 60 * 24 * 365, ".taskwolf.net");
-    window.location.reload();
+    window.location.reload(true);
   }
 
   document.getElementById("register-language-de").onclick = function (event) {
     Cookie.create("taskwolf-home-language", "de", 60 * 60 * 24 * 365, ".taskwolf.net");
-    window.location.reload();
+    window.location.reload(true);
   }
 
   document.getElementById("register-logo").onclick = function (event) {
