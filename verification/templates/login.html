@@ -5,7 +5,7 @@
   <body class="dark">
      {% include 'templates/home-header.html' %}
     <form>
-      <img id="login-logo" src="{% static 'img/logo.png' %}"></br></br></br>
+      <img id="login-logo" src="{% static 'img/logo.png' %}">
       <div class="form-outline mb-4">
         <label for="email" class="form-label">{% trans 'home.login.email' %}</label>
         <input type="email" id="email" class="form-control" placeholder="{% trans 'home.login.email' %}">
@@ -21,8 +21,7 @@
         <input type="checkbox" class="form-check-input" id="remember-check">
         <label class="form-check-label" for="remember-check" id="remember-check-label">{% trans 'home.login.remember' %}</label>
       </div>
-      <button type="button" id="login" class="btn btn-primary mb-4">{% trans 'home.login.button' %}</button></br>
-      <p>{% trans 'home.login.register' %} <a id="not-registered" class="text-decoration-none" href="/register/">{% trans 'home.login.account.create' %}</a>
+      <button type="button" id="login" class="btn btn-primary">{% trans 'home.login.button' %}</button></br>
       <div id="login-alternative">
         <div class="login-alternative-divider"></div>
         <label class="text-muted mx-4">{% trans 'home.login.alternative' %}</label>

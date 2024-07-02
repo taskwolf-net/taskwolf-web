@@ -1,9 +1,12 @@
 form {
-  width: min(calc(800px - 5vw), 95%);
+  width: min(600px, 90%);
   text-align: center;
   margin-top: 5%;
   margin-left: auto;
   margin-right: auto;
+  padding: 50px;
+  border: 1px #373b41 solid;
+  border-radius: 20px;
 }
 
 .dark input[type = "email"], .dark input[type = "password"] {
@@ -72,8 +75,9 @@ input:-webkit-autofill:active{
 
 #login-logo {
   transition: transform .3s;
-  width: 50%;
+  width: 100px;
   height: auto;
+  margin-bottom: 80px;
 }
 
 #login-logo:hover {
@@ -81,8 +85,8 @@ input:-webkit-autofill:active{
 }
 
 #login {
-  margin-top: 2%;
-  width: 400px;
+  margin-top: 50px;
+  width: 100%;
 }
 
 #login-alternative {
@@ -108,7 +112,7 @@ input:-webkit-autofill:active{
 
 .login-external-service-button {
   position: relative;
-  width: 400px;
+  width: 100%;
   margin-bottom: 2%;
   padding: 10px !important;
   color: white !important;
@@ -134,12 +138,10 @@ input:-webkit-autofill:active{
   background-color: #272727;
 }
 
-@media (max-width: 500px) {
-  #login {
-    width: 300px;
-  }
-
-  .login-external-service-button {
-    width: 300px;
+@media (max-width: 720px) {
+  form {
+    padding: 0;
+    border: none;
+    border-radius: 0;
   }
 }
