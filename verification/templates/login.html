@@ -69,6 +69,9 @@
         } else  if (error === 1001) {
           Swal.fire("{% trans 'home.login.failed.confirmation.title' %}", "{% trans 'home.login.failed.confirmation.body' %}", "error");
         } else  if (error === 1002) {
+          Cookie.create("taskwolf-home-email", document.getElementById("email").value, 60 * 60 * 24, ".taskwolf.net");
+          window.location.href = "/payment/";
+        } else  if (error === 1003) {
           Swal.fire("{% trans 'home.login.failed.expired.title' %}", "{% trans 'home.login.failed.expired.body' %}", "error");
         }
         document.getElementById("password").value = "";

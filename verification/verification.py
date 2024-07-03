@@ -20,6 +20,11 @@ async def registerConfirm(request, user, token):
     'user': user, 'token': token})
 
 @home_page
+async def payment(request):
+  return render(request, 'payment.html', {'title': gettext("home.payment.title"),
+    'css': ['css/base/home-header.css', 'css/verification/payment.css']})
+
+@home_page
 async def passwordResetRequest(request):
   return render(request, 'password-reset-request.html', {'title': gettext("home.password.reset.request.title"),
     'css': ['css/base/home-header.css', 'css/verification/password-reset-request.css']})

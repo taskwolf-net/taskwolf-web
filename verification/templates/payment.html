@@ -1,0 +1,182 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body class="dark">
+    <div id="payment-container">
+      <div id="payment-header">
+        <div></div>
+        <img id="payment-logo" src="{% static 'img/logo.png' %}">
+        <div id="payment-languages">
+          <input id="payment-language-en" class="payment-language-flag" src="{% static 'img/languages/en.png' %}" type="image"/>
+          <input id="payment-language-de" class="payment-language-flag" src="{% static 'img/languages/de.png' %}" type="image"/>
+        </div>
+      </div>
+      <div id="payment-pay" class="d-none">
+        <h1 class="text-center fw-bold mb-5">{% trans 'home.payment.pay.headline' %}</h1>
+        <div id="payment-package">
+          <img id="payment-package-logo" class="mb-5" src="{% static 'img/logo.png' %}">
+          <h4 id="payment-package-type" class="text-center"></h4>
+          <p id="payment-package-class" class="text-center mb-0"></p>
+          <p id="payment-package-runtime" class="text-center mb-0"></p>
+          <h2 id="payment-package-price" class="text-center mt-4 fw-bold"></h2>
+          <p id="payment-package-payment-interval" class="text-center">{% trans 'home.payment.package.per.month' %}</p>
+          <button type="button" id="payment-pay-redirect" class="btn btn-primary d-block px-5 mt-5 mx-auto">{% trans 'home.payment.pay.redirect' %}</button>
+          <p id="payment-pay-method-headline" class="text-center mt-4">{% trans 'home.payment.pay.methods' %}</p>
+          <div id="payment-pay-method-list">
+            <img src="https://js.stripe.com/v3/fingerprinted/img/amex-b933c9009eeaf8cfd07e789c549b8c57.svg">
+            <img src="https://js.stripe.com/v3/fingerprinted/img/mastercard-86e9a2b929496a34918767093c470935.svg">
+            <img src="https://js.stripe.com/v3/fingerprinted/img/visa-fb36094822f73d7bc581f6c0bad1c201.svg">
+            <img src="https://js.stripe.com/v3/fingerprinted/img/sepa_debit-dark-2267c20803e67b8bb19eda68d42b20df.svg">
+            <img src="https://js.stripe.com/v3/fingerprinted/img/paypal-dark-b75755d2b5f200ed5a3d4e57fb111a8e.svg">
+          </div>
+        </div>
+      </div>
+      <div id="payment-not-found" class="d-none">
+        <h1 class="text-center fw-bold mb-5">{% trans 'home.payment.not.found.headline' %}</h1>
+        <p>{% trans 'home.payment.not.found.description' %}</p>
+        <button type="button" id="payment-not-found-redirect" class="btn btn-primary d-block px-4 mt-5 mx-auto">{% trans 'home.payment.not.found.redirect' %}</button>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    if (Cookie.find("taskwolf-home-email") == null) {
+      window.location.href = "/login/";
+      return;
+    }
+    var packageType = Cookie.find("taskwolf-package-type");
+    var packageClass = Cookie.find("taskwolf-package-class");
+    var packageRuntime = Cookie.find("taskwolf-package-runtime");
+    var packagePrice = Cookie.find("taskwolf-package-price");
+    if (packageType == null || packageClass == null || packageRuntime == null || packagePrice == null) {
+      document.getElementById("payment-not-found").classList.remove("d-none");
+      return;
+    }
+    displayPackage(packageType, packageClass, packageRuntime, packagePrice);
+  });
+
+  function displayPackage(packageType, packageClass, packageRuntime, packagePrice) {
+    document.getElementById("payment-pay").classList.remove("d-none");
+    displayPackageType(packageType);
+    displayPackageClass(packageType, packageClass);
+    displayPackageRuntime(packageType, packageRuntime);
+    document.getElementById("payment-package-price").innerHTML = packagePrice + " €";
+    if (packageType === "FREE") {
+      document.getElementById("payment-package-payment-interval").classList.add("d-none");
+      document.getElementById("payment-pay-method-headline").classList.add("d-none");
+      document.getElementById("payment-pay-method-list").classList.add("d-none");
+      document.getElementById("payment-pay-redirect").classList.remove("btn-primary");
+      document.getElementById("payment-pay-redirect").classList.add("btn-success");
+      document.getElementById("payment-pay-redirect").innerHTML = "{% trans 'home.payment.pay.complete' %}";
+    }
+  }
+
+  function displayPackageType(packageType) {
+    if (packageType === "FREE") {
+      document.getElementById("payment-package-type").innerHTML =
+        "{% trans 'home.payment.package.type.free' %}";
+    } else if (packageType === "PROFESSIONAL") {
+      document.getElementById("payment-package-type").innerHTML =
+        "{% trans 'home.payment.package.type.professional' %}";
+    } else if (packageType === "TEAM") {
+      document.getElementById("payment-package-type").innerHTML =
+        "{% trans 'home.payment.package.type.team' %}";
+    }
+  }
+
+  function displayPackageClass(packageType, packageClass) {
+    if (packageType === "FREE") {
+      document.getElementById("payment-package-class").classList.add("d-none");
+      return;
+    }
+    if (packageClass === "BEGINNER") {
+      document.getElementById("payment-package-class").innerHTML =
+        "{% trans 'home.payment.package.class.beginner' %}";
+    } else if (packageClass === "ADVANCED") {
+      document.getElementById("payment-package-class").innerHTML =
+        "{% trans 'home.payment.package.class.advanced' %}";
+    } else if (packageClass === "EXPERT") {
+      document.getElementById("payment-package-class").innerHTML =
+        "{% trans 'home.payment.package.class.expert' %}";
+    }
+  }
+
+  function displayPackageRuntime(packageType, packageRuntime) {
+    if (packageType === "FREE") {
+      document.getElementById("payment-package-runtime").innerHTML =
+        "1 {% trans 'home.payment.package.runtime.week' %}";
+      return;
+    }
+    if (packageRuntime === "MONTHLY") {
+      document.getElementById("payment-package-runtime").innerHTML =
+        "1 {% trans 'home.payment.package.runtime.month' %}";
+    } else if (packageRuntime === "YEARLY") {
+      document.getElementById("payment-package-runtime").innerHTML =
+        "1 {% trans 'home.payment.package.runtime.year' %}";
+    }
+  }
+
+  document.getElementById("payment-pay-redirect").onclick = function (event) {
+    var packageType = Cookie.find("taskwolf-package-type");
+    var packageClass = Cookie.find("taskwolf-package-class");
+    var packageRuntime = Cookie.find("taskwolf-package-runtime");
+    if (packageType === "FREE") {
+      return;
+    }
+    var link = findPaymentLink(packageType, packageClass, packageRuntime);
+    if (link === "") {
+      return;
+    }
+    window.location.href = link + "?prefilled_email=" +
+      Cookie.find("taskwolf-home-email");
+  }
+
+  function findPaymentLink(packageType, packageClass, packageRuntime) {
+    if (packageType === "PROFESSIONAL" && packageClass === "BEGINNER" && packageRuntime === "MONTHLY") {
+      return "https://buy.stripe.com/test_28og291S59Hx8qAfZ1";
+    } else if (packageType === "PROFESSIONAL" && packageClass === "ADVANCED" && packageRuntime === "MONTHLY") {
+      return "https://buy.stripe.com/test_cN25nv7cp06XcGQbIJ";
+    } else if (packageType === "PROFESSIONAL" && packageClass === "EXPERT" && packageRuntime === "MONTHLY") {
+      return "https://buy.stripe.com/test_28o4jr1S56vl36g7su";
+    } else if (packageType === "PROFESSIONAL" && packageClass === "BEGINNER" && packageRuntime === "YEARLY") {
+      return "https://buy.stripe.com/test_7sI6rzeER9HxeOY8wA";
+    } else if (packageType === "PROFESSIONAL" && packageClass === "ADVANCED" && packageRuntime === "YEARLY") {
+      return "https://buy.stripe.com/test_14k7vD9kxg5V9uE8wB";
+    } else if (packageType === "PROFESSIONAL" && packageClass === "EXPERT" && packageRuntime === "YEARLY") {
+      return "https://buy.stripe.com/test_bIYbLT0O14ndgX628e";
+    } else if (packageType === "TEAM" && packageClass === "BEGINNER" && packageRuntime === "MONTHLY") {
+      return "https://buy.stripe.com/test_7sI6rzaoB6vl7mw6ov";
+    } else if (packageType === "TEAM" && packageClass === "ADVANCED" && packageRuntime === "MONTHLY") {
+      return "https://buy.stripe.com/test_dR66rz0O1cTJ9uE6ow";
+    } else if (packageType === "TEAM" && packageClass === "EXPERT" && packageRuntime === "MONTHLY") {
+      return "https://buy.stripe.com/test_14kaHPcwJg5V22c8wF";
+    } else if (packageType === "TEAM" && packageClass === "BEGINNER" && packageRuntime === "YEARLY") {
+      return "https://buy.stripe.com/test_aEU7vDgMZdXN6is00a";
+    } else if (packageType === "TEAM" && packageClass === "ADVANCED" && packageRuntime === "YEARLY") {
+      return "https://buy.stripe.com/test_3cs6rz8gtg5VdKUfZ9";
+    } else if (packageType === "TEAM" && packageClass === "EXPERT" && packageRuntime === "YEARLY") {
+      return "https://buy.stripe.com/test_cN203b1S58Dt22cbIU";
+    }
+  }
+
+  document.getElementById("payment-language-en").onclick = function (event) {
+    Cookie.create("taskwolf-home-language", "en", 60 * 60 * 24 * 365, ".taskwolf.net");
+    window.location.reload();
+  }
+
+  document.getElementById("payment-language-de").onclick = function (event) {
+    Cookie.create("taskwolf-home-language", "de", 60 * 60 * 24 * 365, ".taskwolf.net");
+    window.location.reload();
+  }
+
+  document.getElementById("payment-logo").onclick = function (event) {
+    window.location.href = "/";
+  }
+
+  document.getElementById("payment-not-found-redirect").onclick = function (event) {
+    window.location.href = "/pricing/";
+  }
+</script>

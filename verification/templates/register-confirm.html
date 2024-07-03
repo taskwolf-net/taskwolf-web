@@ -3,7 +3,8 @@
 <html lang="en">
   {% include 'templates/head.html' %}
   <body class="dark">
-    {% include 'templates/home-header.html' %}
+    <div class="loader">
+    </div>
   </body>
 </html>
 
@@ -17,8 +18,8 @@
         window.location.href = "/";
         return;
       }
-      Cookie.create("token", response.token, 60 * 60 * 24 * 30, ".taskwolf.net");
-      window.location.href = "/dashboard/";
+      Cookie.create("taskwolf-home-email", response.email, 60 * 60 * 24, ".taskwolf.net");
+      window.location.href = "/payment/";
     });
   });
 </script>

@@ -220,6 +220,10 @@
 <script>
   var bundleClass = "ADVANCED";
   var bundleRuntime = "YEARLY";
+  var freePackageData;
+  var professionalPackageData;
+  var teamPackageData;
+  var enterprisePackageData;
 
   $(document).ready(function() {
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip-parent"]'))
@@ -249,6 +253,10 @@
       fetchPackage("PROFESSIONAL", function (professionalPackage) {
         fetchPackage("TEAM", function (teamPackage) {
           fetchPackage("ENTERPRISE", function (enterprisePackage) {
+            freePackageData = freePackage;
+            professionalPackageData = professionalPackage;
+            teamPackageData = teamPackage;
+            enterprisePackageData = enterprisePackage;
             displayPricing(freePackage, professionalPackage, teamPackage, enterprisePackage);
           });
         });
@@ -357,24 +365,30 @@
   }
 
   document.getElementById("pricing-package-free-buy").onclick = function (event) {
-    preparePurchase("free");
+    preparePurchase("FREE", 0);
   }
 
   document.getElementById("pricing-package-professional-buy").onclick = function (event) {
-    preparePurchase("professional");
+    preparePurchase("PROFESSIONAL", professionalPackageData.price);
   }
 
   document.getElementById("pricing-package-team-buy").onclick = function (event) {
-    preparePurchase("team");
+    preparePurchase("TEAM", teamPackageData.price);
   }
 
   document.getElementById("pricing-package-enterprise-buy").onclick = function (event) {
-    window.location.href= "mailto:sales@taskwolf.net";
+    window.location.href = "mailto:sales@taskwolf.net";
   }
 
-  function preparePurchase(package) {
-    //TODO: SET SESSION STORAGE / COOKIES WITH PACKAGE, CLASS & TIME
-    window.location.href= "/register/";
-
+  function preparePurchase(package, price) {
+    Cookie.create("taskwolf-package-type", package, 60 * 60 * 24, ".taskwolf.net");
+    Cookie.create("taskwolf-package-class", bundleClass, 60 * 60 * 24, ".taskwolf.net");
+    Cookie.create("taskwolf-package-runtime", bundleRuntime, 60 * 60 * 24, ".taskwolf.net");
+    Cookie.create("taskwolf-package-price", price, 60 * 60 * 24, ".taskwolf.net");
+    if (Cookie.find("taskwolf-home-email") == null) {
+      window.location.href = "/register/";
+    } else {
+      window.location.href = "/payment/";
+    }
   }
 </script>
