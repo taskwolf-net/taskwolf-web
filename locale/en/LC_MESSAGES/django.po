@@ -687,6 +687,14 @@ msgstr "To buy a package, you must first select a package. We have developed an 
 msgid "home.payment.not.found.redirect"
 msgstr "REDIRECT"
 
+# PAYMENT COMPLETE
+msgid "home.payment.complete.title"
+msgstr "Payment - Taskwolf"
+msgid "home.payment.complete.headline"
+msgstr "Payment completed"
+msgid "home.payment.complete.description"
+msgstr "Congratulations! You have successfully completed the payment. You will shortly receive an email from us with all further information and steps. Please also check your spam box."
+
 # PASSWORD RESET REQUEST
 msgid "home.password.reset.request.title"
 msgstr "Password Reset - Taskwolf"

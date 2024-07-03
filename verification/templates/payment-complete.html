@@ -1,0 +1,43 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body class="dark">
+    <div id="payment-complete-container">
+      <div id="payment-header">
+        <div></div>
+        <img id="payment-logo" src="{% static 'img/logo.png' %}">
+        <div id="payment-languages">
+          <input id="payment-language-en" class="payment-language-flag" src="{% static 'img/languages/en.png' %}" type="image"/>
+          <input id="payment-language-de" class="payment-language-flag" src="{% static 'img/languages/de.png' %}" type="image"/>
+        </div>
+      </div>
+      <div id="payment-complete-wrapper">
+        <div class="success-icon-wrapper">
+          <div class="success-icon">
+            <div class="success-icon__tip"></div>
+            <div class="success-icon__long"></div>
+          </div>
+        </div>
+        <h1 class="text-center fw-bold mt-5 mb-5">{% trans 'home.payment.complete.headline' %}</h1>
+        <p>{% trans 'home.payment.complete.description' %}</p>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  document.getElementById("payment-language-en").onclick = function (event) {
+    Cookie.create("taskwolf-home-language", "en", 60 * 60 * 24 * 365, ".taskwolf.net");
+    window.location.reload();
+  }
+
+  document.getElementById("payment-language-de").onclick = function (event) {
+    Cookie.create("taskwolf-home-language", "de", 60 * 60 * 24 * 365, ".taskwolf.net");
+    window.location.reload();
+  }
+
+  document.getElementById("payment-logo").onclick = function (event) {
+    window.location.href = "/";
+  }
+</script>
