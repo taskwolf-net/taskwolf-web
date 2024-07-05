@@ -130,8 +130,20 @@
     if (link === "") {
       return;
     }
-    window.location.href = link + "?prefilled_email=" +
-      Cookie.find("taskwolf-home-email");
+    var email = Cookie.find("taskwolf-home-email");
+    let request = new HttpRequest("https://api.taskwolf.net/v1/email/exists/", "POST",
+      [], {email: email});
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      if (response.exists === true) {
+        window.location.href = link + "?prefilled_email=" + email;
+      } else {
+        Cookie.destroy("taskwolf-home-email");
+        Swal.fire("{% trans 'home.payment.failed.not.found.title' %}",
+          "{% trans 'home.payment.failed.not.found.body' %}", "error")
+          .then(success => window.location.href = "/login/");
+      }
+    });
   }
 
   function findPaymentLink(packageType, packageClass, packageRuntime) {
