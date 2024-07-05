@@ -35,13 +35,9 @@
           </div>
           <div id="feedbackin" class="valid-feedback"></div>
           <div id="feedbackirn" class="invalid-feedback">8 {% trans 'neutral.password.letters.remaining' %}, {% trans 'neutral.password.special.characters' %}, {% trans 'neutral.password.upper.case.letters' %}, {% trans 'neutral.password.lower.case.letters' %}, {% trans 'neutral.password.numbers' %}</div>
+          <label for="password-repetition" class="form-label mt-4">{% trans 'home.registration.password.repetition' %}</label>
+          <input type="password" id="password-repetition" class="form-control" placeholder="{% trans 'home.registration.password.repetition' %}" required>
           <button type="button" id="register-password-continue" class="btn btn-primary d-block px-4 mt-5 mx-auto disabled">{% trans 'home.registration.continue' %}</button>
-        </div>
-        <div id="register-password-repetition-container" class="form-outline d-none">
-          <h2 class="register-headline">{% trans 'home.registration.password.repetition.headline' %}</h2>
-          <label for="password-repetition" class="form-label">{% trans 'home.registration.password.repetition' %}</label>
-          <input type="password" id="password-repetition" class="form-control" placeholder="{% trans 'home.registration.password.repetition' %}">
-          <button type="button" id="register-password-repetition-continue" class="btn btn-primary d-block px-4 mt-5 mx-auto disabled">{% trans 'home.registration.continue' %}</button>
         </div>
         <div id="register-legal-container" class="form-outline d-none">
           <h2 class="register-headline">{% trans 'home.registration.legal.headline' %}</h2>
@@ -102,16 +98,43 @@
   }
 
   document.getElementById("email").addEventListener('keyup', function(event) {
+    if (event.key === "Enter") {
+      document.getElementById("register-email-continue").click();
+    }
     $(document.getElementById("register-email-continue")).toggleClass("disabled",
       document.getElementById("email").value.length === 0);
   });
 
   document.getElementById("register-email-continue").onclick = function (event) {
-    switchSelectionPageDelayed(document.getElementById("register-email-container"),
-      document.getElementById("register-username-container"));
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("register-wrapper").appendChild(loader);
+    document.getElementById("register-languages").classList.add("d-none");
+    document.getElementById("register-email-container").classList.add("d-none");
+    let request = new HttpRequest("https://api.taskwolf.net/v1/email/exists/", "POST",
+      [], {email: emailInput.value});
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      document.getElementById("register-wrapper")
+        .removeChild(document.getElementsByClassName("loader")[0]);
+      if (response.exists === false) {
+        document.getElementById("register-page-back").classList.remove("d-none");
+        switchSelectionPage(document.getElementById("register-email-container"),
+          document.getElementById("register-username-container"));
+      } else {
+        document.getElementById("register-languages").classList.remove("d-none");
+        document.getElementById("register-email-container").classList.remove("d-none");
+        emailInput.value = "";
+        Swal.fire("{% trans 'home.registration.email.failed.title' %}",
+          "{% trans 'home.registration.email.failed.body' %}", "error");
+      }
+    });
   }
 
   document.getElementById("username").addEventListener('keyup', function(event) {
+    if (event.key === "Enter") {
+      document.getElementById("register-username-continue").click();
+    }
     $(document.getElementById("register-username-continue")).toggleClass("disabled",
       document.getElementById("username").value.length === 0);
   });
@@ -121,24 +144,25 @@
       document.getElementById("register-password-container"));
   }
 
-  document.getElementById("register-password-continue").onclick = function (event) {
-    switchSelectionPageDelayed(document.getElementById("register-password-container"),
-      document.getElementById("register-password-repetition-container"));
-  }
-
   document.getElementById("password-repetition").addEventListener('keyup', function(event) {
-    $(document.getElementById("register-password-repetition-continue")).toggleClass("disabled",
-      document.getElementById("password-repetition").value.length === 0);
+    if (event.key === "Enter") {
+      document.getElementById("register-password-continue").click();
+    }
+    $(document.getElementById("register-password-continue")).toggleClass("disabled",
+      !(passwordInput.value === passwordRepetitionInput.value &&
+        document.getElementById("progressbar").classList.contains("bg-success")));
   });
 
-  document.getElementById("register-password-repetition-continue").onclick = function (event) {
+  document.getElementById("register-password-continue").onclick = function (event) {
     if (passwordInput.value !== passwordRepetitionInput.value) {
       Swal.fire("{% trans 'home.registration.password.repetition.failed.title' %}",
         "{% trans 'home.registration.password.repetition.failed.body' %}", "error");
+      passwordInput.value = "";
       passwordRepetitionInput.value = "";
+      updatePasswordProgress();
       return;
     }
-    switchSelectionPageDelayed(document.getElementById("register-password-repetition-container"),
+    switchSelectionPageDelayed(document.getElementById("register-password-container"),
       document.getElementById("register-legal-container"));
   }
 
@@ -293,8 +317,6 @@
     $("#feedbackin, #feedbackirn").text(information);
     $("#progressbar").removeClass("bg-danger bg-warning bg-success").addClass(progressBarClass);
     $("#progressbar").width(progress + "%");
-    $(document.getElementById("register-password-continue")).toggleClass("disabled",
-      progressBarClass !== "bg-success");
   }
 
   document.getElementById("register-success-email-resend").onclick = function (event) {
