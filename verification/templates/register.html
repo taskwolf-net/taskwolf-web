@@ -5,7 +5,10 @@
   <body class="dark">
     <div id="register-container">
       <div id="register-header">
-        <div><button id="register-page-back" class="d-none"><i class="fa-solid fa-arrow-left-long"></i></button></div>
+        <div>
+          <button id="register-login" class="btn btn-info">{% trans 'home.registration.login' %}</button>
+          <button id="register-page-back" class="d-none"><i class="fa-solid fa-arrow-left-long"></i></button>
+        </div>
         <img id="register-logo" src="{% static 'img/logo.png' %}">
         <div id="register-languages">
           <input id="register-language-en" class="register-language-flag" src="{% static 'img/languages/en.png' %}" type="image"/>
@@ -94,6 +97,8 @@
         selectionContainers.length === 1);
       $(document.getElementById("register-languages")).toggleClass("d-none",
         selectionContainers.length !== 1);
+      $(document.getElementById("register-login")).toggleClass("d-none",
+        selectionContainers.length !== 1);
     }, 500);
   }
 
@@ -110,6 +115,7 @@
     loader.classList.add("loader");
     document.getElementById("register-wrapper").appendChild(loader);
     document.getElementById("register-languages").classList.add("d-none");
+    document.getElementById("register-login").classList.add("d-none");
     document.getElementById("register-email-container").classList.add("d-none");
     let request = new HttpRequest("https://api.taskwolf.net/v1/email/exists/", "POST",
       [], {email: emailInput.value});
@@ -123,6 +129,7 @@
           document.getElementById("register-username-container"));
       } else {
         document.getElementById("register-languages").classList.remove("d-none");
+        document.getElementById("register-login").classList.remove("d-none");
         document.getElementById("register-email-container").classList.remove("d-none");
         emailInput.value = "";
         Swal.fire("{% trans 'home.registration.email.failed.title' %}",
@@ -236,6 +243,7 @@
     document.getElementById("register-wrapper").appendChild(loader);
     document.getElementById("register-page-back").classList.add("d-none");
     document.getElementById("register-languages").classList.add("d-none");
+    document.getElementById("register-login").classList.add("d-none");
     setTimeout(function () {
       document.getElementById("register-page-back").classList.remove("d-none");
       document.getElementById("register-wrapper")
@@ -340,5 +348,9 @@
 
   document.getElementById("register-logo").onclick = function (event) {
     window.location.href = "/";
+  }
+
+  document.getElementById("register-login").onclick = function (event) {
+    window.location.href = "/login/";
   }
 </script>
