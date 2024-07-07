@@ -36,3 +36,72 @@
   color: #3f82c5;
   border-bottom: 2px #3f82c5 solid;
 }
+
+#package-upgrade-disclaimer, #package-upgrade-limit-reached, #package-upgrade-process, #package-upgrade-options {
+  padding: 30px;
+  border-radius: 5px;
+}
+
+#package-upgrade-options {
+  margin-top: 50px;
+}
+
+.dark #package-upgrade-disclaimer, .dark #package-upgrade-limit-reached, .dark #package-upgrade-process, .dark #package-upgrade-options {
+  background-color: #131820;
+  border: 1px #2b3441 solid;
+}
+
+.light #package-upgrade-disclaimer, .light #package-upgrade-limit-reached, .light #package-upgrade-process, .light #package-upgrade-options {
+  background-color: #dadada;
+  border: 1px #a0a0a0 solid;
+}
+
+#package-upgrade-process {
+  margin-top: 50px;
+}
+
+.package-upgrade-switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  margin: auto;
+  border-radius: 50px;
+  padding: 5px;
+}
+
+.dark .package-upgrade-switch {
+  background-color: #131820;
+  border: 1px #2b3441 solid;
+  color: white;
+}
+
+.light .package-upgrade-switch {
+  background-color: #131820;
+  border: 1px #2b3441 solid;
+  color: white;
+}
+
+.package-upgrade-switch-entry {
+  border-radius: 50px;
+  border: none;
+  outline: none;
+  padding: 10px 20px;
+  background-color: transparent;
+}
+
+.dark .package-upgrade-switch-entry {
+  color: white;
+}
+
+.light .package-upgrade-switch-entry {
+  color: black;
+}
+
+.dark .package-upgrade-switch-active {
+  background-color: #4b5868;
+}
+
+.light .package-upgrade-switch-active {
+  background-color: #4b5868;
+}
