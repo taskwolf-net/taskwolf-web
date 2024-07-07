@@ -16,6 +16,41 @@
               <li class="nav-item"><a class="nav-link" href="/package/upgrade/">{% trans 'product.package.tab.upgrade' %}</a></li>
             </ul>
           </div>
+          <div id="package-payment-disclaimer">
+            <h4 class="fw-bold mb-4">{% trans 'product.package.payment.headline' %}</h4>
+            <p id="package-payment-disclaimer-description" class="mb-0">{% trans 'product.package.payment.description' %}</p>
+          </div>
+          <div id="package-payments">
+            <h3 class="fw-bold mb-4">{% trans 'product.package.payment.your.payments' %}</h3>
+            <ul id="package-payment-description">
+              <li>
+                <div>
+                  <span class="me-2">{% trans 'product.package.payment.time' %}</span>
+                  <i class="fa-regular fa-calendar-days"></i>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span class="me-2">{% trans 'product.package.payment.amount' %}</span>
+                  <i class="fa-solid fa-coins"></i>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span class="me-2">{% trans 'product.package.payment.method' %}</span>
+                  <i class="fa-solid fa-money-check"></i>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span class="me-2">{% trans 'product.package.payment.status' %}</span>
+                  <i class="fa-solid fa-bars-progress"></i>
+                </div>
+              </li>
+            </ul>
+            <ul id="package-payment-list">
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -25,8 +60,106 @@
 <script>
   $(document).ready(function() {
     displayLoader()
-    removeLoader();
+    fetchPayments(function (payments) {
+      displayPayments(payments);
+      removeLoader();
+    });
   });
+
+  function displayPayments(payments) {
+    if (payments.length === 0) {
+      var emptyElement = document.createElement("b");
+      emptyElement.classList.add("mb-0");
+      emptyElement.innerHTML = "{% trans 'product.package.payment.empty' %}";
+      document.getElementById("package-payment-disclaimer").appendChild(emptyElement);
+      document.getElementById("package-payments").classList.add("d-none");
+      var descriptionElement = document.getElementById("package-payment-disclaimer-description");
+      descriptionElement.classList.remove("mb-0");
+      descriptionElement.classList.add("mb-5");
+      return;
+    }
+    for (var i = 0; i < payments.length; i++) {
+      var payment = payments[i];
+      displayPayment(payment.time, payment.amount, payment.method, payment.status);
+    }
+  }
+
+  function displayPayment(time, amount, method, status) {
+    var entry = document.createElement('li');
+    appendPaymentCell(entry, "time", time, "span");
+    appendPaymentCell(entry, "amount", amount + " €", "span");
+    entry.appendChild(createPaymentMethodElement(method));
+    entry.appendChild(createPaymentStatusElement(status));
+    document.getElementById("package-payment-list").appendChild(entry);
+  }
+
+  function createPaymentMethodElement(method) {
+    if (method.includes("card") || method.includes("debit")) {
+      return createPaymentCardMethodElement();
+    } else if (method === "paypal") {
+      return createPaymentPaypalMethodElement();
+    } else {
+      var defaultElement = document.createElement("span");
+      defaultElement.innerHTML = method;
+      return defaultElement;
+    }
+  }
+
+  function createPaymentCardMethodElement() {
+    var cardElement = document.createElement("div");
+    var cardIcon = document.createElement("i");
+    cardIcon.classList.add("fa-solid", "fa-credit-card", "me-2");
+    cardElement.appendChild(cardIcon);
+    var cardName = document.createElement("span");
+    cardName.innerHTML = " ({% trans 'product.package.payment.method.card' %})";
+    cardElement.appendChild(cardName);
+    return cardElement;
+  }
+
+  function createPaymentPaypalMethodElement() {
+    var paypalElement = document.createElement("div");
+    var paypalIcon = document.createElement("i");
+    paypalIcon.classList.add("fa-brands", "fa-paypal", "me-2");
+    paypalElement.appendChild(paypalIcon);
+    var paypalName = document.createElement("span");
+    paypalName.innerHTML = " (PayPal)";
+    paypalElement.appendChild(paypalName);
+    return paypalElement;
+  }
+
+  function createPaymentStatusElement(status) {
+    var statusContainer = document.createElement("div");
+    var statusElement = document.createElement("span");
+    if (status === "succeeded") {
+      statusElement.innerHTML = "{% trans 'product.package.payment.status.successful' %}";
+      statusElement.classList.add("package-payment-status-successful");
+    } else if (status === "canceled") {
+      statusElement.innerHTML = "{% trans 'product.package.payment.status.failed' %}";
+      statusElement.classList.add("package-payment-status-failed");
+    } else {
+      statusElement.innerHTML = "{% trans 'product.package.payment.status.pending' %}";
+      statusElement.classList.add("package-payment-status-pending");
+    }
+    statusContainer.appendChild(statusElement);
+    return statusContainer;
+  }
+
+  function appendPaymentCell(entry, identifier, information, elementType) {
+    var div = document.createElement("div");
+    var element = document.createElement(elementType);
+    element.innerText = information;
+    div.appendChild(element);
+    entry.appendChild(div);
+    return element;
+  }
+
+  function fetchPayments(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/payments/", "GET", []);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      callback(response.payments);
+    });
+  }
 
   function displayLoader() {
     var loader = document.createElement("div");
