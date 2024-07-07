@@ -163,7 +163,7 @@
   color: #72571c;
 }
 
-@media (max-width: 575px) {
+@media (max-width: 850px) {
   #package-payment-description li {
     font-size: .8em;
   }
@@ -174,5 +174,15 @@
 
   .package-payment-status-successful, .package-payment-status-failed, .package-payment-status-pending {
     padding: 5px;
+  }
+}
+
+@media (max-width: 500px) {
+  #package-payment-description li {
+    font-size: .6em;
+  }
+
+  #package-payment-list li div span {
+    font-size: .6em;
   }
 }
