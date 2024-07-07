@@ -27,11 +27,21 @@
               <li class="package-general-information-entry">
                 <div class="package-general-information-entry-description">
                   <div class="package-general-information-entry-icon">
-                    <i class="fa-solid fa-box"></i>
+                    <i class="fa-solid fa-box-archive"></i>
                   </div>
                   <span>{% trans 'product.package.general.type' %}</span>
                 </div>
                 <span id="package-general-information-type"></span>
+              </li>
+              <div class="package-general-information-divider"></div>
+              <li id="package-general-information-entry-class" class="package-general-information-entry">
+                <div class="package-general-information-entry-description">
+                  <div class="package-general-information-entry-icon">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                  </div>
+                  <span>{% trans 'product.package.general.class' %}</span>
+                </div>
+                <span id="package-general-information-class"></span>
               </li>
               <div class="package-general-information-divider"></div>
               <li class="package-general-information-entry">
@@ -203,6 +213,10 @@
   function displayGeneralInformation(bundle) {
     document.getElementById("package-general-information-type").innerHTML =
       findPackageName(bundle);
+    $(document.getElementById("package-general-information-entry-class"))
+      .toggleClass("d-none", bundle.class === "NONE");
+    document.getElementById("package-general-information-class").innerHTML =
+      findPackageClass(bundle);
     document.getElementById("package-general-information-price").innerHTML =
       bundle.price + " €";
     document.getElementById("package-general-information-runtime").innerHTML =
@@ -244,6 +258,18 @@
       return "{% trans 'product.package.general.team' %}";
     } else if (bundle.type === "ENTERPRISE") {
       return "{% trans 'product.package.general.enterprise' %}";
+    }
+  }
+
+  function findPackageClass(bundle) {
+    if (bundle.class === "NONE") {
+      return "";
+    } else if (bundle.class === "BEGINNER") {
+      return "{% trans 'product.package.general.beginner' %}";
+    } else if (bundle.class === "ADVANCED") {
+      return "{% trans 'product.package.general.advanced' %}";
+    } else if (bundle.class === "EXPERT") {
+      return "{% trans 'product.package.general.expert' %}";
     }
   }
 
