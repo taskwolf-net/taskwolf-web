@@ -22,3 +22,8 @@ async def packagePayment(request):
 async def packageUpgrade(request):
   return render(request, 'package/package-upgrade.html', {'title': gettext('product.package.upgrade.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/package/package-upgrade.css']})
+
+@authentication_required
+async def packageTermination(request):
+  return render(request, 'package/package-termination.html', {'title': gettext('product.package.termination.title'),
+    'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/package/package-termination.css']})

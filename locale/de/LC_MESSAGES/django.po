@@ -1374,6 +1374,8 @@ msgid "product.package.tab.payment"
 msgstr "ZAHLUNGEN"
 msgid "product.package.tab.upgrade"
 msgstr "AUFRÜSTEN"
+msgid "product.package.tab.termination"
+msgstr "KÜNDIGUNG"
 
 # PACKAGE - GENERAL
 msgid "product.package.general.title"
@@ -1508,6 +1510,14 @@ msgid "product.package.upgrade.options.headline"
 msgstr "WEITERE OPTIONEN"
 msgid "product.package.upgrade.options.description"
 msgstr "Nicht genug für Sie? <a href='/sales/'>Kontaktieren Sie den Vertrieb</a>, um das Professional-Paket individuell zu erweitern oder <a href='/pricing/'>erstellen Sie eine Organisation</a> (Team / Enterprise-Paket), in der Sie die Automatisierung mit Taskwolf weiterführen."
+
+# PACKAGE - TERMINATION
+msgid "product.package.termination.title"
+msgstr "Package - Kündigung - Taskwolf"
+msgid "product.package.termination.headline"
+msgstr "KÜNDIGUNG"
+msgid "product.package.termination.description"
+msgstr "Hier finden Sie alle Informationen und Möglichkeiten, Ihr Paket zu kündigen. Wenn Sie Ihre Zusammenarbeit mit Taskwolf beenden möchten, können Sie dies hier tun."
 
 # ORGANIZATION
 msgid "product.organization.title"

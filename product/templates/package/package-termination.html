@@ -1,0 +1,56 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+{% include 'templates/head.html' %}
+<body class="dark">
+{% include 'templates/product-header.html' %}
+{% include 'templates/product-sidebar.html' %}
+<div class="sidebar-influenced">
+  <div id="package-termination-container">
+    <div id="package-termination-wrapper" class="d-none">
+      <div>
+        <ul class="nav nav-tabs">
+          <li class="nav-item"><a class="nav-link" href="/package/general/">{% trans 'product.package.tab.general' %}</a></li>
+          <li class="nav-item"><a class="nav-link" href="/package/limitations/">{% trans 'product.package.tab.limitation' %}</a></li>
+          <li class="nav-item"><a class="nav-link" href="/package/payments/">{% trans 'product.package.tab.payment' %}</a></li>
+          <li class="nav-item"><a class="nav-link" href="/package/upgrade/">{% trans 'product.package.tab.upgrade' %}</a></li>
+          <li class="nav-item"><a class="nav-link nav-link-active" href="/package/termination/">{% trans 'product.package.tab.termination' %}</a></li>
+        </ul>
+      </div>
+      <div id="package-termination-disclaimer">
+        <h4 class="fw-bold mb-4">{% trans 'product.package.termination.headline' %}</h4>
+        <p class="mb-3">{% trans 'product.package.termination.description' %}</p>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    displayLoader()
+    fetchBundle(function (bundle) {
+      removeLoader();
+    });
+  });
+
+  function fetchBundle(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/bundle/", "GET", []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("package-termination-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("package-termination-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("package-termination-wrapper").classList.remove("d-none");
+  }
+</script>
