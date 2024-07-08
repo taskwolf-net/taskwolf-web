@@ -34,7 +34,7 @@
                 </div>
                 <span id="package-general-information-type"></span>
               </li>
-              <div class="package-general-information-divider"></div>
+              <div id="package-general-information-divider-class" class="package-general-information-divider"></div>
               <li id="package-general-information-entry-class" class="package-general-information-entry">
                 <div class="package-general-information-entry-description">
                   <div class="package-general-information-entry-icon">
@@ -215,6 +215,8 @@
     document.getElementById("package-general-information-type").innerHTML =
       findPackageName(bundle);
     $(document.getElementById("package-general-information-entry-class"))
+      .toggleClass("d-none", bundle.class === "NONE");
+    $(document.getElementById("package-general-information-divider-class"))
       .toggleClass("d-none", bundle.class === "NONE");
     document.getElementById("package-general-information-class").innerHTML =
       findPackageClass(bundle);
