@@ -19,12 +19,21 @@
           </div>
           <div id="package-termination-disclaimer">
             <h4 class="fw-bold mb-4">{% trans 'product.package.termination.headline' %}</h4>
-            <p class="mb-3">{% trans 'product.package.termination.description' %}</p>
+            <p class="mb-0">{% trans 'product.package.termination.description' %}</p>
           </div>
           <div id="package-termination-process">
             <h4 class="fw-bold mb-4">{% trans 'product.package.termination.process.headline' %}</h4>
-            <p class="mb-5">{% trans 'product.package.termination.process.description' %}</p>
-            <button type="button" id="package-termination" class="btn btn-danger">{% trans 'product.package.termination' %}</button>
+            <p id="package-termination-process-description" class="mb-3"></p>
+            <p id="package-termination-process-description-dynamic" class="mb-5"></p>
+            <button type="button" id="package-termination" class="btn btn-danger d-block px-5 mt-5 mx-auto">{% trans 'product.package.termination' %}</button>
+          </div>
+          <div id="package-termination-not-possible">
+            <h4 class="fw-bold mb-4">{% trans 'product.package.termination.headline' %}</h4>
+            <p class="mb-0">{% trans 'product.package.termination.not.possible.description' %}</p>
+          </div>
+          <div id="package-termination-done">
+            <h4 class="fw-bold mb-4">{% trans 'product.package.termination.headline' %}</h4>
+            <p id="package-termination-done-description" class="mb-0"></p>
           </div>
         </div>
       </div>
@@ -44,7 +53,35 @@
   });
 
   function displayTerminationInformation(terminationStatus, bundle) {
+    var expiration = formatTime(bundle.expiration);
+    if (terminationStatus.terminable === false) {
+      document.getElementById("package-termination-disclaimer").classList.add("d-none");
+      document.getElementById("package-termination-process").classList.add("d-none");
+      document.getElementById("package-termination-done").classList.add("d-none");
+      return;
+    }
+    if (terminationStatus.terminated === true) {
+      document.getElementById("package-termination-disclaimer").classList.add("d-none");
+      document.getElementById("package-termination-process").classList.add("d-none");
+      document.getElementById("package-termination-not-possible").classList.add("d-none");
+      document.getElementById("package-termination-done-description").innerHTML =
+        "{% trans 'product.package.termination.done.description' %}".replace("%s", expiration);
+      return;
+    }
+    document.getElementById("package-termination-done").classList.add("d-none");
+    document.getElementById("package-termination-not-possible").classList.add("d-none");
+    document.getElementById("package-termination-process-description").innerHTML =
+      "{% trans 'product.package.termination.process.description' %}".replace("%s", expiration);
+    var dynamicElement = document.getElementById("package-termination-process-description-dynamic");
+    if (terminationStatus.directlyEffective) {
+      dynamicElement.innerHTML = "{% trans 'product.package.termination.process.description.instant' %}";
+    } else {
+      dynamicElement.innerHTML = "{% trans 'product.package.termination.process.description.delayed' %}";
+    }
+  }
 
+  function formatTime(time) {
+    return new Date(time).toLocaleDateString().replace(/(^|\D)(\d)(?!\d)/g, '$10$2');
   }
 
   function fetchTerminationStatus(callback) {
@@ -58,6 +95,23 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/bundle/", "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
+    });
+  }
+
+  document.getElementById("package-termination").onclick = function (event) {
+    Swal.fire({
+      title: "{% trans 'product.package.termination.process.title' %}",
+      text: "{% trans 'product.package.termination.process.body' %}",
+      icon: "warning",
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/terminate/", "GET", []);
+        request.send(function (status, responseText) {
+          Swal.fire("{% trans 'product.package.termination.process.successful.title' %}", "{% trans 'product.package.termination.process.successful.body' %}", "success").then(success => window.location.reload());
+        });
+      }
     });
   }
 

@@ -37,17 +37,22 @@
   border-bottom: 2px #3f82c5 solid;
 }
 
-#package-termination-disclaimer {
+#package-termination-disclaimer, #package-termination-process, #package-termination-not-possible, #package-termination-done {
   padding: 30px;
   border-radius: 5px;
 }
 
-.dark #package-termination-disclaimer {
+#package-termination-process {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.dark #package-termination-disclaimer, .dark #package-termination-process, .dark #package-termination-not-possible, .dark #package-termination-done {
   background-color: #131820;
   border: 1px #2b3441 solid;
 }
 
-.light #package-termination-disclaimer {
+.light #package-termination-disclaimer, .light #package-termination-process, .light #package-termination-not-possible, .light #package-termination-done {
   background-color: #dadada;
   border: 1px #a0a0a0 solid;
 }
