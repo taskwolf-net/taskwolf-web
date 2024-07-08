@@ -15,8 +15,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 2%;
-  margin-bottom: 5%;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
 }
 
 .pricing-switch {
@@ -57,6 +57,21 @@
   #pricing-class-selection {
     margin: auto;
     width: fit-content;
+  }
+}
+
+@media (max-width: 575px) {
+  #pricing-class-selection {
+    flex-direction: column;
+    border-radius: 20px;
+  }
+
+  #pricing-class-selection .pricing-switch-entry {
+    margin-bottom: 10px;
+  }
+
+  #pricing-class-selection .pricing-switch-entry:last-child {
+    margin-bottom: 0;
   }
 }
 
