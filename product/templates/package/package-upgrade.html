@@ -34,9 +34,25 @@
                 <button id="package-upgrade-runtime-yearly" class="package-upgrade-switch-entry package-upgrade-switch-active">{% trans 'home.pricing.runtime.yearly' %}</button>
               </div>
               <div id="package-upgrade-class-selection" class="package-upgrade-switch mt-4">
-                <button id="package-upgrade-class-beginner" class="package-upgrade-switch-entry package-upgrade-switch-active">{% trans 'home.pricing.class.beginner' %}</button>
+                <button id="package-upgrade-class-beginner" class="package-upgrade-switch-entry">{% trans 'home.pricing.class.beginner' %}</button>
                 <button id="package-upgrade-class-advanced" class="package-upgrade-switch-entry">{% trans 'home.pricing.class.advanced' %}</button>
-                <button id="package-upgrade-class-expert" class="package-upgrade-switch-entry">{% trans 'home.pricing.class.expert' %}</button>
+                <button id="package-upgrade-class-expert" class="package-upgrade-switch-entry package-upgrade-switch-active">{% trans 'home.pricing.class.expert' %}</button>
+              </div>
+            </div>
+            <div id="package-upgrade-package" class="mt-5">
+              <div id="package-upgrade-package-container">
+                <h2 id="package-upgrade-package-title">{% trans 'home.pricing.professional.title' %}</h2>
+                <h1 id="package-upgrade-package-price"></h1>
+                <p id="package-upgrade-package-time">{% trans 'home.pricing.professional.time' %}</p>
+                <button type="button" id="package-upgrade-buy" class="btn btn-outline-light">{% trans 'home.pricing.buy' %}</button>
+                <p id="package-upgrade-package-features-headline">{% trans 'home.pricing.summary.headline' %}</p>
+                <ul id="package-upgrade-package-features">
+                  <li class="mb-3"><i class="fa-regular fa-clock me-3"></i><p id="package-upgrade-package-runtime" class="mb-0"></p></li>
+                  <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="package-upgrade-package-workflow-number" class="mb-0"></p></li>
+                  <li class="mb-3"><i class="fa-solid fa-check me-3"></i><b id="package-upgrade-package-workflow-operation" class="mb-0"></b></li>
+                  <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="package-upgrade-package-database-number" class="mb-0"></p></li>
+                  <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="package-upgrade-package-database-data" class="mb-0"></p></li>
+                </ul>
               </div>
             </div>
           </div>
@@ -51,8 +67,9 @@
 </html>
 
 <script>
-  var bundleClass = "BEGINNER";
+  var bundleClass = "EXPERT";
   var bundleRuntime = "YEARLY";
+  var professionalPackageData;
 
   $(document).ready(function() {
     displayLoader()
@@ -68,12 +85,15 @@
       document.getElementById("package-upgrade-options").classList.add("d-none");
       document.getElementById("package-upgrade-process").classList.add("d-none");
     } else {
+      if (bundle.type === "PROFESSIONAL" && bundle.class === "BEGINNER") {
+        document.getElementById("package-upgrade-class-beginner").classList.add("d-none");
+      }
+      if (bundle.type === "PROFESSIONAL" && bundle.class === "ADVANCED") {
+        document.getElementById("package-upgrade-class-advanced").classList.add("d-none");
+      }
       document.getElementById("package-upgrade-limit-reached").classList.add("d-none");
+      upgradeUpgradePackage();
     }
-  }
-
-  function displayUpgradePackage() {
-
   }
 
   function fetchBundle(callback) {
@@ -83,9 +103,45 @@
     });
   }
 
+  function upgradeUpgradePackage() {
+    fetchPackage("PROFESSIONAL", function (professionalPackage) {
+      professionalPackageData = professionalPackage;
+      displayUpgradePackage(professionalPackage);
+    });
+  }
+
+  function displayUpgradePackage(professionalPackage) {
+    document.getElementById("package-upgrade-package-price").innerHTML =
+      professionalPackage.price + " €";
+    if (bundleRuntime === "MONTHLY") {
+      document.getElementById("package-upgrade-package-runtime").innerHTML =
+        "1 {% trans 'home.pricing.time.month' %}";
+    } else if (bundleRuntime === "YEARLY") {
+      document.getElementById("package-upgrade-package-runtime").innerHTML =
+        "1 {% trans 'home.pricing.time.year' %}";
+    }
+    document.getElementById("package-upgrade-package-workflow-number").innerHTML =
+      professionalPackage.workflowNumberLimit + " {% trans 'home.pricing.summary.workflow.number' %}";
+    document.getElementById("package-upgrade-package-workflow-operation").innerHTML =
+      professionalPackage.workflowOperationLimit + " {% trans 'home.pricing.summary.workflow.operation' %}";
+    document.getElementById("package-upgrade-package-database-number").innerHTML =
+      professionalPackage.databaseNumberLimit + " {% trans 'home.pricing.summary.database.number' %}";
+    document.getElementById("package-upgrade-package-database-data").innerHTML =
+      professionalPackage.databaseDataLimit + " GB {% trans 'home.pricing.summary.database.data' %}";
+  }
+
+  function fetchPackage(packageName, callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/bundle/preset/", "POST",
+      [], {type: packageName, class: bundleClass, runtime: bundleRuntime});
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      callback(response);
+    });
+  }
+
   document.getElementById("package-upgrade-class-beginner").onclick = function (event) {
     bundleClass = "BEGINNER";
-    displayUpgradePackage();
+    upgradeUpgradePackage();
     document.getElementById("package-upgrade-class-beginner").classList.add("package-upgrade-switch-active");
     document.getElementById("package-upgrade-class-advanced").classList.remove("package-upgrade-switch-active");
     document.getElementById("package-upgrade-class-expert").classList.remove("package-upgrade-switch-active");
@@ -93,7 +149,7 @@
 
   document.getElementById("package-upgrade-class-advanced").onclick = function (event) {
     bundleClass = "ADVANCED";
-    displayUpgradePackage();
+    upgradeUpgradePackage();
     document.getElementById("package-upgrade-class-beginner").classList.remove("package-upgrade-switch-active");
     document.getElementById("package-upgrade-class-advanced").classList.add("package-upgrade-switch-active");
     document.getElementById("package-upgrade-class-expert").classList.remove("package-upgrade-switch-active");
@@ -101,7 +157,7 @@
 
   document.getElementById("package-upgrade-class-expert").onclick = function (event) {
     bundleClass = "EXPERT";
-    displayUpgradePackage();
+    upgradeUpgradePackage();
     document.getElementById("package-upgrade-class-beginner").classList.remove("package-upgrade-switch-active");
     document.getElementById("package-upgrade-class-advanced").classList.remove("package-upgrade-switch-active");
     document.getElementById("package-upgrade-class-expert").classList.add("package-upgrade-switch-active");
@@ -109,16 +165,30 @@
 
   document.getElementById("package-upgrade-runtime-monthly").onclick = function (event) {
     bundleRuntime = "MONTHLY";
-    displayUpgradePackage();
+    upgradeUpgradePackage();
     document.getElementById("package-upgrade-runtime-monthly").classList.add("package-upgrade-switch-active");
     document.getElementById("package-upgrade-runtime-yearly").classList.remove("package-upgrade-switch-active");
   }
 
   document.getElementById("package-upgrade-runtime-yearly").onclick = function (event) {
     bundleRuntime = "YEARLY";
-    displayUpgradePackage();
+    upgradeUpgradePackage();
     document.getElementById("package-upgrade-runtime-monthly").classList.remove("package-upgrade-switch-active");
     document.getElementById("package-upgrade-runtime-yearly").classList.add("package-upgrade-switch-active");
+  }
+
+  document.getElementById("package-upgrade-buy").onclick = function (event) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/email/",
+      "GET", []);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      Cookie.create("taskwolf-package-type", "PROFESSIONAL", 60 * 60 * 24);
+      Cookie.create("taskwolf-package-class", bundleClass, 60 * 60 * 24);
+      Cookie.create("taskwolf-package-runtime", bundleRuntime, 60 * 60 * 24);
+      Cookie.create("taskwolf-package-price", professionalPackageData.price, 60 * 60 * 24);
+      Cookie.create("taskwolf-home-email", response.email, 60 * 60 * 24)
+      window.location.href = "/payment/";
+    });
   }
 
   function displayLoader() {

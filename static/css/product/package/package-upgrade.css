@@ -44,6 +44,7 @@
 
 #package-upgrade-options {
   margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 .dark #package-upgrade-disclaimer, .dark #package-upgrade-limit-reached, .dark #package-upgrade-process, .dark #package-upgrade-options {
@@ -77,9 +78,9 @@
 }
 
 .light .package-upgrade-switch {
-  background-color: #131820;
-  border: 1px #2b3441 solid;
-  color: white;
+  background-color: #dadada;
+  border: 1px #a0a0a0 solid;
+  color: black;
 }
 
 .package-upgrade-switch-entry {
@@ -103,5 +104,80 @@
 }
 
 .light .package-upgrade-switch-active {
-  background-color: #4b5868;
+  background-color: #a4a4a4;
+}
+
+@media (max-width: 575px) {
+  #package-upgrade-class-selection {
+    flex-direction: column;
+    border-radius: 20px;
+  }
+
+  #package-upgrade-class-selection .package-upgrade-switch-entry {
+    margin-bottom: 10px;
+  }
+
+  #package-upgrade-class-selection .package-upgrade-switch-entry:last-child {
+    margin-bottom: 0;
+  }
+}
+
+#package-upgrade-package {
+  width: min(350px, 100%);
+  margin: auto;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.dark #package-upgrade-package {
+  background-color: #324450;
+  color: white;
+}
+
+.light #package-upgrade-package {
+  background-color: #4e6a7d;
+  color: white;
+}
+
+#package-upgrade-package-container {
+  width: min(200px, 100%);
+  margin: auto;
+  position: relative;
+}
+
+#package-upgrade-package-title {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+#package-upgrade-package-price {
+  text-align: center;
+  margin-top: 10%;
+  font-weight: bold;
+}
+
+#package-upgrade-package-time {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+#package-upgrade-buy {
+  width: 100%;
+  display: block;
+  margin: auto auto 30px;
+}
+
+#package-upgrade-package-features-headline {
+  font-weight: bold;
+}
+
+#package-upgrade-package-features {
+  list-style: none;
+  padding: 0;
+}
+
+#package-upgrade-package-features li {
+  display: flex;
+  align-items: center;
 }
