@@ -1528,6 +1528,10 @@ msgid "product.package.termination.headline"
 msgstr "TERMINATION"
 msgid "product.package.termination.description"
 msgstr "Here you will find all the information and options for canceling your package. If you wish to terminate your cooperation with Taskwolf, you can do so here."
+msgid "product.package.termination.process.headline"
+msgstr "TERMINATE NOW"
+msgid "product.package.termination"
+msgstr "TERMINATE"
 
 # ORGANIZATION
 msgid "product.organization.title"
