@@ -38,10 +38,12 @@
 
 .dark #devices-search-box input {
   background-color: #202428;
+  color: white;
 }
 
 .light #devices-search-box input {
   background-color: #d8d8d8;
+  color: black;
 }
 
 #devices-search-box input:focus{

@@ -38,10 +38,12 @@
 
 .dark #databases-search-box input {
   background-color: #202428;
+  color: white;
 }
 
 .light #databases-search-box input {
   background-color: #d8d8d8;
+  color: black;
 }
 
 #databases-search-box input:focus{

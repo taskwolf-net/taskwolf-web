@@ -38,10 +38,12 @@
 
 .dark #webhooks-search-box input {
   background-color: #202428;
+  color: white;
 }
 
 .light #webhooks-search-box input {
   background-color: #d8d8d8;
+  color: black;
 }
 
 #webhooks-search-box input:focus{

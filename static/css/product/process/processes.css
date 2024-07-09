@@ -39,10 +39,12 @@
 
 .dark #processes-search-box input {
   background-color: #202428;
+  color: white;
 }
 
 .light #processes-search-box input {
   background-color: #d8d8d8;
+  color: black;
 }
 
 #processes-search-box input:focus{
