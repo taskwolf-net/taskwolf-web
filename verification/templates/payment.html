@@ -127,56 +127,25 @@
       processTrial();
       return;
     }
-    var link = findPaymentLink(packageType, packageClass, packageRuntime);
-    if (link === "") {
-      return;
-    }
-    processPayment(link);
+    processPayment(packageType, packageClass, packageRuntime);
   }
 
-  function processPayment(link) {
+  function processPayment(packageType, packageClass, packageRuntime) {
     var email = Cookie.find("taskwolf-home-email");
-    let request = new HttpRequest("https://api.taskwolf.net/v1/email/exists/", "POST",
-      [], {email: email});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/checkout/", "POST",
+      [], {email: email, bundleType: packageType, bundleClass: packageClass,
+        bundleRuntime: packageRuntime});
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
       resetPackageSelection();
-      if (response.exists === true) {
-        window.location.href = link + "?prefilled_email=" + email;
+      if (response.success === true) {
+        window.location.href = response.link;
       } else {
         Swal.fire("{% trans 'home.payment.failed.not.found.title' %}",
           "{% trans 'home.payment.failed.not.found.body' %}", "error")
           .then(success => window.location.href = "/login/");
       }
     });
-  }
-
-  function findPaymentLink(packageType, packageClass, packageRuntime) {
-    if (packageType === "PROFESSIONAL" && packageClass === "BEGINNER" && packageRuntime === "MONTHLY") {
-      return "https://buy.stripe.com/test_28og291S59Hx8qAfZ1";
-    } else if (packageType === "PROFESSIONAL" && packageClass === "ADVANCED" && packageRuntime === "MONTHLY") {
-      return "https://buy.stripe.com/test_cN25nv7cp06XcGQbIJ";
-    } else if (packageType === "PROFESSIONAL" && packageClass === "EXPERT" && packageRuntime === "MONTHLY") {
-      return "https://buy.stripe.com/test_28o4jr1S56vl36g7su";
-    } else if (packageType === "PROFESSIONAL" && packageClass === "BEGINNER" && packageRuntime === "YEARLY") {
-      return "https://buy.stripe.com/test_7sI6rzeER9HxeOY8wA";
-    } else if (packageType === "PROFESSIONAL" && packageClass === "ADVANCED" && packageRuntime === "YEARLY") {
-      return "https://buy.stripe.com/test_14k7vD9kxg5V9uE8wB";
-    } else if (packageType === "PROFESSIONAL" && packageClass === "EXPERT" && packageRuntime === "YEARLY") {
-      return "https://buy.stripe.com/test_bIYbLT0O14ndgX628e";
-    } else if (packageType === "TEAM" && packageClass === "BEGINNER" && packageRuntime === "MONTHLY") {
-      return "https://buy.stripe.com/test_7sI6rzaoB6vl7mw6ov";
-    } else if (packageType === "TEAM" && packageClass === "ADVANCED" && packageRuntime === "MONTHLY") {
-      return "https://buy.stripe.com/test_dR66rz0O1cTJ9uE6ow";
-    } else if (packageType === "TEAM" && packageClass === "EXPERT" && packageRuntime === "MONTHLY") {
-      return "https://buy.stripe.com/test_14kaHPcwJg5V22c8wF";
-    } else if (packageType === "TEAM" && packageClass === "BEGINNER" && packageRuntime === "YEARLY") {
-      return "https://buy.stripe.com/test_aEU7vDgMZdXN6is00a";
-    } else if (packageType === "TEAM" && packageClass === "ADVANCED" && packageRuntime === "YEARLY") {
-      return "https://buy.stripe.com/test_3cs6rz8gtg5VdKUfZ9";
-    } else if (packageType === "TEAM" && packageClass === "EXPERT" && packageRuntime === "YEARLY") {
-      return "https://buy.stripe.com/test_cN203b1S58Dt22cbIU";
-    }
   }
 
   function processTrial() {
