@@ -137,13 +137,21 @@
         bundleRuntime: packageRuntime});
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
-      resetPackageSelection();
       if (response.success === true) {
+        resetPackageSelection();
         window.location.href = response.link;
-      } else {
+        return;
+      }
+      var errorCode = response.error;
+      if (errorCode === 1000) {
+        Cookie.destroy("taskwolf-home-email");
         Swal.fire("{% trans 'home.payment.failed.not.found.title' %}",
           "{% trans 'home.payment.failed.not.found.body' %}", "error")
           .then(success => window.location.href = "/login/");
+      } else if (errorCode === 1001) {
+        Swal.fire("{% trans 'home.payment.failed.wrong.package.title' %}",
+          "{% trans 'home.payment.failed.wrong.package.body' %}", "error")
+          .then(success => window.location.href = "/pricing/");
       }
     });
   }
