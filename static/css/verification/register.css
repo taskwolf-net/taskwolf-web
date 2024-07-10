@@ -126,6 +126,10 @@ input:-webkit-autofill:active{
   text-align: left;
 }
 
+#register-success-container {
+  margin-top: -75px;
+}
+
 .success-icon-wrapper {
   display: flex;
   align-items: center;
