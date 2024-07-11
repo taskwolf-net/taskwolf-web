@@ -50,15 +50,10 @@
 </html>
 
 <script>
-  var organization;
-
   $(document).ready(function() {
     displayLoader();
-    fetchOrganization(function(organizationData) {
-      organization = organizationData;
-      displayTaps();
-      displayInformation();
-      displayLeaveButton();
+    fetchOrganization(function(organization) {
+      displayOrganization(organization)
       removeLoader();
     });
     var membersHeader = document.getElementById("organization-members-header");
@@ -73,7 +68,13 @@
     });
   }
 
-  function displayTaps() {
+  function displayOrganization(organization) {
+    displayTaps(organization);
+    displayInformation(organization);
+    displayLeaveButton(organization);
+  }
+
+  function displayTaps(organization) {
     if (organization.isOwner) {
       return;
     }
@@ -83,7 +84,7 @@
     }
   }
 
-  function displayInformation() {
+  function displayInformation(organization) {
     document.getElementById("organization-name").innerHTML = organization.name;
     document.getElementById("organization-owner").appendChild(createUserEntry(organization.owner, "li"));
     var memberListElement = document.getElementById("organization-members");
@@ -130,7 +131,7 @@
     return memberElement;
   }
 
-  function displayLeaveButton() {
+  function displayLeaveButton(organization) {
     if (organization.isOwner === true) {
       document.getElementById("organization-leave").classList.add("d-none");
     }
