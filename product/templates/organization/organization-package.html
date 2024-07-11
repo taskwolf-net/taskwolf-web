@@ -1,0 +1,317 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body class="dark">
+    {% include 'templates/product-header.html' %}
+    {% include 'templates/product-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="organization-package-container">
+        <div id="organization-package-wrapper" class="d-none">
+          <div>
+            <ul class="nav nav-tabs">
+              <li class="nav-item"><a class="nav-link" href="/organization/members/">{% trans 'product.organization.tab.member' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/organization/teams/">{% trans 'product.organization.tab.team' %}</a></li>
+              <li class="nav-item"><a class="nav-link nav-link-active" href="/organization/package/">{% trans 'product.organization.tab.package' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/organization/limitations/">{% trans 'product.organization.tab.limitation' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/organization/payments/">{% trans 'product.organization.tab.payment' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/organization/upgrade/">{% trans 'product.organization.tab.upgrade' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/organization/termination/">{% trans 'product.organization.tab.termination' %}</a></li>
+            </ul>
+          </div>
+          <div id="organization-package-disclaimer">
+            <h4 class="fw-bold mb-4">{% trans 'product.organization.package.headline' %}</h4>
+            <p class="mb-3">{% trans 'product.organization.package.description.1' %}</p>
+            <p class="mb-0">{% trans 'product.organization.package.description.2' %}</p>
+          </div>
+          <div id="organization-package-information">
+            <h3 class="fw-bold mb-4">{% trans 'product.organization.package.your.package' %}</h3>
+            <ul id="organization-package-information-entries">
+              <li class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
+                    <i class="fa-solid fa-box-archive"></i>
+                  </div>
+                  <span>{% trans 'product.organization.package.type' %}</span>
+                </div>
+                <span id="organization-package-information-type"></span>
+              </li>
+              <div id="organization-package-information-divider-class" class="organization-package-information-divider"></div>
+              <li id="organization-package-information-entry-class" class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                  </div>
+                  <span>{% trans 'product.organization.package.class' %}</span>
+                </div>
+                <span id="organization-package-information-class"></span>
+              </li>
+              <div class="organization-package-information-divider"></div>
+              <li class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
+                    <i class="fa-solid fa-coins"></i>
+                  </div>
+                  <span>{% trans 'product.organization.package.price' %}</span>
+                </div>
+                <span id="organization-package-information-price"></span>
+              </li>
+              <div class="organization-package-information-divider"></div>
+              <li class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
+                    <i class="fa-regular fa-clock"></i>
+                  </div>
+                  <span>{% trans 'product.organization.package.runtime' %}</span>
+                </div>
+                <span id="organization-package-information-runtime"></span>
+              </li>
+              <div class="organization-package-information-divider"></div>
+              <li class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'product.organization.package.workflow.access' %}</span>
+                </div>
+                <span id="organization-package-information-workflow-access"></span>
+              </li>
+              <div class="organization-package-information-divider"></div>
+              <li class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
+                    <i class="fa-solid fa-hashtag"></i>
+                  </div>
+                  <span>{% trans 'product.organization.package.workflow.number' %}</span>
+                </div>
+                <span id="organization-package-information-workflow-number"></span>
+              </li>
+              <div class="organization-package-information-divider"></div>
+              <li class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
+                    <i class="fa-solid fa-microchip"></i>
+                  </div>
+                  <span>{% trans 'product.organization.package.workflow.operation' %}</span>
+                </div>
+                <span id="organization-package-information-workflow-operation"></span>
+              </li>
+              <div class="organization-package-information-divider"></div>
+              <li class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'product.organization.package.template.access' %}</span>
+                </div>
+                <span id="organization-package-information-template-access"></span>
+              </li>
+              <div class="organization-package-information-divider"></div>
+              <li class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'product.organization.package.database.access' %}</span>
+                </div>
+                <span id="organization-package-information-database-access"></span>
+              </li>
+              <div class="organization-package-information-divider"></div>
+              <li class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
+                    <i class="fa-solid fa-hashtag"></i>
+                  </div>
+                  <span>{% trans 'product.organization.package.database.number' %}</span>
+                </div>
+                <span id="organization-package-information-database-number"></span>
+              </li>
+              <div class="organization-package-information-divider"></div>
+              <li class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
+                    <i class="fa-solid fa-database"></i>
+                  </div>
+                  <span>{% trans 'product.organization.package.database.data' %}</span>
+                </div>
+                <span id="organization-package-information-database-data"></span>
+              </li>
+              <div class="organization-package-information-divider"></div>
+              <li class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'product.organization.package.webhook.access' %}</span>
+                </div>
+                <span id="organization-package-information-webhook-access"></span>
+              </li>
+              <div class="organization-package-information-divider"></div>
+              <li class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
+                    <i class="fa-solid fa-hashtag"></i>
+                  </div>
+                  <span>{% trans 'product.organization.package.webhook.number' %}</span>
+                </div>
+                <span id="organization-package-information-webhook-number"></span>
+              </li>
+              <div class="organization-package-information-divider"></div>
+              <li class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'product.organization.package.organization.access' %}</span>
+                </div>
+                <span id="organization-package-information-organization-access"></span>
+              </li>
+              <div class="organization-package-information-divider"></div>
+              <li class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
+                    <i class="fa-solid fa-user"></i>
+                  </div>
+                  <span>{% trans 'product.organization.package.organization.member' %}</span>
+                </div>
+                <span id="organization-package-information-organization-member"></span>
+              </li>
+              <div class="organization-package-information-divider"></div>
+              <li class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'product.organization.package.device.access' %}</span>
+                </div>
+                <span id="organization-package-information-device-access"></span>
+              </li>
+              <div class="organization-package-information-divider"></div>
+              <li class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'product.organization.package.account.access' %}</span>
+                </div>
+                <span id="organization-package-information-account-access"></span>
+              </li>
+              <div class="organization-package-information-divider"></div>
+              <li class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
+                    <i class="fa-solid fa-hashtag"></i>
+                  </div>
+                  <span>{% trans 'product.organization.package.account.number' %}</span>
+                </div>
+                <span id="organization-package-information-account-number"></span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    displayLoader();
+    fetchBundle(function (bundle) {
+      if (bundle.type !== "TEAM" && bundle.type !== "ENTERPRISE") {
+        window.location.href = "/";
+        return;
+      }
+      displayPackageInformation(bundle);
+      removeLoader();
+    });
+  });
+
+  function displayPackageInformation(bundle) {
+    document.getElementById("organization-package-information-type").innerHTML =
+      findPackageName(bundle);
+    $(document.getElementById("organization-package-information-entry-class"))
+      .toggleClass("d-none", bundle.class === "NONE");
+    $(document.getElementById("organization-package-information-divider-class"))
+      .toggleClass("d-none", bundle.class === "NONE");
+    document.getElementById("organization-package-information-class").innerHTML =
+      findPackageClass(bundle);
+    document.getElementById("organization-package-information-price").innerHTML =
+      bundle.price + " €";
+    document.getElementById("organization-package-information-runtime").innerHTML =
+      "1 " + (bundle.runtime === "WEEKLY" ? "{% trans 'product.organization.package.runtime.week' %}" :
+        (bundle.runtime === "MONTHLY" ? "{% trans 'product.organization.package.runtime.month' %}" :
+          "{% trans 'product.organization.package.runtime.year' %}"));
+    document.getElementById("organization-package-information-workflow-access").innerHTML =
+      bundle.workflowAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("organization-package-information-workflow-number").innerHTML =
+      bundle.workflowNumberLimit < 0 ? "{% trans 'product.organization.package.unlimited' %}" : bundle.workflowNumberLimit;
+    document.getElementById("organization-package-information-workflow-operation").innerHTML =
+      bundle.workflowOperationLimit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    document.getElementById("organization-package-information-template-access").innerHTML =
+      true ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("organization-package-information-database-access").innerHTML =
+      bundle.databaseAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("organization-package-information-database-number").innerHTML =
+      bundle.databaseNumberLimit < 0 ? "{% trans 'product.organization.package.unlimited' %}" : bundle.databaseNumberLimit;
+    document.getElementById("organization-package-information-database-data").innerHTML =
+      bundle.databaseDataLimit + " GB";
+    document.getElementById("organization-package-information-webhook-access").innerHTML =
+      bundle.webhookAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("organization-package-information-webhook-number").innerHTML =
+      bundle.webhookNumberLimit < 0 ? "{% trans 'product.organization.package.unlimited' %}" : bundle.webhookNumberLimit;
+    document.getElementById("organization-package-information-organization-access").innerHTML =
+      bundle.organizationAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("organization-package-information-organization-member").innerHTML =
+      bundle.organizationMemberLimit < 0 ? "{% trans 'product.organization.package.unlimited' %}" : bundle.organizationMemberLimit;
+    document.getElementById("organization-package-information-device-access").innerHTML =
+      bundle.deviceAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("organization-package-information-account-access").innerHTML =
+      bundle.accountsAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("organization-package-information-account-number").innerHTML =
+      bundle.accountsNumberLimit < 0 ? "{% trans 'product.organization.package.unlimited' %}" : bundle.accountsNumberLimit;
+  }
+
+  function findPackageName(bundle) {
+    if (bundle.type === "TRIAL") {
+      return "{% trans 'product.organization.package.free' %}";
+    } else if (bundle.type === "PROFESSIONAL") {
+      return "{% trans 'product.organization.package.professional' %}";
+    } else if (bundle.type === "TEAM") {
+      return "{% trans 'product.organization.package.team' %}";
+    } else if (bundle.type === "ENTERPRISE") {
+      return "{% trans 'product.organization.package.enterprise' %}";
+    }
+  }
+
+  function findPackageClass(bundle) {
+    if (bundle.class === "NONE") {
+      return "";
+    } else if (bundle.class === "BEGINNER") {
+      return "{% trans 'product.organization.package.beginner' %}";
+    } else if (bundle.class === "ADVANCED") {
+      return "{% trans 'product.organization.package.advanced' %}";
+    } else if (bundle.class === "EXPERT") {
+      return "{% trans 'product.organization.package.expert' %}";
+    }
+  }
+
+  function fetchBundle(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/bundle/", "GET", []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("organization-package-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("organization-package-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("organization-package-wrapper").classList.remove("d-none");
+  }
+</script>

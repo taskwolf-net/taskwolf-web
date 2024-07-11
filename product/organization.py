@@ -14,6 +14,11 @@ async def organizationTeam(request):
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/organization/organization-team.css']})
 
 @authentication_required
+async def organizationPackage(request):
+  return render(request, 'organization/organization-package.html', {'title': gettext('product.organization.package.title'),
+    'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/organization/organization-package.css']})
+
+@authentication_required
 async def organizationLimitation(request):
   return render(request, 'organization/organization-limitation.html', {'title': gettext('product.organization.limitation.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/organization/organization-limitation.css']})

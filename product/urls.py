@@ -29,6 +29,7 @@ urlpatterns = [
   path('organization/', organization.organizationMember),
   path('organization/members/', organization.organizationMember),
   path('organization/teams/', organization.organizationTeam),
+  path('organization/package/', organization.organizationPackage),
   path('organization/limitations/', organization.organizationLimitation),
   path('organization/payments/', organization.organizationPayment),
   path('organization/upgrade/', organization.organizationUpgrade),
