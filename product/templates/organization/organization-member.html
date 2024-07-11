@@ -6,11 +6,21 @@
     {% include 'templates/product-header.html' %}
     {% include 'templates/product-sidebar.html' %}
     <div class="sidebar-influenced">
-      <div id="organization-container">
-        <div id="organization-wrapper" class="d-none">
-          <div id="organization-header">
+      <div id="organization-member-container">
+        <div id="organization-member-wrapper" class="d-none">
+          <div>
+            <ul class="nav nav-tabs">
+              <li class="nav-item"><a class="nav-link nav-link-active" href="/organization/members/">{% trans 'product.organization.tab.member' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/organization/teams/">{% trans 'product.organization.tab.team' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/organization/limitations/">{% trans 'product.organization.tab.limitation' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/organization/payments/">{% trans 'product.organization.tab.payment' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/organization/upgrade/">{% trans 'product.organization.tab.upgrade' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/organization/termination/">{% trans 'product.organization.tab.termination' %}</a></li>
+            </ul>
+          </div>
+          <div id="organization-member-header">
             <div>
-              <button id="organization-leave" type="button" class="btn btn-danger">{% trans 'product.organization.leave' %}</button>
+              <button id="organization-leave" type="button" class="btn btn-danger">{% trans 'product.organization.member.leave' %}</button>
             </div>
             <div>
               <h1 id="organization-name" class="fw-bold"></h1>
@@ -19,18 +29,18 @@
               <button id="organization-rename" type="button" class="fa-solid fa-pen-to-square"></button>
             </div>
           </div>
-          <h2 id="organization-owner-headline">{% trans 'product.organization.owner' %}</h2>
+          <h2 id="organization-owner-headline">{% trans 'product.organization.member.owner' %}</h2>
           <ul id="organization-owner">
           </ul>
           <div id="organization-members-header">
-            <h2 id="organization-members-headline">{% trans 'product.organization.members' %}</h2>
-            <button type="button" id="organization-invite" class="btn btn-primary btn-block">{% trans 'product.organization.copy.link' %}</button>
+            <h2 id="organization-members-headline">{% trans 'product.organization.member.members' %}</h2>
+            <button type="button" id="organization-invite" class="btn btn-primary btn-block">{% trans 'product.organization.member.copy.link' %}</button>
             <button type="button" id="organization-link-regenerate" class="btn btn-secondary btn-block"><span class="fa-solid fa-rotate-right"></span></button>
           </div>
           <ul id="organization-members">
           </ul>
           <div id="organization-members-empty">
-            <span id="organization-members-empty-headline">{% trans 'product.organization.empty' %}</span>
+            <span id="organization-members-empty-headline">{% trans 'product.organization.member.empty' %}</span>
           </div>
         </div>
       </div>
@@ -49,8 +59,8 @@
       removeLoader();
     });
     var membersHeader = document.getElementById("organization-members-header");
-    applyTooltips(document.getElementById("organization-invite"), membersHeader, "{% trans 'product.organization.copy.link.tooltip' %}");
-    applyTooltips(document.getElementById("organization-link-regenerate"), membersHeader, "{% trans 'product.organization.regenerate.link.tooltip' %}");
+    applyTooltips(document.getElementById("organization-invite"), membersHeader, "{% trans 'product.organization.member.copy.link.tooltip' %}");
+    applyTooltips(document.getElementById("organization-link-regenerate"), membersHeader, "{% trans 'product.organization.member.regenerate.link.tooltip' %}");
   });
 
   function fetchOrganizationData(callback) {
@@ -82,7 +92,7 @@
             location.reload();
           });
         }
-        applyTooltips(memberKickElement, memberElement, "{% trans 'product.organization.kick' %}")
+        applyTooltips(memberKickElement, memberElement, "{% trans 'product.organization.member.kick' %}")
         memberElement.appendChild(memberKickElement);
       }
       memberListElement.appendChild(memberElement);
@@ -115,24 +125,12 @@
     }
   }
 
-  function displayLoader() {
-    var loader = document.createElement("div");
-    loader.id = "organization-loader";
-    loader.classList.add("loader");
-    document.getElementById("organization-container").appendChild(loader);
-  }
-
-  function removeLoader() {
-    document.getElementById("organization-container").removeChild(document.getElementById("organization-loader"));
-    document.getElementById("organization-wrapper").classList.remove("d-none");
-  }
-
   document.getElementById("organization-invite").onclick = function (event) {
     var linkButton = document.getElementById("organization-invite");
     linkButton.classList.remove("btn-primary");
     linkButton.classList.add("btn-success");
     $('#organization-invite').tooltip('hide');
-    applyTooltips(linkButton, document.getElementById("organization-members-header"), "{% trans 'product.organization.copied.link.tooltip' %}");
+    applyTooltips(linkButton, document.getElementById("organization-members-header"), "{% trans 'product.organization.member.copied.link.tooltip' %}");
     $('#organization-invite').tooltip('show');
     let request = new HttpRequest("https://api.taskwolf.net/v1/organization/link/", "POST", [], {organization: organization.id});
     request.send(function (status, responseText) {
@@ -145,7 +143,8 @@
     linkButton.classList.remove("btn-success");
     linkButton.classList.add("btn-primary");
     $('#organization-link-regenerate').tooltip('hide');
-    applyTooltips(linkButton, document.getElementById("organization-members-header"), "{% trans 'product.organization.copy.link.tooltip' %}");
+    applyTooltips(linkButton, document.getElementById("organization-members-header"),
+      "{% trans 'product.organization.member.copy.link.tooltip' %}");
     let request = new HttpRequest("https://api.taskwolf.net/v1/organization/link/regenerate/", "POST",
       [], {organization: organization.id});
     request.send(function (status, responseText) {
@@ -155,8 +154,8 @@
 
   document.getElementById("organization-leave").onclick = function (event) {
     Swal.fire({
-      title: "{% trans 'product.organization.leave.title' %}",
-      text: "{% trans 'product.organization.leave.body' %}",
+      title: "{% trans 'product.organization.member.leave.title' %}",
+      text: "{% trans 'product.organization.member.leave.body' %}",
       icon: "warning",
       confirmButtonColor: "#dc3545",
       showCancelButton: true,
@@ -165,7 +164,8 @@
         let request = new HttpRequest("https://api.taskwolf.net/v1/organization/leave/", "POST",
           [], {organization: organization});
         request.send(function (status, responseText) {
-          Swal.fire("{% trans 'product.organization.leave.successful.title' %}", "{% trans 'product.organization.leave.successful.body' %}", "success").then(success => window.location.href = "/organizations/");
+          Swal.fire("{% trans 'product.organization.member.leave.successful.title' %}",
+            "{% trans 'product.organization.member.leave.successful.body' %}", "success").then(success => window.location.href = "/organizations/");
         });
       }
     });
@@ -175,26 +175,28 @@
     var content = document.createElement("div");
     content.classList.add("organization-rename-content");
     var text = document.createElement("p");
-    text.innerText = "{% trans 'product.organization.rename.body' %}";
+    text.innerText = "{% trans 'product.organization.member.rename.body' %}";
     content.appendChild(text);
     var input = document.createElement("input");
-    input.placeholder = "{% trans 'product.organization.rename.name' %}";
+    input.placeholder = "{% trans 'product.organization.member.rename.name' %}";
     content.appendChild(input);
     Swal.fire({
-      title: "{% trans 'product.organization.rename.title' %}",
+      title: "{% trans 'product.organization.member.rename.title' %}",
       html: content,
       icon: "info",
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
         if (input.value.replaceAll(" ", "") === "") {
-          Swal.fire("{% trans 'product.organization.rename.empty.title' %}", "{% trans 'product.organization.rename.empty.body' %}", "error");
+          Swal.fire("{% trans 'product.organization.member.rename.empty.title' %}",
+            "{% trans 'product.organization.member.rename.empty.body' %}", "error");
           return;
         }
         let request = new HttpRequest("https://api.taskwolf.net/v1/organization/rename/", "POST",
           [], {organization: organization.id, name: input.value});
         request.send(function (status, responseText) {
-          Swal.fire("{% trans 'product.organization.rename.successful.title' %}", "{% trans 'product.organization.rename.successful.body' %}", "success").then(success => window.location.reload());
+          Swal.fire("{% trans 'product.organization.member.rename.successful.title' %}",
+            "{% trans 'product.organization.member.rename.successful.body' %}", "success").then(success => window.location.reload());
         });
       }
     });
@@ -208,5 +210,17 @@
     new bootstrap.Tooltip(element, {
       container: container
     });
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("organization-member-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("organization-member-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("organization-member-wrapper").classList.remove("d-none");
   }
 </script>

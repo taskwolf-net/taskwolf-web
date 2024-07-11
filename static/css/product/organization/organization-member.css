@@ -1,12 +1,43 @@
-#organization-wrapper {
-  width: min(calc(1500px - 15vw), 95%);
-  text-align: center;
-  margin-top: 2%;
-  margin-left: auto;
-  margin-right: auto;
+#organization-member-wrapper {
+  width: min(1200px, 95%);
+  margin: auto;
 }
 
-#organization-header {
+#organization-member-container .nav-tabs {
+  width: min(1200px, 100%);
+  margin: 40px auto 75px auto;
+  border: none;
+}
+
+#organization-member-container .nav-link {
+  border: none;
+  transition-duration: 0.3s;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.dark #organization-member-container .nav-link {
+  color: white;
+}
+
+.light #organization-member-container .nav-link {
+  color: black;
+}
+
+.dark #organization-member-container .nav-link-active {
+  color: #8fc0f1;
+  border-bottom: 2px #8fc0f1 solid;
+}
+
+.light #organization-member-container .nav-link-active {
+  color: #3f82c5;
+  border-bottom: 2px #3f82c5 solid;
+}
+
+#organization-member-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -73,6 +104,7 @@
 }
 
 #organization-members-empty-headline {
+  text-align: center;
   font-size: 20px;
   font-weight: bold;
   width: 100%;
@@ -118,12 +150,6 @@
 @media (max-width: 575px) {
   .organization-member-kick {
     margin-right: 0;
-  }
-}
-
-@media (max-width: 375px) {
-  #organization-modification {
-    margin: 50px auto 10px;
   }
 }
 
