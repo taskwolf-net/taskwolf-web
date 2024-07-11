@@ -84,9 +84,15 @@
         window.location.href = "/";
         return;
       }
-      fetchBundleUsage(function (usage) {
-        displayLimitations(bundle, usage);
-        removeLoader();
+      fetchOrganization(function (organization) {
+        if (!organization.isOwner) {
+          window.location.href = "/";
+          return;
+        }
+        fetchBundleUsage(function (usage) {
+          displayLimitations(bundle, usage);
+          removeLoader();
+        });
       });
     });
   });
@@ -130,6 +136,13 @@
 
   function fetchBundleUsage(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/bundle/usage/", "GET", []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function fetchOrganization(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });

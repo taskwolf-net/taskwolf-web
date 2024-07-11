@@ -50,9 +50,15 @@
         window.location.href = "/";
         return;
       }
-      fetchTerminationStatus(function (terminationStatus) {
-        displayTerminationInformation(terminationStatus, bundle);
-        removeLoader();
+      fetchOrganization(function (organization) {
+        if (!organization.isOwner) {
+          window.location.href = "/";
+          return;
+        }
+        fetchTerminationStatus(function (terminationStatus) {
+          displayTerminationInformation(terminationStatus, bundle);
+          removeLoader();
+        });
       });
     });
   });
@@ -98,6 +104,13 @@
 
   function fetchBundle(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/bundle/", "GET", []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function fetchOrganization(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });

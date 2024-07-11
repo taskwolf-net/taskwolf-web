@@ -12,10 +12,10 @@
             <ul class="nav nav-tabs">
               <li class="nav-item"><a class="nav-link nav-link-active" href="/organization/members/">{% trans 'product.organization.tab.member' %}</a></li>
               <li class="nav-item"><a class="nav-link" href="/organization/teams/">{% trans 'product.organization.tab.team' %}</a></li>
-              <li class="nav-item"><a class="nav-link" href="/organization/limitations/">{% trans 'product.organization.tab.limitation' %}</a></li>
-              <li class="nav-item"><a class="nav-link" href="/organization/payments/">{% trans 'product.organization.tab.payment' %}</a></li>
-              <li class="nav-item"><a class="nav-link" href="/organization/upgrade/">{% trans 'product.organization.tab.upgrade' %}</a></li>
-              <li class="nav-item"><a class="nav-link" href="/organization/termination/">{% trans 'product.organization.tab.termination' %}</a></li>
+              <li class="nav-item organization-restricted-tab"><a class="nav-link" href="/organization/limitations/">{% trans 'product.organization.tab.limitation' %}</a></li>
+              <li class="nav-item organization-restricted-tab"><a class="nav-link" href="/organization/payments/">{% trans 'product.organization.tab.payment' %}</a></li>
+              <li class="nav-item organization-restricted-tab"><a class="nav-link" href="/organization/upgrade/">{% trans 'product.organization.tab.upgrade' %}</a></li>
+              <li class="nav-item organization-restricted-tab"><a class="nav-link" href="/organization/termination/">{% trans 'product.organization.tab.termination' %}</a></li>
             </ul>
           </div>
           <div id="organization-member-header">
@@ -53,7 +53,9 @@
 
   $(document).ready(function() {
     displayLoader();
-    fetchOrganizationData(function() {
+    fetchOrganization(function(organizationData) {
+      organization = organizationData;
+      displayTaps();
       displayInformation();
       displayLeaveButton();
       removeLoader();
@@ -63,12 +65,21 @@
     applyTooltips(document.getElementById("organization-link-regenerate"), membersHeader, "{% trans 'product.organization.member.regenerate.link.tooltip' %}");
   });
 
-  function fetchOrganizationData(callback) {
+  function fetchOrganization(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET", []);
     request.send(function (status, responseText) {
-      organization = JSON.parse(responseText);
-      callback();
+      callback(JSON.parse(responseText));
     });
+  }
+
+  function displayTaps() {
+    if (organization.isOwner) {
+      return;
+    }
+    var restrictedTabs = document.getElementsByClassName("organization-restricted-tab");
+    for (var i = 0; i < restrictedTabs.length; i++) {
+      restrictedTabs[i].classList.add("d-none");
+    }
   }
 
   function displayInformation() {

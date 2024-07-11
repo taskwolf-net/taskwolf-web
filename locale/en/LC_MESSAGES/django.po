@@ -1613,6 +1613,10 @@ msgstr "Left!"
 msgid "product.organization.member.leave.successful.body"
 msgstr "You have successfully left that organization!"
 
+# ORGANIZATION - TEAM
+msgid "product.organization.team.title"
+msgstr "Organization - Teams - Taskwolf"
+
 # ORGANIZATION - LIMITATION
 msgid "product.organization.limitation.title"
 msgstr "Organization - Limitations - Taskwolf"

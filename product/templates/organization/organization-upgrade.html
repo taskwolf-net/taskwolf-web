@@ -79,8 +79,14 @@
         window.location.href = "/";
         return;
       }
-      displayUpgradeOptions(bundle);
-      removeLoader();
+      fetchOrganization(function (organization) {
+        if (!organization.isOwner) {
+          window.location.href = "/";
+          return;
+        }
+        displayUpgradeOptions(bundle);
+        removeLoader();
+      });
     });
   });
 
@@ -142,6 +148,13 @@
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
       callback(response);
+    });
+  }
+
+  function fetchOrganization(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET", []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
     });
   }
 
