@@ -12,10 +12,11 @@
             <ul class="nav nav-tabs">
               <li class="nav-item"><a class="nav-link" href="/organization/members/">{% trans 'product.organization.tab.member' %}</a></li>
               <li class="nav-item"><a class="nav-link nav-link-active" href="/organization/teams/">{% trans 'product.organization.tab.team' %}</a></li>
-              <li class="nav-item"><a class="nav-link" href="/organization/limitations/">{% trans 'product.organization.tab.limitation' %}</a></li>
-              <li class="nav-item"><a class="nav-link" href="/organization/payments/">{% trans 'product.organization.tab.payment' %}</a></li>
-              <li class="nav-item"><a class="nav-link" href="/organization/upgrade/">{% trans 'product.organization.tab.upgrade' %}</a></li>
-              <li class="nav-item"><a class="nav-link" href="/organization/termination/">{% trans 'product.organization.tab.termination' %}</a></li>
+              <li class="nav-item organization-restricted-tab"><a class="nav-link" href="/organization/package/">{% trans 'product.organization.tab.package' %}</a></li>
+              <li class="nav-item organization-restricted-tab"><a class="nav-link" href="/organization/limitations/">{% trans 'product.organization.tab.limitation' %}</a></li>
+              <li class="nav-item organization-restricted-tab"><a class="nav-link" href="/organization/payments/">{% trans 'product.organization.tab.payment' %}</a></li>
+              <li class="nav-item organization-restricted-tab"><a class="nav-link" href="/organization/upgrade/">{% trans 'product.organization.tab.upgrade' %}</a></li>
+              <li class="nav-item organization-restricted-tab"><a class="nav-link" href="/organization/termination/">{% trans 'product.organization.tab.termination' %}</a></li>
             </ul>
           </div>
         </div>
@@ -23,3 +24,97 @@
     </div>
   </body>
 </html>
+
+<script>
+  $(document).ready(function() {
+    displayLoader();
+    fetchOrganization(function(organization) {
+      fetchOrganizationTeams(function(organizationTeams) {
+        displayOrganizationTeams(organizationTeams);
+        removeLoader();
+      });
+    });
+  });
+
+  function fetchOrganization(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET", []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function fetchOrganizationTeams(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/teams/", "GET", []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function displayOrganizationTeams(organization) {
+    displayTaps(organization);
+    displayInformation(organization);
+  }
+
+  function displayTaps(organization) {
+    if (organization.isOwner) {
+      return;
+    }
+    var restrictedTabs = document.getElementsByClassName("organization-restricted-tab");
+    for (var i = 0; i < restrictedTabs.length; i++) {
+      restrictedTabs[i].classList.add("d-none");
+    }
+  }
+
+  function displayInformation(organizationTeams) {
+    var memberListElement = document.getElementById("organization-members");
+    if (organization.members.length === 0) {
+      document.getElementById("organization-members-empty").style.display = "flex";
+    }
+    for (let i = 0; i < organization.members.length; i++) {
+      var member = organization.members[i];
+      var memberElement = createUserEntry(member.name, "li");
+      if (organization.isOwner === true) {
+        var memberKickElement = document.createElement("span");
+        memberKickElement.classList.add("organization-member-kick", "fa", "fa-ban", "text-danger");
+        memberKickElement.onclick = function (event) {
+          let request = new HttpRequest("https://api.taskwolf.net/v1/organization/kick/", "POST",
+            [], {target: member.id});
+          request.send(function (status, responseText) {
+            location.reload();
+          });
+        }
+        applyTooltips(memberKickElement, memberElement, "{% trans 'product.organization.member.kick' %}")
+        memberElement.appendChild(memberKickElement);
+      }
+      memberListElement.appendChild(memberElement);
+    }
+  }
+
+  function createUserEntry(user, elementType) {
+    var memberElement = document.createElement(elementType);
+    memberElement.classList.add("organization-user");
+    var memberInformationContainer = document.createElement("div");
+    memberInformationContainer.classList.add("organization-user-information");
+    var memberIconElement = document.createElement("i");
+    memberIconElement.classList.add("organization-user-icon", "fa-regular", "fa-user");
+    memberInformationContainer.appendChild(memberIconElement);
+    var memberNameElement = document.createElement("span");
+    memberNameElement.classList.add("organization-user-name");
+    memberNameElement.innerHTML = user;
+    memberInformationContainer.appendChild(memberNameElement);
+    memberElement.appendChild(memberInformationContainer);
+    return memberElement;
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("organization-team-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("organization-team-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("organization-team-wrapper").classList.remove("d-none");
+  }
+</script>
