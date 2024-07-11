@@ -75,6 +75,10 @@
   $(document).ready(function() {
     displayLoader()
     fetchBundle(function (bundle) {
+      if (bundle.type !== "TEAM" && bundle.type !== "ENTERPRISE") {
+        window.location.href = "/";
+        return;
+      }
       displayUpgradeOptions(bundle);
       removeLoader();
     });

@@ -62,9 +62,15 @@
 <script>
   $(document).ready(function() {
     displayLoader()
-    fetchPayments(function (payments) {
-      displayPayments(payments);
-      removeLoader();
+    fetchBundle(function (bundle) {
+      if (bundle.type !== "TEAM" && bundle.type !== "ENTERPRISE") {
+        window.location.href = "/";
+        return;
+      }
+      fetchPayments(function (payments) {
+        displayPayments(payments);
+        removeLoader();
+      });
     });
   });
 
@@ -160,6 +166,13 @@
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
       callback(response.payments);
+    });
+  }
+
+  function fetchBundle(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/bundle/", "GET", []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
     });
   }
 

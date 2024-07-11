@@ -45,8 +45,12 @@
 <script>
   $(document).ready(function() {
     displayLoader();
-    fetchTerminationStatus(function (terminationStatus) {
-      fetchBundle(function (bundle) {
+    fetchBundle(function (bundle) {
+      if (bundle.type !== "TEAM" && bundle.type !== "ENTERPRISE") {
+        window.location.href = "/";
+        return;
+      }
+      fetchTerminationStatus(function (terminationStatus) {
         displayTerminationInformation(terminationStatus, bundle);
         removeLoader();
       });

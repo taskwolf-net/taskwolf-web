@@ -80,6 +80,10 @@
   $(document).ready(function() {
     displayLoader()
     fetchBundle(function (bundle) {
+      if (bundle.type !== "TEAM" && bundle.type !== "ENTERPRISE") {
+        window.location.href = "/";
+        return;
+      }
       fetchBundleUsage(function (usage) {
         displayLimitations(bundle, usage);
         removeLoader();
