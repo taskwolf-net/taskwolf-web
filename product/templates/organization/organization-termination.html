@@ -1,0 +1,130 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body class="dark">
+    {% include 'templates/product-header.html' %}
+    {% include 'templates/product-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="organization-termination-container">
+        <div id="organization-termination-wrapper" class="d-none">
+          <div>
+            <ul class="nav nav-tabs">
+              <li class="nav-item"><a class="nav-link" href="/organization/members/">{% trans 'product.organization.tab.member' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/organization/teams/">{% trans 'product.organization.tab.team' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/organization/limitations/">{% trans 'product.organization.tab.limitation' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/organization/payments/">{% trans 'product.organization.tab.payment' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/organization/upgrade/">{% trans 'product.organization.tab.upgrade' %}</a></li>
+              <li class="nav-item"><a class="nav-link nav-link-active" href="/organization/termination/">{% trans 'product.organization.tab.termination' %}</a></li>
+            </ul>
+          </div>
+          <div id="organization-termination-disclaimer">
+            <h4 class="fw-bold mb-4">{% trans 'product.organization.termination.headline' %}</h4>
+            <p class="mb-0">{% trans 'product.organization.termination.description' %}</p>
+          </div>
+          <div id="organization-termination-process">
+            <h4 class="fw-bold mb-4">{% trans 'product.organization.termination.process.headline' %}</h4>
+            <p id="organization-termination-process-description" class="mb-3"></p>
+            <p id="organization-termination-process-description-dynamic" class="mb-5"></p>
+            <button type="button" id="organization-termination" class="btn btn-danger d-block px-5 mt-5 mx-auto">{% trans 'product.organization.termination' %}</button>
+          </div>
+          <div id="organization-termination-not-possible">
+            <h4 class="fw-bold mb-4">{% trans 'product.organization.termination.headline' %}</h4>
+            <p class="mb-0">{% trans 'product.organization.termination.not.possible.description' %}</p>
+          </div>
+          <div id="organization-termination-done">
+            <h4 class="fw-bold mb-4">{% trans 'product.organization.termination.headline' %}</h4>
+            <p id="organization-termination-done-description" class="mb-0"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    displayLoader();
+    fetchTerminationStatus(function (terminationStatus) {
+      fetchBundle(function (bundle) {
+        displayTerminationInformation(terminationStatus, bundle);
+        removeLoader();
+      });
+    });
+  });
+
+  function displayTerminationInformation(terminationStatus, bundle) {
+    var expiration = formatTime(bundle.expiration);
+    if (terminationStatus.terminable === false) {
+      document.getElementById("organization-termination-disclaimer").classList.add("d-none");
+      document.getElementById("organization-termination-process").classList.add("d-none");
+      document.getElementById("organization-termination-done").classList.add("d-none");
+      return;
+    }
+    if (terminationStatus.terminated === true) {
+      document.getElementById("organization-termination-disclaimer").classList.add("d-none");
+      document.getElementById("organization-termination-process").classList.add("d-none");
+      document.getElementById("organization-termination-not-possible").classList.add("d-none");
+      document.getElementById("organization-termination-done-description").innerHTML =
+        "{% trans 'product.organization.termination.done.description' %}".replace("%s", expiration);
+      return;
+    }
+    document.getElementById("organization-termination-done").classList.add("d-none");
+    document.getElementById("organization-termination-not-possible").classList.add("d-none");
+    document.getElementById("organization-termination-process-description").innerHTML =
+      "{% trans 'product.organization.termination.process.description' %}".replace("%s", expiration);
+    var dynamicElement = document.getElementById("organization-termination-process-description-dynamic");
+    if (terminationStatus.directlyEffective) {
+      dynamicElement.innerHTML = "{% trans 'product.organization.termination.process.description.instant' %}";
+    } else {
+      dynamicElement.innerHTML = "{% trans 'product.organization.termination.process.description.delayed' %}";
+    }
+  }
+
+  function formatTime(time) {
+    return new Date(time).toLocaleDateString().replace(/(^|\D)(\d)(?!\d)/g, '$10$2');
+  }
+
+  function fetchTerminationStatus(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/termination/status/", "GET", []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function fetchBundle(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/bundle/", "GET", []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  document.getElementById("organization-termination").onclick = function (event) {
+    Swal.fire({
+      title: "{% trans 'product.organization.termination.process.title' %}",
+      text: "{% trans 'product.organization.termination.process.body' %}",
+      icon: "warning",
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/terminate/", "GET", []);
+        request.send(function (status, responseText) {
+          Swal.fire("{% trans 'product.organization.termination.process.successful.title' %}", "{% trans 'product.organization.termination.process.successful.body' %}", "success").then(success => window.location.reload());
+        });
+      }
+    });
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("organization-termination-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("organization-termination-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("organization-termination-wrapper").classList.remove("d-none");
+  }
+</script>

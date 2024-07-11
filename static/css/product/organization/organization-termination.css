@@ -1,0 +1,58 @@
+#organization-termination-wrapper {
+  width: min(1200px, 95%);
+  margin: auto;
+}
+
+#organization-termination-container .nav-tabs {
+  width: min(1200px, 100%);
+  margin: 40px auto 75px auto;
+  border: none;
+}
+
+#organization-termination-container .nav-link {
+  border: none;
+  transition-duration: 0.3s;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.dark #organization-termination-container .nav-link {
+  color: white;
+}
+
+.light #organization-termination-container .nav-link {
+  color: black;
+}
+
+.dark #organization-termination-container .nav-link-active {
+  color: #8fc0f1;
+  border-bottom: 2px #8fc0f1 solid;
+}
+
+.light #organization-termination-container .nav-link-active {
+  color: #3f82c5;
+  border-bottom: 2px #3f82c5 solid;
+}
+
+#organization-termination-disclaimer, #organization-termination-process, #organization-termination-not-possible, #organization-termination-done {
+  padding: 30px;
+  border-radius: 5px;
+}
+
+#organization-termination-process {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.dark #organization-termination-disclaimer, .dark #organization-termination-process, .dark #organization-termination-not-possible, .dark #organization-termination-done {
+  background-color: #131820;
+  border: 1px #2b3441 solid;
+}
+
+.light #organization-termination-disclaimer, .light #organization-termination-process, .light #organization-termination-not-possible, .light #organization-termination-done {
+  background-color: #dadada;
+  border: 1px #a0a0a0 solid;
+}
