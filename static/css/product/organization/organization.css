@@ -8,19 +8,12 @@
 
 #organization-header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: 100%;
   margin-top: 5%;
   margin-bottom: 10%;
-}
-
-#organization-name {
-  position: absolute;
-  font-weight: bold;
-}
-
-#organization-modification {
-  display: flex;
-  width: 100%;
 }
 
 #organization-rename {

@@ -9,9 +9,13 @@
       <div id="organization-container">
         <div id="organization-wrapper" class="d-none">
           <div id="organization-header">
-            <h1 id="organization-name"></h1>
-            <div id="organization-modification">
-              <button id="organization-reset" type="button" class="btn btn-danger"></button>
+            <div>
+              <button id="organization-leave" type="button" class="btn btn-danger">{% trans 'product.organization.leave' %}</button>
+            </div>
+            <div>
+              <h1 id="organization-name" class="fw-bold"></h1>
+            </div>
+            <div>
               <button id="organization-rename" type="button" class="fa-solid fa-pen-to-square"></button>
             </div>
           </div>
@@ -41,7 +45,7 @@
     displayLoader();
     fetchOrganizationData(function() {
       displayInformation();
-      displayResetButton();
+      displayLeaveButton();
       removeLoader();
     });
     var membersHeader = document.getElementById("organization-members-header");
@@ -50,10 +54,7 @@
   });
 
   function fetchOrganizationData(callback) {
-    var location = window.location;
-    var id = location.href.replace(location.host, "").replace(location.protocol, "").replace("organization", "").replaceAll("/", "");
-    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/selected/", "POST",
-      [], {id: id});
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET", []);
     request.send(function (status, responseText) {
       organization = JSON.parse(responseText);
       callback();
@@ -108,13 +109,10 @@
     return memberElement;
   }
 
-  function displayResetButton() {
-    var element = document.getElementById("organization-reset");
+  function displayLeaveButton() {
     if (organization.isOwner === true) {
-      element.innerHTML = "{% trans 'product.organization.delete' %}";
-      return;
+      document.getElementById("organization-leave").classList.add("d-none");
     }
-    element.innerHTML = "{% trans 'product.organization.leave' %}";
   }
 
   function displayLoader() {
@@ -155,33 +153,7 @@
     });
   }
 
-  document.getElementById("organization-reset").onclick = function (event) {
-    if (organization.isOwner === true) {
-      openDeleteMenu(organization.id);
-      return;
-    }
-    openLeaveMenu(organization.id);
-  }
-
-  function openDeleteMenu(organization) {
-    Swal.fire({
-      title: "{% trans 'product.organization.delete.title' %}",
-      text: "{% trans 'product.organization.delete.body' %}",
-      icon: "warning",
-      confirmButtonColor: "#dc3545",
-      showCancelButton: true,
-    }).then(result => {
-      if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/organization/delete/", "POST",
-          [], {organization: organization});
-        request.send(function (status, responseText) {
-          Swal.fire("{% trans 'product.organization.delete.successful.title' %}", "{% trans 'product.organization.delete.successful.body' %}", "success").then(success => window.location.href = "/organizations/");
-        });
-      }
-    });
-  }
-
-  function openLeaveMenu(organization) {
+  document.getElementById("organization-leave").onclick = function (event) {
     Swal.fire({
       title: "{% trans 'product.organization.leave.title' %}",
       text: "{% trans 'product.organization.leave.body' %}",

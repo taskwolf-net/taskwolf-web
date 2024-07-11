@@ -26,7 +26,7 @@ urlpatterns = [
   path('package/payments/', package.packagePayment),
   path('package/upgrade/', package.packageUpgrade),
   path('package/termination/', package.packageTermination),
-  path('organization/<str:id>/', organization.organization),
+  path('organization/', organization.organization),
   path('organization/join/<str:organization>/<str:token>/', organization.organizationJoin),
   path('account/apps/', account.accountApps),
   path('accounts/', account.accounts),

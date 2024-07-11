@@ -4,7 +4,7 @@ from base.authentication import authentication_required, isAuthenticated
 from django.utils.translation import gettext
 
 @authentication_required
-async def organization(request, id):
+async def organization(request):
   return render(request, 'organization/organization.html', {'title': gettext('product.organization.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/organization/organization.css']})
 
