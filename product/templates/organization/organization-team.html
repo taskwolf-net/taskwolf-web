@@ -19,6 +19,8 @@
               <li class="nav-item organization-restricted-tab"><a class="nav-link" href="/organization/termination/">{% trans 'product.organization.tab.termination' %}</a></li>
             </ul>
           </div>
+          <ul id="organization-teams">
+          </ul>
         </div>
       </div>
     </div>
@@ -30,7 +32,7 @@
     displayLoader();
     fetchOrganization(function(organization) {
       fetchOrganizationTeams(function(organizationTeams) {
-        displayOrganizationTeams(organizationTeams);
+        displayOrganizationTeams(organization, organizationTeams);
         removeLoader();
       });
     });
@@ -46,13 +48,13 @@
   function fetchOrganizationTeams(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/organization/teams/", "GET", []);
     request.send(function (status, responseText) {
-      callback(JSON.parse(responseText));
+      callback(JSON.parse(responseText).teams);
     });
   }
 
-  function displayOrganizationTeams(organization) {
+  function displayOrganizationTeams(organization, organizationTeams) {
     displayTaps(organization);
-    displayInformation(organization);
+    displayInformation(organization, organizationTeams);
   }
 
   function displayTaps(organization) {
@@ -65,29 +67,80 @@
     }
   }
 
-  function displayInformation(organizationTeams) {
-    var memberListElement = document.getElementById("organization-members");
-    if (organization.members.length === 0) {
-      document.getElementById("organization-members-empty").style.display = "flex";
+  function displayInformation(organization, organizationTeams) {
+    for (let i = 0; i < organizationTeams.length; i++) {
+      var team = organizationTeams[i];
+      document.getElementById("organization-teams")
+        .appendChild(createTeamEntry(organization, team));
     }
-    for (let i = 0; i < organization.members.length; i++) {
-      var member = organization.members[i];
+    if (organization.isOwner === true) {
+      var teamAddEntry = document.createElement("li");
+      var teamAddButton = document.createElement("button");
+      teamAddButton.id = "organization-team-add";
+      teamAddButton.innerHTML = "+ {% trans 'product.organization.team.create' %}";
+      teamAddButton.onclick = (event) => addTeam();
+      teamAddEntry.appendChild(teamAddButton);
+      document.getElementById("organization-teams").appendChild(teamAddEntry);
+    }
+  }
+
+
+  function createTeamEntry(organization, team) {
+    var teamEntry = document.createElement("li");
+    teamEntry.classList.add("organization-team-entry");
+    var headerElement = document.createElement("div");
+    headerElement.classList.add("organization-team-entry-header");
+    var nameElement = document.createElement("h2");
+    nameElement.innerHTML = team.name;
+    headerElement.appendChild(nameElement);
+    if (organization.isOwner === true) {
+      headerElement.appendChild(createTeamControls(team));
+    }
+    teamEntry.appendChild(headerElement);
+    if (team.members.length === 0) {
+      var emptyElement = document.createElement("p");
+      emptyElement.classList.add("text-center", "fw-bold", "mt-5");
+      emptyElement.innerHTML = "{% trans 'product.organization.team.empty' %}"
+      teamEntry.appendChild(emptyElement);
+      return teamEntry;
+    }
+    teamEntry.appendChild(createMemberList(organization, team));
+    return teamEntry;
+  }
+
+  function createTeamControls(team) {
+    var controlElement = document.createElement("div");
+    var memberAddElement = document.createElement("span");
+    memberAddElement.classList.add("organization-member-add", "fa-solid", "fa-plus");
+    memberAddElement.onclick = function (event) {
+      openAddTeamMemberMenu();
+    }
+    controlElement.appendChild(memberAddElement);
+    var teamRemoveElement = document.createElement("span");
+    teamRemoveElement.classList.add("organization-team-remove", "fa-solid", "fa-trash");
+    teamRemoveElement.onclick = function (event) {
+      removeTeam(team.id);
+    }
+    controlElement.appendChild(teamRemoveElement);
+    return controlElement;
+  }
+
+  function createMemberList(organization, team) {
+    var memberListElement = document.createElement("ul");
+    for (let i = 0; i < team.members.length; i++) {
+      var member = team.members[i];
       var memberElement = createUserEntry(member.name, "li");
       if (organization.isOwner === true) {
-        var memberKickElement = document.createElement("span");
-        memberKickElement.classList.add("organization-member-kick", "fa", "fa-ban", "text-danger");
-        memberKickElement.onclick = function (event) {
-          let request = new HttpRequest("https://api.taskwolf.net/v1/organization/kick/", "POST",
-            [], {target: member.id});
-          request.send(function (status, responseText) {
-            location.reload();
-          });
+        var memberRemoveElement = document.createElement("span");
+        memberRemoveElement.classList.add("organization-team-member-add", "fa", "fa-ban", "text-danger");
+        memberRemoveElement.onclick = function (event) {
+          removeTeamMember(team.id, member.id);
         }
-        applyTooltips(memberKickElement, memberElement, "{% trans 'product.organization.member.kick' %}")
-        memberElement.appendChild(memberKickElement);
+        memberElement.appendChild(memberRemoveElement);
       }
       memberListElement.appendChild(memberElement);
     }
+    return memberListElement;
   }
 
   function createUserEntry(user, elementType) {
@@ -104,6 +157,85 @@
     memberInformationContainer.appendChild(memberNameElement);
     memberElement.appendChild(memberInformationContainer);
     return memberElement;
+  }
+
+  function addTeam() {
+    var content = document.createElement("div");
+    content.classList.add("organization-team-add-content");
+    var text = document.createElement("p");
+    text.innerText = "{% trans 'product.organization.team.add.body' %}";
+    content.appendChild(text);
+    var input = document.createElement("input");
+    input.placeholder = "{% trans 'product.organization.team.add.name' %}";
+    content.appendChild(input);
+    Swal.fire({
+      title: "{% trans 'product.organization.team.add.title' %}",
+      html: content,
+      icon: "info",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/add/", "POST",
+          [], {name: input.value});
+        request.send(function (status, responseText) {
+          Swal.fire("{% trans 'product.organization.team.add.successful.title' %}",
+            "{% trans 'product.organization.team.add.successful.body' %}", "success").then(success => window.location.reload());
+        });
+      }
+    });
+  }
+
+  function removeTeam(team) {
+    Swal.fire({
+      title: "{% trans 'product.organization.team.remove.title' %}",
+      text: "{% trans 'product.organization.team.remove.body' %}",
+      icon: "warning",
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/remove/", "POST",
+          [], {team: team});
+        request.send(function (status, responseText) {
+          Swal.fire("{% trans 'product.organization.team.remove.successful.title' %}",
+            "{% trans 'product.organization.team.remove.successful.body' %}", "success").then(success => window.location.reload());
+        });
+      }
+    });
+  }
+
+  function openAddTeamMemberMenu() {
+    var content = document.createElement("div");
+    content.classList.add("organization-team-member-add-content");
+    var text = document.createElement("p");
+    text.innerText = "{% trans 'product.organization.team.member.add.body' %}";
+    content.appendChild(text);
+    var input = document.createElement("input");
+    input.placeholder = "{% trans 'product.organization.team.add.member' %}";
+    content.appendChild(input);
+    var memberList = document.createElement("ul");
+    Swal.fire({
+      title: "{% trans 'product.organization.team.member.add.title' %}",
+      html: content,
+      icon: "info",
+      showCancelButton: true,
+    });
+  }
+
+  function addTeamMember(team, member) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/member/add/", "POST",
+      [], {team: team, target: member});
+    request.send(function (status, responseText) {
+      location.reload();
+    });
+  }
+
+  function removeTeamMember(team, member) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/member/remove/", "POST",
+      [], {team: team, target: member});
+    request.send(function (status, responseText) {
+      location.reload();
+    });
   }
 
   function displayLoader() {

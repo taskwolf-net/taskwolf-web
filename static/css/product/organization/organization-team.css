@@ -36,3 +36,81 @@
   color: #3f82c5;
   border-bottom: 2px #3f82c5 solid;
 }
+
+#organization-teams {
+  width: 100%;
+  padding: 0;
+  list-style-type: none;
+}
+
+.organization-team-entry {
+  width: 100%;
+  padding: 0;
+  list-style-type: none;
+  margin-bottom: 100px;
+}
+
+.organization-team-entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px #4a4a4a solid;
+}
+
+.organization-member-add {
+  background-color: #0d6efd;
+  color: white;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.organization-team-remove {
+  background-color: #dc3545;
+  color: white;
+  border-radius: 5px;
+  padding: 10px;
+  margin-left: 10px;
+}
+
+#organization-team-add {
+  width: 100%;
+  padding: 50px;
+  border-radius: 5px;
+  border: 3px #4a4a4a dashed;
+  color: #4a4a4a;
+  background-color: transparent;
+  font-size: 25px;
+  transition-duration: 0.2s;
+}
+
+.dark #organization-team-add:hover {
+  background-color: #141a23;
+  color: #626262;
+}
+
+.light #organization-team-add:hover {
+  background-color: #d7d7d7;
+  color: #313131;
+}
+
+.organization-team-add-content input, .organization-team-add-content input {
+  background-color: transparent;
+  border-radius: 5px;
+  box-shadow: none;
+  outline: none;
+  padding: 10px !important;
+}
+
+.dark .organization-team-add-content input, .dark .organization-team-add-content input {
+  border: 1px solid white;
+  color: white;
+}
+
+.light .organization-team-add-content input, .light .organization-team-add-content input {
+  border: 1px solid black;
+  color: black;
+}
+
+.organization-team-add-content input::placeholder, .organization-team-add-content input::placeholder {
+  color: #a5a5a5;
+}
