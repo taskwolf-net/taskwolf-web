@@ -1,0 +1,207 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body class="dark">
+    {% include 'templates/product-header.html' %}
+    {% include 'templates/product-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="organization-upgrade-container">
+        <div id="organization-upgrade-wrapper" class="d-none">
+          <div>
+            <ul class="nav nav-tabs">
+              <li class="nav-item"><a class="nav-link" href="/organization/members/">{% trans 'product.organization.tab.member' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/organization/teams/">{% trans 'product.organization.tab.team' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/organization/limitations/">{% trans 'product.organization.tab.limitation' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/organization/payments/">{% trans 'product.organization.tab.payment' %}</a></li>
+              <li class="nav-item"><a class="nav-link nav-link-active" href="/organization/upgrade/">{% trans 'product.organization.tab.upgrade' %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/organization/termination/">{% trans 'product.organization.tab.termination' %}</a></li>
+            </ul>
+          </div>
+          <div id="organization-upgrade-disclaimer">
+            <h4 class="fw-bold mb-4">{% trans 'product.organization.upgrade.headline' %}</h4>
+            <p class="mb-3">{% trans 'product.organization.upgrade.description.1' %}</p>
+            <b class="mb-0">{% trans 'product.organization.upgrade.description.2' %}</b>
+          </div>
+          <div id="organization-upgrade-limit-reached">
+            <h4 class="fw-bold mb-4">{% trans 'product.organization.upgrade.headline' %}</h4>
+            <p class="mb-0">{% trans 'product.organization.upgrade.limit.reached' %}</p>
+          </div>
+          <div id="organization-upgrade-process">
+            <h4 class="fw-bold mb-4">{% trans 'product.organization.upgrade.process.headline' %}</h4>
+            <div id="organization-upgrade-personalization">
+              <div id="organization-upgrade-runtime-selection" class="organization-upgrade-switch">
+                <button id="organization-upgrade-runtime-monthly" class="organization-upgrade-switch-entry">{% trans 'home.pricing.runtime.monthly' %}</button>
+                <button id="organization-upgrade-runtime-yearly" class="organization-upgrade-switch-entry organization-upgrade-switch-active">{% trans 'home.pricing.runtime.yearly' %}</button>
+              </div>
+              <div id="organization-upgrade-class-selection" class="organization-upgrade-switch mt-4">
+                <button id="organization-upgrade-class-beginner" class="organization-upgrade-switch-entry">{% trans 'home.pricing.class.beginner' %}</button>
+                <button id="organization-upgrade-class-advanced" class="organization-upgrade-switch-entry">{% trans 'home.pricing.class.advanced' %}</button>
+                <button id="organization-upgrade-class-expert" class="organization-upgrade-switch-entry organization-upgrade-switch-active">{% trans 'home.pricing.class.expert' %}</button>
+              </div>
+            </div>
+            <div id="organization-upgrade-organization" class="mt-5">
+              <div id="organization-upgrade-organization-container">
+                <h2 id="organization-upgrade-organization-title">{% trans 'home.pricing.team.title' %}</h2>
+                <h1 id="organization-upgrade-organization-price"></h1>
+                <p id="organization-upgrade-organization-time">{% trans 'home.pricing.team.time' %}</p>
+                <button type="button" id="organization-upgrade-buy" class="btn btn-outline-light">{% trans 'home.pricing.buy' %}</button>
+                <p id="organization-upgrade-organization-features-headline">{% trans 'home.pricing.summary.headline' %}</p>
+                <ul id="organization-upgrade-organization-features">
+                  <li class="mb-3"><i class="fa-regular fa-clock me-3"></i><p id="organization-upgrade-organization-runtime" class="mb-0"></p></li>
+                  <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="organization-upgrade-organization-workflow-number" class="mb-0"></p></li>
+                  <li class="mb-3"><i class="fa-solid fa-check me-3"></i><b id="organization-upgrade-organization-workflow-operation" class="mb-0"></b></li>
+                  <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="organization-upgrade-organization-database-number" class="mb-0"></p></li>
+                  <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="organization-upgrade-organization-database-data" class="mb-0"></p></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div id="organization-upgrade-options">
+            <h4 class="fw-bold mb-4">{% trans 'product.organization.upgrade.options.headline' %}</h4>
+            <p class="mb-0">{% trans 'product.organization.upgrade.options.description' %}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  var bundleClass = "EXPERT";
+  var bundleRuntime = "YEARLY";
+  var organizationPackageData;
+
+  $(document).ready(function() {
+    displayLoader()
+    fetchBundle(function (bundle) {
+      displayUpgradeOptions(bundle);
+      removeLoader();
+    });
+  });
+
+  function displayUpgradeOptions(bundle) {
+    if (bundle.class === "EXPERT" || bundle.type === "ENTERPRISE") {
+      document.getElementById("organization-upgrade-disclaimer").classList.add("d-none");
+      document.getElementById("organization-upgrade-options").classList.add("d-none");
+      document.getElementById("organization-upgrade-process").classList.add("d-none");
+    } else {
+      if (bundle.class === "BEGINNER") {
+        document.getElementById("organization-upgrade-class-beginner").classList.add("d-none");
+      }
+      if (bundle.class === "ADVANCED") {
+        document.getElementById("organization-upgrade-class-beginner").classList.add("d-none");
+        document.getElementById("organization-upgrade-class-advanced").classList.add("d-none");
+      }
+      document.getElementById("organization-upgrade-limit-reached").classList.add("d-none");
+      upgradeUpgradePackage();
+    }
+  }
+
+  function fetchBundle(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/bundle/", "GET", []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function upgradeUpgradePackage(bundle) {
+    fetchPackage("TEAM", function (organizationPackage) {
+      organizationPackageData = organizationPackage;
+      displayUpgradeorganization(organizationPackage);
+    });
+  }
+
+  function displayUpgradeorganization(organizationPackage) {
+    document.getElementById("organization-upgrade-organization-price").innerHTML =
+      organizationPackage.price + " €";
+    if (bundleRuntime === "MONTHLY") {
+      document.getElementById("organization-upgrade-organization-runtime").innerHTML =
+        "1 {% trans 'home.pricing.time.month' %}";
+    } else if (bundleRuntime === "YEARLY") {
+      document.getElementById("organization-upgrade-organization-runtime").innerHTML =
+        "1 {% trans 'home.pricing.time.year' %}";
+    }
+    document.getElementById("organization-upgrade-organization-workflow-number").innerHTML =
+      organizationPackage.workflowNumberLimit + " {% trans 'home.pricing.summary.workflow.number' %}";
+    document.getElementById("organization-upgrade-organization-workflow-operation").innerHTML =
+      organizationPackage.workflowOperationLimit + " {% trans 'home.pricing.summary.workflow.operation' %}";
+    document.getElementById("organization-upgrade-organization-database-number").innerHTML =
+      organizationPackage.databaseNumberLimit + " {% trans 'home.pricing.summary.database.number' %}";
+    document.getElementById("organization-upgrade-organization-database-data").innerHTML =
+      organizationPackage.databaseDataLimit + " GB {% trans 'home.pricing.summary.database.data' %}";
+  }
+
+  function fetchPackage(packageName, callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/bundle/preset/", "POST",
+      [], {type: packageName, class: bundleClass, runtime: bundleRuntime});
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      callback(response);
+    });
+  }
+
+  document.getElementById("organization-upgrade-class-beginner").onclick = function (event) {
+    bundleClass = "BEGINNER";
+    upgradeUpgradePackage();
+    document.getElementById("organization-upgrade-class-beginner").classList.add("organization-upgrade-switch-active");
+    document.getElementById("organization-upgrade-class-advanced").classList.remove("organization-upgrade-switch-active");
+    document.getElementById("organization-upgrade-class-expert").classList.remove("organization-upgrade-switch-active");
+  }
+
+  document.getElementById("organization-upgrade-class-advanced").onclick = function (event) {
+    bundleClass = "ADVANCED";
+    upgradeUpgradePackage();
+    document.getElementById("organization-upgrade-class-beginner").classList.remove("organization-upgrade-switch-active");
+    document.getElementById("organization-upgrade-class-advanced").classList.add("organization-upgrade-switch-active");
+    document.getElementById("organization-upgrade-class-expert").classList.remove("organization-upgrade-switch-active");
+  }
+
+  document.getElementById("organization-upgrade-class-expert").onclick = function (event) {
+    bundleClass = "EXPERT";
+    upgradeUpgradePackage();
+    document.getElementById("organization-upgrade-class-beginner").classList.remove("organization-upgrade-switch-active");
+    document.getElementById("organization-upgrade-class-advanced").classList.remove("organization-upgrade-switch-active");
+    document.getElementById("organization-upgrade-class-expert").classList.add("organization-upgrade-switch-active");
+  }
+
+  document.getElementById("organization-upgrade-runtime-monthly").onclick = function (event) {
+    bundleRuntime = "MONTHLY";
+    upgradeUpgradePackage();
+    document.getElementById("organization-upgrade-runtime-monthly").classList.add("organization-upgrade-switch-active");
+    document.getElementById("organization-upgrade-runtime-yearly").classList.remove("organization-upgrade-switch-active");
+  }
+
+  document.getElementById("organization-upgrade-runtime-yearly").onclick = function (event) {
+    bundleRuntime = "YEARLY";
+    upgradeUpgradePackage();
+    document.getElementById("organization-upgrade-runtime-monthly").classList.remove("organization-upgrade-switch-active");
+    document.getElementById("organization-upgrade-runtime-yearly").classList.add("organization-upgrade-switch-active");
+  }
+
+  document.getElementById("organization-upgrade-buy").onclick = function (event) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/email/",
+      "GET", []);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      Cookie.create("taskwolf-organization-type", "TEAM", 60 * 60 * 24);
+      Cookie.create("taskwolf-organization-class", bundleClass, 60 * 60 * 24);
+      Cookie.create("taskwolf-organization-runtime", bundleRuntime, 60 * 60 * 24);
+      Cookie.create("taskwolf-organization-price", organizationPackageData.price, 60 * 60 * 24);
+      Cookie.create("taskwolf-home-email", response.email, 60 * 60 * 24)
+      window.location.href = "/payment/";
+    });
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("organization-upgrade-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("organization-upgrade-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("organization-upgrade-wrapper").classList.remove("d-none");
+  }
+</script>
