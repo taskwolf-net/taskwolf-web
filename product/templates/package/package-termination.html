@@ -44,8 +44,12 @@
 <script>
   $(document).ready(function() {
     displayLoader();
-    fetchTerminationStatus(function (terminationStatus) {
-      fetchBundle(function (bundle) {
+    fetchBundle(function (bundle) {
+      if (bundle.type !== "TRIAL" && bundle.type !== "PROFESSIONAL") {
+        window.location.href = "/";
+        return;
+      }
+      fetchTerminationStatus(function (terminationStatus) {
         displayTerminationInformation(terminationStatus, bundle);
         removeLoader();
       });
