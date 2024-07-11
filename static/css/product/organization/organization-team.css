@@ -1,0 +1,38 @@
+#organization-team-wrapper {
+  width: min(1200px, 95%);
+  margin: auto;
+}
+
+#organization-team-container .nav-tabs {
+  width: min(1200px, 100%);
+  margin: 40px auto 75px auto;
+  border: none;
+}
+
+#organization-team-container .nav-link {
+  border: none;
+  transition-duration: 0.3s;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.dark #organization-team-container .nav-link {
+  color: white;
+}
+
+.light #organization-team-container .nav-link {
+  color: black;
+}
+
+.dark #organization-team-container .nav-link-active {
+  color: #8fc0f1;
+  border-bottom: 2px #8fc0f1 solid;
+}
+
+.light #organization-team-container .nav-link-active {
+  color: #3f82c5;
+  border-bottom: 2px #3f82c5 solid;
+}
