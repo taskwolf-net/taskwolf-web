@@ -1748,6 +1748,10 @@ msgid "product.organization.limitation.database.data"
 msgstr "Datenbank Daten"
 msgid "product.organization.limitation.webhook.number"
 msgstr "Webhook Anzahl"
+msgid "product.organization.limitation.organization.member"
+msgstr "Organisationsmitglieder"
+msgid "product.organization.limitation.organization.team"
+msgstr "Organisationsteams"
 
 # ORGANIZATION - PAYMENT
 msgid "product.organization.payment.title"

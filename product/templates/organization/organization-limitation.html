@@ -31,7 +31,7 @@
                 <span id="organization-limitation-workflow-number-ratio"></span>
               </div>
               <div class="progress">
-                <div id="organization-limitation-workflow-number-bar" class="progress-bar progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                <div id="organization-limitation-workflow-number-bar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
             </li>
             <li id="organization-limitation-workflow-operation-entry" class="organization-limitation-entry">
@@ -40,7 +40,7 @@
                 <span id="organization-limitation-workflow-operation-ratio"></span>
               </div>
               <div class="progress">
-                <div id="organization-limitation-workflow-operation-bar" class="progress-bar progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                <div id="organization-limitation-workflow-operation-bar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
             </li>
             <li id="organization-limitation-database-number-entry" class="organization-limitation-entry">
@@ -49,7 +49,7 @@
                 <span id="organization-limitation-database-number-ratio"></span>
               </div>
               <div class="progress">
-                <div id="organization-limitation-database-number-bar" class="progress-bar progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                <div id="organization-limitation-database-number-bar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
             </li>
             <li id="organization-limitation-database-data-entry" class="organization-limitation-entry">
@@ -58,7 +58,7 @@
                 <span id="organization-limitation-database-data-ratio"></span>
               </div>
               <div class="progress">
-                <div id="organization-limitation-database-data-bar" class="progress-bar progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                <div id="organization-limitation-database-data-bar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
             </li>
             <li id="organization-limitation-webhook-number-entry" class="organization-limitation-entry">
@@ -67,7 +67,25 @@
                 <span id="organization-limitation-webhook-number-ratio"></span>
               </div>
               <div class="progress">
-                <div id="organization-limitation-webhook-number-bar" class="progress-bar progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                <div id="organization-limitation-webhook-number-bar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </li>
+            <li id="organization-limitation-organization-member-entry" class="organization-limitation-entry">
+              <div class="organization-limitation-entry-header">
+                <h3 class="mb-0">{% trans 'product.organization.limitation.organization.member' %}</h3>
+                <span id="organization-limitation-organization-member-ratio"></span>
+              </div>
+              <div class="progress">
+                <div id="organization-limitation-organization-member-bar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </li>
+            <li id="organization-limitation-organization-team-entry" class="organization-limitation-entry">
+              <div class="organization-limitation-entry-header">
+                <h3 class="mb-0">{% trans 'product.organization.limitation.organization.team' %}</h3>
+                <span id="organization-limitation-organization-team-ratio"></span>
+              </div>
+              <div class="progress">
+                <div id="organization-limitation-organization-team-bar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
             </li>
           </ul>
@@ -114,6 +132,12 @@
     displayLimitation(bundle.webhookNumberLimit, usage.webhookNumberUsage,
       "organization-limitation-webhook-number-entry", "organization-limitation-webhook-number-ratio",
       "organization-limitation-webhook-number-bar", "");
+    displayLimitation(bundle.organizationMemberLimit, usage.organizationMemberUsage,
+      "organization-limitation-organization-member-entry", "organization-limitation-organization-member-ratio",
+      "organization-limitation-organization-member-bar", "");
+    displayLimitation(bundle.organizationTeamLimit, usage.organizationTeamUsage,
+      "organization-limitation-organization-team-entry", "organization-limitation-organization-team-ratio",
+      "organization-limitation-organization-team-bar", "");
   }
 
   function displayLimitation(limit, usage, entryElementId, ratioElementId, progressBarElementId, unit) {
