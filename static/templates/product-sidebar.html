@@ -46,11 +46,11 @@
 
 <script>
   $(document).ready(function() {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/bundle/", "GET",
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET",
       []);
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
-      if (response.organizationAccess) {
+      if ("id" in response) {
         document.getElementById("sidebar-organization").classList.remove("d-none");
       } else {
         document.getElementById("sidebar-package").classList.remove("d-none");
