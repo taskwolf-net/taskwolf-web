@@ -169,6 +169,11 @@
         let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/add/", "POST",
           [], {name: input.value});
         request.send(function (status, responseText) {
+          if (status === 400) {
+            Swal.fire("{% trans 'product.organization.team.add.limit.reached.title' %}",
+              "{% trans 'product.organization.team.add.limit.reached.body' %}", "error");
+            return;
+          }
           Swal.fire("{% trans 'product.organization.team.add.successful.title' %}",
             "{% trans 'product.organization.team.add.successful.body' %}", "success").then(success => window.location.reload());
         });
