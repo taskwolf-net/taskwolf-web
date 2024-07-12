@@ -71,7 +71,7 @@
   function displayOrganization(organization) {
     displayTaps(organization);
     displayInformation(organization);
-    displayLeaveButton(organization);
+    displayControlButtons(organization);
   }
 
   function displayTaps(organization) {
@@ -86,7 +86,7 @@
 
   function displayInformation(organization) {
     document.getElementById("organization-name").innerHTML = organization.name;
-    document.getElementById("organization-owner").appendChild(createUserEntry(organization.owner, "li"));
+    document.getElementById("organization-owner").appendChild(createUserEntry(organization.ownerName, "li"));
     var memberListElement = document.getElementById("organization-members");
     if (organization.members.length === 0) {
       document.getElementById("organization-members-empty").style.display = "flex";
@@ -131,9 +131,11 @@
     return memberElement;
   }
 
-  function displayLeaveButton(organization) {
+  function displayControlButtons(organization) {
     if (organization.isOwner === true) {
       document.getElementById("organization-leave").classList.add("d-none");
+    } else {
+      document.getElementById("organization-rename").classList.add("d-none");
     }
   }
 
