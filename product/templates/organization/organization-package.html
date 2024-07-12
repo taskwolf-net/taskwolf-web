@@ -180,6 +180,16 @@
               <li class="organization-package-information-entry">
                 <div class="organization-package-information-entry-description">
                   <div class="organization-package-information-entry-icon">
+                    <i class="fa-solid fa-user"></i>
+                  </div>
+                  <span>{% trans 'product.organization.package.organization.team' %}</span>
+                </div>
+                <span id="organization-package-information-organization-team"></span>
+              </li>
+              <div class="organization-package-information-divider"></div>
+              <li class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
                     <i class="fa-solid fa-unlock"></i>
                   </div>
                   <span>{% trans 'product.organization.package.device.access' %}</span>
@@ -264,6 +274,8 @@
       bundle.organizationAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("organization-package-information-organization-member").innerHTML =
       bundle.organizationMemberLimit < 0 ? "{% trans 'product.organization.package.unlimited' %}" : bundle.organizationMemberLimit;
+    document.getElementById("organization-package-information-organization-team").innerHTML =
+      bundle.organizationTeamLimit < 0 ? "{% trans 'product.organization.package.unlimited' %}" : bundle.organizationTeamLimit;
     document.getElementById("organization-package-information-device-access").innerHTML =
       bundle.deviceAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("organization-package-information-account-access").innerHTML =

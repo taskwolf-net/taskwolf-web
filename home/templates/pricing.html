@@ -68,8 +68,8 @@
               <td id="pricing-availability-team"></td>
               <td id="pricing-availability-enterprise"></td>
             </tr>
-            </tbody>
-            <tbody>
+          </tbody>
+          <tbody>
             <tr class="pricing-feature-bundle-headline">
               <td>{% trans 'home.pricing.feature.workflows' %}</td>
               <td colspan="4"></td>
@@ -129,8 +129,8 @@
               <td id="pricing-database-data-team"></td>
               <td id="pricing-database-data-enterprise"></td>
             </tr>
-            </tbody>
-            <tbody>
+          </tbody>
+          <tbody>
             <tr class="pricing-feature-bundle-headline">
               <td>{% trans 'home.pricing.feature.webhooks' %}</td>
               <td colspan="4"></td>
@@ -169,8 +169,15 @@
               <td id="pricing-organization-members-team"></td>
               <td id="pricing-organization-members-enterprise"></td>
             </tr>
-            </tbody>
-            <tbody>
+            <tr>
+              <td class="pricing-feature">{% trans 'home.pricing.feature.organizations.team.limit' %}</td>
+              <td id="pricing-organization-teams-free"></td>
+              <td id="pricing-organization-teams-professional"></td>
+              <td id="pricing-organization-teams-team"></td>
+              <td id="pricing-organization-teams-enterprise"></td>
+            </tr>
+          </tbody>
+          <tbody>
             <tr class="pricing-feature-bundle-headline">
               <td>{% trans 'home.pricing.feature.devices' %}</td>
               <td colspan="4"></td>
@@ -294,6 +301,7 @@
     displayPackageCell("pricing-webhooks-number-", packageName, packageData.webhookNumberLimit);
     displayPackageCell("pricing-organization-access-", packageName, packageData.organizationAccess);
     displayPackageCell("pricing-organization-members-", packageName, packageData.organizationMemberLimit);
+    displayPackageCell("pricing-organization-teams-", packageName, packageData.organizationTeamLimit);
     displayPackageCell("pricing-device-access-", packageName, packageData.deviceAccess);
     displayPackageCell("pricing-device-app-", packageName, packageData.deviceAccess);
     displayPackageCell("pricing-accounts-access-", packageName, packageData.accountsAccess);
