@@ -55,6 +55,7 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 2px #4a4a4a solid;
+  margin-bottom: 20px;
 }
 
 .organization-member-add {
@@ -62,6 +63,11 @@
   color: white;
   border-radius: 5px;
   padding: 10px;
+  transition-duration: 0.2s;
+}
+
+.organization-member-add:hover {
+  background-color: #1d6cde;
 }
 
 .organization-team-remove {
@@ -70,6 +76,102 @@
   border-radius: 5px;
   padding: 10px;
   margin-left: 10px;
+  transition-duration: 0.2s;
+}
+
+.organization-team-remove:hover {
+  background-color: #c12f3d;
+}
+
+.organization-team-member {
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2%;
+  justify-content: space-between;
+}
+
+.organization-team-member-information {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.organization-team-member-icon {
+  font-size: 28px;
+}
+
+.organization-team-member-name {
+  margin-left: 3%;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.organization-team-member-remove {
+  margin-right: 8px;
+  font-size: 30px;
+  padding: 15px;
+  border-radius: 50%;
+  transition-duration: 0.2s;
+}
+
+.organization-team-member-remove:hover {
+  background-color: #293548;
+}
+
+@media (max-width: 575px) {
+  .organization-team-member-remove {
+    margin-right: 0;
+  }
+}
+
+.organization-team-member-add-search ul {
+  width: min(260px, 100%);
+  margin: 20px auto auto;
+  padding: 0;
+  list-style-type: none;
+  max-height: calc(42px * 3);
+  overflow: auto;
+}
+
+.organization-team-member-search {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  transition-duration: 0.2s;
+}
+
+.organization-team-member-search:last-child {
+  margin-bottom: 0;
+}
+
+.dark .organization-team-member-search:hover {
+  background-color: #424b53;
+}
+
+.light .organization-team-member-search:hover {
+  background-color: #e8e8e8;
+}
+
+.organization-team-member-search-information {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.organization-team-member-search-icon {
+  font-size: 22px;
+}
+
+.organization-team-member-search-name {
+  margin-left: 20px;
+  font-size: 18px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 #organization-team-add {
@@ -93,7 +195,7 @@
   color: #313131;
 }
 
-.organization-team-add-content input, .organization-team-add-content input {
+.organization-team-add-content input, .organization-team-member-add-content input {
   background-color: transparent;
   border-radius: 5px;
   box-shadow: none;
@@ -101,16 +203,16 @@
   padding: 10px !important;
 }
 
-.dark .organization-team-add-content input, .dark .organization-team-add-content input {
+.dark .organization-team-add-content input, .dark .organization-team-member-add-content input {
   border: 1px solid white;
   color: white;
 }
 
-.light .organization-team-add-content input, .light .organization-team-add-content input {
+.light .organization-team-add-content input, .light .organization-team-member-add-content input {
   border: 1px solid black;
   color: black;
 }
 
-.organization-team-add-content input::placeholder, .organization-team-add-content input::placeholder {
+.organization-team-add-content input::placeholder, .organization-team-member-add-content input::placeholder {
   color: #a5a5a5;
 }

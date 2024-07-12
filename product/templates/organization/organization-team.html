@@ -81,6 +81,13 @@
       teamAddButton.onclick = (event) => addTeam();
       teamAddEntry.appendChild(teamAddButton);
       document.getElementById("organization-teams").appendChild(teamAddEntry);
+      return;
+    }
+    if (organizationTeams.length === 0) {
+      var emptyElement = document.createElement("li");
+      emptyElement.classList.add("text-center", "fw-bold");
+      emptyElement.innerHTML = "{% trans 'product.organization.teams.empty' %}"
+      document.getElementById("organization-teams").appendChild(emptyElement);
     }
   }
 
@@ -94,7 +101,7 @@
     nameElement.innerHTML = team.name;
     headerElement.appendChild(nameElement);
     if (organization.isOwner === true) {
-      headerElement.appendChild(createTeamControls(team));
+      headerElement.appendChild(createTeamControls(organization, team));
     }
     teamEntry.appendChild(headerElement);
     if (team.members.length === 0) {
@@ -108,12 +115,12 @@
     return teamEntry;
   }
 
-  function createTeamControls(team) {
+  function createTeamControls(organization, team) {
     var controlElement = document.createElement("div");
     var memberAddElement = document.createElement("span");
     memberAddElement.classList.add("organization-member-add", "fa-solid", "fa-plus");
     memberAddElement.onclick = function (event) {
-      openAddTeamMemberMenu();
+      openAddTeamMemberMenu(organization, team);
     }
     controlElement.appendChild(memberAddElement);
     var teamRemoveElement = document.createElement("span");
@@ -129,10 +136,10 @@
     var memberListElement = document.createElement("ul");
     for (let i = 0; i < team.members.length; i++) {
       var member = team.members[i];
-      var memberElement = createUserEntry(member.name, "li");
+      var memberElement = createUserEntry(member.name, "organization-team-member");
       if (organization.isOwner === true) {
         var memberRemoveElement = document.createElement("span");
-        memberRemoveElement.classList.add("organization-team-member-add", "fa", "fa-ban", "text-danger");
+        memberRemoveElement.classList.add("organization-team-member-remove", "fa", "fa-ban", "text-danger");
         memberRemoveElement.onclick = function (event) {
           removeTeamMember(team.id, member.id);
         }
@@ -143,22 +150,6 @@
     return memberListElement;
   }
 
-  function createUserEntry(user, elementType) {
-    var memberElement = document.createElement(elementType);
-    memberElement.classList.add("organization-user");
-    var memberInformationContainer = document.createElement("div");
-    memberInformationContainer.classList.add("organization-user-information");
-    var memberIconElement = document.createElement("i");
-    memberIconElement.classList.add("organization-user-icon", "fa-regular", "fa-user");
-    memberInformationContainer.appendChild(memberIconElement);
-    var memberNameElement = document.createElement("span");
-    memberNameElement.classList.add("organization-user-name");
-    memberNameElement.innerHTML = user;
-    memberInformationContainer.appendChild(memberNameElement);
-    memberElement.appendChild(memberInformationContainer);
-    return memberElement;
-  }
-
   function addTeam() {
     var content = document.createElement("div");
     content.classList.add("organization-team-add-content");
@@ -166,12 +157,12 @@
     text.innerText = "{% trans 'product.organization.team.add.body' %}";
     content.appendChild(text);
     var input = document.createElement("input");
+    input.classList.add("mt-3");
     input.placeholder = "{% trans 'product.organization.team.add.name' %}";
     content.appendChild(input);
     Swal.fire({
       title: "{% trans 'product.organization.team.add.title' %}",
       html: content,
-      icon: "info",
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
@@ -204,22 +195,71 @@
     });
   }
 
-  function openAddTeamMemberMenu() {
+  function openAddTeamMemberMenu(organization, team) {
     var content = document.createElement("div");
     content.classList.add("organization-team-member-add-content");
     var text = document.createElement("p");
     text.innerText = "{% trans 'product.organization.team.member.add.body' %}";
     content.appendChild(text);
-    var input = document.createElement("input");
-    input.placeholder = "{% trans 'product.organization.team.add.member' %}";
-    content.appendChild(input);
-    var memberList = document.createElement("ul");
+    content.appendChild(createTeamMemberSearch(organization, team));
     Swal.fire({
       title: "{% trans 'product.organization.team.member.add.title' %}",
       html: content,
-      icon: "info",
+      showConfirmButton: false,
       showCancelButton: true,
     });
+  }
+
+  function createTeamMemberSearch(organization, team) {
+    var search = document.createElement("div");
+    search.classList.add("organization-team-member-add-search", "pt-3");
+    var input = document.createElement("input");
+    input.placeholder = "{% trans 'product.organization.team.member.add.member' %}";
+    search.appendChild(input);
+    var memberList = document.createElement("ul");
+    fillTeamMemberSearchList(organization, team, memberList, "");
+    input.oninput = function (event) {
+      memberList.innerHTML = "";
+      fillTeamMemberSearchList(organization, team, memberList, event.target.value);
+    }
+    search.appendChild(memberList);
+    return search;
+  }
+
+  function fillTeamMemberSearchList(organization, team, memberList, search) {
+    var members = [...organization.members];
+    members.push({id: organization.ownerId, name: organization.ownerName});
+    var displayedMembers = 0;
+    for (var i = 0; i < members.length; i++) {
+      let member = members[i];
+      if ((search === "" || member.name.toLowerCase().includes(search.toLowerCase())) &&
+        !isMemberOfTeam(team, member)
+      ) {
+        var memberElement = createUserEntry(member.name, "organization-team-member-search");
+        memberElement.role = "button";
+        memberElement.onclick = function (event) {
+          addTeamMember(team.id, member.id);
+        }
+        memberList.appendChild(memberElement);
+        displayedMembers++;
+      }
+    }
+    if (displayedMembers === 0) {
+      var emptyElement = document.createElement("p");
+      emptyElement.classList.add("text-center");
+      emptyElement.innerHTML = "{% trans 'product.organization.team.member.add.empty' %}"
+      memberList.appendChild(emptyElement);
+    }
+  }
+
+  function isMemberOfTeam(team, member) {
+    for (var i = 0; i < team.members.length; i++) {
+      var teamMember = team.members[i];
+      if (teamMember.id === member.id) {
+        return true;
+      }
+    }
+    return false;
   }
 
   function addTeamMember(team, member) {
@@ -236,6 +276,22 @@
     request.send(function (status, responseText) {
       location.reload();
     });
+  }
+
+  function createUserEntry(user, prefix) {
+    var memberElement = document.createElement("li");
+    memberElement.classList.add(prefix);
+    var memberInformationContainer = document.createElement("div");
+    memberInformationContainer.classList.add(prefix + "-information");
+    var memberIconElement = document.createElement("i");
+    memberIconElement.classList.add(prefix + "-icon", "fa-regular", "fa-user");
+    memberInformationContainer.appendChild(memberIconElement);
+    var memberNameElement = document.createElement("span");
+    memberNameElement.classList.add(prefix + "-name");
+    memberNameElement.innerHTML = user;
+    memberInformationContainer.appendChild(memberNameElement);
+    memberElement.appendChild(memberInformationContainer);
+    return memberElement;
   }
 
   function displayLoader() {
