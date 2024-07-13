@@ -22,12 +22,12 @@ async def registerConfirm(request, user, token):
 @home_page
 async def payment(request):
   return render(request, 'payment.html', {'title': gettext("home.payment.title"),
-    'css': ['css/base/home-header.css', 'css/verification/payment.css']})
+    'css': ['css/base/verification-header.css', 'css/verification/payment.css']})
 
 @home_page
 async def paymentComplete(request):
   return render(request, 'payment-complete.html', {'title': gettext("home.payment.complete.title"),
-    'css': ['css/base/home-header.css', 'css/verification/payment-complete.css']})
+    'css': ['css/base/verification-header.css', 'css/verification/payment-complete.css']})
 
 @home_page
 async def passwordResetRequest(request):

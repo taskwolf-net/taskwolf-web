@@ -1,0 +1,26 @@
+{% load static %}
+{% load i18n %}
+<div id="verification-header">
+  <div></div>
+  <img id="verification-logo" src="{% static 'img/logo.png' %}">
+  <div id="verification-languages">
+    <input id="verification-language-en" class="verification-language-flag" src="{% static 'img/languages/en.png' %}" type="image"/>
+    <input id="verification-language-de" class="verification-language-flag" src="{% static 'img/languages/de.png' %}" type="image"/>
+  </div>
+</div>
+
+<script>
+  document.getElementById("verification-language-en").onclick = function (event) {
+    Cookie.create("taskwolf-home-language", "en", 60 * 60 * 24 * 365, ".taskwolf.net");
+    window.location.reload();
+  }
+
+  document.getElementById("verification-language-de").onclick = function (event) {
+    Cookie.create("taskwolf-home-language", "de", 60 * 60 * 24 * 365, ".taskwolf.net");
+    window.location.reload();
+  }
+
+  document.getElementById("verification-logo").onclick = function (event) {
+    window.location.href = "/";
+  }
+</script>

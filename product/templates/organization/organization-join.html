@@ -31,6 +31,10 @@
 
 <script>
   $(document).ready(function() {
+    if (Cookie.find("home-token") == null) {
+      window.location.href = "/login/";
+      return;
+    }
     let request = new HttpRequest("https://api.taskwolf.net/v1/organization/join/", "POST",
       [], {organization: "{{organization}}", token: "{{token}}"});
     request.send(function (status, responseText) {

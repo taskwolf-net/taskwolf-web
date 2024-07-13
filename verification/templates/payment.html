@@ -4,14 +4,7 @@
   {% include 'templates/head.html' %}
   <body class="dark">
     <div id="payment-container">
-      <div id="payment-header">
-        <div></div>
-        <img id="payment-logo" src="{% static 'img/logo.png' %}">
-        <div id="payment-languages">
-          <input id="payment-language-en" class="payment-language-flag" src="{% static 'img/languages/en.png' %}" type="image"/>
-          <input id="payment-language-de" class="payment-language-flag" src="{% static 'img/languages/de.png' %}" type="image"/>
-        </div>
-      </div>
+      {% include 'templates/verification-header.html' %}
       <div id="payment-pay" class="d-none">
         <h1 class="text-center fw-bold mb-5">{% trans 'home.payment.pay.headline' %}</h1>
         <div id="payment-package">
@@ -186,20 +179,6 @@
     Cookie.destroy("taskwolf-package-class");
     Cookie.destroy("taskwolf-package-runtime");
     Cookie.destroy("taskwolf-package-price");
-  }
-
-  document.getElementById("payment-language-en").onclick = function (event) {
-    Cookie.create("taskwolf-home-language", "en", 60 * 60 * 24 * 365, ".taskwolf.net");
-    window.location.reload();
-  }
-
-  document.getElementById("payment-language-de").onclick = function (event) {
-    Cookie.create("taskwolf-home-language", "de", 60 * 60 * 24 * 365, ".taskwolf.net");
-    window.location.reload();
-  }
-
-  document.getElementById("payment-logo").onclick = function (event) {
-    window.location.href = "/";
   }
 
   document.getElementById("payment-not-found-redirect").onclick = function (event) {

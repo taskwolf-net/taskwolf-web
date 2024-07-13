@@ -1,0 +1,35 @@
+#verification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  height: 52px;
+  margin-top: 40px;
+  margin-bottom: 15vh;
+}
+
+#verification-logo {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 75px;
+  height: auto;
+  transition: transform .3s;
+}
+
+#verification-logo:hover {
+  transform: scale(1.1);
+}
+
+#verification-languages {
+  display: flex;
+  gap: 20px;
+}
+
+.verification-language-flag {
+  width: 48px;
+  height: 27px;
+  border-radius: 5px;
+}
