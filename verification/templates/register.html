@@ -351,6 +351,10 @@
   }
 
   document.getElementById("register-login").onclick = function (event) {
-    window.location.href = "/login/";
+    var addition = "";
+    if ("{{redirect}}" !== "") {
+      addition += "?redirect={{redirect}}";
+    }
+    window.location.href = "/login/" + addition;
   }
 </script>

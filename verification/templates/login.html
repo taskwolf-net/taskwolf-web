@@ -64,7 +64,9 @@
       var success = response.success;
       if (success === true) {
         Cookie.create("token", response.productApiKey, 60 * 60 * 24 * 30, ".taskwolf.net");
-        window.location.href = "/dashboard/";
+        if (!redirect()) {
+          window.location.href = "/dashboard/";
+        }
       } else {
         var error = response.error;
         if (error === 1000) {
@@ -72,7 +74,9 @@
         } else  if (error === 1001) {
           Swal.fire("{% trans 'home.login.failed.confirmation.title' %}", "{% trans 'home.login.failed.confirmation.body' %}", "error");
         } else  if (error === 1002) {
-          window.location.href = "/payment/";
+          if (!redirect()) {
+            window.location.href = "/payment/";
+          }
         } else  if (error === 1003) {
           Swal.fire("{% trans 'home.login.failed.expired.title' %}", "{% trans 'home.login.failed.expired.body' %}", "error");
         }
@@ -80,6 +84,14 @@
       }
     });
   };
+
+  function redirect() {
+    if ("{{redirect}}" !== "") {
+      window.location.href = "{{redirect}}";
+      return true;
+    }
+    return false;
+  }
 
   document.getElementById("login-external-service-google").onclick = function (event) {
     window.location.href = "https://accounts.google.com/o/oauth2/auth?access_type=offline&prompt=consent&client_id=544413433596-5i9issjef49s7tedlcmbkfdp750iom2b.apps.googleusercontent.com&redirect_uri=https://api.taskwolf.net/v1/google/login/&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile";
