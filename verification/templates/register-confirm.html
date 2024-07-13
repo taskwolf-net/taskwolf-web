@@ -18,7 +18,7 @@
         window.location.href = "/";
         return;
       }
-      Cookie.create("taskwolf-home-email", response.email, 60 * 60 * 24);
+      Cookie.create("home-token", response.homeApiKey, 60 * 60 * 24);
       window.location.href = "/payment/";
     });
   });

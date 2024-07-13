@@ -12,6 +12,10 @@ class HttpRequest {
     if (token !== null) {
       this.headers.push({key: "Authorization", value: "Bearer " + token});
     }
+    var homeToken = Cookie.find("home-token");
+    if (homeToken !== null) {
+      this.headers.push({key: "Home-Authorization", value: "Bearer " + token});
+    }
     var whitelistKey = Cookie.find("taskwolf-whitelist-key");
     if (whitelistKey !== null) {
       this.headers.push({key: "WHITELIST-KEY", value: whitelistKey});

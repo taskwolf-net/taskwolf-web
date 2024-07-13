@@ -58,9 +58,12 @@
       {email: document.getElementById("email").value, password: document.getElementById("password").value});
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
+      if ("homeApiKey" in response) {
+        Cookie.create("home-token", response.homeApiKey, 60 * 60 * 24, ".taskwolf.net");
+      }
       var success = response.success;
       if (success === true) {
-        Cookie.create("token", JSON.parse(responseText).apiKey, 60 * 60 * 24 * 30, ".taskwolf.net");
+        Cookie.create("token", response.productApiKey, 60 * 60 * 24 * 30, ".taskwolf.net");
         window.location.href = "/dashboard/";
       } else {
         var error = response.error;
@@ -69,7 +72,6 @@
         } else  if (error === 1001) {
           Swal.fire("{% trans 'home.login.failed.confirmation.title' %}", "{% trans 'home.login.failed.confirmation.body' %}", "error");
         } else  if (error === 1002) {
-          Cookie.create("taskwolf-home-email", document.getElementById("email").value, 60 * 60 * 24);
           window.location.href = "/payment/";
         } else  if (error === 1003) {
           Swal.fire("{% trans 'home.login.failed.expired.title' %}", "{% trans 'home.login.failed.expired.body' %}", "error");

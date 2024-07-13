@@ -183,17 +183,11 @@
   }
 
   document.getElementById("package-upgrade-buy").onclick = function (event) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/email/",
-      "GET", []);
-    request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
-      Cookie.create("taskwolf-package-type", "PROFESSIONAL", 60 * 60 * 24);
-      Cookie.create("taskwolf-package-class", bundleClass, 60 * 60 * 24);
-      Cookie.create("taskwolf-package-runtime", bundleRuntime, 60 * 60 * 24);
-      Cookie.create("taskwolf-package-price", professionalPackageData.price, 60 * 60 * 24);
-      Cookie.create("taskwolf-home-email", response.email, 60 * 60 * 24)
-      window.location.href = "/payment/";
-    });
+    Cookie.create("taskwolf-package-type", "PROFESSIONAL", 60 * 60 * 24);
+    Cookie.create("taskwolf-package-class", bundleClass, 60 * 60 * 24);
+    Cookie.create("taskwolf-package-runtime", bundleRuntime, 60 * 60 * 24);
+    Cookie.create("taskwolf-package-price", professionalPackageData.price, 60 * 60 * 24);
+    window.location.href = "/payment/";
   }
 
   function displayLoader() {
