@@ -1,14 +1,21 @@
 #organization-join-container {
+  width: min(1000px, 95%);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#organization-join-wrapper {
+  width: min(700px, 100%);
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
-  width: 800px;
-  margin: auto;
 }
 
 .success-icon-wrapper {
   display: flex;
-  margin-top: 15%;
   align-items: center;
   justify-content: center;
+  transform: scale(0.75);
 }
 
 .success-icon {
@@ -97,7 +104,7 @@
   width: 160px;
   height: 160px;
   margin: auto;
-  margin-top: 15%;
+  transform: scale(0.75);
 }
 
 svg {

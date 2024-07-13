@@ -3,10 +3,9 @@
 <html lang="en">
   {% include 'templates/head.html' %}
   <body class="dark">
-    {% include 'templates/product-header.html' %}
-    {% include 'templates/product-sidebar.html' %}
-    <div class="sidebar-influenced">
-      <div id="organization-join-container">
+    <div id="organization-join-container">
+      {% include 'templates/verification-header.html' %}
+      <div id="organization-join-wrapper">
         <div id="organization-join-success" class="success-icon-wrapper d-none">
           <div class="success-icon">
             <div class="success-icon__tip"></div>
@@ -32,7 +31,8 @@
 <script>
   $(document).ready(function() {
     if (Cookie.find("home-token") == null) {
-      window.location.href = "/login/";
+      window.location.href = "/login-register/?redirect=" +
+        window.location.href.replace("https://taskwolf.net", "");
       return;
     }
     let request = new HttpRequest("https://api.taskwolf.net/v1/organization/join/", "POST",

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from base.authentication import authentication_required, isAuthenticated
+from home.home import home_page
 from django.utils.translation import gettext
 
 @authentication_required
@@ -38,8 +39,8 @@ async def organizationTermination(request):
   return render(request, 'organization/organization-termination.html', {'title': gettext('product.organization.termination.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/organization/organization-termination.css']})
 
-@authentication_required
+@home_page
 async def organizationJoin(request, organization, token):
   return render(request, 'organization/organization-join.html', {'title': gettext('product.organization.join.title'),
-    'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/organization/organization-join.css'],
+    'css': ['css/base/verification-header.css', 'css/product/organization/organization-join.css'],
     'organization': organization, 'token': token})
