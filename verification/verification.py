@@ -5,19 +5,30 @@ from django.utils.translation import gettext
 
 @home_page
 async def login(request):
+  redirect = request.GET.get('redirect', '')
   return render(request, 'login.html', {'title': gettext("home.login.title"),
-    'css': ['css/base/home-header.css', 'css/verification/login.css']})
+    'css': ['css/base/home-header.css', 'css/verification/login.css'],
+    'redirect': redirect})
 
 @home_page
 async def register(request):
+  redirect = request.GET.get('redirect', '')
   return render(request, 'register.html', {'title': gettext("home.registration.title"),
-    'css': ['css/base/home-header.css', 'css/verification/register.css']})
+    'css': ['css/base/home-header.css', 'css/verification/register.css'],
+    'redirect': redirect})
 
 @home_page
 async def registerConfirm(request, user, token):
   return render(request, 'register-confirm.html', {'title': gettext("home.registration.confirm.title"),
     'css': ['css/base/home-header.css', 'css/verification/register-confirm.css'],
     'user': user, 'token': token})
+
+@home_page
+async def loginRegister(request):
+  redirect = request.GET.get('redirect', '')
+  return render(request, 'login-register.html', {'title': gettext("home.login.register.title"),
+    'css': ['css/base/verification-header.css', 'css/verification/login-register.css'],
+    'redirect': redirect})
 
 @home_page
 async def payment(request):

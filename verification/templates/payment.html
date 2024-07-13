@@ -159,14 +159,10 @@
       }
       var errorCode = response.error;
       if (errorCode === 1000) {
-        Swal.fire("{% trans 'home.payment.trial.failed.user.not.found.title' %}",
-          "{% trans 'home.payment.trial.failed.user.not.found.body' %}", "error")
-          .then(success => window.location.href = "/register/");
-      } else if (errorCode === 1001) {
         Swal.fire("{% trans 'home.payment.trial.failed.trial.exists.title' %}",
           "{% trans 'home.payment.trial.failed.trial.exists.body' %}", "error")
           .then(success => window.location.href = "/pricing/");
-      } else if (errorCode === 1002) {
+      } else if (errorCode === 1001) {
         Swal.fire("{% trans 'home.payment.trial.failed.bundle.present.title' %}",
           "{% trans 'home.payment.trial.failed.bundle.preset.body' %}", "error")
           .then(success => window.location.href = "/login/");

@@ -1,0 +1,38 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body class="dark">
+    <div id="login-register-container">
+      {% include 'templates/verification-header.html' %}
+      <div id="login-register-wrapper">
+        <h6 class="mb-4">{% trans 'home.login.register.login.headline' %}</h6>
+        <button type="button" id="login" class="btn btn-primary">{% trans 'home.login.register.login.button' %}</button></br>
+        <div id="login-register-alternative">
+          <div class="login-register-alternative-divider"></div>
+          <label class="text-muted mx-4">{% trans 'home.login.register.alternative' %}</label>
+          <div class="login-register-alternative-divider"></div>
+        </div>
+        <button type="button" id="register" class="btn btn-success">{% trans 'home.login.register.register.button' %}</button>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  document.getElementById("login").onclick = function (event) {
+    var addition = "";
+    if ("{{redirect}}" !== "") {
+      addition += "?redirect={{redirect}}";
+    }
+    window.location.href = "/login/" + addition;
+  }
+
+  document.getElementById("register").onclick = function (event) {
+    var addition = "";
+    if ("{{redirect}}" !== "") {
+      addition += "?redirect={{redirect}}";
+    }
+    window.location.href = "/register/" + addition;
+  }
+</script>
