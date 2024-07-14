@@ -7,37 +7,54 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   row-gap: 30px;
-  margin-top: 30px;
+  margin-top: 75px;
 }
 
 .settings-theme {
-  position: relative;
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 256px;
+  height: 192px;
   text-align: center;
   margin: auto;
-}
-
-.settings-theme-button {
-  font-size: 64px;
-  width: 128px;
-  height: 128px;
-  margin-bottom: 32px;
-  border: 2px #6d6d6d solid;
   border-radius: 10px;
+  border: none;
+  transition-duration: 0.2s;
 }
 
-.dark .settings-theme-button {
+.dark .settings-theme {
   color: white;
   background-color: #25272f;
 }
 
-.light .settings-theme-button {
+.light .settings-theme {
   color: black;
   background-color: #cecece;
 }
 
-.settings-theme-selected {
-  box-shadow: 0 0 15px 5px #49dc47;
+.dark .settings-theme:hover {
+  background-color: #32343f;
+}
+
+.light .settings-theme:hover {
+  background-color: #bcbcbc;
+}
+
+.settings-theme-icon {
+  width: 64px;
+  height: 64px;
+  font-size: 64px;
+  margin: 0 auto 32px;
+}
+
+.dark .settings-theme-selected {
+  color: #49dc47 !important;
+}
+
+.light .settings-theme-selected {
+  color: #20bc1e !important;
 }
 
 @media (max-width: 1000px) {
