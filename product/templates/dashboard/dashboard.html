@@ -43,18 +43,20 @@
     fetchUsername(function(username) {
       fetchTargets(function (targets, currentTarget) {
         fetchTutorial(function(tutorialActive) {
-          fetchActivities(function (activities) {
-            displayDashboard(username, targets, currentTarget, activities,
-              tutorialActive);
+          fetch2FA(function(twoFactorEnabled) {
+            fetchActivities(function (activities) {
+              displayDashboard(username, targets, currentTarget, activities,
+                tutorialActive, twoFactorEnabled);
+            });
           });
         });
       });
     });
   });
 
-  function displayDashboard(username, targets, currentTarget, activities, tutorialActive) {
+  function displayDashboard(username, targets, currentTarget, activities, tutorialActive, twoFactorEnabled) {
     document.getElementById("dashboard-headline").innerHTML += username;
-    displayTip(tutorialActive);
+    displayTip(tutorialActive, twoFactorEnabled);
     displayTargets(targets, currentTarget);
     displayActivities(activities);
     removeLoader();
@@ -187,11 +189,15 @@
     return activityIconContainerElement;
   }
 
-  function displayTip(tutorialActive) {
+  function displayTip(tutorialActive, twoFactorEnabled) {
     if (tutorialActive) {
       document.getElementById("dashboard-tip").appendChild(createTip(
         "{% trans 'product.dashboard.tip.tutorial.headline' %}",
         "{% trans 'product.dashboard.tip.tutorial.description' %}", "dashboard-tip-issue"));
+    } else if (!twoFactorEnabled) {
+      document.getElementById("dashboard-tip").appendChild(createTip(
+        "{% trans 'product.dashboard.tip.2fa.headline' %}",
+        "{% trans 'product.dashboard.tip.2fa.description' %}", "dashboard-tip-issue"));
     } else {
       document.getElementById("dashboard-tip-container").classList.add("d-none");
     }
@@ -238,6 +244,14 @@
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
       callback(response.active);
+    });
+  }
+
+  function fetch2FA(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/2fa/", "GET", []);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      callback(response.enabled);
     });
   }
 
