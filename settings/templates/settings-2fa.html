@@ -1,0 +1,104 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'templates/head.html' %}
+  <body class="dark">
+    {% include 'templates/settings-header.html' %}
+    <div class="settings-container">
+      {% include 'templates/settings-sidebar.html' %}
+      <div class="sidebar-influenced">
+        <div class="settings-content">
+          <h1 class="settings-headline">{% trans 'settings.2fa.headline' %}</h1>
+          <div id="settings-2fa-container">
+            <button type="button" id="settings-2fa-enable" class="btn btn-success d-block px-5 mx-auto d-none">{% trans 'settings.2fa.enable' %}</button>
+            <button type="button" id="settings-2fa-disable" class="btn btn-danger d-block px-5 mx-auto d-none">{% trans 'settings.2fa.disable' %}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    fetch2FA(function (enabled) {
+      display2FAOptions(enabled);
+    });
+  });
+
+  function display2FAOptions(enabled) {
+    if (enabled) {
+      document.getElementById("settings-2fa-disable").classList.remove("d-none");
+    } else {
+      document.getElementById("settings-2fa-enable").classList.remove("d-none");
+    }
+  }
+
+  function fetch2FA(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/2fa/", "GET", []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText).enabled);
+    });
+  }
+
+  document.getElementById("settings-2fa-enable").onclick = function (event) {
+    switch2FA();
+  }
+
+  document.getElementById("settings-2fa-disable").onclick = function (event) {
+    switch2FA();
+  }
+
+  function switch2FA() {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/2fa/switch/", "GET", []);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      if (!("qrCode" in response)) {
+        window.location.reload();
+        return;
+      }
+      showQRCode(response);
+    });
+  }
+
+  function showQRCode(response) {
+    var qrCode = response.qrCode;
+    var content = document.createElement("ul");
+    content.classList.add("settings-2fa-qrcode-steps");
+    content.innerHTML += "<li>{% trans 'settings.2fa.qrcode.step.1' %}</li>";
+    content.innerHTML += "<li>{% trans 'settings.2fa.qrcode.step.2' %}</li>";
+    Swal.fire({
+      title: "{% trans 'settings.2fa.qrcode.title' %}",
+      html: content,
+      confirmButtonText: "{% trans 'settings.2fa.next' %}",
+      imageUrl: "data:image/png;base64," + qrCode,
+      imageWidth: 256,
+      imageHeight: 256
+    }).then(success => showRecoveryCodes(response));
+  }
+
+  function showRecoveryCodes(response) {
+    var recoveryCodes = response.recoveryCodes;
+    var content = document.createElement("div");
+    var firstDisclaimer = document.createElement("p");
+    firstDisclaimer.classList.add("text-start");
+    firstDisclaimer.innerHTML = "{% trans 'settings.2fa.recovery.codes.disclaimer.1' %}";
+    content.appendChild(firstDisclaimer);
+    var secondDisclaimer = document.createElement("p");
+    secondDisclaimer.classList.add("text-start", "mb-5");
+    secondDisclaimer.innerHTML = "{% trans 'settings.2fa.recovery.codes.disclaimer.2' %}";
+    content.appendChild(secondDisclaimer);
+    var codes = document.createElement("ul");
+    codes.classList.add("settings-2fa-recovery-codes");
+    for (var i = 0; i < recoveryCodes.length; i++) {
+      var recoveryCode = document.createElement("li");
+      recoveryCode.innerHTML = recoveryCodes[i];
+      codes.appendChild(recoveryCode);
+    }
+    content.appendChild(codes);
+    Swal.fire({
+      title: "{% trans 'settings.2fa.recovery.codes.title' %}",
+      html: content
+    }).then(success => window.location.reload());
+  }
+</script>

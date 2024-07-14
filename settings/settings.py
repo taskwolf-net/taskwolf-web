@@ -32,3 +32,8 @@ async def themeSettings(request):
 async def notificationsSettings(request):
   return render(request, 'settings-notifications.html', {'title': gettext('settings.notification.title'),
     'css': ['css/base/settings-header.css', 'css/base/settings-sidebar.css', 'css/base/settings.css', 'css/settings/settings-notifications.css']})
+
+@authentication_required
+async def twoFactorAuthenticationSettings(request):
+  return render(request, 'settings-2fa.html', {'title': gettext('settings.2fa.title'),
+    'css': ['css/base/settings-header.css', 'css/base/settings-sidebar.css', 'css/base/settings.css', 'css/settings/settings-2fa.css']})

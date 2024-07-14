@@ -1,0 +1,26 @@
+#settings-2fa-container {
+  margin-top: 100px;
+}
+
+.swal2-image {
+  border-radius: 20px;
+}
+
+.settings-2fa-qrcode-steps {
+  list-style-type: decimal;
+  text-align: left;
+}
+
+.settings-2fa-qrcode-steps li {
+  margin-bottom: 10px;
+}
+
+.settings-2fa-recovery-codes {
+  list-style-type: none;
+  columns: 2;
+  padding: 0;
+}
+
+.settings-2fa-recovery-codes li {
+  margin-bottom: 5px;
+}

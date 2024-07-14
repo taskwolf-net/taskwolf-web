@@ -20,6 +20,11 @@
       <li class="sidebar-item">
         <a href="/settings/notifications/" class="sidebar-link nav-link {% if request.path == '/settings/notifications/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa fa-bell" aria-hidden="true"></i>{% trans 'settings.sidebar.notifications' %}</a>
       </li>
+      <li class="sidebar-divider my-2"></li>
+      <h6 class="sidebar-section">{% trans 'settings.sidebar.security' %}</h6>
+      <li class="sidebar-item">
+        <a href="/settings/2fa/" class="sidebar-link nav-link {% if request.path == '/settings/2fa/' %}sidebar-active{% endif %}" aria-current="page"><i class="sidebar-icon fa-solid fa-lock" aria-hidden="true"></i>{% trans 'settings.sidebar.2fa' %}</a>
+      </li>
     </ul>
   </div>
 </div>

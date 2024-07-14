@@ -9,4 +9,5 @@ urlpatterns = [
   path('settings/language/', settings.languageSettings),
   path('settings/theme/', settings.themeSettings),
   path('settings/notifications/', settings.notificationsSettings),
+  path('settings/2fa/', settings.twoFactorAuthenticationSettings),
 ]

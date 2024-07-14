@@ -1,8 +1,3 @@
-#settings-theme-select-headline {
-  text-align: center;
-  margin-top: 3%;
-}
-
 #settings-theme-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
