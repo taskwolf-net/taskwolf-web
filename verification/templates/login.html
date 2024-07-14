@@ -34,6 +34,8 @@
   </body>
 </html>
 
+{% include 'templates/2fa.html' %}
+
 <script>
   $(document).ready(function() {
     var rememberMe = Cookie.find("taskwolf-remember-me");
@@ -50,12 +52,17 @@
   });
 
   document.getElementById('login').onclick = function(event) {
+    login("");
+  };
+
+  function login(multiFactorCode) {
     if (document.getElementById("remember-check").checked) {
       Cookie.create("taskwolf-remember-me", document.getElementById("email").value,
         12 * 30 * 24 * 60 * 60);
     }
     let request = new HttpRequest("https://api.taskwolf.net/v1/verification/login/", "POST", [],
-      {email: document.getElementById("email").value, password: document.getElementById("password").value});
+      {email: document.getElementById("email").value, password: document.getElementById("password").value,
+        multiFactorCode: multiFactorCode});
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
       if ("homeApiKey" in response) {
@@ -69,21 +76,33 @@
         }
       } else {
         var error = response.error;
+        if (error === 1002) {
+          if (multiFactorCode === "") {
+            display2FA(function(code) {login(code)});
+          } else {
+            Swal.fire("{% trans 'home.login.failed.two.factor.title' %}", "{% trans 'home.login.failed.two.factor.body' %}", "error").then((result) => {
+              if (result.isConfirmed) {
+                display2FA(function(code) {login(code)});
+              }
+            });
+          }
+          return;
+        }
         if (error === 1000) {
           Swal.fire("{% trans 'home.login.failed.credentials.title' %}", "{% trans 'home.login.failed.credentials.body' %}", "error");
         } else  if (error === 1001) {
           Swal.fire("{% trans 'home.login.failed.confirmation.title' %}", "{% trans 'home.login.failed.confirmation.body' %}", "error");
-        } else  if (error === 1002) {
+        } else  if (error === 1003) {
           if (!redirect()) {
             window.location.href = "/payment/";
           }
-        } else  if (error === 1003) {
+        } else  if (error === 1004) {
           Swal.fire("{% trans 'home.login.failed.expired.title' %}", "{% trans 'home.login.failed.expired.body' %}", "error");
         }
         document.getElementById("password").value = "";
       }
     });
-  };
+  }
 
   function redirect() {
     if ("{{redirect}}" !== "") {

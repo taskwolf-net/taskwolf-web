@@ -1,0 +1,147 @@
+{% load static %}
+{% load i18n %}
+
+<script>
+  function display2FA(callback) {
+    var content = document.createElement("div");
+    var description = document.createElement("p");
+    description.classList.add("mb-4");
+    description.innerHTML = "{% trans 'settings.2fa.window.body' %}";
+    content.appendChild(description);
+    var inputList = document.createElement("div");
+    inputList.classList.add("two-factor-auth-input", "mb-4");
+    for (var i = 0; i < 6; i++) {
+      inputList.appendChild(create2FAInput(1));
+    }
+    controlInputFlow(inputList, 1, "", true, callback);
+    content.appendChild(inputList);
+    content.appendChild(createRecoveryCodeDisclaimer(callback));
+    Swal.fire({
+      title: "{% trans 'settings.2fa.window.title' %}",
+      html: content
+    }).then((result) => {
+      if (result.isConfirmed) {
+        callback(collectInput(inputList, ""));
+      }
+    });
+  }
+
+  function createRecoveryCodeDisclaimer(callback) {
+    var recoveryCodesDisclaimer = document.createElement("div");
+    recoveryCodesDisclaimer.classList.add("d-flex", "justify-content-center");
+    var recoveryCodesDescription = document.createElement("p");
+    recoveryCodesDescription.classList.add("mb-0", "me-1");
+    recoveryCodesDescription.innerHTML = "{% trans 'settings.2fa.window.recovery.description' %}";
+    recoveryCodesDisclaimer.appendChild(recoveryCodesDescription);
+    var recoveryCodesLink = document.createElement("a");
+    recoveryCodesLink.classList.add("text-decoration-none");
+    recoveryCodesLink.href = "javascript:void(null);";
+    recoveryCodesLink.onclick = function () {
+      display2FARecovery(callback);
+    };
+    recoveryCodesLink.innerHTML = "{% trans 'settings.2fa.window.recovery.link' %}";
+    recoveryCodesDisclaimer.appendChild(recoveryCodesLink);
+    return recoveryCodesDisclaimer;
+  }
+
+  function display2FARecovery(callback) {
+    var content = document.createElement("div");
+    var description = document.createElement("p");
+    description.classList.add("mb-4");
+    description.innerHTML = "{% trans 'settings.2fa.recovery.window.body' %}";
+    content.appendChild(description);
+    var inputList = document.createElement("div");
+    inputList.classList.add("two-factor-recovery-input", "mb-4");
+    for (var i = 0; i < 4; i++) {
+      if (i > 0) {
+        var dash = document.createElement("b");
+        dash.innerHTML = "—";
+        inputList.appendChild(dash);
+      }
+      var input = create2FAInput(4);
+      inputList.appendChild(input);
+    }
+    controlInputFlow(inputList, 4, "-", false, callback);
+    content.appendChild(inputList);
+    Swal.fire({
+      title: "{% trans 'settings.2fa.recovery.window.title' %}",
+      html: content
+    }).then((result) => {
+      if (result.isConfirmed) {
+        callback(collectInput(inputList, "-"));
+      }
+    });
+  }
+
+  function create2FAInput(length) {
+    var input = document.createElement("input");
+    input.maxLength = length;
+    input.type = "text";
+    return input;
+  }
+
+  function controlInputFlow(inputList, inputLength, separator, onlyDigits, callback) {
+    var inputs = [...inputList.getElementsByTagName("input")];
+    inputs.forEach((input, index) => {
+      input.addEventListener('input', (e) => {
+        if (onlyDigits) {
+          e.target.value = e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
+        }
+        if (e.target.value.length >= inputLength) {
+          if (index < inputs.length - 1) {
+            inputs[index + 1].focus();
+          } else {
+            Swal.close();
+            callback(collectInput(inputList, separator));
+          }
+        }
+      });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace') {
+          if (input.value === '' && index > 0) {
+            inputs[index - 1].focus();
+          }
+        }
+      });
+    });
+    inputs[0].addEventListener("paste", (event) => {
+      event.preventDefault();
+      processInputPasting(inputList, inputLength, inputs, separator,
+        event.clipboardData, callback);
+    });
+    setTimeout(function () {
+      inputs[0].focus();
+    }, 10);
+  }
+
+  function processInputPasting(inputList, inputLength, inputs, separator, clipboardData, callback) {
+    inputs[0].value = "";
+    const paste = (clipboardData || window.clipboardData).getData("text");
+    const chars = paste.replaceAll(separator, "").split("");
+    inputs.forEach((input, index) => {
+      for (var i = 0; i < inputLength; i++) {
+        if (chars.length > index * inputLength + i) {
+          input.value += chars[index * inputLength + i];
+        }
+      }
+    });
+    if (chars.length >= inputLength * inputs.length) {
+      Swal.close();
+      callback(collectInput(inputList, separator));
+    } else {
+      inputs[Math.min(Math.floor(chars.length / 4), inputs.length - 1)].focus();
+    }
+  }
+
+  function collectInput(inputList, separator) {
+    var result = "";
+    var inputs = [...inputList.getElementsByTagName("input")];
+    inputs.forEach((input, index) => {
+      if (index > 0) {
+        result += separator;
+      }
+      result += input.value;
+    });
+    return result;
+  }
+</script>

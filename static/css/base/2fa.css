@@ -1,0 +1,46 @@
+.two-factor-auth-input, .two-factor-recovery-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.two-factor-auth-input input {
+  width: 40px;
+}
+
+.two-factor-recovery-input input {
+  width: 80px;
+}
+
+.two-factor-auth-input input, .two-factor-recovery-input input {
+  height: 50px;
+  text-align: center;
+  font-size: 24px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.dark .two-factor-auth-input input, .dark .two-factor-recovery-input input {
+  background-color: #343b41;
+  border: 2px solid #505b64;
+  color: white;
+}
+
+.light .two-factor-auth-input input, .light .two-factor-recovery-input input {
+  background-color: white;
+  border: 2px solid #ccc;
+  color: black;
+}
+
+.two-factor-auth-input input:focus, .two-factor-recovery-input input:focus {
+  border-color: #007BFF;
+}
+
+.two-factor-auth-input input:nth-child(3) {
+  margin-right: 20px;
+}

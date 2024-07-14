@@ -7,7 +7,7 @@ from django.utils.translation import gettext
 async def login(request):
   redirect = request.GET.get('redirect', '')
   return render(request, 'login.html', {'title': gettext("home.login.title"),
-    'css': ['css/base/home-header.css', 'css/verification/login.css'],
+    'css': ['css/base/home-header.css', 'css/base/2fa.css', 'css/verification/login.css'],
     'redirect': redirect})
 
 @home_page
