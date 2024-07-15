@@ -19,10 +19,17 @@
   </body>
 </html>
 
+{% include 'templates/2fa.html' %}
+
 <script>
   $(document).ready(function() {
     fetch2FA(function (enabled) {
       display2FAOptions(enabled);
+      needs2FAConfirmation(function (needsConfirmation) {
+        if (needsConfirmation) {
+          openConfirmWindow();
+        }
+      });
     });
   });
 
@@ -38,6 +45,18 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/settings/2fa/", "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText).enabled);
+    });
+  }
+
+  function needs2FAConfirmation(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/2fa/isConfirmed/", "GET", []);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      if (response.success === false) {
+        callback(false);
+        return;
+      }
+      callback(!response.confirmed);
     });
   }
 
@@ -132,8 +151,9 @@
     content.appendChild(codes);
     Swal.fire({
       title: "{% trans 'settings.2fa.recovery.codes.title' %}",
-      html: content
-    }).then(success => window.location.reload());
+      html: content,
+      confirmButtonText: "{% trans 'settings.2fa.next' %}"
+    }).then(success => openConfirmWindow());
   }
 
   function copyRecoveryCodes(recoveryCodes) {
@@ -142,5 +162,36 @@
       result += recoveryCodes[i] + "\n";
     }
     navigator.clipboard.writeText(result);
+  }
+
+  function openConfirmWindow() {
+    Swal.fire({
+      title: "{% trans 'settings.2fa.confirm.title' %}",
+      text: "{% trans 'settings.2fa.confirm.body' %}",
+      confirmButtonText: "{% trans 'settings.2fa.next' %}"
+    }).then(result => {
+      if (result.isConfirmed) {
+        confirm2FA();
+      }
+    });
+  }
+
+  function confirm2FA() {
+    display2FA(function(code) {
+      let request = new HttpRequest("https://api.taskwolf.net/v1/settings/2fa/confirm/", "POST",
+        [], {code: code});
+      request.send(function (status, responseText) {
+        var response = JSON.parse(responseText);
+        if (response.success === false) {
+          Swal.fire("{% trans 'settings.2fa.confirm.failed.title' %}",
+            "{% trans 'settings.2fa.confirm.failed.body' %}", "error")
+            .then(success => confirm2FA());
+          return;
+        }
+        Swal.fire("{% trans 'settings.2fa.confirm.successful.title' %}",
+          "{% trans 'settings.2fa.confirm.successful.body' %}", "success")
+          .then(success => window.location.reload());
+      });
+    });
   }
 </script>
