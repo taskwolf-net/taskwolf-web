@@ -668,6 +668,8 @@ msgid "home.registration.failed.legal"
 msgstr "Um fortzufahren, müssen Sie die Nutzungsbedingungen und die Datenschutzrichtlinie akzeptieren."
 msgid "home.registration.failed.already.exists"
 msgstr "Es gibt bereits ein Konto mit dieser E-Mail. Bitte versuchen Sie den Registrierungsprozess erneut"
+msgid "home.registration.failed.recaptcha"
+msgstr "Ihre Anfrage konnte nicht verifiziert werden. Sie wurden als Roboter und nicht als Mensch erkannt. Bitte versuchen Sie es erneut"
 
 # LOGIN / REGISTER
 msgid "home.login.register.title"

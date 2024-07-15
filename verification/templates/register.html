@@ -209,10 +209,7 @@
     loader.classList.add("loader");
     document.getElementById("register-wrapper").appendChild(loader);
     document.getElementById("register-page-back").classList.add("d-none");
-    let request = new HttpRequest("https://api.taskwolf.net/v1/verification/register/", "POST", [],
-      {email: emailInput.value, name: usernameInput.value, password: passwordInput.value});
-    request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+    register(function (response) {
       document.getElementById("register-wrapper")
         .removeChild(document.getElementsByClassName("loader")[0]);
       if (response.success === true) {
@@ -222,10 +219,29 @@
       } else {
         document.getElementById("register-page-back").classList.remove("d-none");
         document.getElementById("register-legal-container").classList.remove("d-none");
-        Swal.fire("{% trans 'home.registration.failed.title' %}",
+        var errorCode = response.error;
+        if (errorCode === 1000) {
+          Swal.fire("{% trans 'home.registration.failed.title' %}",
             "{% trans 'home.registration.failed.already.exists' %}", "error")
-          .then(success => window.location.reload(true));
+            .then(success => window.location.reload(true));
+        } else if (errorCode === 1001) {
+          Swal.fire("{% trans 'home.registration.failed.title' %}",
+            "{% trans 'home.registration.failed.recaptcha' %}", "error")
+            .then(success => window.location.reload(true));
+        }
       }
+    });
+  }
+
+  function register(callback) {
+    grecaptcha.ready(function() {
+      grecaptcha.execute('6LdpvhAqAAAAAFbSWycUwLBbDnS4TaSvjJOofiOg', {action: 'register'}).then(function(token) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/verification/register/", "POST", [],
+          {email: emailInput.value, name: usernameInput.value, password: passwordInput.value, recaptchaToken: token});
+        request.send(function (status, responseText) {
+          callback(JSON.parse(responseText));
+        });
+      });
     });
   }
 
