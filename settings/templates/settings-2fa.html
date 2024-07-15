@@ -92,7 +92,7 @@
     content.classList.add("settings-2fa-qrcode-steps");
     content.innerHTML += "<li>{% trans 'settings.2fa.qrcode.step.1' %}</li>";
     content.innerHTML += "<li>{% trans 'settings.2fa.qrcode.step.2' %}</li>";
-    content.innerHTML += "<p class='ms-1 settings-2fa-secret'>" + response.secret + "</p>";
+    content.innerHTML += "<p class='ms-1 mt-4 settings-2fa-secret'>" + response.secret + "</p>";
     Swal.fire({
       title: "{% trans 'settings.2fa.qrcode.title' %}",
       html: content,

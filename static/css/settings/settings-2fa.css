@@ -17,8 +17,10 @@
 
 .settings-2fa-secret {
   border-radius: 5px;
+  margin-right: 32px;
   padding: 10px;
   text-align: center;
+  font-size: 17px;
 }
 
 .dark .settings-2fa-secret {
