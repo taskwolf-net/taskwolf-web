@@ -50,14 +50,39 @@
   }
 
   function switch2FA() {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/2fa/switch/", "GET", []);
-    request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
-      if (!("qrCode" in response)) {
-        window.location.reload();
-        return;
+    var content = document.createElement("div");
+    content.classList.add("settings-2fa-switch-password-content");
+    var text = document.createElement("p");
+    text.innerText = "{% trans 'settings.2fa.switch.password.body' %}";
+    content.appendChild(text);
+    var input = document.createElement("input");
+    input.placeholder = "{% trans 'settings.2fa.switch.password' %}";
+    input.type = "password";
+    content.appendChild(input);
+    Swal.fire({
+      title: "{% trans 'settings.2fa.switch.password.title' %}",
+      html: content,
+      icon: "warning",
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/settings/2fa/switch/", "POST",
+          [], {password: input.value});
+        request.send(function (status, responseText) {
+          var response = JSON.parse(responseText);
+          if (response.success === false) {
+            Swal.fire("{% trans 'settings.2fa.switch.password.failed.title' %}",
+              "{% trans 'settings.2fa.switch.password.failed.body' %}", "error");
+            return;
+          }
+          if (!("qrCode" in response)) {
+            window.location.reload();
+            return;
+          }
+          showQRCode(response);
+        });
       }
-      showQRCode(response);
     });
   }
 
@@ -67,6 +92,7 @@
     content.classList.add("settings-2fa-qrcode-steps");
     content.innerHTML += "<li>{% trans 'settings.2fa.qrcode.step.1' %}</li>";
     content.innerHTML += "<li>{% trans 'settings.2fa.qrcode.step.2' %}</li>";
+    content.innerHTML += "<p class='ms-1 settings-2fa-secret'>" + response.secret + "</p>";
     Swal.fire({
       title: "{% trans 'settings.2fa.qrcode.title' %}",
       html: content,
@@ -81,13 +107,21 @@
     var recoveryCodes = response.recoveryCodes;
     var content = document.createElement("div");
     var firstDisclaimer = document.createElement("p");
-    firstDisclaimer.classList.add("text-start");
+    firstDisclaimer.classList.add("settings-2fa-recovery-codes-disclaimer");
     firstDisclaimer.innerHTML = "{% trans 'settings.2fa.recovery.codes.disclaimer.1' %}";
     content.appendChild(firstDisclaimer);
     var secondDisclaimer = document.createElement("p");
-    secondDisclaimer.classList.add("text-start", "mb-5");
+    secondDisclaimer.classList.add("settings-2fa-recovery-codes-disclaimer", "mb-5");
     secondDisclaimer.innerHTML = "{% trans 'settings.2fa.recovery.codes.disclaimer.2' %}";
     content.appendChild(secondDisclaimer);
+    var copyButton = document.createElement("a");
+    copyButton.classList.add("settings-2fa-recovery-codes-copy");
+    copyButton.href = "javascript:void(null);";
+    copyButton.onclick = function () {
+      copyRecoveryCodes(recoveryCodes);
+    };
+    copyButton.innerHTML = "{% trans 'settings.2fa.recovery.codes.copy' %}";
+    content.appendChild(copyButton);
     var codes = document.createElement("ul");
     codes.classList.add("settings-2fa-recovery-codes");
     for (var i = 0; i < recoveryCodes.length; i++) {
@@ -100,5 +134,13 @@
       title: "{% trans 'settings.2fa.recovery.codes.title' %}",
       html: content
     }).then(success => window.location.reload());
+  }
+
+  function copyRecoveryCodes(recoveryCodes) {
+    var result = "";
+    for (var i = 0; i < recoveryCodes.length; i++) {
+      result += recoveryCodes[i] + "\n";
+    }
+    navigator.clipboard.writeText(result);
   }
 </script>

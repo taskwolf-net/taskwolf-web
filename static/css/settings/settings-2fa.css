@@ -15,12 +15,73 @@
   margin-bottom: 10px;
 }
 
+.settings-2fa-secret {
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+}
+
+.dark .settings-2fa-secret {
+  background-color: #343b41;
+  border: 2px solid #505b64;
+}
+
+.light .settings-2fa-secret {
+  background-color: white;
+  border: 2px solid #ccc;
+}
+
+.settings-2fa-recovery-codes-disclaimer {
+  text-align: justify;
+}
+
 .settings-2fa-recovery-codes {
   list-style-type: none;
   columns: 2;
-  padding: 0;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.dark .settings-2fa-recovery-codes {
+  background-color: #343b41;
+  border: 2px solid #505b64;
+}
+
+.light .settings-2fa-recovery-codes {
+  background-color: white;
+  border: 2px solid #ccc;
 }
 
 .settings-2fa-recovery-codes li {
   margin-bottom: 5px;
+}
+
+.settings-2fa-recovery-codes-copy {
+  display: block;
+  text-align: right;
+  margin-bottom: 10px;
+  margin-right: 5px;
+  text-decoration: none;
+}
+
+.settings-2fa-switch-password-content input {
+  background-color: transparent !important;
+  border-radius: 5px;
+  box-shadow: none;
+  outline: none;
+  padding: 10px !important;
+}
+
+.dark .settings-2fa-switch-password-content input {
+  color: white;
+  border: 1px solid white;
+}
+
+.light .settings-2fa-switch-password-content input {
+  color: black;
+  border: 1px solid black;
+}
+
+.settings-2fa-switch-password-content input::placeholder {
+  color: #a5a5a5;
 }
