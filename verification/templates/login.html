@@ -1,9 +1,9 @@
 {% load static %}
 {% load i18n %}
 <html lang="en">
-  {% include 'templates/head.html' %}
+  {% include 'head.html' %}
   <body class="dark">
-     {% include 'templates/home-header.html' %}
+     {% include 'home-header.html' %}
     <form>
       <img id="login-logo" src="{% static 'img/logo.png' %}">
       <div class="form-outline mb-4">
@@ -34,7 +34,7 @@
   </body>
 </html>
 
-{% include 'templates/2fa.html' %}
+{% include '2fa.html' %}
 
 <script>
   $(document).ready(function() {
