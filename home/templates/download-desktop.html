@@ -1,9 +1,9 @@
 {% load static %}
 {% load i18n %}
 <html lang="en">
-  {% include 'templates/head.html' %}
+  {% include 'head.html' %}
   <body class="dark">
-    {% include 'templates/home-header.html' %}
+    {% include 'home-header.html' %}
     <div class="download-desktop-container">
       <h3 class="download-desktop-headline">{% trans 'home.download.desktop.headline' %}</h3>
       <div id="download-desktop-content">
@@ -26,7 +26,7 @@
       <div id="download-desktop-alternative-content" class="tab-content">
       </div>
     </div>
-    {% include 'templates/home-footer.html' %}
+    {% include 'home-footer.html' %}
   </body>
 </html>
 

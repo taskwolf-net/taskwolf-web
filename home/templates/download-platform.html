@@ -1,9 +1,9 @@
 {% load static %}
 {% load i18n %}
 <html lang="en">
-  {% include 'templates/head.html' %}
+  {% include 'head.html' %}
   <body class="dark">
-    {% include 'templates/home-header.html' %}
+    {% include 'home-header.html' %}
     <div id="download-platform-container">
       <h3 id="download-platform-headline">{% trans 'home.download.platform.headline' %}</h3>
       <h1 id="download-platform-description">{% trans 'home.download.platform.description' %}</h1>
@@ -25,6 +25,6 @@
         </button>
       </div>
     </div>
-    {% include 'templates/home-footer.html' %}
+    {% include 'home-footer.html' %}
   </body>
 </html>

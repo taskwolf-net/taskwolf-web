@@ -1,9 +1,9 @@
 {% load static %}
 {% load i18n %}
 <html lang="en">
-  {% include 'templates/head.html' %}
+  {% include 'head.html' %}
   <body class="dark">
-    {% include 'templates/home-header.html' %}
+    {% include 'home-header.html' %}
     <div id="download-cli-container">
       <h3 id="download-cli-headline">{% trans 'home.download.cli.headline' %}</h3>
       <h1 id="download-cli-description">{% trans 'home.download.cli.description' %}</h1>
@@ -37,7 +37,7 @@
         <span>sudo reboot</span>
       </div>
     </div>
-    {% include 'templates/home-footer.html' %}
+    {% include 'home-footer.html' %}
   </body>
 </html>
 
