@@ -70,7 +70,7 @@
 }
 
 #package-payment-list {
-  width: min(800px, 100%);
+  width: min(1000px, 100%);
   position: relative;
   list-style-type: none;
   padding: 0;
@@ -96,7 +96,7 @@
 
 #package-payment-list li div {
   padding: 3%;
-  width: 25%;
+  width: 20%;
   text-align: left;
 }
 
@@ -113,7 +113,7 @@
 }
 
 #package-payment-description {
-  width: min(800px, 100%);
+  width: min(1000px, 100%);
   position: relative;
   list-style-type: none;
   margin: auto;
@@ -125,7 +125,7 @@
 }
 
 #package-payment-description li {
-  width: 25%;
+  width: 20%;
   padding: 2% 3%;
   font-weight: bold;
   font-size: 20px;
@@ -163,7 +163,7 @@
   color: #72571c;
 }
 
-@media (max-width: 850px) {
+@media (max-width: 1100px) {
   #package-payment-description li {
     font-size: .8em;
   }
@@ -175,6 +175,17 @@
   .package-payment-status-successful, .package-payment-status-failed, .package-payment-status-pending {
     padding: 5px;
   }
+
+  .package-payment-invoice {
+    font-size: .7em !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .package-payment-invoice {
+    font-size: .6em !important;
+    padding: .2rem .4rem !important;
+  }
 }
 
 @media (max-width: 500px) {
@@ -184,5 +195,9 @@
 
   #package-payment-list li div span {
     font-size: .6em;
+  }
+
+  .package-payment-invoice {
+    padding: .12rem .24rem !important;
   }
 }

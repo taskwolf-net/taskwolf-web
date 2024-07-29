@@ -48,6 +48,12 @@
                   <i class="fa-solid fa-bars-progress"></i>
                 </div>
               </li>
+              <li>
+                <div>
+                  <span class="me-2">{% trans 'product.package.payment.invoice' %}</span>
+                  <i class="fa-solid fa-file-invoice"></i>
+                </div>
+              </li>
             </ul>
             <ul id="package-payment-list">
             </ul>
@@ -87,16 +93,18 @@
     }
     for (var i = 0; i < payments.length; i++) {
       var payment = payments[i];
-      displayPayment(payment.time, payment.amount, payment.method, payment.status);
+      displayPayment(payment.time, payment.amount, payment.method,
+        payment.status, payment.invoice);
     }
   }
 
-  function displayPayment(time, amount, method, status) {
+  function displayPayment(time, amount, method, status, invoice) {
     var entry = document.createElement('li');
     appendPaymentCell(entry, "time", time, "span");
     appendPaymentCell(entry, "amount", amount + " €", "span");
     entry.appendChild(createPaymentMethodElement(method));
     entry.appendChild(createPaymentStatusElement(status));
+    entry.appendChild(createPaymentInvoiceButton(invoice));
     document.getElementById("package-payment-list").appendChild(entry);
   }
 
@@ -136,6 +144,7 @@
 
   function createPaymentStatusElement(status) {
     var statusContainer = document.createElement("div");
+    statusContainer.classList.add("text-center");
     var statusElement = document.createElement("span");
     if (status === "succeeded") {
       statusElement.innerHTML = "{% trans 'product.package.payment.status.successful' %}";
@@ -149,6 +158,19 @@
     }
     statusContainer.appendChild(statusElement);
     return statusContainer;
+  }
+
+  function createPaymentInvoiceButton(invoiceDownloadLink) {
+    var invoiceContainer = document.createElement("div");
+    invoiceContainer.classList.add("text-center", "py-0");
+    var invoiceButton = document.createElement("button");
+    invoiceButton.classList.add("btn", "btn-primary", "package-payment-invoice");
+    invoiceButton.innerHTML = "{% trans 'product.package.payment.invoice.download' %}";
+    invoiceButton.onclick = function (event) {
+      window.open(invoiceDownloadLink);
+    }
+    invoiceContainer.appendChild(invoiceButton);
+    return invoiceContainer;
   }
 
   function appendPaymentCell(entry, identifier, information, elementType) {
