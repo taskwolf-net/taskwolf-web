@@ -84,6 +84,19 @@
   background-color: #3c3c3c;
 }
 
+.organization-team-rename {
+  background-color: #fdd50d;
+  color: black;
+  border-radius: 5px;
+  padding: 10px;
+  margin-left: 10px;
+  transition-duration: 0.2s;
+}
+
+.organization-team-rename:hover {
+  background-color: #deb71d;
+}
+
 .organization-member-add {
   background-color: #0d6efd;
   color: white;
@@ -240,5 +253,27 @@
 }
 
 .organization-team-add-content input::placeholder, .organization-team-member-add-content input::placeholder {
+  color: #a5a5a5;
+}
+
+.organization-team-rename-content input {
+  background-color: transparent;
+  border-radius: 5px;
+  box-shadow: none;
+  outline: none;
+  padding: 10px !important;
+}
+
+.dark .organization-team-rename-content input {
+  color: white;
+  border: 1px solid white;
+}
+
+.light .organization-team-rename-content input {
+  color: black;
+  border: 1px solid black;
+}
+
+.organization-team-rename-content input::placeholder {
   color: #a5a5a5;
 }
