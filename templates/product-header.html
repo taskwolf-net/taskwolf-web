@@ -5,6 +5,13 @@
   <div id="navbar-content">
     <a href="/" id="navbar-logo"><img src="{% static 'img/logo.png' %}" width="70px" height="70px" alt=""></a>
     <div id="header-control-container">
+      <div id="team-target-button-container" class="dropdown me-3 d-none">
+        <button class="dropdown-toggle btn" id="team-target-button-wrapper" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i id="team-target-icon" class="fa-solid fa-users-between-lines"></i><i id="team-target-icon-arrow" class="fa-solid fa-angle-down"></i>
+        </button>
+        <ul id="team-target-list" class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="target-button-wrapper">
+        </ul>
+      </div>
       <div id="target-button-container" class="dropdown">
         <button class="dropdown-toggle btn" id="target-button-wrapper" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i id="target-icon" class="fa-solid fa-sliders"></i><i id="target-icon-arrow" class="fa-solid fa-angle-down"></i>
@@ -32,6 +39,7 @@
 
 <script>
   var currentTarget;
+  var currentTeamTarget;
 
   $(document).ready(function() {
     setupTargetSelection();
@@ -59,6 +67,9 @@
       }
       currentTarget = targets.filter((target) =>
         target.id === response.currentTarget)[0];
+      if (currentTarget !== targets[0]) {
+        setupTeamTargetSelection();
+      }
     });
   }
 
@@ -88,6 +99,49 @@
   function selectTarget(target) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST",
       [], {target: target.id});
+    request.send(function (status, responseText) {
+      window.location.reload();
+    });
+  }
+
+  function setupTeamTargetSelection() {
+    document.getElementById("team-target-button-container").classList.remove("d-none");
+    fetchTeamTargetsData(function(response) {
+      var targets = response.targets;
+      for (var i = 0; i < targets.length; i++) {
+        addTeamTarget(targets[i], targets[i].id === response.currentTarget);
+      }
+      currentTeamTarget = targets.filter((target) =>
+        target.id === response.currentTarget)[0];
+    });
+  }
+
+  function fetchTeamTargetsData(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/targets/all/",
+      "GET", []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function addTeamTarget(target, isActive) {
+    var targetElement = document.createElement("li");
+    targetElement.classList.add("dropdown-item");
+    if (isActive) {
+      targetElement.classList.add("active");
+    }
+    var targetNameName = document.createElement("span");
+    targetNameName.innerHTML = target.name;
+    targetElement.appendChild(targetNameName);
+    targetElement.onclick = function(event) {
+      selectTeamTarget(target, target.id === "");
+    }
+    document.getElementById("team-target-list").appendChild(targetElement);
+  }
+
+  function selectTeamTarget(target, isGlobal) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/target/change/",
+      "POST", [], {target: target.id, isGlobal: isGlobal});
     request.send(function (status, responseText) {
       window.location.reload();
     });
