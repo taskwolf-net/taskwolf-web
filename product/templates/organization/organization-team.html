@@ -71,7 +71,7 @@
     for (let i = 0; i < organizationTeams.length; i++) {
       var team = organizationTeams[i];
       document.getElementById("organization-teams")
-        .appendChild(createTeamEntry(organization, team));
+        .appendChild(createTeamEntry(organization, team, i, organizationTeams.length));
     }
     if (organization.isOwner === true) {
       var teamAddEntry = document.createElement("li");
@@ -91,8 +91,7 @@
     }
   }
 
-
-  function createTeamEntry(organization, team) {
+  function createTeamEntry(organization, team, teamIndex, totalTeamSize) {
     var teamEntry = document.createElement("li");
     teamEntry.classList.add("organization-team-entry");
     var headerElement = document.createElement("div");
@@ -101,7 +100,8 @@
     nameElement.innerHTML = team.name;
     headerElement.appendChild(nameElement);
     if (organization.isOwner === true) {
-      headerElement.appendChild(createTeamControls(organization, team));
+      headerElement.appendChild(createTeamControls(organization, team,
+        teamIndex, totalTeamSize));
     }
     teamEntry.appendChild(headerElement);
     if (team.members.length === 0) {
@@ -115,14 +115,34 @@
     return teamEntry;
   }
 
-  function createTeamControls(organization, team) {
+  function createTeamControls(organization, team, teamIndex, totalTeamSize) {
     var controlElement = document.createElement("div");
+    controlElement.classList.add("d-flex");
     var memberAddElement = document.createElement("span");
     memberAddElement.classList.add("organization-member-add", "fa-solid", "fa-plus");
     memberAddElement.onclick = function (event) {
       openAddTeamMemberMenu(organization, team);
     }
     controlElement.appendChild(memberAddElement);
+    var sortElement = document.createElement("div");
+    sortElement.classList.add("d-flex", "flex-column", "justify-content-center");
+    if (teamIndex > 0) {
+      var sortUpElement = document.createElement("span");
+      sortUpElement.classList.add("organization-team-sort", "fa-solid", "fa-caret-up", "mb-1");
+      sortUpElement.onclick = function (event) {
+        moveTeam(team.id, false);
+      }
+      sortElement.appendChild(sortUpElement);
+    }
+    if (teamIndex < totalTeamSize - 1) {
+      var sortDownElement = document.createElement("span");
+      sortDownElement.classList.add("organization-team-sort", "fa-solid", "fa-caret-down");
+      sortDownElement.onclick = function (event) {
+        moveTeam(team.id, true);
+      }
+      sortElement.appendChild(sortDownElement);
+    }
+    controlElement.appendChild(sortElement);
     var teamRemoveElement = document.createElement("span");
     teamRemoveElement.classList.add("organization-team-remove", "fa-solid", "fa-trash");
     teamRemoveElement.onclick = function (event) {
@@ -278,6 +298,14 @@
   function removeTeamMember(team, member) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/member/remove/", "POST",
       [], {team: team, target: member});
+    request.send(function (status, responseText) {
+      location.reload();
+    });
+  }
+
+  function moveTeam(team, upwards) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/move/", "POST",
+      [], {team: team, upwards: upwards});
     request.send(function (status, responseText) {
       location.reload();
     });

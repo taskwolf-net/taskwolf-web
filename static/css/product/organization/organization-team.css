@@ -58,6 +58,32 @@
   margin-bottom: 20px;
 }
 
+.organization-team-sort {
+  border-radius: 5px;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-left: 10px;
+  transition-duration: 0.2s;
+}
+
+.dark .organization-team-sort {
+  background-color: white;
+  color: black;
+}
+
+.dark .organization-team-sort:hover {
+  background-color: #cacaca;
+}
+
+.light .organization-team-sort {
+  background-color: black;
+  color: white;
+}
+
+.light .organization-team-sort:hover {
+  background-color: #3c3c3c;
+}
+
 .organization-member-add {
   background-color: #0d6efd;
   color: white;
