@@ -1,5 +1,5 @@
 window.addEventListener('load', function () {
-  var url = window.location.href.replace("https://taskwolf.net/", "").replace("/", "");
+  var url = window.location.href.replace("https://taskwolf.net/", "").replaceAll("/", "");
   if (url === "imprint" || url === "privacy-policy") {
     return;
   }

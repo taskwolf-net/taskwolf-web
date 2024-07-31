@@ -1,9 +1,9 @@
 window.addEventListener('load', function () {
-  var url = window.location.href.replace("https://taskwolf.net/", "").replace("/", "");
+  var url = window.location.href.replace("https://taskwolf.net/", "").replaceAll("/", "");
   if (url === "" || url === "product" || url === "solution" || url === "pricing" ||
     url.includes("login") || url.includes("register") || url.includes("password") ||
-    url.includes("payment") || url === "whitelist" || url === "imprint" ||
-    url === "privacy-policy"
+    url === "payment" || url === "paymentcomplete" || url === "whitelist" ||
+    url === "imprint" || url === "privacy-policy"
   ) {
     return;
   }
