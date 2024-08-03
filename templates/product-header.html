@@ -117,7 +117,7 @@
   }
 
   function fetchTeamTargetsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/targets/all/",
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/targets/selected/",
       "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
