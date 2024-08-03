@@ -46,7 +46,7 @@
   }
 
   function fetchOrganizationTeams(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/teams/", "GET", []);
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/teams/selected/", "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText).teams);
     });
