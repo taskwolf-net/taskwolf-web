@@ -1,0 +1,144 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark">
+    <div id="offer-container">
+      {% include 'verification-header.html' %}
+      <div id="offer-pay" class="d-none">
+        <h1 class="text-center fw-bold mb-5">{% trans 'home.offer.pay.headline' %}</h1>
+        <div id="offer-package">
+          <img id="offer-package-logo" class="mb-5" src="{% static 'img/logo.png' %}">
+          <h4 id="offer-package-type" class="text-center"></h4>
+          <p id="offer-package-class" class="text-center mb-0"></p>
+          <p id="offer-package-runtime" class="text-center mb-0"></p>
+          <h2 id="offer-package-price" class="text-center mt-4 fw-bold"></h2>
+          <p id="offer-package-offer-interval" class="text-center">{% trans 'home.offer.package.per.month' %}</p>
+          <div class="d-flex justify-content-between">
+            <button type="button" id="offer-accept" class="btn btn-success px-5 my-5 me-2">{% trans 'home.offer.accept' %}</button>
+            <button type="button" id="offer-decline" class="btn btn-danger px-5 my-5 ms-2">{% trans 'home.offer.decline' %}</button>
+          </div>
+          <p id="offer-pay-method-headline" class="text-center mt-4">{% trans 'home.offer.pay.methods' %}</p>
+          <div id="offer-pay-method-list">
+            <img src="https://js.stripe.com/v3/fingerprinted/img/amex-b933c9009eeaf8cfd07e789c549b8c57.svg">
+            <img src="https://js.stripe.com/v3/fingerprinted/img/mastercard-86e9a2b929496a34918767093c470935.svg">
+            <img src="https://js.stripe.com/v3/fingerprinted/img/visa-fb36094822f73d7bc581f6c0bad1c201.svg">
+            <img src="https://js.stripe.com/v3/fingerprinted/img/sepa_debit-dark-2267c20803e67b8bb19eda68d42b20df.svg">
+            <img src="https://js.stripe.com/v3/fingerprinted/img/paypal-dark-b75755d2b5f200ed5a3d4e57fb111a8e.svg">
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    displayLoader();
+    if (Cookie.find("home-token") == null) {
+      window.location.href = "/login/";
+      return;
+    }
+    fetchOffer(function (offer) {
+      if (!offer.found) {
+        window.location.href = "/";
+        return;
+      }
+      displayOffer(offer);
+      removeLoader();
+    });
+  });
+
+  function displayOffer(offer) {
+    document.getElementById("offer-pay").classList.remove("d-none");
+    displayPackageType(offer.type);
+    displayPackageClass(offer.type, offer.class);
+    displayPackageRuntime(offer.type, offer.runtime);
+    document.getElementById("offer-package-price").innerHTML = offer.price + " €";
+  }
+
+  function displayPackageType(packageType) {
+    if (packageType === "FREE") {
+      document.getElementById("offer-package-type").innerHTML =
+        "{% trans 'home.offer.package.type.free' %}";
+    } else if (packageType === "PROFESSIONAL") {
+      document.getElementById("offer-package-type").innerHTML =
+        "{% trans 'home.offer.package.type.professional' %}";
+    } else if (packageType === "TEAM") {
+      document.getElementById("offer-package-type").innerHTML =
+        "{% trans 'home.offer.package.type.team' %}";
+    }
+  }
+
+  function displayPackageClass(packageType, packageClass) {
+    if (packageType === "FREE") {
+      document.getElementById("offer-package-class").classList.add("d-none");
+      return;
+    }
+    if (packageClass === "BEGINNER") {
+      document.getElementById("offer-package-class").innerHTML =
+        "{% trans 'home.offer.package.class.beginner' %}";
+    } else if (packageClass === "ADVANCED") {
+      document.getElementById("offer-package-class").innerHTML =
+        "{% trans 'home.offer.package.class.advanced' %}";
+    } else if (packageClass === "EXPERT") {
+      document.getElementById("offer-package-class").innerHTML =
+        "{% trans 'home.offer.package.class.expert' %}";
+    }
+  }
+
+  function displayPackageRuntime(packageType, packageRuntime) {
+    if (packageType === "FREE") {
+      document.getElementById("offer-package-runtime").innerHTML =
+        "1 {% trans 'home.offer.package.runtime.week' %}";
+      return;
+    }
+    if (packageRuntime === "MONTHLY") {
+      document.getElementById("offer-package-runtime").innerHTML =
+        "1 {% trans 'home.offer.package.runtime.month' %}";
+    } else if (packageRuntime === "YEARLY") {
+      document.getElementById("offer-package-runtime").innerHTML =
+        "1 {% trans 'home.offer.package.runtime.year' %}";
+    }
+  }
+
+  document.getElementById("offer-accept").onclick = function (event) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/offer/accept/", "POST",
+      [], {offer: "{{offer}}"});
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      if (!response.success) {
+        return;
+      }
+      window.location.href = response.link;
+    });
+  }
+
+  document.getElementById("offer-decline").onclick = function (event) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/offer/decline/", "POST",
+      [], {offer: "{{offer}}"});
+    request.send(function (status, responseText) {
+      window.location.href = "/";
+    });
+  }
+
+  function fetchOffer(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/offer/find/", "POST",
+      [], {offer: "{{offer}}"});
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("offer-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("offer-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("offer-pay").classList.remove("d-none");
+  }
+</script>

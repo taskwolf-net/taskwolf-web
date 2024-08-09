@@ -42,6 +42,12 @@ async def paymentComplete(request):
     'css': ['css/base/verification-header.css', 'css/verification/payment-complete.css']})
 
 @home_page
+async def offer(request, id):
+  return render(request, 'offer.html', {'title': gettext("home.offer.title"),
+    'css': ['css/base/verification-header.css', 'css/verification/offer.css'],
+    'offer': id})
+
+@home_page
 async def passwordResetRequest(request):
   return render(request, 'password-reset-request.html', {'title': gettext("home.password.reset.request.title"),
     'css': ['css/base/home-header.css', 'css/verification/password-reset-request.css']})

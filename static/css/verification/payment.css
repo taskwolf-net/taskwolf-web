@@ -47,7 +47,7 @@
 
 #payment-pay {
   width: min(450px, 100%);
-  margin: auto;
+  margin: auto auto 5vh;
 }
 
 #payment-package {
