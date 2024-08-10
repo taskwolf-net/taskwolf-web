@@ -6,25 +6,71 @@
     <div id="offer-container">
       {% include 'verification-header.html' %}
       <div id="offer-pay" class="d-none">
-        <h1 class="text-center fw-bold mb-5">{% trans 'home.offer.pay.headline' %}</h1>
+        <h2 class="text-center fw-bold mb-5">{% trans 'home.offer.headline' %}</h2>
         <div id="offer-package">
           <img id="offer-package-logo" class="mb-5" src="{% static 'img/logo.png' %}">
-          <h4 id="offer-package-type" class="text-center"></h4>
-          <p id="offer-package-class" class="text-center mb-0"></p>
-          <p id="offer-package-runtime" class="text-center mb-0"></p>
+          <div class="d-flex align-items-center mt-5 mb-3">
+            <div class="offer-package-separator"></div>
+            <span class="text-center text-nowrap fw-bold">{% trans 'home.offer.default' %}</span>
+            <div class="offer-package-separator"></div>
+          </div>
+          <div class="text-center">
+            <span>{% trans 'home.offer.package.type' %}: </span><span id="offer-package-type"></span><br>
+            <div id="offer-package-class-container">
+              <span>{% trans 'home.offer.package.class' %}: </span><span id="offer-package-class"></span>
+            </div>
+          </div>
+          <div class="d-flex align-items-center mt-5 mb-3">
+            <div class="offer-package-separator"></div>
+            <span class="text-center text-nowrap fw-bold">{% trans 'home.offer.special' %}</span>
+            <div class="offer-package-separator"></div>
+          </div>
+          <div class="d-flex justify-content-center">
+            <div class="text-start">
+              <span>{% trans 'home.offer.package.workflows' %}: </span><br>
+              <span>{% trans 'home.offer.package.operations' %}: </span><br>
+              <span>{% trans 'home.offer.package.databases' %}: </span><br>
+              <span>{% trans 'home.offer.package.data' %}: </span><br>
+              <div class="offer-package-organization mt-2 d-none">
+                <span>{% trans 'home.offer.package.organization.members' %}: </span><br>
+                <span>{% trans 'home.offer.package.organization.teams' %}: </span>
+              </div>
+            </div>
+            <div class="text-end ms-4">
+              <span id="offer-package-workflows"></span><br>
+              <span id="offer-package-operations"></span><br>
+              <span id="offer-package-databases"></span><br>
+              <span id="offer-package-data"></span><br>
+              <div class="offer-package-organization mt-2 d-none">
+                <span id="offer-package-organization-members"></span><br>
+                <span id="offer-package-organization-teams"></span>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center mt-5 mb-3">
+            <div class="offer-package-separator"></div>
+            <span class="text-center text-nowrap fw-bold">{% trans 'home.offer.price' %}</span>
+            <div class="offer-package-separator"></div>
+          </div>
           <h2 id="offer-package-price" class="text-center mt-4 fw-bold"></h2>
           <p id="offer-package-offer-interval" class="text-center">{% trans 'home.offer.package.per.month' %}</p>
-          <div class="d-flex justify-content-between">
-            <button type="button" id="offer-accept" class="btn btn-success px-5 my-5 me-2">{% trans 'home.offer.accept' %}</button>
-            <button type="button" id="offer-decline" class="btn btn-danger px-5 my-5 ms-2">{% trans 'home.offer.decline' %}</button>
+          <div class="text-center">
+            <span>{% trans 'home.offer.package.runtime' %}: </span><span id="offer-package-runtime"></span>
           </div>
-          <p id="offer-pay-method-headline" class="text-center mt-4">{% trans 'home.offer.pay.methods' %}</p>
+          <p id="offer-pay-method-headline" class="text-center mt-5">{% trans 'home.offer.pay.methods' %}</p>
           <div id="offer-pay-method-list">
             <img src="https://js.stripe.com/v3/fingerprinted/img/amex-b933c9009eeaf8cfd07e789c549b8c57.svg">
             <img src="https://js.stripe.com/v3/fingerprinted/img/mastercard-86e9a2b929496a34918767093c470935.svg">
             <img src="https://js.stripe.com/v3/fingerprinted/img/visa-fb36094822f73d7bc581f6c0bad1c201.svg">
             <img src="https://js.stripe.com/v3/fingerprinted/img/sepa_debit-dark-2267c20803e67b8bb19eda68d42b20df.svg">
             <img src="https://js.stripe.com/v3/fingerprinted/img/paypal-dark-b75755d2b5f200ed5a3d4e57fb111a8e.svg">
+          </div>
+          <div class="d-flex align-items-center my-5">
+            <div class="offer-package-separator"></div>
+          </div>
+          <div class="d-flex justify-content-around">
+            <button type="button" id="offer-accept" class="btn btn-success px-3 me-1">{% trans 'home.offer.accept' %}</button>
+            <button type="button" id="offer-decline" class="btn btn-danger px-3 ms-1">{% trans 'home.offer.decline' %}</button>
           </div>
         </div>
       </div>
@@ -52,8 +98,18 @@
   function displayOffer(offer) {
     document.getElementById("offer-pay").classList.remove("d-none");
     displayPackageType(offer.type);
-    displayPackageClass(offer.type, offer.class);
-    displayPackageRuntime(offer.type, offer.runtime);
+    displayPackageClass(offer.class);
+    displayPackageRuntime(offer.runtime);
+    document.getElementById("offer-package-workflows").innerHTML = offer.workflowNumberLimit;
+    document.getElementById("offer-package-operations").innerHTML = offer.workflowOperationLimit;
+    document.getElementById("offer-package-databases").innerHTML = offer.databaseNumberLimit;
+    document.getElementById("offer-package-data").innerHTML = offer.databaseDataLimit + " GB";
+    if (offer.organizationAccess) {
+      document.getElementById("offer-package-organization-members").innerHTML = offer.organizationMemberLimit;
+      document.getElementById("offer-package-organization-teams").innerHTML = offer.organizationTeamLimit;
+      Array.from(document.getElementsByClassName("offer-package-organization"))
+        .forEach((element) => element.classList.remove("d-none"));
+    }
     document.getElementById("offer-package-price").innerHTML = offer.price + " €";
   }
 
@@ -67,12 +123,15 @@
     } else if (packageType === "TEAM") {
       document.getElementById("offer-package-type").innerHTML =
         "{% trans 'home.offer.package.type.team' %}";
+    } else if (packageType === "ENTERPRISE") {
+      document.getElementById("offer-package-type").innerHTML =
+        "{% trans 'home.offer.package.type.enterprise' %}";
     }
   }
 
-  function displayPackageClass(packageType, packageClass) {
-    if (packageType === "FREE") {
-      document.getElementById("offer-package-class").classList.add("d-none");
+  function displayPackageClass(packageClass) {
+    if (packageClass === "NONE") {
+      document.getElementById("offer-package-class-container").classList.add("d-none");
       return;
     }
     if (packageClass === "BEGINNER") {
@@ -87,13 +146,11 @@
     }
   }
 
-  function displayPackageRuntime(packageType, packageRuntime) {
-    if (packageType === "FREE") {
+  function displayPackageRuntime(packageRuntime) {
+    if (packageRuntime === "WEEKLY") {
       document.getElementById("offer-package-runtime").innerHTML =
         "1 {% trans 'home.offer.package.runtime.week' %}";
-      return;
-    }
-    if (packageRuntime === "MONTHLY") {
+    } else if (packageRuntime === "MONTHLY") {
       document.getElementById("offer-package-runtime").innerHTML =
         "1 {% trans 'home.offer.package.runtime.month' %}";
     } else if (packageRuntime === "YEARLY") {

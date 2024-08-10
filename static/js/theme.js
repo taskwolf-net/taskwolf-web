@@ -2,8 +2,8 @@ window.addEventListener('load', function () {
   var url = window.location.href.replace("https://taskwolf.net/", "").replaceAll("/", "");
   if (url === "" || url === "product" || url === "solution" || url === "pricing" ||
     url.includes("login") || url.includes("register") || url.includes("password") ||
-    url === "payment" || url === "paymentcomplete" || url === "whitelist" ||
-    url === "imprint" || url === "privacy-policy"
+    url.includes("offer") || url === "payment" || url === "paymentcomplete" ||
+    url === "whitelist" || url === "imprint" || url === "privacy-policy"
   ) {
     return;
   }
