@@ -2064,6 +2064,10 @@ msgid "settings.sidebar.theme"
 msgstr "Aussehen"
 msgid "settings.sidebar.notifications"
 msgstr "Mitteilungen"
+msgid "settings.sidebar.security"
+msgstr "Sicherheit"
+msgid "settings.sidebar.2fa"
+msgstr "2FA"
 
 # PROFILE
 msgid "settings.profile.title"
@@ -2172,10 +2176,6 @@ msgid "settings.language.english"
 msgstr "Englisch"
 msgid "settings.language.german"
 msgstr "Deutsch"
-msgid "settings.sidebar.security"
-msgstr "Sicherheit"
-msgid "settings.sidebar.2fa"
-msgstr "2FA"
 
 # THEME
 msgid "settings.theme.title"
