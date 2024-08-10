@@ -126,6 +126,10 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/offer/find/", "POST",
       [], {offer: "{{offer}}"});
     request.send(function (status, responseText) {
+      if (status === 403) {
+        window.location.href = "/login/?redirect=/offer/{{offer}}/";
+        return;
+      }
       callback(JSON.parse(responseText));
     });
   }
