@@ -41,7 +41,7 @@
     theme: 'snow'
   });
 
-  document.getElementById("sale-email").oninput = function(event) {
+  document.getElementById("question-email").oninput = function(event) {
     checkQuestionCreatable();
   }
 
@@ -71,6 +71,14 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/question/create/", "POST",
       [], {email: email, title: title, question: message});
     request.send(function (status, responseText) {
+      if (status !== 200) {
+        Swal.fire("{% trans 'home.question.create.limit.title' %}", "{% trans 'home.question.create.limit.body' %}", "error");
+      }
+      var success = JSON.parse(responseText).status;
+      if (!success) {
+        Swal.fire("{% trans 'home.question.create.failed.title' %}", "{% trans 'home.question.create.failed.body' %}", "error");
+        return;
+      }
       Swal.fire("{% trans 'home.question.create.successful.title' %}", "{% trans 'home.question.create.successful.body' %}", "success").then(success => window.location.href = "/");
     });
   }
