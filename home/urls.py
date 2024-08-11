@@ -10,6 +10,8 @@ urlpatterns = [
   path('download/mobile/', home.downloadMobile),
   path('download/cli/', home.downloadCLI),
   path('pricing/', home.pricing),
+  path('question/', home.question),
+  path('sale/', home.sale),
   path('imprint/', home.imprint),
   path('privacy-policy/', home.privacyPolicy),
 ]

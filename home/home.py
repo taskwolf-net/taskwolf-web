@@ -60,6 +60,16 @@ async def pricing(request):
     'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/pricing.css']})
 
 @home_page
+async def question(request):
+  return render(request, 'question.html', {'title': gettext("home.question.title"),
+    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/question.css']})
+
+@home_page
+async def sale(request):
+  return render(request, 'sale.html', {'title': gettext("home.sale.title"),
+    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/sale.css']})
+
+@home_page
 async def imprint(request):
   return render(request, 'imprint.html', {'title': gettext("home.imprint.title"),
     'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/imprint.css']})
