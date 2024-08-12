@@ -167,6 +167,7 @@
     value = value.replace("&nbsp;", " ");
     value = value.replace("&reg;", "®");
     value = value.replace("&copy;", "©");
+    value = value.replace("<br>", "");
     if (identifier === "condition-input-value") {
       inputValue = value;
     }

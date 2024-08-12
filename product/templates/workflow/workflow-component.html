@@ -617,6 +617,7 @@
     value = value.replace("&nbsp;", " ");
     value = value.replace("&reg;", "®");
     value = value.replace("&copy;", "©");
+    value = value.replace("<br>", "");
     if (value === "" && identifier in specificationValues) {
       delete specificationValues[identifier];
     }
