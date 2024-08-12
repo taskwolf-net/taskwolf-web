@@ -29,7 +29,7 @@ p {
 }
 
 #product-header-content {
-  width: min(calc(1400px), 95%);
+  width: min(calc(1600px), 95%);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -38,7 +38,7 @@ p {
 }
 
 #product-header-content-text {
-  width: min(750px, 100%);
+  width: min(900px, 100%);
 }
 
 @media (max-width: 1200px) {
