@@ -41,9 +41,9 @@
             </div>
             <div id="package-upgrade-package" class="mt-5">
               <div id="package-upgrade-package-container">
-                <h2 id="package-upgrade-package-title">{% trans 'home.pricing.professional.title' %}</h2>
+                <h2 id="package-upgrade-package-title">{% trans 'home.pricing.individual.title' %}</h2>
                 <h1 id="package-upgrade-package-price"></h1>
-                <p id="package-upgrade-package-time">{% trans 'home.pricing.professional.time' %}</p>
+                <p id="package-upgrade-package-time">{% trans 'home.pricing.individual.time' %}</p>
                 <button type="button" id="package-upgrade-buy" class="btn btn-outline-light">{% trans 'home.pricing.buy' %}</button>
                 <p id="package-upgrade-package-features-headline">{% trans 'home.pricing.summary.headline' %}</p>
                 <ul id="package-upgrade-package-features">
@@ -69,12 +69,12 @@
 <script>
   var bundleClass = "EXPERT";
   var bundleRuntime = "YEARLY";
-  var professionalPackageData;
+  var individualPackageData;
 
   $(document).ready(function() {
     displayLoader()
     fetchBundle(function (bundle) {
-      if (bundle.type !== "TRIAL" && bundle.type !== "PROFESSIONAL") {
+      if (bundle.type !== "TRIAL" && bundle.type !== "INDIVIDUAL") {
         window.location.href = "/";
         return;
       }
@@ -84,15 +84,15 @@
   });
 
   function displayUpgradeOptions(bundle) {
-    if (bundle.type === "PROFESSIONAL" && bundle.class === "EXPERT") {
+    if (bundle.type === "INDIVIDUAL" && bundle.class === "EXPERT") {
       document.getElementById("package-upgrade-disclaimer").classList.add("d-none");
       document.getElementById("package-upgrade-options").classList.add("d-none");
       document.getElementById("package-upgrade-process").classList.add("d-none");
     } else {
-      if (bundle.type === "PROFESSIONAL" && bundle.class === "BEGINNER") {
+      if (bundle.type === "INDIVIDUAL" && bundle.class === "BEGINNER") {
         document.getElementById("package-upgrade-class-beginner").classList.add("d-none");
       }
-      if (bundle.type === "PROFESSIONAL" && bundle.class === "ADVANCED") {
+      if (bundle.type === "INDIVIDUAL" && bundle.class === "ADVANCED") {
         document.getElementById("package-upgrade-class-beginner").classList.add("d-none");
         document.getElementById("package-upgrade-class-advanced").classList.add("d-none");
       }
@@ -109,15 +109,15 @@
   }
 
   function upgradeUpgradePackage() {
-    fetchPackage("PROFESSIONAL", function (professionalPackage) {
-      professionalPackageData = professionalPackage;
-      displayUpgradePackage(professionalPackage);
+    fetchPackage("INDIVIDUAL", function (individualPackage) {
+      individualPackageData = individualPackage;
+      displayUpgradePackage(individualPackage);
     });
   }
 
-  function displayUpgradePackage(professionalPackage) {
+  function displayUpgradePackage(individualPackage) {
     document.getElementById("package-upgrade-package-price").innerHTML =
-      professionalPackage.price + " €";
+      individualPackage.price + " €";
     if (bundleRuntime === "MONTHLY") {
       document.getElementById("package-upgrade-package-runtime").innerHTML =
         "1 {% trans 'home.pricing.time.month' %}";
@@ -126,13 +126,13 @@
         "1 {% trans 'home.pricing.time.year' %}";
     }
     document.getElementById("package-upgrade-package-workflow-number").innerHTML =
-      professionalPackage.workflowNumberLimit + " {% trans 'home.pricing.summary.workflow.number' %}";
+      individualPackage.workflowNumberLimit + " {% trans 'home.pricing.summary.workflow.number' %}";
     document.getElementById("package-upgrade-package-workflow-operation").innerHTML =
-      professionalPackage.workflowOperationLimit + " {% trans 'home.pricing.summary.workflow.operation' %}";
+      individualPackage.workflowOperationLimit + " {% trans 'home.pricing.summary.workflow.operation' %}";
     document.getElementById("package-upgrade-package-database-number").innerHTML =
-      professionalPackage.databaseNumberLimit + " {% trans 'home.pricing.summary.database.number' %}";
+      individualPackage.databaseNumberLimit + " {% trans 'home.pricing.summary.database.number' %}";
     document.getElementById("package-upgrade-package-database-data").innerHTML =
-      professionalPackage.databaseDataLimit + " GB {% trans 'home.pricing.summary.database.data' %}";
+      individualPackage.databaseDataLimit + " GB {% trans 'home.pricing.summary.database.data' %}";
   }
 
   function fetchPackage(packageName, callback) {
@@ -183,10 +183,10 @@
   }
 
   document.getElementById("package-upgrade-buy").onclick = function (event) {
-    Cookie.create("taskwolf-package-type", "PROFESSIONAL", 60 * 60 * 24);
+    Cookie.create("taskwolf-package-type", "INDIVIDUAL", 60 * 60 * 24);
     Cookie.create("taskwolf-package-class", bundleClass, 60 * 60 * 24);
     Cookie.create("taskwolf-package-runtime", bundleRuntime, 60 * 60 * 24);
-    Cookie.create("taskwolf-package-price", professionalPackageData.price, 60 * 60 * 24);
+    Cookie.create("taskwolf-package-price", individualPackageData.price, 60 * 60 * 24);
     window.location.href = "/payment/";
   }
 

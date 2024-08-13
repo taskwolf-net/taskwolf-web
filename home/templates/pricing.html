@@ -42,20 +42,20 @@
                 <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-database-data-free" class="mb-0"></p></li>
               </ul>
             </th>
-            <th id="pricing-package-professional" class="pricing-package">
-              <h2 class="pricing-package-title">{% trans 'home.pricing.professional.title' %}</h2>
-              <p class="pricing-package-description">{% trans 'home.pricing.professional.description' %}</p>
+            <th id="pricing-package-individual" class="pricing-package">
+              <h2 class="pricing-package-title">{% trans 'home.pricing.individual.title' %}</h2>
+              <p class="pricing-package-description">{% trans 'home.pricing.individual.description' %}</p>
               <div class="pricing-package-price-container">
-                <h1 id="pricing-price-professional" class="pricing-package-price">€</h1>
-                <p class="pricing-package-time">{% trans 'home.pricing.professional.time' %}</p>
+                <h1 id="pricing-price-individual" class="pricing-package-price">€</h1>
+                <p class="pricing-package-time">{% trans 'home.pricing.individual.time' %}</p>
               </div>
-              <button type="button" id="pricing-package-professional-buy" class="pricing-get-button btn btn-outline-light">{% trans 'home.pricing.buy' %}</button>
+              <button type="button" id="pricing-package-individual-buy" class="pricing-get-button btn btn-outline-light">{% trans 'home.pricing.buy' %}</button>
               <p class="pricing-package-features-headline">{% trans 'home.pricing.summary.headline' %}</p>
               <ul class="pricing-package-features">
-                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-workflow-number-professional" class="mb-0"></p></li>
-                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><b id="pricing-package-feature-workflow-operation-professional" class="mb-0"></b></li>
-                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-database-number-professional" class="mb-0"></p></li>
-                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-database-data-professional" class="mb-0"></p></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-workflow-number-individual" class="mb-0"></p></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><b id="pricing-package-feature-workflow-operation-individual" class="mb-0"></b></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-database-number-individual" class="mb-0"></p></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-database-data-individual" class="mb-0"></p></li>
               </ul>
             </th>
             <th id="pricing-package-team" class="pricing-package">
@@ -104,14 +104,14 @@
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent">{% trans 'home.pricing.feature.runtime' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.runtime.tip' %}"></h5></td>
               <td id="pricing-runtime-free"></td>
-              <td id="pricing-runtime-professional"></td>
+              <td id="pricing-runtime-individual"></td>
               <td id="pricing-runtime-team"></td>
               <td id="pricing-runtime-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent">{% trans 'home.pricing.feature.availability' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.availability.tip' %}"></h5></td>
               <td id="pricing-availability-free"></td>
-              <td id="pricing-availability-professional"></td>
+              <td id="pricing-availability-individual"></td>
               <td id="pricing-availability-team"></td>
               <td id="pricing-availability-enterprise"></td>
             </tr>
@@ -124,28 +124,28 @@
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.workflows.access' %}</td>
               <td id="pricing-workflow-access-free"></td>
-              <td id="pricing-workflow-access-professional"></td>
+              <td id="pricing-workflow-access-individual"></td>
               <td id="pricing-workflow-access-team"></td>
               <td id="pricing-workflow-access-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.workflows.number.limit' %}</td>
               <td id="pricing-workflow-number-free"></td>
-              <td id="pricing-workflow-number-professional"></td>
+              <td id="pricing-workflow-number-individual"></td>
               <td id="pricing-workflow-number-team"></td>
               <td id="pricing-workflow-number-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent">{% trans 'home.pricing.feature.workflows.operation.limit' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.workflows.operation.limit.tip' %}"></h5></td>
               <td id="pricing-workflow-operation-free"></td>
-              <td id="pricing-workflow-operation-professional"></td>
+              <td id="pricing-workflow-operation-individual"></td>
               <td id="pricing-workflow-operation-team"></td>
               <td id="pricing-workflow-operation-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.workflows.templates' %}</td>
               <td id="pricing-workflow-templates-free"></td>
-              <td id="pricing-workflow-templates-professional"></td>
+              <td id="pricing-workflow-templates-individual"></td>
               <td id="pricing-workflow-templates-team"></td>
               <td id="pricing-workflow-templates-enterprise"></td>
             </tr>
@@ -158,21 +158,21 @@
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.databases.access' %}</td>
               <td id="pricing-database-access-free"></td>
-              <td id="pricing-database-access-professional"></td>
+              <td id="pricing-database-access-individual"></td>
               <td id="pricing-database-access-team"></td>
               <td id="pricing-database-access-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.databases.number.limit' %}</td>
               <td id="pricing-database-number-free"></td>
-              <td id="pricing-database-number-professional"></td>
+              <td id="pricing-database-number-individual"></td>
               <td id="pricing-database-number-team"></td>
               <td id="pricing-database-number-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.databases.data.limit' %}</td>
               <td id="pricing-database-data-free"></td>
-              <td id="pricing-database-data-professional"></td>
+              <td id="pricing-database-data-individual"></td>
               <td id="pricing-database-data-team"></td>
               <td id="pricing-database-data-enterprise"></td>
             </tr>
@@ -185,14 +185,14 @@
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.webhooks.access' %}</td>
               <td id="pricing-webhooks-access-free"></td>
-              <td id="pricing-webhooks-access-professional"></td>
+              <td id="pricing-webhooks-access-individual"></td>
               <td id="pricing-webhooks-access-team"></td>
               <td id="pricing-webhooks-access-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.webhooks.number.limit' %}</td>
               <td id="pricing-webhooks-number-free"></td>
-              <td id="pricing-webhooks-number-professional"></td>
+              <td id="pricing-webhooks-number-individual"></td>
               <td id="pricing-webhooks-number-team"></td>
               <td id="pricing-webhooks-number-enterprise"></td>
             </tr>
@@ -205,21 +205,21 @@
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.organizations.access' %}</td>
               <td id="pricing-organization-access-free"></td>
-              <td id="pricing-organization-access-professional"></td>
+              <td id="pricing-organization-access-individual"></td>
               <td id="pricing-organization-access-team"></td>
               <td id="pricing-organization-access-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.organizations.member.limit' %}</td>
               <td id="pricing-organization-members-free"></td>
-              <td id="pricing-organization-members-professional"></td>
+              <td id="pricing-organization-members-individual"></td>
               <td id="pricing-organization-members-team"></td>
               <td id="pricing-organization-members-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.organizations.team.limit' %}</td>
               <td id="pricing-organization-teams-free"></td>
-              <td id="pricing-organization-teams-professional"></td>
+              <td id="pricing-organization-teams-individual"></td>
               <td id="pricing-organization-teams-team"></td>
               <td id="pricing-organization-teams-enterprise"></td>
             </tr>
@@ -232,14 +232,14 @@
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent">{% trans 'home.pricing.feature.devices.access' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.devices.access.tip' %}"></h5></td>
               <td id="pricing-device-access-free"></td>
-              <td id="pricing-device-access-professional"></td>
+              <td id="pricing-device-access-individual"></td>
               <td id="pricing-device-access-team"></td>
               <td id="pricing-device-access-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent">{% trans 'home.pricing.feature.devices.app' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.devices.app.tip' %}"></h5></td>
               <td id="pricing-device-app-free"></td>
-              <td id="pricing-device-app-professional"></td>
+              <td id="pricing-device-app-individual"></td>
               <td id="pricing-device-app-team"></td>
               <td id="pricing-device-app-enterprise"></td>
             </tr>
@@ -252,14 +252,14 @@
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent">{% trans 'home.pricing.feature.accounts.access' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.accounts.access.tip' %}"></h5></td>
               <td id="pricing-accounts-access-free"></td>
-              <td id="pricing-accounts-access-professional"></td>
+              <td id="pricing-accounts-access-individual"></td>
               <td id="pricing-accounts-access-team"></td>
               <td id="pricing-accounts-access-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.accounts.number.limit' %}</td>
               <td id="pricing-accounts-number-free"></td>
-              <td id="pricing-accounts-number-professional"></td>
+              <td id="pricing-accounts-number-individual"></td>
               <td id="pricing-accounts-number-team"></td>
               <td id="pricing-accounts-number-enterprise"></td>
             </tr>
@@ -275,7 +275,7 @@
   var bundleClass = "ADVANCED";
   var bundleRuntime = "YEARLY";
   var freePackageData;
-  var professionalPackageData;
+  var individualPackageData;
   var teamPackageData;
   var enterprisePackageData;
 
@@ -288,7 +288,7 @@
       });
     });
     observeStickiness(document.getElementById("pricing-package-free"));
-    observeStickiness(document.getElementById("pricing-package-professional"));
+    observeStickiness(document.getElementById("pricing-package-individual"));
     observeStickiness(document.getElementById("pricing-package-team"));
     observeStickiness(document.getElementById("pricing-package-enterprise"));
     updatePricing();
@@ -304,23 +304,23 @@
 
   function updatePricing() {
     fetchPackage("TRIAL", function (freePackage) {
-      fetchPackage("PROFESSIONAL", function (professionalPackage) {
+      fetchPackage("INDIVIDUAL", function (individualPackage) {
         fetchPackage("TEAM", function (teamPackage) {
           fetchPackage("ENTERPRISE", function (enterprisePackage) {
             freePackageData = freePackage;
-            professionalPackageData = professionalPackage;
+            individualPackageData = individualPackage;
             teamPackageData = teamPackage;
             enterprisePackageData = enterprisePackage;
-            displayPricing(freePackage, professionalPackage, teamPackage, enterprisePackage);
+            displayPricing(freePackage, individualPackage, teamPackage, enterprisePackage);
           });
         });
       });
     });
   }
 
-  function displayPricing(freePackage, professionalPackage, teamPackage, enterprisePackage) {
+  function displayPricing(freePackage, individualPackage, teamPackage, enterprisePackage) {
     displayPackage("free", freePackage);
-    displayPackage("professional", professionalPackage);
+    displayPackage("individual", individualPackage);
     displayPackage("team", teamPackage);
     displayPackage("enterprise", enterprisePackage);
   }
@@ -440,8 +440,8 @@
     preparePurchase("FREE", 0);
   }
 
-  document.getElementById("pricing-package-professional-buy").onclick = function (event) {
-    preparePurchase("PROFESSIONAL", professionalPackageData.price);
+  document.getElementById("pricing-package-individual-buy").onclick = function (event) {
+    preparePurchase("INDIVIDUAL", individualPackageData.price);
   }
 
   document.getElementById("pricing-package-team-buy").onclick = function (event) {

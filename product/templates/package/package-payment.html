@@ -68,7 +68,7 @@
   $(document).ready(function() {
     displayLoader()
     fetchBundle(function (bundle) {
-      if (bundle.type !== "TRIAL" && bundle.type !== "PROFESSIONAL") {
+      if (bundle.type !== "TRIAL" && bundle.type !== "INDIVIDUAL") {
         window.location.href = "/";
         return;
       }
