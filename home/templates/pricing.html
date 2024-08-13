@@ -347,8 +347,9 @@
       packageData.workflowOperationLimit, " {% trans 'home.pricing.summary.workflow.operation' %}");
     displayPackageCell("pricing-package-feature-database-number-", packageName,
       packageData.databaseNumberLimit, " {% trans 'home.pricing.summary.database.number' %}");
+    var dataLimit = packageData.databaseDataLimit;
     displayPackageCell("pricing-package-feature-database-data-", packageName,
-      packageData.databaseDataLimit, " {% trans 'home.pricing.summary.database.data' %}");
+      dataLimit, (dataLimit > 0 ? " GB" : "") + " {% trans 'home.pricing.summary.database.data' %}");
     displayPackageCell("pricing-availability-", packageName, true);
     displayPackageCell("pricing-workflow-access-", packageName, packageData.workflowAccess);
     displayPackageCell("pricing-workflow-number-", packageName, packageData.workflowNumberLimit);
@@ -356,7 +357,6 @@
     displayPackageCell("pricing-workflow-templates-", packageName, packageData.workflowTemplateAccess);
     displayPackageCell("pricing-database-access-", packageName, packageData.databaseAccess);
     displayPackageCell("pricing-database-number-", packageName, packageData.databaseNumberLimit);
-    var dataLimit = packageData.databaseDataLimit;
     displayPackageCell("pricing-database-data-", packageName, dataLimit > 0 ? dataLimit + " GB" : dataLimit);
     displayPackageCell("pricing-webhooks-access-", packageName, packageData.webhookAccess);
     displayPackageCell("pricing-webhooks-number-", packageName, packageData.webhookNumberLimit);
