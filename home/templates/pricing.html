@@ -21,36 +21,83 @@
         <table id="pricing-table">
           <thead>
             <th class="pricing-table-advantages">
-              <div>
+              <img class="pricing-table-advantages-logo" src="{% static 'img/logo.png' %}">
+              <div class="pricing-table-advantages-title">
                 <h2>{% trans 'home.pricing.advantages' %}</h2>
               </div>
             </th>
             <th id="pricing-package-free" class="pricing-package">
               <h2 class="pricing-package-title">{% trans 'home.pricing.free.title' %}</h2>
               <p class="pricing-package-description">{% trans 'home.pricing.free.description' %}</p>
-              <h1 id="pricing-price-free" class="pricing-package-price">€</h1>
-              <p class="pricing-package-time">{% trans 'home.pricing.free.time' %}</p>
+              <div class="pricing-package-price-container">
+                <h1 id="pricing-price-free" class="pricing-package-price">€</h1>
+                <p class="pricing-package-time">{% trans 'home.pricing.free.time' %}</p>
+              </div>
               <button type="button" id="pricing-package-free-buy" class="pricing-get-button btn btn-outline-light">{% trans 'home.pricing.free.try' %}</button>
+              <p class="pricing-package-features-headline">{% trans 'home.pricing.summary.headline' %}</p>
+              <ul class="pricing-package-features">
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-workflow-number-free" class="mb-0"></p></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><b id="pricing-package-feature-workflow-operation-free" class="mb-0"></b></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-database-number-free" class="mb-0"></p></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-database-data-free" class="mb-0"></p></li>
+              </ul>
             </th>
             <th id="pricing-package-professional" class="pricing-package">
               <h2 class="pricing-package-title">{% trans 'home.pricing.professional.title' %}</h2>
               <p class="pricing-package-description">{% trans 'home.pricing.professional.description' %}</p>
-              <h1 id="pricing-price-professional" class="pricing-package-price">€</h1>
-              <p class="pricing-package-time">{% trans 'home.pricing.professional.time' %}</p>
+              <div class="pricing-package-price-container">
+                <h1 id="pricing-price-professional" class="pricing-package-price">€</h1>
+                <p class="pricing-package-time">{% trans 'home.pricing.professional.time' %}</p>
+              </div>
               <button type="button" id="pricing-package-professional-buy" class="pricing-get-button btn btn-outline-light">{% trans 'home.pricing.buy' %}</button>
+              <p class="pricing-package-features-headline">{% trans 'home.pricing.summary.headline' %}</p>
+              <ul class="pricing-package-features">
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-workflow-number-professional" class="mb-0"></p></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><b id="pricing-package-feature-workflow-operation-professional" class="mb-0"></b></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-database-number-professional" class="mb-0"></p></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-database-data-professional" class="mb-0"></p></li>
+              </ul>
             </th>
             <th id="pricing-package-team" class="pricing-package">
               <h2 class="pricing-package-title">{% trans 'home.pricing.team.title' %}</h2>
               <p class="pricing-package-description">{% trans 'home.pricing.team.description' %}</p>
-              <h1 id="pricing-price-team" class="pricing-package-price">€</h1>
-              <p class="pricing-package-time">{% trans 'home.pricing.team.time' %}</p>
+              <div class="pricing-package-price-container">
+                <h1 id="pricing-price-team" class="pricing-package-price">€</h1>
+                <p class="pricing-package-time">{% trans 'home.pricing.team.time' %}</p>
+              </div>
               <button type="button" id="pricing-package-team-buy" class="pricing-get-button btn btn-outline-light">{% trans 'home.pricing.buy' %}</button>
+              <p class="pricing-package-features-headline">{% trans 'home.pricing.summary.headline' %}</p>
+              <ul class="pricing-package-features">
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-workflow-number-team" class="mb-0"></p></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><b id="pricing-package-feature-workflow-operation-team" class="mb-0"></b></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-database-number-team" class="mb-0"></p></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-database-data-team" class="mb-0"></p></li>
+              </ul>
+              <p class="pricing-package-features-headline">{% trans 'home.pricing.summary.organization' %}</p>
+              <ul class="pricing-package-features">
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-organization-member-team" class="mb-0"></p></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-organization-team-team" class="mb-0"></p></li>
+              </ul>
             </th>
             <th id="pricing-package-enterprise" class="pricing-package">
               <h2 class="pricing-package-title">{% trans 'home.pricing.enterprise.title' %}</h2>
               <p class="pricing-package-description">{% trans 'home.pricing.enterprise.description' %}</p>
-              <h2 class="pricing-package-price">{% trans 'home.pricing.enterprise.price.contact' %}</h2>
+              <div class="pricing-package-price-container">
+                <h2 class="pricing-package-price">{% trans 'home.pricing.enterprise.price.contact' %}</h2>
+              </div>
               <button type="button" id="pricing-package-enterprise-buy" class="pricing-get-button btn btn-outline-light">{% trans 'home.pricing.enterprise.contact' %}</button>
+              <p class="pricing-package-features-headline">{% trans 'home.pricing.summary.headline' %}</p>
+              <ul class="pricing-package-features">
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-workflow-number-enterprise" class="mb-0"></p></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><b id="pricing-package-feature-workflow-operation-enterprise" class="mb-0"></b></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-database-number-enterprise" class="mb-0"></p></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-database-data-enterprise" class="mb-0"></p></li>
+              </ul>
+              <p class="pricing-package-features-headline mt-2">{% trans 'home.pricing.summary.organization' %}</p>
+              <ul class="pricing-package-features">
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-organization-member-enterprise" class="mb-0"></p></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-organization-team-enterprise" class="mb-0"></p></li>
+              </ul>
             </th>
           </thead>
           <tbody>
@@ -288,6 +335,20 @@
       displayPackageCell("pricing-runtime-", packageName, "1 " + (bundleRuntime === "MONTHLY" ?
         "{% trans 'home.pricing.time.month' %}" : "{% trans 'home.pricing.time.year' %}"));
     }
+    if (packageName === "team" || packageName === "enterprise") {
+      displayPackageCell("pricing-package-feature-organization-member-", packageName,
+        packageData.organizationMemberLimit, " {% trans 'home.pricing.summary.organization.member' %}");
+      displayPackageCell("pricing-package-feature-organization-team-", packageName,
+        packageData.organizationTeamLimit, " {% trans 'home.pricing.summary.organization.team' %}");
+    }
+    displayPackageCell("pricing-package-feature-workflow-number-", packageName,
+      packageData.workflowNumberLimit, " {% trans 'home.pricing.summary.workflow.number' %}");
+    displayPackageCell("pricing-package-feature-workflow-operation-", packageName,
+      packageData.workflowOperationLimit, " {% trans 'home.pricing.summary.workflow.operation' %}");
+    displayPackageCell("pricing-package-feature-database-number-", packageName,
+      packageData.databaseNumberLimit, " {% trans 'home.pricing.summary.database.number' %}");
+    displayPackageCell("pricing-package-feature-database-data-", packageName,
+      packageData.databaseDataLimit, " {% trans 'home.pricing.summary.database.data' %}");
     displayPackageCell("pricing-availability-", packageName, true);
     displayPackageCell("pricing-workflow-access-", packageName, packageData.workflowAccess);
     displayPackageCell("pricing-workflow-number-", packageName, packageData.workflowNumberLimit);
@@ -308,7 +369,7 @@
     displayPackageCell("pricing-accounts-number-", packageName, packageData.accountsNumberLimit);
   }
 
-  function displayPackageCell(packageCellId, packageName, value) {
+  function displayPackageCell(packageCellId, packageName, value, suffix) {
     if (typeof value == "boolean") {
       value = value ? "<i class='fa-solid fa-check'></i>" :
         "<i class='fa-solid fa-xmark'></i>";
@@ -322,7 +383,10 @@
     if (typeof value == "number") {
       value = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
-    document.getElementById(packageCellId + packageName).innerHTML = value;
+    if (suffix === undefined) {
+      suffix = "";
+    }
+    document.getElementById(packageCellId + packageName).innerHTML = value + suffix;
   }
 
   function fetchPackage(packageName, callback) {

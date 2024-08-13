@@ -86,15 +86,11 @@
   background-color: #0d1117 !important;
 }
 
-#pricing-table th {
-  position: relative;
-  width: 20%;
-  color: white;
-  text-align: center;
-  padding: 10px;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  border: 5px solid #0d1117;
+#pricing-table thead:after {
+  content: "-";
+  display: block;
+  line-height: 20vh;
+  color: transparent;
 }
 
 .pricing-table-advantages {
@@ -102,9 +98,14 @@
   position: relative;
 }
 
-.pricing-table-advantages div {
+.pricing-table-advantages-logo {
+  width: calc(60%);
+  height: calc(60%);
+}
+
+.pricing-table-advantages-title {
   position: absolute;
-  bottom: 0;
+  bottom: -18vh;
   left: 0;
   right: 0;
   color: white !important;
@@ -123,6 +124,20 @@
 #pricing-table td {
   padding: 20px;
   border: 1px solid #2b333f;
+}
+
+.pricing-package {
+  width: 20%;
+  position: sticky !important;
+  top: 84px !important;
+  z-index: 100 !important;
+  vertical-align: top;
+  color: white;
+  text-align: center;
+  padding: 10px 30px;
+  border-radius: 20px;
+  border-left: 5px solid #0d1117;
+  border-right: 5px solid #0d1117;
 }
 
 .pricing-package-title {
@@ -149,6 +164,10 @@
   -webkit-box-orient: vertical;
 }
 
+.pricing-package-price-container {
+  height: 80px;
+}
+
 .pricing-package-price {
   margin-top: 10%;
   font-weight: bold;
@@ -160,28 +179,39 @@
   -webkit-box-orient: vertical;
 }
 
-.pricing-package-time {
-  margin-bottom: 60px;
-}
-
 .pricing-get-button {
-  max-width: calc(100% - 20px);
+  width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  position: absolute;
-  bottom: 20px;
-  transform: translate(-50%, 0);
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
-.pricing-package {
-  position: sticky !important;
-  top: 84px !important;
-  z-index: 100 !important;
-  vertical-align: top;
+.pricing-package-features-headline {
+  text-align: left;
 }
 
-@media (min-width: 1000px) {
+.pricing-package-features {
+  list-style: none;
+  padding: 0;
+  font-weight: normal;
+}
+
+.pricing-package-features li {
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  text-align: left;
+}
+
+@media (max-width: 1600px) {
+  .pricing-package {
+    padding: 10px 20px;
+  }
+}
+
+@media (min-width: 1350px) {
   .pricing-package-stuck {
     padding-bottom: 20px !important;
   }
@@ -199,6 +229,14 @@
   }
 
   .pricing-package-stuck .pricing-get-button {
+    display: none;
+  }
+
+  .pricing-package-stuck .pricing-package-features-headline {
+    display: none;
+  }
+
+  .pricing-package-stuck .pricing-package-features {
     display: none;
   }
 }
@@ -243,21 +281,7 @@
   width: 20% !important;
 }
 
-@media (max-width: 1300px) {
-  .pricing-package-title {
-    font-size: 25px !important;
-  }
-
-  .pricing-package-price {
-    font-size: 25px !important;
-  }
-
-  .pricing-table-advantages h2 {
-    font-size: 22px !important;
-  }
-}
-
-@media (max-width: 1000px) {
+@media (max-width: 1350px) {
   #pricing-container {
     width: 97.5%;
     margin-left: 2.5%;
@@ -270,7 +294,7 @@
   }
 
   #pricing-table {
-    width: 1000px;
+    width: 1350px;
   }
 
   .pricing-package {
