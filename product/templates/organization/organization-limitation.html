@@ -43,6 +43,15 @@
                 <div id="organization-limitation-workflow-operation-bar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
             </li>
+            <li id="organization-limitation-process-number-entry" class="organization-limitation-entry">
+              <div class="organization-limitation-entry-header">
+                <h3 class="mb-0">{% trans 'product.organization.limitation.process.number' %}</h3>
+                <span id="organization-limitation-process-number-ratio"></span>
+              </div>
+              <div class="progress">
+                <div id="organization-limitation-process-number-bar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </li>
             <li id="organization-limitation-database-number-entry" class="organization-limitation-entry">
               <div class="organization-limitation-entry-header">
                 <h3 class="mb-0">{% trans 'product.organization.limitation.database.number' %}</h3>
@@ -123,6 +132,9 @@
     displayLimitation(bundle.workflowOperationLimit, usage.workflowOperationUsage,
       "organization-limitation-workflow-operation-entry", "organization-limitation-workflow-operation-ratio",
       "organization-limitation-workflow-operation-bar", "");
+    displayLimitation(bundle.processNumberLimit, usage.processNumberUsage,
+      "organization-limitation-process-number-entry", "organization-limitation-process-number-ratio",
+      "organization-limitation-process-number-bar", "");
     displayLimitation(bundle.databaseNumberLimit, usage.databaseNumberUsage,
       "organization-limitation-database-number-entry", "organization-limitation-database-number-ratio",
       "organization-limitation-database-number-bar", "");

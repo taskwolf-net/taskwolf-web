@@ -52,6 +52,7 @@
                   <li class="mb-3"><i class="fa-regular fa-clock me-3"></i><p id="organization-upgrade-organization-runtime" class="mb-0"></p></li>
                   <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="organization-upgrade-organization-workflow-number" class="mb-0"></p></li>
                   <li class="mb-3"><i class="fa-solid fa-check me-3"></i><b id="organization-upgrade-organization-workflow-operation" class="mb-0"></b></li>
+                  <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="organization-upgrade-organization-process-number" class="mb-0"></p></li>
                   <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="organization-upgrade-organization-database-number" class="mb-0"></p></li>
                   <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="organization-upgrade-organization-database-data" class="mb-0"></p></li>
                 </ul>
@@ -137,6 +138,8 @@
       organizationPackage.workflowNumberLimit + " {% trans 'home.pricing.summary.workflow.number' %}";
     document.getElementById("organization-upgrade-organization-workflow-operation").innerHTML =
       organizationPackage.workflowOperationLimit + " {% trans 'home.pricing.summary.workflow.operation' %}";
+    document.getElementById("organization-upgrade-organization-process-number").innerHTML =
+      organizationPackage.processNumberLimit + " {% trans 'home.pricing.summary.process.number' %}";
     document.getElementById("organization-upgrade-organization-database-number").innerHTML =
       organizationPackage.databaseNumberLimit + " {% trans 'home.pricing.summary.database.number' %}";
     document.getElementById("organization-upgrade-organization-database-data").innerHTML =

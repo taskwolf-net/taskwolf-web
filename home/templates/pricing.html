@@ -38,6 +38,7 @@
               <ul class="pricing-package-features">
                 <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-workflow-number-free" class="mb-0"></p></li>
                 <li class="mb-3"><i class="fa-solid fa-check me-3"></i><b id="pricing-package-feature-workflow-operation-free" class="mb-0"></b></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-process-number-free" class="mb-0"></p></li>
                 <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-database-number-free" class="mb-0"></p></li>
                 <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-database-data-free" class="mb-0"></p></li>
               </ul>
@@ -54,6 +55,7 @@
               <ul class="pricing-package-features">
                 <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-workflow-number-individual" class="mb-0"></p></li>
                 <li class="mb-3"><i class="fa-solid fa-check me-3"></i><b id="pricing-package-feature-workflow-operation-individual" class="mb-0"></b></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-process-number-individual" class="mb-0"></p></li>
                 <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-database-number-individual" class="mb-0"></p></li>
                 <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-database-data-individual" class="mb-0"></p></li>
               </ul>
@@ -70,6 +72,7 @@
               <ul class="pricing-package-features">
                 <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-workflow-number-team" class="mb-0"></p></li>
                 <li class="mb-3"><i class="fa-solid fa-check me-3"></i><b id="pricing-package-feature-workflow-operation-team" class="mb-0"></b></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-process-number-team" class="mb-0"></p></li>
                 <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-database-number-team" class="mb-0"></p></li>
                 <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-database-data-team" class="mb-0"></p></li>
               </ul>
@@ -90,6 +93,7 @@
               <ul class="pricing-package-features">
                 <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-workflow-number-enterprise" class="mb-0"></p></li>
                 <li class="mb-3"><i class="fa-solid fa-check me-3"></i><b id="pricing-package-feature-workflow-operation-enterprise" class="mb-0"></b></li>
+                <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-process-number-enterprise" class="mb-0"></p></li>
                 <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-database-number-enterprise" class="mb-0"></p></li>
                 <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-database-data-enterprise" class="mb-0"></p></li>
               </ul>
@@ -151,6 +155,26 @@
             </tr>
           </tbody>
           <tbody>
+          <tr class="pricing-feature-bundle-headline">
+            <td>{% trans 'home.pricing.feature.processes' %}</td>
+            <td colspan="4"></td>
+          </tr>
+          <tr>
+            <td class="pricing-feature">{% trans 'home.pricing.feature.processes.access' %}</td>
+            <td id="pricing-process-access-free"></td>
+            <td id="pricing-process-access-individual"></td>
+            <td id="pricing-process-access-team"></td>
+            <td id="pricing-process-access-enterprise"></td>
+          </tr>
+          <tr>
+            <td class="pricing-feature">{% trans 'home.pricing.feature.processes.number.limit' %}</td>
+            <td id="pricing-process-number-free"></td>
+            <td id="pricing-process-number-individual"></td>
+            <td id="pricing-process-number-team"></td>
+            <td id="pricing-process-number-enterprise"></td>
+          </tr>
+          </tbody>
+          <tbody>
             <tr class="pricing-feature-bundle-headline">
               <td>{% trans 'home.pricing.feature.databases' %}</td>
               <td colspan="4"></td>
@@ -184,17 +208,17 @@
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.webhooks.access' %}</td>
-              <td id="pricing-webhooks-access-free"></td>
-              <td id="pricing-webhooks-access-individual"></td>
-              <td id="pricing-webhooks-access-team"></td>
-              <td id="pricing-webhooks-access-enterprise"></td>
+              <td id="pricing-webhook-access-free"></td>
+              <td id="pricing-webhook-access-individual"></td>
+              <td id="pricing-webhook-access-team"></td>
+              <td id="pricing-webhook-access-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.webhooks.number.limit' %}</td>
-              <td id="pricing-webhooks-number-free"></td>
-              <td id="pricing-webhooks-number-individual"></td>
-              <td id="pricing-webhooks-number-team"></td>
-              <td id="pricing-webhooks-number-enterprise"></td>
+              <td id="pricing-webhook-number-free"></td>
+              <td id="pricing-webhook-number-individual"></td>
+              <td id="pricing-webhook-number-team"></td>
+              <td id="pricing-webhook-number-enterprise"></td>
             </tr>
           </tbody>
           <tbody>
@@ -251,17 +275,17 @@
             </tr>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent">{% trans 'home.pricing.feature.accounts.access' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.accounts.access.tip' %}"></h5></td>
-              <td id="pricing-accounts-access-free"></td>
-              <td id="pricing-accounts-access-individual"></td>
-              <td id="pricing-accounts-access-team"></td>
-              <td id="pricing-accounts-access-enterprise"></td>
+              <td id="pricing-account-access-free"></td>
+              <td id="pricing-account-access-individual"></td>
+              <td id="pricing-account-access-team"></td>
+              <td id="pricing-account-access-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.accounts.number.limit' %}</td>
-              <td id="pricing-accounts-number-free"></td>
-              <td id="pricing-accounts-number-individual"></td>
-              <td id="pricing-accounts-number-team"></td>
-              <td id="pricing-accounts-number-enterprise"></td>
+              <td id="pricing-account-number-free"></td>
+              <td id="pricing-account-number-individual"></td>
+              <td id="pricing-account-number-team"></td>
+              <td id="pricing-account-number-enterprise"></td>
             </tr>
           </tbody>
         </table>
@@ -345,6 +369,8 @@
       packageData.workflowNumberLimit, " {% trans 'home.pricing.summary.workflow.number' %}");
     displayPackageCell("pricing-package-feature-workflow-operation-", packageName,
       packageData.workflowOperationLimit, " {% trans 'home.pricing.summary.workflow.operation' %}");
+    displayPackageCell("pricing-package-feature-process-number-", packageName,
+      packageData.processNumberLimit, " {% trans 'home.pricing.summary.process.number' %}");
     displayPackageCell("pricing-package-feature-database-number-", packageName,
       packageData.databaseNumberLimit, " {% trans 'home.pricing.summary.database.number' %}");
     var dataLimit = packageData.databaseDataLimit;
@@ -355,18 +381,20 @@
     displayPackageCell("pricing-workflow-number-", packageName, packageData.workflowNumberLimit);
     displayPackageCell("pricing-workflow-operation-", packageName, packageData.workflowOperationLimit);
     displayPackageCell("pricing-workflow-templates-", packageName, packageData.workflowTemplateAccess);
+    displayPackageCell("pricing-process-access-", packageName, packageData.processAccess);
+    displayPackageCell("pricing-process-number-", packageName, packageData.processNumberLimit);
     displayPackageCell("pricing-database-access-", packageName, packageData.databaseAccess);
     displayPackageCell("pricing-database-number-", packageName, packageData.databaseNumberLimit);
     displayPackageCell("pricing-database-data-", packageName, dataLimit > 0 ? dataLimit + " GB" : dataLimit);
-    displayPackageCell("pricing-webhooks-access-", packageName, packageData.webhookAccess);
-    displayPackageCell("pricing-webhooks-number-", packageName, packageData.webhookNumberLimit);
+    displayPackageCell("pricing-webhook-access-", packageName, packageData.webhookAccess);
+    displayPackageCell("pricing-webhook-number-", packageName, packageData.webhookNumberLimit);
     displayPackageCell("pricing-organization-access-", packageName, packageData.organizationAccess);
     displayPackageCell("pricing-organization-members-", packageName, packageData.organizationMemberLimit);
     displayPackageCell("pricing-organization-teams-", packageName, packageData.organizationTeamLimit);
     displayPackageCell("pricing-device-access-", packageName, packageData.deviceAccess);
     displayPackageCell("pricing-device-app-", packageName, packageData.deviceAccess);
-    displayPackageCell("pricing-accounts-access-", packageName, packageData.accountsAccess);
-    displayPackageCell("pricing-accounts-number-", packageName, packageData.accountsNumberLimit);
+    displayPackageCell("pricing-account-access-", packageName, packageData.accountsAccess);
+    displayPackageCell("pricing-account-number-", packageName, packageData.accountsNumberLimit);
   }
 
   function displayPackageCell(packageCellId, packageName, value, suffix) {

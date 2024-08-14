@@ -628,6 +628,10 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/process/add/", "POST",
       [], createProcessPayload(title, description));
     request.send(function (status, responseText) {
+      if (status === 400) {
+        Swal.fire("{% trans 'product.process.publish.limit.reached.title' %}", "{% trans 'product.process.publish.limit.reached.body' %}", "error");
+        return;
+      }
       window.location.href = "/processes/";
     });
   }

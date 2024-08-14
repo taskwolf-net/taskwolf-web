@@ -110,6 +110,26 @@
                   <div class="package-general-information-entry-icon">
                     <i class="fa-solid fa-unlock"></i>
                   </div>
+                  <span>{% trans 'product.package.general.process.access' %}</span>
+                </div>
+                <span id="package-general-information-process-access"></span>
+              </li>
+              <div class="package-general-information-divider"></div>
+              <li class="package-general-information-entry">
+                <div class="package-general-information-entry-description">
+                  <div class="package-general-information-entry-icon">
+                    <i class="fa-solid fa-hashtag"></i>
+                  </div>
+                  <span>{% trans 'product.package.general.process.number' %}</span>
+                </div>
+                <span id="package-general-information-process-number"></span>
+              </li>
+              <div class="package-general-information-divider"></div>
+              <li class="package-general-information-entry">
+                <div class="package-general-information-entry-description">
+                  <div class="package-general-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
                   <span>{% trans 'product.package.general.database.access' %}</span>
                 </div>
                 <span id="package-general-information-database-access"></span>
@@ -238,6 +258,10 @@
       bundle.workflowOperationLimit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     document.getElementById("package-general-information-template-access").innerHTML =
       true ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("package-general-information-process-access").innerHTML =
+      bundle.processAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("package-general-information-process-number").innerHTML =
+      bundle.processNumberLimit < 0 ? "{% trans 'product.package.general.unlimited' %}" : bundle.processNumberLimit;
     document.getElementById("package-general-information-database-access").innerHTML =
       bundle.databaseAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("package-general-information-database-number").innerHTML =

@@ -112,6 +112,26 @@
                   <div class="organization-package-information-entry-icon">
                     <i class="fa-solid fa-unlock"></i>
                   </div>
+                  <span>{% trans 'product.organization.package.process.access' %}</span>
+                </div>
+                <span id="organization-package-information-process-access"></span>
+              </li>
+              <div class="organization-package-information-divider"></div>
+              <li class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
+                    <i class="fa-solid fa-hashtag"></i>
+                  </div>
+                  <span>{% trans 'product.organization.package.process.number' %}</span>
+                </div>
+                <span id="organization-package-information-process-number"></span>
+              </li>
+              <div class="organization-package-information-divider"></div>
+              <li class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
                   <span>{% trans 'product.organization.package.database.access' %}</span>
                 </div>
                 <span id="organization-package-information-database-access"></span>
@@ -260,6 +280,10 @@
       bundle.workflowOperationLimit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     document.getElementById("organization-package-information-template-access").innerHTML =
       true ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("organization-package-information-process-access").innerHTML =
+      bundle.processAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("organization-package-information-process-number").innerHTML =
+      bundle.processNumberLimit < 0 ? "{% trans 'product.organization.package.unlimited' %}" : bundle.processNumberLimit;
     document.getElementById("organization-package-information-database-access").innerHTML =
       bundle.databaseAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("organization-package-information-database-number").innerHTML =

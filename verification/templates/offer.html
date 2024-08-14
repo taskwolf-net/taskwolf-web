@@ -29,6 +29,7 @@
             <div class="text-start">
               <span>{% trans 'home.offer.package.workflows' %}: </span><br>
               <span>{% trans 'home.offer.package.operations' %}: </span><br>
+              <span>{% trans 'home.offer.package.processes' %}: </span><br>
               <span>{% trans 'home.offer.package.databases' %}: </span><br>
               <span>{% trans 'home.offer.package.data' %}: </span><br>
               <div class="offer-package-organization mt-2 d-none">
@@ -39,6 +40,7 @@
             <div class="text-end ms-4">
               <span id="offer-package-workflows"></span><br>
               <span id="offer-package-operations"></span><br>
+              <span id="offer-package-processes"></span><br>
               <span id="offer-package-databases"></span><br>
               <span id="offer-package-data"></span><br>
               <div class="offer-package-organization mt-2 d-none">
@@ -102,6 +104,7 @@
     displayPackageRuntime(offer.runtime);
     document.getElementById("offer-package-workflows").innerHTML = offer.workflowNumberLimit;
     document.getElementById("offer-package-operations").innerHTML = offer.workflowOperationLimit;
+    document.getElementById("offer-package-processes").innerHTML = offer.processNumberLimit;
     document.getElementById("offer-package-databases").innerHTML = offer.databaseNumberLimit;
     document.getElementById("offer-package-data").innerHTML = offer.databaseDataLimit + " GB";
     if (offer.organizationAccess) {

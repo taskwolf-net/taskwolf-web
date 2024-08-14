@@ -41,6 +41,15 @@
                 <div id="package-limitation-workflow-operation-bar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
             </li>
+            <li id="package-limitation-process-number-entry" class="package-limitation-entry">
+              <div class="package-limitation-entry-header">
+                <h3 class="mb-0">{% trans 'product.package.limitation.process.number' %}</h3>
+                <span id="package-limitation-process-number-ratio"></span>
+              </div>
+              <div class="progress">
+                <div id="package-limitation-process-number-bar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </li>
             <li id="package-limitation-database-number-entry" class="package-limitation-entry">
               <div class="package-limitation-entry-header">
                 <h3 class="mb-0">{% trans 'product.package.limitation.database.number' %}</h3>
@@ -97,6 +106,9 @@
     displayLimitation(bundle.workflowOperationLimit, usage.workflowOperationUsage,
       "package-limitation-workflow-operation-entry", "package-limitation-workflow-operation-ratio",
       "package-limitation-workflow-operation-bar", "");
+    displayLimitation(bundle.processNumberLimit, usage.processNumberUsage,
+      "package-limitation-process-number-entry", "package-limitation-process-number-ratio",
+      "package-limitation-process-number-bar", "");
     displayLimitation(bundle.databaseNumberLimit, usage.databaseNumberUsage,
       "package-limitation-database-number-entry", "package-limitation-database-number-ratio",
       "package-limitation-database-number-bar", "");
