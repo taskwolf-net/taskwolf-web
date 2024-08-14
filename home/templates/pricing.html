@@ -5,21 +5,22 @@
   <body class="dark">
     {% include 'home-header.html' %}
     <div id="pricing-container">
-      <h1 id="pricing-headline">{% trans 'home.pricing.headline' %}</h1>
-      <div id="pricing-personalization">
-        <div id="pricing-runtime-selection" class="pricing-switch">
-          <button id="pricing-runtime-monthly" class="pricing-switch-entry">{% trans 'home.pricing.runtime.monthly' %}</button>
-          <button id="pricing-runtime-yearly" class="pricing-switch-entry pricing-switch-active">{% trans 'home.pricing.runtime.yearly' %}</button>
+      <div id="pricing-wrapper" class="d-none">
+        <h1 id="pricing-headline">{% trans 'home.pricing.headline' %}</h1>
+        <div id="pricing-personalization">
+          <div id="pricing-runtime-selection" class="pricing-switch">
+            <button id="pricing-runtime-monthly" class="pricing-switch-entry">{% trans 'home.pricing.runtime.monthly' %}</button>
+            <button id="pricing-runtime-yearly" class="pricing-switch-entry pricing-switch-active">{% trans 'home.pricing.runtime.yearly' %}</button>
+          </div>
+          <div id="pricing-class-selection" class="pricing-switch">
+            <button id="pricing-class-beginner" class="pricing-switch-entry pricing-switch-active">{% trans 'home.pricing.class.beginner' %}</button>
+            <button id="pricing-class-advanced" class="pricing-switch-entry">{% trans 'home.pricing.class.advanced' %}</button>
+            <button id="pricing-class-expert" class="pricing-switch-entry">{% trans 'home.pricing.class.expert' %}</button>
+          </div>
         </div>
-        <div id="pricing-class-selection" class="pricing-switch">
-          <button id="pricing-class-beginner" class="pricing-switch-entry pricing-switch-active">{% trans 'home.pricing.class.beginner' %}</button>
-          <button id="pricing-class-advanced" class="pricing-switch-entry">{% trans 'home.pricing.class.advanced' %}</button>
-          <button id="pricing-class-expert" class="pricing-switch-entry">{% trans 'home.pricing.class.expert' %}</button>
-        </div>
-      </div>
-      <div id="pricing-table-container">
-        <table id="pricing-table">
-          <thead>
+        <div id="pricing-table-container">
+          <table id="pricing-table">
+            <thead>
             <th class="pricing-table-advantages">
               <img class="pricing-table-advantages-logo" src="{% static 'img/logo.png' %}">
               <div class="pricing-table-advantages-title">
@@ -103,8 +104,8 @@
                 <li class="mb-3"><i class="fa-solid fa-check me-3"></i><p id="pricing-package-feature-organization-team-enterprise" class="mb-0"></p></li>
               </ul>
             </th>
-          </thead>
-          <tbody>
+            </thead>
+            <tbody>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent">{% trans 'home.pricing.feature.runtime' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.runtime.tip' %}"></h5></td>
               <td id="pricing-runtime-free"></td>
@@ -119,8 +120,8 @@
               <td id="pricing-availability-team"></td>
               <td id="pricing-availability-enterprise"></td>
             </tr>
-          </tbody>
-          <tbody>
+            </tbody>
+            <tbody>
             <tr class="pricing-feature-bundle-headline">
               <td>{% trans 'home.pricing.feature.workflows' %}</td>
               <td colspan="4"></td>
@@ -153,28 +154,28 @@
               <td id="pricing-workflow-templates-team"></td>
               <td id="pricing-workflow-templates-enterprise"></td>
             </tr>
-          </tbody>
-          <tbody>
-          <tr class="pricing-feature-bundle-headline">
-            <td>{% trans 'home.pricing.feature.processes' %}</td>
-            <td colspan="4"></td>
-          </tr>
-          <tr>
-            <td class="pricing-feature">{% trans 'home.pricing.feature.processes.access' %}</td>
-            <td id="pricing-process-access-free"></td>
-            <td id="pricing-process-access-individual"></td>
-            <td id="pricing-process-access-team"></td>
-            <td id="pricing-process-access-enterprise"></td>
-          </tr>
-          <tr>
-            <td class="pricing-feature">{% trans 'home.pricing.feature.processes.number.limit' %}</td>
-            <td id="pricing-process-number-free"></td>
-            <td id="pricing-process-number-individual"></td>
-            <td id="pricing-process-number-team"></td>
-            <td id="pricing-process-number-enterprise"></td>
-          </tr>
-          </tbody>
-          <tbody>
+            </tbody>
+            <tbody>
+            <tr class="pricing-feature-bundle-headline">
+              <td>{% trans 'home.pricing.feature.processes' %}</td>
+              <td colspan="4"></td>
+            </tr>
+            <tr>
+              <td class="pricing-feature">{% trans 'home.pricing.feature.processes.access' %}</td>
+              <td id="pricing-process-access-free"></td>
+              <td id="pricing-process-access-individual"></td>
+              <td id="pricing-process-access-team"></td>
+              <td id="pricing-process-access-enterprise"></td>
+            </tr>
+            <tr>
+              <td class="pricing-feature">{% trans 'home.pricing.feature.processes.number.limit' %}</td>
+              <td id="pricing-process-number-free"></td>
+              <td id="pricing-process-number-individual"></td>
+              <td id="pricing-process-number-team"></td>
+              <td id="pricing-process-number-enterprise"></td>
+            </tr>
+            </tbody>
+            <tbody>
             <tr class="pricing-feature-bundle-headline">
               <td>{% trans 'home.pricing.feature.databases' %}</td>
               <td colspan="4"></td>
@@ -200,8 +201,8 @@
               <td id="pricing-database-data-team"></td>
               <td id="pricing-database-data-enterprise"></td>
             </tr>
-          </tbody>
-          <tbody>
+            </tbody>
+            <tbody>
             <tr class="pricing-feature-bundle-headline">
               <td>{% trans 'home.pricing.feature.webhooks' %}</td>
               <td colspan="4"></td>
@@ -220,8 +221,8 @@
               <td id="pricing-webhook-number-team"></td>
               <td id="pricing-webhook-number-enterprise"></td>
             </tr>
-          </tbody>
-          <tbody>
+            </tbody>
+            <tbody>
             <tr class="pricing-feature-bundle-headline">
               <td>{% trans 'home.pricing.feature.organizations' %}</td>
               <td colspan="4"></td>
@@ -247,8 +248,8 @@
               <td id="pricing-organization-teams-team"></td>
               <td id="pricing-organization-teams-enterprise"></td>
             </tr>
-          </tbody>
-          <tbody>
+            </tbody>
+            <tbody>
             <tr class="pricing-feature-bundle-headline">
               <td>{% trans 'home.pricing.feature.devices' %}</td>
               <td colspan="4"></td>
@@ -267,8 +268,8 @@
               <td id="pricing-device-app-team"></td>
               <td id="pricing-device-app-enterprise"></td>
             </tr>
-          </tbody>
-          <tbody>
+            </tbody>
+            <tbody>
             <tr class="pricing-feature-bundle-headline">
               <td>{% trans 'home.pricing.feature.accounts' %}</td>
               <td colspan="4"></td>
@@ -287,11 +288,14 @@
               <td id="pricing-account-number-team"></td>
               <td id="pricing-account-number-enterprise"></td>
             </tr>
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-    {% include 'home-footer.html' %}
+    <div id="pricing-footer" class="d-none">
+      {% include 'home-footer.html' %}
+    </div>
   </body>
 </html>
 
@@ -304,6 +308,7 @@
   var enterprisePackageData;
 
   $(document).ready(function() {
+    displayLoader();
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip-parent"]'))
     tooltipTriggerList.map(function (tooltipTriggerEl) {
       tooltipTriggerEl.classList.add("position-relative");
@@ -336,6 +341,7 @@
             teamPackageData = teamPackage;
             enterprisePackageData = enterprisePackage;
             displayPricing(freePackage, individualPackage, teamPackage, enterprisePackage);
+            removeLoader();
           });
         });
       });
@@ -490,5 +496,18 @@
     } else {
       window.location.href = "/payment/";
     }
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("pricing-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("pricing-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("pricing-wrapper").classList.remove("d-none");
+    document.getElementById("pricing-footer").classList.remove("d-none");
   }
 </script>
