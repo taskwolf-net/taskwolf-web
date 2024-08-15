@@ -46,7 +46,9 @@
         addTemplateModule(modules[i].name);
       }
       fetchTemplatesData(function() {
-        displayTemplates();
+        fetchBundle(function (bundle) {
+          displayTemplates(bundle);
+        });
       });
     });
   });
@@ -87,7 +89,14 @@
     });
   }
 
-  function displayTemplates() {
+  function fetchBundle(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/bundle/", "GET", []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function displayTemplates(bundle) {
     document.getElementById("templates-list").innerHTML = "";
     var displayedEntries = 0;
     for (var i = 0; i < templates.length; i++) {
@@ -95,7 +104,8 @@
       if(!(shouldDisplayTemplateEntry(entry))) {
         continue;
       }
-      displayTemplate(entry.name, entry.description, entry.trigger, entry.actions);
+      displayTemplate(entry.name, entry.description, entry.trigger, entry.actions,
+        entry.accessType, bundle.type === "TRIAL");
       displayedEntries++;
     }
     if (displayedEntries === 0) {
@@ -106,7 +116,9 @@
   }
 
   function shouldDisplayTemplateEntry(entry) {
-    if (currentSelectedModule !== "{% trans 'product.templates.all' %}".toLowerCase() && !entry.modules.some((module) => module.toLowerCase() === currentSelectedModule)) {
+    if (currentSelectedModule !== "{% trans 'product.templates.all' %}".toLowerCase() &&
+      !entry.modules.some((module) => module.toLowerCase() === currentSelectedModule)
+    ) {
       return false;
     }
     return templatesCurrentNameFilter.length === 0 ||
@@ -114,9 +126,8 @@
       entry.description.toLowerCase().includes(templatesCurrentNameFilter.toLowerCase());
   }
 
-  function displayTemplate(name, description, trigger, actions) {
+  function displayTemplate(name, description, trigger, actions, accessType, isTrial) {
     var entryElement = document.createElement("li");
-    entryElement.role = "button";
     entryElement.classList.add("template-entry");
     entryElement.appendChild(createWorkflowElement(trigger, actions));
     var nameElement = document.createElement("b");
@@ -126,9 +137,24 @@
     descriptionElement.innerHTML = description;
     entryElement.appendChild(descriptionElement);
     entryElement.onclick = function(event) {
+      if (isTrial && accessType === "CHARGEABLE") {
+        return;
+      }
       clickTemplate(name, description, trigger, actions);
     }
-    applyTooltips(entryElement, document.getElementById("templates-list"), "{% trans 'product.templates.tooltip' %}");
+    if (isTrial && accessType === "CHARGEABLE") {
+      var chargeableElement = document.createElement("i");
+      chargeableElement.classList.add("template-entry-chargeable", "fa-solid",
+        "fa-crown", "text-warning");
+      entryElement.appendChild(chargeableElement);
+      entryElement.classList.add("template-entry-unavailable");
+      applyTooltips(chargeableElement, entryElement,
+        "{% trans 'product.templates.chargeable.tooltip' %}");
+    } else {
+      entryElement.role = "button";
+      applyTooltips(entryElement, document.getElementById("templates-list"),
+        "{% trans 'product.templates.tooltip' %}");
+    }
     document.getElementById("templates-list").appendChild(entryElement);
   }
 

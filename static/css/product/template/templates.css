@@ -90,6 +90,7 @@
 }
 
 .template-entry {
+  position: relative;
   height: 350px;
   border: 1px solid #7f7f7f;
   border-radius: 10px;
@@ -97,8 +98,12 @@
   transition-duration: 0.3s;
 }
 
-.template-entry:hover {
-  scale: 1.05;
+.dark .template-entry:hover {
+  background-color: #12171e;
+}
+
+.light .template-entry:hover {
+  background-color: #efefef;
 }
 
 .template-workflow {
@@ -131,8 +136,31 @@
   margin-bottom: 5%;
 }
 
+.template-entry img {
+  border-radius: 25%;
+}
+
 .template-entry span {
   display: block;
+}
+
+.dark .template-entry-unavailable:hover {
+  background-color: #0d1117 !important;
+}
+
+.light .template-entry-unavailable:hover {
+  background-color: #fafafa !important;
+}
+
+.template-entry-unavailable .template-workflow {
+  filter: grayscale(1);
+}
+
+.template-entry-chargeable {
+  position: absolute;
+  top: -23px;
+  right: -21px;
+  font-size: 42px;
 }
 
 #templates-empty {
