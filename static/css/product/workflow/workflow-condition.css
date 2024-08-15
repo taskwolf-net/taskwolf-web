@@ -74,10 +74,15 @@ input:-webkit-autofill:active{
   margin: auto;
 }
 
+.workflow-condition-input br {
+  display: none;
+}
+
 .workflow-condition-input-placeholder {
   width: fit-content;
   padding: 5px;
   border-radius: 5px;
+  display: inline-block;
 }
 
 .dark .workflow-condition-input-placeholder {

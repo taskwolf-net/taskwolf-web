@@ -561,11 +561,15 @@
     applyTooltips(informationElement, inputContainerElement, description);
     inputContainerElement.appendChild(informationElement);
     var inputElement = document.createElement("div");
-    inputElement.type = "name";
     inputElement.setAttribute("placeholder", placeholder);
     inputElement.contentEditable = "true";
     inputElement.id = "workflow-component-specifications-input-" + identifier;
     inputElement.classList.add("workflow-component-specifications-input", "form-control");
+    inputElement.onkeydown = function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+      }
+    }
     inputElement.oninput = function (event) {
       inputSpecificationInput(identifier, event.target.innerHTML);
     }
@@ -574,8 +578,8 @@
     };
     inputElement.ondrop = function (event) {
       inputElement.innerHTML = inputElement.innerHTML +
-        '<span class="workflow-component-specifications-input-placeholder" contenteditable="false">' +
-        event.dataTransfer.getData("placeholder-name") + '</span>';
+        '<div class="workflow-component-specifications-input-placeholder" contentEditable="false">' +
+        event.dataTransfer.getData("placeholder-name") + '</div><wbr>';
       inputSpecificationInput(identifier, inputElement.innerHTML);
     };
     inputContainerElement.appendChild(inputElement);
@@ -588,8 +592,8 @@
             var variable = componentsOutputVariables[i];
             selectedComponentContent[identifier] = selectedComponentContent[identifier].replace(
               "%" + variable.identifier + "%",
-              '<span class="workflow-component-specifications-input-placeholder" contenteditable="false">' +
-                variable.name + '</span>')
+              '<div class="workflow-component-specifications-input-placeholder" contentEditable="false">' +
+                variable.name + '</div><wbr>')
           }
           inputElement.innerHTML = selectedComponentContent[identifier];
           inputSpecificationInput(identifier, inputElement.innerHTML);
@@ -604,8 +608,8 @@
   function inputSpecificationInput(identifier, value) {
     for (var i = 0; i < componentsOutputVariables.length; i++) {
       var variable = componentsOutputVariables[i];
-      value = value.replace('<span class="workflow-component-specifications-input-placeholder" contenteditable="false">' +
-        variable.name + '</span>', "%" + variable.identifier + "%")
+      value = value.replace('<div class="workflow-component-specifications-input-placeholder" contentEditable="false">' +
+        variable.name + '</div>', "%" + variable.identifier + "%")
     }
     value = value.replace("&nbsp;", " ");
     value = value.replace("&quot;", "\"");

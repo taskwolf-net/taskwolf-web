@@ -89,7 +89,7 @@
     for (var i = 0; i < conditionOutputVariables.length; i++) {
       var variable = conditionOutputVariables[i];
       value = value.replace("%" + variable.identifier + "%",
-        '<span class="workflow-condition-input-placeholder" contenteditable="false">' + variable.name + '</span>')
+        '<div class="workflow-condition-input-placeholder" contentEditable="false">' + variable.name + '</div><wbr>')
     }
     var element = document.getElementById("workflow-condition-input-" + identifier);
     element.innerHTML = value;
@@ -124,7 +124,6 @@
     applyTooltips(informationElement, inputContainerElement, description);
     inputContainerElement.appendChild(informationElement);
     var inputElement = document.createElement("div");
-    inputElement.type = "name";
     inputElement.setAttribute("placeholder", name);
     inputElement.contentEditable = "true";
     inputElement.id = "workflow-condition-input-" + identifier;
@@ -143,8 +142,8 @@
     };
     inputElement.ondrop = function (event) {
       inputElement.innerHTML = inputElement.innerHTML +
-        '<span class="workflow-condition-input-placeholder" contenteditable="false">' +
-        event.dataTransfer.getData("placeholder-name") + '</span>';
+        '<div class="workflow-condition-input-placeholder" contentEditable="false">' +
+        event.dataTransfer.getData("placeholder-name") + '</div><wbr>';
       inputConditionInput(identifier, inputElement.innerHTML);
     };
     inputContainerElement.appendChild(inputElement);
@@ -154,8 +153,8 @@
   function inputConditionInput(identifier, value) {
     for (var i = 0; i < conditionOutputVariables.length; i++) {
       var variable = conditionOutputVariables[i];
-      value = value.replace('<span class="workflow-condition-input-placeholder" contenteditable="false">' +
-        variable.name + '</span>', "%" + variable.identifier + "%")
+      value = value.replace('<div class="workflow-condition-input-placeholder" contentEditable="false">' +
+        variable.name + '</div>', "%" + variable.identifier + "%")
     }
     value = value.replace("&nbsp;", " ");
     value = value.replace("&quot;", "\"");

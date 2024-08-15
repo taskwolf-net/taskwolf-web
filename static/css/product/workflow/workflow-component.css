@@ -409,10 +409,15 @@ input:-webkit-autofill:active{
   margin: auto;
 }
 
+.workflow-component-specifications-input br {
+  display: none;
+}
+
 .workflow-component-specifications-input-placeholder {
   width: fit-content;
   padding: 5px;
   border-radius: 5px;
+  display: inline-block;
 }
 
 .dark .workflow-component-specifications-input-placeholder {
