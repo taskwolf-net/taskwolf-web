@@ -134,6 +134,11 @@
     if (identifier === "condition-comparative-value" && comparativeValue !== "") {
       inputElement.value = comparativeValue;
     }
+    inputElement.onkeydown = function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+      }
+    }
     inputElement.oninput = function (event) {
       inputConditionInput(identifier, event.target.innerHTML);
     }
