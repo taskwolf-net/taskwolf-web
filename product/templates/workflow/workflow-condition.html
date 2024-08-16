@@ -89,10 +89,10 @@
     for (var i = 0; i < conditionOutputVariables.length; i++) {
       var variable = conditionOutputVariables[i];
       value = value.replace("%" + variable.identifier + "%",
-        '<div class="workflow-condition-input-placeholder" contentEditable="false">' + variable.name + '</div><wbr>')
+        '<div class="workflow-condition-input-placeholder" contenteditable="false">' + variable.name + '</div>')
     }
     var element = document.getElementById("workflow-condition-input-" + identifier);
-    element.innerHTML = value;
+    element.innerHTML = value + "<br>";
     inputConditionInput(identifier, element.innerHTML);
   }
 
@@ -141,9 +141,9 @@
       event.preventDefault();
     };
     inputElement.ondrop = function (event) {
-      inputElement.innerHTML = inputElement.innerHTML +
-        '<div class="workflow-condition-input-placeholder" contentEditable="false">' +
-        event.dataTransfer.getData("placeholder-name") + '</div><wbr>';
+      inputElement.innerHTML = inputElement.innerHTML.replaceAll("<br>", "") +
+        '<div class="workflow-condition-input-placeholder" contenteditable="false">' +
+        event.dataTransfer.getData("placeholder-name") + '</div><br>';
       inputConditionInput(identifier, inputElement.innerHTML);
     };
     inputContainerElement.appendChild(inputElement);
@@ -153,7 +153,7 @@
   function inputConditionInput(identifier, value) {
     for (var i = 0; i < conditionOutputVariables.length; i++) {
       var variable = conditionOutputVariables[i];
-      value = value.replace('<div class="workflow-condition-input-placeholder" contentEditable="false">' +
+      value = value.replace('<div class="workflow-condition-input-placeholder" contenteditable="false">' +
         variable.name + '</div>', "%" + variable.identifier + "%")
     }
     value = value.replace("&nbsp;", " ");

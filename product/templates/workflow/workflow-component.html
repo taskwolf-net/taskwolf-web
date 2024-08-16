@@ -577,9 +577,9 @@
       event.preventDefault();
     };
     inputElement.ondrop = function (event) {
-      inputElement.innerHTML = inputElement.innerHTML +
-        '<div class="workflow-component-specifications-input-placeholder" contentEditable="false">' +
-        event.dataTransfer.getData("placeholder-name") + '</div><wbr>';
+      inputElement.innerHTML = inputElement.innerHTML.replaceAll("<br>", "") +
+        '<div class="workflow-component-specifications-input-placeholder" contenteditable="false">' +
+        event.dataTransfer.getData("placeholder-name") + '</div><br>';
       inputSpecificationInput(identifier, inputElement.innerHTML);
     };
     inputContainerElement.appendChild(inputElement);
@@ -592,10 +592,10 @@
             var variable = componentsOutputVariables[i];
             selectedComponentContent[identifier] = selectedComponentContent[identifier].replace(
               "%" + variable.identifier + "%",
-              '<div class="workflow-component-specifications-input-placeholder" contentEditable="false">' +
-                variable.name + '</div><wbr>')
+              '<div class="workflow-component-specifications-input-placeholder" contenteditable="false">' +
+                variable.name + '</div>')
           }
-          inputElement.innerHTML = selectedComponentContent[identifier];
+          inputElement.innerHTML = selectedComponentContent[identifier] + "<br>";
           inputSpecificationInput(identifier, inputElement.innerHTML);
         }
         if (index === inputsLength - 1) {
@@ -608,7 +608,7 @@
   function inputSpecificationInput(identifier, value) {
     for (var i = 0; i < componentsOutputVariables.length; i++) {
       var variable = componentsOutputVariables[i];
-      value = value.replace('<div class="workflow-component-specifications-input-placeholder" contentEditable="false">' +
+      value = value.replace('<div class="workflow-component-specifications-input-placeholder" contenteditable="false">' +
         variable.name + '</div>', "%" + variable.identifier + "%")
     }
     value = value.replace("&nbsp;", " ");
