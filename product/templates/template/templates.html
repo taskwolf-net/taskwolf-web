@@ -6,27 +6,29 @@
     {% include 'product-header.html' %}
     {% include 'product-sidebar.html' %}
     <div class="sidebar-influenced">
-      <div id="templates-wrapper">
-        <h1 id="templates-headline">{% trans 'product.templates.headline' %}</h1>
-        <div id="templates-header">
-          <div id="templates-modules-dropdown" class="dropdown">
-            <button id="templates-modules-dropdown-button" class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
-              {% trans 'product.templates.app' %}: {% trans 'product.templates.all' %}
-            </button>
-            <ul id="templates-modules-dropdown-list" class="dropdown-menu">
-            </ul>
+      <div id="templates-container">
+        <div id="templates-wrapper" class="d-none">
+          <h1 id="templates-headline">{% trans 'product.templates.headline' %}</h1>
+          <div id="templates-header">
+            <div id="templates-modules-dropdown" class="dropdown">
+              <button id="templates-modules-dropdown-button" class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                {% trans 'product.templates.app' %}: {% trans 'product.templates.all' %}
+              </button>
+              <ul id="templates-modules-dropdown-list" class="dropdown-menu">
+              </ul>
+            </div>
+            <div id="templates-search-box">
+              <input id="templates-search-input" placeholder="{% trans 'product.templates.search' %}" type="text" class="form-control" value="" autocomplete="off">
+              <button type="button">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
           </div>
-          <div id="templates-search-box">
-            <input id="templates-search-input" placeholder="{% trans 'product.templates.search' %}" type="text" class="form-control" value="" autocomplete="off">
-            <button type="button">
-              <i class="fa fa-search"></i>
-            </button>
+          <ul id="templates-list">
+          </ul>
+          <div id="templates-empty">
+            <b id="templates-empty-headline">{% trans 'product.templates.empty' %}</b>
           </div>
-        </div>
-        <ul id="templates-list">
-        </ul>
-        <div id="templates-empty">
-          <b id="templates-empty-headline">{% trans 'product.templates.empty' %}</b>
         </div>
       </div>
     </div>
@@ -40,6 +42,7 @@
   var templatesCurrentNameFilter = "";
 
   $(document).ready(function() {
+    displayLoader();
     fetchModulesData(function () {
       addTemplateModule("{% trans 'product.templates.all' %}");
       for (var i = 0; i < modules.length; i++) {
@@ -48,6 +51,7 @@
       fetchTemplatesData(function() {
         fetchBundle(function (bundle) {
           displayTemplates(bundle);
+          removeLoader();
         });
       });
     });
@@ -233,4 +237,15 @@
     templatesCurrentNameFilter = event.target.value;
     displayTemplates();
   };
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("templates-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("templates-container").removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("templates-wrapper").classList.remove("d-none");
+  }
 </script>

@@ -7,27 +7,29 @@
     {% include 'product-sidebar.html' %}
     <div class="sidebar-influenced">
       <div id="webhook-container">
-        <div id="webhook-header">
-          <h1 id="webhook-name"></h1>
-          <div id="webhook-modification">
-            <button id="webhook-delete" type="button" class="btn btn-danger">{% trans 'product.webhook.delete' %}</button>
-            <button id="webhook-rename" type="button" class="fa-solid fa-pen-to-square"></button>
-          </div>
-        </div>
-        <div id="webhook-content">
-          <div id="webhook-url-section" class="webhook-section">
-            <label class="form-label">{% trans 'product.webhook.url' %}</label>
-            <div id="webhook-url-section-content" class="webhook-section-content">
-              <input id="webhook-url" class="form-control" readonly>
-              <button type="button" id="webhook-url-copy" class="btn btn-primary btn-block">{% trans 'product.webhook.url.copy' %}</button>
+        <div id="webhook-wrapper" class="d-none">
+          <div id="webhook-header">
+            <h1 id="webhook-name"></h1>
+            <div id="webhook-modification">
+              <button id="webhook-delete" type="button" class="btn btn-danger">{% trans 'product.webhook.delete' %}</button>
+              <button id="webhook-rename" type="button" class="fa-solid fa-pen-to-square"></button>
             </div>
           </div>
-          <div id="webhook-key-section" class="webhook-section">
-            <label class="form-label">{% trans 'product.webhook.key' %}</label>
-            <div id="webhook-key-section-content" class="webhook-section-content">
-              <input type="password" id="webhook-key" class="form-control" readonly>
-              <button type="button" id="webhook-key-copy" class="btn btn-primary btn-block">{% trans 'product.webhook.key.copy' %}</button>
-              <button type="button" id="webhook-key-regenerate" class="btn btn-secondary btn-block"><span class="fa-solid fa-rotate-right"></span></button>
+          <div id="webhook-content">
+            <div id="webhook-url-section" class="webhook-section">
+              <label class="form-label">{% trans 'product.webhook.url' %}</label>
+              <div id="webhook-url-section-content" class="webhook-section-content">
+                <input id="webhook-url" class="form-control" readonly>
+                <button type="button" id="webhook-url-copy" class="btn btn-primary btn-block">{% trans 'product.webhook.url.copy' %}</button>
+              </div>
+            </div>
+            <div id="webhook-key-section" class="webhook-section">
+              <label class="form-label">{% trans 'product.webhook.key' %}</label>
+              <div id="webhook-key-section-content" class="webhook-section-content">
+                <input type="password" id="webhook-key" class="form-control" readonly>
+                <button type="button" id="webhook-key-copy" class="btn btn-primary btn-block">{% trans 'product.webhook.key.copy' %}</button>
+                <button type="button" id="webhook-key-regenerate" class="btn btn-secondary btn-block"><span class="fa-solid fa-rotate-right"></span></button>
+              </div>
             </div>
           </div>
         </div>
@@ -41,6 +43,7 @@
   var key;
 
   $(document).ready(function() {
+    displayLoader();
     fetchWebhookData(function() {
       key = webhook.key;
       document.getElementById("webhook-name").innerHTML = webhook.name;
@@ -55,6 +58,7 @@
       applyTooltips(document.getElementById("webhook-key-regenerate"),
         document.getElementById("webhook-key-section-content"),
         "{% trans 'product.webhook.key.regenerate.tooltip' %}");
+      removeLoader();
     });
   });
 
@@ -161,5 +165,16 @@
     new bootstrap.Tooltip(element, {
       container: container
     });
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("webhook-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("webhook-container").removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("webhook-wrapper").classList.remove("d-none");
   }
 </script>

@@ -7,29 +7,31 @@
     {% include 'product-sidebar.html' %}
     <div class="sidebar-influenced">
       <div id="database-container">
-        <div id="database-header">
-          <h1 id="database-name"></h1>
-          <div id="database-modification">
-            <button id="database-delete" type="button" class="btn btn-danger">{% trans 'product.database.delete' %}</button>
-            <button id="database-rename" type="button" class="fa-solid fa-pen-to-square"></button>
-          </div>
-        </div>
-        <div id="database-table-container">
-          <table id="database-table">
-            <thead id="database-table-head">
-            </thead>
-            <tbody id="database-table-body">
-            </tbody>
-          </table>
-          <div id="database-table-paginate">
-            <button id="database-remove" type="button" class="btn btn-danger disabled">{% trans 'product.database.remove' %}</button>
-            <div class="text-center position-absolute">
-              <a id="database-table-previous-page" class="database-table-paginate-button database-table-paginate-page-button database-table-paginate-previous"><</a>
-              <span id="database-table-pages">
-              </span>
-              <a id="database-table-next-page" class="database-table-paginate-button database-table-paginate-page-button database-table-paginate-next">></a>
+        <div id="database-wrapper" class="d-none">
+          <div id="database-header">
+            <h1 id="database-name"></h1>
+            <div id="database-modification">
+              <button id="database-delete" type="button" class="btn btn-danger">{% trans 'product.database.delete' %}</button>
+              <button id="database-rename" type="button" class="fa-solid fa-pen-to-square"></button>
             </div>
-            <button id="database-insert" type="button" class="btn btn-primary">{% trans 'product.database.insert' %}</button>
+          </div>
+          <div id="database-table-container">
+            <table id="database-table">
+              <thead id="database-table-head">
+              </thead>
+              <tbody id="database-table-body">
+              </tbody>
+            </table>
+            <div id="database-table-paginate">
+              <button id="database-remove" type="button" class="btn btn-danger disabled">{% trans 'product.database.remove' %}</button>
+              <div class="text-center position-absolute">
+                <a id="database-table-previous-page" class="database-table-paginate-button database-table-paginate-page-button database-table-paginate-previous"><</a>
+                <span id="database-table-pages">
+              </span>
+                <a id="database-table-next-page" class="database-table-paginate-button database-table-paginate-page-button database-table-paginate-next">></a>
+              </div>
+              <button id="database-insert" type="button" class="btn btn-primary">{% trans 'product.database.insert' %}</button>
+            </div>
           </div>
         </div>
       </div>
@@ -44,9 +46,11 @@
   var rowCheckboxes = [];
 
   $(document).ready(function() {
+    displayLoader();
     fetchDatabaseData(function() {
       document.getElementById("database-name").innerHTML = database.name;
       displayTable();
+      removeLoader();
     });
   });
 
@@ -594,5 +598,16 @@
     }
     document.getElementById("database-table-container").removeChild(
       document.getElementById("database-table-empty"));
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("database-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("database-container").removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("database-wrapper").classList.remove("d-none");
   }
 </script>

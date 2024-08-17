@@ -7,14 +7,16 @@
     {% include 'product-sidebar.html' %}
     <div class="sidebar-influenced">
       <div id="workflow-timeline-container">
-        <h1 id="workflow-timeline-headline">{% trans 'product.workflow.timeline.headline' %}</h1>
-        <button type="button" id="workflow-timeline-reset" class="btn btn-danger btn-block d-none">{% trans 'product.workflow.timeline.reset' %}</button>
-        <hr id="workflow-timeline-divider" class="hr"/>
-        <section id="workflow-timeline-section">
-          <ul id="workflow-timeline" class="timeline">
-          </ul>
-        </section>
-        <span id="workflow-timeline-empty">{% trans 'product.workflow.timeline.empty' %}</span>
+        <div id="workflow-timeline-wrapper" class="d-none">
+          <h1 id="workflow-timeline-headline">{% trans 'product.workflow.timeline.headline' %}</h1>
+          <button type="button" id="workflow-timeline-reset" class="btn btn-danger btn-block d-none">{% trans 'product.workflow.timeline.reset' %}</button>
+          <hr id="workflow-timeline-divider" class="hr"/>
+          <section id="workflow-timeline-section">
+            <ul id="workflow-timeline" class="timeline">
+            </ul>
+          </section>
+          <span id="workflow-timeline-empty">{% trans 'product.workflow.timeline.empty' %}</span>
+        </div>
       </div>
     </div>
   </body>
@@ -24,11 +26,13 @@
   var timeline;
 
   $(document).ready(function() {
+    displayLoader();
     if (sessionStorage.getItem("workflow-selected") === null || sessionStorage.getItem("workflow-id") === null) {
       return;
     }
     fetchTimelineData(function() {
       displayTimeline();
+      removeLoader();
     });
   });
 
@@ -97,5 +101,16 @@
         });
       }
     });
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("workflow-timeline-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("workflow-timeline-container").removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("workflow-timeline-wrapper").classList.remove("d-none");
   }
 </script>
