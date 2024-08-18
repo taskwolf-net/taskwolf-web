@@ -310,7 +310,7 @@
     return element;
   }
 
-  const pageVisibilityRange = 3;
+  const pageVisibilityRange = 2;
 
   function displayPaging(pages, currentPage, pageState) {
     displayPagingShiftButton("workflows-previous-page", currentPage > 0,
@@ -320,6 +320,9 @@
     var pagesElement = document.getElementById("workflows-pages");
     pagesElement.innerHTML = "";
     createPageButton(pagesElement, pages, currentPage, pageState, 0, currentPage === 0);
+    if (pages === 1) {
+      return;
+    }
     if (currentPage - pageVisibilityRange > 0) {
       pagesElement.insertAdjacentHTML("beforeend",
         "<i class='workflows-paging-ellipsis workflows-paging-ellipsis-start " +
