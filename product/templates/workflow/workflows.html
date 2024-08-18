@@ -71,7 +71,7 @@
   $(document).ready(function() {
     displayLoader();
     fetchWorkflowPageNumber(function (pages) {
-      fetchWorkflowsPage(0, function(workflows, pageState) {
+      fetchWorkflowsPage("", 0, 0, function(workflows, pageState) {
         displayWorkflows(workflows);
         removeLoader();
         if (workflows.length === 0) {
@@ -92,8 +92,9 @@
     });
   }
 
-  function fetchWorkflowsPage(page, callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/page/" + page + "/", "GET", []);
+  function fetchWorkflowsPage(pageState, currentPage, targetPage, callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/page/", "POST",
+      [], {pageState: pageState, currentPage: currentPage, targetPage: targetPage});
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
       callback(response.workflows, response.page);
@@ -381,7 +382,7 @@
       shiftPage(pages, currentPage, pageState, page - currentPage);
       return;
     }
-    fetchWorkflowsPage(page, function(workflows, pageState) {
+    fetchWorkflowsPage(pageState, currentPage, page, function(workflows, pageState) {
       updatePaging(pages, page, pageState, workflows);
     });
   }
