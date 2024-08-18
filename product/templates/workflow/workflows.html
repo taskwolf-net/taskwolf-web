@@ -49,9 +49,9 @@
         <ul id="workflows-list">
         </ul>
         <div id="workflows-paging" class="d-none">
-          <a id="workflows-previous-page" class="workflows-page"><i class="fa-solid fa-chevron-left"></i></a>
+          <a id="workflows-previous-page" class="workflows-page me-4"><i class="fa-solid fa-chevron-left"></i></a>
           <div id="workflows-pages"></div>
-          <a id="workflows-next-page" class="workflows-page"><i class="fa-solid fa-chevron-right"></i></a>
+          <a id="workflows-next-page" class="workflows-page ms-4"><i class="fa-solid fa-chevron-right"></i></a>
         </div>
         <div id="workflows-loader">
         </div>
@@ -319,22 +319,26 @@
       pages, currentPage, pageState, 1);
     var pagesElement = document.getElementById("workflows-pages");
     pagesElement.innerHTML = "";
-    for (var i = pageVisibilityRange - 1; i > 0; i--) {
-      var page = currentPage - i;
-      if (page < 0) {
-        continue;
-      }
-      createPageButton(pagesElement, pages, currentPage, pageState, page, false);
+    createPageButton(pagesElement, pages, currentPage, pageState, 0, currentPage === 0);
+    if (currentPage - pageVisibilityRange > 0) {
+      pagesElement.insertAdjacentHTML("beforeend",
+        "<i class='workflows-paging-ellipsis workflows-paging-ellipsis-start " +
+        "fa-solid fa-ellipsis mx-4'></i>");
     }
-    createPageButton(pagesElement, pages, currentPage, pageState, currentPage, true);
-    for (var i = 1; i < pageVisibilityRange; i++) {
+    for (var i = -pageVisibilityRange + 1; i < pageVisibilityRange; i++) {
       var page = currentPage + i;
-      if (page >= pages) {
+      if (page < 1 || page >= pages - 1) {
         continue;
       }
-      createPageButton(pagesElement, pages, currentPage, pageState, page, false);
+      createPageButton(pagesElement, pages, currentPage, pageState, page,
+        page === currentPage);
     }
-    displayPagingEllipsis(pagesElement, pages, currentPage);
+    if (currentPage + pageVisibilityRange < pages - 1) {
+      pagesElement.insertAdjacentHTML("beforeend",
+        "<i class='workflows-paging-ellipsis workflows-paging-ellipsis-end " +
+        "fa-solid fa-ellipsis mx-4'></i>");
+    }
+    createPageButton(pagesElement, pages, currentPage, pageState, pages - 1, currentPage === pages - 1);
     document.getElementById("workflows-paging").classList.remove("d-none");
   }
 
@@ -350,19 +354,6 @@
         return;
       }
       shiftPage(pages, currentPage, pageState, direction);
-    }
-  }
-
-  function displayPagingEllipsis(pagesElement, pages, currentPage) {
-    if (currentPage - (pageVisibilityRange - 1) > 0) {
-      pagesElement.insertAdjacentHTML("afterbegin",
-        "<i class='workflows-paging-ellipsis workflows-paging-ellipsis-start " +
-        "fa-solid fa-ellipsis'></i>");
-    }
-    if (currentPage + (pageVisibilityRange - 1) < pages - 1) {
-      pagesElement.insertAdjacentHTML("beforeend",
-        "<i class='workflows-paging-ellipsis workflows-paging-ellipsis-end " +
-        "fa-solid fa-ellipsis'></i>");
     }
   }
 

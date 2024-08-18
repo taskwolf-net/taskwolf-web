@@ -517,22 +517,6 @@ input:checked + .slider:before {
   color: black;
 }
 
-.workflows-paging-ellipsis-start {
-  margin-right: 20px;
-}
-
-.workflows-paging-ellipsis-end {
-  margin-left: 20px;
-}
-
-#workflows-previous-page {
-  margin-right: 20px !important;
-}
-
-#workflows-next-page {
-  margin-left: 20px !important;
-}
-
 #workflows-empty {
   display: none;
   flex-flow: wrap;
