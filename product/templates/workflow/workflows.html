@@ -48,6 +48,11 @@
         </ul>
         <ul id="workflows-list">
         </ul>
+        <div id="workflows-paging" class="d-none">
+          <a id="workflows-previous-page" class="workflows-page"><i class="fa-solid fa-chevron-left"></i></a>
+          <div id="workflows-pages"></div>
+          <a id="workflows-next-page" class="workflows-page"><i class="fa-solid fa-chevron-right"></i></a>
+        </div>
         <div id="workflows-loader">
         </div>
         <div id="workflows-empty">
@@ -60,48 +65,48 @@
 </html>
 
 <script>
-  var workflows;
   var workflowsCurrentNameFilter = "";
   var changeStateBlocked = false;
 
   $(document).ready(function() {
-    workflows = [];
     displayLoader();
-    fetchWorkflowsData(function() {
-      displayWorkflows();
-      if (workflows.length === 0) {
-        document.getElementById("workflows-empty").style.display = "flex";
-      } else {
-        document.getElementById("workflows-empty").style.display = "none";
-      }
+    fetchWorkflowPageNumber(function (pages) {
+      fetchWorkflowsPage(0, function(workflows, pageState) {
+        displayWorkflows(workflows);
+        removeLoader();
+        if (workflows.length === 0) {
+          document.getElementById("workflows-empty").style.display = "flex";
+          return;
+        } else {
+          document.getElementById("workflows-empty").style.display = "none";
+        }
+        displayPaging(pages, 0, pageState);
+      });
     });
   });
 
-  function fetchWorkflowsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/selected/", "GET", []);
+  function fetchWorkflowPageNumber(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/pages/", "GET", []);
     request.send(function (status, responseText) {
-      workflows = JSON.parse(responseText).workflows;
-      removeLoader();
-      callback();
+      callback(JSON.parse(responseText).pages);
     });
   }
 
-  function displayWorkflows() {
+  function fetchWorkflowsPage(page, callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/page/" + page + "/", "GET", []);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      callback(response.workflows, response.page);
+    });
+  }
+
+  function displayWorkflows(workflows) {
     document.getElementById("workflows-list").innerHTML = "";
     for (var i = 0; i < workflows.length; i++) {
       var entry = workflows[i];
-      if(!(shouldDisplayWorkflowEntry(entry))) {
-        continue;
-      }
-      displayWorkflow(entry.id, entry.name, entry.creator, entry.created, entry.armed, entry.triggerType);
+      displayWorkflow(entry.id, entry.name, entry.creator, entry.created,
+        entry.armed, entry.triggerType);
     }
-  }
-
-  function shouldDisplayWorkflowEntry(entry) {
-    return workflowsCurrentNameFilter.length === 0 ||
-      entry.name.toLowerCase().includes(workflowsCurrentNameFilter.toLowerCase()) ||
-      entry.creator.toLowerCase().includes(workflowsCurrentNameFilter.toLowerCase()) ||
-      entry.created.toLowerCase().includes(workflowsCurrentNameFilter.toLowerCase());
   }
 
   function displayWorkflow(id, name, creator, created, armed, triggerType) {
@@ -303,6 +308,102 @@
     div.appendChild(element);
     entry.appendChild(div);
     return element;
+  }
+
+  const pageVisibilityRange = 3;
+
+  function displayPaging(pages, currentPage, pageState) {
+    displayPagingShiftButton("workflows-previous-page", currentPage > 0,
+      pages, currentPage, pageState, -1);
+    displayPagingShiftButton("workflows-next-page", currentPage < pages - 1,
+      pages, currentPage, pageState, 1);
+    var pagesElement = document.getElementById("workflows-pages");
+    pagesElement.innerHTML = "";
+    for (var i = pageVisibilityRange - 1; i > 0; i--) {
+      var page = currentPage - i;
+      if (page < 0) {
+        continue;
+      }
+      createPageButton(pagesElement, pages, currentPage, pageState, page, false);
+    }
+    createPageButton(pagesElement, pages, currentPage, pageState, currentPage, true);
+    for (var i = 1; i < pageVisibilityRange; i++) {
+      var page = currentPage + i;
+      if (page >= pages) {
+        continue;
+      }
+      createPageButton(pagesElement, pages, currentPage, pageState, page, false);
+    }
+    displayPagingEllipsis(pagesElement, pages, currentPage);
+    document.getElementById("workflows-paging").classList.remove("d-none");
+  }
+
+  function displayPagingShiftButton(id, isEnabled, pages, currentPage, pageState, direction) {
+    var button = document.getElementById(id);
+    if (isEnabled) {
+      button.classList.remove("workflows-page-disabled");
+    } else {
+      button.classList.add("workflows-page-disabled");
+    }
+    button.onclick = function (event) {
+      if (!isEnabled) {
+        return;
+      }
+      shiftPage(pages, currentPage, pageState, direction);
+    }
+  }
+
+  function displayPagingEllipsis(pagesElement, pages, currentPage) {
+    if (currentPage - (pageVisibilityRange - 1) > 0) {
+      pagesElement.insertAdjacentHTML("afterbegin",
+        "<i class='workflows-paging-ellipsis workflows-paging-ellipsis-start " +
+        "fa-solid fa-ellipsis'></i>");
+    }
+    if (currentPage + (pageVisibilityRange - 1) < pages - 1) {
+      pagesElement.insertAdjacentHTML("beforeend",
+        "<i class='workflows-paging-ellipsis workflows-paging-ellipsis-end " +
+        "fa-solid fa-ellipsis'></i>");
+    }
+  }
+
+  function createPageButton(pagesElement, pages, currentPage, pageState, page, isActive) {
+    var button = document.createElement("a");
+    button.classList.add("workflows-page");
+    if (isActive) {
+      button.classList.add("workflows-page-active");
+    }
+    button.innerHTML = page + 1;
+    button.onclick = function (event) {
+      onPageButtonClick(pages, currentPage, pageState, page);
+    };
+    pagesElement.appendChild(button);
+  }
+
+  function onPageButtonClick(pages, currentPage, pageState, page) {
+    if (page === currentPage) {
+      return;
+    }
+    if (Math.abs(page - currentPage) === 1) {
+      shiftPage(pages, currentPage, pageState, page - currentPage);
+      return;
+    }
+    fetchWorkflowsPage(page, function(workflows, pageState) {
+      updatePaging(pages, page, pageState, workflows);
+    });
+  }
+
+  function shiftPage(pages, currentPage, pageState, direction) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/page/shift/", "POST",
+      [], {pageState: pageState, direction: direction < 0 ? "BACKWARD" : "FORWARD"});
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      updatePaging(pages, currentPage + direction, response.page, response.workflows);
+    });
+  }
+
+  function updatePaging(pages, currentPage, pageState, workflows) {
+    displayWorkflows(workflows);
+    displayPaging(pages, currentPage, pageState);
   }
 
   document.getElementById("workflows-search-input").oninput = function(event) {
