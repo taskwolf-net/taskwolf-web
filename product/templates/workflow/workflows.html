@@ -67,6 +67,7 @@
 <script>
   var workflowsCurrentNameFilter = "";
   var changeStateBlocked = false;
+  var pagingStartingPoint = "";
 
   $(document).ready(function() {
     displayLoader();
@@ -97,6 +98,7 @@
       [], {pageState: pageState, currentPage: currentPage, targetPage: targetPage});
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
+      pagingStartingPoint = targetPage === 0 ? "FORWARD" : "BACKWARD";
       callback(response.workflows, response.page);
     });
   }
@@ -389,7 +391,8 @@
 
   function shiftPage(pages, currentPage, pageState, direction) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/page/shift/", "POST",
-      [], {pageState: pageState, direction: direction < 0 ? "BACKWARD" : "FORWARD"});
+      [], {pageState: pageState, currentPage: currentPage, startingPoint: pagingStartingPoint,
+        direction: direction < 0 ? "BACKWARD" : "FORWARD"});
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
       updatePaging(pages, currentPage + direction, response.page, response.workflows);
