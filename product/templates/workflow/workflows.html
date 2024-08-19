@@ -65,43 +65,22 @@
 </html>
 
 <script>
-  var workflowsCurrentNameFilter = "";
   var changeStateBlocked = false;
-  var pagingStartingPoint = "";
 
   $(document).ready(function() {
     displayLoader();
-    fetchWorkflowPageNumber(function (pages) {
-      fetchWorkflowsPage("", 0, 0, function(workflows, pageState) {
-        displayWorkflows(workflows);
-        removeLoader();
-        if (workflows.length === 0) {
-          document.getElementById("workflows-empty").style.display = "flex";
-          return;
-        } else {
-          document.getElementById("workflows-empty").style.display = "none";
-        }
-        displayPaging(pages, 0, pageState);
-      });
+    fetchWorkflowsPage(0, function(workflows, pageState, pageNumber) {
+      displayWorkflows(workflows);
+      removeLoader();
+      if (workflows.length === 0) {
+        document.getElementById("workflows-empty").style.display = "flex";
+        return;
+      } else {
+        document.getElementById("workflows-empty").style.display = "none";
+      }
+      displayPaging(pageNumber, 0, pageState);
     });
   });
-
-  function fetchWorkflowPageNumber(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/pages/", "GET", []);
-    request.send(function (status, responseText) {
-      callback(JSON.parse(responseText).pages);
-    });
-  }
-
-  function fetchWorkflowsPage(pageState, currentPage, targetPage, callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/page/", "POST",
-      [], {pageState: pageState, currentPage: currentPage, targetPage: targetPage});
-    request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
-      pagingStartingPoint = targetPage === 0 ? "FORWARD" : "BACKWARD";
-      callback(response.workflows, response.page);
-    });
-  }
 
   function displayWorkflows(workflows) {
     document.getElementById("workflows-list").innerHTML = "";
@@ -314,6 +293,7 @@
   }
 
   const pageVisibilityRange = 2;
+  var pagingStartingPoint = "";
 
   function displayPaging(pages, currentPage, pageState) {
     displayPagingShiftButton("workflows-previous-page", currentPage > 0,
@@ -384,18 +364,30 @@
       shiftPage(pages, currentPage, pageState, page - currentPage);
       return;
     }
-    fetchWorkflowsPage(pageState, currentPage, page, function(workflows, pageState) {
-      updatePaging(pages, page, pageState, workflows);
+    fetchWorkflowsPage(page, function(workflows, pageState, pageNumber) {
+      updatePaging(pageNumber, page, pageState, workflows);
+    });
+  }
+
+  function fetchWorkflowsPage(targetPage, callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/page/", "POST",
+      [], {targetPage: targetPage, creator: "ac35898d-4ce6-408c-8f31-40e1f180ad31",
+      startTime: -1, endTime: -1});
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      pagingStartingPoint = targetPage === 0 ? "FORWARD" : "BACKWARD";
+      callback(response.workflows, response.page, response.pageNumber);
     });
   }
 
   function shiftPage(pages, currentPage, pageState, direction) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/page/shift/", "POST",
-      [], {pageState: pageState, currentPage: currentPage, startingPoint: pagingStartingPoint,
-        direction: direction < 0 ? "BACKWARD" : "FORWARD"});
+      [], {pageState: pageState, startingPoint: pagingStartingPoint,
+        direction: direction < 0 ? "BACKWARD" : "FORWARD", creator: "ac35898d-4ce6-408c-8f31-40e1f180ad31",
+        startTime: -1, endTime: -1});
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
-      updatePaging(pages, currentPage + direction, response.page, response.workflows);
+      updatePaging(response.pageNumber, currentPage + direction, response.page, response.workflows);
     });
   }
 
@@ -405,7 +397,6 @@
   }
 
   document.getElementById("workflows-search-input").oninput = function(event) {
-    workflowsCurrentNameFilter = event.target.value;
     displayWorkflows();
   };
 
