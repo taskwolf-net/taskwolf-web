@@ -66,6 +66,11 @@
   color: #545454;
 }
 
+#workflows-filter {
+  width: fit-content;
+  margin-right: 2%;
+}
+
 #workflow-create {
   width: 20%;
   margin-left: 2%;
@@ -518,7 +523,6 @@ input:checked + .slider:before {
 }
 
 #workflows-empty {
-  display: none;
   flex-flow: wrap;
   justify-content: center;
   text-align: center;

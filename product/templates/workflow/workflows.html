@@ -10,6 +10,7 @@
         <h1 id="workflows-headline">{% trans 'product.workflows.headline' %}</h1>
         <div id="workflows-header">
           <div class="d-flex w-100">
+            <button type="button" id="workflows-filter" class="btn btn-dark"><i class="fa-solid fa-sliders"></i></button>
             <div id="workflows-search-box">
               <input id="workflows-search-input" placeholder=" {% trans 'product.workflows.search' %}" type="text" class="form-control" value="" autocomplete="off">
               <button type="button">
@@ -55,7 +56,7 @@
         </div>
         <div id="workflows-loader">
         </div>
-        <div id="workflows-empty">
+        <div id="workflows-empty" class="d-none">
           <span id="workflows-empty-headline">{% trans 'product.workflows.empty.headline' %}</span>
           <span>{% trans 'product.workflows.empty.text' %}</span><a id="workflows-empty-link" href="javascript:createWorkflow()">{% trans 'product.workflows.empty.link' %}</a><span>?</span>
         </div>
@@ -70,15 +71,8 @@
   $(document).ready(function() {
     displayLoader();
     fetchWorkflowsPage(0, function(workflows, pageState, pageNumber) {
-      displayWorkflows(workflows);
       removeLoader();
-      if (workflows.length === 0) {
-        document.getElementById("workflows-empty").style.display = "flex";
-        return;
-      } else {
-        document.getElementById("workflows-empty").style.display = "none";
-      }
-      displayPaging(pageNumber, 0, pageState);
+      updatePaging(pageNumber, 0, pageState, workflows);
     });
   });
 
@@ -294,6 +288,8 @@
 
   const pageVisibilityRange = 2;
   var pagingStartingPoint = "";
+  var pagingFilterSearch = "";
+  var pagingFilterCreator = "";
 
   function displayPaging(pages, currentPage, pageState) {
     displayPagingShiftButton("workflows-previous-page", currentPage > 0,
@@ -325,7 +321,6 @@
         "fa-solid fa-ellipsis mx-4'></i>");
     }
     createPageButton(pagesElement, pages, currentPage, pageState, pages - 1, currentPage === pages - 1);
-    document.getElementById("workflows-paging").classList.remove("d-none");
   }
 
   function displayPagingShiftButton(id, isEnabled, pages, currentPage, pageState, direction) {
@@ -370,9 +365,12 @@
   }
 
   function fetchWorkflowsPage(targetPage, callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/page/", "POST",
-      [], {targetPage: targetPage, creator: "ac35898d-4ce6-408c-8f31-40e1f180ad31",
-      startTime: -1, endTime: -1});
+    var body = {targetPage: targetPage, search: pagingFilterSearch};
+    if (pagingFilterCreator !== "") {
+      body.creator = pagingFilterCreator;
+    }
+    let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/page/",
+      "POST", [], body);
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
       pagingStartingPoint = targetPage === 0 ? "FORWARD" : "BACKWARD";
@@ -381,23 +379,44 @@
   }
 
   function shiftPage(pages, currentPage, pageState, direction) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/page/shift/", "POST",
-      [], {pageState: pageState, startingPoint: pagingStartingPoint,
-        direction: direction < 0 ? "BACKWARD" : "FORWARD", creator: "ac35898d-4ce6-408c-8f31-40e1f180ad31",
-        startTime: -1, endTime: -1});
+    var body = {pageState: pageState, startingPoint: pagingStartingPoint,
+      direction: direction < 0 ? "BACKWARD" : "FORWARD"};
+    if (pagingFilterCreator !== "") {
+      body.creator = pagingFilterCreator;
+    }
+    let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/page/shift/",
+      "POST", [], body);
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
       updatePaging(response.pageNumber, currentPage + direction, response.page, response.workflows);
     });
   }
 
-  function updatePaging(pages, currentPage, pageState, workflows) {
+  function updatePaging(pageNumber, currentPage, pageState, workflows) {
     displayWorkflows(workflows);
-    displayPaging(pages, currentPage, pageState);
+    if (workflows.length === 0) {
+      document.getElementById("workflows-empty").classList.remove("d-none");
+      document.getElementById("workflows-paging").classList.add("d-none");
+    } else {
+      document.getElementById("workflows-empty").classList.add("d-none");
+      displayPaging(pageNumber, currentPage, pageState);
+      document.getElementById("workflows-paging").classList.remove("d-none");
+    }
   }
 
+  var currentSearchTimeout = -1;
+
   document.getElementById("workflows-search-input").oninput = function(event) {
-    displayWorkflows();
+    if (currentSearchTimeout !== -1) {
+      clearTimeout(currentSearchTimeout);
+    }
+    currentSearchTimeout = setTimeout(function () {
+      currentSearchTimeout = -1;
+      pagingFilterSearch = event.target.value;
+      fetchWorkflowsPage(0, function(workflows, pageState, pageNumber) {
+        updatePaging(pageNumber, 0, pageState, workflows);
+      });
+    }, 500);
   };
 
   document.getElementById("workflow-create").onclick = function(event) {
