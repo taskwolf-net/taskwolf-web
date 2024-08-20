@@ -9,18 +9,25 @@
       <div id="workflows-wrapper">
         <h1 id="workflows-headline">{% trans 'product.workflows.headline' %}</h1>
         <div id="workflows-header">
-          <div class="d-flex w-100">
-            <button type="button" id="workflows-filter" class="btn btn-dark"><i class="fa-solid fa-sliders"></i></button>
-            <div id="workflows-search-box">
-              <input id="workflows-search-input" placeholder=" {% trans 'product.workflows.search' %}" type="text" class="form-control" value="" autocomplete="off">
-              <button type="button">
-                <i class="fa fa-search"></i>
-              </button>
-            </div>
-            <button type="button" id="workflow-create" class="btn btn-primary btn-block">{% trans 'product.workflows.create' %}</button>
+          <button type="button" id="workflows-filter" class="btn btn-dark"><i class="fa-solid fa-sliders"></i></button>
+          <div id="workflows-search-box">
+            <input id="workflows-search-input" placeholder=" {% trans 'product.workflows.search' %}" type="text" class="form-control" value="" autocomplete="off">
+            <button type="button">
+              <i class="fa fa-search"></i>
+            </button>
           </div>
+          <button type="button" id="workflow-create" class="btn btn-primary btn-block">{% trans 'product.workflows.create' %}</button>
         </div>
-        <ul id="workflows-table-description">
+        <div id="workflows-filter-container" class="bg-dark rounded p-3 mt-4 d-none">
+          <div class="vr"></div>
+          <div class="workflows-filter-section">
+            <h6 class="text-center fw-bold my-3">{% trans 'product.workflows.filter.creator' %}</h6>
+            <ul id="workflows-filter-creator-list">
+            </ul>
+          </div>
+          <div class="vr"></div>
+        </div>
+        <ul id="workflows-table-description" class="mt-4">
           <li id="workflows-table-description-name">
             <div>
               <span>{% trans 'product.workflows.name' %}</span>
@@ -60,6 +67,9 @@
           <span id="workflows-empty-headline">{% trans 'product.workflows.empty.headline' %}</span>
           <span>{% trans 'product.workflows.empty.text' %}</span><a id="workflows-empty-link" href="javascript:createWorkflow()">{% trans 'product.workflows.empty.link' %}</a><span>?</span>
         </div>
+        <div id="workflows-not-found" class="d-none">
+          <span id="workflows-not-found-headline">{% trans 'product.workflows.not.found.headline' %}</span>
+        </div>
       </div>
     </div>
   </body>
@@ -72,8 +82,10 @@
     displayLoader();
     fetchWorkflowsPage(0, function(workflows, pageState, pageNumber) {
       removeLoader();
-      updatePaging(pageNumber, 0, pageState, workflows);
+      updatePaging(pageNumber, 0, pageState, workflows,
+        document.getElementById("workflows-empty"));
     });
+    fillWorkflowsCreatorFilter();
   });
 
   function displayWorkflows(workflows) {
@@ -360,7 +372,8 @@
       return;
     }
     fetchWorkflowsPage(page, function(workflows, pageState, pageNumber) {
-      updatePaging(pageNumber, page, pageState, workflows);
+      updatePaging(pageNumber, page, pageState, workflows,
+        document.getElementById("workflows-not-found"));
     });
   }
 
@@ -388,20 +401,69 @@
       "POST", [], body);
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
-      updatePaging(response.pageNumber, currentPage + direction, response.page, response.workflows);
+      updatePaging(response.pageNumber, currentPage + direction, response.page,
+        response.workflows, document.getElementById("workflows-not-found"));
     });
   }
 
-  function updatePaging(pageNumber, currentPage, pageState, workflows) {
+  function updatePaging(pageNumber, currentPage, pageState, workflows, emptyElement) {
     displayWorkflows(workflows);
+    document.getElementById("workflows-empty").classList.add("d-none");
+    document.getElementById("workflows-not-found").classList.add("d-none");
     if (workflows.length === 0) {
-      document.getElementById("workflows-empty").classList.remove("d-none");
+      emptyElement.classList.remove("d-none");
       document.getElementById("workflows-paging").classList.add("d-none");
     } else {
-      document.getElementById("workflows-empty").classList.add("d-none");
+      emptyElement.classList.add("d-none");
       displayPaging(pageNumber, currentPage, pageState);
       document.getElementById("workflows-paging").classList.remove("d-none");
     }
+  }
+
+  function fillWorkflowsCreatorFilter() {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET", []);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      if ("id" in response) {
+        createWorkflowCreatorEntry(response.ownerId, response.ownerName, false);
+        for (var i = 0; i < 100; i++) {
+          createWorkflowCreatorEntry(response.ownerId, response.ownerName, false);
+        }
+        for (var i = 0; i < response.members.length; i++) {
+          var member = response.members[i];
+          createWorkflowCreatorEntry(member.id, member.name, false);
+        }
+      } else {
+        createWorkflowCreatorEntry("", "{% trans 'product.workflows.filter.creator.you' %}", true);
+      }
+    });
+  }
+
+  function createWorkflowCreatorEntry(id, name, isChecked) {
+    var entry = document.createElement("li");
+    entry.classList.add("form-check");
+    var entryInput = document.createElement("input");
+    entryInput.classList.add("form-check-input");
+    entryInput.type = "radio";
+    entryInput.name = "workflows-filter-creator";
+    entryInput.checked = isChecked;
+    entryInput.id = "workflows-filter-creator-" + id;
+    entry.appendChild(entryInput);
+    entryInput.onclick = function (event) {
+      if (id === "") {
+        return;
+      }
+      pagingFilterCreator = id;
+      fetchWorkflowsPage(0, function(workflows, pageState, pageNumber) {
+        updatePaging(pageNumber, 0, pageState, workflows,
+          document.getElementById("workflows-not-found"));
+      });
+    }
+    var entryLabel = document.createElement("label");
+    entryLabel.classList.add("form-check-label");
+    entryLabel.innerHTML = name;
+    entry.appendChild(entryLabel);
+    document.getElementById("workflows-filter-creator-list").appendChild(entry);
   }
 
   var currentSearchTimeout = -1;
@@ -414,9 +476,14 @@
       currentSearchTimeout = -1;
       pagingFilterSearch = event.target.value;
       fetchWorkflowsPage(0, function(workflows, pageState, pageNumber) {
-        updatePaging(pageNumber, 0, pageState, workflows);
+        updatePaging(pageNumber, 0, pageState, workflows,
+          document.getElementById("workflows-not-found"));
       });
     }, 500);
+  };
+
+  document.getElementById("workflows-filter").onclick = function(event) {
+    document.getElementById("workflows-filter-container").classList.toggle("d-none");
   };
 
   document.getElementById("workflow-create").onclick = function(event) {

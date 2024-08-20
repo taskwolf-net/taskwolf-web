@@ -1,3 +1,8 @@
+#workflows-wrapper {
+  width: min(calc(2000px - 15vw), 95%);
+  margin: auto;
+}
+
 #workflows-headline {
   text-align: center;
   font-weight: bold;
@@ -5,8 +10,6 @@
 }
 
 #workflows-header {
-  width: min(calc(2000px - 15vw), 95%);
-  margin: auto;
   margin-top: 3%;
   display: flex;
   align-items: center;
@@ -76,6 +79,27 @@
   margin-left: 2%;
 }
 
+#workflows-filter-container {
+  width: 100%;
+  height: 300px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.workflows-filter-section {
+  width: 20%;
+  height: fit-content;
+}
+
+#workflows-filter-creator-list {
+  width: fit-content;
+  height: 200px;
+  padding: 0 20px;
+  margin: auto;
+  overflow: auto;
+}
+
 @media (max-width: 1200px) {
   #workflows-header {
     display: block;
@@ -87,11 +111,9 @@
 }
 
 #workflows-list {
-  width: min(calc(2000px - 15vw), 95%);
   position: relative;
   list-style-type: none;
   padding: 0;
-  margin: auto;
 }
 
 #workflows-list li {
@@ -178,11 +200,8 @@
 }
 
 #workflows-table-description {
-  width: min(calc(2000px - 15vw), 95%);
   position: relative;
   list-style-type: none;
-  margin: auto;
-  margin-top: 1%;
   border-bottom: 4px #717171 solid;
   padding: 0;
   display: flex;
@@ -522,7 +541,7 @@ input:checked + .slider:before {
   color: black;
 }
 
-#workflows-empty {
+#workflows-empty, #workflows-not-found {
   flex-flow: wrap;
   justify-content: center;
   text-align: center;
@@ -530,7 +549,7 @@ input:checked + .slider:before {
   white-space: pre;
 }
 
-#workflows-empty-headline {
+#workflows-empty-headline, #workflows-not-found-headline {
   font-size: 20px;
   font-weight: bold;
   width: 100%;
