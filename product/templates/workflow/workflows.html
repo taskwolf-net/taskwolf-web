@@ -31,21 +31,25 @@
           <li id="workflows-table-description-name">
             <div>
               <span>{% trans 'product.workflows.name' %}</span>
+              <i class="workflows-table-description-sort fa-solid fa-sort-down ms-2" role="button" type="name"></i>
             </div>
           </li>
           <li>
             <div>
               <span>{% trans 'product.workflows.creator' %}</span>
+              <i class="workflows-table-description-sort fa-solid fa-sort ms-2" role="button" type="creator"></i>
             </div>
           </li>
           <li>
             <div>
               <span>{% trans 'product.workflows.date' %}</span>
+              <i class="workflows-table-description-sort fa-solid fa-sort ms-2" role="button" type="created"></i>
             </div>
           </li>
           <li id="workflows-table-description-is-running">
             <div>
               <span>{% trans 'product.workflows.running' %}</span>
+              <i class="workflows-table-description-sort fa-solid fa-sort ms-2" role="button" type="state"></i>
             </div>
           </li>
           <li id="workflows-table-description-settings">
@@ -300,8 +304,13 @@
 
   const pageVisibilityRange = 2;
   var pagingStartingPoint = "";
+  var pagingSorting = "name";
+  var pagingOrder = "DESCENDING";
   var pagingFilterSearch = "";
   var pagingFilterCreator = "";
+  var pagingFilterStartTime = -1;
+  var pagingFilterEndTime = -1;
+  var pagingFilterState = "";
 
   function displayPaging(pages, currentPage, pageState) {
     displayPagingShiftButton("workflows-previous-page", currentPage > 0,
@@ -378,7 +387,8 @@
   }
 
   function fetchWorkflowsPage(targetPage, callback) {
-    var body = {targetPage: targetPage, search: pagingFilterSearch};
+    var body = {targetPage: targetPage, search: pagingFilterSearch,
+      sorting: pagingSorting, order: pagingOrder};
     if (pagingFilterCreator !== "") {
       body.creator = pagingFilterCreator;
     }
@@ -393,7 +403,8 @@
 
   function shiftPage(pages, currentPage, pageState, direction) {
     var body = {pageState: pageState, startingPoint: pagingStartingPoint,
-      direction: direction < 0 ? "BACKWARD" : "FORWARD"};
+      direction: direction < 0 ? "BACKWARD" : "FORWARD", sorting: pagingSorting,
+      order: pagingOrder};
     if (pagingFilterCreator !== "") {
       body.creator = pagingFilterCreator;
     }
@@ -481,6 +492,36 @@
       });
     }, 500);
   };
+
+  var sortingElements = document.getElementsByClassName("workflows-table-description-sort");
+  for (var i = 0; i < sortingElements.length; i++) {
+    let sortingElement = sortingElements[i];
+    sortingElement.onclick = function (event) {
+      updateSorting(sortingElement);
+    }
+  }
+
+  function updateSorting(selectedElement) {
+    for (var i = 0; i < sortingElements.length; i++) {
+      let sortingElement = sortingElements[i];
+      sortingElement.classList.remove("fa-sort-up", "fa-sort-down");
+      sortingElement.classList.add("fa-sort");
+    }
+    var selectedSorting = selectedElement.getAttribute("type");
+    selectedElement.classList.remove("fa-sort");
+    if (pagingSorting === selectedSorting) {
+      pagingOrder = pagingOrder === "ASCENDING" ? "DESCENDING" : "ASCENDING";
+      selectedElement.classList.add(pagingOrder === "DESCENDING" ? "fa-sort-down" : "fa-sort-up");
+    } else {
+      pagingOrder = "DESCENDING";
+      selectedElement.classList.add("fa-sort-down");
+    }
+    pagingSorting = selectedSorting;
+    fetchWorkflowsPage(0, function(workflows, pageState, pageNumber) {
+      updatePaging(pageNumber, 0, pageState, workflows,
+        document.getElementById("workflows-not-found"));
+    });
+  }
 
   document.getElementById("workflows-filter").onclick = function(event) {
     document.getElementById("workflows-filter-container").classList.toggle("d-none");

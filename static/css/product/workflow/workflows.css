@@ -1,5 +1,5 @@
 #workflows-wrapper {
-  width: min(calc(2000px - 15vw), 95%);
+  width: min(1500px, 95%);
   margin: auto;
 }
 
@@ -101,10 +101,6 @@
 }
 
 @media (max-width: 1200px) {
-  #workflows-header {
-    display: block;
-  }
-
   #workflow-create {
     width: fit-content;
   }
@@ -136,7 +132,7 @@
 }
 
 #workflows-list li div {
-  padding: 3%;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   width: 22%;
@@ -196,7 +192,7 @@
 }
 
 .workflows-entry-settings-dropdown-entry label {
-  margin-left: 15px;
+  margin-left: 20px;
 }
 
 #workflows-table-description {
@@ -206,11 +202,12 @@
   padding: 0;
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 #workflows-table-description li {
   width: 22%;
-  padding: 2% 3%;
+  padding: 20px;
   font-weight: bold;
   font-size: 20px;
 }
