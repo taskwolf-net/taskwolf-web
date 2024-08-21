@@ -24,6 +24,9 @@
             <input type="search" class="mb-3" id="workflows-filter-application-search" placeholder="{% trans 'product.workflows.filter.application' %}"/>
             <ul id="workflows-filter-application-list">
             </ul>
+            <div id="workflows-filter-application-empty" class="text-center d-none">
+              <span>{% trans 'product.workflows.filter.application.empty' %}</span>
+            </div>
           </div>
           <div class="vr"></div>
           <div class="workflows-filter-section">
@@ -31,6 +34,9 @@
             <input type="search" class="mb-3" id="workflows-filter-creator-search" placeholder="{% trans 'product.workflows.filter.creator' %}"/>
             <ul id="workflows-filter-creator-list">
             </ul>
+            <div id="workflows-filter-creator-empty" class="text-center d-none">
+              <span>{% trans 'product.workflows.filter.creator.empty' %}</span>
+            </div>
           </div>
           <div class="vr"></div>
           <div class="workflows-filter-section">
@@ -458,6 +464,13 @@
     });
   }
 
+  function updateWorkflows() {
+    fetchWorkflowsPage(0, function(workflows, pageState, pageNumber) {
+      updatePaging(pageNumber, 0, pageState, workflows,
+        document.getElementById("workflows-not-found"));
+    });
+  }
+
   function updatePaging(pageNumber, currentPage, pageState, workflows, emptyElement) {
     displayWorkflows(workflows);
     document.getElementById("workflows-empty").classList.add("d-none");
@@ -491,7 +504,8 @@
       for (var i = 0; i < organization.members.length; i++) {
         var member = organization.members[i];
         if (search === "" || member.name.toLowerCase().includes(search)) {
-          list.appendChild(createWorkflowCreatorEntry(member.id, member.name, false));
+          list.appendChild(createWorkflowCreatorEntry(member.id, member.name,
+            pagingFilterCreator === member.id));
         }
       }
     } else {
@@ -500,11 +514,13 @@
           "{% trans 'product.workflows.filter.creator.you' %}", true));
       }
     }
+    var emptyElement = document.getElementById("workflows-filter-creator-empty");
     if (list.innerHTML === "") {
-      var emptyElement = document.createElement("li");
-      emptyElement.classList.add("text-center");
-      emptyElement.innerText = "{% trans 'product.workflows.filter.creator.empty' %}";
-      list.appendChild(emptyElement);
+      list.classList.add("d-none");
+      emptyElement.classList.remove("d-none");
+    } else {
+      list.classList.remove("d-none");
+      emptyElement.classList.add("d-none");
     }
   }
 
@@ -513,7 +529,7 @@
     entry.classList.add("form-check");
     var entryInput = document.createElement("input");
     entryInput.classList.add("form-check-input");
-    entryInput.type = "checkbox";
+    entryInput.type = "radio";
     entryInput.name = "workflows-filter-creator";
     entryInput.checked = isChecked;
     entryInput.id = "workflows-filter-creator-" + id;
@@ -523,10 +539,7 @@
         return;
       }
       pagingFilterCreator = id;
-      fetchWorkflowsPage(0, function(workflows, pageState, pageNumber) {
-        updatePaging(pageNumber, 0, pageState, workflows,
-          document.getElementById("workflows-not-found"));
-      });
+      updateWorkflows();
     }
     var entryLabel = document.createElement("label");
     entryLabel.classList.add("form-check-label");
@@ -567,11 +580,13 @@
           application.name, application.logo, false));
       }
     }
+    var emptyElement = document.getElementById("workflows-filter-application-empty");
     if (list.innerHTML === "") {
-      var emptyElement = document.createElement("li");
-      emptyElement.classList.add("text-center");
-      emptyElement.innerText = "{% trans 'product.workflows.filter.application.empty' %}";
-      list.appendChild(emptyElement);
+      list.classList.add("d-none");
+      emptyElement.classList.remove("d-none");
+    } else {
+      list.classList.remove("d-none");
+      emptyElement.classList.add("d-none");
     }
   }
 
@@ -580,7 +595,30 @@
     var entryLogo = document.createElement("img");
     entryLogo.src = "https://taskwolf.net/static/img/applications/" + logo;
     entry.appendChild(entryLogo);
+    applyTooltips(entryLogo, entry, name);
     return entry;
+  }
+
+  document.getElementById("workflows-filter-start-time").oninput = function (event) {
+    var date = new Date(document.getElementById("workflows-filter-start-time").value);
+    pagingFilterStartTime = date.getTime();
+    updateWorkflows();
+  }
+
+  document.getElementById("workflows-filter-end-time").oninput = function (event) {
+    var date = new Date(document.getElementById("workflows-filter-end-time").value);
+    pagingFilterEndTime = date.getTime();
+    updateWorkflows();
+  }
+
+  document.getElementById("workflows-filter-state-enabled").onclick = function (event) {
+    pagingFilterState = "ARMED";
+    updateWorkflows();
+  }
+
+  document.getElementById("workflows-filter-state-disabled").onclick = function (event) {
+    pagingFilterState = "DISABLED";
+    updateWorkflows();
   }
 
   document.getElementById("workflows-filter-application-search").oninput = function (event) {
@@ -596,10 +634,7 @@
     currentSearchTimeout = setTimeout(function () {
       currentSearchTimeout = -1;
       pagingFilterSearch = event.target.value;
-      fetchWorkflowsPage(0, function(workflows, pageState, pageNumber) {
-        updatePaging(pageNumber, 0, pageState, workflows,
-          document.getElementById("workflows-not-found"));
-      });
+      updateWorkflows();
     }, 500);
   };
 
@@ -627,10 +662,7 @@
       selectedElement.classList.add("fa-sort-down");
     }
     pagingSorting = selectedSorting;
-    fetchWorkflowsPage(0, function(workflows, pageState, pageNumber) {
-      updatePaging(pageNumber, 0, pageState, workflows,
-        document.getElementById("workflows-not-found"));
-    });
+    updateWorkflows();
   }
 
   document.getElementById("workflows-filter").onclick = function(event) {
@@ -679,6 +711,16 @@
         return;
       }
       Swal.fire("{% trans 'product.workflow.duplicate.successful.title' %}", "{% trans 'product.workflow.duplicate.successful.body' %}", "success").then(success => window.location.href = "/workflows/");
+    });
+  }
+
+  function applyTooltips(element, container, text) {
+    $(element).attr("data-bs-toggle", "tooltip");
+    $(element).attr("data-bs-placement", "top");
+    $(element).attr("data-bs-title", text);
+    container.classList.add("position-relative");
+    new bootstrap.Tooltip(element, {
+      container: container
     });
   }
 

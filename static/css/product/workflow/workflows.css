@@ -151,11 +151,27 @@
   box-shadow: inset 0 0 20px 20px #23232329;
 }
 
+.form-check-input {
+  background-color: transparent !important;
+}
+
+.form-check-input:checked {
+  background-color: #0d6efd !important;
+}
+
+.dark .form-check-input {
+  border: 1px solid #cecece !important;
+}
+
+.light .form-check-input {
+  border: 1px solid #4c4c4c !important;
+}
+
 .workflows-filter-section {
   width: 20%;
   height: fit-content;
-  padding-left: 2%;
-  padding-right: 2%;
+  padding-left: 3%;
+  padding-right: 3%;
 }
 
 #workflows-filter-application {
@@ -164,7 +180,7 @@
 
 #workflows-filter-application-list, #workflows-filter-creator-list, #workflows-filter-state-list  {
   height: 130px;
-  padding: 0;
+  padding: 0 10px;
   overflow: auto;
   list-style-type: none;
 }
