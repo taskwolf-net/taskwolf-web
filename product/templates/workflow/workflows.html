@@ -19,13 +19,44 @@
           <button type="button" id="workflow-create" class="btn btn-primary btn-block">{% trans 'product.workflows.create' %}</button>
         </div>
         <div id="workflows-filter-container" class="bg-dark rounded p-3 mt-4 d-none">
+          <div id="workflows-filter-application" class="workflows-filter-section">
+            <h6 class="text-center fw-bold my-3">{% trans 'product.workflows.filter.application' %}</h6>
+            <ul id="workflows-filter-application-list">
+            </ul>
+          </div>
           <div class="vr"></div>
           <div class="workflows-filter-section">
             <h6 class="text-center fw-bold my-3">{% trans 'product.workflows.filter.creator' %}</h6>
+            <input type="search" class="mb-3" id="workflows-filter-creator-search" placeholder="{% trans 'product.workflows.filter.creator' %}"/>
             <ul id="workflows-filter-creator-list">
             </ul>
           </div>
           <div class="vr"></div>
+          <div class="workflows-filter-section">
+            <h6 class="text-center fw-bold my-3">{% trans 'product.workflows.filter.time' %}</h6>
+            <div class="form-outline mb-3">
+              <label class="form-label">{% trans 'product.workflows.filter.start.time' %}</label>
+              <input type="date" id="workflows-filter-start-time"/>
+            </div>
+            <div class="form-outline">
+              <label class="form-label">{% trans 'product.workflows.filter.end.time' %}</label>
+              <input type="date" id="workflows-filter-end-time"/>
+            </div>
+          </div>
+          <div class="vr"></div>
+          <div class="workflows-filter-section">
+            <h6 class="text-center fw-bold my-3">{% trans 'product.workflows.filter.state' %}</h6>
+            <ul id="workflows-filter-state-list">
+              <li class="form-check">
+                <input class="form-check-input" type="radio" name="workflows-filter-state" id="workflows-filter-state-enabled">
+                <label class="form-check-label">{% trans 'product.workflows.filter.state.enabled' %}</label>
+              </li>
+              <li class="form-check">
+                <input class="form-check-input" type="radio" name="workflows-filter-state" id="workflows-filter-state-disabled">
+                <label class="form-check-label">{% trans 'product.workflows.filter.state.disabled' %}</label>
+              </li>
+            </ul>
+          </div>
         </div>
         <ul id="workflows-table-description" class="mt-4">
           <li id="workflows-table-description-name">
@@ -81,6 +112,7 @@
 
 <script>
   var changeStateBlocked = false;
+  var organization;
 
   $(document).ready(function() {
     displayLoader();
@@ -89,7 +121,10 @@
       updatePaging(pageNumber, 0, pageState, workflows,
         document.getElementById("workflows-empty"));
     });
-    fillWorkflowsCreatorFilter();
+    fetchOrganization(function (result) {
+      organization = result;
+      displayWorkflowsCreatorFilter();
+    });
   });
 
   function displayWorkflows(workflows) {
@@ -431,23 +466,39 @@
     }
   }
 
-  function fillWorkflowsCreatorFilter() {
+  function fetchOrganization(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET", []);
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
-      if ("id" in response) {
-        createWorkflowCreatorEntry(response.ownerId, response.ownerName, false);
-        for (var i = 0; i < 100; i++) {
-          createWorkflowCreatorEntry(response.ownerId, response.ownerName, false);
-        }
-        for (var i = 0; i < response.members.length; i++) {
-          var member = response.members[i];
-          createWorkflowCreatorEntry(member.id, member.name, false);
-        }
-      } else {
-        createWorkflowCreatorEntry("", "{% trans 'product.workflows.filter.creator.you' %}", true);
-      }
+      callback(JSON.parse(responseText));
     });
+  }
+
+  function displayWorkflowsCreatorFilter() {
+    var list = document.getElementById("workflows-filter-creator-list");
+    list.innerHTML = "";
+    var search = document.getElementById("workflows-filter-creator-search").value.toLowerCase();
+    var creatorCount = 0;
+    if ("id" in organization) {
+      createWorkflowCreatorEntry(organization.ownerId, organization.ownerName, false);
+      for (var i = 0; i < organization.members.length; i++) {
+        var member = organization.members[i];
+        if (!member.name.toLowerCase().includes(search)) {
+          continue;
+        }
+        list.appendChild(createWorkflowCreatorEntry(member.id, member.name, false));
+        creatorCount++;
+      }
+    } else {
+      if (search.contains("you")) {
+        createWorkflowCreatorEntry("", "{% trans 'product.workflows.filter.creator.you' %}", true);
+        creatorCount++;
+      }
+    }
+    if (creatorCount === 0) {
+      var emptyElement = document.createElement("li");
+      emptyElement.innerText = "{% trans 'product.workflows.filter.creator.empty' %}";
+      list.appendChild(emptyElement);
+    }
   }
 
   function createWorkflowCreatorEntry(id, name, isChecked) {
@@ -455,7 +506,7 @@
     entry.classList.add("form-check");
     var entryInput = document.createElement("input");
     entryInput.classList.add("form-check-input");
-    entryInput.type = "radio";
+    entryInput.type = "checkbox";
     entryInput.name = "workflows-filter-creator";
     entryInput.checked = isChecked;
     entryInput.id = "workflows-filter-creator-" + id;
@@ -474,7 +525,11 @@
     entryLabel.classList.add("form-check-label");
     entryLabel.innerHTML = name;
     entry.appendChild(entryLabel);
-    document.getElementById("workflows-filter-creator-list").appendChild(entry);
+    return entry;
+  }
+
+  document.getElementById("workflows-filter-creator-search").oninput = function (event) {
+    displayWorkflowsCreatorFilter();
   }
 
   var currentSearchTimeout = -1;

@@ -87,12 +87,75 @@
   justify-content: center;
 }
 
+#workflows-filter-container input[type=date] {
+  width: 100%;
+  background-color: transparent;
+  border-radius: 5px;
+}
+
+.dark #workflows-filter-container input[type=date] {
+  color: white;
+  -webkit-text-fill-color: white;
+  border: 1px solid #cecece;
+}
+
+.light #workflows-filter-container input[type=date] {
+  color: black;
+  -webkit-text-fill-color: black;
+  border: 1px solid #4c4c4c;
+}
+
+#workflows-filter-container input[type=search] {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.dark #workflows-filter-container input[type=search] {
+  color: white !important;
+  -webkit-text-fill-color: white;
+  border: 1px solid #cecece !important;
+}
+
+.dark #workflows-filter-container input[type=search]::placeholder {
+  color: #828282 !important;
+  -webkit-text-fill-color: #828282;
+}
+
+.light #workflows-filter-container input[type=search] {
+  color: black;
+  -webkit-text-fill-color: black;
+  border: 1px solid #4c4c4c;
+}
+
+.light #workflows-filter-container input[type=search]::placeholder {
+  color: #949494 !important;
+  -webkit-text-fill-color: #949494;
+}
+
+#workflows-filter-container input[type=search]:-webkit-autofill,
+#workflows-filter-container input[type=search]:-webkit-autofill:hover,
+#workflows-filter-container input[type=search]:-webkit-autofill:focus,
+#workflows-filter-container input[type=search]:-webkit-autofill:active{
+  -webkit-background-clip: text;
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 20px 20px #23232329;
+}
+
 .workflows-filter-section {
   width: 20%;
   height: fit-content;
+  padding-left: 2%;
+  padding-right: 2%;
 }
 
-#workflows-filter-creator-list {
+#workflows-filter-application {
+  width: 40% !important;
+}
+
+#workflows-filter-creator-list, #workflows-filter-state-list  {
   width: fit-content;
   height: 200px;
   padding: 0 20px;
