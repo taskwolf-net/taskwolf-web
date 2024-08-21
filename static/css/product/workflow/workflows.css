@@ -87,6 +87,13 @@
   justify-content: center;
 }
 
+#workflows-filter-container * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 #workflows-filter-container input[type=date] {
   width: 100%;
   background-color: transparent;
@@ -155,12 +162,24 @@
   width: 40% !important;
 }
 
-#workflows-filter-creator-list, #workflows-filter-state-list  {
-  width: fit-content;
-  height: 200px;
-  padding: 0 20px;
-  margin: auto;
+#workflows-filter-application-list, #workflows-filter-creator-list, #workflows-filter-state-list  {
+  height: 130px;
+  padding: 0;
   overflow: auto;
+  list-style-type: none;
+}
+
+#workflows-filter-application-list {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  column-gap: calc((100% - 48px * 7) / 6);
+  row-gap: 32px;
+}
+
+#workflows-filter-application-list img {
+  width: 48px;
+  height: 48px;
+  border-radius: 25%;
 }
 
 @media (max-width: 1200px) {

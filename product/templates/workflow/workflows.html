@@ -18,22 +18,23 @@
           </div>
           <button type="button" id="workflow-create" class="btn btn-primary btn-block">{% trans 'product.workflows.create' %}</button>
         </div>
-        <div id="workflows-filter-container" class="bg-dark rounded p-3 mt-4 d-none">
+        <div id="workflows-filter-container" class="bg-dark rounded-4 py-3 mt-4 d-none">
           <div id="workflows-filter-application" class="workflows-filter-section">
-            <h6 class="text-center fw-bold my-3">{% trans 'product.workflows.filter.application' %}</h6>
+            <h5 class="text-center fw-bold my-4">{% trans 'product.workflows.filter.application' %}</h5>
+            <input type="search" class="mb-3" id="workflows-filter-application-search" placeholder="{% trans 'product.workflows.filter.application' %}"/>
             <ul id="workflows-filter-application-list">
             </ul>
           </div>
           <div class="vr"></div>
           <div class="workflows-filter-section">
-            <h6 class="text-center fw-bold my-3">{% trans 'product.workflows.filter.creator' %}</h6>
+            <h5 class="text-center fw-bold my-4">{% trans 'product.workflows.filter.creator' %}</h5>
             <input type="search" class="mb-3" id="workflows-filter-creator-search" placeholder="{% trans 'product.workflows.filter.creator' %}"/>
             <ul id="workflows-filter-creator-list">
             </ul>
           </div>
           <div class="vr"></div>
           <div class="workflows-filter-section">
-            <h6 class="text-center fw-bold my-3">{% trans 'product.workflows.filter.time' %}</h6>
+            <h5 class="text-center fw-bold my-4">{% trans 'product.workflows.filter.time' %}</h5>
             <div class="form-outline mb-3">
               <label class="form-label">{% trans 'product.workflows.filter.start.time' %}</label>
               <input type="date" id="workflows-filter-start-time"/>
@@ -45,15 +46,15 @@
           </div>
           <div class="vr"></div>
           <div class="workflows-filter-section">
-            <h6 class="text-center fw-bold my-3">{% trans 'product.workflows.filter.state' %}</h6>
+            <h5 class="text-center fw-bold my-4">{% trans 'product.workflows.filter.state' %}</h5>
             <ul id="workflows-filter-state-list">
               <li class="form-check">
                 <input class="form-check-input" type="radio" name="workflows-filter-state" id="workflows-filter-state-enabled">
-                <label class="form-check-label">{% trans 'product.workflows.filter.state.enabled' %}</label>
+                <label class="form-check-label" onclick="document.getElementById('workflows-filter-state-enabled').click()">{% trans 'product.workflows.filter.state.enabled' %}</label>
               </li>
               <li class="form-check">
                 <input class="form-check-input" type="radio" name="workflows-filter-state" id="workflows-filter-state-disabled">
-                <label class="form-check-label">{% trans 'product.workflows.filter.state.disabled' %}</label>
+                <label class="form-check-label" onclick="document.getElementById('workflows-filter-state-disabled').click()">{% trans 'product.workflows.filter.state.disabled' %}</label>
               </li>
             </ul>
           </div>
@@ -113,6 +114,7 @@
 <script>
   var changeStateBlocked = false;
   var organization;
+  var applications;
 
   $(document).ready(function() {
     displayLoader();
@@ -124,6 +126,10 @@
     fetchOrganization(function (result) {
       organization = result;
       displayWorkflowsCreatorFilter();
+    });
+    fetchApplications(function (result) {
+      applications = result;
+      displayWorkflowsApplicationFilter();
     });
   });
 
@@ -469,7 +475,11 @@
   function fetchOrganization(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET", []);
     request.send(function (status, responseText) {
-      callback(JSON.parse(responseText));
+      var organization = JSON.parse(responseText);
+      if ("id" in organization) {
+        organization.members.push({id: organization.ownerId, name: organization.ownerName});
+      }
+      callback(organization);
     });
   }
 
@@ -477,25 +487,22 @@
     var list = document.getElementById("workflows-filter-creator-list");
     list.innerHTML = "";
     var search = document.getElementById("workflows-filter-creator-search").value.toLowerCase();
-    var creatorCount = 0;
     if ("id" in organization) {
-      createWorkflowCreatorEntry(organization.ownerId, organization.ownerName, false);
       for (var i = 0; i < organization.members.length; i++) {
         var member = organization.members[i];
-        if (!member.name.toLowerCase().includes(search)) {
-          continue;
+        if (search === "" || member.name.toLowerCase().includes(search)) {
+          list.appendChild(createWorkflowCreatorEntry(member.id, member.name, false));
         }
-        list.appendChild(createWorkflowCreatorEntry(member.id, member.name, false));
-        creatorCount++;
       }
     } else {
-      if (search.contains("you")) {
-        createWorkflowCreatorEntry("", "{% trans 'product.workflows.filter.creator.you' %}", true);
-        creatorCount++;
+      if (search === "" || "you".includes(search)) {
+        list.appendChild(createWorkflowCreatorEntry("",
+          "{% trans 'product.workflows.filter.creator.you' %}", true));
       }
     }
-    if (creatorCount === 0) {
+    if (list.innerHTML === "") {
       var emptyElement = document.createElement("li");
+      emptyElement.classList.add("text-center");
       emptyElement.innerText = "{% trans 'product.workflows.filter.creator.empty' %}";
       list.appendChild(emptyElement);
     }
@@ -524,12 +531,60 @@
     var entryLabel = document.createElement("label");
     entryLabel.classList.add("form-check-label");
     entryLabel.innerHTML = name;
+    entryLabel.onclick = function (event) {
+      entryInput.click();
+    }
     entry.appendChild(entryLabel);
     return entry;
   }
 
   document.getElementById("workflows-filter-creator-search").oninput = function (event) {
     displayWorkflowsCreatorFilter();
+  }
+
+  function fetchApplications(callback) {
+    let languageRequest = new HttpRequest("https://api.taskwolf.net/v1/settings/language/",
+      "GET", []);
+    languageRequest.send(function (languageStatus, languageResponseText) {
+      language = JSON.parse(languageResponseText).language;
+      let applicationRequest = new HttpRequest(
+        "https://api.taskwolf.net/v1/modules/all/unauthorized/" + language + "/",
+        "GET", []);
+      applicationRequest.send(function (applicationStatus, applicationResponseText) {
+        callback(JSON.parse(applicationResponseText).modules);
+      });
+    });
+  }
+
+  function displayWorkflowsApplicationFilter() {
+    var list = document.getElementById("workflows-filter-application-list");
+    list.innerHTML = "";
+    var search = document.getElementById("workflows-filter-application-search").value.toLowerCase();
+    for (var i = 0; i < applications.length; i++) {
+      var application = applications[i];
+      if (search === "" || application.name.toLowerCase().includes(search)) {
+        list.appendChild(createWorkflowApplicationEntry(application.id,
+          application.name, application.logo, false));
+      }
+    }
+    if (list.innerHTML === "") {
+      var emptyElement = document.createElement("li");
+      emptyElement.classList.add("text-center");
+      emptyElement.innerText = "{% trans 'product.workflows.filter.application.empty' %}";
+      list.appendChild(emptyElement);
+    }
+  }
+
+  function createWorkflowApplicationEntry(id, name, logo, isChecked) {
+    var entry = document.createElement("li");
+    var entryLogo = document.createElement("img");
+    entryLogo.src = "https://taskwolf.net/static/img/applications/" + logo;
+    entry.appendChild(entryLogo);
+    return entry;
+  }
+
+  document.getElementById("workflows-filter-application-search").oninput = function (event) {
+    displayWorkflowsApplicationFilter();
   }
 
   var currentSearchTimeout = -1;
