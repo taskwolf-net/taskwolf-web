@@ -9,7 +9,7 @@
       <div id="workflows-wrapper">
         <h1 id="workflows-headline">{% trans 'product.workflows.headline' %}</h1>
         <div id="workflows-header">
-          <button type="button" id="workflows-filter" class="btn btn-dark"><i class="fa-solid fa-sliders"></i></button>
+          <button type="button" id="workflows-filter" class="btn"><i class="fa-solid fa-sliders"></i></button>
           <div id="workflows-search-box">
             <input id="workflows-search-input" placeholder=" {% trans 'product.workflows.search' %}" type="text" class="form-control" value="" autocomplete="off">
             <button type="button">
@@ -18,7 +18,7 @@
           </div>
           <button type="button" id="workflow-create" class="btn btn-primary btn-block">{% trans 'product.workflows.create' %}</button>
         </div>
-        <div id="workflows-filter-container" class="bg-dark rounded-4 py-3 mt-4 d-none">
+        <div id="workflows-filter-container" class="rounded-4 py-3 mt-4 d-none">
           <div id="workflows-filter-application" class="workflows-filter-section">
             <h5 class="text-center fw-bold my-4">{% trans 'product.workflows.filter.application' %}</h5>
             <input type="search" class="mb-3" id="workflows-filter-application-search" placeholder="{% trans 'product.workflows.filter.application' %}"/>
@@ -54,11 +54,11 @@
           <div class="workflows-filter-section">
             <h5 class="text-center fw-bold my-4">{% trans 'product.workflows.filter.state' %}</h5>
             <ul id="workflows-filter-state-list">
-              <li class="form-check">
+              <li class="form-check" role="button">
                 <input class="form-check-input" type="radio" name="workflows-filter-state" id="workflows-filter-state-enabled">
                 <label class="form-check-label" onclick="document.getElementById('workflows-filter-state-enabled').click()">{% trans 'product.workflows.filter.state.enabled' %}</label>
               </li>
-              <li class="form-check">
+              <li class="form-check" role="button">
                 <input class="form-check-input" type="radio" name="workflows-filter-state" id="workflows-filter-state-disabled">
                 <label class="form-check-label" onclick="document.getElementById('workflows-filter-state-disabled').click()">{% trans 'product.workflows.filter.state.disabled' %}</label>
               </li>
@@ -354,6 +354,7 @@
   var pagingSorting = "name";
   var pagingOrder = "DESCENDING";
   var pagingFilterSearch = "";
+  var pagingFilterApplication = "";
   var pagingFilterCreator = "";
   var pagingFilterStartTime = -1;
   var pagingFilterEndTime = -1;
@@ -434,11 +435,9 @@
   }
 
   function fetchWorkflowsPage(targetPage, callback) {
-    var body = {targetPage: targetPage, search: pagingFilterSearch,
-      sorting: pagingSorting, order: pagingOrder};
-    if (pagingFilterCreator !== "") {
-      body.creator = pagingFilterCreator;
-    }
+    var body = createPagingBody();
+    body.search = pagingFilterSearch;
+    body.targetPage = targetPage;
     let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/page/",
       "POST", [], body);
     request.send(function (status, responseText) {
@@ -449,12 +448,10 @@
   }
 
   function shiftPage(pages, currentPage, pageState, direction) {
-    var body = {pageState: pageState, startingPoint: pagingStartingPoint,
-      direction: direction < 0 ? "BACKWARD" : "FORWARD", sorting: pagingSorting,
-      order: pagingOrder};
-    if (pagingFilterCreator !== "") {
-      body.creator = pagingFilterCreator;
-    }
+    var body = createPagingBody();
+    body.pageState = pageState;
+    body.startingPoint = pagingStartingPoint;
+    body.direction = direction < 0 ? "BACKWARD" : "FORWARD";
     let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/page/shift/",
       "POST", [], body);
     request.send(function (status, responseText) {
@@ -462,6 +459,26 @@
       updatePaging(response.pageNumber, currentPage + direction, response.page,
         response.workflows, document.getElementById("workflows-not-found"));
     });
+  }
+
+  function createPagingBody() {
+    var body = {sorting: pagingSorting, order: pagingOrder};
+    if (pagingFilterApplication !== "") {
+      body.application = pagingFilterApplication;
+    }
+    if (pagingFilterCreator !== "") {
+      body.creator = pagingFilterCreator;
+    }
+    if (pagingFilterStartTime !== -1) {
+      body.startTime = pagingFilterStartTime;
+    }
+    if (pagingFilterEndTime !== -1) {
+      body.endTime = pagingFilterEndTime;
+    }
+    if (pagingFilterState !== "") {
+      body.state = pagingFilterState;
+    }
+    return body;
   }
 
   function updateWorkflows() {
@@ -527,6 +544,7 @@
   function createWorkflowCreatorEntry(id, name, isChecked) {
     var entry = document.createElement("li");
     entry.classList.add("form-check");
+    entry.role = "button";
     var entryInput = document.createElement("input");
     entryInput.classList.add("form-check-input");
     entryInput.type = "radio";
@@ -535,7 +553,7 @@
     entryInput.id = "workflows-filter-creator-" + id;
     entry.appendChild(entryInput);
     entryInput.onclick = function (event) {
-      if (id === "") {
+      if (id === "" || pagingFilterCreator === id) {
         return;
       }
       pagingFilterCreator = id;
@@ -577,7 +595,7 @@
       var application = applications[i];
       if (search === "" || application.name.toLowerCase().includes(search)) {
         list.appendChild(createWorkflowApplicationEntry(application.id,
-          application.name, application.logo, false));
+          application.name, application.logo, pagingFilterApplication === application.id));
       }
     }
     var emptyElement = document.getElementById("workflows-filter-application-empty");
@@ -590,12 +608,29 @@
     }
   }
 
-  function createWorkflowApplicationEntry(id, name, logo, isChecked) {
+  function createWorkflowApplicationEntry(id, name, logo, isActive) {
     var entry = document.createElement("li");
+    entry.id = "workflows-filter-application-" + id;
+    entry.role = "button";
+    if (isActive) {
+      entry.classList.add("workflows-filter-application-active");
+    }
     var entryLogo = document.createElement("img");
     entryLogo.src = "https://taskwolf.net/static/img/applications/" + logo;
     entry.appendChild(entryLogo);
     applyTooltips(entryLogo, entry, name);
+    entry.onclick = function (event) {
+      if (pagingFilterApplication === id) {
+        return;
+      }
+      if (pagingFilterApplication !== "") {
+        document.getElementById("workflows-filter-application-" + pagingFilterApplication)
+          .classList.remove("workflows-filter-application-active");
+      }
+      entry.classList.add("workflows-filter-application-active");
+      pagingFilterApplication = id;
+      updateWorkflows();
+    }
     return entry;
   }
 

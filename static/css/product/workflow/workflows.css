@@ -26,7 +26,7 @@
 }
 
 .dark #workflows-search-box {
-  background-color: #202428;
+  background-color: #212529;
 }
 
 .light #workflows-search-box {
@@ -40,7 +40,7 @@
 }
 
 .dark #workflows-search-box input {
-  background-color: #202428;
+  background-color: #212529;
   color: white;
 }
 
@@ -72,6 +72,17 @@
 #workflows-filter {
   width: fit-content;
   margin-right: 2%;
+  border: none;
+}
+
+.dark #workflows-filter {
+  background-color: #212529;
+  color: white;
+}
+
+.light #workflows-filter {
+  background-color: #d8d8d8;
+  color: black;
 }
 
 #workflow-create {
@@ -85,6 +96,14 @@
   position: relative;
   display: flex;
   justify-content: center;
+}
+
+.dark #workflows-filter-container {
+  background-color: #212529;
+}
+
+.light #workflows-filter-container {
+  background-color: #d8d8d8;
 }
 
 #workflows-filter-container * {
@@ -104,12 +123,14 @@
   color: white;
   -webkit-text-fill-color: white;
   border: 1px solid #cecece;
+  color-scheme: dark;
 }
 
 .light #workflows-filter-container input[type=date] {
   color: black;
   -webkit-text-fill-color: black;
   border: 1px solid #4c4c4c;
+  color-scheme: light;
 }
 
 #workflows-filter-container input[type=search] {
@@ -138,8 +159,8 @@
 }
 
 .light #workflows-filter-container input[type=search]::placeholder {
-  color: #949494 !important;
-  -webkit-text-fill-color: #949494;
+  color: #5e5e5e !important;
+  -webkit-text-fill-color: #5e5e5e;
 }
 
 #workflows-filter-container input[type=search]:-webkit-autofill,
@@ -187,20 +208,76 @@
 
 #workflows-filter-application-list {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  column-gap: calc((100% - 48px * 7) / 6);
-  row-gap: 32px;
+  grid-template-columns: repeat(5, 1fr);
+  column-gap: calc((100% - 56px * 7) / 6);
+  row-gap: 16px;
+}
+
+#workflows-filter-application-list li {
+  padding: 5px;
+  border-radius: 25%;
+  margin: auto;
+  width: fit-content;
+}
+
+.dark .workflows-filter-application-active {
+  background-color: #31373d;
+}
+
+.light .workflows-filter-application-active {
+  background-color: #b6b6b6;
 }
 
 #workflows-filter-application-list img {
-  width: 48px;
-  height: 48px;
+  width: 46px;
+  height: 46px;
   border-radius: 25%;
+}
+
+@media (max-width: 1550px) {
+  .workflows-filter-section {
+    width: 25%;
+  }
+
+  #workflows-filter-application {
+    width: 25% !important;
+  }
+
+  #workflows-filter-application-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: calc((100% - 56px * 3) / 2);
+  }
+}
+
+@media (max-width: 1300px) {
+  #workflows-filter-application-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: calc(100% - 56px * 2);
+  }
 }
 
 @media (max-width: 1200px) {
   #workflow-create {
     width: fit-content;
+  }
+}
+
+@media (max-width: 1000px) {
+  #workflows-filter-application-list {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    column-gap: 0;
+  }
+
+  #workflows-filter-application-list, #workflows-filter-creator-list, #workflows-filter-state-list  {
+    padding: 0;
+  }
+
+  .workflows-filter-section {
+    padding-left: 2%;
+    padding-right: 2%;
   }
 }
 
