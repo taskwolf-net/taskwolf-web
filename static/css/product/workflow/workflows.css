@@ -220,12 +220,8 @@
   width: fit-content;
 }
 
-.dark .workflows-filter-application-active {
-  background-color: #31373d;
-}
-
-.light .workflows-filter-application-active {
-  background-color: #b6b6b6;
+.workflows-filter-application-active {
+  background-color: #2fa548;
 }
 
 #workflows-filter-application-list img {
