@@ -307,7 +307,7 @@
 }
 
 #workflows-list li div {
-  padding: 20px;
+  padding: 40px 20px;
   display: flex;
   flex-direction: column;
   width: 22%;
