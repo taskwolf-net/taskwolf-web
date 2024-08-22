@@ -54,13 +54,13 @@
           <div class="workflows-filter-section">
             <h5 class="text-center fw-bold my-4">{% trans 'product.workflows.filter.state' %}</h5>
             <ul id="workflows-filter-state-list">
-              <li class="form-check" role="button">
+              <li class="form-check">
                 <input class="form-check-input" type="radio" name="workflows-filter-state" id="workflows-filter-state-enabled">
-                <label class="form-check-label" onclick="document.getElementById('workflows-filter-state-enabled').click()">{% trans 'product.workflows.filter.state.enabled' %}</label>
+                <label class="form-check-label" role="button" onclick="document.getElementById('workflows-filter-state-enabled').click()">{% trans 'product.workflows.filter.state.enabled' %}</label>
               </li>
-              <li class="form-check" role="button">
+              <li class="form-check">
                 <input class="form-check-input" type="radio" name="workflows-filter-state" id="workflows-filter-state-disabled">
-                <label class="form-check-label" onclick="document.getElementById('workflows-filter-state-disabled').click()">{% trans 'product.workflows.filter.state.disabled' %}</label>
+                <label class="form-check-label" role="button" onclick="document.getElementById('workflows-filter-state-disabled').click()">{% trans 'product.workflows.filter.state.disabled' %}</label>
               </li>
             </ul>
           </div>
@@ -544,7 +544,6 @@
   function createWorkflowCreatorEntry(id, name, isChecked) {
     var entry = document.createElement("li");
     entry.classList.add("form-check");
-    entry.role = "button";
     var entryInput = document.createElement("input");
     entryInput.classList.add("form-check-input");
     entryInput.type = "radio";
@@ -562,6 +561,7 @@
     var entryLabel = document.createElement("label");
     entryLabel.classList.add("form-check-label");
     entryLabel.innerHTML = name;
+    entryLabel.role = "button";
     entryLabel.onclick = function (event) {
       entryInput.click();
     }
