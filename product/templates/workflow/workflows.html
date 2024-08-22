@@ -55,12 +55,12 @@
             <h5 class="text-center fw-bold my-4">{% trans 'product.workflows.filter.state' %}</h5>
             <ul id="workflows-filter-state-list">
               <li class="form-check">
-                <input class="form-check-input" type="radio" name="workflows-filter-state" id="workflows-filter-state-enabled">
-                <label class="form-check-label" role="button" onclick="document.getElementById('workflows-filter-state-enabled').click()">{% trans 'product.workflows.filter.state.enabled' %}</label>
+                <input class="form-check-input" type="radio" name="workflows-filter-state" id="workflows-filter-state-operational">
+                <label class="form-check-label" role="button" onclick="document.getElementById('workflows-filter-state-operational').click()">{% trans 'product.workflows.filter.state.operational' %}</label>
               </li>
               <li class="form-check">
-                <input class="form-check-input" type="radio" name="workflows-filter-state" id="workflows-filter-state-disabled">
-                <label class="form-check-label" role="button" onclick="document.getElementById('workflows-filter-state-disabled').click()">{% trans 'product.workflows.filter.state.disabled' %}</label>
+                <input class="form-check-input" type="radio" name="workflows-filter-state" id="workflows-filter-state-failing">
+                <label class="form-check-label" role="button" onclick="document.getElementById('workflows-filter-state-failing').click()">{% trans 'product.workflows.filter.state.failing' %}</label>
               </li>
             </ul>
           </div>
@@ -646,13 +646,13 @@
     updateWorkflows();
   }
 
-  document.getElementById("workflows-filter-state-enabled").onclick = function (event) {
-    pagingFilterState = "ARMED";
+  document.getElementById("workflows-filter-state-operational").onclick = function (event) {
+    pagingFilterState = "OPERATIONAL";
     updateWorkflows();
   }
 
-  document.getElementById("workflows-filter-state-disabled").onclick = function (event) {
-    pagingFilterState = "DISABLED";
+  document.getElementById("workflows-filter-state-failing").onclick = function (event) {
+    pagingFilterState = "FAILING";
     updateWorkflows();
   }
 
