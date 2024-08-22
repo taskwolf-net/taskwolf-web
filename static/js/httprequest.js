@@ -12,7 +12,7 @@ class HttpRequest {
     if (token !== null) {
       this.headers.push({key: "Authorization", value: "Bearer " + token});
     }
-    var homeToken = Cookie.find("home-token");
+    var homeToken = sessionStorage.getItem("home-token");
     if (homeToken !== null) {
       this.headers.push({key: "Home-Authorization", value: "Bearer " + homeToken});
     }

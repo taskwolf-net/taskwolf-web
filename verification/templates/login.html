@@ -66,7 +66,7 @@
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
       if ("homeApiKey" in response) {
-        Cookie.create("home-token", response.homeApiKey, 60 * 60 * 24, ".taskwolf.net");
+        sessionStorage.setItem("home-token", response.homeApiKey);
       }
       var success = response.success;
       if (success === true) {

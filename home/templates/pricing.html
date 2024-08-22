@@ -491,8 +491,8 @@
     Cookie.create("taskwolf-package-class", bundleClass, 60 * 60 * 24);
     Cookie.create("taskwolf-package-runtime", bundleRuntime, 60 * 60 * 24);
     Cookie.create("taskwolf-package-price", price, 60 * 60 * 24);
-    if (Cookie.find("home-token") == null) {
-      window.location.href = "/login-register/";
+    if (sessionStorage.getItem("home-token") == null) {
+      window.location.href = "/login-register/?redirect=/payment/";
     } else {
       window.location.href = "/payment/";
     }

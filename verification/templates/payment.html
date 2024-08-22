@@ -36,7 +36,7 @@
 
 <script>
   $(document).ready(function() {
-    if (Cookie.find("home-token") == null) {
+    if (sessionStorage.getItem("home-token") == null) {
       window.location.href = "/login/";
       return;
     }

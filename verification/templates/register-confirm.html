@@ -18,7 +18,7 @@
         window.location.href = "/";
         return;
       }
-      Cookie.create("home-token", response.homeApiKey, 60 * 60 * 24);
+      sessionStorage.setItem("home-token", response.homeApiKey);
       window.location.href = "/payment/";
     });
   });
