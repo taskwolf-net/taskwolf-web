@@ -66,6 +66,11 @@
           </div>
         </div>
         <ul id="workflows-table-description" class="mt-4 mb-0">
+          <li id="workflows-table-description-selector">
+            <div>
+              <input id="workflows-selector-global" class="form-check-input" type="checkbox">
+            </div>
+          </li>
           <li id="workflows-table-description-name">
             <div>
               <span>{% trans 'product.workflows.name' %}</span>
@@ -87,6 +92,7 @@
           <li id="workflows-table-description-is-running">
             <div>
               <span>{% trans 'product.workflows.running' %}</span>
+              <i class="workflows-table-description-sort fa-solid fa-sort ms-2" role="button" type="state"></i>
             </div>
           </li>
           <li id="workflows-table-description-settings">
@@ -98,9 +104,13 @@
         <ul id="workflows-list">
         </ul>
         <div id="workflows-paging" class="d-none">
-          <a id="workflows-previous-page" class="workflows-page me-4"><i class="fa-solid fa-chevron-left"></i></a>
-          <div id="workflows-pages"></div>
-          <a id="workflows-next-page" class="workflows-page ms-4"><i class="fa-solid fa-chevron-right"></i></a>
+          <button id="workflows-selector-delete" type="button" class="btn btn-danger disabled">{% trans 'product.workflows.selector.delete' %}</button>
+          <div class="d-flex justify-content-center align-items-center">
+            <a id="workflows-previous-page" class="workflows-page me-4"><i class="fa-solid fa-chevron-left"></i></a>
+            <div id="workflows-pages"></div>
+            <a id="workflows-next-page" class="workflows-page ms-4"><i class="fa-solid fa-chevron-right"></i></a>
+          </div>
+          <div></div>
         </div>
         <div id="workflows-loader">
         </div>
@@ -117,9 +127,10 @@
 </html>
 
 <script>
-  var changeStateBlocked = false;
   var organization;
   var applications;
+  var changeStateBlocked = false;
+  var entryCheckboxes = [];
 
   $(document).ready(function() {
     displayLoader();
@@ -151,6 +162,7 @@
     var entry = document.createElement('li');
     entry.role = "button";
     entry.classList.add("workflow-entry");
+    entry.appendChild(createWorkflowsSelector(id));
     var nameDiv = document.createElement("div");
     nameDiv.classList.add("workflows-entry-name");
     var nameElement = document.createElement("span");
@@ -169,7 +181,7 @@
     entry.onclick = function (event) {
       var target = event.target;
       if (Boolean(target.closest(".switch")) || Boolean(target.closest(".workflow-run-button")) ||
-          Boolean(target.closest(".workflows-entry-settings"))
+          Boolean(target.closest(".workflows-entry-settings")) || Boolean(target.closest(".workflows-entry-selector"))
       ) {
         return;
       }
@@ -282,6 +294,60 @@
       click();
     };
     return dropdownEntry;
+  }
+
+  function createWorkflowsSelector(id) {
+    var selector = document.createElement("div");
+    selector.classList.add("workflows-entry-selector");
+    var input = document.createElement("input");
+    input.classList.add("form-check-input");
+    input.type = "checkbox";
+    input.onchange = function (event) {
+      var checkboxSelected = false;
+      for (var i = 0; i < entryCheckboxes.length; i++) {
+        if (entryCheckboxes[i].checkbox.checked) {
+          checkboxSelected = true;
+          break;
+        }
+      }
+      var deleteButton = document.getElementById("workflows-selector-delete");
+      if (!checkboxSelected) {
+        deleteButton.classList.add("disabled");
+      } else {
+        deleteButton.classList.remove("disabled");
+      }
+    }
+    selector.appendChild(input);
+    entryCheckboxes.push({checkbox: selector.firstChild, id: id})
+    return selector;
+  }
+
+  document.getElementById("workflows-selector-global").onclick = function (event) {
+    var checkboxSelected = document.getElementById("workflows-selector-global").checked;
+    for (var i = 0; i < entryCheckboxes.length; i++) {
+      entryCheckboxes[i].checkbox.checked = checkboxSelected;
+    }
+    var deleteButton = document.getElementById("workflows-selector-delete");
+    if (!checkboxSelected) {
+      deleteButton.classList.add("disabled");
+    } else {
+      deleteButton.classList.remove("disabled");
+    }
+  }
+
+  document.getElementById("workflows-selector-delete").onclick = function (event) {
+    for (var i = 0; i < entryCheckboxes.length; i++) {
+      var entry = entryCheckboxes[i];
+      if (entry.checkbox.checked) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/remove/", "POST",
+          [], {workflow: entry.id});
+        request.send(function (status, responseText) {
+        });
+      }
+    }
+    Swal.fire("{% trans 'product.workflows.selector.delete.successful.title' %}",
+      "{% trans 'product.workflows.selector.delete.successful.body' %}", "success")
+      .then(success => window.location.reload());
   }
 
   function clickWorkflow(id) {
@@ -488,6 +554,9 @@
   }
 
   function updatePaging(pageNumber, currentPage, pageState, workflows, emptyElement) {
+    document.getElementById("workflows-selector-global").checked = false;
+    entryCheckboxes = [];
+    document.getElementById("workflows-selector-delete").classList.add("disabled");
     displayWorkflows(workflows);
     document.getElementById("workflows-empty").classList.add("d-none");
     document.getElementById("workflows-not-found").classList.add("d-none");

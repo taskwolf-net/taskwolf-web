@@ -317,7 +317,7 @@
 }
 
 .workflows-entry-name {
-  width: 40% !important;
+  width: 36% !important;
 }
 
 .workflows-entry-is-running {
@@ -327,6 +327,11 @@
 .workflows-entry-settings {
   width: 4% !important;
   padding: 0 !important;
+}
+
+.workflows-entry-selector {
+  width: 4% !important;
+  text-align: center;
 }
 
 .workflows-entry-settings-button {
@@ -384,7 +389,7 @@
 }
 
 #workflows-table-description-name {
-  width: 40% !important;
+  width: 36% !important;
 }
 
 #workflows-table-description-is-running {
@@ -395,6 +400,11 @@
 #workflows-table-description-settings {
   width: 4% !important;
   padding: 0 !important;
+}
+
+#workflows-table-description-selector {
+  width: 4% !important;
+  text-align: center;
 }
 
 #workflows-table-description button {
@@ -465,7 +475,7 @@
   }
 
   #workflows-table-description-name {
-    width: 28% !important;
+    width: 24% !important;
   }
 
   #workflows-table-description-is-running {
@@ -499,7 +509,7 @@
   }
 
   #workflows-table-description-name {
-    width: 24% !important;
+    width: 20% !important;
   }
 
   #workflows-table-description-is-running {
@@ -625,7 +635,7 @@ input:checked + .slider:before {
 
 #workflows-paging {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   width: 100%;
   padding-top: 20px;
   padding-bottom: 20px;

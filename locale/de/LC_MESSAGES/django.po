@@ -1070,6 +1070,12 @@ msgid "product.workflows.duplicate"
 msgstr "Duplizieren"
 msgid "product.workflows.delete"
 msgstr "Löschen"
+msgid "product.workflows.selector.delete"
+msgstr "LÖSCHEN"
+msgid "product.workflows.selector.delete.successful.title"
+msgstr "Workflows gelöscht"
+msgid "product.workflows.selector.delete.successful.body"
+msgstr "Die ausgewählten Workflows wurden erfolgreich gelöscht"
 
 # WORKFLOW
 msgid "product.workflow.title"
