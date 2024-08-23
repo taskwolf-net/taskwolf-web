@@ -9,30 +9,60 @@
       <div id="processes-wrapper">
         <h1 id="processes-headline">{% trans 'product.processes.headline' %}</h1>
         <div id="processes-header">
-          <div class="d-flex w-100">
-            <div id="processes-search-box">
-              <input id="processes-search-input" placeholder=" {% trans 'product.processes.search' %}" type="text" class="form-control" value="" autocomplete="off">
-              <button type="button">
-                <i class="fa fa-search"></i>
-              </button>
+          <button type="button" id="processes-filter" class="btn"><i class="fa-solid fa-sliders"></i></button>
+          <div id="processes-search-box">
+            <input id="processes-search-input" placeholder=" {% trans 'product.processes.search' %}" type="text" class="form-control" value="" autocomplete="off">
+            <button type="button">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+          <button type="button" id="process-create" class="btn btn-primary btn-block">{% trans 'product.processes.create' %}</button>
+        </div>
+        <div id="processes-filter-container" class="rounded-4 py-3 mt-4 d-none">
+          <div class="processes-filter-section">
+            <h5 class="text-center fw-bold my-4">{% trans 'product.processes.filter.creator' %}</h5>
+            <input type="search" class="mb-3" id="processes-filter-creator-search" placeholder="{% trans 'product.processes.filter.creator' %}"/>
+            <ul id="processes-filter-creator-list">
+            </ul>
+            <div id="processes-filter-creator-empty" class="text-center d-none">
+              <span>{% trans 'product.processes.filter.creator.empty' %}</span>
             </div>
-            <button type="button" id="process-create" class="btn btn-primary btn-block">{% trans 'product.processes.create' %}</button>
+          </div>
+          <div class="vr"></div>
+          <div class="processes-filter-section">
+            <h5 class="text-center fw-bold my-4">{% trans 'product.processes.filter.time' %}</h5>
+            <div class="form-outline mb-3">
+              <label class="form-label">{% trans 'product.processes.filter.start.time' %}</label>
+              <input type="date" id="processes-filter-start-time"/>
+            </div>
+            <div class="form-outline">
+              <label class="form-label">{% trans 'product.processes.filter.end.time' %}</label>
+              <input type="date" id="processes-filter-end-time"/>
+            </div>
           </div>
         </div>
-        <ul id="processes-table-description">
+        <ul id="processes-table-description" class="mt-4 mb-0">
+          <li id="processes-table-description-selector">
+            <div>
+              <input id="processes-selector-global" class="form-check-input" type="checkbox">
+            </div>
+          </li>
           <li id="processes-table-description-name">
             <div>
               <span>{% trans 'product.processes.name' %}</span>
+              <i class="processes-table-description-sort fa-solid fa-sort-up ms-2" role="button" type="name"></i>
             </div>
           </li>
           <li>
             <div>
               <span>{% trans 'product.processes.creator' %}</span>
+              <i class="processes-table-description-sort fa-solid fa-sort ms-2" role="button" type="creator"></i>
             </div>
           </li>
           <li>
             <div>
               <span>{% trans 'product.processes.date' %}</span>
+              <i class="processes-table-description-sort fa-solid fa-sort ms-2" role="button" type="created"></i>
             </div>
           </li>
           <li>
@@ -43,11 +73,23 @@
         </ul>
         <ul id="processes-list">
         </ul>
+        <div id="processes-paging" class="d-none">
+          <button id="processes-selector-delete" type="button" class="btn btn-danger disabled">{% trans 'product.processes.selector.delete' %}</button>
+          <div class="d-flex justify-content-center align-items-center">
+            <a id="processes-previous-page" class="processes-page me-4"><i class="fa-solid fa-chevron-left"></i></a>
+            <div id="processes-pages"></div>
+            <a id="processes-next-page" class="processes-page ms-4"><i class="fa-solid fa-chevron-right"></i></a>
+          </div>
+          <div></div>
+        </div>
         <div id="processes-loader">
         </div>
-        <div id="processes-empty">
+        <div id="processes-empty" class="d-none">
           <span id="processes-empty-headline">{% trans 'product.processes.empty.headline' %}</span>
           <span>{% trans 'product.processes.empty.text' %}</span><a id="processes-empty-link" href="/process/">{% trans 'product.processes.empty.link' %}</a><span>?</span>
+        </div>
+        <div id="processes-not-found" class="d-none">
+          <span id="processes-not-found-headline">{% trans 'product.processes.not.found.headline' %}</span>
         </div>
       </div>
     </div>
@@ -55,53 +97,35 @@
 </html>
 
 <script>
-  var processes;
-  var processesCurrentNameFilter = "";
+  var organization;
+  var entryCheckboxes = [];
 
   $(document).ready(function() {
-    processes = [];
     displayLoader();
-    fetchProcessesData(function() {
-      displayProcesses();
-      if (processes.length === 0) {
-        document.getElementById("processes-empty").style.display = "flex";
-      } else {
-        document.getElementById("processes-empty").style.display = "none";
-      }
+    fetchProcessesPage(0, function(processes, pageState, pageNumber) {
+      removeLoader();
+      updatePaging(pageNumber, 0, pageState, processes,
+        document.getElementById("processes-empty"));
+    });
+    fetchOrganization(function (result) {
+      organization = result;
+      displayProcessesCreatorFilter();
     });
   });
 
-  function fetchProcessesData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/processes/selected/", "GET", []);
-    request.send(function (status, responseText) {
-      processes = JSON.parse(responseText).processes;
-      removeLoader();
-      callback();
-    });
-  }
-
-  function displayProcesses() {
+  function displayProcesses(processes) {
     document.getElementById("processes-list").innerHTML = "";
     for (var i = 0; i < processes.length; i++) {
       var entry = processes[i];
-      if(!(shouldDisplayProcessEntry(entry))) {
-        continue;
-      }
       displayProcess(entry.id, entry.name, entry.creator, entry.created, entry.steps.length);
     }
-  }
-
-  function shouldDisplayProcessEntry(entry) {
-    return processesCurrentNameFilter.length === 0 ||
-      entry.name.toLowerCase().includes(processesCurrentNameFilter.toLowerCase()) ||
-      entry.creator.toLowerCase().includes(processesCurrentNameFilter.toLowerCase()) ||
-      entry.created.toLowerCase().includes(processesCurrentNameFilter.toLowerCase());
   }
 
   function displayProcess(id, name, creator, created, steps) {
     var entry = document.createElement('li');
     entry.role = "button";
     entry.classList.add("process-entry");
+    entry.appendChild(createProcessesSelector(id));
     var nameDiv = document.createElement("div");
     nameDiv.classList.add("processes-entry-name");
     var nameElement = document.createElement("span");
@@ -113,9 +137,67 @@
     appendProcessesCell(entry, "created", created, "span");
     appendProcessesCell(entry, "steps", steps, "span");
     entry.onclick = function (event) {
+      var target = event.target;
+      if (Boolean(target.closest(".processes-entry-selector"))) {
+        return;
+      }
       window.location.href = "/process/" + id + "/";
     }
     document.getElementById("processes-list").appendChild(entry);
+  }
+
+  function createProcessesSelector(id) {
+    var selector = document.createElement("div");
+    selector.classList.add("processes-entry-selector");
+    var input = document.createElement("input");
+    input.classList.add("form-check-input");
+    input.type = "checkbox";
+    input.onchange = function (event) {
+      var checkboxSelected = false;
+      for (var i = 0; i < entryCheckboxes.length; i++) {
+        if (entryCheckboxes[i].checkbox.checked) {
+          checkboxSelected = true;
+          break;
+        }
+      }
+      var deleteButton = document.getElementById("processes-selector-delete");
+      if (!checkboxSelected) {
+        deleteButton.classList.add("disabled");
+      } else {
+        deleteButton.classList.remove("disabled");
+      }
+    }
+    selector.appendChild(input);
+    entryCheckboxes.push({checkbox: selector.firstChild, id: id})
+    return selector;
+  }
+
+  document.getElementById("processes-selector-global").onclick = function (event) {
+    var checkboxSelected = document.getElementById("processes-selector-global").checked;
+    for (var i = 0; i < entryCheckboxes.length; i++) {
+      entryCheckboxes[i].checkbox.checked = checkboxSelected;
+    }
+    var deleteButton = document.getElementById("processes-selector-delete");
+    if (!checkboxSelected) {
+      deleteButton.classList.add("disabled");
+    } else {
+      deleteButton.classList.remove("disabled");
+    }
+  }
+
+  document.getElementById("processes-selector-delete").onclick = function (event) {
+    for (var i = 0; i < entryCheckboxes.length; i++) {
+      var entry = entryCheckboxes[i];
+      if (entry.checkbox.checked) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/process/remove/", "POST",
+          [], {process: entry.id});
+        request.send(function (status, responseText) {
+        });
+      }
+    }
+    Swal.fire("{% trans 'product.processes.selector.delete.successful.title' %}",
+      "{% trans 'product.processes.selector.delete.successful.body' %}", "success")
+      .then(success => window.location.reload());
   }
 
   function appendProcessesCell(entry, identifier, information, elementType) {
@@ -128,9 +210,289 @@
     return element;
   }
 
+  const pageVisibilityRange = 2;
+  var pagingStartingPoint = "";
+  var pagingSorting = "name";
+  var pagingOrder = "ASCENDING";
+  var pagingFilterSearch = "";
+  var pagingFilterCreator = "";
+  var pagingFilterStartTime = -1;
+  var pagingFilterEndTime = -1;
+
+  function displayPaging(pages, currentPage, pageState) {
+    displayPagingShiftButton("processes-previous-page", currentPage > 0,
+      pages, currentPage, pageState, -1);
+    displayPagingShiftButton("processes-next-page", currentPage < pages - 1,
+      pages, currentPage, pageState, 1);
+    var pagesElement = document.getElementById("processes-pages");
+    pagesElement.innerHTML = "";
+    createPageButton(pagesElement, pages, currentPage, pageState, 0, currentPage === 0);
+    if (pages === 1) {
+      return;
+    }
+    if (currentPage - pageVisibilityRange > 0) {
+      pagesElement.insertAdjacentHTML("beforeend",
+        "<i class='processes-paging-ellipsis processes-paging-ellipsis-start " +
+        "fa-solid fa-ellipsis mx-4'></i>");
+    }
+    for (var i = -pageVisibilityRange + 1; i < pageVisibilityRange; i++) {
+      var page = currentPage + i;
+      if (page < 1 || page >= pages - 1) {
+        continue;
+      }
+      createPageButton(pagesElement, pages, currentPage, pageState, page,
+        page === currentPage);
+    }
+    if (currentPage + pageVisibilityRange < pages - 1) {
+      pagesElement.insertAdjacentHTML("beforeend",
+        "<i class='processes-paging-ellipsis processes-paging-ellipsis-end " +
+        "fa-solid fa-ellipsis mx-4'></i>");
+    }
+    createPageButton(pagesElement, pages, currentPage, pageState, pages - 1, currentPage === pages - 1);
+  }
+
+  function displayPagingShiftButton(id, isEnabled, pages, currentPage, pageState, direction) {
+    var button = document.getElementById(id);
+    if (isEnabled) {
+      button.classList.remove("processes-page-disabled");
+    } else {
+      button.classList.add("processes-page-disabled");
+    }
+    button.onclick = function (event) {
+      if (!isEnabled) {
+        return;
+      }
+      shiftPage(pages, currentPage, pageState, direction);
+    }
+  }
+
+  function createPageButton(pagesElement, pages, currentPage, pageState, page, isActive) {
+    var button = document.createElement("a");
+    button.classList.add("processes-page");
+    if (isActive) {
+      button.classList.add("processes-page-active");
+    }
+    button.innerHTML = page + 1;
+    button.onclick = function (event) {
+      onPageButtonClick(pages, currentPage, pageState, page);
+    };
+    pagesElement.appendChild(button);
+  }
+
+  function onPageButtonClick(pages, currentPage, pageState, page) {
+    if (page === currentPage) {
+      return;
+    }
+    if (Math.abs(page - currentPage) === 1) {
+      shiftPage(pages, currentPage, pageState, page - currentPage);
+      return;
+    }
+    fetchProcessesPage(page, function(processes, pageState, pageNumber) {
+      updatePaging(pageNumber, page, pageState, processes,
+        document.getElementById("processes-not-found"));
+    });
+  }
+
+  function fetchProcessesPage(targetPage, callback) {
+    var body = createPagingBody();
+    body.search = pagingFilterSearch;
+    body.targetPage = targetPage;
+    let request = new HttpRequest("https://api.taskwolf.net/v1/processes/page/",
+      "POST", [], body);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      pagingStartingPoint = targetPage === 0 ? "FORWARD" : "BACKWARD";
+      callback(response.processes, response.page, response.pageNumber);
+    });
+  }
+
+  function shiftPage(pages, currentPage, pageState, direction) {
+    var newPage = currentPage + direction;
+    if (newPage === 0 || newPage === pages - 1) {
+      pagingStartingPoint = newPage === 0 ? "FORWARD" : "BACKWARD";
+      fetchProcessesPage(newPage, function(processes, pageState, pageNumber) {
+        updatePaging(pageNumber, newPage, pageState, processes,
+          document.getElementById("processes-not-found"));
+      });
+      return;
+    }
+    var body = createPagingBody();
+    body.pageState = pageState;
+    body.startingPoint = pagingStartingPoint;
+    body.direction = direction < 0 ? "BACKWARD" : "FORWARD";
+    let request = new HttpRequest("https://api.taskwolf.net/v1/processes/page/shift/",
+      "POST", [], body);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      var newPage = currentPage + direction;
+      updatePaging(response.pageNumber, newPage, response.page,
+        response.processes, document.getElementById("processes-not-found"));
+    });
+  }
+
+  function createPagingBody() {
+    var body = {sorting: pagingSorting, order: pagingOrder};
+    if (pagingFilterCreator !== "") {
+      body.creator = pagingFilterCreator;
+    }
+    if (pagingFilterStartTime !== -1) {
+      body.startTime = pagingFilterStartTime;
+    }
+    if (pagingFilterEndTime !== -1) {
+      body.endTime = pagingFilterEndTime;
+    }
+    return body;
+  }
+
+  function updateProcesses() {
+    fetchProcessesPage(0, function(processes, pageState, pageNumber) {
+      updatePaging(pageNumber, 0, pageState, processes,
+        document.getElementById("processes-not-found"));
+    });
+  }
+
+  function updatePaging(pageNumber, currentPage, pageState, processes, emptyElement) {
+    document.getElementById("processes-selector-global").checked = false;
+    entryCheckboxes = [];
+    document.getElementById("processes-selector-delete").classList.add("disabled");
+    displayProcesses(processes);
+    document.getElementById("processes-empty").classList.add("d-none");
+    document.getElementById("processes-not-found").classList.add("d-none");
+    if (processes.length === 0) {
+      emptyElement.classList.remove("d-none");
+      document.getElementById("processes-paging").classList.add("d-none");
+    } else {
+      emptyElement.classList.add("d-none");
+      displayPaging(pageNumber, currentPage, pageState);
+      document.getElementById("processes-paging").classList.remove("d-none");
+    }
+  }
+
+  function fetchOrganization(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET", []);
+    request.send(function (status, responseText) {
+      var organization = JSON.parse(responseText);
+      if ("id" in organization) {
+        organization.members.push({id: organization.ownerId, name: organization.ownerName});
+      }
+      callback(organization);
+    });
+  }
+
+  function displayProcessesCreatorFilter() {
+    var list = document.getElementById("processes-filter-creator-list");
+    list.innerHTML = "";
+    var search = document.getElementById("processes-filter-creator-search").value.toLowerCase();
+    if ("id" in organization) {
+      for (var i = 0; i < organization.members.length; i++) {
+        var member = organization.members[i];
+        if (search === "" || member.name.toLowerCase().includes(search)) {
+          list.appendChild(createWorkflowCreatorEntry(member.id, member.name,
+            pagingFilterCreator === member.id));
+        }
+      }
+    } else {
+      if (search === "" || "you".includes(search)) {
+        list.appendChild(createWorkflowCreatorEntry("",
+          "{% trans 'product.processes.filter.creator.you' %}", true));
+      }
+    }
+    var emptyElement = document.getElementById("processes-filter-creator-empty");
+    if (list.innerHTML === "") {
+      list.classList.add("d-none");
+      emptyElement.classList.remove("d-none");
+    } else {
+      list.classList.remove("d-none");
+      emptyElement.classList.add("d-none");
+    }
+  }
+
+  function createWorkflowCreatorEntry(id, name, isChecked) {
+    var entry = document.createElement("li");
+    entry.classList.add("form-check");
+    var entryInput = document.createElement("input");
+    entryInput.classList.add("form-check-input");
+    entryInput.type = "radio";
+    entryInput.name = "processes-filter-creator";
+    entryInput.checked = isChecked;
+    entryInput.id = "processes-filter-creator-" + id;
+    entry.appendChild(entryInput);
+    entryInput.onclick = function (event) {
+      if (id === "" || pagingFilterCreator === id) {
+        return;
+      }
+      pagingFilterCreator = id;
+      updateProcesses();
+    }
+    var entryLabel = document.createElement("label");
+    entryLabel.classList.add("form-check-label");
+    entryLabel.innerHTML = name;
+    entryLabel.role = "button";
+    entryLabel.onclick = function (event) {
+      entryInput.click();
+    }
+    entry.appendChild(entryLabel);
+    return entry;
+  }
+
+  document.getElementById("processes-filter-creator-search").oninput = function (event) {
+    displayProcessesCreatorFilter();
+  }
+
+  document.getElementById("processes-filter-start-time").oninput = function (event) {
+    var date = new Date(document.getElementById("processes-filter-start-time").value);
+    pagingFilterStartTime = date.getTime();
+    updateProcesses();
+  }
+
+  document.getElementById("processes-filter-end-time").oninput = function (event) {
+    var date = new Date(document.getElementById("processes-filter-end-time").value);
+    pagingFilterEndTime = date.getTime();
+    updateProcesses();
+  }
+
+  var currentSearchTimeout = -1;
+
   document.getElementById("processes-search-input").oninput = function(event) {
-    processesCurrentNameFilter = event.target.value;
-    displayProcesses();
+    if (currentSearchTimeout !== -1) {
+      clearTimeout(currentSearchTimeout);
+    }
+    currentSearchTimeout = setTimeout(function () {
+      currentSearchTimeout = -1;
+      pagingFilterSearch = event.target.value;
+      updateProcesses();
+    }, 500);
+  };
+
+  var sortingElements = document.getElementsByClassName("processes-table-description-sort");
+  for (var i = 0; i < sortingElements.length; i++) {
+    let sortingElement = sortingElements[i];
+    sortingElement.onclick = function (event) {
+      updateSorting(sortingElement);
+    }
+  }
+
+  function updateSorting(selectedElement) {
+    for (var i = 0; i < sortingElements.length; i++) {
+      let sortingElement = sortingElements[i];
+      sortingElement.classList.remove("fa-sort-up", "fa-sort-down");
+      sortingElement.classList.add("fa-sort");
+    }
+    var selectedSorting = selectedElement.getAttribute("type");
+    selectedElement.classList.remove("fa-sort");
+    if (pagingSorting === selectedSorting) {
+      pagingOrder = pagingOrder === "ASCENDING" ? "DESCENDING" : "ASCENDING";
+      selectedElement.classList.add(pagingOrder === "DESCENDING" ? "fa-sort-down" : "fa-sort-up");
+    } else {
+      pagingOrder = "ASCENDING";
+      selectedElement.classList.add("fa-sort-up");
+    }
+    pagingSorting = selectedSorting;
+    updateProcesses();
+  }
+
+  document.getElementById("processes-filter").onclick = function(event) {
+    document.getElementById("processes-filter-container").classList.toggle("d-none");
   };
 
   document.getElementById("process-create").onclick = function(event) {
