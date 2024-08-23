@@ -512,6 +512,15 @@
   }
 
   function shiftPage(pages, currentPage, pageState, direction) {
+    var newPage = currentPage + direction;
+    if (newPage === 0 || newPage === pages - 1) {
+      pagingStartingPoint = newPage === 0 ? "FORWARD" : "BACKWARD";
+      fetchWorkflowsPage(newPage, function(workflows, pageState, pageNumber) {
+        updatePaging(pageNumber, newPage, pageState, workflows,
+          document.getElementById("workflows-not-found"));
+      });
+      return;
+    }
     var body = createPagingBody();
     body.pageState = pageState;
     body.startingPoint = pagingStartingPoint;
@@ -520,7 +529,8 @@
       "POST", [], body);
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
-      updatePaging(response.pageNumber, currentPage + direction, response.page,
+      var newPage = currentPage + direction;
+      updatePaging(response.pageNumber, newPage, response.page,
         response.workflows, document.getElementById("workflows-not-found"));
     });
   }
