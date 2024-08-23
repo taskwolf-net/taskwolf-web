@@ -9,45 +9,100 @@
       <div id="webhooks-wrapper">
         <h1 id="webhooks-headline">{% trans 'product.webhooks.headline' %}</h1>
         <div id="webhooks-header">
-          <div class="d-flex w-100">
-            <div id="webhooks-search-box">
-              <input id="webhooks-search-input" placeholder=" {% trans 'product.webhooks.search' %}" type="text" class="form-control" value="" autocomplete="off">
-              <button type="button">
-                <i class="fa fa-search"></i>
-              </button>
+          <button type="button" id="webhooks-filter" class="btn"><i class="fa-solid fa-sliders"></i></button>
+          <div id="webhooks-search-box">
+            <input id="webhooks-search-input" placeholder=" {% trans 'product.webhooks.search' %}" type="text" class="form-control" value="" autocomplete="off">
+            <button type="button">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+          <button type="button" id="webhook-create" class="btn btn-primary btn-block">{% trans 'product.webhooks.create' %}</button>
+        </div>
+        <div id="webhooks-filter-container" class="rounded-4 py-3 mt-4 d-none">
+          <div class="webhooks-filter-section">
+            <h5 class="text-center fw-bold my-4">{% trans 'product.webhooks.filter.creator' %}</h5>
+            <input type="search" class="mb-3" id="webhooks-filter-creator-search" placeholder="{% trans 'product.webhooks.filter.creator' %}"/>
+            <ul id="webhooks-filter-creator-list">
+            </ul>
+            <div id="webhooks-filter-creator-empty" class="text-center d-none">
+              <span>{% trans 'product.webhooks.filter.creator.empty' %}</span>
             </div>
-            <button type="button" id="webhook-create" class="btn btn-primary btn-block">{% trans 'product.webhooks.create' %}</button>
+          </div>
+          <div class="vr"></div>
+          <div class="webhooks-filter-section">
+            <h5 class="text-center fw-bold my-4">{% trans 'product.webhooks.filter.time' %}</h5>
+            <div class="form-outline mb-3">
+              <label class="form-label">{% trans 'product.webhooks.filter.start.time' %}</label>
+              <input type="date" id="webhooks-filter-start-time"/>
+            </div>
+            <div class="form-outline">
+              <label class="form-label">{% trans 'product.webhooks.filter.end.time' %}</label>
+              <input type="date" id="webhooks-filter-end-time"/>
+            </div>
+          </div>
+          <div class="vr"></div>
+          <div class="webhooks-filter-section">
+            <h5 class="text-center fw-bold my-4">{% trans 'product.webhooks.filter.usages' %}</h5>
+            <div class="form-outline mb-3">
+              <label class="form-label">{% trans 'product.webhooks.filter.minimum.usages' %}</label>
+              <input type="text" id="webhooks-filter-minimum-usages" placeholder="{% trans 'product.webhooks.filter.minimum.usages' %}"/>
+            </div>
+            <div class="form-outline">
+              <label class="form-label">{% trans 'product.webhooks.filter.maximum.usages' %}</label>
+              <input type="text" id="webhooks-filter-maximum-usages" placeholder="{% trans 'product.webhooks.filter.maximum.usages' %}"/>
+            </div>
           </div>
         </div>
-        <ul id="webhooks-table-description">
+        <ul id="webhooks-table-description" class="mt-4 mb-0">
+          <li id="webhooks-table-description-selector">
+            <div>
+              <input id="webhooks-selector-global" class="form-check-input" type="checkbox">
+            </div>
+          </li>
           <li id="webhooks-table-description-name">
             <div>
               <span>{% trans 'product.webhooks.name' %}</span>
+              <i class="webhooks-table-description-sort fa-solid fa-sort-up ms-2" role="button" type="name"></i>
             </div>
           </li>
           <li>
             <div>
               <span>{% trans 'product.webhooks.creator' %}</span>
+              <i class="webhooks-table-description-sort fa-solid fa-sort ms-2" role="button" type="creator"></i>
             </div>
           </li>
           <li>
             <div>
               <span>{% trans 'product.webhooks.date' %}</span>
+              <i class="webhooks-table-description-sort fa-solid fa-sort ms-2" role="button" type="created"></i>
             </div>
           </li>
           <li>
             <div>
               <span>{% trans 'product.webhooks.usages' %}</span>
+              <i class="webhooks-table-description-sort fa-solid fa-sort ms-2" role="button" type="usages"></i>
             </div>
           </li>
         </ul>
         <ul id="webhooks-list">
         </ul>
+        <div id="webhooks-paging" class="d-none">
+          <button id="webhooks-selector-delete" type="button" class="btn btn-danger disabled">{% trans 'product.webhooks.selector.delete' %}</button>
+          <div class="d-flex justify-content-center align-items-center">
+            <a id="webhooks-previous-page" class="webhooks-page me-4"><i class="fa-solid fa-chevron-left"></i></a>
+            <div id="webhooks-pages"></div>
+            <a id="webhooks-next-page" class="webhooks-page ms-4"><i class="fa-solid fa-chevron-right"></i></a>
+          </div>
+          <div></div>
+        </div>
         <div id="webhooks-loader">
         </div>
-        <div id="webhooks-empty">
+        <div id="webhooks-empty" class="d-none">
           <span id="webhooks-empty-headline">{% trans 'product.webhooks.empty.headline' %}</span>
-          <span>{% trans 'product.webhooks.empty.text' %}</span><a id="webhooks-empty-link" href="/webhook/add/">{% trans 'product.webhooks.empty.link' %}</a><span>?</span>
+          <span>{% trans 'product.webhooks.empty.text' %}</span><a id="webhooks-empty-link" href="/webhook/">{% trans 'product.webhooks.empty.link' %}</a><span>?</span>
+        </div>
+        <div id="webhooks-not-found" class="d-none">
+          <span id="webhooks-not-found-headline">{% trans 'product.webhooks.not.found.headline' %}</span>
         </div>
       </div>
     </div>
@@ -55,53 +110,35 @@
 </html>
 
 <script>
-  var webhooks;
-  var webhooksCurrentNameFilter = "";
+  var organization;
+  var entryCheckboxes = [];
 
   $(document).ready(function() {
-    webhooks = [];
     displayLoader();
-    fetchWebhooksData(function() {
-      displayWebhooks();
-      if (webhooks.length === 0) {
-        document.getElementById("webhooks-empty").style.display = "flex";
-      } else {
-        document.getElementById("webhooks-empty").style.display = "none";
-      }
+    fetchWebhooksPage(0, function(webhooks, pageState, pageNumber) {
+      removeLoader();
+      updatePaging(pageNumber, 0, pageState, webhooks,
+        document.getElementById("webhooks-empty"));
+    });
+    fetchOrganization(function (result) {
+      organization = result;
+      displayWebhooksCreatorFilter();
     });
   });
 
-  function fetchWebhooksData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/webhooks/selected/", "GET", []);
-    request.send(function (status, responseText) {
-      webhooks = JSON.parse(responseText).webhooks;
-      removeLoader();
-      callback();
-    });
-  }
-
-  function displayWebhooks() {
+  function displayWebhooks(webhooks) {
     document.getElementById("webhooks-list").innerHTML = "";
     for (var i = 0; i < webhooks.length; i++) {
       var entry = webhooks[i];
-      if(!(shouldDisplayWebhookEntry(entry))) {
-        continue;
-      }
       displayWebhook(entry.id, entry.name, entry.creator, entry.created, entry.usages);
     }
-  }
-
-  function shouldDisplayWebhookEntry(entry) {
-    return webhooksCurrentNameFilter.length === 0 ||
-      entry.name.toLowerCase().includes(webhooksCurrentNameFilter.toLowerCase()) ||
-      entry.creator.toLowerCase().includes(webhooksCurrentNameFilter.toLowerCase()) ||
-      entry.created.toLowerCase().includes(webhooksCurrentNameFilter.toLowerCase());
   }
 
   function displayWebhook(id, name, creator, created, usages) {
     var entry = document.createElement('li');
     entry.role = "button";
     entry.classList.add("webhook-entry");
+    entry.appendChild(createWebhooksSelector(id));
     var nameDiv = document.createElement("div");
     nameDiv.classList.add("webhooks-entry-name");
     var nameElement = document.createElement("span");
@@ -113,9 +150,67 @@
     appendWebhookCell(entry, "created", created, "span");
     appendWebhookCell(entry, "usages", usages, "span");
     entry.onclick = function (event) {
+      var target = event.target;
+      if (Boolean(target.closest(".webhooks-entry-selector"))) {
+        return;
+      }
       window.location.href = "/webhook/" + id + "/";
     }
     document.getElementById("webhooks-list").appendChild(entry);
+  }
+
+  function createWebhooksSelector(id) {
+    var selector = document.createElement("div");
+    selector.classList.add("webhooks-entry-selector");
+    var input = document.createElement("input");
+    input.classList.add("form-check-input");
+    input.type = "checkbox";
+    input.onchange = function (event) {
+      var checkboxSelected = false;
+      for (var i = 0; i < entryCheckboxes.length; i++) {
+        if (entryCheckboxes[i].checkbox.checked) {
+          checkboxSelected = true;
+          break;
+        }
+      }
+      var deleteButton = document.getElementById("webhooks-selector-delete");
+      if (!checkboxSelected) {
+        deleteButton.classList.add("disabled");
+      } else {
+        deleteButton.classList.remove("disabled");
+      }
+    }
+    selector.appendChild(input);
+    entryCheckboxes.push({checkbox: selector.firstChild, id: id})
+    return selector;
+  }
+
+  document.getElementById("webhooks-selector-global").onclick = function (event) {
+    var checkboxSelected = document.getElementById("webhooks-selector-global").checked;
+    for (var i = 0; i < entryCheckboxes.length; i++) {
+      entryCheckboxes[i].checkbox.checked = checkboxSelected;
+    }
+    var deleteButton = document.getElementById("webhooks-selector-delete");
+    if (!checkboxSelected) {
+      deleteButton.classList.add("disabled");
+    } else {
+      deleteButton.classList.remove("disabled");
+    }
+  }
+
+  document.getElementById("webhooks-selector-delete").onclick = function (event) {
+    for (var i = 0; i < entryCheckboxes.length; i++) {
+      var entry = entryCheckboxes[i];
+      if (entry.checkbox.checked) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/webhook/remove/", "POST",
+          [], {webhook: entry.id});
+        request.send(function (status, responseText) {
+        });
+      }
+    }
+    Swal.fire("{% trans 'product.webhooks.selector.delete.successful.title' %}",
+      "{% trans 'product.webhooks.selector.delete.successful.body' %}", "success")
+      .then(success => window.location.reload());
   }
 
   function appendWebhookCell(entry, identifier, information, elementType) {
@@ -128,9 +223,311 @@
     return element;
   }
 
+  const pageVisibilityRange = 2;
+  var pagingStartingPoint = "";
+  var pagingSorting = "name";
+  var pagingOrder = "ASCENDING";
+  var pagingFilterSearch = "";
+  var pagingFilterCreator = "";
+  var pagingFilterStartTime = -1;
+  var pagingFilterEndTime = -1;
+  var pagingFilterMinimumUsages = -1;
+  var pagingFilterMaximumUsages = -1;
+
+  function displayPaging(pages, currentPage, pageState) {
+    displayPagingShiftButton("webhooks-previous-page", currentPage > 0,
+      pages, currentPage, pageState, -1);
+    displayPagingShiftButton("webhooks-next-page", currentPage < pages - 1,
+      pages, currentPage, pageState, 1);
+    var pagesElement = document.getElementById("webhooks-pages");
+    pagesElement.innerHTML = "";
+    createPageButton(pagesElement, pages, currentPage, pageState, 0, currentPage === 0);
+    if (pages === 1) {
+      return;
+    }
+    if (currentPage - pageVisibilityRange > 0) {
+      pagesElement.insertAdjacentHTML("beforeend",
+        "<i class='webhooks-paging-ellipsis webhooks-paging-ellipsis-start " +
+        "fa-solid fa-ellipsis mx-4'></i>");
+    }
+    for (var i = -pageVisibilityRange + 1; i < pageVisibilityRange; i++) {
+      var page = currentPage + i;
+      if (page < 1 || page >= pages - 1) {
+        continue;
+      }
+      createPageButton(pagesElement, pages, currentPage, pageState, page,
+        page === currentPage);
+    }
+    if (currentPage + pageVisibilityRange < pages - 1) {
+      pagesElement.insertAdjacentHTML("beforeend",
+        "<i class='webhooks-paging-ellipsis webhooks-paging-ellipsis-end " +
+        "fa-solid fa-ellipsis mx-4'></i>");
+    }
+    createPageButton(pagesElement, pages, currentPage, pageState, pages - 1, currentPage === pages - 1);
+  }
+
+  function displayPagingShiftButton(id, isEnabled, pages, currentPage, pageState, direction) {
+    var button = document.getElementById(id);
+    if (isEnabled) {
+      button.classList.remove("webhooks-page-disabled");
+    } else {
+      button.classList.add("webhooks-page-disabled");
+    }
+    button.onclick = function (event) {
+      if (!isEnabled) {
+        return;
+      }
+      shiftPage(pages, currentPage, pageState, direction);
+    }
+  }
+
+  function createPageButton(pagesElement, pages, currentPage, pageState, page, isActive) {
+    var button = document.createElement("a");
+    button.classList.add("webhooks-page");
+    if (isActive) {
+      button.classList.add("webhooks-page-active");
+    }
+    button.innerHTML = page + 1;
+    button.onclick = function (event) {
+      onPageButtonClick(pages, currentPage, pageState, page);
+    };
+    pagesElement.appendChild(button);
+  }
+
+  function onPageButtonClick(pages, currentPage, pageState, page) {
+    if (page === currentPage) {
+      return;
+    }
+    if (Math.abs(page - currentPage) === 1) {
+      shiftPage(pages, currentPage, pageState, page - currentPage);
+      return;
+    }
+    fetchWebhooksPage(page, function(webhooks, pageState, pageNumber) {
+      updatePaging(pageNumber, page, pageState, webhooks,
+        document.getElementById("webhooks-not-found"));
+    });
+  }
+
+  function fetchWebhooksPage(targetPage, callback) {
+    var body = createPagingBody();
+    body.search = pagingFilterSearch;
+    body.targetPage = targetPage;
+    let request = new HttpRequest("https://api.taskwolf.net/v1/webhooks/page/",
+      "POST", [], body);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      pagingStartingPoint = targetPage === 0 ? "FORWARD" : "BACKWARD";
+      callback(response.webhooks, response.page, response.pageNumber);
+    });
+  }
+
+  function shiftPage(pages, currentPage, pageState, direction) {
+    var newPage = currentPage + direction;
+    if (newPage === 0 || newPage === pages - 1) {
+      pagingStartingPoint = newPage === 0 ? "FORWARD" : "BACKWARD";
+      fetchWebhooksPage(newPage, function(webhooks, pageState, pageNumber) {
+        updatePaging(pageNumber, newPage, pageState, webhooks,
+          document.getElementById("webhooks-not-found"));
+      });
+      return;
+    }
+    var body = createPagingBody();
+    body.pageState = pageState;
+    body.startingPoint = pagingStartingPoint;
+    body.direction = direction < 0 ? "BACKWARD" : "FORWARD";
+    let request = new HttpRequest("https://api.taskwolf.net/v1/webhooks/page/shift/",
+      "POST", [], body);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      var newPage = currentPage + direction;
+      updatePaging(response.pageNumber, newPage, response.page,
+        response.webhooks, document.getElementById("webhooks-not-found"));
+    });
+  }
+
+  function createPagingBody() {
+    var body = {sorting: pagingSorting, order: pagingOrder};
+    if (pagingFilterCreator !== "") {
+      body.creator = pagingFilterCreator;
+    }
+    if (pagingFilterStartTime !== -1) {
+      body.startTime = pagingFilterStartTime;
+    }
+    if (pagingFilterEndTime !== -1) {
+      body.endTime = pagingFilterEndTime;
+    }
+    if (pagingFilterMinimumUsages !== -1) {
+      body.minimumUsages = pagingFilterMinimumUsages;
+    }
+    if (pagingFilterMaximumUsages !== -1) {
+      body.maximumUsages = pagingFilterMaximumUsages;
+    }
+    return body;
+  }
+
+  function updateWebhooks() {
+    fetchWebhooksPage(0, function(webhooks, pageState, pageNumber) {
+      updatePaging(pageNumber, 0, pageState, webhooks,
+        document.getElementById("webhooks-not-found"));
+    });
+  }
+
+  function updatePaging(pageNumber, currentPage, pageState, webhooks, emptyElement) {
+    document.getElementById("webhooks-selector-global").checked = false;
+    entryCheckboxes = [];
+    document.getElementById("webhooks-selector-delete").classList.add("disabled");
+    displayWebhooks(webhooks);
+    document.getElementById("webhooks-empty").classList.add("d-none");
+    document.getElementById("webhooks-not-found").classList.add("d-none");
+    if (webhooks.length === 0) {
+      emptyElement.classList.remove("d-none");
+      document.getElementById("webhooks-paging").classList.add("d-none");
+    } else {
+      emptyElement.classList.add("d-none");
+      displayPaging(pageNumber, currentPage, pageState);
+      document.getElementById("webhooks-paging").classList.remove("d-none");
+    }
+  }
+
+  function fetchOrganization(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET", []);
+    request.send(function (status, responseText) {
+      var organization = JSON.parse(responseText);
+      if ("id" in organization) {
+        organization.members.push({id: organization.ownerId, name: organization.ownerName});
+      }
+      callback(organization);
+    });
+  }
+
+  function displayWebhooksCreatorFilter() {
+    var list = document.getElementById("webhooks-filter-creator-list");
+    list.innerHTML = "";
+    var search = document.getElementById("webhooks-filter-creator-search").value.toLowerCase();
+    if ("id" in organization) {
+      for (var i = 0; i < organization.members.length; i++) {
+        var member = organization.members[i];
+        if (search === "" || member.name.toLowerCase().includes(search)) {
+          list.appendChild(createWorkflowCreatorEntry(member.id, member.name,
+            pagingFilterCreator === member.id));
+        }
+      }
+    } else {
+      if (search === "" || "you".includes(search)) {
+        list.appendChild(createWorkflowCreatorEntry("",
+          "{% trans 'product.webhooks.filter.creator.you' %}", true));
+      }
+    }
+    var emptyElement = document.getElementById("webhooks-filter-creator-empty");
+    if (list.innerHTML === "") {
+      list.classList.add("d-none");
+      emptyElement.classList.remove("d-none");
+    } else {
+      list.classList.remove("d-none");
+      emptyElement.classList.add("d-none");
+    }
+  }
+
+  function createWorkflowCreatorEntry(id, name, isChecked) {
+    var entry = document.createElement("li");
+    entry.classList.add("form-check");
+    var entryInput = document.createElement("input");
+    entryInput.classList.add("form-check-input");
+    entryInput.type = "radio";
+    entryInput.name = "webhooks-filter-creator";
+    entryInput.checked = isChecked;
+    entryInput.id = "webhooks-filter-creator-" + id;
+    entry.appendChild(entryInput);
+    entryInput.onclick = function (event) {
+      if (id === "" || pagingFilterCreator === id) {
+        return;
+      }
+      pagingFilterCreator = id;
+      updateWebhooks();
+    }
+    var entryLabel = document.createElement("label");
+    entryLabel.classList.add("form-check-label");
+    entryLabel.innerHTML = name;
+    entryLabel.role = "button";
+    entryLabel.onclick = function (event) {
+      entryInput.click();
+    }
+    entry.appendChild(entryLabel);
+    return entry;
+  }
+
+  document.getElementById("webhooks-filter-creator-search").oninput = function (event) {
+    displayWebhooksCreatorFilter();
+  }
+
+  document.getElementById("webhooks-filter-start-time").oninput = function (event) {
+    var date = new Date(document.getElementById("webhooks-filter-start-time").value);
+    pagingFilterStartTime = date.getTime();
+    updateWebhooks();
+  }
+
+  document.getElementById("webhooks-filter-end-time").oninput = function (event) {
+    var date = new Date(document.getElementById("webhooks-filter-end-time").value);
+    pagingFilterEndTime = date.getTime();
+    updateWebhooks();
+  }
+
+  document.getElementById("webhooks-filter-minimum-usages").oninput = function (event) {
+    var target = event.target;
+    target.value = target.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
+    pagingFilterMinimumUsages = target.value !== "" ? target.value : -1;
+    updateWebhooks();
+  }
+
+  document.getElementById("webhooks-filter-maximum-usages").oninput = function (event) {
+    var target = event.target;
+    target.value = target.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
+    pagingFilterMaximumUsages = target.value !== "" ? target.value : -1;
+    updateWebhooks();
+  }
+
+  var currentSearchTimeout = -1;
+
   document.getElementById("webhooks-search-input").oninput = function(event) {
-    webhooksCurrentNameFilter = event.target.value;
-    displayWebhooks();
+    if (currentSearchTimeout !== -1) {
+      clearTimeout(currentSearchTimeout);
+    }
+    currentSearchTimeout = setTimeout(function () {
+      currentSearchTimeout = -1;
+      pagingFilterSearch = event.target.value;
+      updateWebhooks();
+    }, 500);
+  };
+
+  var sortingElements = document.getElementsByClassName("webhooks-table-description-sort");
+  for (var i = 0; i < sortingElements.length; i++) {
+    let sortingElement = sortingElements[i];
+    sortingElement.onclick = function (event) {
+      updateSorting(sortingElement);
+    }
+  }
+
+  function updateSorting(selectedElement) {
+    for (var i = 0; i < sortingElements.length; i++) {
+      let sortingElement = sortingElements[i];
+      sortingElement.classList.remove("fa-sort-up", "fa-sort-down");
+      sortingElement.classList.add("fa-sort");
+    }
+    var selectedSorting = selectedElement.getAttribute("type");
+    selectedElement.classList.remove("fa-sort");
+    if (pagingSorting === selectedSorting) {
+      pagingOrder = pagingOrder === "ASCENDING" ? "DESCENDING" : "ASCENDING";
+      selectedElement.classList.add(pagingOrder === "DESCENDING" ? "fa-sort-down" : "fa-sort-up");
+    } else {
+      pagingOrder = "ASCENDING";
+      selectedElement.classList.add("fa-sort-up");
+    }
+    pagingSorting = selectedSorting;
+    updateWebhooks();
+  }
+
+  document.getElementById("webhooks-filter").onclick = function(event) {
+    document.getElementById("webhooks-filter-container").classList.toggle("d-none");
   };
 
   document.getElementById("webhook-create").onclick = function(event) {

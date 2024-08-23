@@ -10,7 +10,6 @@
 }
 
 #processes-header {
-  margin: auto;
   margin-top: 3%;
   display: flex;
   align-items: center;
@@ -214,7 +213,6 @@
   position: relative;
   list-style-type: none;
   padding: 0;
-  margin: auto;
 }
 
 #processes-list li {
@@ -237,7 +235,7 @@
 }
 
 #processes-list li div {
-  padding: 3%;
+  padding: 40px 20px;
   display: flex;
   flex-direction: column;
   width: 20%;
@@ -262,8 +260,6 @@
 #processes-table-description {
   position: relative;
   list-style-type: none;
-  margin: auto;
-  margin-top: 1%;
   border-bottom: 4px #717171 solid;
   padding: 0;
   display: flex;
@@ -272,7 +268,7 @@
 
 #processes-table-description li {
   width: 20%;
-  padding: 2% 3%;
+  padding: 20px;
   font-weight: bold;
   font-size: 20px;
 }
