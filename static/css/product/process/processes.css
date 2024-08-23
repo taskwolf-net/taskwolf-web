@@ -134,7 +134,7 @@
   color-scheme: light;
 }
 
-#processes-filter-container input[type=search] {
+#processes-filter-container input[type=search], #processes-filter-container input[type=text] {
   width: 100%;
   background-color: transparent;
   border: none;
@@ -142,24 +142,24 @@
   padding: 5px;
 }
 
-.dark #processes-filter-container input[type=search] {
+.dark #processes-filter-container input[type=search], .dark #processes-filter-container input[type=text] {
   color: white !important;
   -webkit-text-fill-color: white;
   border: 1px solid #cecece !important;
 }
 
-.dark #processes-filter-container input[type=search]::placeholder {
+.dark #processes-filter-container input[type=search]::placeholder, .dark #processes-filter-container input[type=text]::placeholder {
   color: #828282 !important;
   -webkit-text-fill-color: #828282;
 }
 
-.light #processes-filter-container input[type=search] {
+.light #processes-filter-container input[type=search], .light #processes-filter-container input[type=text] {
   color: black;
   -webkit-text-fill-color: black;
   border: 1px solid #4c4c4c;
 }
 
-.light #processes-filter-container input[type=search]::placeholder {
+.light #processes-filter-container input[type=search]::placeholder, .light #processes-filter-container input[type=text]::placeholder {
   color: #5e5e5e !important;
   -webkit-text-fill-color: #5e5e5e;
 }
@@ -167,7 +167,11 @@
 #processes-filter-container input[type=search]:-webkit-autofill,
 #processes-filter-container input[type=search]:-webkit-autofill:hover,
 #processes-filter-container input[type=search]:-webkit-autofill:focus,
-#processes-filter-container input[type=search]:-webkit-autofill:active{
+#processes-filter-container input[type=search]:-webkit-autofill:active,
+#processes-filter-container input[type=text]:-webkit-autofill,
+#processes-filter-container input[type=text]:-webkit-autofill:hover,
+#processes-filter-container input[type=text]:-webkit-autofill:focus,
+#processes-filter-container input[type=text]:-webkit-autofill:active {
   -webkit-background-clip: text;
   transition: background-color 5000s ease-in-out 0s;
   box-shadow: inset 0 0 20px 20px #23232329;
@@ -190,7 +194,7 @@
 }
 
 .processes-filter-section {
-  width: 20%;
+  width: calc(100% / 3);
   height: fit-content;
   padding-left: 3%;
   padding-right: 3%;

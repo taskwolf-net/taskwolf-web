@@ -40,6 +40,18 @@
               <input type="date" id="processes-filter-end-time"/>
             </div>
           </div>
+          <div class="vr"></div>
+          <div class="processes-filter-section">
+            <h5 class="text-center fw-bold my-4">{% trans 'product.processes.filter.steps' %}</h5>
+            <div class="form-outline mb-3">
+              <label class="form-label">{% trans 'product.processes.filter.minimum.steps' %}</label>
+              <input type="text" id="processes-filter-minimum-steps" placeholder="{% trans 'product.processes.filter.minimum.steps' %}"/>
+            </div>
+            <div class="form-outline">
+              <label class="form-label">{% trans 'product.processes.filter.maximum.steps' %}</label>
+              <input type="text" id="processes-filter-maximum-steps" placeholder="{% trans 'product.processes.filter.maximum.steps' %}"/>
+            </div>
+          </div>
         </div>
         <ul id="processes-table-description" class="mt-4 mb-0">
           <li id="processes-table-description-selector">
@@ -68,6 +80,7 @@
           <li>
             <div>
                 <span>{% trans 'product.processes.steps' %}</span>
+              <i class="processes-table-description-sort fa-solid fa-sort ms-2" role="button" type="steps"></i>
             </div>
           </li>
         </ul>
@@ -218,6 +231,8 @@
   var pagingFilterCreator = "";
   var pagingFilterStartTime = -1;
   var pagingFilterEndTime = -1;
+  var pagingFilterMinimumSteps = -1;
+  var pagingFilterMaximumSteps = -1;
 
   function displayPaging(pages, currentPage, pageState) {
     displayPagingShiftButton("processes-previous-page", currentPage > 0,
@@ -341,6 +356,12 @@
     if (pagingFilterEndTime !== -1) {
       body.endTime = pagingFilterEndTime;
     }
+    if (pagingFilterMinimumSteps !== -1) {
+      body.minimumSteps = pagingFilterMinimumSteps;
+    }
+    if (pagingFilterMaximumSteps !== -1) {
+      body.maximumSteps = pagingFilterMaximumSteps;
+    }
     return body;
   }
 
@@ -448,6 +469,20 @@
   document.getElementById("processes-filter-end-time").oninput = function (event) {
     var date = new Date(document.getElementById("processes-filter-end-time").value);
     pagingFilterEndTime = date.getTime();
+    updateProcesses();
+  }
+
+  document.getElementById("processes-filter-minimum-steps").oninput = function (event) {
+    var target = event.target;
+    target.value = target.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
+    pagingFilterMinimumSteps = target.value !== "" ? target.value : -1;
+    updateProcesses();
+  }
+
+  document.getElementById("processes-filter-maximum-steps").oninput = function (event) {
+    var target = event.target;
+    target.value = target.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
+    pagingFilterMaximumSteps = target.value !== "" ? target.value : -1;
     updateProcesses();
   }
 
