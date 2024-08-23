@@ -74,7 +74,7 @@
           <li id="workflows-table-description-name">
             <div>
               <span>{% trans 'product.workflows.name' %}</span>
-              <i class="workflows-table-description-sort fa-solid fa-sort-down ms-2" role="button" type="name"></i>
+              <i class="workflows-table-description-sort fa-solid fa-sort-up ms-2" role="button" type="name"></i>
             </div>
           </li>
           <li>
@@ -416,7 +416,7 @@
   const pageVisibilityRange = 2;
   var pagingStartingPoint = "";
   var pagingSorting = "name";
-  var pagingOrder = "DESCENDING";
+  var pagingOrder = "ASCENDING";
   var pagingFilterSearch = "";
   var pagingFilterApplication = "";
   var pagingFilterCreator = "";
@@ -770,8 +770,8 @@
       pagingOrder = pagingOrder === "ASCENDING" ? "DESCENDING" : "ASCENDING";
       selectedElement.classList.add(pagingOrder === "DESCENDING" ? "fa-sort-down" : "fa-sort-up");
     } else {
-      pagingOrder = "DESCENDING";
-      selectedElement.classList.add("fa-sort-down");
+      pagingOrder = "ASCENDING";
+      selectedElement.classList.add("fa-sort-up");
     }
     pagingSorting = selectedSorting;
     updateWorkflows();
