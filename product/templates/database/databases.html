@@ -9,40 +9,100 @@
       <div id="databases-wrapper">
         <h1 id="databases-headline">{% trans 'product.databases.headline' %}</h1>
         <div id="databases-header">
-          <div class="d-flex w-100">
-            <div id="databases-search-box">
-              <input id="databases-search-input" placeholder=" {% trans 'product.databases.search' %}" type="text" class="form-control" value="" autocomplete="off">
-              <button type="button">
-                <i class="fa fa-search"></i>
-              </button>
+          <button type="button" id="databases-filter" class="btn"><i class="fa-solid fa-sliders"></i></button>
+          <div id="databases-search-box">
+            <input id="databases-search-input" placeholder=" {% trans 'product.databases.search' %}" type="text" class="form-control" value="" autocomplete="off">
+            <button type="button">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+          <button type="button" id="database-create" class="btn btn-primary btn-block">{% trans 'product.databases.create' %}</button>
+        </div>
+        <div id="databases-filter-container" class="rounded-4 py-3 mt-4 d-none">
+          <div class="databases-filter-section">
+            <h5 class="text-center fw-bold my-4">{% trans 'product.databases.filter.creator' %}</h5>
+            <input type="search" class="mb-3" id="databases-filter-creator-search" placeholder="{% trans 'product.databases.filter.creator' %}"/>
+            <ul id="databases-filter-creator-list">
+            </ul>
+            <div id="databases-filter-creator-empty" class="text-center d-none">
+              <span>{% trans 'product.databases.filter.creator.empty' %}</span>
             </div>
-            <button type="button" id="database-create" class="btn btn-primary btn-block">{% trans 'product.databases.create' %}</button>
+          </div>
+          <div class="vr"></div>
+          <div class="databases-filter-section">
+            <h5 class="text-center fw-bold my-4">{% trans 'product.databases.filter.time' %}</h5>
+            <div class="form-outline mb-3">
+              <label class="form-label">{% trans 'product.databases.filter.start.time' %}</label>
+              <input type="date" id="databases-filter-start-time"/>
+            </div>
+            <div class="form-outline">
+              <label class="form-label">{% trans 'product.databases.filter.end.time' %}</label>
+              <input type="date" id="databases-filter-end-time"/>
+            </div>
+          </div>
+          <div class="vr"></div>
+          <div class="databases-filter-section">
+            <h5 class="text-center fw-bold my-4">{% trans 'product.databases.filter.size' %}</h5>
+            <div class="form-outline mb-3">
+              <label class="form-label">{% trans 'product.databases.filter.minimum.size' %}</label>
+              <input type="text" id="databases-filter-minimum-size" placeholder="{% trans 'product.databases.filter.minimum.size' %}"/>
+            </div>
+            <div class="form-outline">
+              <label class="form-label">{% trans 'product.databases.filter.maximum.size' %}</label>
+              <input type="text" id="databases-filter-maximum-size" placeholder="{% trans 'product.databases.filter.maximum.size' %}"/>
+            </div>
           </div>
         </div>
-        <ul id="databases-table-description">
+        <ul id="databases-table-description" class="mt-4 mb-0">
+          <li id="databases-table-description-selector">
+            <div>
+              <input id="databases-selector-global" class="form-check-input" type="checkbox">
+            </div>
+          </li>
           <li id="databases-table-description-name">
             <div>
               <span>{% trans 'product.databases.name' %}</span>
+              <i class="databases-table-description-sort fa-solid fa-sort-up ms-2" role="button" type="name"></i>
             </div>
           </li>
           <li>
             <div>
-              <span>{% trans 'product.databases.entries' %}</span>
+              <span>{% trans 'product.databases.creator' %}</span>
+              <i class="databases-table-description-sort fa-solid fa-sort ms-2" role="button" type="creator"></i>
+            </div>
+          </li>
+          <li>
+            <div>
+              <span>{% trans 'product.databases.created' %}</span>
+              <i class="databases-table-description-sort fa-solid fa-sort ms-2" role="button" type="created"></i>
             </div>
           </li>
           <li>
             <div>
               <span>{% trans 'product.databases.size' %}</span>
+              <i class="databases-table-description-sort fa-solid fa-sort ms-2" role="button" type="size"></i>
             </div>
           </li>
         </ul>
         <ul id="databases-list">
         </ul>
+        <div id="databases-paging" class="d-none">
+          <button id="databases-selector-delete" type="button" class="btn btn-danger disabled">{% trans 'product.databases.selector.delete' %}</button>
+          <div class="d-flex justify-content-center align-items-center">
+            <a id="databases-previous-page" class="databases-page me-4"><i class="fa-solid fa-chevron-left"></i></a>
+            <div id="databases-pages"></div>
+            <a id="databases-next-page" class="databases-page ms-4"><i class="fa-solid fa-chevron-right"></i></a>
+          </div>
+          <div></div>
+        </div>
         <div id="databases-loader">
         </div>
-        <div id="databases-empty">
+        <div id="databases-empty" class="d-none">
           <span id="databases-empty-headline">{% trans 'product.databases.empty.headline' %}</span>
-          <span>{% trans 'product.databases.empty.text' %}</span><a id="databases-empty-link" href="/database/create/">{% trans 'product.databases.empty.link' %}</a><span>?</span>
+          <span>{% trans 'product.databases.empty.text' %}</span><a id="databases-empty-link" href="/database/">{% trans 'product.databases.empty.link' %}</a><span>?</span>
+        </div>
+        <div id="databases-not-found" class="d-none">
+          <span id="databases-not-found-headline">{% trans 'product.databases.not.found.headline' %}</span>
         </div>
       </div>
     </div>
@@ -50,50 +110,35 @@
 </html>
 
 <script>
-  var databases;
-  var databasesCurrentNameFilter = "";
+  var organization;
+  var entryCheckboxes = [];
 
   $(document).ready(function() {
     displayLoader();
-    fetchDatabasesData(function() {
-      displayDatabases();
-      if (databases.length === 0) {
-        document.getElementById("databases-empty").style.display = "flex";
-      } else {
-        document.getElementById("databases-empty").style.display = "none";
-      }
+    fetchDatabasesPage(0, function(databases, pageState, pageNumber) {
+      removeLoader();
+      updatePaging(pageNumber, 0, pageState, databases,
+        document.getElementById("databases-empty"));
+    });
+    fetchOrganization(function (result) {
+      organization = result;
+      displayDatabasesCreatorFilter();
     });
   });
 
-  function fetchDatabasesData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/tables/find/", "GET", []);
-    request.send(function (status, responseText) {
-      databases = JSON.parse(responseText).tables;
-      removeLoader();
-      callback();
-    });
-  }
-
-  function displayDatabases() {
+  function displayDatabases(databases) {
     document.getElementById("databases-list").innerHTML = "";
     for (var i = 0; i < databases.length; i++) {
       var entry = databases[i];
-      if(!(shouldDisplayDatabaseEntry(entry))) {
-        continue;
-      }
-      displayDatabase(entry.id, entry.name, entry.entries, entry.size);
+      displayDatabase(entry.id, entry.name, entry.creator, entry.created, entry.size);
     }
   }
 
-  function shouldDisplayDatabaseEntry(entry) {
-    return databasesCurrentNameFilter.length === 0 ||
-      entry.name.toLowerCase().includes(databasesCurrentNameFilter.toLowerCase());
-  }
-
-  function displayDatabase(id, name, entries, size) {
+  function displayDatabase(id, name, creator, created, size) {
     var entry = document.createElement('li');
     entry.role = "button";
     entry.classList.add("database-entry");
+    entry.appendChild(createDatabasesSelector(id));
     var nameDiv = document.createElement("div");
     nameDiv.classList.add("databases-entry-name");
     var nameElement = document.createElement("span");
@@ -101,12 +146,67 @@
     nameElement.classList.add("databases-list-name");
     nameDiv.appendChild(nameElement);
     entry.appendChild(nameDiv);
-    appendDatabasesCell(entry, "entries", entries, "span");
+    appendDatabasesCell(entry, "creator", creator, "span");
+    appendDatabasesCell(entry, "created", created, "span");
     appendDatabasesCell(entry, "size", size, "span");
     entry.onclick = function (event) {
       window.location.href = "/database/" + id + "/";
     }
     document.getElementById("databases-list").appendChild(entry);
+  }
+
+  function createDatabasesSelector(id) {
+    var selector = document.createElement("div");
+    selector.classList.add("databases-entry-selector");
+    var input = document.createElement("input");
+    input.classList.add("form-check-input");
+    input.type = "checkbox";
+    input.onchange = function (event) {
+      var checkboxSelected = false;
+      for (var i = 0; i < entryCheckboxes.length; i++) {
+        if (entryCheckboxes[i].checkbox.checked) {
+          checkboxSelected = true;
+          break;
+        }
+      }
+      var deleteButton = document.getElementById("databases-selector-delete");
+      if (!checkboxSelected) {
+        deleteButton.classList.add("disabled");
+      } else {
+        deleteButton.classList.remove("disabled");
+      }
+    }
+    selector.appendChild(input);
+    entryCheckboxes.push({checkbox: selector.firstChild, id: id})
+    return selector;
+  }
+
+  document.getElementById("databases-selector-global").onclick = function (event) {
+    var checkboxSelected = document.getElementById("databases-selector-global").checked;
+    for (var i = 0; i < entryCheckboxes.length; i++) {
+      entryCheckboxes[i].checkbox.checked = checkboxSelected;
+    }
+    var deleteButton = document.getElementById("databases-selector-delete");
+    if (!checkboxSelected) {
+      deleteButton.classList.add("disabled");
+    } else {
+      deleteButton.classList.remove("disabled");
+    }
+  }
+
+  document.getElementById("databases-selector-delete").onclick = function (event) {
+    for (var i = 0; i < entryCheckboxes.length; i++) {
+      var entry = entryCheckboxes[i];
+      if (entry.checkbox.checked) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/table/delete/", "POST",
+          [], {database: entry.id});
+        request.send(function (status, responseText) {
+        });
+      }
+    }
+    Swal.fire("{% trans 'product.databases.selector.delete.successful.title' %}",
+      "{% trans 'product.databases.selector.delete.successful.body' %}", "success")
+      .then(success => window.location.reload());
   }
 
   function appendDatabasesCell(entry, identifier, information, elementType) {
@@ -119,9 +219,311 @@
     return element;
   }
 
+  const pageVisibilityRange = 2;
+  var pagingStartingPoint = "";
+  var pagingSorting = "name";
+  var pagingOrder = "ASCENDING";
+  var pagingFilterSearch = "";
+  var pagingFilterCreator = "";
+  var pagingFilterStartTime = -1;
+  var pagingFilterEndTime = -1;
+  var pagingFilterMinimumSize= -1;
+  var pagingFilterMaximumSize = -1;
+
+  function displayPaging(pages, currentPage, pageState) {
+    displayPagingShiftButton("databases-previous-page", currentPage > 0,
+      pages, currentPage, pageState, -1);
+    displayPagingShiftButton("databases-next-page", currentPage < pages - 1,
+      pages, currentPage, pageState, 1);
+    var pagesElement = document.getElementById("databases-pages");
+    pagesElement.innerHTML = "";
+    createPageButton(pagesElement, pages, currentPage, pageState, 0, currentPage === 0);
+    if (pages === 1) {
+      return;
+    }
+    if (currentPage - pageVisibilityRange > 0) {
+      pagesElement.insertAdjacentHTML("beforeend",
+        "<i class='databases-paging-ellipsis databases-paging-ellipsis-start " +
+        "fa-solid fa-ellipsis mx-4'></i>");
+    }
+    for (var i = -pageVisibilityRange + 1; i < pageVisibilityRange; i++) {
+      var page = currentPage + i;
+      if (page < 1 || page >= pages - 1) {
+        continue;
+      }
+      createPageButton(pagesElement, pages, currentPage, pageState, page,
+        page === currentPage);
+    }
+    if (currentPage + pageVisibilityRange < pages - 1) {
+      pagesElement.insertAdjacentHTML("beforeend",
+        "<i class='databases-paging-ellipsis databases-paging-ellipsis-end " +
+        "fa-solid fa-ellipsis mx-4'></i>");
+    }
+    createPageButton(pagesElement, pages, currentPage, pageState, pages - 1, currentPage === pages - 1);
+  }
+
+  function displayPagingShiftButton(id, isEnabled, pages, currentPage, pageState, direction) {
+    var button = document.getElementById(id);
+    if (isEnabled) {
+      button.classList.remove("databases-page-disabled");
+    } else {
+      button.classList.add("databases-page-disabled");
+    }
+    button.onclick = function (event) {
+      if (!isEnabled) {
+        return;
+      }
+      shiftPage(pages, currentPage, pageState, direction);
+    }
+  }
+
+  function createPageButton(pagesElement, pages, currentPage, pageState, page, isActive) {
+    var button = document.createElement("a");
+    button.classList.add("databases-page");
+    if (isActive) {
+      button.classList.add("databases-page-active");
+    }
+    button.innerHTML = page + 1;
+    button.onclick = function (event) {
+      onPageButtonClick(pages, currentPage, pageState, page);
+    };
+    pagesElement.appendChild(button);
+  }
+
+  function onPageButtonClick(pages, currentPage, pageState, page) {
+    if (page === currentPage) {
+      return;
+    }
+    if (Math.abs(page - currentPage) === 1) {
+      shiftPage(pages, currentPage, pageState, page - currentPage);
+      return;
+    }
+    fetchDatabasesPage(page, function(databases, pageState, pageNumber) {
+      updatePaging(pageNumber, page, pageState, databases,
+        document.getElementById("databases-not-found"));
+    });
+  }
+
+  function fetchDatabasesPage(targetPage, callback) {
+    var body = createPagingBody();
+    body.search = pagingFilterSearch;
+    body.targetPage = targetPage;
+    let request = new HttpRequest("https://api.taskwolf.net/v1/tables/page/",
+      "POST", [], body);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      pagingStartingPoint = targetPage === 0 ? "FORWARD" : "BACKWARD";
+      callback(response.tables, response.page, response.pageNumber);
+    });
+  }
+
+  function shiftPage(pages, currentPage, pageState, direction) {
+    var newPage = currentPage + direction;
+    if (newPage === 0 || newPage === pages - 1) {
+      pagingStartingPoint = newPage === 0 ? "FORWARD" : "BACKWARD";
+      fetchDatabasesPage(newPage, function(databases, pageState, pageNumber) {
+        updatePaging(pageNumber, newPage, pageState, databases,
+          document.getElementById("databases-not-found"));
+      });
+      return;
+    }
+    var body = createPagingBody();
+    body.pageState = pageState;
+    body.startingPoint = pagingStartingPoint;
+    body.direction = direction < 0 ? "BACKWARD" : "FORWARD";
+    let request = new HttpRequest("https://api.taskwolf.net/v1/tables/page/shift/",
+      "POST", [], body);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      var newPage = currentPage + direction;
+      updatePaging(response.pageNumber, newPage, response.page,
+        response.tables, document.getElementById("databases-not-found"));
+    });
+  }
+
+  function createPagingBody() {
+    var body = {sorting: pagingSorting, order: pagingOrder};
+    if (pagingFilterCreator !== "") {
+      body.creator = pagingFilterCreator;
+    }
+    if (pagingFilterStartTime !== -1) {
+      body.startTime = pagingFilterStartTime;
+    }
+    if (pagingFilterEndTime !== -1) {
+      body.endTime = pagingFilterEndTime;
+    }
+    if (pagingFilterMinimumSize !== -1) {
+      body.minimumSize = pagingFilterMinimumSize;
+    }
+    if (pagingFilterMaximumSize !== -1) {
+      body.maximumSize = pagingFilterMaximumSize;
+    }
+    return body;
+  }
+
+  function updateDatabases() {
+    fetchDatabasesPage(0, function(databases, pageState, pageNumber) {
+      updatePaging(pageNumber, 0, pageState, databases,
+        document.getElementById("databases-not-found"));
+    });
+  }
+
+  function updatePaging(pageNumber, currentPage, pageState, databases, emptyElement) {
+    document.getElementById("databases-selector-global").checked = false;
+    entryCheckboxes = [];
+    document.getElementById("databases-selector-delete").classList.add("disabled");
+    displayDatabases(databases);
+    document.getElementById("databases-empty").classList.add("d-none");
+    document.getElementById("databases-not-found").classList.add("d-none");
+    if (databases.length === 0) {
+      emptyElement.classList.remove("d-none");
+      document.getElementById("databases-paging").classList.add("d-none");
+    } else {
+      emptyElement.classList.add("d-none");
+      displayPaging(pageNumber, currentPage, pageState);
+      document.getElementById("databases-paging").classList.remove("d-none");
+    }
+  }
+
+  function fetchOrganization(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET", []);
+    request.send(function (status, responseText) {
+      var organization = JSON.parse(responseText);
+      if ("id" in organization) {
+        organization.members.push({id: organization.ownerId, name: organization.ownerName});
+      }
+      callback(organization);
+    });
+  }
+
+  function displayDatabasesCreatorFilter() {
+    var list = document.getElementById("databases-filter-creator-list");
+    list.innerHTML = "";
+    var search = document.getElementById("databases-filter-creator-search").value.toLowerCase();
+    if ("id" in organization) {
+      for (var i = 0; i < organization.members.length; i++) {
+        var member = organization.members[i];
+        if (search === "" || member.name.toLowerCase().includes(search)) {
+          list.appendChild(createWorkflowCreatorEntry(member.id, member.name,
+            pagingFilterCreator === member.id));
+        }
+      }
+    } else {
+      if (search === "" || "you".includes(search)) {
+        list.appendChild(createWorkflowCreatorEntry("",
+          "{% trans 'product.databases.filter.creator.you' %}", true));
+      }
+    }
+    var emptyElement = document.getElementById("databases-filter-creator-empty");
+    if (list.innerHTML === "") {
+      list.classList.add("d-none");
+      emptyElement.classList.remove("d-none");
+    } else {
+      list.classList.remove("d-none");
+      emptyElement.classList.add("d-none");
+    }
+  }
+
+  function createWorkflowCreatorEntry(id, name, isChecked) {
+    var entry = document.createElement("li");
+    entry.classList.add("form-check");
+    var entryInput = document.createElement("input");
+    entryInput.classList.add("form-check-input");
+    entryInput.type = "radio";
+    entryInput.name = "databases-filter-creator";
+    entryInput.checked = isChecked;
+    entryInput.id = "databases-filter-creator-" + id;
+    entry.appendChild(entryInput);
+    entryInput.onclick = function (event) {
+      if (id === "" || pagingFilterCreator === id) {
+        return;
+      }
+      pagingFilterCreator = id;
+      updateDatabases();
+    }
+    var entryLabel = document.createElement("label");
+    entryLabel.classList.add("form-check-label");
+    entryLabel.innerHTML = name;
+    entryLabel.role = "button";
+    entryLabel.onclick = function (event) {
+      entryInput.click();
+    }
+    entry.appendChild(entryLabel);
+    return entry;
+  }
+
+  document.getElementById("databases-filter-creator-search").oninput = function (event) {
+    displayDatabasesCreatorFilter();
+  }
+
+  document.getElementById("databases-filter-start-time").oninput = function (event) {
+    var date = new Date(document.getElementById("databases-filter-start-time").value);
+    pagingFilterStartTime = date.getTime();
+    updateDatabases();
+  }
+
+  document.getElementById("databases-filter-end-time").oninput = function (event) {
+    var date = new Date(document.getElementById("databases-filter-end-time").value);
+    pagingFilterEndTime = date.getTime();
+    updateDatabases();
+  }
+
+  document.getElementById("databases-filter-minimum-size").oninput = function (event) {
+    var target = event.target;
+    target.value = target.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
+    pagingFilterMinimumSize = target.value !== "" ? target.value : -1;
+    updateDatabases();
+  }
+
+  document.getElementById("databases-filter-maximum-size").oninput = function (event) {
+    var target = event.target;
+    target.value = target.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
+    pagingFilterMaximumSize = target.value !== "" ? target.value : -1;
+    updateDatabases();
+  }
+
+  var currentSearchTimeout = -1;
+
   document.getElementById("databases-search-input").oninput = function(event) {
-    databasesCurrentNameFilter = event.target.value;
-    displayDatabases();
+    if (currentSearchTimeout !== -1) {
+      clearTimeout(currentSearchTimeout);
+    }
+    currentSearchTimeout = setTimeout(function () {
+      currentSearchTimeout = -1;
+      pagingFilterSearch = event.target.value;
+      updateDatabases();
+    }, 500);
+  };
+
+  var sortingElements = document.getElementsByClassName("databases-table-description-sort");
+  for (var i = 0; i < sortingElements.length; i++) {
+    let sortingElement = sortingElements[i];
+    sortingElement.onclick = function (event) {
+      updateSorting(sortingElement);
+    }
+  }
+
+  function updateSorting(selectedElement) {
+    for (var i = 0; i < sortingElements.length; i++) {
+      let sortingElement = sortingElements[i];
+      sortingElement.classList.remove("fa-sort-up", "fa-sort-down");
+      sortingElement.classList.add("fa-sort");
+    }
+    var selectedSorting = selectedElement.getAttribute("type");
+    selectedElement.classList.remove("fa-sort");
+    if (pagingSorting === selectedSorting) {
+      pagingOrder = pagingOrder === "ASCENDING" ? "DESCENDING" : "ASCENDING";
+      selectedElement.classList.add(pagingOrder === "DESCENDING" ? "fa-sort-down" : "fa-sort-up");
+    } else {
+      pagingOrder = "ASCENDING";
+      selectedElement.classList.add("fa-sort-up");
+    }
+    pagingSorting = selectedSorting;
+    updateDatabases();
+  }
+
+  document.getElementById("databases-filter").onclick = function(event) {
+    document.getElementById("databases-filter-container").classList.toggle("d-none");
   };
 
   document.getElementById("database-create").onclick = function(event) {
