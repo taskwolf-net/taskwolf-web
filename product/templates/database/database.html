@@ -22,13 +22,14 @@
               <tbody id="database-table-body">
               </tbody>
             </table>
-            <div id="database-table-paginate">
+            <div id="database-table-paging">
               <button id="database-remove" type="button" class="btn btn-danger disabled">{% trans 'product.database.remove' %}</button>
-              <div class="text-center position-absolute">
-                <a id="database-table-previous-page" class="database-table-paginate-button database-table-paginate-page-button database-table-paginate-previous"><</a>
-                <span id="database-table-pages">
-              </span>
-                <a id="database-table-next-page" class="database-table-paginate-button database-table-paginate-page-button database-table-paginate-next">></a>
+              <div class="mx-auto">
+                <div id="database-table-page-control" class="d-flex justify-content-center align-items-center">
+                  <a id="database-previous-page" class="database-page me-4"><i class="fa-solid fa-chevron-left"></i></a>
+                  <div id="database-pages"></div>
+                  <a id="database-next-page" class="database-page ms-4"><i class="fa-solid fa-chevron-right"></i></a>
+                </div>
               </div>
               <button id="database-insert" type="button" class="btn btn-primary">{% trans 'product.database.insert' %}</button>
             </div>
@@ -41,16 +42,19 @@
 
 <script>
   var database;
-  var currentPage = 1;
   var inserting = false;
   var rowCheckboxes = [];
 
   $(document).ready(function() {
     displayLoader();
-    fetchDatabaseData(function() {
+    fetchDatabaseData(function(result) {
+      database = result;
       document.getElementById("database-name").innerHTML = database.name;
-      displayTable();
-      removeLoader();
+      fillTableHead();
+      fetchDatabasePage(0, function(content, pageState, pageNumber) {
+        removeLoader();
+        updatePaging(pageNumber, 0, pageState, content);
+      });
     });
   });
 
@@ -58,17 +62,10 @@
     var location = window.location;
     var id = location.href.replace(location.host, "").replace(location.protocol, "").replace("database", "").replaceAll("/", "");
     let request = new HttpRequest("https://api.taskwolf.net/v1/table/find/", "POST",
-      [], {table: id, page: currentPage});
+      [], {table: id});
     request.send(function (status, responseText) {
-      database = JSON.parse(responseText);
-      callback();
+      callback(JSON.parse(responseText));
     });
-  }
-
-  function displayTable() {
-    fillTableHead();
-    fillTableContent();
-    displayTablePages();
   }
 
   function fillTableHead() {
@@ -185,14 +182,13 @@
     });
   }
 
-  function fillTableContent() {
+  function fillTableContent(content) {
     var body = document.getElementById("database-table-body");
     body.innerHTML = "";
-    var rows = database.rows;
-    for (var i = 0; i < rows.length; i++) {
-      body.appendChild(displayTableRow(rows[i]));
+    for (var i = 0; i < content.length; i++) {
+      body.appendChild(displayTableRow(content[i]));
     }
-    if (rows.length === 0) {
+    if (content.length === 0) {
       displayTableEmptyLabel();
     }
   }
@@ -364,72 +360,129 @@
     return entry;
   }
 
-  var previousPageElement = document.getElementById("database-table-previous-page");
-  var nextPageElement = document.getElementById("database-table-next-page");
+  const pageVisibilityRange = 2;
+  var pagingStartingPoint = "";
 
-  function displayTablePages() {
-    var pagesList = document.getElementById("database-table-pages");
-    pagesList.innerHTML = "";
-    var pageNumber = Math.max(Math.ceil(database.entries / 5), 1);
-    for (let i = 1; i <= pageNumber; i++) {
-      var pageElement = document.createElement("a");
-      pageElement.classList.add("database-table-paginate-button");
-      if (currentPage === i) {
-        pageElement.classList.add("database-table-paginate-current");
-      } else {
-        pageElement.onclick = function(event) {
-          currentPage = i;
-          refreshTableContent();
-        }
+  function displayPaging(pages, currentPage, pageState) {
+    displayPagingShiftButton("database-previous-page", currentPage > 0,
+      pages, currentPage, pageState, -1);
+    displayPagingShiftButton("database-next-page", currentPage < pages - 1,
+      pages, currentPage, pageState, 1);
+    var pagesElement = document.getElementById("database-pages");
+    pagesElement.innerHTML = "";
+    createPageButton(pagesElement, pages, currentPage, pageState, 0, currentPage === 0);
+    if (pages === 1) {
+      return;
+    }
+    if (currentPage - pageVisibilityRange > 0) {
+      pagesElement.insertAdjacentHTML("beforeend",
+        "<i class='database-paging-ellipsis database-paging-ellipsis-start " +
+        "fa-solid fa-ellipsis mx-4'></i>");
+    }
+    for (var i = -pageVisibilityRange + 1; i < pageVisibilityRange; i++) {
+      var page = currentPage + i;
+      if (page < 1 || page >= pages - 1) {
+        continue;
       }
-      pageElement.type = "button";
-      pageElement.innerText = i + "";
-      pagesList.appendChild(pageElement);
+      createPageButton(pagesElement, pages, currentPage, pageState, page,
+        page === currentPage);
     }
-    updatePageArrows(pageNumber);
-    inserting = false;
-    document.getElementById("database-insert").classList.remove("disabled");
+    if (currentPage + pageVisibilityRange < pages - 1) {
+      pagesElement.insertAdjacentHTML("beforeend",
+        "<i class='database-paging-ellipsis database-paging-ellipsis-end " +
+        "fa-solid fa-ellipsis mx-4'></i>");
+    }
+    createPageButton(pagesElement, pages, currentPage, pageState, pages - 1, currentPage === pages - 1);
   }
 
-  function updatePageArrows(pageNumber) {
-    previousPageElement.classList.remove("paginate-button-disabled");
-    previousPageElement.type = "button";
-    nextPageElement.classList.remove("paginate-button-disabled");
-    nextPageElement.type = "button";
-    if (currentPage === 1) {
-      previousPageElement.classList.add("paginate-button-disabled");
-      previousPageElement.type = "";
+  function displayPagingShiftButton(id, isEnabled, pages, currentPage, pageState, direction) {
+    var button = document.getElementById(id);
+    if (isEnabled) {
+      button.classList.remove("database-page-disabled");
+    } else {
+      button.classList.add("database-page-disabled");
     }
-    if (currentPage === pageNumber) {
-      nextPageElement.classList.add("paginate-button-disabled");
-      nextPageElement.type = "";
+    button.onclick = function (event) {
+      if (!isEnabled) {
+        return;
+      }
+      shiftPage(pages, currentPage, pageState, direction);
     }
   }
 
-  previousPageElement.onclick = function (event) {
-    if(previousPageElement.classList.contains("paginate-button-disabled")) {
+  function createPageButton(pagesElement, pages, currentPage, pageState, page, isActive) {
+    var button = document.createElement("a");
+    button.classList.add("database-page");
+    if (isActive) {
+      button.classList.add("database-page-active");
+    }
+    button.innerHTML = page + 1;
+    button.onclick = function (event) {
+      onPageButtonClick(pages, currentPage, pageState, page);
+    };
+    pagesElement.appendChild(button);
+  }
+
+  function onPageButtonClick(pages, currentPage, pageState, page) {
+    if (page === currentPage) {
       return;
     }
-    currentPage--;
-    refreshTableContent();
-  }
-
-  nextPageElement.onclick = function (event) {
-    if (nextPageElement.classList.contains("paginate-button-disabled")) {
+    if (Math.abs(page - currentPage) === 1) {
+      shiftPage(pages, currentPage, pageState, page - currentPage);
       return;
     }
-    currentPage++;
-    refreshTableContent();
-  }
-
-  function refreshTableContent() {
-    fetchDatabaseData(function() {
-      document.getElementById("database-table-checkbox-global").checked = false;
-      rowCheckboxes = [];
-      document.getElementById("database-remove").classList.add("disabled");
-      fillTableContent();
-      displayTablePages();
+    fetchDatabasePage(page, function(database, pageState, pageNumber) {
+      updatePaging(pageNumber, page, pageState, database);
     });
+  }
+
+  function fetchDatabasePage(targetPage, callback) {
+    var body = {};
+    body.table = database.id;
+    body.targetPage = targetPage;
+    let request = new HttpRequest("https://api.taskwolf.net/v1/table/content/page/",
+      "POST", [], body);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      pagingStartingPoint = targetPage === 0 ? "FORWARD" : "BACKWARD";
+      callback(response.content, response.page, response.pageNumber);
+    });
+  }
+
+  function shiftPage(pages, currentPage, pageState, direction) {
+    var newPage = currentPage + direction;
+    if (newPage === 0 || newPage === pages - 1) {
+      pagingStartingPoint = newPage === 0 ? "FORWARD" : "BACKWARD";
+      fetchDatabasePage(newPage, function(database, pageState, pageNumber) {
+        updatePaging(pageNumber, newPage, pageState, database);
+      });
+      return;
+    }
+    var body = {};
+    body.table = database.id;
+    body.pageState = pageState;
+    body.startingPoint = pagingStartingPoint;
+    body.direction = direction < 0 ? "BACKWARD" : "FORWARD";
+    let request = new HttpRequest("https://api.taskwolf.net/v1/table/content/page/shift/",
+      "POST", [], body);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      var newPage = currentPage + direction;
+      updatePaging(response.pageNumber, newPage, response.page);
+    });
+  }
+
+  function updatePaging(pageNumber, currentPage, pageState, database) {
+    document.getElementById("database-table-checkbox-global").checked = false;
+    rowCheckboxes = [];
+    document.getElementById("database-remove").classList.add("disabled");
+    fillTableContent(database);
+    if (database.length === 0) {
+      document.getElementById("database-table-page-control").classList.add("d-none");
+    } else {
+      displayPaging(pageNumber, currentPage, pageState);
+      document.getElementById("database-table-page-control").classList.remove("d-none");
+    }
   }
 
   document.getElementById("database-delete").onclick = function (event) {
@@ -589,7 +642,7 @@
     emptyLabel.id = "database-table-empty";
     emptyLabel.innerText = "{% trans 'product.database.empty' %}";
     document.getElementById("database-table-container").insertBefore(emptyLabel,
-      document.getElementById("database-table-paginate"));
+      document.getElementById("database-table-paging"));
   }
 
   function removeTableEmptyLabel() {

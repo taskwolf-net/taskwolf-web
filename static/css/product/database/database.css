@@ -221,29 +221,11 @@ tr {
   border-bottom: #626e7b 2px solid;
 }
 
-#database-table-paginate {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  user-select: none;
-}
-
-.dark #database-table-paginate {
-  background-color: #212529;
-}
-
-.light #database-table-paginate {
-  background-color: #d7d7d7;
-}
-
 #database-remove {
   margin-left: 20px;
 }
 
 #database-insert {
-  margin-left: auto;
   margin-right: 20px;
 }
 
@@ -296,82 +278,98 @@ tr {
   background-color: #d7d7d7 !important;
 }
 
-.database-table-paginate-button {
-  padding: .5em !important;
-  width: 40px !important;
-  height: 40px !important;
-  border-radius: .5rem !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  transition: all 0.3s ease-in-out !important;
-  text-decoration: none;
+#database-table-paging {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 20px;
   user-select: none;
 }
 
-.dark .database-table-paginate-button {
+.dark #database-table-paging {
+  background-color: #212529;
+}
+
+.light #database-table-paging {
+  background-color: #d7d7d7;
+}
+
+.database-page {
+  padding: .5em;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: .5rem;
+  background-color: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease-in-out;
+  text-decoration: none;
+  user-select: none;
+  font-weight: bold;
+}
+
+.dark .database-page {
   color: white;
 }
 
-.light .database-table-paginate-button {
+.light .database-page {
   color: black;
 }
 
-.database-table-paginate-button:hover {
+.database-page:hover {
   border-color: transparent !important;
   text-decoration: none;
 }
 
-.dark .database-table-paginate-button:hover {
+.dark .database-page:hover {
   background: #434b53 !important;
 }
 
-.light .database-table-paginate-button:hover {
+.light .database-page:hover {
   background: #b3b3b3 !important;
 }
 
-.database-table-paginate-page-button {
-  font-weight: bold;
-}
-
-.paginate-button-disabled {
+.database-page-disabled {
   transition: all 0s !important;
 }
 
-.dark .paginate-button-disabled {
+.dark .database-page-disabled {
   color: #545454 !important;
 }
 
-.light .paginate-button-disabled {
+.light .database-page-disabled {
   color: #898989 !important;
 }
 
-.dark .paginate-button-disabled:hover {
+.dark .database-page-disabled:hover {
   background-color: #212529 !important;
 }
 
-.light .paginate-button-disabled:hover {
+.light .database-page-disabled:hover {
   background-color: #d7d7d7 !important;
 }
 
-.database-table-paginate-current {
+.database-page-active {
   font-weight: bold;
 }
 
-.dark .database-table-paginate-current {
+.dark .database-page-active {
   background: #33393f !important;
 }
 
-.light .database-table-paginate-current {
+.light .database-page-active {
   background: #878787 !important;
 }
 
-.database-table-paginate-previous {
-  margin-right: 20px !important;
+.dark .database-paging-ellipsis {
+  color: white;
 }
 
-.database-table-paginate-next {
-  margin-left: 20px !important;
+.light .database-paging-ellipsis {
+  color: black;
 }
 
 .database-rename-content input, .database-column-add-content input {
