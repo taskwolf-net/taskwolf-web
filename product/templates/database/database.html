@@ -468,7 +468,7 @@
     request.send(function (status, responseText) {
       var response = JSON.parse(responseText);
       var newPage = currentPage + direction;
-      updatePaging(response.pageNumber, newPage, response.page);
+      updatePaging(response.pageNumber, newPage, response.page, response.content);
     });
   }
 
