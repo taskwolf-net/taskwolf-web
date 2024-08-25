@@ -118,13 +118,15 @@
 
 <script>
   var organization;
+  var team;
   var entryCheckboxes = [];
 
   $(document).ready(function() {
     displayLoader();
     fetchDevicesPage(0, function(devices, pageState, pageNumber) {
-      fetchOrganization(function (result) {
-        organization = result;
+      fetchOrganization(function (organizationResult, teamResult) {
+        organization = organizationResult;
+        team = teamResult;
         if ("id" in organization) {
           document.getElementById("devices-selector-remove").classList.remove("d-none");
         }
@@ -247,7 +249,7 @@
           break;
         }
       }
-      var deleteButton = document.getElementById("devices-selector-delete");
+      var deleteButton = document.getElementById("devices-selector-remove");
       if (!checkboxSelected) {
         deleteButton.classList.add("disabled");
       } else {
@@ -264,7 +266,7 @@
     for (var i = 0; i < entryCheckboxes.length; i++) {
       entryCheckboxes[i].checkbox.checked = checkboxSelected;
     }
-    var deleteButton = document.getElementById("devices-selector-delete");
+    var deleteButton = document.getElementById("devices-selector-remove");
     if (!checkboxSelected) {
       deleteButton.classList.add("disabled");
     } else {
@@ -277,7 +279,7 @@
       var entry = entryCheckboxes[i];
       if (entry.checkbox.checked) {
         let request = new HttpRequest("https://api.taskwolf.net/v1/device/organization/remove/", "POST",
-          [], {device: entry.id, organization: organization.id});
+          [], {device: entry.id, organization: organization.id, team: team});
         request.send(function (status, responseText) {
         });
       }
@@ -457,6 +459,16 @@
       var organization = JSON.parse(responseText);
       if ("id" in organization) {
         organization.members.push({id: organization.ownerId, name: organization.ownerName});
+        let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/targets/selected/",
+          "GET", []);
+        request.send(function (status, responseText) {
+          var team = JSON.parse(responseText).currentTarget;
+          if (team === "") {
+            team = organization.id;
+          }
+          callback(organization, team);
+        });
+        return;
       }
       callback(organization);
     });
@@ -601,7 +613,7 @@
     }).then(result => {
       if (result.isConfirmed) {
         let request = new HttpRequest("https://api.taskwolf.net/v1/device/organization/remove/", "POST",
-          [], {device: device, organization: organization.id});
+          [], {device: device, organization: organization.id, team: team});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.devices.remove.successful.title' %}", "{% trans 'product.devices.remove.successful.body' %}", "success").then(success => window.location.href = "/devices/");
         });
