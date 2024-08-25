@@ -26,7 +26,8 @@
           </div>
           <ul id="templates-list">
           </ul>
-          <div id="templates-empty">
+          <button id="templates-load-more" type="button" class="btn btn-outline-success d-block mx-auto px-5 mt-5 d-none">{% trans 'product.templates.load.more' %} +</button>
+          <div id="templates-empty" class="d-none">
             <b id="templates-empty-headline">{% trans 'product.templates.empty' %}</b>
           </div>
         </div>
@@ -37,20 +38,24 @@
 
 <script>
   var modules;
-  var currentSelectedModule = "{% trans 'product.templates.all' %}".toLowerCase();
-  var templates;
-  var templatesCurrentNameFilter = "";
+  var bundle;
+  var totalPages = 0;
+  var loadedPages = 0;
+  var currentPageState = "";
+  var currentSelectedModule = "";
+  var currentSearch = "";
 
   $(document).ready(function() {
     displayLoader();
     fetchModulesData(function () {
       addTemplateModule("{% trans 'product.templates.all' %}");
       for (var i = 0; i < modules.length; i++) {
-        addTemplateModule(modules[i].name);
+        addTemplateModule(modules[i]);
       }
-      fetchTemplatesData(function() {
-        fetchBundle(function (bundle) {
-          displayTemplates(bundle);
+      fetchBundle(function (result) {
+        bundle = result;
+        fetchMoreTemplates(function (templates) {
+          displayTemplates(templates);
           removeLoader();
         });
       });
@@ -70,7 +75,7 @@
     var moduleElement = document.createElement("li");
     moduleElement.classList.add("dropdown-item");
     var moduleName = document.createElement("b");
-    moduleName.innerHTML = module;
+    moduleName.innerHTML = module.name;
     moduleElement.appendChild(moduleName);
     moduleElement.onclick = function(event) {
       selectTemplateModule(module);
@@ -79,17 +84,30 @@
   }
 
   function selectTemplateModule(module) {
-    document.getElementById("templates-modules-dropdown-button").innerHTML = "{% trans 'product.templates.app' %}: " + module;
-    currentSelectedModule = module.toLowerCase();
-    displayTemplates();
+    document.getElementById("templates-modules-dropdown-button").innerHTML =
+      "{% trans 'product.templates.app' %}: " + module.name;
+    currentSelectedModule = module.id;
+    updateTemplates();
   }
 
-  function fetchTemplatesData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/templates/all/", "GET",
-      []);
+  function updateTemplates() {
+    document.getElementById("templates-list").innerHTML = "";
+    loadedPages = 0;
+    currentPageState = "";
+    fetchMoreTemplates(function (templates) {
+      displayTemplates(templates);
+    });
+  }
+
+  function fetchMoreTemplates(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/templates/load/", "POST",
+      [], {pageState: currentPageState, module: currentSelectedModule, search: currentSearch});
     request.send(function (status, responseText) {
-      templates = JSON.parse(responseText).templates;
-      callback();
+      var result = JSON.parse(responseText);
+      currentPageState = result.page;
+      totalPages = result.pageNumber;
+      loadedPages++;
+      callback(result.templates);
     });
   }
 
@@ -100,34 +118,25 @@
     });
   }
 
-  function displayTemplates(bundle) {
-    document.getElementById("templates-list").innerHTML = "";
+  function displayTemplates(templates) {
     var displayedEntries = 0;
     for (var i = 0; i < templates.length; i++) {
       var entry = templates[i];
-      if(!(shouldDisplayTemplateEntry(entry))) {
-        continue;
-      }
       displayTemplate(entry.name, entry.description, entry.trigger, entry.actions,
         entry.accessType, bundle.type === "TRIAL");
       displayedEntries++;
     }
     if (displayedEntries === 0) {
-      document.getElementById("templates-empty").style.display = "block";
+      document.getElementById("templates-empty").classList.remove("d-none");
+      document.getElementById("templates-load-more").classList.add("d-none");
     } else {
-      document.getElementById("templates-empty").style.display = "none";
+      document.getElementById("templates-empty").classList.add("d-none");
+      if (loadedPages < totalPages) {
+        document.getElementById("templates-load-more").classList.remove("d-none");
+      } else {
+        document.getElementById("templates-load-more").classList.add("d-none");
+      }
     }
-  }
-
-  function shouldDisplayTemplateEntry(entry) {
-    if (currentSelectedModule !== "{% trans 'product.templates.all' %}".toLowerCase() &&
-      !entry.modules.some((module) => module.toLowerCase() === currentSelectedModule)
-    ) {
-      return false;
-    }
-    return templatesCurrentNameFilter.length === 0 ||
-      entry.name.toLowerCase().includes(templatesCurrentNameFilter.toLowerCase()) ||
-      entry.description.toLowerCase().includes(templatesCurrentNameFilter.toLowerCase());
   }
 
   function displayTemplate(name, description, trigger, actions, accessType, isTrial) {
@@ -234,9 +243,15 @@
   }
 
   document.getElementById("templates-search-input").oninput = function(event) {
-    templatesCurrentNameFilter = event.target.value;
-    displayTemplates();
+    currentSearch = event.target.value;
+    updateTemplates();
   };
+
+  document.getElementById("templates-load-more").onclick = function (event) {
+    fetchMoreTemplates(function (templates) {
+      displayTemplates(templates);
+    });
+  }
 
   function displayLoader() {
     var loader = document.createElement("div");

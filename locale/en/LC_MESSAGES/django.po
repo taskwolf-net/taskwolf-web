@@ -1666,6 +1666,8 @@ msgid "product.templates.chargeable.tooltip"
 msgstr "Premium template"
 msgid "product.templates.all"
 msgstr "All"
+msgid "product.templates.load.more"
+msgstr "LOAD MORE"
 
 # PACkAGE
 msgid "product.package.tab.general"
