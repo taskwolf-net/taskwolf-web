@@ -199,7 +199,7 @@
       var entry = entryCheckboxes[i];
       if (entry.checkbox.checked) {
         let request = new HttpRequest("https://api.taskwolf.net/v1/table/delete/", "POST",
-          [], {database: entry.id});
+          [], {table: entry.id});
         request.send(function (status, responseText) {
         });
       }
