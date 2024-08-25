@@ -13,18 +13,6 @@
   justify-content: center;
 }
 
-#templates-modules-dropdown {
-  margin-right: 2%;
-}
-
-#templates-modules-dropdown-button {
-  width: 100%;
-}
-
-#templates-modules-dropdown-list {
-  width: 100%;
-}
-
 #templates-search-box {
   width: 100%;
   display: flex;

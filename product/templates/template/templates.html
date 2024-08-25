@@ -10,13 +10,6 @@
         <div id="templates-wrapper" class="d-none">
           <h1 id="templates-headline">{% trans 'product.templates.headline' %}</h1>
           <div id="templates-header">
-            <div id="templates-modules-dropdown" class="dropdown">
-              <button id="templates-modules-dropdown-button" class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                {% trans 'product.templates.app' %}: {% trans 'product.templates.all' %}
-              </button>
-              <ul id="templates-modules-dropdown-list" class="dropdown-menu">
-              </ul>
-            </div>
             <div id="templates-search-box">
               <input id="templates-search-input" placeholder="{% trans 'product.templates.search' %}" type="text" class="form-control" value="" autocomplete="off">
               <button type="button">
@@ -37,58 +30,22 @@
 </html>
 
 <script>
-  var modules;
   var bundle;
   var totalPages = 0;
   var loadedPages = 0;
   var currentPageState = "";
-  var currentSelectedModule = "";
   var currentSearch = "";
 
   $(document).ready(function() {
     displayLoader();
-    fetchModulesData(function () {
-      addTemplateModule("{% trans 'product.templates.all' %}");
-      for (var i = 0; i < modules.length; i++) {
-        addTemplateModule(modules[i]);
-      }
-      fetchBundle(function (result) {
-        bundle = result;
-        fetchMoreTemplates(function (templates) {
-          displayTemplates(templates);
-          removeLoader();
-        });
+    fetchBundle(function (result) {
+      bundle = result;
+      fetchMoreTemplates(function (templates) {
+        displayTemplates(templates);
+        removeLoader();
       });
     });
   });
-
-  function fetchModulesData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/modules/all/", "GET",
-      []);
-    request.send(function (status, responseText) {
-      modules = JSON.parse(responseText).modules;
-      callback();
-    });
-  }
-
-  function addTemplateModule(module) {
-    var moduleElement = document.createElement("li");
-    moduleElement.classList.add("dropdown-item");
-    var moduleName = document.createElement("b");
-    moduleName.innerHTML = module.name;
-    moduleElement.appendChild(moduleName);
-    moduleElement.onclick = function(event) {
-      selectTemplateModule(module);
-    }
-    document.getElementById("templates-modules-dropdown-list").appendChild(moduleElement);
-  }
-
-  function selectTemplateModule(module) {
-    document.getElementById("templates-modules-dropdown-button").innerHTML =
-      "{% trans 'product.templates.app' %}: " + module.name;
-    currentSelectedModule = module.id;
-    updateTemplates();
-  }
 
   function updateTemplates() {
     document.getElementById("templates-list").innerHTML = "";
@@ -101,7 +58,7 @@
 
   function fetchMoreTemplates(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/templates/load/", "POST",
-      [], {pageState: currentPageState, module: currentSelectedModule, search: currentSearch});
+      [], {pageState: currentPageState, search: currentSearch});
     request.send(function (status, responseText) {
       var result = JSON.parse(responseText);
       currentPageState = result.page;
@@ -217,9 +174,7 @@
 
   function createLogoElement(module) {
     var logoElement = document.createElement("img");
-    logoElement.src = "{% static '' %}" + "img/applications/" + modules.filter(entry => {
-      return entry.name.toLowerCase() === module.module.toLowerCase();
-    })[0].logo;
+    logoElement.src = "{% static '' %}" + "img/applications/" + module.moduleLogo;
     logoElement.width = 64;
     logoElement.height = 64;
     return logoElement;
@@ -242,9 +197,17 @@
     });
   }
 
+  var currentSearchTimeout = -1;
+
   document.getElementById("templates-search-input").oninput = function(event) {
-    currentSearch = event.target.value;
-    updateTemplates();
+    if (currentSearchTimeout !== -1) {
+      clearTimeout(currentSearchTimeout);
+    }
+    currentSearchTimeout = setTimeout(function () {
+      currentSearchTimeout = -1;
+      currentSearch = event.target.value;
+      updateTemplates();
+    }, 500);
   };
 
   document.getElementById("templates-load-more").onclick = function (event) {
