@@ -9,16 +9,57 @@
       <div id="devices-wrapper">
         <h1 id="devices-headline">{% trans 'product.devices.headline' %}</h1>
         <div id="devices-header">
-          <div class="d-flex w-100">
-            <div id="devices-search-box">
-              <input id="devices-search-input" placeholder=" {% trans 'product.devices.search' %}" type="text" class="form-control" value="" autocomplete="off">
-              <button type="button">
-                <i class="fa fa-search"></i>
-              </button>
+          <button type="button" id="devices-filter" class="btn"><i class="fa-solid fa-sliders"></i></button>
+          <div id="devices-search-box">
+            <input id="devices-search-input" placeholder=" {% trans 'product.devices.search' %}" type="text" class="form-control" value="" autocomplete="off">
+            <button type="button">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </div>
+        <div id="devices-filter-container" class="rounded-4 py-3 mt-4 d-none">
+          <div class="devices-filter-section">
+            <h5 class="text-center fw-bold my-4">{% trans 'product.devices.filter.owner' %}</h5>
+            <input type="search" class="mb-3" id="devices-filter-owner-search" placeholder="{% trans 'product.devices.filter.owner' %}"/>
+            <ul id="devices-filter-owner-list">
+            </ul>
+            <div id="devices-filter-owner-empty" class="text-center d-none">
+              <span>{% trans 'product.devices.filter.owner.empty' %}</span>
             </div>
+          </div>
+          <div class="vr"></div>
+          <div class="devices-filter-section">
+            <h5 class="text-center fw-bold my-4">{% trans 'product.devices.filter.platform' %}</h5>
+            <ul id="devices-filter-platform-list">
+              <li class="form-check">
+                <input class="form-check-input" type="radio" name="devices-filter-platform" id="devices-filter-platform-android">
+                <label class="form-check-label" role="button" onclick="document.getElementById('devices-filter-platform-android').click()">{% trans 'product.devices.filter.platform.android' %}</label>
+              </li>
+              <li class="form-check">
+                <input class="form-check-input" type="radio" name="devices-filter-platform" id="devices-filter-platform-ios">
+                <label class="form-check-label" role="button" onclick="document.getElementById('devices-filter-platform-ios').click()">{% trans 'product.devices.filter.platform.ios' %}</label>
+              </li>
+              <li class="form-check">
+                <input class="form-check-input" type="radio" name="devices-filter-platform" id="devices-filter-platform-windows">
+                <label class="form-check-label" role="button" onclick="document.getElementById('devices-filter-platform-windows').click()">{% trans 'product.devices.filter.platform.windows' %}</label>
+              </li>
+              <li class="form-check">
+                <input class="form-check-input" type="radio" name="devices-filter-platform" id="devices-filter-platform-linux">
+                <label class="form-check-label" role="button" onclick="document.getElementById('devices-filter-platform-linux').click()">{% trans 'product.devices.filter.platform.linux' %}</label>
+              </li>
+              <li class="form-check">
+                <input class="form-check-input" type="radio" name="devices-filter-platform" id="devices-filter-platform-macos">
+                <label class="form-check-label" role="button" onclick="document.getElementById('devices-filter-platform-macos').click()">{% trans 'product.devices.filter.platform.macos' %}</label>
+              </li>
+            </ul>
           </div>
         </div>
         <ul id="devices-table-description">
+          <li id="devices-table-description-selector">
+            <div>
+              <input id="devices-selector-global" class="form-check-input" type="checkbox">
+            </div>
+          </li>
           <li id="devices-table-description-id">
             <div>
               <span>{% trans 'product.devices.id' %}</span>
@@ -27,16 +68,19 @@
           <li id="devices-table-description-name">
             <div>
               <span>{% trans 'product.devices.name' %}</span>
+              <i class="devices-table-description-sort fa-solid fa-sort-up ms-2" role="button" type="information"></i>
             </div>
           </li>
           <li>
             <div>
               <span>{% trans 'product.devices.owner' %}</span>
+              <i class="devices-table-description-sort fa-solid fa-sort ms-2" role="button" type="owner"></i>
             </div>
           </li>
           <li id="devices-table-description-platform">
             <div>
               <span>{% trans 'product.devices.platform' %}</span>
+              <i class="devices-table-description-sort fa-solid fa-sort ms-2" role="button" type="platform"></i>
             </div>
           </li>
           <li id="devices-table-description-settings">
@@ -47,11 +91,25 @@
         </ul>
         <ul id="devices-list">
         </ul>
+        <div id="devices-paging" class="d-none">
+          <div>
+            <button id="devices-selector-remove" type="button" class="btn btn-danger disabled d-none">{% trans 'product.devices.selector.remove' %}</button>
+          </div>
+          <div class="d-flex justify-content-center align-items-center">
+            <a id="devices-previous-page" class="devices-page me-4"><i class="fa-solid fa-chevron-left"></i></a>
+            <div id="devices-pages"></div>
+            <a id="devices-next-page" class="devices-page ms-4"><i class="fa-solid fa-chevron-right"></i></a>
+          </div>
+          <div></div>
+        </div>
         <div id="devices-loader">
         </div>
-        <div id="devices-empty">
+        <div id="devices-empty" class="d-none">
           <span id="devices-empty-headline">{% trans 'product.devices.empty.headline' %}</span>
-          <span>{% trans 'product.devices.empty.text' %}</span><a id="devices-empty-link" href="/download/">{% trans 'product.devices.empty.link' %}</a><span>.</span>
+          <span>{% trans 'product.devices.empty.text' %}</span><a id="devices-empty-link" href="/device/">{% trans 'product.devices.empty.link' %}</a><span>.</span>
+        </div>
+        <div id="devices-not-found" class="d-none">
+          <span id="devices-not-found-headline">{% trans 'product.devices.not.found.headline' %}</span>
         </div>
       </div>
     </div>
@@ -59,54 +117,38 @@
 </html>
 
 <script>
-  var devices;
-  var devicesCurrentNameFilter = "";
+  var organization;
+  var entryCheckboxes = [];
 
   $(document).ready(function() {
-    devices = [];
-    displayLoader()
-    fetchDevicesData(function() {
-      displayDevices();
-      if (devices.length === 0) {
-        document.getElementById("devices-empty").style.display = "flex";
-      } else {
-        document.getElementById("devices-empty").style.display = "none";
-      }
+    displayLoader();
+    fetchDevicesPage(0, function(devices, pageState, pageNumber) {
+      fetchOrganization(function (result) {
+        organization = result;
+        if ("id" in organization) {
+          document.getElementById("devices-selector-remove").classList.remove("d-none");
+        }
+        updatePaging(pageNumber, 0, pageState, devices,
+          document.getElementById("devices-empty"));
+        displayDevicesOwnerFilter();
+        removeLoader();
+      });
     });
   });
 
-  function fetchDevicesData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/devices/selected/", "GET", []);
-    request.send(function (status, responseText) {
-      devices = JSON.parse(responseText).devices;
-      removeLoader();
-      callback();
-    });
-  }
-
-  function displayDevices() {
+  function displayDevices(devices) {
     document.getElementById("devices-list").innerHTML = "";
     for (var i = 0; i < devices.length; i++) {
       var entry = devices[i];
-      if(!(shouldDisplayDeviceEntry(entry))) {
-        continue;
-      }
       displayDevice(entry.id, entry.information, entry.owner, entry.ownDevice,
         entry.platform);
     }
   }
 
-  function shouldDisplayDeviceEntry(entry) {
-    return devicesCurrentNameFilter.length === 0 ||
-      entry.id.toLowerCase().includes(devicesCurrentNameFilter.toLowerCase()) ||
-      entry.information.toLowerCase().includes(devicesCurrentNameFilter.toLowerCase()) ||
-      entry.owner.toLowerCase().includes(devicesCurrentNameFilter.toLowerCase()) ||
-      entry.platform.toLowerCase().includes(devicesCurrentNameFilter.toLowerCase());
-  }
-
   function displayDevice(id, information, owner, ownDevice, platform) {
     var entry = document.createElement('li');
     entry.classList.add("device-entry");
+    entry.appendChild(createDevicesSelector(id));
     var idDiv = document.createElement("div");
     idDiv.classList.add("devices-entry-id");
     var idElement = document.createElement("span");
@@ -191,6 +233,60 @@
     return dropdownEntry;
   }
 
+  function createDevicesSelector(id) {
+    var selector = document.createElement("div");
+    selector.classList.add("devices-entry-selector");
+    var input = document.createElement("input");
+    input.classList.add("form-check-input");
+    input.type = "checkbox";
+    input.onchange = function (event) {
+      var checkboxSelected = false;
+      for (var i = 0; i < entryCheckboxes.length; i++) {
+        if (entryCheckboxes[i].checkbox.checked) {
+          checkboxSelected = true;
+          break;
+        }
+      }
+      var deleteButton = document.getElementById("devices-selector-delete");
+      if (!checkboxSelected) {
+        deleteButton.classList.add("disabled");
+      } else {
+        deleteButton.classList.remove("disabled");
+      }
+    }
+    selector.appendChild(input);
+    entryCheckboxes.push({checkbox: selector.firstChild, id: id})
+    return selector;
+  }
+
+  document.getElementById("devices-selector-global").onclick = function (event) {
+    var checkboxSelected = document.getElementById("devices-selector-global").checked;
+    for (var i = 0; i < entryCheckboxes.length; i++) {
+      entryCheckboxes[i].checkbox.checked = checkboxSelected;
+    }
+    var deleteButton = document.getElementById("devices-selector-delete");
+    if (!checkboxSelected) {
+      deleteButton.classList.add("disabled");
+    } else {
+      deleteButton.classList.remove("disabled");
+    }
+  }
+
+  document.getElementById("devices-selector-remove").onclick = function (event) {
+    for (var i = 0; i < entryCheckboxes.length; i++) {
+      var entry = entryCheckboxes[i];
+      if (entry.checkbox.checked) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/device/organization/remove/", "POST",
+          [], {device: entry.id, organization: organization.id});
+        request.send(function (status, responseText) {
+        });
+      }
+    }
+    Swal.fire("{% trans 'product.devices.selector.remove.successful.title' %}",
+      "{% trans 'product.devices.selector.remove.successful.body' %}", "success")
+      .then(success => window.location.reload());
+  }
+
   function appendDeviceCell(entry, identifier, information, elementType) {
     var div = document.createElement("div");
     var element = document.createElement(elementType);
@@ -201,9 +297,298 @@
     return element;
   }
 
+  const pageVisibilityRange = 2;
+  var pagingStartingPoint = "";
+  var pagingSorting = "information";
+  var pagingOrder = "ASCENDING";
+  var pagingFilterSearch = "";
+  var pagingFilterOwner = "";
+  var pagingFilterPlatform = "";
+
+  function displayPaging(pages, currentPage, pageState) {
+    displayPagingShiftButton("devices-previous-page", currentPage > 0,
+      pages, currentPage, pageState, -1);
+    displayPagingShiftButton("devices-next-page", currentPage < pages - 1,
+      pages, currentPage, pageState, 1);
+    var pagesElement = document.getElementById("devices-pages");
+    pagesElement.innerHTML = "";
+    createPageButton(pagesElement, pages, currentPage, pageState, 0, currentPage === 0);
+    if (pages === 1) {
+      return;
+    }
+    if (currentPage - pageVisibilityRange > 0) {
+      pagesElement.insertAdjacentHTML("beforeend",
+        "<i class='devices-paging-ellipsis devices-paging-ellipsis-start " +
+        "fa-solid fa-ellipsis mx-4'></i>");
+    }
+    for (var i = -pageVisibilityRange + 1; i < pageVisibilityRange; i++) {
+      var page = currentPage + i;
+      if (page < 1 || page >= pages - 1) {
+        continue;
+      }
+      createPageButton(pagesElement, pages, currentPage, pageState, page,
+        page === currentPage);
+    }
+    if (currentPage + pageVisibilityRange < pages - 1) {
+      pagesElement.insertAdjacentHTML("beforeend",
+        "<i class='devices-paging-ellipsis devices-paging-ellipsis-end " +
+        "fa-solid fa-ellipsis mx-4'></i>");
+    }
+    createPageButton(pagesElement, pages, currentPage, pageState, pages - 1, currentPage === pages - 1);
+  }
+
+  function displayPagingShiftButton(id, isEnabled, pages, currentPage, pageState, direction) {
+    var button = document.getElementById(id);
+    if (isEnabled) {
+      button.classList.remove("devices-page-disabled");
+    } else {
+      button.classList.add("devices-page-disabled");
+    }
+    button.onclick = function (event) {
+      if (!isEnabled) {
+        return;
+      }
+      shiftPage(pages, currentPage, pageState, direction);
+    }
+  }
+
+  function createPageButton(pagesElement, pages, currentPage, pageState, page, isActive) {
+    var button = document.createElement("a");
+    button.classList.add("devices-page");
+    if (isActive) {
+      button.classList.add("devices-page-active");
+    }
+    button.innerHTML = page + 1;
+    button.onclick = function (event) {
+      onPageButtonClick(pages, currentPage, pageState, page);
+    };
+    pagesElement.appendChild(button);
+  }
+
+  function onPageButtonClick(pages, currentPage, pageState, page) {
+    if (page === currentPage) {
+      return;
+    }
+    if (Math.abs(page - currentPage) === 1) {
+      shiftPage(pages, currentPage, pageState, page - currentPage);
+      return;
+    }
+    fetchDevicesPage(page, function(devices, pageState, pageNumber) {
+      updatePaging(pageNumber, page, pageState, devices,
+        document.getElementById("devices-not-found"));
+    });
+  }
+
+  function fetchDevicesPage(targetPage, callback) {
+    var body = createPagingBody();
+    body.search = pagingFilterSearch;
+    body.targetPage = targetPage;
+    let request = new HttpRequest("https://api.taskwolf.net/v1/devices/page/",
+      "POST", [], body);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      pagingStartingPoint = targetPage === 0 ? "FORWARD" : "BACKWARD";
+      callback(response.devices, response.page, response.pageNumber);
+    });
+  }
+
+  function shiftPage(pages, currentPage, pageState, direction) {
+    var newPage = currentPage + direction;
+    if (newPage === 0 || newPage === pages - 1) {
+      pagingStartingPoint = newPage === 0 ? "FORWARD" : "BACKWARD";
+      fetchDevicesPage(newPage, function(devices, pageState, pageNumber) {
+        updatePaging(pageNumber, newPage, pageState, devices,
+          document.getElementById("devices-not-found"));
+      });
+      return;
+    }
+    var body = createPagingBody();
+    body.pageState = pageState;
+    body.startingPoint = pagingStartingPoint;
+    body.direction = direction < 0 ? "BACKWARD" : "FORWARD";
+    let request = new HttpRequest("https://api.taskwolf.net/v1/devices/page/shift/",
+      "POST", [], body);
+    request.send(function (status, responseText) {
+      var response = JSON.parse(responseText);
+      var newPage = currentPage + direction;
+      updatePaging(response.pageNumber, newPage, response.page,
+        response.devices, document.getElementById("devices-not-found"));
+    });
+  }
+
+  function createPagingBody() {
+    var body = {sorting: pagingSorting, order: pagingOrder};
+    if (pagingFilterOwner !== "") {
+      body.owner = pagingFilterOwner;
+    }
+    if (pagingFilterPlatform !== "") {
+      body.platform = pagingFilterPlatform;
+    }
+    return body;
+  }
+
+  function updateDevices() {
+    fetchDevicesPage(0, function(devices, pageState, pageNumber) {
+      updatePaging(pageNumber, 0, pageState, devices,
+        document.getElementById("devices-not-found"));
+    });
+  }
+
+  function updatePaging(pageNumber, currentPage, pageState, devices, emptyElement) {
+    document.getElementById("devices-selector-global").checked = false;
+    entryCheckboxes = [];
+    document.getElementById("devices-selector-remove").classList.add("disabled");
+    displayDevices(devices);
+    document.getElementById("devices-empty").classList.add("d-none");
+    document.getElementById("devices-not-found").classList.add("d-none");
+    if (devices.length === 0) {
+      emptyElement.classList.remove("d-none");
+      document.getElementById("devices-paging").classList.add("d-none");
+    } else {
+      emptyElement.classList.add("d-none");
+      displayPaging(pageNumber, currentPage, pageState);
+      document.getElementById("devices-paging").classList.remove("d-none");
+    }
+  }
+
+  function fetchOrganization(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET", []);
+    request.send(function (status, responseText) {
+      var organization = JSON.parse(responseText);
+      if ("id" in organization) {
+        organization.members.push({id: organization.ownerId, name: organization.ownerName});
+      }
+      callback(organization);
+    });
+  }
+
+  function displayDevicesOwnerFilter() {
+    var list = document.getElementById("devices-filter-owner-list");
+    list.innerHTML = "";
+    var search = document.getElementById("devices-filter-owner-search").value.toLowerCase();
+    if ("id" in organization) {
+      for (var i = 0; i < organization.members.length; i++) {
+        var member = organization.members[i];
+        if (search === "" || member.name.toLowerCase().includes(search)) {
+          list.appendChild(createWorkflowOwnerEntry(member.id, member.name,
+            pagingFilterOwner === member.id));
+        }
+      }
+    } else {
+      if (search === "" || "you".includes(search)) {
+        list.appendChild(createWorkflowOwnerEntry("",
+          "{% trans 'product.devices.filter.owner.you' %}", true));
+      }
+    }
+    var emptyElement = document.getElementById("devices-filter-owner-empty");
+    if (list.innerHTML === "") {
+      list.classList.add("d-none");
+      emptyElement.classList.remove("d-none");
+    } else {
+      list.classList.remove("d-none");
+      emptyElement.classList.add("d-none");
+    }
+  }
+
+  function createWorkflowOwnerEntry(id, name, isChecked) {
+    var entry = document.createElement("li");
+    entry.classList.add("form-check");
+    var entryInput = document.createElement("input");
+    entryInput.classList.add("form-check-input");
+    entryInput.type = "radio";
+    entryInput.name = "devices-filter-owner";
+    entryInput.checked = isChecked;
+    entryInput.id = "devices-filter-owner-" + id;
+    entry.appendChild(entryInput);
+    entryInput.onclick = function (event) {
+      if (id === "" || pagingFilterOwner === id) {
+        return;
+      }
+      pagingFilterOwner = id;
+      updateDevices();
+    }
+    var entryLabel = document.createElement("label");
+    entryLabel.classList.add("form-check-label");
+    entryLabel.innerHTML = name;
+    entryLabel.role = "button";
+    entryLabel.onclick = function (event) {
+      entryInput.click();
+    }
+    entry.appendChild(entryLabel);
+    return entry;
+  }
+
+  document.getElementById("devices-filter-platform-android").onclick = function (event) {
+    pagingFilterPlatform = "ANDROID";
+    updateDevices();
+  }
+
+  document.getElementById("devices-filter-platform-ios").onclick = function (event) {
+    pagingFilterPlatform = "IOS";
+    updateDevices();
+  }
+
+  document.getElementById("devices-filter-platform-windows").onclick = function (event) {
+    pagingFilterPlatform = "WINDOWS";
+    updateDevices();
+  }
+
+  document.getElementById("devices-filter-platform-linux").onclick = function (event) {
+    pagingFilterPlatform = "LINUX";
+    updateDevices();
+  }
+
+  document.getElementById("devices-filter-platform-macos").onclick = function (event) {
+    pagingFilterPlatform = "MACOS";
+    updateDevices();
+  }
+
+  document.getElementById("devices-filter-owner-search").oninput = function (event) {
+    displayDevicesOwnerFilter();
+  }
+
+  var currentSearchTimeout = -1;
+
   document.getElementById("devices-search-input").oninput = function(event) {
-    devicesCurrentNameFilter = event.target.value;
-    displayDevices();
+    if (currentSearchTimeout !== -1) {
+      clearTimeout(currentSearchTimeout);
+    }
+    currentSearchTimeout = setTimeout(function () {
+      currentSearchTimeout = -1;
+      pagingFilterSearch = event.target.value;
+      updateDevices();
+    }, 500);
+  };
+
+  var sortingElements = document.getElementsByClassName("devices-table-description-sort");
+  for (var i = 0; i < sortingElements.length; i++) {
+    let sortingElement = sortingElements[i];
+    sortingElement.onclick = function (event) {
+      updateSorting(sortingElement);
+    }
+  }
+
+  function updateSorting(selectedElement) {
+    for (var i = 0; i < sortingElements.length; i++) {
+      let sortingElement = sortingElements[i];
+      sortingElement.classList.remove("fa-sort-up", "fa-sort-down");
+      sortingElement.classList.add("fa-sort");
+    }
+    var selectedSorting = selectedElement.getAttribute("type");
+    selectedElement.classList.remove("fa-sort");
+    if (pagingSorting === selectedSorting) {
+      pagingOrder = pagingOrder === "ASCENDING" ? "DESCENDING" : "ASCENDING";
+      selectedElement.classList.add(pagingOrder === "DESCENDING" ? "fa-sort-down" : "fa-sort-up");
+    } else {
+      pagingOrder = "ASCENDING";
+      selectedElement.classList.add("fa-sort-up");
+    }
+    pagingSorting = selectedSorting;
+    updateDevices();
+  }
+
+  document.getElementById("devices-filter").onclick = function(event) {
+    document.getElementById("devices-filter-container").classList.toggle("d-none");
   };
 
   function removeDevice(device) {
@@ -216,7 +601,7 @@
     }).then(result => {
       if (result.isConfirmed) {
         let request = new HttpRequest("https://api.taskwolf.net/v1/device/organization/remove/", "POST",
-          [], {device: device, organization: currentTarget.id});
+          [], {device: device, organization: organization.id});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.devices.remove.successful.title' %}", "{% trans 'product.devices.remove.successful.body' %}", "success").then(success => window.location.href = "/devices/");
         });
