@@ -150,6 +150,10 @@
     appendDatabasesCell(entry, "created", created, "span");
     appendDatabasesCell(entry, "size", size, "span");
     entry.onclick = function (event) {
+      var target = event.target;
+      if (Boolean(target.closest(".databases-entry-selector"))) {
+        return;
+      }
       window.location.href = "/database/" + id + "/";
     }
     document.getElementById("databases-list").appendChild(entry);
