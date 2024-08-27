@@ -14,10 +14,16 @@ from django.http import HttpResponse
 def authentication_required(function):
   @wraps(function)
   async def authentication(request, *args, **kwargs):
-    response = await function(request, *args, **kwargs)
-    authenticated = await isAuthenticated(request, response)
-    if (authenticated):
+    authenticationResponse = await isAuthenticated(request)
+    if (authenticationResponse["success"]):
+      if ("data" in authenticationResponse):
+        request.COOKIES["token"] = authenticationResponse["data"]["token"]
+        request.COOKIES["refresh-token"] = authenticationResponse["data"]["refreshToken"]
       await applyLanguage(request)
+      response = await function(request, *args, **kwargs)
+      if ("data" in authenticationResponse):
+        setCookie(response, "token", authenticationResponse["data"]["token"], 10 / (60 * 24))
+        setCookie(response, "refresh-token", authenticationResponse["data"]["refreshToken"], 30)
       return response
     response = redirect("/")
     response.delete_cookie("token", domain=".taskwolf.net")
@@ -25,43 +31,42 @@ def authentication_required(function):
     return response
   return authentication
 
-async def isAuthenticated(request, response):
+async def isAuthenticated(request):
   token = request.COOKIES.get('token')
   if (token is None):
-    return False
+    return {"success": False}
   headers = {}
   applyWhitelistKey(request, headers)
-  requestResponse = await asyncio.get_event_loop().run_in_executor(None,
+  response = await asyncio.get_event_loop().run_in_executor(None,
     partial(requests.post, "https://api.taskwolf.net/v1/verification/isValid/",
       json = {"token": token}, headers = headers))
-  if (requestResponse.status_code == 417):
-    return await refreshAuthentication(request, response)
-  text = requestResponse.text
+  if (response.status_code == 417):
+    return await refreshAuthentication(request)
+  text = response.text
   jsonText = json.loads(text)
   isValid = jsonText["isValid"]
   if (isValid == "true"):
-    return True
-  return False
+    return {"success": True}
+  return {"success": False}
 
-async def refreshAuthentication(request, response):
+async def refreshAuthentication(request):
   refreshToken = request.COOKIES.get('refresh-token')
   if (refreshToken is None):
-    return False
+    return {"success": False}
   headers = {}
   applyWhitelistKey(request, headers)
-  requestResponse = await asyncio.get_event_loop().run_in_executor(None,
+  response = await asyncio.get_event_loop().run_in_executor(None,
     partial(requests.post, "https://api.taskwolf.net/v1/verification/refresh/",
       json = {"refreshToken": refreshToken}, headers = headers))
-  text = requestResponse.text
+  text = response.text
   jsonText = json.loads(text)
   success = jsonText["success"]
   if (success == "true"):
-    setCookie(response, "token", jsonText["productApiKey"], 10 / (60 * 24))
-    setCookie(response, "refresh-token", jsonText["refreshToken"], 1)
-    request.COOKIES["token"] = jsonText["productApiKey"]
-    request.COOKIES["refresh-token"] = jsonText["refreshToken"]
-    return True
-  return False
+    request.taskwolfToken = jsonText["productApiKey"]
+    request.taskwolfRefreshToken = jsonText["refreshToken"]
+    return {"success": True, "data": {"token": jsonText["productApiKey"],
+      "refreshToken": jsonText["refreshToken"]}}
+  return {"success": False}
 
 async def applyLanguage(request):
   token = request.COOKIES.get('token')
