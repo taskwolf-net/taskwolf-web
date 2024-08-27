@@ -1,0 +1,79 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark">
+    {% include 'settings-header.html' %}
+    <div class="settings-container">
+      {% include 'settings-sidebar.html' %}
+      <div class="sidebar-influenced d-none">
+        <div class="settings-content">
+          <h1 class="settings-headline">{% trans 'settings.session.headline' %}</h1>
+          <div id="settings-session-container">
+            <ul id="settings-session-list">
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    displayLoader();
+    fetchSessions(function (sessions) {
+      displaySessions(sessions);
+      removeLoader();
+    });
+  });
+
+  function fetchSessions(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/sessions/", "GET",
+      []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText).sessions);
+    });
+  }
+
+  function displaySessions(sessions) {
+    for (var i = 0; i < sessions.length; i++) {
+      var session = sessions[i];
+      displaySession(session.id, session.platform, session.country, session.city,
+        session.openTime, session.status);
+    }
+  }
+
+  function displaySession(id, platform, country, city, openTime, status) {
+    var entry = document.createElement("li");
+    entry.classList.add("d-flex", "justify-content-between");
+    var entryDescription = document.createElement("div");
+    var entryPlatform = document.getElementById("span");
+    entryPlatform.innerHTML = platform;
+    entryDescription.appendChild(entryPlatform);
+    var entryLocation = document.getElementById("span");
+    entryLocation.innerHTML = city + ", " + country;
+    entryDescription.appendChild(entryLocation);
+    var entryOpenTime = document.getElementById("span");
+    entryOpenTime.innerHTML = openTime;
+    entryDescription.appendChild(entryOpenTime);
+    entry.appendChild(entryDescription);
+    var entryStatus = document.createElement("span");
+    entryStatus.innerHTML = status === "ACTIVE" ?
+      "{% trans 'settings.session.active' %}" : "{% trans 'settings.session.closed' %}";
+    entry.appendChild(entryStatus);
+    document.getElementById("settings-session-list").appendChild(entry);
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementsByClassName("settings-container")[0].appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementsByClassName("settings-container")[0]
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementsByClassName("sidebar-influenced")[0].classList.remove("d-none");
+  }
+</script>

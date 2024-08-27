@@ -2318,6 +2318,8 @@ msgid "settings.sidebar.security"
 msgstr "Sicherheit"
 msgid "settings.sidebar.2fa"
 msgstr "2FA"
+msgid "settings.sidebar.session"
+msgstr "Sitzungen"
 
 # PROFILE
 msgid "settings.profile.title"
@@ -2510,6 +2512,16 @@ msgid "settings.2fa.recovery.window.title"
 msgstr "2-Faktor-Wiederherstellung"
 msgid "settings.2fa.recovery.window.body"
 msgstr "Geben Sie jetzt einen Ihrer Wiederherstellungsschlüssel ein"
+
+# SESSION
+msgid "settings.session.title"
+msgstr "Sitzungen - Taskwolf"
+msgid "settings.session.headline"
+msgstr "Sitzungen"
+msgid "settings.session.active"
+msgstr "Activ"
+msgid "settings.session.closed"
+msgstr "Geschlossen"
 
 # TICKETS
 msgid "tickets.page.title"
