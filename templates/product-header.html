@@ -55,8 +55,12 @@
     window.location.href = "/tickets/";
   };
   document.getElementById('logout-button').onclick = function() {
-    Cookie.destroy("token", ".taskwolf.net");
-    window.location.href = "/";
+    let request = new HttpRequest("https://api.taskwolf.net/v1/verification/logout/",
+      "GET", []);
+    request.send(function (status, responseText) {
+      Cookie.destroy("token", ".taskwolf.net");
+      window.location.href = "/";
+    });
   };
 
   function setupTargetSelection() {

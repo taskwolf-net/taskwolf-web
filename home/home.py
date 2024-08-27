@@ -2,7 +2,6 @@ from functools import wraps
 from functools import partial
 from django.shortcuts import render
 from django.http import HttpResponse
-from base.authentication import isAuthenticated
 from product.product import dashboard
 from django.shortcuts import redirect
 from django.utils import translation
@@ -23,11 +22,11 @@ def applyLanguage(request):
 
 @home_page
 async def product(request):
-  authenticated = await isAuthenticated(request)
-  if (authenticated):
-    return redirect("/dashboard/")
-  return render(request, 'product.html', {'title': gettext("home.product.title"),
-    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/product.css']})
+  token = request.COOKIES.get('token')
+  if (token is None):
+    return render(request, 'product.html', {'title': gettext("home.product.title"),
+      'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/product.css']})
+  return redirect("/dashboard/")
 
 @home_page
 async def solution(request):
