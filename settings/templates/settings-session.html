@@ -46,23 +46,111 @@
 
   function displaySession(id, platform, country, city, openTime, status) {
     var entry = document.createElement("li");
-    entry.classList.add("d-flex", "justify-content-between");
-    var entryDescription = document.createElement("div");
-    var entryPlatform = document.getElementById("span");
+    entry.classList.add("d-flex", "justify-content-between", "align-items-center");
+    var entryPrefix = document.createElement("div");
+    var entryPlatform = document.createElement("b");
+    entryPlatform.classList.add("mb-0");
     entryPlatform.innerHTML = platform;
-    entryDescription.appendChild(entryPlatform);
-    var entryLocation = document.getElementById("span");
+    entryPrefix.appendChild(entryPlatform);
+    var entryLocation = document.createElement("p");
+    entryLocation.classList.add("mb-0");
     entryLocation.innerHTML = city + ", " + country;
-    entryDescription.appendChild(entryLocation);
-    var entryOpenTime = document.getElementById("span");
+    entryPrefix.appendChild(entryLocation);
+    var entryOpenTime = document.createElement("p");
+    entryOpenTime.classList.add("mb-0");
     entryOpenTime.innerHTML = openTime;
-    entryDescription.appendChild(entryOpenTime);
-    entry.appendChild(entryDescription);
-    var entryStatus = document.createElement("span");
-    entryStatus.innerHTML = status === "ACTIVE" ?
-      "{% trans 'settings.session.active' %}" : "{% trans 'settings.session.closed' %}";
-    entry.appendChild(entryStatus);
+    entryPrefix.appendChild(entryOpenTime);
+    entry.appendChild(entryPrefix);
+    var entrySuffix = document.createElement("div");
+    entrySuffix.classList.add("d-flex", "align-items-center");
+    entrySuffix.appendChild(createSessionStatusBatch(status));
+    if (status === "ACTIVE") {
+      entrySuffix.appendChild(createSessionSettingsButton(id));
+    }
+    entry.appendChild(entrySuffix);
     document.getElementById("settings-session-list").appendChild(entry);
+  }
+
+  function createSessionStatusBatch(status) {
+    var statusElement = document.createElement("span");
+    statusElement.classList.add("settings-session-status");
+    if (status === "ACTIVE") {
+      statusElement.innerHTML = "{% trans 'settings.session.active' %}";
+      statusElement.classList.add("settings-session-active");
+    } else {
+      statusElement.innerHTML = "{% trans 'settings.session.closed' %}";
+      statusElement.classList.add("settings-session-closed");
+    }
+    return statusElement;
+  }
+
+  function createSessionSettingsButton(id) {
+    var settingsDiv = document.createElement("div");
+    settingsDiv.classList.add("settings-session-settings");
+    var settingsButton = document.createElement("button");
+    settingsButton.type = "button";
+    settingsButton.classList.add("settings-session-settings-button", "fa-solid",
+      "fa-ellipsis-vertical");
+    settingsButton.setAttribute("data-bs-toggle", "dropdown");
+    settingsButton.setAttribute("aria-expanded", "false");
+    settingsDiv.appendChild(settingsButton);
+    var dropdown = createSessionSettingsDropdown([
+      {icon: "fa-circle-xmark", content: "{% trans 'settings.session.close' %}",
+        color: "text-danger", click: function() {closeSession(id)}}
+    ]);
+    settingsDiv.appendChild(dropdown);
+    return settingsDiv;
+  }
+
+  function createSessionSettingsDropdown(buttons) {
+    var dropdown = document.createElement("ul");
+    dropdown.classList.add("settings-session-settings-dropdown", "dropdown-menu");
+    for (var i = 0; i < buttons.length; i++) {
+      var button = buttons[i];
+      dropdown.appendChild(createSessionSettingsDropdownButton(dropdown, button.icon,
+        button.content, button.color, button.click));
+    }
+    return dropdown;
+  }
+
+  function createSessionSettingsDropdownButton(dropdown, icon, content, color, click) {
+    var dropdownEntry = document.createElement("li");
+    dropdownEntry.classList.add("settings-session-settings-dropdown-entry", "dropdown-item");
+    var dropdownEntryIcon = document.createElement("i");
+    dropdownEntryIcon.classList.add("fa-solid", icon);
+    dropdownEntry.appendChild(dropdownEntryIcon);
+    var dropdownEntryLabel = document.createElement("label");
+    dropdownEntryLabel.innerText = content;
+    dropdownEntry.appendChild(dropdownEntryLabel);
+    if (color !== undefined) {
+      dropdownEntryIcon.classList.add(color);
+      dropdownEntryLabel.classList.add(color);
+    }
+    dropdownEntry.onclick = function (event) {
+      $(dropdown).dropdown('toggle');
+      click();
+    };
+    return dropdownEntry;
+  }
+
+  function closeSession(id) {
+    Swal.fire({
+      title: "{% trans 'settings.session.close.title' %}",
+      text: "{% trans 'settings.session.close.body' %}",
+      icon: "warning",
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
+        let request = new HttpRequest("https://api.taskwolf.net/v1/settings/session/close/", "POST",
+          [], {session: id});
+        request.send(function (status, responseText) {
+          Swal.fire("{% trans 'settings.session.close.successful.title' %}",
+            "{% trans 'settings.session.close.successful.body' %}", "success")
+            .then(success => window.location.reload());
+        });
+      }
+    });
   }
 
   function displayLoader() {

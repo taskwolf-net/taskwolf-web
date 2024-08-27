@@ -2,3 +2,85 @@
   width: 90%;
   margin: auto auto 5%;
 }
+
+#settings-session-list {
+  width: 100%;
+  margin-top: 5vh;
+}
+
+#settings-session-list li {
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.dark #settings-session-list li {
+  background-color: #131820;
+  border: 1px #2b3441 solid;
+}
+
+.light #settings-session-list li {
+  background-color: #dadada;
+  border: 1px #a0a0a0 solid;
+}
+
+.settings-session-status {
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.settings-session-active {
+  border: 2px #42a94b solid;
+  background-color: #d7f8da;
+  color: #1f721c;
+}
+
+.settings-session-closed {
+  border: 2px #a94242 solid;
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.settings-session-settings {
+  width: fit-content;
+  margin-left: 15px;
+}
+
+.settings-session-settings-button {
+  background-color: transparent;
+  border: none;
+  float: right;
+  width: 100% !important;
+}
+
+.dark .settings-session-settings-button {
+  color: white;
+}
+
+.light .settings-session-settings-button {
+  color: black;
+}
+
+.settings-session-settings-dropdown {
+  padding: 10px !important;
+}
+
+.settings-session-settings-dropdown-entry {
+  padding: 10px !important;
+  border-radius: 5px !important;
+  border: none !important;
+  margin-bottom: 0 !important;
+  background-color: transparent !important;
+}
+
+.settings-session-settings-dropdown-entry:hover {
+  background-color: #464b54 !important;
+}
+
+.settings-session-settings-dropdown-entry i {
+  width: 20px;
+}
+
+.settings-session-settings-dropdown-entry label {
+  margin-left: 20px;
+}
