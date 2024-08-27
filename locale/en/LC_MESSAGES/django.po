@@ -2532,6 +2532,8 @@ msgid "settings.session.close.successful.title"
 msgstr "Session closed"
 msgid "settings.session.close.successful.body"
 msgstr "You have successfully closed the session"
+msgid "settings.session.empty"
+msgstr "No active sessions could be found."
 
 # TICKETS
 msgid "tickets.page.title"

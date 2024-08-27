@@ -12,6 +12,9 @@
           <div id="settings-session-container">
             <ul id="settings-session-list">
             </ul>
+            <div class="text-center">
+              <span id="settings-session-empty" class="d-none">{% trans 'settings.session.empty' %}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -41,6 +44,9 @@
       var session = sessions[i];
       displaySession(session.id, session.platform, session.country, session.city,
         session.openTime, session.status);
+    }
+    if (sessions.length === 0) {
+      document.getElementById("settings-session-empty").classList.remove("d-none");
     }
   }
 
