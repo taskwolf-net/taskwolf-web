@@ -24,6 +24,25 @@
   border: 1px #a0a0a0 solid;
 }
 
+.settings-session-icon {
+  width: 40px;
+  text-align: center;
+  margin-right: 40px;
+  margin-left: 20px;
+}
+
+@media (max-width: 650px) {
+  .settings-session-icon {
+    margin-right: 20px;
+  }
+}
+
+@media (max-width: 500px) {
+  .settings-session-icon {
+    display: none !important;
+  }
+}
+
 .settings-session-status {
   border-radius: 5px;
   padding: 10px;

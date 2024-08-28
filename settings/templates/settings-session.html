@@ -54,18 +54,33 @@
     var entry = document.createElement("li");
     entry.classList.add("d-flex", "justify-content-between", "align-items-center");
     var entryPrefix = document.createElement("div");
+    entryPrefix.classList.add("d-flex", "align-items-center");
+    var entryIconContainer = document.createElement("div");
+    entryIconContainer.classList.add("settings-session-icon");
+    var entryIcon = document.createElement("h2");
+    entryIcon.classList.add("fa-solid");
+    if (platform === "WINDOWS" || platform === "LINUX" || platform === "MAC") {
+      entryIcon.classList.add("fa-computer");
+    }
+    if (platform === "ANDROID" || platform === "IOS") {
+      entryIcon.classList.add("fa-mobile-screen-button");
+    }
+    entryIconContainer.appendChild(entryIcon);
+    entryPrefix.appendChild(entryIconContainer);
+    var entryDescription = document.createElement("div");
     var entryPlatform = document.createElement("b");
     entryPlatform.classList.add("mb-0");
     entryPlatform.innerHTML = platform;
-    entryPrefix.appendChild(entryPlatform);
+    entryDescription.appendChild(entryPlatform);
     var entryLocation = document.createElement("p");
     entryLocation.classList.add("mb-0");
     entryLocation.innerHTML = city + ", " + country;
-    entryPrefix.appendChild(entryLocation);
+    entryDescription.appendChild(entryLocation);
     var entryOpenTime = document.createElement("p");
     entryOpenTime.classList.add("mb-0");
     entryOpenTime.innerHTML = openTime;
-    entryPrefix.appendChild(entryOpenTime);
+    entryDescription.appendChild(entryOpenTime);
+    entryPrefix.appendChild(entryDescription);
     entry.appendChild(entryPrefix);
     var entrySuffix = document.createElement("div");
     entrySuffix.classList.add("d-flex", "align-items-center");
