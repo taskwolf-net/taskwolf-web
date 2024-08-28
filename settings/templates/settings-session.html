@@ -43,14 +43,14 @@
     for (var i = 0; i < sessions.length; i++) {
       var session = sessions[i];
       displaySession(session.id, session.platform, session.country, session.city,
-        session.openTime, session.status);
+        session.openTime, session.status, session.isCurrent);
     }
     if (sessions.length === 0) {
       document.getElementById("settings-session-empty").classList.remove("d-none");
     }
   }
 
-  function displaySession(id, platform, country, city, openTime, status) {
+  function displaySession(id, platform, country, city, openTime, status, isCurrent) {
     var entry = document.createElement("li");
     entry.classList.add("d-flex", "justify-content-between", "align-items-center");
     var entryPrefix = document.createElement("div");
@@ -78,24 +78,27 @@
     entryDescription.appendChild(entryLocation);
     var entryOpenTime = document.createElement("p");
     entryOpenTime.classList.add("mb-0");
-    entryOpenTime.innerHTML = openTime;
+    entryOpenTime.innerHTML = new Date(openTime).toLocaleString();
     entryDescription.appendChild(entryOpenTime);
     entryPrefix.appendChild(entryDescription);
     entry.appendChild(entryPrefix);
     var entrySuffix = document.createElement("div");
     entrySuffix.classList.add("d-flex", "align-items-center");
-    entrySuffix.appendChild(createSessionStatusBatch(status));
-    if (status === "ACTIVE") {
+    entrySuffix.appendChild(createSessionStatusBatch(status, isCurrent));
+    if (status === "ACTIVE" && !isCurrent) {
       entrySuffix.appendChild(createSessionSettingsButton(id));
     }
     entry.appendChild(entrySuffix);
     document.getElementById("settings-session-list").appendChild(entry);
   }
 
-  function createSessionStatusBatch(status) {
+  function createSessionStatusBatch(status, isCurrent) {
     var statusElement = document.createElement("span");
     statusElement.classList.add("settings-session-status");
-    if (status === "ACTIVE") {
+    if (isCurrent) {
+      statusElement.innerHTML = "{% trans 'settings.session.current' %}";
+      statusElement.classList.add("settings-session-active");
+    } else if (status === "ACTIVE") {
       statusElement.innerHTML = "{% trans 'settings.session.active' %}";
       statusElement.classList.add("settings-session-active");
     } else {
