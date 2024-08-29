@@ -77,13 +77,18 @@
               <i class="workflows-table-description-sort fa-solid fa-sort-up ms-2" role="button" type="name"></i>
             </div>
           </li>
-          <li>
+          <li id="workflows-table-description-preview">
+            <div>
+              <span>{% trans 'product.workflows.preview' %}</span>
+            </div>
+          </li>
+          <li id="workflows-table-description-creator">
             <div>
               <span>{% trans 'product.workflows.creator' %}</span>
               <i class="workflows-table-description-sort fa-solid fa-sort ms-2" role="button" type="creator"></i>
             </div>
           </li>
-          <li>
+          <li id="workflows-table-description-created">
             <div>
               <span>{% trans 'product.workflows.date' %}</span>
               <i class="workflows-table-description-sort fa-solid fa-sort ms-2" role="button" type="created"></i>
@@ -153,11 +158,11 @@
     for (var i = 0; i < workflows.length; i++) {
       var entry = workflows[i];
       displayWorkflow(entry.id, entry.name, entry.creator, entry.created,
-        entry.armed, entry.triggerType);
+        entry.armed, entry.triggerType, entry.triggerModuleLogo, entry.actions);
     }
   }
 
-  function displayWorkflow(id, name, creator, created, armed, triggerType) {
+  function displayWorkflow(id, name, creator, created, armed, triggerType, triggerLogo, actions) {
     var entry = document.createElement('li');
     entry.role = "button";
     entry.classList.add("workflow-entry");
@@ -169,8 +174,9 @@
     nameElement.classList.add("workflows-list-name");
     nameDiv.appendChild(nameElement);
     entry.appendChild(nameDiv);
-    appendWorkflowsCell(entry, "creator", creator, "span");
-    appendWorkflowsCell(entry, "created", created, "span");
+    entry.appendChild(createWorkflowPreview(triggerLogo, actions))
+    appendWorkflowsCell(entry, "creator", creator, "span").classList.add("workflows-entry-creator");
+    appendWorkflowsCell(entry, "created", created, "span").classList.add("workflows-entry-created");
     if (triggerType === "internal-manual-trigger") {
       entry.appendChild(createManualRunButton(id));
     } else {
@@ -187,6 +193,28 @@
       clickWorkflow(id);
     }
     document.getElementById("workflows-list").appendChild(entry);
+  }
+
+  function createWorkflowPreview(triggerLogo, actions) {
+    var previewContainer = document.createElement("div");
+    previewContainer.classList.add("workflows-entry-preview");
+    var preview = document.createElement("div");
+    preview.classList.add("workflows-preview");
+    preview.appendChild(createWorkflowPreviewEntry(triggerLogo));
+    for (var i = 0; i < Math.min(actions.length, 2); i++) {
+      preview.appendChild(createWorkflowPreviewEntry(actions[i].actionModuleLogo));
+    }
+    previewContainer.appendChild(preview);
+    return previewContainer;
+  }
+
+  function createWorkflowPreviewEntry(logo) {
+    var entry = document.createElement("div");
+    entry.classList.add("workflows-preview-entry");
+    var logoElement = document.createElement("img");
+    logoElement.src = "{% static '' %}" + "img/applications/" + logo;
+    entry.appendChild(logoElement);
+    return entry;
   }
 
   function createManualRunButton(id) {
@@ -410,7 +438,7 @@
     element.classList.add("workflows-list-" + identifier);
     div.appendChild(element);
     entry.appendChild(div);
-    return element;
+    return div;
   }
 
   const pageVisibilityRange = 2;
