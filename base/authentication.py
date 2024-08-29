@@ -22,7 +22,7 @@ def authentication_required(function):
       await applyLanguage(request)
       response = await function(request, *args, **kwargs)
       if ("data" in authenticationResponse):
-        setCookie(response, "token", authenticationResponse["data"]["token"], 10 / (60 * 24))
+        setCookie(response, "token", authenticationResponse["data"]["token"], 30)
         setCookie(response, "refresh-token", authenticationResponse["data"]["refreshToken"], 30)
       return response
     response = redirect("/")

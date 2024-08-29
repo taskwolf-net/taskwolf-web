@@ -70,7 +70,7 @@
       }
       var success = response.success;
       if (success === true) {
-        Cookie.create("token", response.productApiKey, 60 * 10, ".taskwolf.net");
+        Cookie.create("token", response.productApiKey, 60 * 60 * 24 * 30, ".taskwolf.net");
         Cookie.create("refresh-token", response.refreshToken, 60 * 60 * 24 * 30, ".taskwolf.net");
         if (!redirect()) {
           window.location.href = "/dashboard/";
