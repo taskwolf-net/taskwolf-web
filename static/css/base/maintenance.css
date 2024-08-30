@@ -1,0 +1,19 @@
+.maintenance-banner {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  z-index: 100;
+  padding: 20px;
+  height: 60px;
+  background-color: #dc3545;
+}
+
+.maintenance-header {
+  margin-top: 60px;
+}
+
+.maintenance-header-space {
+  height: 140px !important;
+}

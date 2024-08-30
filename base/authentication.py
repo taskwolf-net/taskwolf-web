@@ -19,8 +19,10 @@ def authentication_required(function):
       if ("data" in authenticationResponse):
         request.COOKIES["token"] = authenticationResponse["data"]["token"]
         request.COOKIES["refresh-token"] = authenticationResponse["data"]["refreshToken"]
-      await applyLanguage(request)
+      language = await applyLanguage(request)
       response = await function(request, *args, **kwargs)
+      setCookie(response, "taskwolf-language", language, 30)
+      setCookie(response, "taskwolf-home-language", language, 30)
       if ("data" in authenticationResponse):
         setCookie(response, "token", authenticationResponse["data"]["token"], 30)
         setCookie(response, "refresh-token", authenticationResponse["data"]["refreshToken"], 30)
@@ -79,7 +81,9 @@ async def applyLanguage(request):
     headers = headers))
   text = response.text
   jsonText = json.loads(text)
-  translation.activate(jsonText["language"])
+  language = jsonText["language"]
+  translation.activate(language)
+  return language
 
 def applyWhitelistKey(request, headers):
   if (not settings.WHITELIST):
