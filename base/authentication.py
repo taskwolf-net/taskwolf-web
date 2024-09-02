@@ -40,7 +40,7 @@ async def isAuthenticated(request):
   headers = {}
   applyWhitelistKey(request, headers)
   response = await asyncio.get_event_loop().run_in_executor(None,
-    partial(requests.post, "https://api.taskwolf.net/v1/verification/isValid/",
+    partial(requests.post, "http://10.96.0.4/v1/verification/isValid/",
       json = {"token": token}, headers = headers))
   if (response.status_code == 417):
     return await refreshAuthentication(request)
@@ -58,7 +58,7 @@ async def refreshAuthentication(request):
   headers = {}
   applyWhitelistKey(request, headers)
   response = await asyncio.get_event_loop().run_in_executor(None,
-    partial(requests.post, "https://api.taskwolf.net/v1/verification/refresh/",
+    partial(requests.post, "http://10.96.0.4/v1/verification/refresh/",
       json = {"refreshToken": refreshToken}, headers = headers))
   text = response.text
   jsonText = json.loads(text)
@@ -77,7 +77,7 @@ async def applyLanguage(request):
   headers = {"Authorization": "Bearer " + token}
   applyWhitelistKey(request, headers)
   response = await asyncio.get_event_loop().run_in_executor(None,
-    partial(requests.get, "https://api.taskwolf.net/v1/settings/language/",
+    partial(requests.get, "http://10.96.0.4/v1/settings/language/",
     headers = headers))
   text = response.text
   jsonText = json.loads(text)
