@@ -232,7 +232,14 @@
       let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/manual/execute/", "POST",
         [], {workflow: id});
       request.send(function (status, responseText) {
-        Swal.fire("{% trans 'product.workflows.executed.title' %}", "{% trans 'product.workflows.executed.body' %}", "success");
+        var response = JSON.parse(responseText);
+        if (response.success) {
+          Swal.fire("{% trans 'product.workflows.execution.successful.title' %}",
+            "{% trans 'product.workflows.execution.successful.body' %}", "success");
+        } else {
+          Swal.fire("{% trans 'product.workflows.execution.failure.title' %}",
+            "{% trans 'product.workflows.execution.failure.body' %}", "error");
+        }
       });
     }
     return runButton;
