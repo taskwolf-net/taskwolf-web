@@ -84,7 +84,8 @@
   $(document).ready(function() {
     displayLoader();
     if (sessionStorage.getItem("home-token") == null) {
-      window.location.href = "/login/";
+      window.location.href = "/login/?redirect=" +
+        window.location.href.replace("https://taskwolf.net", "");
       return;
     }
     fetchOffer(function (offer) {

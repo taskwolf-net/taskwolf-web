@@ -37,7 +37,8 @@
 <script>
   $(document).ready(function() {
     if (sessionStorage.getItem("home-token") == null) {
-      window.location.href = "/login/";
+      window.location.href = "/login/?redirect=" +
+        window.location.href.replace("https://taskwolf.net", "");
       return;
     }
     var packageType = Cookie.find("taskwolf-package-type");
