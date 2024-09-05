@@ -40,8 +40,8 @@
   }
 
   function displaySessions(sessions) {
-    for (var i = 0; i < sessions.length; i++) {
-      var session = sessions[i];
+    for (let i = 0; i < sessions.length; i++) {
+      let session = sessions[i];
       displaySession(session.id, session.platform, session.country, session.city,
         session.openTime, session.status, session.isCurrent);
     }
@@ -51,13 +51,13 @@
   }
 
   function displaySession(id, platform, country, city, openTime, status, isCurrent) {
-    var entry = document.createElement("li");
+    let entry = document.createElement("li");
     entry.classList.add("d-flex", "justify-content-between", "align-items-center");
-    var entryPrefix = document.createElement("div");
+    let entryPrefix = document.createElement("div");
     entryPrefix.classList.add("d-flex", "align-items-center");
-    var entryIconContainer = document.createElement("div");
+    let entryIconContainer = document.createElement("div");
     entryIconContainer.classList.add("settings-session-icon");
-    var entryIcon = document.createElement("h2");
+    let entryIcon = document.createElement("h2");
     entryIcon.classList.add("fa-solid");
     if (platform === "WINDOWS" || platform === "LINUX" || platform === "MAC") {
       entryIcon.classList.add("fa-computer");
@@ -67,22 +67,22 @@
     }
     entryIconContainer.appendChild(entryIcon);
     entryPrefix.appendChild(entryIconContainer);
-    var entryDescription = document.createElement("div");
-    var entryPlatform = document.createElement("b");
+    let entryDescription = document.createElement("div");
+    let entryPlatform = document.createElement("b");
     entryPlatform.classList.add("mb-0");
     entryPlatform.innerHTML = platform;
     entryDescription.appendChild(entryPlatform);
-    var entryLocation = document.createElement("p");
+    let entryLocation = document.createElement("p");
     entryLocation.classList.add("mb-0");
     entryLocation.innerHTML = city + ", " + country;
     entryDescription.appendChild(entryLocation);
-    var entryOpenTime = document.createElement("p");
+    let entryOpenTime = document.createElement("p");
     entryOpenTime.classList.add("mb-0");
     entryOpenTime.innerHTML = new Date(openTime).toLocaleString();
     entryDescription.appendChild(entryOpenTime);
     entryPrefix.appendChild(entryDescription);
     entry.appendChild(entryPrefix);
-    var entrySuffix = document.createElement("div");
+    let entrySuffix = document.createElement("div");
     entrySuffix.classList.add("d-flex", "align-items-center");
     entrySuffix.appendChild(createSessionStatusBatch(status, isCurrent));
     if (status === "ACTIVE" && !isCurrent) {
@@ -93,7 +93,7 @@
   }
 
   function createSessionStatusBatch(status, isCurrent) {
-    var statusElement = document.createElement("span");
+    let statusElement = document.createElement("span");
     statusElement.classList.add("settings-session-status");
     if (isCurrent) {
       statusElement.innerHTML = "{% trans 'settings.session.current' %}";
@@ -109,16 +109,16 @@
   }
 
   function createSessionSettingsButton(id) {
-    var settingsDiv = document.createElement("div");
+    let settingsDiv = document.createElement("div");
     settingsDiv.classList.add("settings-session-settings");
-    var settingsButton = document.createElement("button");
+    let settingsButton = document.createElement("button");
     settingsButton.type = "button";
     settingsButton.classList.add("settings-session-settings-button", "fa-solid",
       "fa-ellipsis-vertical");
     settingsButton.setAttribute("data-bs-toggle", "dropdown");
     settingsButton.setAttribute("aria-expanded", "false");
     settingsDiv.appendChild(settingsButton);
-    var dropdown = createSessionSettingsDropdown([
+    let dropdown = createSessionSettingsDropdown([
       {icon: "fa-circle-xmark", content: "{% trans 'settings.session.close' %}",
         color: "text-danger", click: function() {closeSession(id)}}
     ]);
@@ -127,10 +127,10 @@
   }
 
   function createSessionSettingsDropdown(buttons) {
-    var dropdown = document.createElement("ul");
+    let dropdown = document.createElement("ul");
     dropdown.classList.add("settings-session-settings-dropdown", "dropdown-menu");
-    for (var i = 0; i < buttons.length; i++) {
-      var button = buttons[i];
+    for (let i = 0; i < buttons.length; i++) {
+      let button = buttons[i];
       dropdown.appendChild(createSessionSettingsDropdownButton(dropdown, button.icon,
         button.content, button.color, button.click));
     }
@@ -138,12 +138,12 @@
   }
 
   function createSessionSettingsDropdownButton(dropdown, icon, content, color, click) {
-    var dropdownEntry = document.createElement("li");
+    let dropdownEntry = document.createElement("li");
     dropdownEntry.classList.add("settings-session-settings-dropdown-entry", "dropdown-item");
-    var dropdownEntryIcon = document.createElement("i");
+    let dropdownEntryIcon = document.createElement("i");
     dropdownEntryIcon.classList.add("fa-solid", icon);
     dropdownEntry.appendChild(dropdownEntryIcon);
-    var dropdownEntryLabel = document.createElement("label");
+    let dropdownEntryLabel = document.createElement("label");
     dropdownEntryLabel.innerText = content;
     dropdownEntry.appendChild(dropdownEntryLabel);
     if (color !== undefined) {
@@ -178,7 +178,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementsByClassName("settings-container")[0].appendChild(loader);
   }

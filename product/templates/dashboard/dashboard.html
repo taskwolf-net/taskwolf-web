@@ -63,19 +63,19 @@
   }
 
   function displayTargets(targets, currentTarget) {
-    for (var i = 0; i < targets.length; i++) {
-      var target = targets[i];
+    for (let i = 0; i < targets.length; i++) {
+      let target = targets[i];
       if (i > 0) {
-        var separatorElement = document.createElement("div");
+        let separatorElement = document.createElement("div");
         separatorElement.classList.add("dashboard-target-separator");
         document.getElementById("dashboard-target-list").appendChild(separatorElement);
       }
-      var targetEntry = document.createElement("li");
+      let targetEntry = document.createElement("li");
       targetEntry.classList.add("dashboard-target");
-      var targetDescription = document.createElement("div");
+      let targetDescription = document.createElement("div");
       targetDescription.classList.add("d-flex", "align-items-center");
       targetDescription.appendChild(createTargetIcon(target));
-      var targetNameElement = document.createElement("span");
+      let targetNameElement = document.createElement("span");
       targetNameElement.classList.add("dashboard-target-name");
       targetNameElement.innerText = target.name;
       targetDescription.appendChild(targetNameElement);
@@ -86,9 +86,9 @@
   }
 
   function createTargetIcon(target) {
-    var targetIconContainerElement = document.createElement("div");
+    let targetIconContainerElement = document.createElement("div");
     targetIconContainerElement.classList.add("dashboard-target-icon");
-    var targetIconElement = document.createElement("i");
+    let targetIconElement = document.createElement("i");
     if (target.type === "PERSONAL") {
       targetIconElement.classList.add("fa-solid", "fa-user");
     } else {
@@ -100,9 +100,9 @@
 
   function createTargetButton(target, selected) {
     if (selected) {
-      var selectedBadgeContainer = document.createElement("h4");
+      let selectedBadgeContainer = document.createElement("h4");
       selectedBadgeContainer.classList.add("mb-0");
-      var selectedBadge = document.createElement("span");
+      let selectedBadge = document.createElement("span");
       selectedBadge.classList.add("badge", "text-bg-success", "d-inline-flex",
         "justify-content-center");
       selectedBadge.style.width = "150px";
@@ -110,7 +110,7 @@
       selectedBadgeContainer.appendChild(selectedBadge);
       return selectedBadgeContainer;
     }
-    var selectButton = document.createElement("button");
+    let selectButton = document.createElement("button");
     selectButton.classList.add("btn", Cookie.find("taskwolf-theme") === "dark" ?
       "btn-outline-light" : "btn-outline-dark");
     selectButton.style.width = "150px";
@@ -126,18 +126,18 @@
   }
 
   function displayActivities(activities) {
-    for (var i = 0; i < activities.length; i++) {
-      var activity = activities[i];
+    for (let i = 0; i < activities.length; i++) {
+      let activity = activities[i];
       document.getElementById("dashboard-activity-list")
         .appendChild(createActivity(activity));
     }
-    for (var i = activities.length; i < 3; i++) {
-      var emptyActivityElement = document.createElement("li");
+    for (let i = activities.length; i < 3; i++) {
+      let emptyActivityElement = document.createElement("li");
       emptyActivityElement.classList.add("dashboard-activity-empty");
-      var emptyTitleElement = document.createElement("div");
+      let emptyTitleElement = document.createElement("div");
       emptyTitleElement.classList.add("dashboard-activity-title-empty");
       emptyActivityElement.appendChild(emptyTitleElement);
-      var emptyDescriptionElement = document.createElement("div");
+      let emptyDescriptionElement = document.createElement("div");
       emptyDescriptionElement.classList.add("dashboard-activity-description-empty");
       emptyActivityElement.appendChild(emptyDescriptionElement);
       document.getElementById("dashboard-activity-list").appendChild(emptyActivityElement);
@@ -145,26 +145,26 @@
   }
 
   function createActivity(activity) {
-    var activityElement = document.createElement("li");
+    let activityElement = document.createElement("li");
     activityElement.classList.add("dashboard-activity");
-    var firstContainer = document.createElement("div");
+    let firstContainer = document.createElement("div");
     firstContainer.appendChild(createActivityIcon(activity));
-    var activityNameContainer = document.createElement("h4");
+    let activityNameContainer = document.createElement("h4");
     activityNameContainer.classList.add("text-center", "fw-bold", "mb-3");
-    var activityNameElement = document.createElement("span");
+    let activityNameElement = document.createElement("span");
     activityNameElement.classList.add("badge",
       Cookie.find("taskwolf-theme") === "dark" ? "text-bg-light" : "text-bg-dark");
     activityNameElement.innerText = activity.title;
     activityNameContainer.appendChild(activityNameElement);
     firstContainer.appendChild(activityNameContainer);
-    var activityDescriptionElement = document.createElement("p");
+    let activityDescriptionElement = document.createElement("p");
     activityDescriptionElement.classList.add("text-center", "mb-0");
     activityDescriptionElement.innerText = activity.description;
     firstContainer.appendChild(activityDescriptionElement);
     firstContainer.appendChild(document.createElement("br"));
     activityElement.appendChild(firstContainer);
-    var secondContainer = document.createElement("div");
-    var activityTimeElement = document.createElement("p");
+    let secondContainer = document.createElement("div");
+    let activityTimeElement = document.createElement("p");
     activityTimeElement.classList.add("text-center", "mb-0");
     activityTimeElement.innerText = activity.time;
     secondContainer.appendChild(activityTimeElement);
@@ -173,9 +173,9 @@
   }
 
   function createActivityIcon(activity) {
-    var activityIconContainerElement = document.createElement("div");
+    let activityIconContainerElement = document.createElement("div");
     activityIconContainerElement.classList.add("dashboard-activity-icon");
-    var activityIconElement = document.createElement("i");
+    let activityIconElement = document.createElement("i");
     if (activity.type === "SETTING") {
       activityIconElement.classList.add("fa-solid", "fa-gear");
     } else if (activity.type === "ORGANIZATION") {
@@ -204,12 +204,12 @@
   }
 
   function createTip(headline, description, type) {
-    var tipElement = document.createElement("div");
+    let tipElement = document.createElement("div");
     tipElement.classList.add(type);
-    var headlineElement = document.createElement("h4");
+    let headlineElement = document.createElement("h4");
     headlineElement.innerText = headline;
     tipElement.appendChild(headlineElement);
-    var descriptionElement = document.createElement("span");
+    let descriptionElement = document.createElement("span");
     descriptionElement.innerText = description;
     tipElement.appendChild(descriptionElement);
     return tipElement;
@@ -218,7 +218,7 @@
   function fetchUsername(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/username/", "GET", []);
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       callback(response.username);
     });
   }
@@ -226,7 +226,7 @@
   function fetchTargets(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/targets/all/", "GET", []);
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       callback(response.targets, response.currentTarget);
     });
   }
@@ -234,7 +234,7 @@
   function fetchActivities(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/activities/", "GET", []);
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       callback(response.activities);
     });
   }
@@ -242,7 +242,7 @@
   function fetchTutorial(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/tutorial/", "GET", []);
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       callback(response.active);
     });
   }
@@ -250,13 +250,13 @@
   function fetch2FA(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/settings/2fa/", "GET", []);
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       callback(response.enabled);
     });
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("dashboard-container").appendChild(loader);
   }

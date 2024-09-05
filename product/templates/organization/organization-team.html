@@ -61,21 +61,21 @@
     if (organization.isOwner) {
       return;
     }
-    var restrictedTabs = document.getElementsByClassName("organization-restricted-tab");
-    for (var i = 0; i < restrictedTabs.length; i++) {
+    let restrictedTabs = document.getElementsByClassName("organization-restricted-tab");
+    for (let i = 0; i < restrictedTabs.length; i++) {
       restrictedTabs[i].classList.add("d-none");
     }
   }
 
   function displayInformation(organization, organizationTeams) {
     for (let i = 0; i < organizationTeams.length; i++) {
-      var team = organizationTeams[i];
+      let team = organizationTeams[i];
       document.getElementById("organization-teams")
         .appendChild(createTeamEntry(organization, team, i, organizationTeams.length));
     }
     if (organization.isOwner === true) {
-      var teamAddEntry = document.createElement("li");
-      var teamAddButton = document.createElement("button");
+      let teamAddEntry = document.createElement("li");
+      let teamAddButton = document.createElement("button");
       teamAddButton.id = "organization-team-add";
       teamAddButton.innerHTML = "+ {% trans 'product.organization.team.create' %}";
       teamAddButton.onclick = (event) => addTeam();
@@ -84,7 +84,7 @@
       return;
     }
     if (organizationTeams.length === 0) {
-      var emptyElement = document.createElement("li");
+      let emptyElement = document.createElement("li");
       emptyElement.classList.add("text-center", "fw-bold");
       emptyElement.innerHTML = "{% trans 'product.organization.teams.empty' %}"
       document.getElementById("organization-teams").appendChild(emptyElement);
@@ -92,11 +92,11 @@
   }
 
   function createTeamEntry(organization, team, teamIndex, totalTeamSize) {
-    var teamEntry = document.createElement("li");
+    let teamEntry = document.createElement("li");
     teamEntry.classList.add("organization-team-entry");
-    var headerElement = document.createElement("div");
+    let headerElement = document.createElement("div");
     headerElement.classList.add("organization-team-entry-header");
-    var nameElement = document.createElement("h2");
+    let nameElement = document.createElement("h2");
     nameElement.innerHTML = team.name;
     headerElement.appendChild(nameElement);
     if (organization.isOwner === true) {
@@ -105,7 +105,7 @@
     }
     teamEntry.appendChild(headerElement);
     if (team.members.length === 0) {
-      var emptyElement = document.createElement("p");
+      let emptyElement = document.createElement("p");
       emptyElement.classList.add("text-center", "fw-bold", "mt-5");
       emptyElement.innerHTML = "{% trans 'product.organization.team.empty' %}"
       teamEntry.appendChild(emptyElement);
@@ -116,18 +116,18 @@
   }
 
   function createTeamControls(organization, team, teamIndex, totalTeamSize) {
-    var controlElement = document.createElement("div");
+    let controlElement = document.createElement("div");
     controlElement.classList.add("d-flex");
-    var memberAddElement = document.createElement("span");
+    let memberAddElement = document.createElement("span");
     memberAddElement.classList.add("organization-member-add", "fa-solid", "fa-plus");
     memberAddElement.onclick = function (event) {
       openAddTeamMemberMenu(organization, team);
     }
     controlElement.appendChild(memberAddElement);
-    var sortElement = document.createElement("div");
+    let sortElement = document.createElement("div");
     sortElement.classList.add("d-flex", "flex-column", "justify-content-center");
     if (teamIndex > 0) {
-      var sortUpElement = document.createElement("span");
+      let sortUpElement = document.createElement("span");
       sortUpElement.classList.add("organization-team-sort", "fa-solid", "fa-caret-up", "mb-1");
       sortUpElement.onclick = function (event) {
         moveTeam(team.id, false);
@@ -135,7 +135,7 @@
       sortElement.appendChild(sortUpElement);
     }
     if (teamIndex < totalTeamSize - 1) {
-      var sortDownElement = document.createElement("span");
+      let sortDownElement = document.createElement("span");
       sortDownElement.classList.add("organization-team-sort", "fa-solid", "fa-caret-down");
       sortDownElement.onclick = function (event) {
         moveTeam(team.id, true);
@@ -143,13 +143,13 @@
       sortElement.appendChild(sortDownElement);
     }
     controlElement.appendChild(sortElement);
-    var teamRenameElement = document.createElement("span");
+    let teamRenameElement = document.createElement("span");
     teamRenameElement.classList.add("organization-team-rename", "fa-solid", "fa-pencil");
     teamRenameElement.onclick = function (event) {
       renameTeam(team.id);
     }
     controlElement.appendChild(teamRenameElement);
-    var teamRemoveElement = document.createElement("span");
+    let teamRemoveElement = document.createElement("span");
     teamRemoveElement.classList.add("organization-team-remove", "fa-solid", "fa-trash");
     teamRemoveElement.onclick = function (event) {
       removeTeam(team.id);
@@ -159,12 +159,12 @@
   }
 
   function createMemberList(organization, team) {
-    var memberListElement = document.createElement("ul");
+    let memberListElement = document.createElement("ul");
     for (let i = 0; i < team.members.length; i++) {
-      var member = team.members[i];
-      var memberElement = createUserEntry(member.name, "organization-team-member");
+      let member = team.members[i];
+      let memberElement = createUserEntry(member.name, "organization-team-member");
       if (organization.isOwner === true) {
-        var memberRemoveElement = document.createElement("span");
+        let memberRemoveElement = document.createElement("span");
         memberRemoveElement.classList.add("organization-team-member-remove", "fa", "fa-ban", "text-danger");
         memberRemoveElement.onclick = function (event) {
           removeTeamMember(team.id, member.id);
@@ -177,12 +177,12 @@
   }
 
   function addTeam() {
-    var content = document.createElement("div");
+    let content = document.createElement("div");
     content.classList.add("organization-team-add-content");
-    var text = document.createElement("p");
+    let text = document.createElement("p");
     text.innerText = "{% trans 'product.organization.team.add.body' %}";
     content.appendChild(text);
-    var input = document.createElement("input");
+    let input = document.createElement("input");
     input.classList.add("mt-3");
     input.placeholder = "{% trans 'product.organization.team.add.name' %}";
     content.appendChild(input);
@@ -227,9 +227,9 @@
   }
 
   function openAddTeamMemberMenu(organization, team) {
-    var content = document.createElement("div");
+    let content = document.createElement("div");
     content.classList.add("organization-team-member-add-content");
-    var text = document.createElement("p");
+    let text = document.createElement("p");
     text.innerText = "{% trans 'product.organization.team.member.add.body' %}";
     content.appendChild(text);
     content.appendChild(createTeamMemberSearch(organization, team));
@@ -242,12 +242,12 @@
   }
 
   function createTeamMemberSearch(organization, team) {
-    var search = document.createElement("div");
+    let search = document.createElement("div");
     search.classList.add("organization-team-member-add-search", "pt-3");
-    var input = document.createElement("input");
+    let input = document.createElement("input");
     input.placeholder = "{% trans 'product.organization.team.member.add.member' %}";
     search.appendChild(input);
-    var memberList = document.createElement("ul");
+    let memberList = document.createElement("ul");
     fillTeamMemberSearchList(organization, team, memberList, "");
     input.oninput = function (event) {
       memberList.innerHTML = "";
@@ -258,15 +258,15 @@
   }
 
   function fillTeamMemberSearchList(organization, team, memberList, search) {
-    var members = [...organization.members];
+    let members = [...organization.members];
     members.push({id: organization.ownerId, name: organization.ownerName});
-    var displayedMembers = 0;
-    for (var i = 0; i < members.length; i++) {
+    let displayedMembers = 0;
+    for (let i = 0; i < members.length; i++) {
       let member = members[i];
       if ((search === "" || member.name.toLowerCase().includes(search.toLowerCase())) &&
         !isMemberOfTeam(team, member)
       ) {
-        var memberElement = createUserEntry(member.name, "organization-team-member-search");
+        let memberElement = createUserEntry(member.name, "organization-team-member-search");
         memberElement.role = "button";
         memberElement.onclick = function (event) {
           addTeamMember(team.id, member.id);
@@ -276,7 +276,7 @@
       }
     }
     if (displayedMembers === 0) {
-      var emptyElement = document.createElement("p");
+      let emptyElement = document.createElement("p");
       emptyElement.classList.add("text-center");
       emptyElement.innerHTML = "{% trans 'product.organization.team.member.add.empty' %}"
       memberList.appendChild(emptyElement);
@@ -284,8 +284,8 @@
   }
 
   function isMemberOfTeam(team, member) {
-    for (var i = 0; i < team.members.length; i++) {
-      var teamMember = team.members[i];
+    for (let i = 0; i < team.members.length; i++) {
+      let teamMember = team.members[i];
       if (teamMember.id === member.id) {
         return true;
       }
@@ -318,12 +318,12 @@
   }
 
   function renameTeam(team) {
-    var content = document.createElement("div");
+    let content = document.createElement("div");
     content.classList.add("organization-team-rename-content");
-    var text = document.createElement("p");
+    let text = document.createElement("p");
     text.innerText = "{% trans 'product.organization.team.rename.body' %}";
     content.appendChild(text);
-    var input = document.createElement("input");
+    let input = document.createElement("input");
     input.placeholder = "{% trans 'product.organization.team.rename.name' %}";
     content.appendChild(input);
     Swal.fire({
@@ -348,14 +348,14 @@
   }
 
   function createUserEntry(user, prefix) {
-    var memberElement = document.createElement("li");
+    let memberElement = document.createElement("li");
     memberElement.classList.add(prefix);
-    var memberInformationContainer = document.createElement("div");
+    let memberInformationContainer = document.createElement("div");
     memberInformationContainer.classList.add(prefix + "-information");
-    var memberIconElement = document.createElement("i");
+    let memberIconElement = document.createElement("i");
     memberIconElement.classList.add(prefix + "-icon", "fa-regular", "fa-user");
     memberInformationContainer.appendChild(memberIconElement);
-    var memberNameElement = document.createElement("span");
+    let memberNameElement = document.createElement("span");
     memberNameElement.classList.add(prefix + "-name");
     memberNameElement.innerHTML = user;
     memberInformationContainer.appendChild(memberNameElement);
@@ -364,7 +364,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("organization-team-container").appendChild(loader);
   }

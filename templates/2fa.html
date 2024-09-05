@@ -3,14 +3,14 @@
 
 <script>
   function display2FA(callback) {
-    var content = document.createElement("div");
-    var description = document.createElement("p");
+    let content = document.createElement("div");
+    let description = document.createElement("p");
     description.classList.add("mb-4");
     description.innerHTML = "{% trans 'settings.2fa.window.body' %}";
     content.appendChild(description);
-    var inputList = document.createElement("div");
+    let inputList = document.createElement("div");
     inputList.classList.add("two-factor-auth-input", "mb-4");
-    for (var i = 0; i < 6; i++) {
+    for (let i = 0; i < 6; i++) {
       inputList.appendChild(create2FAInput(1));
     }
     controlInputFlow(inputList, 1, "", true, callback);
@@ -27,13 +27,13 @@
   }
 
   function createRecoveryCodeDisclaimer(callback) {
-    var recoveryCodesDisclaimer = document.createElement("div");
+    let recoveryCodesDisclaimer = document.createElement("div");
     recoveryCodesDisclaimer.classList.add("d-flex", "justify-content-center");
-    var recoveryCodesDescription = document.createElement("p");
+    let recoveryCodesDescription = document.createElement("p");
     recoveryCodesDescription.classList.add("mb-0", "me-1");
     recoveryCodesDescription.innerHTML = "{% trans 'settings.2fa.window.recovery.description' %}";
     recoveryCodesDisclaimer.appendChild(recoveryCodesDescription);
-    var recoveryCodesLink = document.createElement("a");
+    let recoveryCodesLink = document.createElement("a");
     recoveryCodesLink.classList.add("text-decoration-none");
     recoveryCodesLink.href = "javascript:void(null);";
     recoveryCodesLink.onclick = function () {
@@ -45,20 +45,20 @@
   }
 
   function display2FARecovery(callback) {
-    var content = document.createElement("div");
-    var description = document.createElement("p");
+    let content = document.createElement("div");
+    let description = document.createElement("p");
     description.classList.add("mb-4");
     description.innerHTML = "{% trans 'settings.2fa.recovery.window.body' %}";
     content.appendChild(description);
-    var inputList = document.createElement("div");
+    let inputList = document.createElement("div");
     inputList.classList.add("two-factor-recovery-input", "mb-4");
-    for (var i = 0; i < 4; i++) {
+    for (let i = 0; i < 4; i++) {
       if (i > 0) {
-        var dash = document.createElement("b");
+        let dash = document.createElement("b");
         dash.innerHTML = "—";
         inputList.appendChild(dash);
       }
-      var input = create2FAInput(4);
+      let input = create2FAInput(4);
       inputList.appendChild(input);
     }
     controlInputFlow(inputList, 4, "-", false, callback);
@@ -74,14 +74,14 @@
   }
 
   function create2FAInput(length) {
-    var input = document.createElement("input");
+    let input = document.createElement("input");
     input.maxLength = length;
     input.type = "text";
     return input;
   }
 
   function controlInputFlow(inputList, inputLength, separator, onlyDigits, callback) {
-    var inputs = [...inputList.getElementsByTagName("input")];
+    let inputs = [...inputList.getElementsByTagName("input")];
     inputs.forEach((input, index) => {
       input.addEventListener('input', (e) => {
         if (onlyDigits) {
@@ -119,7 +119,7 @@
     const paste = (clipboardData || window.clipboardData).getData("text");
     const chars = paste.replaceAll(separator, "").split("");
     inputs.forEach((input, index) => {
-      for (var i = 0; i < inputLength; i++) {
+      for (let i = 0; i < inputLength; i++) {
         if (chars.length > index * inputLength + i) {
           input.value += chars[index * inputLength + i];
         }
@@ -134,8 +134,8 @@
   }
 
   function collectInput(inputList, separator) {
-    var result = "";
-    var inputs = [...inputList.getElementsByTagName("input")];
+    let result = "";
+    let inputs = [...inputList.getElementsByTagName("input")];
     inputs.forEach((input, index) => {
       if (index > 0) {
         result += separator;

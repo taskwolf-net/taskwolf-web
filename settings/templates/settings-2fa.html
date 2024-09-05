@@ -51,7 +51,7 @@
   function needs2FAConfirmation(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/settings/2fa/isConfirmed/", "GET", []);
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       if (response.success === false) {
         callback(false);
         return;
@@ -69,12 +69,12 @@
   }
 
   function switch2FA() {
-    var content = document.createElement("div");
+    let content = document.createElement("div");
     content.classList.add("settings-2fa-switch-password-content");
-    var text = document.createElement("p");
+    let text = document.createElement("p");
     text.innerText = "{% trans 'settings.2fa.switch.password.body' %}";
     content.appendChild(text);
-    var input = document.createElement("input");
+    let input = document.createElement("input");
     input.placeholder = "{% trans 'settings.2fa.switch.password' %}";
     input.type = "password";
     content.appendChild(input);
@@ -89,7 +89,7 @@
         let request = new HttpRequest("https://api.taskwolf.net/v1/settings/2fa/switch/", "POST",
           [], {password: input.value});
         request.send(function (status, responseText) {
-          var response = JSON.parse(responseText);
+          let response = JSON.parse(responseText);
           if (response.success === false) {
             Swal.fire("{% trans 'settings.2fa.switch.password.failed.title' %}",
               "{% trans 'settings.2fa.switch.password.failed.body' %}", "error");
@@ -106,8 +106,8 @@
   }
 
   function showQRCode(response) {
-    var qrCode = response.qrCode;
-    var content = document.createElement("ul");
+    let qrCode = response.qrCode;
+    let content = document.createElement("ul");
     content.classList.add("settings-2fa-qrcode-steps");
     content.innerHTML += "<li>{% trans 'settings.2fa.qrcode.step.1' %}</li>";
     content.innerHTML += "<li>{% trans 'settings.2fa.qrcode.step.2' %}</li>";
@@ -123,17 +123,17 @@
   }
 
   function showRecoveryCodes(response) {
-    var recoveryCodes = response.recoveryCodes;
-    var content = document.createElement("div");
-    var firstDisclaimer = document.createElement("p");
+    let recoveryCodes = response.recoveryCodes;
+    let content = document.createElement("div");
+    let firstDisclaimer = document.createElement("p");
     firstDisclaimer.classList.add("settings-2fa-recovery-codes-disclaimer");
     firstDisclaimer.innerHTML = "{% trans 'settings.2fa.recovery.codes.disclaimer.1' %}";
     content.appendChild(firstDisclaimer);
-    var secondDisclaimer = document.createElement("p");
+    let secondDisclaimer = document.createElement("p");
     secondDisclaimer.classList.add("settings-2fa-recovery-codes-disclaimer", "mb-5");
     secondDisclaimer.innerHTML = "{% trans 'settings.2fa.recovery.codes.disclaimer.2' %}";
     content.appendChild(secondDisclaimer);
-    var copyButton = document.createElement("a");
+    let copyButton = document.createElement("a");
     copyButton.classList.add("settings-2fa-recovery-codes-copy");
     copyButton.href = "javascript:void(null);";
     copyButton.onclick = function () {
@@ -141,10 +141,10 @@
     };
     copyButton.innerHTML = "{% trans 'settings.2fa.recovery.codes.copy' %}";
     content.appendChild(copyButton);
-    var codes = document.createElement("ul");
+    let codes = document.createElement("ul");
     codes.classList.add("settings-2fa-recovery-codes");
-    for (var i = 0; i < recoveryCodes.length; i++) {
-      var recoveryCode = document.createElement("li");
+    for (let i = 0; i < recoveryCodes.length; i++) {
+      let recoveryCode = document.createElement("li");
       recoveryCode.innerHTML = recoveryCodes[i];
       codes.appendChild(recoveryCode);
     }
@@ -157,8 +157,8 @@
   }
 
   function copyRecoveryCodes(recoveryCodes) {
-    var result = "";
-    for (var i = 0; i < recoveryCodes.length; i++) {
+    let result = "";
+    for (let i = 0; i < recoveryCodes.length; i++) {
       result += recoveryCodes[i] + "\n";
     }
     navigator.clipboard.writeText(result);
@@ -181,7 +181,7 @@
       let request = new HttpRequest("https://api.taskwolf.net/v1/settings/2fa/confirm/", "POST",
         [], {code: code});
       request.send(function (status, responseText) {
-        var response = JSON.parse(responseText);
+        let response = JSON.parse(responseText);
         if (response.success === false) {
           Swal.fire("{% trans 'settings.2fa.confirm.failed.title' %}",
             "{% trans 'settings.2fa.confirm.failed.body' %}", "error")

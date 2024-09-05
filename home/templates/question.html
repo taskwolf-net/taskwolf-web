@@ -27,7 +27,7 @@
 </html>
 
 <script>
-  var quill = new Quill('#question-message', {
+  let quill = new Quill('#question-message', {
     modules: {
       toolbar: [
         [{'size': ['huge', 'large', false, 'small']}],
@@ -65,16 +65,16 @@
   }
 
   document.getElementById("question-create").onclick = function(event) {
-    var email = document.getElementById("question-email").value;
-    var title = document.getElementById("question-title").value;
-    var message =  document.getElementsByClassName("ql-editor")[0].innerHTML;
+    let email = document.getElementById("question-email").value;
+    let title = document.getElementById("question-title").value;
+    let message =  document.getElementsByClassName("ql-editor")[0].innerHTML;
     let request = new HttpRequest("https://api.taskwolf.net/v1/question/create/", "POST",
       [], {email: email, title: title, question: message});
     request.send(function (status, responseText) {
       if (status !== 200) {
         Swal.fire("{% trans 'home.question.create.limit.title' %}", "{% trans 'home.question.create.limit.body' %}", "error");
       }
-      var success = JSON.parse(responseText).status;
+      let success = JSON.parse(responseText).status;
       if (!success) {
         Swal.fire("{% trans 'home.question.create.failed.title' %}", "{% trans 'home.question.create.failed.body' %}", "error");
         return;

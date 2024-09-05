@@ -23,7 +23,7 @@
 </html>
 
 <script>
-  var timeline;
+  let timeline;
 
   $(document).ready(function() {
     displayLoader();
@@ -47,7 +47,7 @@
 
   function displayTimeline() {
     document.getElementById("workflow-timeline").innerHTML = "";
-    for (var i = 0; i < timeline.length; i++) {
+    for (let i = 0; i < timeline.length; i++) {
       displayEntry(timeline[i]);
     }
     if (timeline.length === 0) {
@@ -58,20 +58,20 @@
   }
 
   function displayEntry(entry) {
-    var entryElement = document.createElement("li");
+    let entryElement = document.createElement("li");
     entryElement.classList.add("timeline-item", "mb-5");
-    var entryHeaderElement = document.createElement("div");
+    let entryHeaderElement = document.createElement("div");
     entryHeaderElement.classList.add("timeline-item-header");
-    var entryTitleElement = document.createElement("h5");
+    let entryTitleElement = document.createElement("h5");
     entryTitleElement.classList.add("timeline-item-title", "fw-bold");
     entryTitleElement.innerHTML = entry.title;
     entryHeaderElement.appendChild(entryTitleElement);
-    var entryDateElement = document.createElement("p");
+    let entryDateElement = document.createElement("p");
     entryDateElement.classList.add("timeline-item-date", "mb-2", "fw-bold");
     entryDateElement.innerHTML = entry.time;
     entryHeaderElement.appendChild(entryDateElement);
     entryElement.appendChild(entryHeaderElement);
-    var entryDescriptionElement = document.createElement("p");
+    let entryDescriptionElement = document.createElement("p");
     entryDescriptionElement.innerHTML = entry.description;
     entryElement.appendChild(entryDescriptionElement);
     if (entry.level === "SUCCESS") {
@@ -104,7 +104,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("workflow-timeline-container").appendChild(loader);
   }

@@ -214,7 +214,7 @@
 </html>
 
 <script>
-  var triggers = [
+  let triggers = [
     {logo: "manual.png"},
     {logo: "scheduler.png"},
     {logo: "process.png"},
@@ -227,7 +227,7 @@
     {logo: "gmail.png"},
     {logo: "discord.png"},
   ];
-  var actions = [
+  let actions = [
     {logo: "device.png"},
     {logo: "database.png"},
     {logo: "googlecalendar.png"},
@@ -246,18 +246,18 @@
   });
 
   function displayAppConstellations() {
-    for (var i = 0; i < triggers.length * 3; i++) {
+    for (let i = 0; i < triggers.length * 3; i++) {
       document.getElementById("solution-apps-constellations-triggers")
         .appendChild(createAppConstellationElement(triggers[i % triggers.length].logo));
     }
-    for (var i = 0; i < actions.length * 3; i++) {
+    for (let i = 0; i < actions.length * 3; i++) {
       document.getElementById("solution-apps-constellations-actions")
         .appendChild(createAppConstellationElement(actions[i % actions.length].logo));
     }
   }
 
   function createAppConstellationElement(logo) {
-    var element = document.createElement("img");
+    let element = document.createElement("img");
     element.classList.add("solution-apps-constellations-app");
     element.src = "{% static '' %}" + "img/applications/" + logo;
     return element;
@@ -271,10 +271,10 @@
   }
 
   function checkAnimation(elementClass, animationClass) {
-    var elements = document.getElementsByClassName(elementClass);
-    for (var i = 0; i < elements.length; i++) {
+    let elements = document.getElementsByClassName(elementClass);
+    for (let i = 0; i < elements.length; i++) {
       let element = elements[i];
-      var bottom_of_object = element.getBoundingClientRect().top - window.screen.height;
+      let bottom_of_object = element.getBoundingClientRect().top - window.screen.height;
       if (bottom_of_object < -window.screen.height / 6) {
         element.classList.remove(elementClass);
         element.classList.add(animationClass);

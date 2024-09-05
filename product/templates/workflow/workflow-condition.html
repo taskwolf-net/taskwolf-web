@@ -37,21 +37,21 @@
 </html>
 
 <script>
-  var selectButtons = [];
-  var inputValue = "";
-  var conditionType = "";
-  var comparativeValue = "";
-  var currentPlaceholderElement;
-  var conditionOutputVariables = [];
+  let selectButtons = [];
+  let inputValue = "";
+  let conditionType = "";
+  let comparativeValue = "";
+  let currentPlaceholderElement;
+  let conditionOutputletiables = [];
 
   $(document).ready(function() {
-    var actionIndex = parseInt(sessionStorage.getItem("workflow-condition-index").split(":")[0]);
-    var fetchedVariables = -1;
+    let actionIndex = parseInt(sessionStorage.getItem("workflow-condition-index").split(":")[0]);
+    let fetchedletiables = -1;
     for (let i = -1; i < actionIndex; i++) {
-      findOutputVariables(i, function(outputVariables) {
-        conditionOutputVariables = conditionOutputVariables.concat(outputVariables);
-        fetchedVariables++;
-        if (fetchedVariables === actionIndex) {
+      findOutputletiables(i, function(outputletiables) {
+        conditionOutputletiables = conditionOutputletiables.concat(outputletiables);
+        fetchedletiables++;
+        if (fetchedletiables === actionIndex) {
           performAutoCompletion();
           displayPlaceholdersTabs();
         }
@@ -60,25 +60,25 @@
   });
 
   function performAutoCompletion() {
-    var indexes = sessionStorage.getItem("workflow-condition-index").split(":");
-    var actionIndex = parseInt(indexes[0]);
-    var conditionIndex = parseInt(indexes[1]);
+    let indexes = sessionStorage.getItem("workflow-condition-index").split(":");
+    let actionIndex = parseInt(indexes[0]);
+    let conditionIndex = parseInt(indexes[1]);
     if (sessionStorage.getItem("workflow-conditions") === null) {
       fillConditionInputs();
       return;
     }
-    var actionConditions = JSON.parse(sessionStorage.getItem("workflow-conditions"))
+    let actionConditions = JSON.parse(sessionStorage.getItem("workflow-conditions"))
       .conditions.filter(item => item.actionIndex === actionIndex);
     if (actionConditions.length <= conditionIndex) {
       fillConditionInputs();
       return;
     }
-    var condition = actionConditions[conditionIndex];
+    let condition = actionConditions[conditionIndex];
     if (condition.selected === false) {
       fillConditionInputs();
       return;
     }
-    var content = JSON.parse(condition.content);
+    let content = JSON.parse(condition.content);
     conditionType = condition.type;
     fillConditionInputs();
     autoCompleteInput("condition-input-value", content.inputValue);
@@ -86,18 +86,18 @@
   }
 
   function autoCompleteInput(identifier, value) {
-    for (var i = 0; i < conditionOutputVariables.length; i++) {
-      var variable = conditionOutputVariables[i];
-      value = value.replace("%" + variable.identifier + "%",
-        '<div class="workflow-condition-input-placeholder" contenteditable="false">' + variable.name + '</div>')
+    for (let i = 0; i < conditionOutputletiables.length; i++) {
+      let letiable = conditionOutputletiables[i];
+      value = value.replace("%" + letiable.identifier + "%",
+        '<div class="workflow-condition-input-placeholder" contenteditable="false">' + letiable.name + '</div>')
     }
-    var element = document.getElementById("workflow-condition-input-" + identifier);
+    let element = document.getElementById("workflow-condition-input-" + identifier);
     element.innerHTML = value + "<br>";
     inputConditionInput(identifier, element.innerHTML);
   }
 
   function fillConditionInputs() {
-    var inputListElement = document.getElementById("workflow-condition-input-list");
+    let inputListElement = document.getElementById("workflow-condition-input-list");
     inputListElement.innerHTML = "";
     addConditionInput("condition-input-value", "{% trans 'product.workflow.condition.input.value' %}", "{% trans 'product.workflow.condition.input.value.tooltip' %}");
     addConditionSelect("condition-type", "{% trans 'product.workflow.condition.condition.type' %}", "{% trans 'product.workflow.condition.condition.type.tooltip' %}");
@@ -113,17 +113,17 @@
   }
 
   function addConditionInput(identifier, name, description) {
-    var inputContainerElement = document.createElement("div");
+    let inputContainerElement = document.createElement("div");
     inputContainerElement.classList.add("workflow-condition-input-container", "form-outline", "mb-4");
-    var labelElement = document.createElement("h5");
+    let labelElement = document.createElement("h5");
     labelElement.classList.add("workflow-condition-headline", "form-label");
     labelElement.innerHTML = name + ":";
     inputContainerElement.appendChild(labelElement);
-    var informationElement = document.createElement("h5");
+    let informationElement = document.createElement("h5");
     informationElement.classList.add("workflow-condition-information", "fa", "fa-question-circle");
     applyTooltips(informationElement, inputContainerElement, description);
     inputContainerElement.appendChild(informationElement);
-    var inputElement = document.createElement("div");
+    let inputElement = document.createElement("div");
     inputElement.setAttribute("placeholder", name);
     inputElement.contentEditable = "true";
     inputElement.id = "workflow-condition-input-" + identifier;
@@ -156,10 +156,10 @@
   }
 
   function inputConditionInput(identifier, value) {
-    for (var i = 0; i < conditionOutputVariables.length; i++) {
-      var variable = conditionOutputVariables[i];
+    for (let i = 0; i < conditionOutputletiables.length; i++) {
+      let letiable = conditionOutputletiables[i];
       value = value.replace('<div class="workflow-condition-input-placeholder" contenteditable="false">' +
-        variable.name + '</div>', "%" + variable.identifier + "%")
+        letiable.name + '</div>', "%" + letiable.identifier + "%")
     }
     value = value.replace("&nbsp;", " ");
     value = value.replace("&quot;", "\"");
@@ -182,18 +182,18 @@
   }
 
   function addConditionSelect(identifier, name, description) {
-    var dropdownContainer = document.createElement("div");
+    let dropdownContainer = document.createElement("div");
     dropdownContainer.classList.add("mb-4");
-    var labelElement = document.createElement("h5");
+    let labelElement = document.createElement("h5");
     labelElement.classList.add("workflow-condition-headline", "form-label");
     labelElement.innerHTML = name + ":";
     dropdownContainer.appendChild(labelElement);
-    var informationElement = document.createElement("h5");
+    let informationElement = document.createElement("h5");
     informationElement.classList.add("workflow-condition-information", "fa", "fa-question-circle");
     applyTooltips(informationElement, dropdownContainer, description);
     dropdownContainer.appendChild(informationElement);
     dropdownContainer.classList.add("workflow-condition-select-container", "dropdown");
-    var dropdownButton = document.createElement("button");
+    let dropdownButton = document.createElement("button");
     dropdownButton.classList.add("btn", "dropdown-button", "dropdown-toggle");
     if (document.getElementsByClassName("workflow-condition-select-container").length > 0) {
       dropdownButton.setAttribute("disabled", "disabled");
@@ -203,7 +203,7 @@
     dropdownButton.type = "button";
     dropdownButton.innerHTML = name;
     dropdownContainer.appendChild(dropdownButton);
-    var dropdownList = document.createElement("ul");
+    let dropdownList = document.createElement("ul");
     dropdownList.classList.add("workflow-condition-select-list", "dropdown-menu");
     dropdownContainer.appendChild(dropdownList);
     dropdownButton.addEventListener("click", function (event) {
@@ -220,12 +220,12 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/conditions/find/", "GET",
       []);
     request.send(function (status, responseText) {
-      var items = JSON.parse(responseText).conditions;
-      for (var i = 0; i < items.length; i++) {
+      let items = JSON.parse(responseText).conditions;
+      for (let i = 0; i < items.length; i++) {
         let item = items[i];
-        var itemElement = document.createElement("li");
+        let itemElement = document.createElement("li");
         itemElement.classList.add("dropdown-item");
-        var itemNameName = document.createElement("b");
+        let itemNameName = document.createElement("b");
         itemNameName.innerHTML = item.name;
         itemElement.appendChild(itemNameName);
         itemElement.onclick = function (event) {
@@ -246,9 +246,9 @@
     conditionName = itemName;
     dropdownContainer.removeChild(dropdownButton);
     dropdownContainer.removeChild(dropdownList);
-    var itemElement = document.createElement("div");
+    let itemElement = document.createElement("div");
     itemElement.classList.add("workflow-condition-selected-item");
-    var itemNameElement = document.createElement("b");
+    let itemNameElement = document.createElement("b");
     itemNameElement.innerHTML = itemName;
     itemElement.appendChild(itemNameElement);
     dropdownContainer.appendChild(itemElement);
@@ -259,8 +259,8 @@
   }
 
   function displayPlaceholdersTabs() {
-    var trigger = sessionStorage.getItem("workflow-trigger");
-    var actions = sessionStorage.getItem("workflow-actions");
+    let trigger = sessionStorage.getItem("workflow-trigger");
+    let actions = sessionStorage.getItem("workflow-actions");
     if (trigger == null && (actions == null || actions.length === 0)) {
       document.getElementById("workflow-condition-placeholders-empty").classList.remove("d-none");
       return;
@@ -269,7 +269,7 @@
       displayPlaceholdersTab(-1);
     }
     if ((actions != null && actions.length > 0)) {
-      for (var i = 0; i < parseInt(sessionStorage.getItem("workflow-condition-index").split(":")[0]); i++) {
+      for (let i = 0; i < parseInt(sessionStorage.getItem("workflow-condition-index").split(":")[0]); i++) {
         if (i < actions.length) {
           displayPlaceholdersTab(i);
         }
@@ -279,9 +279,9 @@
   }
 
   function displayPlaceholdersTab(index) {
-    var tabElement = document.createElement("li");
+    let tabElement = document.createElement("li");
     tabElement.classList.add("nav-item");
-    var linkElement = document.createElement("a");
+    let linkElement = document.createElement("a");
     linkElement.classList.add("nav-link");
     if (index === -1) {
       currentPlaceholderElement = linkElement;
@@ -308,13 +308,13 @@
 
   function displayPlaceholders(index) {
     document.getElementById("workflow-condition-placeholders-list").innerHTML = "";
-    findOutputVariables(index, function(outputVariables) {
-      for (var i = 0; i < outputVariables.length; i++) {
-        let variable = outputVariables[i];
-        displayPlaceholder(variable.identifier, variable.name);
+    findOutputletiables(index, function(outputletiables) {
+      for (let i = 0; i < outputletiables.length; i++) {
+        let letiable = outputletiables[i];
+        displayPlaceholder(letiable.identifier, letiable.name);
       }
-      if (outputVariables.length === 0) {
-        var noPlaceholdersAvailableElement = document.createElement("p");
+      if (outputletiables.length === 0) {
+        let noPlaceholdersAvailableElement = document.createElement("p");
         noPlaceholdersAvailableElement.classList.add("text-center", "mt-4");
         noPlaceholdersAvailableElement.innerHTML = "{% trans 'product.workflow.condition.placeholders.empty' %}";
         document.getElementById("workflow-condition-placeholders-list").appendChild(noPlaceholdersAvailableElement);
@@ -322,32 +322,32 @@
     });
   }
 
-  function findOutputVariables(index, callback) {
-    var componentType = (index < 0) ? "trigger" : "action";
-    var component;
+  function findOutputletiables(index, callback) {
+    let componentType = (index < 0) ? "trigger" : "action";
+    let component;
     if (componentType === "trigger") {
       component = JSON.parse(sessionStorage.getItem("workflow-trigger"));
     } else {
       component = JSON.parse(sessionStorage.getItem("workflow-actions")).actions.filter(element => element.actionIndex === index)[0];
     }
-    var module = component.module;
-    var type = component.type;
+    let module = component.module;
+    let type = component.type;
     let request = new HttpRequest("https://api.taskwolf.net/v1/component/find/", "POST",
       [], {componentType: componentType, module: module, type: type});
     request.send(function (status, responseText) {
-      callback(JSON.parse(responseText).outputVariables);
+      callback(JSON.parse(responseText).outputletiables);
     });
   }
 
   function displayPlaceholder(identifier, name) {
-    var placeholderElement = document.createElement("li");
+    let placeholderElement = document.createElement("li");
     placeholderElement.classList.add("workflow-condition-placeholder");
     placeholderElement.draggable= "true";
     placeholderElement.ondragstart = function (event) {
       event.dataTransfer.setData("placeholder-identifier", identifier);
       event.dataTransfer.setData("placeholder-name", name);
     }
-    var placeholderNameElement = document.createElement("b");
+    let placeholderNameElement = document.createElement("b");
     placeholderNameElement.innerHTML = name;
     placeholderElement.appendChild(placeholderNameElement);
     document.getElementById("workflow-condition-placeholders-list").appendChild(placeholderElement);
@@ -358,7 +358,7 @@
   }
 
   function updateAdoptability(isAdoptable) {
-    var adoptButton = document.getElementById("workflow-condition-adopt-button");
+    let adoptButton = document.getElementById("workflow-condition-adopt-button");
     if (isAdoptable) {
       adoptButton.classList.remove("disabled");
       adoptButton.classList.add("workflow-condition-adopt-enabled");
@@ -377,10 +377,10 @@
     if (sessionStorage.getItem("workflow-conditions") === null) {
       sessionStorage.setItem("workflow-conditions", JSON.stringify({conditions: [createCondition()]}));
     } else {
-      var conditions = JSON.parse(sessionStorage.getItem("workflow-conditions")).conditions;
-      var indexes = sessionStorage.getItem("workflow-condition-index").split(":");
+      let conditions = JSON.parse(sessionStorage.getItem("workflow-conditions")).conditions;
+      let indexes = sessionStorage.getItem("workflow-condition-index").split(":");
       conditions = conditions.filter(item => !(item.actionIndex === parseInt(indexes[0]) && item.conditionIndex === parseInt(indexes[1])));
-      var component = createCondition();
+      let component = createCondition();
       if (sessionStorage.getItem("workflow-condition-index") !== null) {
         sessionStorage.removeItem("workflow-condition-index");
       }
@@ -403,9 +403,9 @@
   }
 
   function createResetButton(container, resetCallback) {
-    var resetButtonContainer = document.createElement("div");
+    let resetButtonContainer = document.createElement("div");
     resetButtonContainer.classList.add("workflow-condition-reset");
-    var resetButton = document.createElement("button");
+    let resetButton = document.createElement("button");
     resetButton.type = "button";
     resetButton.classList.add("btn", "btn-danger");
     resetButton.innerHTML = "{% trans 'product.workflow.condition.reset' %}";

@@ -84,7 +84,8 @@
   $(document).ready(function() {
     displayLoader();
     if (sessionStorage.getItem("home-token") == null) {
-      window.location.href = "/login/";
+      window.location.href = "/login/?redirect=" +
+        window.location.href.replace("https://taskwolf.net", "");
       return;
     }
     fetchOffer(function (offer) {
@@ -166,7 +167,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/offer/accept/", "POST",
       [], {offer: "{{offer}}"});
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       if (!response.success) {
         return;
       }
@@ -195,7 +196,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("offer-container").appendChild(loader);
   }

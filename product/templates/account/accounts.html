@@ -25,7 +25,7 @@
 </html>
 
 <script>
-  var accounts;
+  let accounts;
 
   $(document).ready(function() {
     displayLoader();
@@ -54,19 +54,19 @@
 
   function displayAccounts() {
     document.getElementById("accounts-list").innerHTML = "";
-    for (var i = 0; i < accounts.length; i++) {
-      var entry = accounts[i];
+    for (let i = 0; i < accounts.length; i++) {
+      let entry = accounts[i];
       displayAccount(entry.identifier, entry.name);
     }
   }
 
   function displayAccount(identifier, name) {
-    var entryElement = document.createElement("li");
+    let entryElement = document.createElement("li");
     entryElement.classList.add("account-entry");
-    var nameElement = document.createElement("b");
+    let nameElement = document.createElement("b");
     nameElement.innerHTML = name;
     entryElement.appendChild(nameElement);
-    var deleteButton = document.createElement("button");
+    let deleteButton = document.createElement("button");
     deleteButton.classList.add("btn", "btn-danger");
     deleteButton.type = "button";
     deleteButton.innerHTML = "{% trans 'product.accounts.account.delete' %}";
@@ -96,7 +96,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("accounts-container").appendChild(loader);
   }

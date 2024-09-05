@@ -41,9 +41,9 @@
 </html>
 
 <script>
-  var database;
-  var inserting = false;
-  var rowCheckboxes = [];
+  let database;
+  let inserting = false;
+  let rowCheckboxes = [];
 
   $(document).ready(function() {
     displayLoader();
@@ -59,8 +59,8 @@
   });
 
   function fetchDatabaseData(callback) {
-    var location = window.location;
-    var id = location.href.replace(location.host, "").replace(location.protocol, "").replace("database", "").replaceAll("/", "");
+    let location = window.location;
+    let id = location.href.replace(location.host, "").replace(location.protocol, "").replace("database", "").replaceAll("/", "");
     let request = new HttpRequest("https://api.taskwolf.net/v1/table/find/", "POST",
       [], {table: id});
     request.send(function (status, responseText) {
@@ -69,14 +69,14 @@
   }
 
   function fillTableHead() {
-    var head = document.createElement("tr");
-    var checkbox = createCheckboxElement(function(event) {
+    let head = document.createElement("tr");
+    let checkbox = createCheckboxElement(function(event) {
       clickGlobalCheckbox();
     });
     checkbox.firstChild.id = "database-table-checkbox-global";
     head.appendChild(checkbox);
-    var columns = database.columns;
-    for (var i = 0; i < columns.length; i++) {
+    let columns = database.columns;
+    for (let i = 0; i < columns.length; i++) {
       head.appendChild(createTableColumnHead(columns[i].name));
     }
     head.appendChild(createTableAddColumnButton());
@@ -84,11 +84,11 @@
   }
 
   function clickGlobalCheckbox() {
-    var checkboxSelected = document.getElementById("database-table-checkbox-global").checked;
-    for (var i = 0; i < rowCheckboxes.length; i++) {
+    let checkboxSelected = document.getElementById("database-table-checkbox-global").checked;
+    for (let i = 0; i < rowCheckboxes.length; i++) {
       rowCheckboxes[i].checkbox.checked = checkboxSelected;
     }
-    var removeButton = document.getElementById("database-remove");
+    let removeButton = document.getElementById("database-remove");
     if (!checkboxSelected) {
       removeButton.classList.add("disabled");
     } else if (database.entries > 0) {
@@ -97,22 +97,22 @@
   }
 
   function createTableColumnHead(name) {
-    var entry = document.createElement("th");
-    var columnWidth = ((document.getElementById("database-table-container").offsetWidth - 240) / database.columns.length) + "px";
+    let entry = document.createElement("th");
+    let columnWidth = ((document.getElementById("database-table-container").offsetWidth - 240) / database.columns.length) + "px";
     entry.style = "width: " + columnWidth + "; max-width: " + columnWidth;
-    var head = document.createElement("div");
+    let head = document.createElement("div");
     head.classList.add("database-column-head");
-    var columnName = document.createElement("b");
+    let columnName = document.createElement("b");
     columnName.innerText = name;
     head.appendChild(columnName);
-    var settingsButton = document.createElement("button");
+    let settingsButton = document.createElement("button");
     settingsButton.type = "button";
     settingsButton.classList.add("database-column-settings", "fa-solid",
       "fa-angle-down");
     settingsButton.setAttribute("data-bs-toggle", "dropdown");
     settingsButton.setAttribute("aria-expanded", "false");
     head.appendChild(settingsButton);
-    var dropdown = createTableSettingsDropdown([
+    let dropdown = createTableSettingsDropdown([
         {icon: "fa-trash", content: "{% trans 'product.database.column.settings.delete' %}", color: "text-danger", click: () => openRemoveColumnMenu(name)}
       ], []);
     head.appendChild(dropdown);
@@ -139,9 +139,9 @@
   }
 
   function createTableAddColumnButton() {
-    var entry = document.createElement("th");
+    let entry = document.createElement("th");
     entry.id = "database-column-add-head";
-    var button = document.createElement("button");
+    let button = document.createElement("button");
     button.id = "database-column-add";
     button.type = "button";
     button.classList.add("btn", "btn-secondary");
@@ -154,12 +154,12 @@
   }
 
   function openAddColumnMenu() {
-    var content = document.createElement("div");
+    let content = document.createElement("div");
     content.classList.add("database-column-add-content");
-    var text = document.createElement("p");
+    let text = document.createElement("p");
     text.innerText = "{% trans 'product.database.column.add.body' %}";
     content.appendChild(text);
-    var input = document.createElement("input");
+    let input = document.createElement("input");
     input.placeholder = "{% trans 'product.database.column.add.name' %}";
     content.appendChild(input);
     Swal.fire({
@@ -183,9 +183,9 @@
   }
 
   function fillTableContent(content) {
-    var body = document.getElementById("database-table-body");
+    let body = document.getElementById("database-table-body");
     body.innerHTML = "";
-    for (var i = 0; i < content.length; i++) {
+    for (let i = 0; i < content.length; i++) {
       body.appendChild(displayTableRow(content[i]));
     }
     if (content.length === 0) {
@@ -194,18 +194,18 @@
   }
 
   function displayTableRow(entry) {
-    var row = document.createElement("tr");
-    var checkbox = createCheckboxElement(function(event) {
+    let row = document.createElement("tr");
+    let checkbox = createCheckboxElement(function(event) {
       clickRowCheckbox();
     });
     rowCheckboxes.push({checkbox: checkbox.firstChild, row: entry})
     row.appendChild(checkbox);
-    var columns = database.columns;
-    var cellWidth = ((document.getElementById("database-table-container").offsetWidth - 240) / database.columns.length) + "px";
-    var cells = entry.cells;
-    for (var i = 0; i < columns.length; i++) {
-      var column = columns[i].name;
-      var cell = document.createElement("td");
+    let columns = database.columns;
+    let cellWidth = ((document.getElementById("database-table-container").offsetWidth - 240) / database.columns.length) + "px";
+    let cells = entry.cells;
+    for (let i = 0; i < columns.length; i++) {
+      let column = columns[i].name;
+      let cell = document.createElement("td");
       cell.style = "width: " + cellWidth + "; max-width: " + cellWidth;
       cell.innerText = cells.filter((cell) => cell.column === column)[0].value;
       row.appendChild(cell);
@@ -216,23 +216,23 @@
   }
 
   function editTableRow(entry, row) {
-    var originalContent = [...row.childNodes];
+    let originalContent = [...row.childNodes];
     row.innerHTML = "";
     row.appendChild(document.createElement("td"));
-    var columns = database.columns;
-    var cells = [];
-    for (var i = 0; i < columns.length; i++) {
-      var column = columns[i].name;
-      var cell = document.createElement("td");
+    let columns = database.columns;
+    let cells = [];
+    for (let i = 0; i < columns.length; i++) {
+      let column = columns[i].name;
+      let cell = document.createElement("td");
       cell.classList.add("database-row-edit-cell");
-      var input = document.createElement("input");
+      let input = document.createElement("input");
       input.classList.add("database-row-edit-cell-input");
       input.value = entry.cells.filter((cell) => cell.column === column)[0].value;
       cell.appendChild(input);
       row.appendChild(cell);
       cells.push({column: column, input: input})
     }
-    var modificationCell = document.createElement("td");
+    let modificationCell = document.createElement("td");
     modificationCell.classList.add("database-row-edit-modification");
     modificationCell.appendChild(createRowEditSubmitButton(() => submitTableEdit(entry, cells)));
     modificationCell.appendChild(createRowEditExitButton(() => exitTableEdit(row, originalContent)));
@@ -240,9 +240,9 @@
   }
 
   function submitTableEdit(entry, cells) {
-    var rowData = {};
-    for (var i = 0; i < cells.length; i++) {
-      var cell = cells[i];
+    let rowData = {};
+    for (let i = 0; i < cells.length; i++) {
+      let cell = cells[i];
       rowData[cell.column] = cell.input.value;
     }
     let request = new HttpRequest("https://api.taskwolf.net/v1/table/entry/update/", "POST",
@@ -258,7 +258,7 @@
 
   function exitTableEdit(row, originalContent) {
     row.innerHTML = "";
-    for (var i = 0; i < originalContent.length; i++) {
+    for (let i = 0; i < originalContent.length; i++) {
       row.appendChild(originalContent[i]);
     }
   }
@@ -272,14 +272,14 @@
   }
 
   function clickRowCheckbox() {
-    var checkboxSelected = false;
-    for (var i = 0; i < rowCheckboxes.length; i++) {
+    let checkboxSelected = false;
+    for (let i = 0; i < rowCheckboxes.length; i++) {
       if (rowCheckboxes[i].checkbox.checked) {
         checkboxSelected = true;
         break;
       }
     }
-    var removeButton = document.getElementById("database-remove");
+    let removeButton = document.getElementById("database-remove");
     if (!checkboxSelected) {
       removeButton.classList.add("disabled");
     } else {
@@ -288,17 +288,17 @@
   }
 
   function createTableRowSettingsElement(submitEdit, submitDelete) {
-    var entry = document.createElement("td");
-    var entryDiv = document.createElement("div");
+    let entry = document.createElement("td");
+    let entryDiv = document.createElement("div");
     entryDiv.classList.add("database-row-settings-container");
-    var settingsButton = document.createElement("button");
+    let settingsButton = document.createElement("button");
     settingsButton.type = "button";
     settingsButton.classList.add("database-row-settings", "fa-solid",
       "fa-ellipsis-vertical");
     settingsButton.setAttribute("data-bs-toggle", "dropdown");
     settingsButton.setAttribute("aria-expanded", "false");
     entryDiv.appendChild(settingsButton);
-    var dropdown = createTableSettingsDropdown([
+    let dropdown = createTableSettingsDropdown([
         {icon: "fa-pen", content: "{% trans 'product.database.row.settings.edit' %}", click: submitEdit},
         {icon: "fa-trash", content: "{% trans 'product.database.row.settings.delete' %}", color: "text-danger", click: submitDelete}
       ], [1]);
@@ -308,16 +308,16 @@
   }
 
   function createTableSettingsDropdown(buttons, dividers) {
-    var dropdown = document.createElement("ul");
+    let dropdown = document.createElement("ul");
     dropdown.classList.add("database-table-settings-dropdown", "dropdown-menu");
-    for (var i = 0; i < buttons.length; i++) {
-      for (var j = 0; j < dividers.length; j++) {
+    for (let i = 0; i < buttons.length; i++) {
+      for (let j = 0; j < dividers.length; j++) {
         if (dividers[j] === i) {
           dropdown.appendChild(createTableSettingsDropdownDivider());
           break;
         }
       }
-      var button = buttons[i];
+      let button = buttons[i];
       dropdown.appendChild(createTableSettingsDropdownButton(dropdown, button.icon,
         button.content, button.color, button.click));
     }
@@ -325,18 +325,18 @@
   }
 
   function createTableSettingsDropdownDivider() {
-    var dropdownDivider = document.createElement("li");
+    let dropdownDivider = document.createElement("li");
     dropdownDivider.classList.add("database-table-settings-dropdown-divider");
     return dropdownDivider;
   }
 
   function createTableSettingsDropdownButton(dropdown, icon, content, color, click) {
-    var dropdownEntry = document.createElement("li");
+    let dropdownEntry = document.createElement("li");
     dropdownEntry.classList.add("database-table-settings-dropdown-entry", "dropdown-item");
-    var dropdownEntryIcon = document.createElement("i");
+    let dropdownEntryIcon = document.createElement("i");
     dropdownEntryIcon.classList.add("fa-solid", icon);
     dropdownEntry.appendChild(dropdownEntryIcon);
-    var dropdownEntryLabel = document.createElement("label");
+    let dropdownEntryLabel = document.createElement("label");
     dropdownEntryLabel.innerText = content;
     dropdownEntry.appendChild(dropdownEntryLabel);
     if (color !== undefined) {
@@ -351,8 +351,8 @@
   }
 
   function createCheckboxElement(click) {
-    var entry = document.createElement("td");
-    var input = document.createElement("input");
+    let entry = document.createElement("td");
+    let input = document.createElement("input");
     input.classList.add("form-check-input");
     input.type = "checkbox";
     input.onchange = click;
@@ -361,14 +361,14 @@
   }
 
   const pageVisibilityRange = 2;
-  var pagingStartingPoint = "";
+  let pagingStartingPoint = "";
 
   function displayPaging(pages, currentPage, pageState) {
     displayPagingShiftButton("database-previous-page", currentPage > 0,
       pages, currentPage, pageState, -1);
     displayPagingShiftButton("database-next-page", currentPage < pages - 1,
       pages, currentPage, pageState, 1);
-    var pagesElement = document.getElementById("database-pages");
+    let pagesElement = document.getElementById("database-pages");
     pagesElement.innerHTML = "";
     createPageButton(pagesElement, pages, currentPage, pageState, 0, currentPage === 0);
     if (pages === 1) {
@@ -379,8 +379,8 @@
         "<i class='database-paging-ellipsis database-paging-ellipsis-start " +
         "fa-solid fa-ellipsis mx-4'></i>");
     }
-    for (var i = -pageVisibilityRange + 1; i < pageVisibilityRange; i++) {
-      var page = currentPage + i;
+    for (let i = -pageVisibilityRange + 1; i < pageVisibilityRange; i++) {
+      let page = currentPage + i;
       if (page < 1 || page >= pages - 1) {
         continue;
       }
@@ -396,7 +396,7 @@
   }
 
   function displayPagingShiftButton(id, isEnabled, pages, currentPage, pageState, direction) {
-    var button = document.getElementById(id);
+    let button = document.getElementById(id);
     if (isEnabled) {
       button.classList.remove("database-page-disabled");
     } else {
@@ -411,7 +411,7 @@
   }
 
   function createPageButton(pagesElement, pages, currentPage, pageState, page, isActive) {
-    var button = document.createElement("a");
+    let button = document.createElement("a");
     button.classList.add("database-page");
     if (isActive) {
       button.classList.add("database-page-active");
@@ -437,20 +437,20 @@
   }
 
   function fetchDatabasePage(targetPage, callback) {
-    var body = {};
+    let body = {};
     body.table = database.id;
     body.targetPage = targetPage;
     let request = new HttpRequest("https://api.taskwolf.net/v1/table/content/page/",
       "POST", [], body);
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       pagingStartingPoint = targetPage === 0 ? "FORWARD" : "BACKWARD";
       callback(response.content, response.page, response.pageNumber);
     });
   }
 
   function shiftPage(pages, currentPage, pageState, direction) {
-    var newPage = currentPage + direction;
+    let newPage = currentPage + direction;
     if (newPage === 0 || newPage === pages - 1) {
       pagingStartingPoint = newPage === 0 ? "FORWARD" : "BACKWARD";
       fetchDatabasePage(newPage, function(database, pageState, pageNumber) {
@@ -458,7 +458,7 @@
       });
       return;
     }
-    var body = {};
+    let body = {};
     body.table = database.id;
     body.pageState = pageState;
     body.startingPoint = pagingStartingPoint;
@@ -466,8 +466,8 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/table/content/page/shift/",
       "POST", [], body);
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
-      var newPage = currentPage + direction;
+      let response = JSON.parse(responseText);
+      let newPage = currentPage + direction;
       updatePaging(response.pageNumber, newPage, response.page, response.content);
     });
   }
@@ -504,12 +504,12 @@
   }
 
   document.getElementById("database-rename").onclick = function (event) {
-    var content = document.createElement("div");
+    let content = document.createElement("div");
     content.classList.add("database-rename-content");
-    var text = document.createElement("p");
+    let text = document.createElement("p");
     text.innerText = "{% trans 'product.database.rename.body' %}";
     content.appendChild(text);
-    var input = document.createElement("input");
+    let input = document.createElement("input");
     input.placeholder = "{% trans 'product.database.rename.name' %}";
     content.appendChild(input);
     Swal.fire({
@@ -533,8 +533,8 @@
   }
 
   document.getElementById("database-remove").onclick = function (event) {
-    for (var i = 0; i < rowCheckboxes.length; i++) {
-      var entry = rowCheckboxes[i];
+    for (let i = 0; i < rowCheckboxes.length; i++) {
+      let entry = rowCheckboxes[i];
       if (entry.checkbox.checked) {
         let request = new HttpRequest("https://api.taskwolf.net/v1/table/entry/remove/", "POST",
           [], {table: database.id, row: findRowId(entry.row)});
@@ -546,10 +546,10 @@
   }
 
   function findRowId(row) {
-    var id;
-    var cells = row.cells;
-    for (var i = 0; i < cells.length; i++) {
-      var cell = cells[i];
+    let id;
+    let cells = row.cells;
+    for (let i = 0; i < cells.length; i++) {
+      let cell = cells[i];
       if (cell.column === "id") {
         id = cell.value;
         break;
@@ -569,20 +569,20 @@
   }
 
   function displayTableInsertRow() {
-    var row = document.createElement("tr");
+    let row = document.createElement("tr");
     row.appendChild(document.createElement("td"));
-    var columns = database.columns;
-    var cells = [];
-    for (var i = 0; i < columns.length; i++) {
-      var cell = document.createElement("td");
+    let columns = database.columns;
+    let cells = [];
+    for (let i = 0; i < columns.length; i++) {
+      let cell = document.createElement("td");
       cell.classList.add("database-row-edit-cell");
-      var input = document.createElement("input");
+      let input = document.createElement("input");
       input.classList.add("database-row-edit-cell-input");
       cell.appendChild(input);
       row.appendChild(cell);
       cells.push({column: columns[i].name, input: input})
     }
-    var modificationCell = document.createElement("td");
+    let modificationCell = document.createElement("td");
     modificationCell.classList.add("database-row-edit-modification");
     modificationCell.appendChild(createRowEditSubmitButton(() => submitTableInsert(cells)));
     modificationCell.appendChild(createRowEditExitButton(() => exitTableInsert(row)));
@@ -591,9 +591,9 @@
   }
 
   function submitTableInsert(cells) {
-    var rowData = {};
-    for (var i = 0; i < cells.length; i++) {
-      var cell = cells[i];
+    let rowData = {};
+    for (let i = 0; i < cells.length; i++) {
+      let cell = cells[i];
       rowData[cell.column] = cell.input.value;
     }
     let request = new HttpRequest("https://api.taskwolf.net/v1/table/entry/insert/", "POST",
@@ -617,7 +617,7 @@
   }
 
   function createRowEditSubmitButton(click) {
-    var button = document.createElement("button");
+    let button = document.createElement("button");
     button.classList.add("database-row-edit-submit", "btn", "btn-success");
     button.type = "button";
     button.innerText = "{% trans 'product.database.insert.submit' %}";
@@ -629,7 +629,7 @@
   }
 
   function createRowEditExitButton(click) {
-    var exitButton = document.createElement("button");
+    let exitButton = document.createElement("button");
     exitButton.type = "button";
     exitButton.classList.add("database-row-edit-exit", "fa-regular",
       "fa-circle-xmark");
@@ -638,7 +638,7 @@
   }
 
   function displayTableEmptyLabel() {
-    var emptyLabel = document.createElement("h5");
+    let emptyLabel = document.createElement("h5");
     emptyLabel.id = "database-table-empty";
     emptyLabel.innerText = "{% trans 'product.database.empty' %}";
     document.getElementById("database-table-container").insertBefore(emptyLabel,
@@ -654,7 +654,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("database-container").appendChild(loader);
   }

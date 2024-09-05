@@ -19,8 +19,10 @@ def authentication_required(function):
       if ("data" in authenticationResponse):
         request.COOKIES["token"] = authenticationResponse["data"]["token"]
         request.COOKIES["refresh-token"] = authenticationResponse["data"]["refreshToken"]
-      await applyLanguage(request)
+      language = await applyLanguage(request)
       response = await function(request, *args, **kwargs)
+      setCookie(response, "taskwolf-language", language, 30)
+      setCookie(response, "taskwolf-home-language", language, 30)
       if ("data" in authenticationResponse):
         setCookie(response, "token", authenticationResponse["data"]["token"], 30)
         setCookie(response, "refresh-token", authenticationResponse["data"]["refreshToken"], 30)
@@ -38,7 +40,7 @@ async def isAuthenticated(request):
   headers = {}
   applyWhitelistKey(request, headers)
   response = await asyncio.get_event_loop().run_in_executor(None,
-    partial(requests.post, "https://api.taskwolf.net/v1/verification/isValid/",
+    partial(requests.post, "http://10.96.0.4/v1/verification/isValid/",
       json = {"token": token}, headers = headers))
   if (response.status_code == 417):
     return await refreshAuthentication(request)
@@ -56,7 +58,7 @@ async def refreshAuthentication(request):
   headers = {}
   applyWhitelistKey(request, headers)
   response = await asyncio.get_event_loop().run_in_executor(None,
-    partial(requests.post, "https://api.taskwolf.net/v1/verification/refresh/",
+    partial(requests.post, "http://10.96.0.4/v1/verification/refresh/",
       json = {"refreshToken": refreshToken}, headers = headers))
   text = response.text
   jsonText = json.loads(text)
@@ -75,11 +77,13 @@ async def applyLanguage(request):
   headers = {"Authorization": "Bearer " + token}
   applyWhitelistKey(request, headers)
   response = await asyncio.get_event_loop().run_in_executor(None,
-    partial(requests.get, "https://api.taskwolf.net/v1/settings/language/",
+    partial(requests.get, "http://10.96.0.4/v1/settings/language/",
     headers = headers))
   text = response.text
   jsonText = json.loads(text)
-  translation.activate(jsonText["language"])
+  language = jsonText["language"]
+  translation.activate(language)
+  return language
 
 def applyWhitelistKey(request, headers):
   if (not settings.WHITELIST):

@@ -75,7 +75,7 @@
 </html>
 
 <script>
-  var selectionContainers = [document.getElementById("register-email-container")];
+  let selectionContainers = [document.getElementById("register-email-container")];
 
   let emailInput = document.getElementById("email");
   let usernameInput = document.getElementById("username");
@@ -85,7 +85,7 @@
   document.getElementById("register-page-back").onclick = function (event) {
     selectionContainers[selectionContainers.length - 1].classList.add("d-none");
     selectionContainers.pop();
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("register-wrapper").appendChild(loader);
     document.getElementById("register-page-back").classList.add("d-none");
@@ -111,7 +111,7 @@
   });
 
   document.getElementById("register-email-continue").onclick = function (event) {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("register-wrapper").appendChild(loader);
     document.getElementById("register-languages").classList.add("d-none");
@@ -120,7 +120,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/email/exists/", "POST",
       [], {email: emailInput.value});
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       document.getElementById("register-wrapper")
         .removeChild(document.getElementsByClassName("loader")[0]);
       if (response.exists === false) {
@@ -205,7 +205,7 @@
       return;
     }
     document.getElementById("register-legal-container").classList.add("d-none");
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("register-wrapper").appendChild(loader);
     document.getElementById("register-page-back").classList.add("d-none");
@@ -219,7 +219,7 @@
       } else {
         document.getElementById("register-page-back").classList.remove("d-none");
         document.getElementById("register-legal-container").classList.remove("d-none");
-        var errorCode = response.error;
+        let errorCode = response.error;
         if (errorCode === 1000) {
           Swal.fire("{% trans 'home.registration.failed.title' %}",
             "{% trans 'home.registration.failed.already.exists' %}", "error")
@@ -254,7 +254,7 @@
   function switchSelectionPageDelayed(currentContainer, nextContainer) {
     selectionContainers.push(nextContainer);
     currentContainer.classList.add("d-none");
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("register-wrapper").appendChild(loader);
     document.getElementById("register-page-back").classList.add("d-none");
@@ -276,21 +276,21 @@
     updatePasswordProgress();
   });
 
-  var passwordMatchedCases = [];
+  let passwordMatchedCases = [];
   passwordMatchedCases.push("[!@#$%&*_?]");
   passwordMatchedCases.push("[A-Z]");
   passwordMatchedCases.push("[a-z]");
   passwordMatchedCases.push("[0-9]");
-  var passwordMessageCases = [];
+  let passwordMessageCases = [];
   passwordMessageCases.push("{% trans 'neutral.password.special.characters' %}");
   passwordMessageCases.push("{% trans 'neutral.password.upper.case.letters' %}");
   passwordMessageCases.push("{% trans 'neutral.password.lower.case.letters' %}");
   passwordMessageCases.push("{% trans 'neutral.password.numbers' %}");
 
   function updatePasswordProgress() {
-    var messageCases = passwordMessageCases.slice();
-    var status = 0;
-    for (var i = 0; i < passwordMatchedCases.length; i++) {
+    let messageCases = passwordMessageCases.slice();
+    let status = 0;
+    for (let i = 0; i < passwordMatchedCases.length; i++) {
       if (new RegExp(passwordMatchedCases[i]).test(passwordInput.value)) {
         messageCases.splice(messageCases.indexOf(passwordMessageCases[i]), 1);
         status++;
@@ -299,8 +299,8 @@
     if (passwordInput.value.length >= 8) {
       status++;
     }
-    var progress;
-    var strength;
+    let progress;
+    let strength;
     switch (status) {
       case 0:
         strength = "";
@@ -324,8 +324,8 @@
         break;
     }
     progress += passwordInput.value.length;
-    var information = "";
-    var progressBarClass;
+    let information = "";
+    let progressBarClass;
     if (progress >= 75 && passwordInput.value.length >= 8) {
       passwordInput.setCustomValidity("");
       progressBarClass = "bg-success";
@@ -367,7 +367,7 @@
   }
 
   document.getElementById("register-login").onclick = function (event) {
-    var addition = "";
+    let addition = "";
     if ("{{redirect}}" !== "") {
       addition += "?redirect={{redirect}}";
     }

@@ -1,5 +1,5 @@
 window.addEventListener('load', function () {
-  var url = window.location.href.replace("https://taskwolf.net/", "").replaceAll("/", "");
+  let url = window.location.href.replace("https://taskwolf.net/", "").replaceAll("/", "");
   if (url === "" || url === "product" || url === "solution" || url === "pricing" ||
     url.includes("login") || url.includes("register") || url.includes("password") ||
     url.includes("offer") || url === "payment" || url === "paymentcomplete" ||
@@ -10,7 +10,7 @@ window.addEventListener('load', function () {
   if (Cookie.find("taskwolf-theme") == null) {
     Cookie.create("taskwolf-theme", "dark", 60 * 60 * 24 * 365, ".taskwolf.net");
   }
-  var theme = Cookie.find("taskwolf-theme");
+  let theme = Cookie.find("taskwolf-theme");
   if (theme === "dark") {
     document.body.classList.add("dark");
   } else {

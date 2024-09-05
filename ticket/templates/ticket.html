@@ -23,8 +23,8 @@
 </html>
 
 <script>
-  var ticket;
-  var username;
+  let ticket;
+  let username;
 
   $(document).ready(function() {
     fetchUsername(function() {
@@ -54,23 +54,23 @@
 
   function displayTicket() {
     document.getElementById("ticket-title").value = ticket.title;
-    for (var i = 0; i < ticket.messages.length; i++) {
+    for (let i = 0; i < ticket.messages.length; i++) {
       displayMessage(ticket.messages[i], i);
     }
     displayAnswerField();
   }
 
   function displayMessage(message, index) {
-    var messageElement = document.createElement("div");
+    let messageElement = document.createElement("div");
     messageElement.classList.add("ticket-message", "ql-editor");
     messageElement.innerHTML = message.message;
-    var entry = displayEntry(!message.selfWritten, message.author,
+    let entry = displayEntry(!message.selfWritten, message.author,
       message.time.split(" ")[0], message.time.split(" ")[1], messageElement);
     if (index > 0 && message.selfWritten) {
-      var deleteButton = document.createElement("button");
+      let deleteButton = document.createElement("button");
       deleteButton.type = "button";
       deleteButton.classList.add("ticket-message-delete");
-      var deleteIcon = document.createElement("span");
+      let deleteIcon = document.createElement("span");
       deleteButton.classList.add("fa-solid", "fa-trash-can");
       deleteButton.appendChild(deleteIcon);
       deleteButton.onclick = function() {
@@ -99,10 +99,10 @@
   }
 
   function displayAnswerField() {
-    var answerField = document.createElement("div");
+    let answerField = document.createElement("div");
     answerField.id = "ticket-answer-field";
     displayEntry(false, username, "", "", answerField);
-    var quill = new Quill('#ticket-answer-field', {
+    let quill = new Quill('#ticket-answer-field', {
       modules: {
         toolbar: [
           [{'size': ['huge', 'large', false, 'small']}],
@@ -125,45 +125,45 @@
   }
 
   function displayEntry(taskwolfWritten, author, date, time, contentElement) {
-    var messageContainer = document.createElement("li");
+    let messageContainer = document.createElement("li");
     messageContainer.classList.add("ticket-message-container");
-    var messageDescription = document.createElement("div");
+    let messageDescription = document.createElement("div");
     messageDescription.classList.add("ticket-message-description");
     if (taskwolfWritten) {
-      var taskwolfPicture = document.createElement("img");
+      let taskwolfPicture = document.createElement("img");
       taskwolfPicture.classList.add("ticket-message-profile-picture");
       taskwolfPicture.src = "{% static 'img/tickets/taskwolf-profile-picture.png' %}";
       messageDescription.appendChild(taskwolfPicture);
     } else {
-      var userPicture = document.createElement("i");
+      let userPicture = document.createElement("i");
       userPicture.classList.add("ticket-message-profile-icon", "fa-regular", "fa-user");
       messageDescription.appendChild(userPicture);
     }
     messageDescription.appendChild(document.createElement("br"));
     messageDescription.appendChild(document.createElement("br"));
-    var messageAuthor = document.createElement("b");
+    let messageAuthor = document.createElement("b");
     messageAuthor.classList.add("ticket-message-author");
     messageAuthor.innerHTML = author;
     messageDescription.appendChild(messageAuthor);
     messageDescription.appendChild(document.createElement("br"));
     messageDescription.appendChild(document.createElement("br"));
-    var messageDate = document.createElement("label");
+    let messageDate = document.createElement("label");
     messageDate.classList.add("ticket-message-date");
     messageDate.innerHTML = date;
     messageDescription.appendChild(messageDate);
     messageDescription.appendChild(document.createElement("br"));
     messageContainer.appendChild(messageDescription);
-    var messageTime = document.createElement("label");
+    let messageTime = document.createElement("label");
     messageTime.classList.add("ticket-message-time");
     messageTime.innerHTML = time;
     messageDescription.appendChild(messageTime);
     messageDescription.appendChild(document.createElement("br"));
     messageDescription.appendChild(document.createElement("br"));
     messageContainer.appendChild(messageDescription);
-    var divider = document.createElement("div");
+    let divider = document.createElement("div");
     divider.classList.add("ticket-message-divider");
     messageContainer.appendChild(divider);
-    var messageContent = document.createElement("div");
+    let messageContent = document.createElement("div");
     messageContent.classList.add("ticket-message-content");
     messageContent.appendChild(contentElement);
     messageContainer.appendChild(messageContent);
@@ -172,7 +172,7 @@
   }
 
   document.getElementById("ticket-title-change").onclick = function(event) {
-    var title = document.getElementById("ticket-title").value;
+    let title = document.getElementById("ticket-title").value;
     let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/rename/", "POST",
       [], {ticket: ticket.id, title: title});
     request.send(function (status, responseText) {
@@ -181,7 +181,7 @@
   }
 
   document.getElementById("ticket-message-add").onclick = function(event) {
-    var message = document.getElementById("ticket-answer-field").firstElementChild.innerHTML;
+    let message = document.getElementById("ticket-answer-field").firstElementChild.innerHTML;
     let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/message/add/", "POST",
       [], {ticket: ticket.id, message: message});
     request.send(function (status, responseText) {

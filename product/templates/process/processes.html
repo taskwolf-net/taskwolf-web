@@ -110,8 +110,8 @@
 </html>
 
 <script>
-  var organization;
-  var entryCheckboxes = [];
+  let organization;
+  let entryCheckboxes = [];
 
   $(document).ready(function() {
     displayLoader();
@@ -128,20 +128,20 @@
 
   function displayProcesses(processes) {
     document.getElementById("processes-list").innerHTML = "";
-    for (var i = 0; i < processes.length; i++) {
-      var entry = processes[i];
+    for (let i = 0; i < processes.length; i++) {
+      let entry = processes[i];
       displayProcess(entry.id, entry.name, entry.creator, entry.created, entry.steps.length);
     }
   }
 
   function displayProcess(id, name, creator, created, steps) {
-    var entry = document.createElement('li');
+    let entry = document.createElement('li');
     entry.role = "button";
     entry.classList.add("process-entry");
     entry.appendChild(createProcessesSelector(id));
-    var nameDiv = document.createElement("div");
+    let nameDiv = document.createElement("div");
     nameDiv.classList.add("processes-entry-name");
-    var nameElement = document.createElement("span");
+    let nameElement = document.createElement("span");
     nameElement.innerText = name;
     nameElement.classList.add("processes-list-name");
     nameDiv.appendChild(nameElement);
@@ -150,7 +150,7 @@
     appendProcessesCell(entry, "created", created, "span");
     appendProcessesCell(entry, "steps", steps, "span");
     entry.onclick = function (event) {
-      var target = event.target;
+      let target = event.target;
       if (Boolean(target.closest(".processes-entry-selector"))) {
         return;
       }
@@ -160,20 +160,20 @@
   }
 
   function createProcessesSelector(id) {
-    var selector = document.createElement("div");
+    let selector = document.createElement("div");
     selector.classList.add("processes-entry-selector");
-    var input = document.createElement("input");
+    let input = document.createElement("input");
     input.classList.add("form-check-input");
     input.type = "checkbox";
     input.onchange = function (event) {
-      var checkboxSelected = false;
-      for (var i = 0; i < entryCheckboxes.length; i++) {
+      let checkboxSelected = false;
+      for (let i = 0; i < entryCheckboxes.length; i++) {
         if (entryCheckboxes[i].checkbox.checked) {
           checkboxSelected = true;
           break;
         }
       }
-      var deleteButton = document.getElementById("processes-selector-delete");
+      let deleteButton = document.getElementById("processes-selector-delete");
       if (!checkboxSelected) {
         deleteButton.classList.add("disabled");
       } else {
@@ -186,11 +186,11 @@
   }
 
   document.getElementById("processes-selector-global").onclick = function (event) {
-    var checkboxSelected = document.getElementById("processes-selector-global").checked;
-    for (var i = 0; i < entryCheckboxes.length; i++) {
+    let checkboxSelected = document.getElementById("processes-selector-global").checked;
+    for (let i = 0; i < entryCheckboxes.length; i++) {
       entryCheckboxes[i].checkbox.checked = checkboxSelected;
     }
-    var deleteButton = document.getElementById("processes-selector-delete");
+    let deleteButton = document.getElementById("processes-selector-delete");
     if (!checkboxSelected) {
       deleteButton.classList.add("disabled");
     } else {
@@ -199,8 +199,8 @@
   }
 
   document.getElementById("processes-selector-delete").onclick = function (event) {
-    for (var i = 0; i < entryCheckboxes.length; i++) {
-      var entry = entryCheckboxes[i];
+    for (let i = 0; i < entryCheckboxes.length; i++) {
+      let entry = entryCheckboxes[i];
       if (entry.checkbox.checked) {
         let request = new HttpRequest("https://api.taskwolf.net/v1/process/remove/", "POST",
           [], {process: entry.id});
@@ -214,8 +214,8 @@
   }
 
   function appendProcessesCell(entry, identifier, information, elementType) {
-    var div = document.createElement("div");
-    var element = document.createElement(elementType);
+    let div = document.createElement("div");
+    let element = document.createElement(elementType);
     element.innerText = information;
     element.classList.add("processes-list-" + identifier);
     div.appendChild(element);
@@ -224,22 +224,22 @@
   }
 
   const pageVisibilityRange = 2;
-  var pagingStartingPoint = "";
-  var pagingSorting = "name";
-  var pagingOrder = "ASCENDING";
-  var pagingFilterSearch = "";
-  var pagingFilterCreator = "";
-  var pagingFilterStartTime = -1;
-  var pagingFilterEndTime = -1;
-  var pagingFilterMinimumSteps = -1;
-  var pagingFilterMaximumSteps = -1;
+  let pagingStartingPoint = "";
+  let pagingSorting = "name";
+  let pagingOrder = "ASCENDING";
+  let pagingFilterSearch = "";
+  let pagingFilterCreator = "";
+  let pagingFilterStartTime = -1;
+  let pagingFilterEndTime = -1;
+  let pagingFilterMinimumSteps = -1;
+  let pagingFilterMaximumSteps = -1;
 
   function displayPaging(pages, currentPage, pageState) {
     displayPagingShiftButton("processes-previous-page", currentPage > 0,
       pages, currentPage, pageState, -1);
     displayPagingShiftButton("processes-next-page", currentPage < pages - 1,
       pages, currentPage, pageState, 1);
-    var pagesElement = document.getElementById("processes-pages");
+    let pagesElement = document.getElementById("processes-pages");
     pagesElement.innerHTML = "";
     createPageButton(pagesElement, pages, currentPage, pageState, 0, currentPage === 0);
     if (pages === 1) {
@@ -250,8 +250,8 @@
         "<i class='processes-paging-ellipsis processes-paging-ellipsis-start " +
         "fa-solid fa-ellipsis mx-4'></i>");
     }
-    for (var i = -pageVisibilityRange + 1; i < pageVisibilityRange; i++) {
-      var page = currentPage + i;
+    for (let i = -pageVisibilityRange + 1; i < pageVisibilityRange; i++) {
+      let page = currentPage + i;
       if (page < 1 || page >= pages - 1) {
         continue;
       }
@@ -267,7 +267,7 @@
   }
 
   function displayPagingShiftButton(id, isEnabled, pages, currentPage, pageState, direction) {
-    var button = document.getElementById(id);
+    let button = document.getElementById(id);
     if (isEnabled) {
       button.classList.remove("processes-page-disabled");
     } else {
@@ -282,7 +282,7 @@
   }
 
   function createPageButton(pagesElement, pages, currentPage, pageState, page, isActive) {
-    var button = document.createElement("a");
+    let button = document.createElement("a");
     button.classList.add("processes-page");
     if (isActive) {
       button.classList.add("processes-page-active");
@@ -309,20 +309,20 @@
   }
 
   function fetchProcessesPage(targetPage, callback) {
-    var body = createPagingBody();
+    let body = createPagingBody();
     body.search = pagingFilterSearch;
     body.targetPage = targetPage;
     let request = new HttpRequest("https://api.taskwolf.net/v1/processes/page/",
       "POST", [], body);
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       pagingStartingPoint = targetPage === 0 ? "FORWARD" : "BACKWARD";
       callback(response.processes, response.page, response.pageNumber);
     });
   }
 
   function shiftPage(pages, currentPage, pageState, direction) {
-    var newPage = currentPage + direction;
+    let newPage = currentPage + direction;
     if (newPage === 0 || newPage === pages - 1) {
       pagingStartingPoint = newPage === 0 ? "FORWARD" : "BACKWARD";
       fetchProcessesPage(newPage, function(processes, pageState, pageNumber) {
@@ -331,22 +331,22 @@
       });
       return;
     }
-    var body = createPagingBody();
+    let body = createPagingBody();
     body.pageState = pageState;
     body.startingPoint = pagingStartingPoint;
     body.direction = direction < 0 ? "BACKWARD" : "FORWARD";
     let request = new HttpRequest("https://api.taskwolf.net/v1/processes/page/shift/",
       "POST", [], body);
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
-      var newPage = currentPage + direction;
+      let response = JSON.parse(responseText);
+      let newPage = currentPage + direction;
       updatePaging(response.pageNumber, newPage, response.page,
         response.processes, document.getElementById("processes-not-found"));
     });
   }
 
   function createPagingBody() {
-    var body = {sorting: pagingSorting, order: pagingOrder};
+    let body = {sorting: pagingSorting, order: pagingOrder};
     if (pagingFilterCreator !== "") {
       body.creator = pagingFilterCreator;
     }
@@ -392,7 +392,7 @@
   function fetchOrganization(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET", []);
     request.send(function (status, responseText) {
-      var organization = JSON.parse(responseText);
+      let organization = JSON.parse(responseText);
       if ("id" in organization) {
         organization.members.push({id: organization.ownerId, name: organization.ownerName});
       }
@@ -401,12 +401,12 @@
   }
 
   function displayProcessesCreatorFilter() {
-    var list = document.getElementById("processes-filter-creator-list");
+    let list = document.getElementById("processes-filter-creator-list");
     list.innerHTML = "";
-    var search = document.getElementById("processes-filter-creator-search").value.toLowerCase();
+    let search = document.getElementById("processes-filter-creator-search").value.toLowerCase();
     if ("id" in organization) {
-      for (var i = 0; i < organization.members.length; i++) {
-        var member = organization.members[i];
+      for (let i = 0; i < organization.members.length; i++) {
+        let member = organization.members[i];
         if (search === "" || member.name.toLowerCase().includes(search)) {
           list.appendChild(createWorkflowCreatorEntry(member.id, member.name,
             pagingFilterCreator === member.id));
@@ -418,7 +418,7 @@
           "{% trans 'product.processes.filter.creator.you' %}", true));
       }
     }
-    var emptyElement = document.getElementById("processes-filter-creator-empty");
+    let emptyElement = document.getElementById("processes-filter-creator-empty");
     if (list.innerHTML === "") {
       list.classList.add("d-none");
       emptyElement.classList.remove("d-none");
@@ -429,9 +429,9 @@
   }
 
   function createWorkflowCreatorEntry(id, name, isChecked) {
-    var entry = document.createElement("li");
+    let entry = document.createElement("li");
     entry.classList.add("form-check");
-    var entryInput = document.createElement("input");
+    let entryInput = document.createElement("input");
     entryInput.classList.add("form-check-input");
     entryInput.type = "radio";
     entryInput.name = "processes-filter-creator";
@@ -445,7 +445,7 @@
       pagingFilterCreator = id;
       updateProcesses();
     }
-    var entryLabel = document.createElement("label");
+    let entryLabel = document.createElement("label");
     entryLabel.classList.add("form-check-label");
     entryLabel.innerHTML = name;
     entryLabel.role = "button";
@@ -461,32 +461,32 @@
   }
 
   document.getElementById("processes-filter-start-time").oninput = function (event) {
-    var date = new Date(document.getElementById("processes-filter-start-time").value);
+    let date = new Date(document.getElementById("processes-filter-start-time").value);
     pagingFilterStartTime = date.getTime();
     updateProcesses();
   }
 
   document.getElementById("processes-filter-end-time").oninput = function (event) {
-    var date = new Date(document.getElementById("processes-filter-end-time").value);
+    let date = new Date(document.getElementById("processes-filter-end-time").value);
     pagingFilterEndTime = date.getTime();
     updateProcesses();
   }
 
   document.getElementById("processes-filter-minimum-steps").oninput = function (event) {
-    var target = event.target;
+    let target = event.target;
     target.value = target.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
     pagingFilterMinimumSteps = target.value !== "" ? target.value : -1;
     updateProcesses();
   }
 
   document.getElementById("processes-filter-maximum-steps").oninput = function (event) {
-    var target = event.target;
+    let target = event.target;
     target.value = target.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
     pagingFilterMaximumSteps = target.value !== "" ? target.value : -1;
     updateProcesses();
   }
 
-  var currentSearchTimeout = -1;
+  let currentSearchTimeout = -1;
 
   document.getElementById("processes-search-input").oninput = function(event) {
     if (currentSearchTimeout !== -1) {
@@ -499,8 +499,8 @@
     }, 500);
   };
 
-  var sortingElements = document.getElementsByClassName("processes-table-description-sort");
-  for (var i = 0; i < sortingElements.length; i++) {
+  let sortingElements = document.getElementsByClassName("processes-table-description-sort");
+  for (let i = 0; i < sortingElements.length; i++) {
     let sortingElement = sortingElements[i];
     sortingElement.onclick = function (event) {
       updateSorting(sortingElement);
@@ -508,12 +508,12 @@
   }
 
   function updateSorting(selectedElement) {
-    for (var i = 0; i < sortingElements.length; i++) {
+    for (let i = 0; i < sortingElements.length; i++) {
       let sortingElement = sortingElements[i];
       sortingElement.classList.remove("fa-sort-up", "fa-sort-down");
       sortingElement.classList.add("fa-sort");
     }
-    var selectedSorting = selectedElement.getAttribute("type");
+    let selectedSorting = selectedElement.getAttribute("type");
     selectedElement.classList.remove("fa-sort");
     if (pagingSorting === selectedSorting) {
       pagingOrder = pagingOrder === "ASCENDING" ? "DESCENDING" : "ASCENDING";
@@ -535,7 +535,7 @@
   };
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader", "loader-list");
     document.getElementById("processes-loader").appendChild(loader);
   }

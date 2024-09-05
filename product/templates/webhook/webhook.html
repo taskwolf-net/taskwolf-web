@@ -39,8 +39,8 @@
 </html>
 
 <script>
-  var webhook;
-  var key;
+  let webhook;
+  let key;
 
   $(document).ready(function() {
     displayLoader();
@@ -63,8 +63,8 @@
   });
 
   function fetchWebhookData(callback) {
-    var location = window.location;
-    var id = location.href.replace(location.host, "").replace(location.protocol, "").replace("webhook", "").replaceAll("/", "");
+    let location = window.location;
+    let id = location.href.replace(location.host, "").replace(location.protocol, "").replace("webhook", "").replaceAll("/", "");
     let request = new HttpRequest("https://api.taskwolf.net/v1/webhook/find/", "POST",
       [], {webhook: id});
     request.send(function (status, responseText) {
@@ -74,7 +74,7 @@
   }
 
   document.getElementById("webhook-url-copy").onclick = function (event) {
-    var urlButton = document.getElementById("webhook-url-copy");
+    let urlButton = document.getElementById("webhook-url-copy");
     urlButton.classList.remove("btn-primary");
     urlButton.classList.add("btn-success");
     $('#webhook-url-copy').tooltip('hide');
@@ -85,7 +85,7 @@
   }
 
   document.getElementById("webhook-key-copy").onclick = function (event) {
-    var keyButton = document.getElementById("webhook-key-copy");
+    let keyButton = document.getElementById("webhook-key-copy");
     keyButton.classList.remove("btn-primary");
     keyButton.classList.add("btn-success");
     $('#webhook-key-copy').tooltip('hide');
@@ -96,7 +96,7 @@
   }
 
   document.getElementById("webhook-key-regenerate").onclick = function (event) {
-    var keyButton = document.getElementById("webhook-key-copy");
+    let keyButton = document.getElementById("webhook-key-copy");
     keyButton.classList.remove("btn-success");
     keyButton.classList.add("btn-primary");
     $('#webhook-key-regenerate').tooltip('hide');
@@ -129,12 +129,12 @@
   }
 
   document.getElementById("webhook-rename").onclick = function (event) {
-    var content = document.createElement("div");
+    let content = document.createElement("div");
     content.classList.add("webhook-rename-content");
-    var text = document.createElement("p");
+    let text = document.createElement("p");
     text.innerText = "{% trans 'product.webhook.rename.body' %}";
     content.appendChild(text);
-    var input = document.createElement("input");
+    let input = document.createElement("input");
     input.placeholder = "{% trans 'product.webhook.rename.name' %}";
     content.appendChild(input);
     Swal.fire({
@@ -168,7 +168,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("webhook-container").appendChild(loader);
   }

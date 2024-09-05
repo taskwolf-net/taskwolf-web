@@ -57,7 +57,7 @@
   });
 
   function displayTerminationInformation(terminationStatus, bundle) {
-    var expiration = formatTime(bundle.expiration);
+    let expiration = formatTime(bundle.expiration);
     if (terminationStatus.terminable === false) {
       document.getElementById("package-termination-disclaimer").classList.add("d-none");
       document.getElementById("package-termination-process").classList.add("d-none");
@@ -76,7 +76,7 @@
     document.getElementById("package-termination-not-possible").classList.add("d-none");
     document.getElementById("package-termination-process-description").innerHTML =
       "{% trans 'product.package.termination.process.description' %}".replace("%s", expiration);
-    var dynamicElement = document.getElementById("package-termination-process-description-dynamic");
+    let dynamicElement = document.getElementById("package-termination-process-description-dynamic");
     if (terminationStatus.directlyEffective) {
       dynamicElement.innerHTML = "{% trans 'product.package.termination.process.description.instant' %}";
     } else {
@@ -120,7 +120,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("package-termination-container").appendChild(loader);
   }

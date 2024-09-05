@@ -117,9 +117,9 @@
 </html>
 
 <script>
-  var organization;
-  var team;
-  var entryCheckboxes = [];
+  let organization;
+  let team;
+  let entryCheckboxes = [];
 
   $(document).ready(function() {
     displayLoader();
@@ -140,20 +140,20 @@
 
   function displayDevices(devices) {
     document.getElementById("devices-list").innerHTML = "";
-    for (var i = 0; i < devices.length; i++) {
-      var entry = devices[i];
+    for (let i = 0; i < devices.length; i++) {
+      let entry = devices[i];
       displayDevice(entry.id, entry.information, entry.owner, entry.ownDevice,
         entry.platform);
     }
   }
 
   function displayDevice(id, information, owner, ownDevice, platform) {
-    var entry = document.createElement('li');
+    let entry = document.createElement('li');
     entry.classList.add("device-entry");
     entry.appendChild(createDevicesSelector(id));
-    var idDiv = document.createElement("div");
+    let idDiv = document.createElement("div");
     idDiv.classList.add("devices-entry-id");
-    var idElement = document.createElement("span");
+    let idElement = document.createElement("span");
     idElement.innerText = id;
     idElement.classList.add("devices-list-id");
     idDiv.appendChild(idElement);
@@ -166,9 +166,9 @@
   }
 
   function createDevicePlatformCell(platform) {
-    var optimizationDiv = document.createElement("div");
+    let optimizationDiv = document.createElement("div");
     optimizationDiv.classList.add("devices-entry-platform");
-    var optimizationElement = document.createElement("span");
+    let optimizationElement = document.createElement("span");
     optimizationElement.classList.add("devices-list-platform");
     if (platform.toLowerCase() === "android") {
       optimizationElement.innerHTML = "Android";
@@ -191,16 +191,16 @@
   }
 
   function createSettingsDropdown(device, ownDevice) {
-    var settingsDiv = document.createElement("div");
+    let settingsDiv = document.createElement("div");
     settingsDiv.classList.add("devices-entry-settings");
-    var settingsButton = document.createElement("button");
+    let settingsButton = document.createElement("button");
     settingsButton.type = "button";
     settingsButton.classList.add("devices-list-settings", "fa-solid",
       "fa-ellipsis-vertical");
     settingsButton.setAttribute("data-bs-toggle", "dropdown");
     settingsButton.setAttribute("aria-expanded", "false");
     settingsDiv.appendChild(settingsButton);
-    var dropdown = document.createElement("ul");
+    let dropdown = document.createElement("ul");
     dropdown.classList.add("device-settings-dropdown", "dropdown-menu");
     if (ownDevice) {
       dropdown.appendChild(createSettingsDropdownButton(dropdown, "fa-trash",
@@ -216,12 +216,12 @@
   }
 
   function createSettingsDropdownButton(dropdown, icon, content, color, click) {
-    var dropdownEntry = document.createElement("li");
+    let dropdownEntry = document.createElement("li");
     dropdownEntry.classList.add("device-settings-dropdown-entry", "dropdown-item");
-    var dropdownEntryIcon = document.createElement("i");
+    let dropdownEntryIcon = document.createElement("i");
     dropdownEntryIcon.classList.add("fa-solid", icon);
     dropdownEntry.appendChild(dropdownEntryIcon);
-    var dropdownEntryLabel = document.createElement("label");
+    let dropdownEntryLabel = document.createElement("label");
     dropdownEntryLabel.innerText = content;
     dropdownEntry.appendChild(dropdownEntryLabel);
     if (color !== undefined) {
@@ -236,20 +236,20 @@
   }
 
   function createDevicesSelector(id) {
-    var selector = document.createElement("div");
+    let selector = document.createElement("div");
     selector.classList.add("devices-entry-selector");
-    var input = document.createElement("input");
+    let input = document.createElement("input");
     input.classList.add("form-check-input");
     input.type = "checkbox";
     input.onchange = function (event) {
-      var checkboxSelected = false;
-      for (var i = 0; i < entryCheckboxes.length; i++) {
+      let checkboxSelected = false;
+      for (let i = 0; i < entryCheckboxes.length; i++) {
         if (entryCheckboxes[i].checkbox.checked) {
           checkboxSelected = true;
           break;
         }
       }
-      var deleteButton = document.getElementById("devices-selector-remove");
+      let deleteButton = document.getElementById("devices-selector-remove");
       if (!checkboxSelected) {
         deleteButton.classList.add("disabled");
       } else {
@@ -262,11 +262,11 @@
   }
 
   document.getElementById("devices-selector-global").onclick = function (event) {
-    var checkboxSelected = document.getElementById("devices-selector-global").checked;
-    for (var i = 0; i < entryCheckboxes.length; i++) {
+    let checkboxSelected = document.getElementById("devices-selector-global").checked;
+    for (let i = 0; i < entryCheckboxes.length; i++) {
       entryCheckboxes[i].checkbox.checked = checkboxSelected;
     }
-    var deleteButton = document.getElementById("devices-selector-remove");
+    let deleteButton = document.getElementById("devices-selector-remove");
     if (!checkboxSelected) {
       deleteButton.classList.add("disabled");
     } else {
@@ -275,8 +275,8 @@
   }
 
   document.getElementById("devices-selector-remove").onclick = function (event) {
-    for (var i = 0; i < entryCheckboxes.length; i++) {
-      var entry = entryCheckboxes[i];
+    for (let i = 0; i < entryCheckboxes.length; i++) {
+      let entry = entryCheckboxes[i];
       if (entry.checkbox.checked) {
         let request = new HttpRequest("https://api.taskwolf.net/v1/device/organization/remove/", "POST",
           [], {device: entry.id, organization: organization.id, team: team});
@@ -290,8 +290,8 @@
   }
 
   function appendDeviceCell(entry, identifier, information, elementType) {
-    var div = document.createElement("div");
-    var element = document.createElement(elementType);
+    let div = document.createElement("div");
+    let element = document.createElement(elementType);
     element.innerText = information;
     element.classList.add("devices-list-" + identifier);
     div.appendChild(element);
@@ -300,19 +300,19 @@
   }
 
   const pageVisibilityRange = 2;
-  var pagingStartingPoint = "";
-  var pagingSorting = "information";
-  var pagingOrder = "ASCENDING";
-  var pagingFilterSearch = "";
-  var pagingFilterOwner = "";
-  var pagingFilterPlatform = "";
+  let pagingStartingPoint = "";
+  let pagingSorting = "information";
+  let pagingOrder = "ASCENDING";
+  let pagingFilterSearch = "";
+  let pagingFilterOwner = "";
+  let pagingFilterPlatform = "";
 
   function displayPaging(pages, currentPage, pageState) {
     displayPagingShiftButton("devices-previous-page", currentPage > 0,
       pages, currentPage, pageState, -1);
     displayPagingShiftButton("devices-next-page", currentPage < pages - 1,
       pages, currentPage, pageState, 1);
-    var pagesElement = document.getElementById("devices-pages");
+    let pagesElement = document.getElementById("devices-pages");
     pagesElement.innerHTML = "";
     createPageButton(pagesElement, pages, currentPage, pageState, 0, currentPage === 0);
     if (pages === 1) {
@@ -323,8 +323,8 @@
         "<i class='devices-paging-ellipsis devices-paging-ellipsis-start " +
         "fa-solid fa-ellipsis mx-4'></i>");
     }
-    for (var i = -pageVisibilityRange + 1; i < pageVisibilityRange; i++) {
-      var page = currentPage + i;
+    for (let i = -pageVisibilityRange + 1; i < pageVisibilityRange; i++) {
+      let page = currentPage + i;
       if (page < 1 || page >= pages - 1) {
         continue;
       }
@@ -340,7 +340,7 @@
   }
 
   function displayPagingShiftButton(id, isEnabled, pages, currentPage, pageState, direction) {
-    var button = document.getElementById(id);
+    let button = document.getElementById(id);
     if (isEnabled) {
       button.classList.remove("devices-page-disabled");
     } else {
@@ -355,7 +355,7 @@
   }
 
   function createPageButton(pagesElement, pages, currentPage, pageState, page, isActive) {
-    var button = document.createElement("a");
+    let button = document.createElement("a");
     button.classList.add("devices-page");
     if (isActive) {
       button.classList.add("devices-page-active");
@@ -382,20 +382,20 @@
   }
 
   function fetchDevicesPage(targetPage, callback) {
-    var body = createPagingBody();
+    let body = createPagingBody();
     body.search = pagingFilterSearch;
     body.targetPage = targetPage;
     let request = new HttpRequest("https://api.taskwolf.net/v1/devices/page/",
       "POST", [], body);
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       pagingStartingPoint = targetPage === 0 ? "FORWARD" : "BACKWARD";
       callback(response.devices, response.page, response.pageNumber);
     });
   }
 
   function shiftPage(pages, currentPage, pageState, direction) {
-    var newPage = currentPage + direction;
+    let newPage = currentPage + direction;
     if (newPage === 0 || newPage === pages - 1) {
       pagingStartingPoint = newPage === 0 ? "FORWARD" : "BACKWARD";
       fetchDevicesPage(newPage, function(devices, pageState, pageNumber) {
@@ -404,22 +404,22 @@
       });
       return;
     }
-    var body = createPagingBody();
+    let body = createPagingBody();
     body.pageState = pageState;
     body.startingPoint = pagingStartingPoint;
     body.direction = direction < 0 ? "BACKWARD" : "FORWARD";
     let request = new HttpRequest("https://api.taskwolf.net/v1/devices/page/shift/",
       "POST", [], body);
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
-      var newPage = currentPage + direction;
+      let response = JSON.parse(responseText);
+      let newPage = currentPage + direction;
       updatePaging(response.pageNumber, newPage, response.page,
         response.devices, document.getElementById("devices-not-found"));
     });
   }
 
   function createPagingBody() {
-    var body = {sorting: pagingSorting, order: pagingOrder};
+    let body = {sorting: pagingSorting, order: pagingOrder};
     if (pagingFilterOwner !== "") {
       body.owner = pagingFilterOwner;
     }
@@ -456,13 +456,13 @@
   function fetchOrganization(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET", []);
     request.send(function (status, responseText) {
-      var organization = JSON.parse(responseText);
+      let organization = JSON.parse(responseText);
       if ("id" in organization) {
         organization.members.push({id: organization.ownerId, name: organization.ownerName});
         let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/targets/selected/",
           "GET", []);
         request.send(function (status, responseText) {
-          var team = JSON.parse(responseText).currentTarget;
+          let team = JSON.parse(responseText).currentTarget;
           if (team === "") {
             team = organization.id;
           }
@@ -475,12 +475,12 @@
   }
 
   function displayDevicesOwnerFilter() {
-    var list = document.getElementById("devices-filter-owner-list");
+    let list = document.getElementById("devices-filter-owner-list");
     list.innerHTML = "";
-    var search = document.getElementById("devices-filter-owner-search").value.toLowerCase();
+    let search = document.getElementById("devices-filter-owner-search").value.toLowerCase();
     if ("id" in organization) {
-      for (var i = 0; i < organization.members.length; i++) {
-        var member = organization.members[i];
+      for (let i = 0; i < organization.members.length; i++) {
+        let member = organization.members[i];
         if (search === "" || member.name.toLowerCase().includes(search)) {
           list.appendChild(createWorkflowOwnerEntry(member.id, member.name,
             pagingFilterOwner === member.id));
@@ -492,7 +492,7 @@
           "{% trans 'product.devices.filter.owner.you' %}", true));
       }
     }
-    var emptyElement = document.getElementById("devices-filter-owner-empty");
+    let emptyElement = document.getElementById("devices-filter-owner-empty");
     if (list.innerHTML === "") {
       list.classList.add("d-none");
       emptyElement.classList.remove("d-none");
@@ -503,9 +503,9 @@
   }
 
   function createWorkflowOwnerEntry(id, name, isChecked) {
-    var entry = document.createElement("li");
+    let entry = document.createElement("li");
     entry.classList.add("form-check");
-    var entryInput = document.createElement("input");
+    let entryInput = document.createElement("input");
     entryInput.classList.add("form-check-input");
     entryInput.type = "radio";
     entryInput.name = "devices-filter-owner";
@@ -519,7 +519,7 @@
       pagingFilterOwner = id;
       updateDevices();
     }
-    var entryLabel = document.createElement("label");
+    let entryLabel = document.createElement("label");
     entryLabel.classList.add("form-check-label");
     entryLabel.innerHTML = name;
     entryLabel.role = "button";
@@ -559,7 +559,7 @@
     displayDevicesOwnerFilter();
   }
 
-  var currentSearchTimeout = -1;
+  let currentSearchTimeout = -1;
 
   document.getElementById("devices-search-input").oninput = function(event) {
     if (currentSearchTimeout !== -1) {
@@ -572,8 +572,8 @@
     }, 500);
   };
 
-  var sortingElements = document.getElementsByClassName("devices-table-description-sort");
-  for (var i = 0; i < sortingElements.length; i++) {
+  let sortingElements = document.getElementsByClassName("devices-table-description-sort");
+  for (let i = 0; i < sortingElements.length; i++) {
     let sortingElement = sortingElements[i];
     sortingElement.onclick = function (event) {
       updateSorting(sortingElement);
@@ -581,12 +581,12 @@
   }
 
   function updateSorting(selectedElement) {
-    for (var i = 0; i < sortingElements.length; i++) {
+    for (let i = 0; i < sortingElements.length; i++) {
       let sortingElement = sortingElements[i];
       sortingElement.classList.remove("fa-sort-up", "fa-sort-down");
       sortingElement.classList.add("fa-sort");
     }
-    var selectedSorting = selectedElement.getAttribute("type");
+    let selectedSorting = selectedElement.getAttribute("type");
     selectedElement.classList.remove("fa-sort");
     if (pagingSorting === selectedSorting) {
       pagingOrder = pagingOrder === "ASCENDING" ? "DESCENDING" : "ASCENDING";
@@ -622,12 +622,12 @@
   }
 
   function deleteDevice(device) {
-    var content = document.createElement("div");
+    let content = document.createElement("div");
     content.classList.add("devices-delete-content");
-    var text = document.createElement("p");
+    let text = document.createElement("p");
     text.innerText = "{% trans 'product.devices.delete.body' %}";
     content.appendChild(text);
-    var input = document.createElement("input");
+    let input = document.createElement("input");
     input.classList.add("mt-3")
     input.placeholder = "{% trans 'product.devices.delete.password' %}";
     input.type = "password";
@@ -643,7 +643,7 @@
         let request = new HttpRequest("https://api.taskwolf.net/v1/device/delete/", "POST",
           [], {device: device, password: input.value});
         request.send(function (status, responseText) {
-          var success = JSON.parse(responseText).success;
+          let success = JSON.parse(responseText).success;
           if (success === true) {
             Swal.fire("{% trans 'product.devices.delete.successful.title' %}", "{% trans 'product.devices.delete.successful.body' %}", "success").then(success => window.location.href = "/devices/");
           } else {
@@ -655,7 +655,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader", "loader-list");
     document.getElementById("devices-loader").appendChild(loader);
   }

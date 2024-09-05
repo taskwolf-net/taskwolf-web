@@ -30,7 +30,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/settings/language/", "GET",
       []);
     request.send(function (status, responseText) {
-      var language = JSON.parse(responseText).language;
+      let language = JSON.parse(responseText).language;
       document.getElementById("settings-language-" + language).classList.add("settings-language-selected");
     });
   });
