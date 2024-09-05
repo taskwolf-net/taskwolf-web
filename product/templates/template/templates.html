@@ -30,11 +30,11 @@
 </html>
 
 <script>
-  var bundle;
-  var totalPages = 0;
-  var loadedPages = 0;
-  var currentPageState = "";
-  var currentSearch = "";
+  let bundle;
+  let totalPages = 0;
+  let loadedPages = 0;
+  let currentPageState = "";
+  let currentSearch = "";
 
   $(document).ready(function() {
     displayLoader();
@@ -60,7 +60,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/templates/load/", "POST",
       [], {pageState: currentPageState, search: currentSearch});
     request.send(function (status, responseText) {
-      var result = JSON.parse(responseText);
+      let result = JSON.parse(responseText);
       currentPageState = result.page;
       totalPages = result.pageNumber;
       loadedPages++;
@@ -76,9 +76,9 @@
   }
 
   function displayTemplates(templates) {
-    var displayedEntries = 0;
-    for (var i = 0; i < templates.length; i++) {
-      var entry = templates[i];
+    let displayedEntries = 0;
+    for (let i = 0; i < templates.length; i++) {
+      let entry = templates[i];
       displayTemplate(entry.name, entry.description, entry.trigger, entry.actions,
         entry.accessType, bundle.type === "TRIAL");
       displayedEntries++;
@@ -97,13 +97,13 @@
   }
 
   function displayTemplate(name, description, trigger, actions, accessType, isTrial) {
-    var entryElement = document.createElement("li");
+    let entryElement = document.createElement("li");
     entryElement.classList.add("template-entry");
     entryElement.appendChild(createWorkflowElement(trigger, actions));
-    var nameElement = document.createElement("b");
+    let nameElement = document.createElement("b");
     nameElement.innerHTML = name;
     entryElement.appendChild(nameElement);
-    var descriptionElement = document.createElement("span");
+    let descriptionElement = document.createElement("span");
     descriptionElement.innerHTML = description;
     entryElement.appendChild(descriptionElement);
     entryElement.onclick = function(event) {
@@ -113,7 +113,7 @@
       clickTemplate(name, description, trigger, actions);
     }
     if (isTrial && accessType === "CHARGEABLE") {
-      var chargeableElement = document.createElement("i");
+      let chargeableElement = document.createElement("i");
       chargeableElement.classList.add("template-entry-chargeable", "fa-solid",
         "fa-crown", "text-warning");
       entryElement.appendChild(chargeableElement);
@@ -145,9 +145,9 @@
       "typeDescription": trigger.typeDescription,
       "selected": true
     }));
-    var encodedActions = [];
-    for (var i = 0; i < actions.length; i++) {
-      var action = actions[i];
+    let encodedActions = [];
+    for (let i = 0; i < actions.length; i++) {
+      let action = actions[i];
       encodedActions.push({
         "actionIndex": action.actionIndex,
         "module": action.module,
@@ -162,10 +162,10 @@
   }
 
   function createWorkflowElement(trigger, actions) {
-    var workflowElement = document.createElement("div");
+    let workflowElement = document.createElement("div");
     workflowElement.classList.add("template-workflow");
     workflowElement.appendChild(createLogoElement(trigger));
-    for (var i = 0; i < actions.length; i++) {
+    for (let i = 0; i < actions.length; i++) {
       workflowElement.appendChild(createArrowElement());
       workflowElement.appendChild(createLogoElement(actions[i]));
     }
@@ -173,7 +173,7 @@
   }
 
   function createLogoElement(module) {
-    var logoElement = document.createElement("img");
+    let logoElement = document.createElement("img");
     logoElement.src = "{% static '' %}" + "img/applications/" + module.moduleLogo;
     logoElement.width = 64;
     logoElement.height = 64;
@@ -181,7 +181,7 @@
   }
 
   function createArrowElement() {
-    var arrow = document.createElement("span");
+    let arrow = document.createElement("span");
     arrow.classList.add("template-workflow-arrow");
     arrow.innerHTML = "&#10132;";
     return arrow;
@@ -197,7 +197,7 @@
     });
   }
 
-  var currentSearchTimeout = -1;
+  let currentSearchTimeout = -1;
 
   document.getElementById("templates-search-input").oninput = function(event) {
     if (currentSearchTimeout !== -1) {
@@ -217,7 +217,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("templates-container").appendChild(loader);
   }

@@ -70,9 +70,9 @@
 </html>
 
 <script>
-  var bundleClass = "EXPERT";
-  var bundleRuntime = "YEARLY";
-  var organizationPackageData;
+  let bundleClass = "EXPERT";
+  let bundleRuntime = "YEARLY";
+  let organizationPackageData;
 
   $(document).ready(function() {
     displayLoader()
@@ -150,7 +150,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/bundle/preset/", "POST",
       [], {type: packageName, class: bundleClass, runtime: bundleRuntime});
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       callback(response);
     });
   }
@@ -209,7 +209,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("organization-upgrade-container").appendChild(loader);
   }

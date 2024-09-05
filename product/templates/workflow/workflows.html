@@ -131,10 +131,10 @@
 </html>
 
 <script>
-  var organization;
-  var applications;
-  var changeStateBlocked = false;
-  var entryCheckboxes = [];
+  let organization;
+  let applications;
+  let changeStateBlocked = false;
+  let entryCheckboxes = [];
 
   $(document).ready(function() {
     displayLoader();
@@ -155,21 +155,21 @@
 
   function displayWorkflows(workflows) {
     document.getElementById("workflows-list").innerHTML = "";
-    for (var i = 0; i < workflows.length; i++) {
-      var entry = workflows[i];
+    for (let i = 0; i < workflows.length; i++) {
+      let entry = workflows[i];
       displayWorkflow(entry.id, entry.name, entry.creator, entry.created,
         entry.armed, entry.triggerType, entry.triggerModuleLogo, entry.actions);
     }
   }
 
   function displayWorkflow(id, name, creator, created, armed, triggerType, triggerLogo, actions) {
-    var entry = document.createElement('li');
+    let entry = document.createElement('li');
     entry.role = "button";
     entry.classList.add("workflow-entry");
     entry.appendChild(createWorkflowsSelector(id));
-    var nameDiv = document.createElement("div");
+    let nameDiv = document.createElement("div");
     nameDiv.classList.add("workflows-entry-name");
-    var nameElement = document.createElement("span");
+    let nameElement = document.createElement("span");
     nameElement.innerText = name;
     nameElement.classList.add("workflows-list-name");
     nameDiv.appendChild(nameElement);
@@ -184,7 +184,7 @@
     }
     entry.appendChild(createSettingsButton(id));
     entry.onclick = function (event) {
-      var target = event.target;
+      let target = event.target;
       if (Boolean(target.closest(".switch")) || Boolean(target.closest(".workflow-run-button")) ||
           Boolean(target.closest(".workflows-entry-settings")) || Boolean(target.closest(".workflows-entry-selector"))
       ) {
@@ -196,12 +196,12 @@
   }
 
   function createWorkflowPreview(triggerLogo, actions) {
-    var previewContainer = document.createElement("div");
+    let previewContainer = document.createElement("div");
     previewContainer.classList.add("workflows-entry-preview");
-    var preview = document.createElement("div");
+    let preview = document.createElement("div");
     preview.classList.add("workflows-preview");
     preview.appendChild(createWorkflowPreviewEntry(triggerLogo));
-    for (var i = 0; i < Math.min(actions.length, 2); i++) {
+    for (let i = 0; i < Math.min(actions.length, 2); i++) {
       preview.appendChild(createWorkflowPreviewEntry(actions[i].actionModuleLogo));
     }
     previewContainer.appendChild(preview);
@@ -209,22 +209,22 @@
   }
 
   function createWorkflowPreviewEntry(logo) {
-    var entry = document.createElement("div");
+    let entry = document.createElement("div");
     entry.classList.add("workflows-preview-entry");
-    var logoElement = document.createElement("img");
+    let logoElement = document.createElement("img");
     logoElement.src = "{% static '' %}" + "img/applications/" + logo;
     entry.appendChild(logoElement);
     return entry;
   }
 
   function createManualRunButton(id) {
-    var runButton = document.createElement("button");
+    let runButton = document.createElement("button");
     runButton.type = "button";
     runButton.classList.add("workflow-run-button", "btn", "btn-success");
-    var runIcon = document.createElement("i");
+    let runIcon = document.createElement("i");
     runIcon.classList.add("fa-solid", "fa-play");
     runButton.appendChild(runIcon);
-    var runLabel = document.createElement("label");
+    let runLabel = document.createElement("label");
     runLabel.role = "button";
     runLabel.innerHTML = "{% trans 'product.workflows.execute' %}";
     runButton.appendChild(runLabel);
@@ -239,11 +239,11 @@
   }
 
   function createRunningSwitch(id, armed) {
-    var isRunningDiv = document.createElement("div");
+    let isRunningDiv = document.createElement("div");
     isRunningDiv.classList.add("workflows-entry-is-running");
-    var isRunningElement = document.createElement("label");
+    let isRunningElement = document.createElement("label");
     isRunningElement.classList.add("switch");
-    var isRunningInput = document.createElement("input");
+    let isRunningInput = document.createElement("input");
     isRunningInput.type = "checkbox";
     if (armed) {
       isRunningInput.checked = true;
@@ -255,7 +255,7 @@
       updateWorkflowState(id, !isRunningInput.checked);
     }
     isRunningElement.appendChild(isRunningInput);
-    var isRunningSpan = document.createElement("span");
+    let isRunningSpan = document.createElement("span");
     isRunningSpan.classList.add("slider", "round");
     isRunningElement.appendChild(isRunningSpan);
     isRunningDiv.appendChild(isRunningElement);
@@ -263,16 +263,16 @@
   }
 
   function createSettingsButton(id) {
-    var settingsDiv = document.createElement("div");
+    let settingsDiv = document.createElement("div");
     settingsDiv.classList.add("workflows-entry-settings");
-    var settingsButton = document.createElement("button");
+    let settingsButton = document.createElement("button");
     settingsButton.type = "button";
     settingsButton.classList.add("workflows-entry-settings-button", "fa-solid",
       "fa-ellipsis-vertical");
     settingsButton.setAttribute("data-bs-toggle", "dropdown");
     settingsButton.setAttribute("aria-expanded", "false");
     settingsDiv.appendChild(settingsButton);
-    var dropdown = createSettingsDropdown([
+    let dropdown = createSettingsDropdown([
         {icon: "fa-copy", content: "{% trans 'product.workflows.duplicate' %}", click: function(){duplicateWorkflow(id)}},
         {icon: "fa-trash", content: "{% trans 'product.workflows.delete' %}", color: "text-danger", click: function(){deleteWorkflow(id)}}
       ], [1]);
@@ -281,16 +281,16 @@
   }
 
   function createSettingsDropdown(buttons, dividers) {
-    var dropdown = document.createElement("ul");
+    let dropdown = document.createElement("ul");
     dropdown.classList.add("workflows-entry-settings-dropdown", "dropdown-menu");
-    for (var i = 0; i < buttons.length; i++) {
-      for (var j = 0; j < dividers.length; j++) {
+    for (let i = 0; i < buttons.length; i++) {
+      for (let j = 0; j < dividers.length; j++) {
         if (dividers[j] === i) {
           dropdown.appendChild(createSettingsDropdownDivider());
           break;
         }
       }
-      var button = buttons[i];
+      let button = buttons[i];
       dropdown.appendChild(createSettingsDropdownButton(dropdown, button.icon,
         button.content, button.color, button.click));
     }
@@ -298,18 +298,18 @@
   }
 
   function createSettingsDropdownDivider() {
-    var dropdownDivider = document.createElement("li");
+    let dropdownDivider = document.createElement("li");
     dropdownDivider.classList.add("database-table-settings-dropdown-divider");
     return dropdownDivider;
   }
 
   function createSettingsDropdownButton(dropdown, icon, content, color, click) {
-    var dropdownEntry = document.createElement("li");
+    let dropdownEntry = document.createElement("li");
     dropdownEntry.classList.add("workflows-entry-settings-dropdown-entry", "dropdown-item");
-    var dropdownEntryIcon = document.createElement("i");
+    let dropdownEntryIcon = document.createElement("i");
     dropdownEntryIcon.classList.add("fa-solid", icon);
     dropdownEntry.appendChild(dropdownEntryIcon);
-    var dropdownEntryLabel = document.createElement("label");
+    let dropdownEntryLabel = document.createElement("label");
     dropdownEntryLabel.innerText = content;
     dropdownEntry.appendChild(dropdownEntryLabel);
     if (color !== undefined) {
@@ -324,20 +324,20 @@
   }
 
   function createWorkflowsSelector(id) {
-    var selector = document.createElement("div");
+    let selector = document.createElement("div");
     selector.classList.add("workflows-entry-selector");
-    var input = document.createElement("input");
+    let input = document.createElement("input");
     input.classList.add("form-check-input");
     input.type = "checkbox";
     input.onchange = function (event) {
-      var checkboxSelected = false;
-      for (var i = 0; i < entryCheckboxes.length; i++) {
+      let checkboxSelected = false;
+      for (let i = 0; i < entryCheckboxes.length; i++) {
         if (entryCheckboxes[i].checkbox.checked) {
           checkboxSelected = true;
           break;
         }
       }
-      var deleteButton = document.getElementById("workflows-selector-delete");
+      let deleteButton = document.getElementById("workflows-selector-delete");
       if (!checkboxSelected) {
         deleteButton.classList.add("disabled");
       } else {
@@ -350,11 +350,11 @@
   }
 
   document.getElementById("workflows-selector-global").onclick = function (event) {
-    var checkboxSelected = document.getElementById("workflows-selector-global").checked;
-    for (var i = 0; i < entryCheckboxes.length; i++) {
+    let checkboxSelected = document.getElementById("workflows-selector-global").checked;
+    for (let i = 0; i < entryCheckboxes.length; i++) {
       entryCheckboxes[i].checkbox.checked = checkboxSelected;
     }
-    var deleteButton = document.getElementById("workflows-selector-delete");
+    let deleteButton = document.getElementById("workflows-selector-delete");
     if (!checkboxSelected) {
       deleteButton.classList.add("disabled");
     } else {
@@ -363,8 +363,8 @@
   }
 
   document.getElementById("workflows-selector-delete").onclick = function (event) {
-    for (var i = 0; i < entryCheckboxes.length; i++) {
-      var entry = entryCheckboxes[i];
+    for (let i = 0; i < entryCheckboxes.length; i++) {
+      let entry = entryCheckboxes[i];
       if (entry.checkbox.checked) {
         let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/remove/", "POST",
           [], {workflow: entry.id});
@@ -380,7 +380,7 @@
   function clickWorkflow(id) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/find/", "POST", [], {workflow: id});
     request.send(function (status, responseText) {
-      var workflow = JSON.parse(responseText);
+      let workflow = JSON.parse(responseText);
       sessionStorage.setItem("workflow-selected", "true");
       sessionStorage.setItem("workflow-id", workflow.id);
       sessionStorage.setItem("workflow-name", workflow.name);
@@ -393,9 +393,9 @@
         "content": workflow.triggerContent,
         "selected": true
       }));
-      var actions = [];
-      for (var i = 0; i < workflow.actions.length; i++) {
-        var workflowActionInformation = workflow.actions[i];
+      let actions = [];
+      for (let i = 0; i < workflow.actions.length; i++) {
+        let workflowActionInformation = workflow.actions[i];
         actions.push({
           "actionIndex": workflowActionInformation.actionIndex,
           "module": workflowActionInformation.actionModule,
@@ -407,9 +407,9 @@
         });
       }
       sessionStorage.setItem("workflow-actions", JSON.stringify({actions: actions}));
-      var conditions = [];
-      for (var i = 0; i < workflow.conditions.length; i++) {
-        var workflowConditionInformation = workflow.conditions[i];
+      let conditions = [];
+      for (let i = 0; i < workflow.conditions.length; i++) {
+        let workflowConditionInformation = workflow.conditions[i];
         conditions.push({
           "actionIndex": workflowConditionInformation.conditionActionIndex,
           "conditionIndex": workflowConditionInformation.conditionConditionIndex,
@@ -432,8 +432,8 @@
   }
 
   function appendWorkflowsCell(entry, identifier, information, elementType) {
-    var div = document.createElement("div");
-    var element = document.createElement(elementType);
+    let div = document.createElement("div");
+    let element = document.createElement(elementType);
     element.innerText = information;
     element.classList.add("workflows-list-" + identifier);
     div.appendChild(element);
@@ -442,22 +442,22 @@
   }
 
   const pageVisibilityRange = 2;
-  var pagingStartingPoint = "";
-  var pagingSorting = "name";
-  var pagingOrder = "ASCENDING";
-  var pagingFilterSearch = "";
-  var pagingFilterApplication = "";
-  var pagingFilterCreator = "";
-  var pagingFilterStartTime = -1;
-  var pagingFilterEndTime = -1;
-  var pagingFilterState = "";
+  let pagingStartingPoint = "";
+  let pagingSorting = "name";
+  let pagingOrder = "ASCENDING";
+  let pagingFilterSearch = "";
+  let pagingFilterApplication = "";
+  let pagingFilterCreator = "";
+  let pagingFilterStartTime = -1;
+  let pagingFilterEndTime = -1;
+  let pagingFilterState = "";
 
   function displayPaging(pages, currentPage, pageState) {
     displayPagingShiftButton("workflows-previous-page", currentPage > 0,
       pages, currentPage, pageState, -1);
     displayPagingShiftButton("workflows-next-page", currentPage < pages - 1,
       pages, currentPage, pageState, 1);
-    var pagesElement = document.getElementById("workflows-pages");
+    let pagesElement = document.getElementById("workflows-pages");
     pagesElement.innerHTML = "";
     createPageButton(pagesElement, pages, currentPage, pageState, 0, currentPage === 0);
     if (pages === 1) {
@@ -468,8 +468,8 @@
         "<i class='workflows-paging-ellipsis workflows-paging-ellipsis-start " +
         "fa-solid fa-ellipsis mx-4'></i>");
     }
-    for (var i = -pageVisibilityRange + 1; i < pageVisibilityRange; i++) {
-      var page = currentPage + i;
+    for (let i = -pageVisibilityRange + 1; i < pageVisibilityRange; i++) {
+      let page = currentPage + i;
       if (page < 1 || page >= pages - 1) {
         continue;
       }
@@ -485,7 +485,7 @@
   }
 
   function displayPagingShiftButton(id, isEnabled, pages, currentPage, pageState, direction) {
-    var button = document.getElementById(id);
+    let button = document.getElementById(id);
     if (isEnabled) {
       button.classList.remove("workflows-page-disabled");
     } else {
@@ -500,7 +500,7 @@
   }
 
   function createPageButton(pagesElement, pages, currentPage, pageState, page, isActive) {
-    var button = document.createElement("a");
+    let button = document.createElement("a");
     button.classList.add("workflows-page");
     if (isActive) {
       button.classList.add("workflows-page-active");
@@ -527,20 +527,20 @@
   }
 
   function fetchWorkflowsPage(targetPage, callback) {
-    var body = createPagingBody();
+    let body = createPagingBody();
     body.search = pagingFilterSearch;
     body.targetPage = targetPage;
     let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/page/",
       "POST", [], body);
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       pagingStartingPoint = targetPage === 0 ? "FORWARD" : "BACKWARD";
       callback(response.workflows, response.page, response.pageNumber);
     });
   }
 
   function shiftPage(pages, currentPage, pageState, direction) {
-    var newPage = currentPage + direction;
+    let newPage = currentPage + direction;
     if (newPage === 0 || newPage === pages - 1) {
       pagingStartingPoint = newPage === 0 ? "FORWARD" : "BACKWARD";
       fetchWorkflowsPage(newPage, function(workflows, pageState, pageNumber) {
@@ -549,22 +549,22 @@
       });
       return;
     }
-    var body = createPagingBody();
+    let body = createPagingBody();
     body.pageState = pageState;
     body.startingPoint = pagingStartingPoint;
     body.direction = direction < 0 ? "BACKWARD" : "FORWARD";
     let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/page/shift/",
       "POST", [], body);
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
-      var newPage = currentPage + direction;
+      let response = JSON.parse(responseText);
+      let newPage = currentPage + direction;
       updatePaging(response.pageNumber, newPage, response.page,
         response.workflows, document.getElementById("workflows-not-found"));
     });
   }
 
   function createPagingBody() {
-    var body = {sorting: pagingSorting, order: pagingOrder};
+    let body = {sorting: pagingSorting, order: pagingOrder};
     if (pagingFilterApplication !== "") {
       body.application = pagingFilterApplication;
     }
@@ -610,7 +610,7 @@
   function fetchOrganization(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET", []);
     request.send(function (status, responseText) {
-      var organization = JSON.parse(responseText);
+      let organization = JSON.parse(responseText);
       if ("id" in organization) {
         organization.members.push({id: organization.ownerId, name: organization.ownerName});
       }
@@ -619,12 +619,12 @@
   }
 
   function displayWorkflowsCreatorFilter() {
-    var list = document.getElementById("workflows-filter-creator-list");
+    let list = document.getElementById("workflows-filter-creator-list");
     list.innerHTML = "";
-    var search = document.getElementById("workflows-filter-creator-search").value.toLowerCase();
+    let search = document.getElementById("workflows-filter-creator-search").value.toLowerCase();
     if ("id" in organization) {
-      for (var i = 0; i < organization.members.length; i++) {
-        var member = organization.members[i];
+      for (let i = 0; i < organization.members.length; i++) {
+        let member = organization.members[i];
         if (search === "" || member.name.toLowerCase().includes(search)) {
           list.appendChild(createWorkflowCreatorEntry(member.id, member.name,
             pagingFilterCreator === member.id));
@@ -636,7 +636,7 @@
           "{% trans 'product.workflows.filter.creator.you' %}", true));
       }
     }
-    var emptyElement = document.getElementById("workflows-filter-creator-empty");
+    let emptyElement = document.getElementById("workflows-filter-creator-empty");
     if (list.innerHTML === "") {
       list.classList.add("d-none");
       emptyElement.classList.remove("d-none");
@@ -647,9 +647,9 @@
   }
 
   function createWorkflowCreatorEntry(id, name, isChecked) {
-    var entry = document.createElement("li");
+    let entry = document.createElement("li");
     entry.classList.add("form-check");
-    var entryInput = document.createElement("input");
+    let entryInput = document.createElement("input");
     entryInput.classList.add("form-check-input");
     entryInput.type = "radio";
     entryInput.name = "workflows-filter-creator";
@@ -663,7 +663,7 @@
       pagingFilterCreator = id;
       updateWorkflows();
     }
-    var entryLabel = document.createElement("label");
+    let entryLabel = document.createElement("label");
     entryLabel.classList.add("form-check-label");
     entryLabel.innerHTML = name;
     entryLabel.role = "button";
@@ -693,17 +693,17 @@
   }
 
   function displayWorkflowsApplicationFilter() {
-    var list = document.getElementById("workflows-filter-application-list");
+    let list = document.getElementById("workflows-filter-application-list");
     list.innerHTML = "";
-    var search = document.getElementById("workflows-filter-application-search").value.toLowerCase();
-    for (var i = 0; i < applications.length; i++) {
-      var application = applications[i];
+    let search = document.getElementById("workflows-filter-application-search").value.toLowerCase();
+    for (let i = 0; i < applications.length; i++) {
+      let application = applications[i];
       if (search === "" || application.name.toLowerCase().includes(search)) {
         list.appendChild(createWorkflowApplicationEntry(application.id,
           application.name, application.logo, pagingFilterApplication === application.id));
       }
     }
-    var emptyElement = document.getElementById("workflows-filter-application-empty");
+    let emptyElement = document.getElementById("workflows-filter-application-empty");
     if (list.innerHTML === "") {
       list.classList.add("d-none");
       emptyElement.classList.remove("d-none");
@@ -714,13 +714,13 @@
   }
 
   function createWorkflowApplicationEntry(id, name, logo, isActive) {
-    var entry = document.createElement("li");
+    let entry = document.createElement("li");
     entry.id = "workflows-filter-application-" + id;
     entry.role = "button";
     if (isActive) {
       entry.classList.add("workflows-filter-application-active");
     }
-    var entryLogo = document.createElement("img");
+    let entryLogo = document.createElement("img");
     entryLogo.src = "https://taskwolf.net/static/img/applications/" + logo;
     entry.appendChild(entryLogo);
     applyTooltips(entryLogo, entry, name);
@@ -740,13 +740,13 @@
   }
 
   document.getElementById("workflows-filter-start-time").oninput = function (event) {
-    var date = new Date(document.getElementById("workflows-filter-start-time").value);
+    let date = new Date(document.getElementById("workflows-filter-start-time").value);
     pagingFilterStartTime = date.getTime();
     updateWorkflows();
   }
 
   document.getElementById("workflows-filter-end-time").oninput = function (event) {
-    var date = new Date(document.getElementById("workflows-filter-end-time").value);
+    let date = new Date(document.getElementById("workflows-filter-end-time").value);
     pagingFilterEndTime = date.getTime();
     updateWorkflows();
   }
@@ -765,7 +765,7 @@
     displayWorkflowsApplicationFilter();
   }
 
-  var currentSearchTimeout = -1;
+  let currentSearchTimeout = -1;
 
   document.getElementById("workflows-search-input").oninput = function(event) {
     if (currentSearchTimeout !== -1) {
@@ -778,8 +778,8 @@
     }, 500);
   };
 
-  var sortingElements = document.getElementsByClassName("workflows-table-description-sort");
-  for (var i = 0; i < sortingElements.length; i++) {
+  let sortingElements = document.getElementsByClassName("workflows-table-description-sort");
+  for (let i = 0; i < sortingElements.length; i++) {
     let sortingElement = sortingElements[i];
     sortingElement.onclick = function (event) {
       updateSorting(sortingElement);
@@ -787,12 +787,12 @@
   }
 
   function updateSorting(selectedElement) {
-    for (var i = 0; i < sortingElements.length; i++) {
+    for (let i = 0; i < sortingElements.length; i++) {
       let sortingElement = sortingElements[i];
       sortingElement.classList.remove("fa-sort-up", "fa-sort-down");
       sortingElement.classList.add("fa-sort");
     }
-    var selectedSorting = selectedElement.getAttribute("type");
+    let selectedSorting = selectedElement.getAttribute("type");
     selectedElement.classList.remove("fa-sort");
     if (pagingSorting === selectedSorting) {
       pagingOrder = pagingOrder === "ASCENDING" ? "DESCENDING" : "ASCENDING";
@@ -865,7 +865,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader", "loader-list");
     document.getElementById("workflows-loader").appendChild(loader);
   }

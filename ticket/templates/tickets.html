@@ -43,8 +43,8 @@
 </html>
 
 <script>
-  var tickets;
-  var ticketsCurrentNameFilter = "";
+  let tickets;
+  let ticketsCurrentNameFilter = "";
 
   $(document).ready(function() {
     fetchTicketsData(function() {
@@ -63,13 +63,13 @@
 
   function displayTickets() {
     document.getElementById("tickets-list").innerHTML = "";
-    var displayedTickets = 0;
-    for (var i = 0; i < tickets.length; i++) {
-      var entry = tickets[i];
+    let displayedTickets = 0;
+    for (let i = 0; i < tickets.length; i++) {
+      let entry = tickets[i];
       if(!(shouldDisplayTicketEntry(entry))) {
         continue;
       }
-      var type = "";
+      let type = "";
       if (entry.type.toUpperCase() === "REQUEST") {
         type = "{% trans 'tickets.type.request' %}";
       }
@@ -94,12 +94,12 @@
   }
 
   function displayTicket(id, title, type, status) {
-    var entry = document.createElement('li');
+    let entry = document.createElement('li');
     entry.role = "button";
     entry.classList.add("ticket-entry");
-    var titleDiv = document.createElement("div");
+    let titleDiv = document.createElement("div");
     titleDiv.classList.add("ticket-entry-title");
-    var nameElement = document.createElement("span");
+    let nameElement = document.createElement("span");
     nameElement.innerText = title;
     nameElement.classList.add("tickets-list-title");
     titleDiv.appendChild(nameElement);
@@ -121,8 +121,8 @@
   }
 
   function appendTicketsCell(entry, identifier, information, elementType) {
-    var div = document.createElement("div");
-    var element = document.createElement(elementType);
+    let div = document.createElement("div");
+    let element = document.createElement(elementType);
     element.innerText = information;
     element.classList.add("tickets-list-" + identifier);
     div.appendChild(element);

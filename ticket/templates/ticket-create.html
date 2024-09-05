@@ -34,9 +34,9 @@
 </html>
 
 <script>
-  var ticketType = "";
+  let ticketType = "";
 
-  var quill = new Quill('#ticket-message', {
+  let quill = new Quill('#ticket-message', {
     modules: {
       toolbar: [
         [{'size': ['huge', 'large', false, 'small']}],
@@ -81,8 +81,8 @@
   }
 
   document.getElementById("ticket-create").onclick = function(event) {
-    var title = document.getElementById("ticket-title").value;
-    var message =  document.getElementsByClassName("ql-editor")[0].innerHTML;
+    let title = document.getElementById("ticket-title").value;
+    let message =  document.getElementsByClassName("ql-editor")[0].innerHTML;
     let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/create/", "POST",
       [], {title: title, type: ticketType, message: message});
     request.send(function (status, responseText) {

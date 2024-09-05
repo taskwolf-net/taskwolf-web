@@ -89,25 +89,25 @@
 
   function displayPayments(payments) {
     if (payments.length === 0) {
-      var emptyElement = document.createElement("b");
+      let emptyElement = document.createElement("b");
       emptyElement.classList.add("mb-0");
       emptyElement.innerHTML = "{% trans 'product.organization.payment.empty' %}";
       document.getElementById("organization-payment-disclaimer").appendChild(emptyElement);
       document.getElementById("organization-payments").classList.add("d-none");
-      var descriptionElement = document.getElementById("organization-payment-disclaimer-description");
+      let descriptionElement = document.getElementById("organization-payment-disclaimer-description");
       descriptionElement.classList.remove("mb-0");
       descriptionElement.classList.add("mb-5");
       return;
     }
-    for (var i = 0; i < payments.length; i++) {
-      var payment = payments[i];
+    for (let i = 0; i < payments.length; i++) {
+      let payment = payments[i];
       displayPayment(payment.time, payment.amount, payment.method,
         payment.status, payment.invoice);
     }
   }
 
   function displayPayment(time, amount, method, status, invoice) {
-    var entry = document.createElement('li');
+    let entry = document.createElement('li');
     appendPaymentCell(entry, "time", time, "span");
     appendPaymentCell(entry, "amount", amount + " €", "span");
     entry.appendChild(createPaymentMethodElement(method));
@@ -122,38 +122,38 @@
     } else if (method === "paypal") {
       return createPaymentPaypalMethodElement();
     } else {
-      var defaultElement = document.createElement("span");
+      let defaultElement = document.createElement("span");
       defaultElement.innerHTML = method;
       return defaultElement;
     }
   }
 
   function createPaymentCardMethodElement() {
-    var cardElement = document.createElement("div");
-    var cardIcon = document.createElement("i");
+    let cardElement = document.createElement("div");
+    let cardIcon = document.createElement("i");
     cardIcon.classList.add("fa-solid", "fa-credit-card", "me-2");
     cardElement.appendChild(cardIcon);
-    var cardName = document.createElement("span");
+    let cardName = document.createElement("span");
     cardName.innerHTML = " ({% trans 'product.organization.payment.method.card' %})";
     cardElement.appendChild(cardName);
     return cardElement;
   }
 
   function createPaymentPaypalMethodElement() {
-    var paypalElement = document.createElement("div");
-    var paypalIcon = document.createElement("i");
+    let paypalElement = document.createElement("div");
+    let paypalIcon = document.createElement("i");
     paypalIcon.classList.add("fa-brands", "fa-paypal", "me-2");
     paypalElement.appendChild(paypalIcon);
-    var paypalName = document.createElement("span");
+    let paypalName = document.createElement("span");
     paypalName.innerHTML = " (PayPal)";
     paypalElement.appendChild(paypalName);
     return paypalElement;
   }
 
   function createPaymentStatusElement(status) {
-    var statusContainer = document.createElement("div");
+    let statusContainer = document.createElement("div");
     statusContainer.classList.add("text-center");
-    var statusElement = document.createElement("span");
+    let statusElement = document.createElement("span");
     if (status === "succeeded") {
       statusElement.innerHTML = "{% trans 'product.organization.payment.status.successful' %}";
       statusElement.classList.add("organization-payment-status-successful");
@@ -169,9 +169,9 @@
   }
 
   function createPaymentInvoiceButton(invoiceDownloadLink) {
-    var invoiceContainer = document.createElement("div");
+    let invoiceContainer = document.createElement("div");
     invoiceContainer.classList.add("text-center", "py-0");
-    var invoiceButton = document.createElement("button");
+    let invoiceButton = document.createElement("button");
     invoiceButton.classList.add("btn", "btn-primary", "organization-payment-invoice");
     invoiceButton.innerHTML = "{% trans 'product.organization.payment.invoice.download' %}";
     invoiceButton.onclick = function (event) {
@@ -182,8 +182,8 @@
   }
 
   function appendPaymentCell(entry, identifier, information, elementType) {
-    var div = document.createElement("div");
-    var element = document.createElement(elementType);
+    let div = document.createElement("div");
+    let element = document.createElement(elementType);
     element.innerText = information;
     div.appendChild(element);
     entry.appendChild(div);
@@ -193,7 +193,7 @@
   function fetchPayments(callback) {
     let request = new HttpRequest("https://api.taskwolf.net/v1/payments/", "GET", []);
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       callback(response.payments);
     });
   }
@@ -213,7 +213,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("organization-payment-container").appendChild(loader);
   }

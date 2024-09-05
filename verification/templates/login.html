@@ -38,7 +38,7 @@
 
 <script>
   $(document).ready(function() {
-    var rememberMe = Cookie.find("taskwolf-remember-me");
+    let rememberMe = Cookie.find("taskwolf-remember-me");
     if (rememberMe != null) {
       document.getElementById("email").value = rememberMe;
     }
@@ -64,11 +64,11 @@
       {email: document.getElementById("email").value, password: document.getElementById("password").value,
         multiFactorCode: multiFactorCode});
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       if ("homeApiKey" in response) {
         sessionStorage.setItem("home-token", response.homeApiKey);
       }
-      var success = response.success;
+      let success = response.success;
       if (success === true) {
         Cookie.create("token", response.productApiKey, 60 * 60 * 24 * 30, ".taskwolf.net");
         Cookie.create("refresh-token", response.refreshToken, 60 * 60 * 24 * 30, ".taskwolf.net");
@@ -76,7 +76,7 @@
           window.location.href = "/dashboard/";
         }
       } else {
-        var error = response.error;
+        let error = response.error;
         if (error === 1002) {
           if (multiFactorCode === "") {
             display2FA(function(code) {login(code)});

@@ -7,18 +7,18 @@ class HttpRequest {
   }
 
   send(callback) {
-    var self = this;
-    var headers = [...self.headers];
+    let self = this;
+    let headers = [...self.headers];
     headers.push({key: "Content-Type", value: "application/json"});
-    var token = Cookie.find("token");
+    let token = Cookie.find("token");
     if (token !== null) {
       headers.push({key: "Authorization", value: "Bearer " + token});
     }
-    var homeToken = sessionStorage.getItem("home-token");
+    let homeToken = sessionStorage.getItem("home-token");
     if (homeToken !== null) {
       headers.push({key: "Home-Authorization", value: "Bearer " + homeToken});
     }
-    var whitelistKey = Cookie.find("taskwolf-whitelist-key");
+    let whitelistKey = Cookie.find("taskwolf-whitelist-key");
     if (whitelistKey !== null) {
       headers.push({key: "WHITELIST-KEY", value: whitelistKey});
     }
@@ -41,15 +41,15 @@ class HttpRequest {
   }
 
   refresh(callback) {
-    var self = this;
-    var refreshToken = Cookie.find("refresh-token");
+    let self = this;
+    let refreshToken = Cookie.find("refresh-token");
     if (refreshToken == null) {
       return;
     }
     let request = new HttpRequest("https://api.taskwolf.net/v1/verification/refresh/", "POST",
       [], {refreshToken: refreshToken});
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       if (response.success === "true") {
         Cookie.create("token", response.productApiKey, 60 * 60 * 24 * 30, ".taskwolf.net");
         Cookie.create("refresh-token", response.refreshToken, 60 * 60 * 24 * 30, ".taskwolf.net");

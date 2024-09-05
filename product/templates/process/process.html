@@ -95,19 +95,19 @@
     }
 
     display() {
-      var self = this;
-      var moved = false;
-      var group = self.draw.group();
-      var subGroup = self.draw.group();
+      let self = this;
+      let moved = false;
+      let group = self.draw.group();
+      let subGroup = self.draw.group();
       group.add(subGroup);
-      var outerRect = subGroup.rect(300, 150).move(-150, -75).radius(10);
+      let outerRect = subGroup.rect(300, 150).move(-150, -75).radius(10);
       if (this.state === "ACTIVE") {
         outerRect.fill("#49ff1d");
       } else {
         outerRect.fill(isDarkTheme ? "#1b232f" : "#c5c5c5")
       }
-      var innerRect = subGroup.rect(290, 140).move(-145, -70).radius(10).fill(isDarkTheme ? "#3d4b5a" : "#e5e5e5");
-      var divider = subGroup.rect(250, 2).move(-125, -25).radius(10).fill(isDarkTheme ? "#4b5c6f" : "#a2a2a2");
+      let innerRect = subGroup.rect(290, 140).move(-145, -70).radius(10).fill(isDarkTheme ? "#3d4b5a" : "#e5e5e5");
+      let divider = subGroup.rect(250, 2).move(-125, -25).radius(10).fill(isDarkTheme ? "#4b5c6f" : "#a2a2a2");
       group.on("mouseover", function() {
         if (self.state === "INACTIVE") {
           outerRect.animate(300, "<>").fill(isDarkTheme ? "#334056" : "#787878");
@@ -142,7 +142,7 @@
     }
 
     displayConnectionPoints(group) {
-      var self = this;
+      let self = this;
       if (self.type === "TASK" || self.type === "END") {
         self.incomingConnectingPoint.display(group);
       }
@@ -152,37 +152,37 @@
     }
 
     displayContent(group) {
-      var self = this;
+      let self = this;
       self.displayTitle(group);
       self.displayDescription(group);
     }
 
     displayTitle(group) {
-      var self = this;
-      var title = group.foreignObject(300, 40).move(-150, -65)
+      let self = this;
+      let title = group.foreignObject(300, 40).move(-150, -65)
         .add(SVG("<input class='process-step-title'>", true))
         .node.childNodes[0];
       title.value = self.title;
     }
 
     displayDescription(group) {
-      var self = this;
-      var description = group.foreignObject(300, 75).move(-150, -15)
+      let self = this;
+      let description = group.foreignObject(300, 75).move(-150, -15)
         .add(SVG("<textarea class='process-step-description'></textarea>", true))
         .node.childNodes[0];
       description.innerText = self.description;
     }
 
     displayRemoveButton(group) {
-      var self = this;
-      var button = group.foreignObject(32, 32).move(128, -80)
+      let self = this;
+      let button = group.foreignObject(32, 32).move(128, -80)
         .add(SVG("<div class='process-step-remove'><i class='fa-solid fa-xmark'></i></div>", true))
         .node.childNodes[0];
       button.addEventListener("click", function() {
         group.remove();
         steps.splice(steps.indexOf(self), 1);
-        for (var i = connections.length - 1; i >= 0; i--) {
-          var connection = connections[i];
+        for (let i = connections.length - 1; i >= 0; i--) {
+          let connection = connections[i];
           if (connection.origin === self || connection.destination === self) {
             connections.splice(i, 1);
             connection.remove();
@@ -192,14 +192,14 @@
     }
 
     displayStepSidebar() {
-      var self = this;
+      let self = this;
       currentSelectedStep = self;
       document.getElementById("process-step-title").value = self.title;
       document.getElementById("process-step-description").value = self.description;
       document.getElementById("process-step-todos").innerHTML = "";
       for (let i = 0; i < self.todos.length; i++) {
-        var todo = self.todos[i];
-        var entry = document.createElement("li");
+        let todo = self.todos[i];
+        let entry = document.createElement("li");
         entry.innerText = todo;
         entry.appendChild(self.createTodoRemoveButton(i));
         document.getElementById("process-step-todos").appendChild(entry);
@@ -221,8 +221,8 @@
     }
 
     createTodoRemoveButton(index) {
-      var self = this;
-      var button = document.createElement("button");
+      let self = this;
+      let button = document.createElement("button");
       button.classList.add("process-step-todo-remove", "fa-solid", "fa-square-minus");
       button.onclick = function (event) {
         self.todos.splice(index, 1);
@@ -261,9 +261,9 @@
     }
 
     display(group) {
-      var self = this;
-      var outerCircle = group.circle(30).move(self.x - 15, self.y - 15).fill(self.outerCircleColor);
-      var innerCircle = group.circle(26).move(self.x - 13, self.y - 13).fill(self.innerCircleColor);
+      let self = this;
+      let outerCircle = group.circle(30).move(self.x - 15, self.y - 15).fill(self.outerCircleColor);
+      let innerCircle = group.circle(26).move(self.x - 13, self.y - 13).fill(self.innerCircleColor);
       innerCircle.on("mousedown", function () {
         mouseDown = true;
         self.connecting = true;
@@ -284,8 +284,8 @@
         }
       });
       group.on("dragmove", event => {
-        var mouseX = event.detail.box.x;
-        var mouseY = event.detail.box.y;
+        let mouseX = event.detail.box.x;
+        let mouseY = event.detail.box.y;
         self.drag(mouseX, mouseY);
       });
       self.draw.on("mouseup", event => {
@@ -295,29 +295,29 @@
     }
 
     drag(mouseX, mouseY) {
-      for (var i = 0; i < connections.length; i++) {
+      for (let i = 0; i < connections.length; i++) {
         connections[i].display();
       }
-      var self = this;
+      let self = this;
       if (!self.connecting) {
         return;
       }
       if (self.line != null) {
         self.line.remove();
       }
-      var originX = self.step.x + 165 + self.x;
-      var originY = self.step.y + 80;
-      var destinationX = mouseX + 165 + self.x;
-      var destinationY = mouseY + 80;
+      let originX = self.step.x + 165 + self.x;
+      let originY = self.step.y + 80;
+      let destinationX = mouseX + 165 + self.x;
+      let destinationY = mouseY + 80;
       if (self.step.type === "START") {
         originX -= 15;
         destinationX -= 15;
       }
-      var diffX = destinationX - originX;
-      var diffY = destinationY - originY;
-      var length = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
-      var nX = diffX * (1 / length) * (length - 10);
-      var nY = diffY * (1 / length) * (length - 10);
+      let diffX = destinationX - originX;
+      let diffY = destinationY - originY;
+      let length = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
+      let nX = diffX * (1 / length) * (length - 10);
+      let nY = diffY * (1 / length) * (length - 10);
       destinationX = nX + originX;
       destinationY = nY + originY;
       self.line = self.draw.line(originX, originY, destinationX, destinationY).stroke({
@@ -329,7 +329,7 @@
     }
 
     releaseMouse(outerCircle, innerCircle) {
-      var self = this;
+      let self = this;
       outerCircle.animate(300, "<>").fill(self.outerCircleColor);
       innerCircle.animate(300, "<>").fill(self.innerCircleColor);
       if (!self.connecting) {
@@ -347,14 +347,14 @@
     }
 
     connect() {
-      var self = this;
+      let self = this;
       if (aimedConnectionPoint.step === self.step || aimedConnectionPoint.type === self.type) {
         aimedConnectionPoint = null;
         return;
       }
-      var origin = this.type === "origin" ? self.step : aimedConnectionPoint.step;
-      var destination = this.type === "destination" ? self.step : aimedConnectionPoint.step;
-      var connection = new Connection(draw, origin, destination);
+      let origin = this.type === "origin" ? self.step : aimedConnectionPoint.step;
+      let destination = this.type === "destination" ? self.step : aimedConnectionPoint.step;
+      let connection = new Connection(draw, origin, destination);
       connection.display();
       connections.push(connection);
     }
@@ -371,18 +371,18 @@
     }
 
     display() {
-      var self = this;
+      let self = this;
       if (self.line != null) {
         self.remove();
       }
-      var originX = self.origin.x + 330;
+      let originX = self.origin.x + 330;
       if (self.origin.type === "START") {
         originX -= 15;
       }
-      var originY = self.origin.y + 80;
-      var destinationX = self.destination.x;
-      var destinationY = self.destination.y + 80;
-      var color = isDarkTheme ? "#ffffff" : "#000000";
+      let originY = self.origin.y + 80;
+      let destinationX = self.destination.x;
+      let destinationY = self.destination.y + 80;
+      let color = isDarkTheme ? "#ffffff" : "#000000";
       if (this.state === "ACTIVE") {
         color = "#49ff1d";
       }
@@ -424,22 +424,22 @@
   }
 </script>
 <script>
-  var isDarkTheme = Cookie.find("taskwolf-theme") === "dark";
-  var process = null;
-  var steps = [];
-  var connections = [];
-  var previousBox;
-  var mouseDown = false;
-  var aimedConnectionPoint = null;
-  var currentSelectedStep = null;
+  let isDarkTheme = Cookie.find("taskwolf-theme") === "dark";
+  let process = null;
+  let steps = [];
+  let connections = [];
+  let previousBox;
+  let mouseDown = false;
+  let aimedConnectionPoint = null;
+  let currentSelectedStep = null;
 
-  var draw = SVG().addTo(document.getElementById("process-graph"))
+  let draw = SVG().addTo(document.getElementById("process-graph"))
     .size("100%", "100%")
     .viewbox("-500 -500 1000 1000")
     .panZoom({ zoomMin: 0.5, zoomMax: 3, zoomFactor: 0.1});
 
   draw.on("panning", event => {
-    var box = event.detail.box;
+    let box = event.detail.box;
     display(box);
   });
 
@@ -448,8 +448,8 @@
   });
 
   $(document).ready(function() {
-    var location = window.location;
-    var id = location.href.replace(location.host, "").replace(location.protocol, "").replace("process", "").replaceAll("/", "");
+    let location = window.location;
+    let id = location.href.replace(location.host, "").replace(location.protocol, "").replace("process", "").replaceAll("/", "");
     if (id === "") {
       steps.push(new Step(draw, -850, -75, "START", "Start", "Description", [], null));
       steps.push(new Step(draw, -150, -75, "TASK", "Step", "Description", [], null));
@@ -473,19 +473,19 @@
 
   function displayProcess() {
     document.getElementById("process-delete").classList.remove("d-none");
-    var stepIdRelation = [];
-    for (var i = 0; i < process.steps.length; i++) {
-      var entry = process.steps[i];
-      var step = new Step(draw, entry.stepXCoordinate, entry.stepYCoordinate,
+    let stepIdRelation = [];
+    for (let i = 0; i < process.steps.length; i++) {
+      let entry = process.steps[i];
+      let step = new Step(draw, entry.stepXCoordinate, entry.stepYCoordinate,
         entry.stepType, entry.stepName, entry.stepDescription, entry.stepTodos,
         entry.stepWorkflow);
       steps.push(step);
       stepIdRelation.push({id: entry.stepId, step: step});
     }
-    for (var i = 0; i < process.connections.length; i++) {
-      var entry = process.connections[i];
-      var origin = stepIdRelation.filter((step) => step.id === entry.connectionOriginStep)[0].step;
-      var destination = stepIdRelation.filter((step) => step.id === entry.connectionDestinationStep)[0].step;
+    for (let i = 0; i < process.connections.length; i++) {
+      let entry = process.connections[i];
+      let origin = stepIdRelation.filter((step) => step.id === entry.connectionOriginStep)[0].step;
+      let destination = stepIdRelation.filter((step) => step.id === entry.connectionDestinationStep)[0].step;
       connections.push(new Connection(draw, origin, destination));
     }
     initialDisplay();
@@ -499,16 +499,16 @@
     previousBox = box;
     draw.clear();
     displayBackground(box);
-    for (var i = 0; i < steps.length; i++) {
+    for (let i = 0; i < steps.length; i++) {
       steps[i].display();
     }
-    for (var i = 0; i < connections.length; i++) {
+    for (let i = 0; i < connections.length; i++) {
       connections[i].display();
     }
   }
 
   function displayBackground(box) {
-    var background = draw.pattern(100, 100, function(add) {
+    let background = draw.pattern(100, 100, function(add) {
       add.rect(8, 2).move(46, 49).radius(2).fill("#bababa");
       add.rect(2, 8).move(49, 46).radius(2).fill("#bababa");
     });
@@ -516,21 +516,21 @@
   }
 
   document.getElementById("process-add-start").onclick = function (event) {
-    var step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "START",
+    let step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "START",
       "Start", "Description", [], null);
     step.display();
     steps.push(step);
   }
 
   document.getElementById("process-add-step").onclick = function (event) {
-    var step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "TASK",
+    let step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "TASK",
       "Step", "Description", [], null);
     step.display();
     steps.push(step);
   }
 
   document.getElementById("process-add-end").onclick = function (event) {
-    var step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "END",
+    let step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "END",
       "End", "Description", [], null);
     step.display();
     steps.push(step);
@@ -541,22 +541,22 @@
       Swal.fire("{% trans 'product.process.publish.integrity.title' %}", "{% trans 'product.process.publish.integrity.body' %}", "error");
       return;
     }
-    var publishForm = document.createElement("div");
+    let publishForm = document.createElement("div");
     publishForm.classList.add("process-publish-form");
-    var processNameLabel = document.createElement("h5");
+    let processNameLabel = document.createElement("h5");
     processNameLabel.innerText = "{% trans 'product.process.name' %}";
     publishForm.appendChild(processNameLabel);
-    var processNameElement = document.createElement("input");
+    let processNameElement = document.createElement("input");
     processNameElement.classList.add("mb-2");
     if (process != null) {
       processNameElement.value = process.name;
     }
     processNameElement.placeholder = "{% trans 'product.process.name' %}";
     publishForm.appendChild(processNameElement);
-    var processDescriptionLabel = document.createElement("h5");
+    let processDescriptionLabel = document.createElement("h5");
     processDescriptionLabel.innerText = "{% trans 'product.process.description' %}";
     publishForm.appendChild(processDescriptionLabel);
-    var processDescriptionElement = document.createElement("input");
+    let processDescriptionElement = document.createElement("input");
     if (process != null) {
       processDescriptionElement.value = process.description;
     }
@@ -584,13 +584,13 @@
   }
 
   function checkProcessIntegrity() {
-    var currentSteps = findStartSteps();
+    let currentSteps = findStartSteps();
     while (currentSteps.length > 0) {
-      var newSteps = [];
-      for (var i = 0; i < currentSteps.length; i++) {
-        var stepConnections = findStepConnections(currentSteps[i]);
-        for (var j = 0; j < stepConnections.length; j++) {
-          var step = stepConnections[j].destination;
+      let newSteps = [];
+      for (let i = 0; i < currentSteps.length; i++) {
+        let stepConnections = findStepConnections(currentSteps[i]);
+        for (let j = 0; j < stepConnections.length; j++) {
+          let step = stepConnections[j].destination;
           if (step.type === "END") {
             return true;
           }
@@ -603,9 +603,9 @@
   }
 
   function findStartSteps() {
-    var startSteps = [];
-    for (var i = 0; i < steps.length; i++) {
-      var step = steps[i];
+    let startSteps = [];
+    for (let i = 0; i < steps.length; i++) {
+      let step = steps[i];
       if (step.type === "START") {
         startSteps.push(step);
       }
@@ -614,9 +614,9 @@
   }
 
   function findStepConnections(step) {
-    var stepConnection = [];
-    for (var i = 0; i < connections.length; i++) {
-      var connection = connections[i];
+    let stepConnection = [];
+    for (let i = 0; i < connections.length; i++) {
+      let connection = connections[i];
       if (connection.origin === step) {
         stepConnection.push(connection);
       }
@@ -637,7 +637,7 @@
   }
 
   function updateProcess(title, description) {
-    var payload = createProcessPayload(title, description);
+    let payload = createProcessPayload(title, description);
     payload.process = process.id;
     let request = new HttpRequest("https://api.taskwolf.net/v1/process/update/", "POST",
       [], payload);
@@ -647,12 +647,12 @@
   }
 
   function createProcessPayload(title, description) {
-    var stepsPayload = [];
-    for (var i = 0; i < steps.length; i++) {
+    let stepsPayload = [];
+    for (let i = 0; i < steps.length; i++) {
       stepsPayload[i] = createStepPayload(steps[i]);
     }
-    var connectionsPayload = [];
-    for (var i = 0; i < connections.length; i++) {
+    let connectionsPayload = [];
+    for (let i = 0; i < connections.length; i++) {
       connectionsPayload[i] = createConnectionPayload(connections[i]);
     }
     return {
@@ -664,11 +664,11 @@
   }
 
   function createStepPayload(step) {
-    var todos = [];
-    for (var i = 0; i < step.todos.length; i++) {
+    let todos = [];
+    for (let i = 0; i < step.todos.length; i++) {
       todos[i] = {"todo": step.todos[i]}
     }
-    var payload = {
+    let payload = {
       name: step.title,
       description: step.description,
       todos: todos,
@@ -714,7 +714,7 @@
   }
 
   document.getElementById("process-step-todo-add").onclick = function (event) {
-    var todo = document.getElementById("process-step-todo-input").value;
+    let todo = document.getElementById("process-step-todo-input").value;
     if (todo === "") {
       return;
     }
@@ -726,7 +726,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/process/workflows/", "GET",
       []);
     request.send(function (status, responseText) {
-      var workflows = JSON.parse(responseText).workflows;
+      let workflows = JSON.parse(responseText).workflows;
       document.getElementById("process-step-workflow-list").innerHTML = "";
       for (let i = 0; i < workflows.length; i++) {
         let workflow = workflows[i];
@@ -745,9 +745,9 @@
   }
 
   function createProcessWorkflowEntry(name, click) {
-    var workflowElement = document.createElement("li");
+    let workflowElement = document.createElement("li");
     workflowElement.classList.add("dropdown-item");
-    var workflowNameName = document.createElement("b");
+    let workflowNameName = document.createElement("b");
     workflowNameName.innerHTML = name;
     workflowElement.appendChild(workflowNameName);
     workflowElement.onclick = function(event) {
@@ -765,13 +765,13 @@
 </script>
 
 <script>
-  var currentActiveSteps = [];
+  let currentActiveSteps = [];
 
   document.getElementById("process-run").onclick = function (event) {
     if (isConnectionActive()) {
       return;
     }
-    var afterFunction = function (next) {
+    let afterFunction = function (next) {
       if (findStepConnections(next).length > 0) {
         currentActiveSteps.push(next);
       }
@@ -780,20 +780,20 @@
       if (isStepActive()) {
         return;
       }
-      var startSteps = findStartSteps();
-      for (var i = 0; i < startSteps.length; i++) {
+      let startSteps = findStartSteps();
+      for (let i = 0; i < startSteps.length; i++) {
         activateStep(startSteps[i], false, afterFunction);
       }
       return;
     }
-    for (var i = 0; i < currentActiveSteps.length; i++) {
+    for (let i = 0; i < currentActiveSteps.length; i++) {
       activateConnection(currentActiveSteps[i], false, afterFunction);
     }
     currentActiveSteps = [];
   }
 
   function isConnectionActive() {
-    for (var i = 0; i < connections.length; i++) {
+    for (let i = 0; i < connections.length; i++) {
       if (connections[i].state === "ACTIVE") {
         return true;
       }
@@ -802,7 +802,7 @@
   }
 
   function isStepActive() {
-    for (var i = 0; i < steps.length; i++) {
+    for (let i = 0; i < steps.length; i++) {
       if (steps[i].state === "ACTIVE") {
         return true;
       }
@@ -812,8 +812,8 @@
 
   document.getElementById("process-execute-fast").onclick = function (event) {
     abortProcessExecution();
-    var startSteps = findStartSteps();
-    for (var i = 0; i < startSteps.length; i++) {
+    let startSteps = findStartSteps();
+    for (let i = 0; i < startSteps.length; i++) {
       activateStep(startSteps[i], true, function(next) {});
     }
   }
@@ -840,13 +840,13 @@
 
   function activateConnection(step, loop, after) {
     step.deactivate();
-    var stepConnections = findStepConnections(step);
+    let stepConnections = findStepConnections(step);
     if (stepConnections.length > 0) {
-      for (var i = 0; i < stepConnections.length; i++) {
+      for (let i = 0; i < stepConnections.length; i++) {
         stepConnections[i].activate();
       }
       setTimeout(function() {
-        for (var i = 0; i < stepConnections.length; i++) {
+        for (let i = 0; i < stepConnections.length; i++) {
           if (stepConnections[i].state === "INACTIVE") {
             continue;
           }
@@ -863,10 +863,10 @@
   }
 
   function abortProcessExecution() {
-    for (var i = 0; i < steps.length; i++) {
+    for (let i = 0; i < steps.length; i++) {
       steps[i].deactivate();
     }
-    for (var i = 0; i < connections.length; i++) {
+    for (let i = 0; i < connections.length; i++) {
       connections[i].deactivate();
     }
     currentActiveSteps = [];

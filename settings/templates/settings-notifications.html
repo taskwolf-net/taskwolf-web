@@ -40,13 +40,13 @@
 </html>
 
 <script>
-  var updateLock = false;
+  let updateLock = false;
 
   $(document).ready(function() {
     let request = new HttpRequest("https://api.taskwolf.net/v1/settings/notification/", "GET",
       []);
     request.send(function (status, responseText) {
-      var settings = JSON.parse(responseText);
+      let settings = JSON.parse(responseText);
       document.getElementById("settings-notification-general-input").checked = settings.general;
       document.getElementById("settings-notification-workflow-fail-input").checked = settings.workflowFail;
     });

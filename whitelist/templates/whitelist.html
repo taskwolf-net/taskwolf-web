@@ -26,7 +26,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/whitelist/isValid/", "POST", [],
       {key: document.getElementById("key").value});
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       if (response.isValid === true) {
         Cookie.create("taskwolf-whitelist-key", document.getElementById("key").value,
           12 * 30 * 24 * 60 * 60);

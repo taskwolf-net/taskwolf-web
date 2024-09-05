@@ -1,7 +1,7 @@
-var highlightedElement = "";
+let highlightedElement = "";
 
 window.addEventListener('load', function () {
-  var url = window.location.href.replace("https://taskwolf.net/", "").replaceAll("/", "");
+  let url = window.location.href.replace("https://taskwolf.net/", "").replaceAll("/", "");
   if (url === "" || url === "product" || url === "solution" || url === "pricing" ||
     url.includes("login") || url.includes("register") || url.includes("password") ||
     url === "whitelist" || url === "imprint" || url === "privacy-policy"
@@ -10,7 +10,7 @@ window.addEventListener('load', function () {
   }
   let request = new HttpRequest("https://api.taskwolf.net/v1/tutorial/", "GET", []);
   request.send(function (status, responseText) {
-    var tutorial = JSON.parse(responseText);
+    let tutorial = JSON.parse(responseText);
     if (!tutorial.active) {
       return;
     }
@@ -67,7 +67,7 @@ function displayTutorial(tutorial, showCancel) {
 function cancelTutorial() {
   let request = new HttpRequest("https://api.taskwolf.net/v1/tutorial/cancel/", "POST", []);
   request.send(function (status, responseText) {
-    var tutorial = JSON.parse(responseText);
+    let tutorial = JSON.parse(responseText);
     if (!tutorial.active) {
       return;
     }
@@ -78,7 +78,7 @@ function cancelTutorial() {
 function continueTutorial() {
   let request = new HttpRequest("https://api.taskwolf.net/v1/tutorial/next/", "POST", []);
   request.send(function (status, responseText) {
-    var tutorial = JSON.parse(responseText);
+    let tutorial = JSON.parse(responseText);
     if (!tutorial.active) {
       return;
     }

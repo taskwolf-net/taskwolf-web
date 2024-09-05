@@ -156,10 +156,10 @@
     if (limit < 0) {
       document.getElementById(entryElementId).classList.add("d-none");
     }
-    var ratio = Math.round((usage / limit) * 100) + "%";
-    var ratioElement = document.getElementById(ratioElementId);
+    let ratio = Math.round((usage / limit) * 100) + "%";
+    let ratioElement = document.getElementById(ratioElementId);
     ratioElement.innerHTML = usage + " / " + limit + " " + unit;
-    var progressBarElement = document.getElementById(progressBarElementId);
+    let progressBarElement = document.getElementById(progressBarElementId);
     progressBarElement.style.width = ratio;
     progressBarElement.innerHTML = ratio;
   }
@@ -186,7 +186,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("organization-limitation-container").appendChild(loader);
   }

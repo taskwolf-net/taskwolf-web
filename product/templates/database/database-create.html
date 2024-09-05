@@ -27,7 +27,7 @@
   });
 
   document.getElementById('create').onclick = function() {
-    var name = document.getElementById("name").value;
+    let name = document.getElementById("name").value;
     if (name === "") {
       Swal.fire("{% trans 'product.database.create.empty.title' %}", "{% trans 'product.database.create.empty.body' %}", "error");
       return;

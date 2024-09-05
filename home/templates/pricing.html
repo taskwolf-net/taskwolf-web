@@ -300,16 +300,16 @@
 </html>
 
 <script>
-  var bundleClass = "BEGINNER";
-  var bundleRuntime = "YEARLY";
-  var freePackageData;
-  var individualPackageData;
-  var teamPackageData;
-  var enterprisePackageData;
+  let bundleClass = "BEGINNER";
+  let bundleRuntime = "YEARLY";
+  let freePackageData;
+  let individualPackageData;
+  let teamPackageData;
+  let enterprisePackageData;
 
   $(document).ready(function() {
     displayLoader();
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip-parent"]'))
+    let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip-parent"]'))
     tooltipTriggerList.map(function (tooltipTriggerEl) {
       tooltipTriggerEl.classList.add("position-relative");
       return new bootstrap.Tooltip(tooltipTriggerEl.querySelectorAll('[data-bs-toggle="tooltip"]')[0], {
@@ -379,7 +379,7 @@
       packageData.processNumberLimit, " {% trans 'home.pricing.summary.process.number' %}");
     displayPackageCell("pricing-package-feature-database-number-", packageName,
       packageData.databaseNumberLimit, " {% trans 'home.pricing.summary.database.number' %}");
-    var dataLimit = packageData.databaseDataLimit;
+    let dataLimit = packageData.databaseDataLimit;
     displayPackageCell("pricing-package-feature-database-data-", packageName,
       dataLimit, (dataLimit > 0 ? " GB" : "") + " {% trans 'home.pricing.summary.database.data' %}");
     displayPackageCell("pricing-availability-", packageName, true);
@@ -427,7 +427,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/bundle/preset/", "POST",
       [], {type: packageName, class: bundleClass, runtime: bundleRuntime});
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       callback(response);
     });
   }
@@ -499,7 +499,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("pricing-container").appendChild(loader);
   }

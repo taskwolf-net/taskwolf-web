@@ -21,7 +21,7 @@
 
 <script>
   document.getElementById("login").onclick = function (event) {
-    var addition = "";
+    let addition = "";
     if ("{{redirect}}" !== "") {
       addition += "?redirect={{redirect}}";
     }
@@ -29,7 +29,7 @@
   }
 
   document.getElementById("register").onclick = function (event) {
-    var addition = "";
+    let addition = "";
     if ("{{redirect}}" !== "") {
       addition += "?redirect={{redirect}}";
     }

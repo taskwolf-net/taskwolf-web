@@ -38,8 +38,8 @@
 <div id="header-space"></div>
 
 <script>
-  var currentTarget;
-  var currentTeamTarget;
+  let currentTarget;
+  let currentTeamTarget;
 
   $(document).ready(function() {
     setupTargetSelection();
@@ -65,8 +65,8 @@
 
   function setupTargetSelection() {
     fetchTargetsData(function(response) {
-      var targets = response.targets;
-      for (var i = 0; i < targets.length; i++) {
+      let targets = response.targets;
+      for (let i = 0; i < targets.length; i++) {
         addTarget(targets[i], targets[i].id === response.currentTarget);
       }
       currentTarget = targets.filter((target) =>
@@ -86,12 +86,12 @@
   }
 
   function addTarget(target, isActive) {
-    var targetElement = document.createElement("li");
+    let targetElement = document.createElement("li");
     targetElement.classList.add("dropdown-item");
     if (isActive) {
       targetElement.classList.add("active");
     }
-    var targetNameName = document.createElement("span");
+    let targetNameName = document.createElement("span");
     targetNameName.innerHTML = target.name;
     targetElement.appendChild(targetNameName);
     targetElement.onclick = function(event) {
@@ -111,8 +111,8 @@
   function setupTeamTargetSelection() {
     document.getElementById("team-target-button-container").classList.remove("d-none");
     fetchTeamTargetsData(function(response) {
-      var targets = response.targets;
-      for (var i = 0; i < targets.length; i++) {
+      let targets = response.targets;
+      for (let i = 0; i < targets.length; i++) {
         addTeamTarget(targets[i], targets[i].id === response.currentTarget);
       }
       currentTeamTarget = targets.filter((target) =>
@@ -129,12 +129,12 @@
   }
 
   function addTeamTarget(target, isActive) {
-    var targetElement = document.createElement("li");
+    let targetElement = document.createElement("li");
     targetElement.classList.add("dropdown-item");
     if (isActive) {
       targetElement.classList.add("active");
     }
-    var targetNameName = document.createElement("span");
+    let targetNameName = document.createElement("span");
     targetNameName.innerHTML = target.name;
     targetElement.appendChild(targetNameName);
     targetElement.onclick = function(event) {
@@ -151,13 +151,13 @@
     });
   }
 
-  var isSidebarShown;
+  let isSidebarShown;
 
   window.onload = function() {
     if (sessionStorage.getItem("taskwolf-sidebar") === null) {
       sessionStorage.setItem("taskwolf-sidebar", "true");
     }
-    var sidebarSetting = sessionStorage.getItem("taskwolf-sidebar").toLowerCase() === "true";
+    let sidebarSetting = sessionStorage.getItem("taskwolf-sidebar").toLowerCase() === "true";
     isSidebarShown = window.innerWidth > 575 && sidebarSetting;
     if (isSidebarShown) {
       document.getElementById("sidebar").classList.add("show");
@@ -174,8 +174,8 @@
   };
 
   function updateSidebarSpacing() {
-    var elements = document.getElementsByClassName('sidebar-influenced');
-    for (var i = 0; i < elements.length; i++) {
+    let elements = document.getElementsByClassName('sidebar-influenced');
+    for (let i = 0; i < elements.length; i++) {
       if (isSidebarShown && window.innerWidth > 800) {
         elements[i].style.marginLeft = '260px';
       } else {

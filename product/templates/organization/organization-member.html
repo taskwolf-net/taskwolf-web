@@ -55,7 +55,7 @@
       displayOrganization(organization)
       removeLoader();
     });
-    var membersHeader = document.getElementById("organization-members-header");
+    let membersHeader = document.getElementById("organization-members-header");
     applyTooltips(document.getElementById("organization-invite"), membersHeader, "{% trans 'product.organization.member.copy.link.tooltip' %}");
     applyTooltips(document.getElementById("organization-link-regenerate"), membersHeader, "{% trans 'product.organization.member.regenerate.link.tooltip' %}");
   });
@@ -77,8 +77,8 @@
     if (organization.isOwner) {
       return;
     }
-    var restrictedTabs = document.getElementsByClassName("organization-restricted-tab");
-    for (var i = 0; i < restrictedTabs.length; i++) {
+    let restrictedTabs = document.getElementsByClassName("organization-restricted-tab");
+    for (let i = 0; i < restrictedTabs.length; i++) {
       restrictedTabs[i].classList.add("d-none");
     }
   }
@@ -86,15 +86,15 @@
   function displayInformation(organization) {
     document.getElementById("organization-name").innerHTML = organization.name;
     document.getElementById("organization-owner").appendChild(createUserEntry(organization.ownerName, "li"));
-    var memberListElement = document.getElementById("organization-members");
+    let memberListElement = document.getElementById("organization-members");
     if (organization.members.length === 0) {
       document.getElementById("organization-members-empty").style.display = "flex";
     }
     for (let i = 0; i < organization.members.length; i++) {
-      var member = organization.members[i];
-      var memberElement = createUserEntry(member.name, "li");
+      let member = organization.members[i];
+      let memberElement = createUserEntry(member.name, "li");
       if (organization.isOwner === true) {
-        var memberKickElement = document.createElement("span");
+        let memberKickElement = document.createElement("span");
         memberKickElement.classList.add("organization-member-kick", "fa", "fa-ban", "text-danger");
         memberKickElement.onclick = function (event) {
           let request = new HttpRequest("https://api.taskwolf.net/v1/organization/kick/", "POST",
@@ -115,14 +115,14 @@
   }
 
   function createUserEntry(user, elementType) {
-    var memberElement = document.createElement(elementType);
+    let memberElement = document.createElement(elementType);
     memberElement.classList.add("organization-user");
-    var memberInformationContainer = document.createElement("div");
+    let memberInformationContainer = document.createElement("div");
     memberInformationContainer.classList.add("organization-user-information");
-    var memberIconElement = document.createElement("i");
+    let memberIconElement = document.createElement("i");
     memberIconElement.classList.add("organization-user-icon", "fa-regular", "fa-user");
     memberInformationContainer.appendChild(memberIconElement);
-    var memberNameElement = document.createElement("span");
+    let memberNameElement = document.createElement("span");
     memberNameElement.classList.add("organization-user-name");
     memberNameElement.innerHTML = user;
     memberInformationContainer.appendChild(memberNameElement);
@@ -139,7 +139,7 @@
   }
 
   document.getElementById("organization-invite").onclick = function (event) {
-    var linkButton = document.getElementById("organization-invite");
+    let linkButton = document.getElementById("organization-invite");
     linkButton.classList.remove("btn-primary");
     linkButton.classList.add("btn-success");
     $('#organization-invite').tooltip('hide');
@@ -152,7 +152,7 @@
   }
 
   document.getElementById("organization-link-regenerate").onclick = function (event) {
-    var linkButton = document.getElementById("organization-invite");
+    let linkButton = document.getElementById("organization-invite");
     linkButton.classList.remove("btn-success");
     linkButton.classList.add("btn-primary");
     $('#organization-link-regenerate').tooltip('hide');
@@ -183,12 +183,12 @@
   }
 
   document.getElementById("organization-rename").onclick = function (event) {
-    var content = document.createElement("div");
+    let content = document.createElement("div");
     content.classList.add("organization-rename-content");
-    var text = document.createElement("p");
+    let text = document.createElement("p");
     text.innerText = "{% trans 'product.organization.member.rename.body' %}";
     content.appendChild(text);
-    var input = document.createElement("input");
+    let input = document.createElement("input");
     input.placeholder = "{% trans 'product.organization.member.rename.name' %}";
     content.appendChild(input);
     Swal.fire({
@@ -224,7 +224,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("organization-member-container").appendChild(loader);
   }

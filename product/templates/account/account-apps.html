@@ -29,8 +29,8 @@
 </html>
 
 <script>
-  var apps;
-  var appsCurrentNameFilter = "";
+  let apps;
+  let appsCurrentNameFilter = "";
 
   $(document).ready(function() {
     displayLoader();
@@ -56,8 +56,8 @@
 
   function displayApps() {
     document.getElementById("account-apps-list").innerHTML = "";
-    for (var i = 0; i < apps.length; i++) {
-      var entry = apps[i];
+    for (let i = 0; i < apps.length; i++) {
+      let entry = apps[i];
       if(!(shouldDisplayAppEntry(entry))) {
         continue;
       }
@@ -71,15 +71,15 @@
   }
 
   function displayApp(id, name, logo) {
-    var entryElement = document.createElement("li");
+    let entryElement = document.createElement("li");
     entryElement.role = "button";
     entryElement.classList.add("account-application-entry");
-    var logoElement = document.createElement("img");
+    let logoElement = document.createElement("img");
     logoElement.src = "{% static '' %}" + "img/applications/" + logo;
     logoElement.width = 64;
     logoElement.height = 64;
     entryElement.appendChild(logoElement);
-    var nameElement = document.createElement("b");
+    let nameElement = document.createElement("b");
     nameElement.innerHTML = name;
     entryElement.appendChild(nameElement);
     entryElement.onclick = function(event) {
@@ -88,7 +88,7 @@
       sessionStorage.setItem("account-app-logo", logo);
       window.location.href = "/accounts/";
     }
-    var arrowElement = document.createElement("i");
+    let arrowElement = document.createElement("i");
     arrowElement.classList.add("fa-solid", "fa-angle-right");
     entryElement.appendChild(arrowElement);
     document.getElementById("account-apps-list").appendChild(entryElement);
@@ -100,7 +100,7 @@
   };
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader", "loader-list");
     document.getElementById("account-apps-loader").appendChild(loader);
   }

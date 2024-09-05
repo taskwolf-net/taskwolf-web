@@ -71,7 +71,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/unlocked/", "GET",
       []);
     request.send(function (status, responseText) {
-      var unlocked = JSON.parse(responseText).unlocked;
+      let unlocked = JSON.parse(responseText).unlocked;
       if (unlocked) {
         document.getElementById("settings-account-content").classList.remove("d-none");
       } else {
@@ -81,9 +81,9 @@
   });
 
   document.getElementById("settings-account-password-button").onclick = function(event) {
-    var currentPasswordElement = document.getElementById("settings-account-current-password");
-    var newPasswordElement = document.getElementById("settings-account-new-password");
-    var newPasswordRepetitionElement = document.getElementById("settings-account-new-password-repetition");
+    let currentPasswordElement = document.getElementById("settings-account-current-password");
+    let newPasswordElement = document.getElementById("settings-account-new-password");
+    let newPasswordRepetitionElement = document.getElementById("settings-account-new-password-repetition");
     if (currentPasswordElement.value === "" || newPasswordElement.value === "") {
       return;
     }
@@ -104,7 +104,7 @@
     let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/password/change/", "POST",
       [], {currentPassword: currentPasswordElement.value, newPassword: newPasswordElement.value});
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       if (response.success === false) {
         Swal.fire("{% trans 'settings.account.password.wrong.title' %}", "{% trans 'settings.account.password.wrong.body' %}", "error");
       } else {
@@ -118,15 +118,15 @@
   };
 
   document.getElementById("settings-account-email-button").onclick = function(event) {
-    var passwordElement = document.getElementById("settings-account-password");
-    var emailElement = document.getElementById("settings-account-email");
+    let passwordElement = document.getElementById("settings-account-password");
+    let emailElement = document.getElementById("settings-account-email");
     if (passwordElement.value === "" || emailElement.value === "") {
       return;
     }
     let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/email/change/request/", "POST",
       [], {password: passwordElement.value, newEmail: emailElement.value});
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       if (response.success === false) {
         if (response.errorCode === 1000) {
           Swal.fire("{% trans 'settings.account.email.wrong.password.title' %}", "{% trans 'settings.account.email.wrong.password.body' %}", "error");
@@ -146,12 +146,12 @@
   }
 
   function openAccountDeleteMenu() {
-    var content = document.createElement("div");
+    let content = document.createElement("div");
     content.classList.add("settings-account-delete-content");
-    var text = document.createElement("p");
+    let text = document.createElement("p");
     text.innerText = "{% trans 'settings.account.delete.body' %}";
     content.appendChild(text);
-    var input = document.createElement("input");
+    let input = document.createElement("input");
     input.placeholder = "{% trans 'settings.account.delete.password' %}";
     input.type = "password";
     content.appendChild(input);
@@ -166,7 +166,7 @@
         let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/delete/", "POST",
           [], {password: input.value});
         request.send(function (status, responseText) {
-          var success = JSON.parse(responseText).success;
+          let success = JSON.parse(responseText).success;
           if (success === true) {
             Cookie.destroy("token", ".taskwolf.net");
             Swal.fire("{% trans 'settings.account.delete.successful.title' %}", "{% trans 'settings.account.delete.successful.body' %}", "success").then(success => window.location.href = "/");
@@ -199,21 +199,21 @@
     updatePasswordProgress();
   });
 
-  var passwordMatchedCases = [];
+  let passwordMatchedCases = [];
   passwordMatchedCases.push("[!@#$%&*_?]");
   passwordMatchedCases.push("[A-Z]");
   passwordMatchedCases.push("[a-z]");
   passwordMatchedCases.push("[0-9]");
-  var passwordMessageCases = [];
+  let passwordMessageCases = [];
   passwordMessageCases.push("{% trans 'neutral.password.special.characters' %}");
   passwordMessageCases.push("{% trans 'neutral.password.upper.case.letters' %}");
   passwordMessageCases.push("{% trans 'neutral.password.lower.case.letters' %}");
   passwordMessageCases.push("{% trans 'neutral.password.numbers' %}");
 
   function updatePasswordProgress() {
-    var messageCases = passwordMessageCases.slice();
-    var status = 0;
-    for (var i = 0; i < passwordMatchedCases.length; i++) {
+    let messageCases = passwordMessageCases.slice();
+    let status = 0;
+    for (let i = 0; i < passwordMatchedCases.length; i++) {
       if (new RegExp(passwordMatchedCases[i]).test(passwordInput.value)) {
         messageCases.splice(messageCases.indexOf(passwordMessageCases[i]), 1);
         status++;
@@ -222,8 +222,8 @@
     if (passwordInput.value.length >= 8) {
       status++;
     }
-    var progress;
-    var strength;
+    let progress;
+    let strength;
     switch (status) {
       case 0:
         strength = "";
@@ -247,8 +247,8 @@
         break;
     }
     progress += passwordInput.value.length;
-    var information = "";
-    var progressBarClass;
+    let information = "";
+    let progressBarClass;
     if (progress >= 75 && passwordInput.value.length >= 8) {
       passwordInput.setCustomValidity("");
       progressBarClass = "bg-success";

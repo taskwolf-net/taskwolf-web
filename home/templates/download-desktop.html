@@ -39,7 +39,7 @@
     } else if (window.navigator.userAgent.indexOf("Mac") !== -1) {
       displayForOperatingSystem("MACOS", ["WINDOWS", "LINUX"]);
     } else {
-      var errorText = document.createElement("p");
+      let errorText = document.createElement("p");
       errorText.classList.add("text-danger");
       errorText.innerHTML = "{% trans 'home.download.desktop.unsupported' %}";
       document.getElementById("download-desktop-content-text").appendChild(errorText);
@@ -65,7 +65,7 @@
         createDownloadButton("{% trans 'home.download.desktop.macos.download' %}",
           "https://taskwolf.net/static/download/taskwolf.deb"));
     }
-    for (var i = 0; i < tabs.length; i++) {
+    for (let i = 0; i < tabs.length; i++) {
       if (tabs[i] === "WINDOWS") {
         createWindowsAlternativeTab("calc(100% / 2)", i === 0);
       } else if (tabs[i] === "LINUX") {
@@ -100,11 +100,11 @@
   function createAlternativeTab(
     id, title, downloadName, downloadFile, width, selected
   ) {
-    var entry = document.createElement("li");
+    let entry = document.createElement("li");
     entry.classList.add("nav-item");
     entry.style.width = width;
     entry.setAttribute("role", "presentation");
-    var button = document.createElement("button");
+    let button = document.createElement("button");
     button.id = id;
     button.type = "button";
     button.role = "tab";
@@ -119,7 +119,7 @@
     button.setAttribute("aria-selected", selected);
     entry.appendChild(button);
     document.getElementById("download-desktop-alternative-list").appendChild(entry);
-    var content = document.createElement("div");
+    let content = document.createElement("div");
     content.id = id + "-pane";
     content.classList.add("tab-pane", "fade");
     if (selected) {
@@ -133,7 +133,7 @@
   }
 
   function createDownloadButton(name, downloadFile) {
-    var button = document.createElement("button");
+    let button = document.createElement("button");
     button.classList.add("btn", "btn-primary", "d-block", "mx-auto", "mt-5");
     button.innerHTML = '<i class="fa-solid fa-download me-2"></i>' + name;
     button.onclick = function (event) {

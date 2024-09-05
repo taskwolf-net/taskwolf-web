@@ -41,10 +41,10 @@
         window.location.href.replace("https://taskwolf.net", "");
       return;
     }
-    var packageType = Cookie.find("taskwolf-package-type");
-    var packageClass = Cookie.find("taskwolf-package-class");
-    var packageRuntime = Cookie.find("taskwolf-package-runtime");
-    var packagePrice = Cookie.find("taskwolf-package-price");
+    let packageType = Cookie.find("taskwolf-package-type");
+    let packageClass = Cookie.find("taskwolf-package-class");
+    let packageRuntime = Cookie.find("taskwolf-package-runtime");
+    let packagePrice = Cookie.find("taskwolf-package-price");
     if (packageType == null || packageClass == null || packageRuntime == null || packagePrice == null) {
       document.getElementById("payment-not-found").classList.remove("d-none");
       return;
@@ -114,9 +114,9 @@
   }
 
   document.getElementById("payment-pay-redirect").onclick = function (event) {
-    var packageType = Cookie.find("taskwolf-package-type");
-    var packageClass = Cookie.find("taskwolf-package-class");
-    var packageRuntime = Cookie.find("taskwolf-package-runtime");
+    let packageType = Cookie.find("taskwolf-package-type");
+    let packageClass = Cookie.find("taskwolf-package-class");
+    let packageRuntime = Cookie.find("taskwolf-package-runtime");
     if (packageType === "FREE") {
       processTrial();
       return;
@@ -135,7 +135,7 @@
           .then(success => window.location.href = "/login/");
         return;
       }
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       if (response.success === true) {
         resetPackageSelection();
         window.location.href = response.link;
@@ -150,7 +150,7 @@
   function processTrial() {
     let request = new HttpRequest("https://api.taskwolf.net/v1/trial/use/", "GET", []);
     request.send(function (status, responseText) {
-      var response = JSON.parse(responseText);
+      let response = JSON.parse(responseText);
       resetPackageSelection();
       if (response.success === true) {
         Swal.fire("{% trans 'home.payment.trial.successful.title' %}",
@@ -158,7 +158,7 @@
           .then(success => window.location.href = "/login/");
         return;
       }
-      var errorCode = response.error;
+      let errorCode = response.error;
       if (errorCode === 1000) {
         Swal.fire("{% trans 'home.payment.trial.failed.trial.exists.title' %}",
           "{% trans 'home.payment.trial.failed.trial.exists.body' %}", "error")
