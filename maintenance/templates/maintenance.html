@@ -1,0 +1,51 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark">
+    <div id="maintenance-container">
+      {% include 'verification-header.html' %}
+      <div id="maintenance-content">
+        <div>
+          <h3 id="maintenance-headline">{% trans 'maintenance.headline' %}</h3>
+          <h1 id="maintenance-subtitle">{% trans 'maintenance.subtitle' %}</h1>
+          <p id="maintenance-description">{% trans 'maintenance.description' %}</p>
+        </div>
+        <div>
+          <img id="maintenance-logo" src="{% static 'img/maintenance/maintenance.png' %}">
+        </div>
+      </div>
+    </div>
+    {% include 'home-footer.html' %}
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    document.getElementById("maintenance-description").innerHTML =
+      "{% trans 'maintenance.description' %}".replace("%s", "0");
+    fetchMaintenance(function (maintenance) {
+      if (!maintenance.found) {
+        window.location.href = "/";
+        return;
+      }
+      setInterval(function () {
+        displayRemainingDuration(maintenance.startTime, maintenance.duration);
+      }, 1000);
+    });
+  });
+
+  function displayRemainingDuration(startTime, duration) {
+    var remainingTime = Math.max(startTime + duration - Date.now(), 0);
+    document.getElementById("maintenance-description").innerHTML =
+      "{% trans 'maintenance.description' %}".replace("%s",
+        new Date(Math.abs(remainingTime)).toISOString().slice(11,19));
+  }
+
+  function fetchMaintenance(callback) {
+    let request = new HttpRequest("https://api.taskwolf.net/v1/maintenance/running/", "GET", []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+</script>

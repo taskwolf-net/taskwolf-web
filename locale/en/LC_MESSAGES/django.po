@@ -35,6 +35,16 @@ msgstr "Weak"
 msgid "neutral.password.strong"
 msgstr "Strong"
 
+# MAINTENANCE
+msgid "maintenance.title"
+msgstr "Maintenance - Taskwolf"
+msgid "maintenance.headline"
+msgstr "Maintenance"
+msgid "maintenance.subtitle"
+msgstr "The page is currently not available"
+msgid "maintenance.description"
+msgstr "Maintenance work is currently being carried out. For this reason, the website and its services are not available to you. <br><br>The expected remaining time of the maintenance is <b>%s minutes</b>. <br><br>Please be patient. We will endeavor to complete the maintenance work as soon as possible. Thank you for your understanding!"
+
 # HOME
 
 # HEADER

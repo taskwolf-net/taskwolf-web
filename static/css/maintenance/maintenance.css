@@ -1,0 +1,57 @@
+#maintenance-container {
+  margin: auto;
+  width: min(1500px, 95%);
+}
+
+#maintenance-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15vh;
+  margin-bottom: 15vh;
+}
+
+#maintenance-content div {
+  width: 50%;
+  text-align: center;
+}
+
+#maintenance-headline {
+  width: fit-content;
+  background-color: #2f333a;
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#maintenance-subtitle {
+  margin-top: 2vh;
+  text-align: center;
+  font-weight: bold;
+}
+
+#maintenance-description {
+  margin-top: 5vh;
+  text-align: justify;
+}
+
+#maintenance-logo {
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 1000px) {
+  #maintenance-content {
+    flex-direction: column-reverse;
+    margin-top: 5vh;
+  }
+
+  #maintenance-content div {
+    width: 100%;
+  }
+
+  #maintenance-logo {
+    width: min(100%, 768px);
+  }
+}
