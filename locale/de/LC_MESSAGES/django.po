@@ -43,7 +43,7 @@ msgstr "Wartung"
 msgid "maintenance.subtitle"
 msgstr "Die Seite ist derzeit nicht verfügbar"
 msgid "maintenance.description"
-msgstr "Derzeit werden Wartungsarbeiten durchgeführt. Aus diesem Grund sind die Website und ihre Dienste für Sie nicht verfügbar. <br><br>Die voraussichtliche Restzeit der Wartungsarbeiten beträgt <b>%s Minuten</b>. <br><br>Bitte haben Sie etwas Geduld. Wir werden uns bemühen, die Wartungsarbeiten so schnell wie möglich abzuschließen. Wir danken Ihnen für Ihr Verständnis!"
+msgstr "Derzeit werden Wartungsarbeiten durchgeführt. Aus diesem Grund sind die Website und ihre Dienste für Sie nicht verfügbar. <br><br>Die voraussichtliche Restzeit der Wartungsarbeiten beträgt <b>%s</b>. <br><br>Bitte haben Sie etwas Geduld. Wir werden uns bemühen, die Wartungsarbeiten so schnell wie möglich abzuschließen. Wir danken Ihnen für Ihr Verständnis!"
 
 # HOME
 

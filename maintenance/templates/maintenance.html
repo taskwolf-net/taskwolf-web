@@ -9,7 +9,7 @@
         <div>
           <h3 id="maintenance-headline">{% trans 'maintenance.headline' %}</h3>
           <h1 id="maintenance-subtitle">{% trans 'maintenance.subtitle' %}</h1>
-          <p id="maintenance-description">{% trans 'maintenance.description' %}</p>
+          <p id="maintenance-description"></p>
         </div>
         <div>
           <img id="maintenance-logo" src="{% static 'img/maintenance/maintenance.png' %}">
@@ -23,12 +23,13 @@
 <script>
   $(document).ready(function() {
     document.getElementById("maintenance-description").innerHTML =
-      "{% trans 'maintenance.description' %}".replace("%s", "0");
+      "{% trans 'maintenance.description' %}".replace("%s", "");
     fetchMaintenance(function (maintenance) {
       if (!maintenance.found) {
         window.location.href = "/";
         return;
       }
+      displayRemainingDuration(maintenance.startTime, maintenance.duration);
       setInterval(function () {
         displayRemainingDuration(maintenance.startTime, maintenance.duration);
       }, 1000);
