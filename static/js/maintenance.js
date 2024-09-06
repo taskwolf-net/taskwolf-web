@@ -61,9 +61,9 @@ function generateMaintenanceInformationFormat() {
   }
   let text = "";
   if (language === "en") {
-    text = "+++ Maintenance work on {0} - Estimated duration: {1} minutes +++";
+    text = "+++ Maintenance work on {0} - Estimated duration: {1} minutes - All services will be unavailable +++"
   } else if (language === "de") {
-    text = "+++ Wartungsarbeiten am {0} - Geschätzte Dauer: {1} Minuten +++";
+    text = "+++ Wartungsarbeiten am {0} - Geschätzte Dauer: {1} Minuten - Alle Dienste werden nicht verfügbar sein +++";
   }
   return text;
 }
