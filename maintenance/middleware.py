@@ -18,6 +18,7 @@ class MaintenanceMiddleware(object):
 
   async def __call__(self, request):
     if (request.path == "/maintenance/" or request.path == "/whitelist/" or request.path == "/favicon.ico"):
+      self.applyLanguage(request)
       return await self.get_response(request)
     running = await self.isRunning(request)
     if (running):
