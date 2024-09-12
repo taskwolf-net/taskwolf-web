@@ -64,6 +64,15 @@
   margin-left: 5%;
 }
 
+#home-name {
+  margin-left: 20px;
+  margin-right: 200px;
+}
+
+#home-name h4 {
+  font-family: Verdana, sans-serif;
+}
+
 #login-button {
   margin-left: 5%;
 }
