@@ -61,7 +61,7 @@
   });
 
   function fetchOrganization(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET", []);
+    let request = new HttpRequest("https://api.dulno.com/v1/organization/", "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });
@@ -97,7 +97,7 @@
         let memberKickElement = document.createElement("span");
         memberKickElement.classList.add("organization-member-kick", "fa", "fa-ban", "text-danger");
         memberKickElement.onclick = function (event) {
-          let request = new HttpRequest("https://api.taskwolf.net/v1/organization/kick/", "POST",
+          let request = new HttpRequest("https://api.dulno.com/v1/organization/kick/", "POST",
             [], {target: member.id});
           request.send(function (status, responseText) {
             location.reload();
@@ -145,7 +145,7 @@
     $('#organization-invite').tooltip('hide');
     applyTooltips(linkButton, document.getElementById("organization-members-header"), "{% trans 'product.organization.member.copied.link.tooltip' %}");
     $('#organization-invite').tooltip('show');
-    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/link/", "GET", []);
+    let request = new HttpRequest("https://api.dulno.com/v1/organization/link/", "GET", []);
     request.send(function (status, responseText) {
       navigator.clipboard.writeText(JSON.parse(responseText).link);
     });
@@ -158,7 +158,7 @@
     $('#organization-link-regenerate').tooltip('hide');
     applyTooltips(linkButton, document.getElementById("organization-members-header"),
       "{% trans 'product.organization.member.copy.link.tooltip' %}");
-    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/link/regenerate/", "GET", []);
+    let request = new HttpRequest("https://api.dulno.com/v1/organization/link/regenerate/", "GET", []);
     request.send(function (status, responseText) {
 
     });
@@ -173,7 +173,7 @@
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/organization/leave/", "GET");
+        let request = new HttpRequest("https://api.dulno.com/v1/organization/leave/", "GET");
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.organization.member.leave.successful.title' %}",
             "{% trans 'product.organization.member.leave.successful.body' %}", "success").then(success => window.location.href = "/organizations/");
@@ -203,7 +203,7 @@
             "{% trans 'product.organization.member.rename.empty.body' %}", "error");
           return;
         }
-        let request = new HttpRequest("https://api.taskwolf.net/v1/organization/rename/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/organization/rename/", "POST",
           [], {name: input.value});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.organization.member.rename.successful.title' %}",

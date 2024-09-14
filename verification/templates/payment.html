@@ -38,13 +38,13 @@
   $(document).ready(function() {
     if (sessionStorage.getItem("home-token") == null) {
       window.location.href = "/login/?redirect=" +
-        window.location.href.replace("https://taskwolf.net", "");
+        window.location.href.replace("https://dulno.com", "");
       return;
     }
-    let packageType = Cookie.find("taskwolf-package-type");
-    let packageClass = Cookie.find("taskwolf-package-class");
-    let packageRuntime = Cookie.find("taskwolf-package-runtime");
-    let packagePrice = Cookie.find("taskwolf-package-price");
+    let packageType = Cookie.find("dulno-package-type");
+    let packageClass = Cookie.find("dulno-package-class");
+    let packageRuntime = Cookie.find("dulno-package-runtime");
+    let packagePrice = Cookie.find("dulno-package-price");
     if (packageType == null || packageClass == null || packageRuntime == null || packagePrice == null) {
       document.getElementById("payment-not-found").classList.remove("d-none");
       return;
@@ -114,9 +114,9 @@
   }
 
   document.getElementById("payment-pay-redirect").onclick = function (event) {
-    let packageType = Cookie.find("taskwolf-package-type");
-    let packageClass = Cookie.find("taskwolf-package-class");
-    let packageRuntime = Cookie.find("taskwolf-package-runtime");
+    let packageType = Cookie.find("dulno-package-type");
+    let packageClass = Cookie.find("dulno-package-class");
+    let packageRuntime = Cookie.find("dulno-package-runtime");
     if (packageType === "FREE") {
       processTrial();
       return;
@@ -125,7 +125,7 @@
   }
 
   function processPayment(packageType, packageClass, packageRuntime) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/checkout/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/checkout/", "POST",
       [], {bundleType: packageType, bundleClass: packageClass,
         bundleRuntime: packageRuntime});
     request.send(function (status, responseText) {
@@ -148,7 +148,7 @@
   }
 
   function processTrial() {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/trial/use/", "GET", []);
+    let request = new HttpRequest("https://api.dulno.com/v1/trial/use/", "GET", []);
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
       resetPackageSelection();
@@ -172,10 +172,10 @@
   }
 
   function resetPackageSelection() {
-    Cookie.destroy("taskwolf-package-type");
-    Cookie.destroy("taskwolf-package-class");
-    Cookie.destroy("taskwolf-package-runtime");
-    Cookie.destroy("taskwolf-package-price");
+    Cookie.destroy("dulno-package-type");
+    Cookie.destroy("dulno-package-class");
+    Cookie.destroy("dulno-package-runtime");
+    Cookie.destroy("dulno-package-price");
   }
 
   document.getElementById("payment-not-found-redirect").onclick = function (event) {

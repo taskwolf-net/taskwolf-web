@@ -117,7 +117,7 @@
     document.getElementById("register-languages").classList.add("d-none");
     document.getElementById("register-login").classList.add("d-none");
     document.getElementById("register-email-container").classList.add("d-none");
-    let request = new HttpRequest("https://api.taskwolf.net/v1/email/exists/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/email/exists/", "POST",
       [], {email: emailInput.value});
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
@@ -236,7 +236,7 @@
   function register(callback) {
     grecaptcha.ready(function() {
       grecaptcha.execute('6LdpvhAqAAAAAFbSWycUwLBbDnS4TaSvjJOofiOg', {action: 'register'}).then(function(token) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/verification/register/", "POST", [],
+        let request = new HttpRequest("https://api.dulno.com/v1/verification/register/", "POST", [],
           {email: emailInput.value, name: usernameInput.value, password: passwordInput.value, recaptchaToken: token});
         request.send(function (status, responseText) {
           callback(JSON.parse(responseText));
@@ -344,7 +344,7 @@
   }
 
   document.getElementById("register-success-email-resend").onclick = function (event) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/verification/email/resend/", "POST", [],
+    let request = new HttpRequest("https://api.dulno.com/v1/verification/email/resend/", "POST", [],
       {email: sessionStorage.getItem("registration-email")});
     request.send(function (status, responseText) {
       Swal.fire("{% trans 'home.registration.success.email.resend.success.title' %}",
@@ -353,12 +353,12 @@
   }
 
   document.getElementById("register-language-en").onclick = function (event) {
-    Cookie.create("taskwolf-home-language", "en", 60 * 60 * 24 * 365, ".taskwolf.net");
+    Cookie.create("dulno-home-language", "en", 60 * 60 * 24 * 365, ".dulno.com");
     window.location.reload(true);
   }
 
   document.getElementById("register-language-de").onclick = function (event) {
-    Cookie.create("taskwolf-home-language", "de", 60 * 60 * 24 * 365, ".taskwolf.net");
+    Cookie.create("dulno-home-language", "de", 60 * 60 * 24 * 365, ".dulno.com");
     window.location.reload(true);
   }
 

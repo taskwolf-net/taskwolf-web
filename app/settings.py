@@ -13,7 +13,7 @@ SECRET_KEY = '***REMOVED***'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['taskwolf.net']
+ALLOWED_HOSTS = ['dulno.com']
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
 
@@ -52,7 +52,7 @@ MIDDLEWARE = [
   'maintenance.middleware.MaintenanceMiddleware',
 ]
 
-CSRF_TRUSTED_ORIGINS = ["https://taskwolf.net"]
+CSRF_TRUSTED_ORIGINS = ["https://dulno.com"]
 
 ROOT_URLCONF = 'app.urls'
 

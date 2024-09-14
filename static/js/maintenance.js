@@ -1,5 +1,5 @@
 window.addEventListener('load', function () {
-  let request = new HttpRequest("https://api.taskwolf.net/v1/maintenance/scheduled/", "GET", []);
+  let request = new HttpRequest("https://api.dulno.com/v1/maintenance/scheduled/", "GET", []);
   request.send(function (status, responseText) {
     let maintenance = JSON.parse(responseText);
     if (!maintenance.found) {
@@ -39,7 +39,7 @@ function displayMaintenanceBanner(maintenance) {
 }
 
 function acknowledgeMaintenance(maintenance) {
-  Cookie.create("maintenance", maintenance.id, 60 * 60 * 24 * 30, ".taskwolf.net");
+  Cookie.create("maintenance", maintenance.id, 60 * 60 * 24 * 30, ".dulno.com");
   window.location.reload();
 }
 
@@ -52,8 +52,8 @@ function buildMaintenanceInformation(maintenance) {
 
 function generateMaintenanceInformationFormat() {
   let language = "en";
-  let homeLanguage = Cookie.find("taskwolf-home-language");
-  let productLanguage = Cookie.find("taskwolf-language");
+  let homeLanguage = Cookie.find("dulno-home-language");
+  let productLanguage = Cookie.find("dulno-language");
   if (homeLanguage != null) {
     language = homeLanguage.toLowerCase();
   } else if (productLanguage != null) {

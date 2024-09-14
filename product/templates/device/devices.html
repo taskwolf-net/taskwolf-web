@@ -278,7 +278,7 @@
     for (let i = 0; i < entryCheckboxes.length; i++) {
       let entry = entryCheckboxes[i];
       if (entry.checkbox.checked) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/device/organization/remove/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/device/organization/remove/", "POST",
           [], {device: entry.id, organization: organization.id, team: team});
         request.send(function (status, responseText) {
         });
@@ -385,7 +385,7 @@
     let body = createPagingBody();
     body.search = pagingFilterSearch;
     body.targetPage = targetPage;
-    let request = new HttpRequest("https://api.taskwolf.net/v1/devices/page/",
+    let request = new HttpRequest("https://api.dulno.com/v1/devices/page/",
       "POST", [], body);
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
@@ -408,7 +408,7 @@
     body.pageState = pageState;
     body.startingPoint = pagingStartingPoint;
     body.direction = direction < 0 ? "BACKWARD" : "FORWARD";
-    let request = new HttpRequest("https://api.taskwolf.net/v1/devices/page/shift/",
+    let request = new HttpRequest("https://api.dulno.com/v1/devices/page/shift/",
       "POST", [], body);
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
@@ -454,12 +454,12 @@
   }
 
   function fetchOrganization(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET", []);
+    let request = new HttpRequest("https://api.dulno.com/v1/organization/", "GET", []);
     request.send(function (status, responseText) {
       let organization = JSON.parse(responseText);
       if ("id" in organization) {
         organization.members.push({id: organization.ownerId, name: organization.ownerName});
-        let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/targets/selected/",
+        let request = new HttpRequest("https://api.dulno.com/v1/organization/team/targets/selected/",
           "GET", []);
         request.send(function (status, responseText) {
           let team = JSON.parse(responseText).currentTarget;
@@ -612,7 +612,7 @@
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/device/organization/remove/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/device/organization/remove/", "POST",
           [], {device: device, organization: organization.id, team: team});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.devices.remove.successful.title' %}", "{% trans 'product.devices.remove.successful.body' %}", "success").then(success => window.location.href = "/devices/");
@@ -640,7 +640,7 @@
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/device/delete/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/device/delete/", "POST",
           [], {device: device, password: input.value});
         request.send(function (status, responseText) {
           let success = JSON.parse(responseText).success;

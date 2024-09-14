@@ -37,7 +37,7 @@
   });
 
   function fetchTimelineData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/timeline/find/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/workflow/timeline/find/", "POST",
       [], {workflow: sessionStorage.getItem("workflow-id")});
     request.send(function (status, responseText) {
       timeline = JSON.parse(responseText).timeline;
@@ -94,7 +94,7 @@
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/timeline/reset/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/workflow/timeline/reset/", "POST",
           [], {workflow: sessionStorage.getItem("workflow-id")});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.workflow.timeline.reset.successful.title' %}", "{% trans 'product.workflow.timeline.reset.successful.body' %}", "success").then(success => window.location.reload());

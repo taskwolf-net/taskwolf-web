@@ -68,7 +68,7 @@
 
 <script>
   $(document).ready(function() {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/unlocked/", "GET",
+    let request = new HttpRequest("https://api.dulno.com/v1/settings/account/unlocked/", "GET",
       []);
     request.send(function (status, responseText) {
       let unlocked = JSON.parse(responseText).unlocked;
@@ -101,7 +101,7 @@
       Swal.fire("{% trans 'settings.account.password.insecure.title' %}", "{% trans 'settings.account.password.insecure.body' %}", "error");
       return;
     }
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/password/change/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/settings/account/password/change/", "POST",
       [], {currentPassword: currentPasswordElement.value, newPassword: newPasswordElement.value});
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
@@ -123,7 +123,7 @@
     if (passwordElement.value === "" || emailElement.value === "") {
       return;
     }
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/email/change/request/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/settings/account/email/change/request/", "POST",
       [], {password: passwordElement.value, newEmail: emailElement.value});
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
@@ -163,12 +163,12 @@
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/delete/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/settings/account/delete/", "POST",
           [], {password: input.value});
         request.send(function (status, responseText) {
           let success = JSON.parse(responseText).success;
           if (success === true) {
-            Cookie.destroy("token", ".taskwolf.net");
+            Cookie.destroy("token", ".dulno.com");
             Swal.fire("{% trans 'settings.account.delete.successful.title' %}", "{% trans 'settings.account.delete.successful.body' %}", "success").then(success => window.location.href = "/");
           } else {
             Swal.fire("{% trans 'settings.account.delete.failed.title' %}", "{% trans 'settings.account.delete.failed.body' %}", "error");
@@ -179,11 +179,11 @@
   }
 
   document.getElementById("settings-account-set-password").onclick = function(event) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/unlock/", "GET",
+    let request = new HttpRequest("https://api.dulno.com/v1/settings/account/unlock/", "GET",
       []);
     request.send(function (status, responseText) {
       Swal.fire("{% trans 'settings.account.password.set.successful.title' %}", "{% trans 'settings.account.password.set.successful.body' %}", "success").then(success => {
-        Cookie.destroy("token", ".taskwolf.net");
+        Cookie.destroy("token", ".dulno.com");
         window.location.href = "/";
       });
     });

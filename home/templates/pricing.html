@@ -424,7 +424,7 @@
   }
 
   function fetchPackage(packageName, callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/bundle/preset/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/bundle/preset/", "POST",
       [], {type: packageName, class: bundleClass, runtime: bundleRuntime});
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
@@ -487,10 +487,10 @@
   }
 
   function preparePurchase(package, price) {
-    Cookie.create("taskwolf-package-type", package, 60 * 60 * 24);
-    Cookie.create("taskwolf-package-class", bundleClass, 60 * 60 * 24);
-    Cookie.create("taskwolf-package-runtime", bundleRuntime, 60 * 60 * 24);
-    Cookie.create("taskwolf-package-price", price, 60 * 60 * 24);
+    Cookie.create("dulno-package-type", package, 60 * 60 * 24);
+    Cookie.create("dulno-package-class", bundleClass, 60 * 60 * 24);
+    Cookie.create("dulno-package-runtime", bundleRuntime, 60 * 60 * 24);
+    Cookie.create("dulno-package-price", price, 60 * 60 * 24);
     if (sessionStorage.getItem("home-token") == null) {
       window.location.href = "/login-register/?redirect=/payment/";
     } else {

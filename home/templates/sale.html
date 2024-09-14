@@ -172,7 +172,7 @@
     let companyRole = document.getElementById("sale-company-role").value;
     let title = document.getElementById("sale-title").value;
     let message =  document.getElementsByClassName("ql-editor")[0].innerHTML;
-    let request = new HttpRequest("https://api.taskwolf.net/v1/sale/create/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/sale/create/", "POST",
       [], {email: email, firstName: firstName, lastName: lastName,
         phoneNumber: phoneNumber, country: country, companyName: companyName,
         companySize: companySize, companyRole: companyRole, title: title,

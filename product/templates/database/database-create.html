@@ -32,7 +32,7 @@
       Swal.fire("{% trans 'product.database.create.empty.title' %}", "{% trans 'product.database.create.empty.body' %}", "error");
       return;
     }
-    let request = new HttpRequest("https://api.taskwolf.net/v1/table/create/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/table/create/", "POST",
       [], {name: document.getElementById("name").value});
     request.send(function (status, responseText) {
       if (status === 400) {

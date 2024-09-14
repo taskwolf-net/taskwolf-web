@@ -10,7 +10,7 @@
 
 <script>
   $(document).ready(function() {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/verification/complete/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/verification/complete/", "POST",
       [], {user: "{{user}}", token: "{{token}}"});
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);

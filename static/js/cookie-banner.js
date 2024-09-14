@@ -1,13 +1,13 @@
 window.addEventListener('load', function () {
-  let url = window.location.href.replace("https://taskwolf.net/", "").replaceAll("/", "");
+  let url = window.location.href.replace("https://dulno.com/", "").replaceAll("/", "");
   if (url === "imprint" || url === "privacy-policy") {
     return;
   }
-  if (Cookie.find("taskwolf-cookies") != null) {
+  if (Cookie.find("dulno-cookies") != null) {
     return;
   }
   Swal.fire({
-    imageUrl: "https://taskwolf.net/static/img/home/cookie.png",
+    imageUrl: "https://dulno.com/static/img/home/cookie.png",
     imageWidth: 128,
     imageHeight: 128,
     title: "Cookies",
@@ -26,6 +26,6 @@ window.addEventListener('load', function () {
       htmlContainer: "cookie-banner-container",
     }
   }).then((result) => {
-    Cookie.create("taskwolf-cookies", true, 60 * 60 * 24 * 365);
+    Cookie.create("dulno-cookies", true, 60 * 60 * 24 * 365);
   });
 });

@@ -68,7 +68,7 @@
     let email = document.getElementById("question-email").value;
     let title = document.getElementById("question-title").value;
     let message =  document.getElementsByClassName("ql-editor")[0].innerHTML;
-    let request = new HttpRequest("https://api.taskwolf.net/v1/question/create/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/question/create/", "POST",
       [], {email: email, title: title, question: message});
     request.send(function (status, responseText) {
       if (status !== 200) {

@@ -43,7 +43,7 @@
   let updateLock = false;
 
   $(document).ready(function() {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/notification/", "GET",
+    let request = new HttpRequest("https://api.dulno.com/v1/settings/notification/", "GET",
       []);
     request.send(function (status, responseText) {
       let settings = JSON.parse(responseText);
@@ -67,7 +67,7 @@
       return;
     }
     updateLock = true;
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/notification/change/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/settings/notification/change/", "POST",
       [], {general: general, workflowFail: workflowFail});
     request.send(function (status, responseText) {
       updateLock = false;

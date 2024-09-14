@@ -229,7 +229,7 @@
     runLabel.innerHTML = "{% trans 'product.workflows.execute' %}";
     runButton.appendChild(runLabel);
     runButton.onclick = function (event) {
-      let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/manual/execute/", "POST",
+      let request = new HttpRequest("https://api.dulno.com/v1/workflow/manual/execute/", "POST",
         [], {workflow: id});
       request.send(function (status, responseText) {
         var response = JSON.parse(responseText);
@@ -373,7 +373,7 @@
     for (let i = 0; i < entryCheckboxes.length; i++) {
       let entry = entryCheckboxes[i];
       if (entry.checkbox.checked) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/remove/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/workflow/remove/", "POST",
           [], {workflow: entry.id});
         request.send(function (status, responseText) {
         });
@@ -385,7 +385,7 @@
   }
 
   function clickWorkflow(id) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/find/", "POST", [], {workflow: id});
+    let request = new HttpRequest("https://api.dulno.com/v1/workflow/find/", "POST", [], {workflow: id});
     request.send(function (status, responseText) {
       let workflow = JSON.parse(responseText);
       sessionStorage.setItem("workflow-selected", "true");
@@ -432,7 +432,7 @@
 
   function updateWorkflowState(id, state) {
     changeStateBlocked = true;
-    let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/state/change/", "POST", [], {workflow: id, armed: state});
+    let request = new HttpRequest("https://api.dulno.com/v1/workflow/state/change/", "POST", [], {workflow: id, armed: state});
     request.send(function (status, responseText) {
       changeStateBlocked = false;
     });
@@ -537,7 +537,7 @@
     let body = createPagingBody();
     body.search = pagingFilterSearch;
     body.targetPage = targetPage;
-    let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/page/",
+    let request = new HttpRequest("https://api.dulno.com/v1/workflows/page/",
       "POST", [], body);
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
@@ -560,7 +560,7 @@
     body.pageState = pageState;
     body.startingPoint = pagingStartingPoint;
     body.direction = direction < 0 ? "BACKWARD" : "FORWARD";
-    let request = new HttpRequest("https://api.taskwolf.net/v1/workflows/page/shift/",
+    let request = new HttpRequest("https://api.dulno.com/v1/workflows/page/shift/",
       "POST", [], body);
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
@@ -615,7 +615,7 @@
   }
 
   function fetchOrganization(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET", []);
+    let request = new HttpRequest("https://api.dulno.com/v1/organization/", "GET", []);
     request.send(function (status, responseText) {
       let organization = JSON.parse(responseText);
       if ("id" in organization) {
@@ -686,12 +686,12 @@
   }
 
   function fetchApplications(callback) {
-    let languageRequest = new HttpRequest("https://api.taskwolf.net/v1/settings/language/",
+    let languageRequest = new HttpRequest("https://api.dulno.com/v1/settings/language/",
       "GET", []);
     languageRequest.send(function (languageStatus, languageResponseText) {
       language = JSON.parse(languageResponseText).language;
       let applicationRequest = new HttpRequest(
-        "https://api.taskwolf.net/v1/modules/all/unauthorized/" + language + "/",
+        "https://api.dulno.com/v1/modules/all/unauthorized/" + language + "/",
         "GET", []);
       applicationRequest.send(function (applicationStatus, applicationResponseText) {
         callback(JSON.parse(applicationResponseText).modules);
@@ -728,7 +728,7 @@
       entry.classList.add("workflows-filter-application-active");
     }
     let entryLogo = document.createElement("img");
-    entryLogo.src = "https://taskwolf.net/static/img/applications/" + logo;
+    entryLogo.src = "https://dulno.com/static/img/applications/" + logo;
     entry.appendChild(entryLogo);
     applyTooltips(entryLogo, entry, name);
     entry.onclick = function (event) {
@@ -840,7 +840,7 @@
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/remove/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/workflow/remove/", "POST",
           [], {workflow: id});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.workflow.delete.successful.title' %}", "{% trans 'product.workflow.delete.successful.body' %}", "success").then(success => window.location.href = "/workflows/");
@@ -850,7 +850,7 @@
   }
 
   function duplicateWorkflow(id) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/duplicate/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/workflow/duplicate/", "POST",
       [], {workflow: id});
     request.send(function (status, responseText) {
       if (status === 400) {

@@ -454,7 +454,7 @@
     if (isSelected) {
       requestBody.workflow = sessionStorage.getItem("workflow-id");
     }
-    let request = new HttpRequest("https://api.taskwolf.net/v1/workflow" + (isSelected ? "/update/" : "/add/"), "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/workflow" + (isSelected ? "/update/" : "/add/"), "POST",
       [], requestBody);
     request.send(function (status, responseText) {
       if (status === 413) {
@@ -491,7 +491,7 @@
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/workflow/remove/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/workflow/remove/", "POST",
           [], {workflow: sessionStorage.getItem("workflow-id")});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.workflow.delete.successful.title' %}", "{% trans 'product.workflow.delete.successful.body' %}", "success").then(success => window.location.href = "/workflows/");

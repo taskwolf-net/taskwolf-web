@@ -151,11 +151,11 @@
   });
 
   function fetchApplicationsData(callback) {
-    let applicationsRequest = new HttpRequest("https://api.taskwolf.net/v1/modules/available/", "POST",
+    let applicationsRequest = new HttpRequest("https://api.dulno.com/v1/modules/available/", "POST",
       [], {componentType: "{{type}}"});
     applicationsRequest.send(function (status, applicationsResponseText) {
       applications = JSON.parse(applicationsResponseText).modules;
-      let hotApplicationsRequest = new HttpRequest("https://api.taskwolf.net/v1/modules/{{type}}/hot/", "GET", []);
+      let hotApplicationsRequest = new HttpRequest("https://api.dulno.com/v1/modules/{{type}}/hot/", "GET", []);
       hotApplicationsRequest.send(function (status, hotApplicationsResponseText) {
         hotApplications = JSON.parse(hotApplicationsResponseText).modules;
         callback();
@@ -311,7 +311,7 @@
   function displayAccountInformation() {
     let accountContentElement = document.getElementById("workflow-component-account-content");
     accountContentElement.innerHTML = "";
-    let request = new HttpRequest("https://api.taskwolf.net/v1/account/information/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/account/information/", "POST",
       [], {module: selectedApplication.toLowerCase()});
     request.send(function (status, responseText) {
       let information = JSON.parse(responseText);
@@ -388,7 +388,7 @@
 
   function fillEventDropdown() {
     document.getElementById("workflow-component-event-dropdown-list").innerHTML = "";
-    let request = new HttpRequest("https://api.taskwolf.net/v1/components/find/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/components/find/", "POST",
       [], {componentType: "{{type}}", module: selectedApplication.toLowerCase()});
     request.send(function (status, responseText) {
       let events = JSON.parse(responseText).components;
@@ -512,7 +512,7 @@
   }
 
   function fillSpecificationsInputs() {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/component/find/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/component/find/", "POST",
       [], {componentType: "{{type}}", module: selectedApplication.toLowerCase(), type: selectedEvent});
     request.send(function (status, responseText) {
       document.getElementById("workflow-component-specifications-input-list").innerHTML = "";
@@ -669,7 +669,7 @@
 
   function clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton, index, inputsLength) {
     dropdownList.innerHTML = "";
-    let request = new HttpRequest("https://api.taskwolf.net/v1/component/select/items/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/component/select/items/", "POST",
       [], {componentType: "{{type}}", module: selectedApplication.toLowerCase(), type: selectedEvent, previousInputs: specificationValues, select: identifier});
     request.send(function (status, responseText) {
       let items = JSON.parse(responseText).items;
@@ -855,7 +855,7 @@
     }
     let module = component.module;
     let type = component.type;
-    let request = new HttpRequest("https://api.taskwolf.net/v1/component/find/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/component/find/", "POST",
       [], {componentType: componentType, module: module, type: type});
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText).outputletiables);

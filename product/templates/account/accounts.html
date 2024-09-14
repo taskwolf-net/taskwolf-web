@@ -44,7 +44,7 @@
   });
 
   function fetchAccountsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/accounts/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/accounts/", "POST",
       [], {module: sessionStorage.getItem("account-app-identifier")});
     request.send(function (status, responseText) {
       accounts = JSON.parse(responseText).accounts;
@@ -86,7 +86,7 @@
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/account/remove/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/account/remove/", "POST",
           [], {module: sessionStorage.getItem("account-app-identifier"), identifier: identifier});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.accounts.account.delete.successful.title' %}", "{% trans 'product.accounts.account.delete.successful.body' %}", "success").then(success => window.location.href = "/account/apps/");

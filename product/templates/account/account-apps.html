@@ -45,7 +45,7 @@
   });
 
   function fetchAppsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/account/apps/", "GET",
+    let request = new HttpRequest("https://api.dulno.com/v1/account/apps/", "GET",
       []);
     request.send(function (status, responseText) {
       apps = JSON.parse(responseText).apps;

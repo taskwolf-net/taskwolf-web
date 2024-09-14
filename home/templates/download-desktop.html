@@ -55,15 +55,15 @@
     if (detected === "WINDOWS") {
       document.getElementById("download-desktop-content-text").appendChild(
         createDownloadButton("{% trans 'home.download.desktop.windows.download' %}",
-          "https://taskwolf.net/static/download/taskwolf.deb"));
+          "https://dulno.com/static/download/dulno.deb"));
     } else if (detected === "LINUX") {
       document.getElementById("download-desktop-content-text").appendChild(
         createDownloadButton("{% trans 'home.download.desktop.linux.download' %}",
-          "https://taskwolf.net/static/download/taskwolf.deb"));
+          "https://dulno.com/static/download/dulno.deb"));
     } else if (detected === "MACOS") {
       document.getElementById("download-desktop-content-text").appendChild(
         createDownloadButton("{% trans 'home.download.desktop.macos.download' %}",
-          "https://taskwolf.net/static/download/taskwolf.deb"));
+          "https://dulno.com/static/download/dulno.deb"));
     }
     for (let i = 0; i < tabs.length; i++) {
       if (tabs[i] === "WINDOWS") {
@@ -80,21 +80,21 @@
     createAlternativeTab("download-desktop-windows",
       "{% trans 'home.download.desktop.windows' %}",
       "{% trans 'home.download.desktop.windows.download' %}",
-      "https://taskwolf.net/static/download/taskwolf.deb", width, selected);
+      "https://dulno.com/static/download/dulno.deb", width, selected);
   }
 
   function createLinuxAlternativeTab(width, selected) {
     createAlternativeTab("download-desktop-linux",
       "{% trans 'home.download.desktop.linux' %}",
       "{% trans 'home.download.desktop.linux.download' %}",
-      "https://taskwolf.net/static/download/taskwolf.deb", width, selected);
+      "https://dulno.com/static/download/dulno.deb", width, selected);
   }
 
   function createMacOSAlternativeTab(width, selected) {
     createAlternativeTab("download-desktop-macos",
       "{% trans 'home.download.desktop.macos' %}",
       "{% trans 'home.download.desktop.macos.download' %}",
-      "https://taskwolf.net/static/download/taskwolf.deb", width, selected);
+      "https://dulno.com/static/download/dulno.deb", width, selected);
   }
 
   function createAlternativeTab(

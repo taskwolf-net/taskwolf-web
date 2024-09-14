@@ -61,7 +61,7 @@
   function fetchDatabaseData(callback) {
     let location = window.location;
     let id = location.href.replace(location.host, "").replace(location.protocol, "").replace("database", "").replaceAll("/", "");
-    let request = new HttpRequest("https://api.taskwolf.net/v1/table/find/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/table/find/", "POST",
       [], {table: id});
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
@@ -129,7 +129,7 @@
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/table/column/remove/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/table/column/remove/", "POST",
           [], {table: database.id, columnName: column});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.database.column.remove.successful.title' %}", "{% trans 'product.database.column.remove.successful.body' %}", "success").then(success => window.location.reload());
@@ -173,7 +173,7 @@
           Swal.fire("{% trans 'product.database.rename.empty.title' %}", "{% trans 'product.database.column.add.empty.body' %}", "error");
           return;
         }
-        let request = new HttpRequest("https://api.taskwolf.net/v1/table/column/add/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/table/column/add/", "POST",
           [], {table: database.id, columnName: input.value});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.database.column.add.successful.title' %}", "{% trans 'product.database.column.add.successful.body' %}", "success").then(success => window.location.reload());
@@ -245,7 +245,7 @@
       let cell = cells[i];
       rowData[cell.column] = cell.input.value;
     }
-    let request = new HttpRequest("https://api.taskwolf.net/v1/table/entry/update/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/table/entry/update/", "POST",
       [], {table: database.id, row: findRowId(entry), content: rowData});
     request.send(function (status, responseText) {
       if (status === 400) {
@@ -264,7 +264,7 @@
   }
 
   function deleteTableRow(entry) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/table/entry/remove/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/table/entry/remove/", "POST",
       [], {table: database.id, row: findRowId(entry)});
     request.send(function (status, responseText) {
       Swal.fire("{% trans 'product.database.row.delete.successful.title' %}", "{% trans 'product.database.row.delete.successful.body' %}", "success").then(success => window.location.reload());
@@ -440,7 +440,7 @@
     let body = {};
     body.table = database.id;
     body.targetPage = targetPage;
-    let request = new HttpRequest("https://api.taskwolf.net/v1/table/content/page/",
+    let request = new HttpRequest("https://api.dulno.com/v1/table/content/page/",
       "POST", [], body);
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
@@ -463,7 +463,7 @@
     body.pageState = pageState;
     body.startingPoint = pagingStartingPoint;
     body.direction = direction < 0 ? "BACKWARD" : "FORWARD";
-    let request = new HttpRequest("https://api.taskwolf.net/v1/table/content/page/shift/",
+    let request = new HttpRequest("https://api.dulno.com/v1/table/content/page/shift/",
       "POST", [], body);
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
@@ -494,7 +494,7 @@
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/table/delete/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/table/delete/", "POST",
           [], {table: database.id});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.database.delete.successful.title' %}", "{% trans 'product.database.delete.successful.body' %}", "success").then(success => window.location.href = "/databases/");
@@ -523,7 +523,7 @@
           Swal.fire("{% trans 'product.database.rename.empty.title' %}", "{% trans 'product.database.rename.empty.body' %}", "error");
           return;
         }
-        let request = new HttpRequest("https://api.taskwolf.net/v1/table/rename/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/table/rename/", "POST",
           [], {table: database.id, name: input.value});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.database.rename.successful.title' %}", "{% trans 'product.database.rename.successful.body' %}", "success").then(success => window.location.reload());
@@ -536,7 +536,7 @@
     for (let i = 0; i < rowCheckboxes.length; i++) {
       let entry = rowCheckboxes[i];
       if (entry.checkbox.checked) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/table/entry/remove/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/table/entry/remove/", "POST",
           [], {table: database.id, row: findRowId(entry.row)});
         request.send(function (status, responseText) {
         });
@@ -596,7 +596,7 @@
       let cell = cells[i];
       rowData[cell.column] = cell.input.value;
     }
-    let request = new HttpRequest("https://api.taskwolf.net/v1/table/entry/insert/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/table/entry/insert/", "POST",
       [], {table: database.id, row: rowData});
     request.send(function (status, responseText) {
       if (status === 400) {

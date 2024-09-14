@@ -27,17 +27,17 @@
 
 <script>
   $(document).ready(function() {
-    let theme = Cookie.find("taskwolf-theme");
+    let theme = Cookie.find("dulno-theme");
     document.getElementById("settings-theme-" + theme).classList.add("settings-theme-selected");
   });
 
   document.getElementById("settings-theme-dark").onclick = function(event) {
-    Cookie.create("taskwolf-theme", "dark", 60 * 60 * 24 * 365, ".taskwolf.net");
+    Cookie.create("dulno-theme", "dark", 60 * 60 * 24 * 365, ".dulno.com");
     window.location.reload();
   }
 
   document.getElementById("settings-theme-light").onclick = function(event) {
-    Cookie.create("taskwolf-theme", "light", 60 * 60 * 24 * 365, ".taskwolf.net");
+    Cookie.create("dulno-theme", "light", 60 * 60 * 24 * 365, ".dulno.com");
     window.location.reload();
   }
 </script>

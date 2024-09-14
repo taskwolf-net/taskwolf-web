@@ -217,7 +217,7 @@
 
   function clickConditionSelect(identifier, dropdownContainer, dropdownList, dropdownButton) {
     dropdownList.innerHTML = "";
-    let request = new HttpRequest("https://api.taskwolf.net/v1/conditions/find/", "GET",
+    let request = new HttpRequest("https://api.dulno.com/v1/conditions/find/", "GET",
       []);
     request.send(function (status, responseText) {
       let items = JSON.parse(responseText).conditions;
@@ -332,7 +332,7 @@
     }
     let module = component.module;
     let type = component.type;
-    let request = new HttpRequest("https://api.taskwolf.net/v1/component/find/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/component/find/", "POST",
       [], {componentType: componentType, module: module, type: type});
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText).outputletiables);

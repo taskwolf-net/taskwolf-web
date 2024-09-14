@@ -236,7 +236,7 @@
       if (this.workflow == null) {
         return;
       }
-      let request = new HttpRequest("https://api.taskwolf.net/v1/process/workflow/execute/", "POST",
+      let request = new HttpRequest("https://api.dulno.com/v1/process/workflow/execute/", "POST",
         [], {workflow: this.workflow.id});
       request.send(function (status, responseText) {
       });
@@ -424,7 +424,7 @@
   }
 </script>
 <script>
-  let isDarkTheme = Cookie.find("taskwolf-theme") === "dark";
+  let isDarkTheme = Cookie.find("dulno-theme") === "dark";
   let process = null;
   let steps = [];
   let connections = [];
@@ -463,7 +463,7 @@
   });
 
   function fetchProcessData(id, callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/process/find/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/process/find/", "POST",
       [], {process: id});
     request.send(function (status, responseText) {
       process = JSON.parse(responseText);
@@ -625,7 +625,7 @@
   }
 
   function addProcess(title, description) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/process/add/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/process/add/", "POST",
       [], createProcessPayload(title, description));
     request.send(function (status, responseText) {
       if (status === 400) {
@@ -639,7 +639,7 @@
   function updateProcess(title, description) {
     let payload = createProcessPayload(title, description);
     payload.process = process.id;
-    let request = new HttpRequest("https://api.taskwolf.net/v1/process/update/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/process/update/", "POST",
       [], payload);
     request.send(function (status, responseText) {
       window.location.href = "/processes/";
@@ -698,7 +698,7 @@
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/process/remove/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/process/remove/", "POST",
           [], {process: process.id});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.process.delete.successful.title' %}", "{% trans 'product.process.delete.successful.body' %}", "success").then(success => window.location.href = "/processes/");
@@ -723,7 +723,7 @@
   }
 
   document.getElementById("process-step-workflow-button").onclick = function (event) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/process/workflows/", "GET",
+    let request = new HttpRequest("https://api.dulno.com/v1/process/workflows/", "GET",
       []);
     request.send(function (status, responseText) {
       let workflows = JSON.parse(responseText).workflows;

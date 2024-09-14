@@ -55,10 +55,10 @@
     window.location.href = "/tickets/";
   };
   document.getElementById('logout-button').onclick = function() {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/verification/logout/",
+    let request = new HttpRequest("https://api.dulno.com/v1/verification/logout/",
       "GET", []);
     request.send(function (status, responseText) {
-      Cookie.destroy("token", ".taskwolf.net");
+      Cookie.destroy("token", ".dulno.com");
       window.location.href = "/";
     });
   };
@@ -78,7 +78,7 @@
   }
 
   function fetchTargetsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/targets/all/", "GET",
+    let request = new HttpRequest("https://api.dulno.com/v1/targets/all/", "GET",
       []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
@@ -101,7 +101,7 @@
   }
 
   function selectTarget(target) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/target/change/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/target/change/", "POST",
       [], {target: target.id});
     request.send(function (status, responseText) {
       window.location.reload();
@@ -121,7 +121,7 @@
   }
 
   function fetchTeamTargetsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/targets/selected/",
+    let request = new HttpRequest("https://api.dulno.com/v1/organization/team/targets/selected/",
       "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
@@ -144,7 +144,7 @@
   }
 
   function selectTeamTarget(target, isGlobal) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/target/change/",
+    let request = new HttpRequest("https://api.dulno.com/v1/organization/team/target/change/",
       "POST", [], {target: target.id, isGlobal: isGlobal});
     request.send(function (status, responseText) {
       window.location.reload();
@@ -154,10 +154,10 @@
   let isSidebarShown;
 
   window.onload = function() {
-    if (sessionStorage.getItem("taskwolf-sidebar") === null) {
-      sessionStorage.setItem("taskwolf-sidebar", "true");
+    if (sessionStorage.getItem("dulno-sidebar") === null) {
+      sessionStorage.setItem("dulno-sidebar", "true");
     }
-    let sidebarSetting = sessionStorage.getItem("taskwolf-sidebar").toLowerCase() === "true";
+    let sidebarSetting = sessionStorage.getItem("dulno-sidebar").toLowerCase() === "true";
     isSidebarShown = window.innerWidth > 575 && sidebarSetting;
     if (isSidebarShown) {
       document.getElementById("sidebar").classList.add("show");
@@ -168,7 +168,7 @@
 
   document.getElementById('sidebar-button').onclick = function() {
     isSidebarShown = !isSidebarShown;
-    sessionStorage.setItem("taskwolf-sidebar", isSidebarShown);
+    sessionStorage.setItem("dulno-sidebar", isSidebarShown);
     updateSidebarSpacing();
     updateSidebarButtonIcon();
   };

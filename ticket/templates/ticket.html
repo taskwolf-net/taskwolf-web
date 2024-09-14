@@ -35,7 +35,7 @@
   });
 
   function fetchUsername(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/profile/username/", "GET",
+    let request = new HttpRequest("https://api.dulno.com/v1/settings/profile/username/", "GET",
       []);
     request.send(function (status, responseText) {
       username = JSON.parse(responseText).username;
@@ -44,7 +44,7 @@
   }
 
   function fetchTicketsData(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/find/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/ticket/find/", "POST",
       [], {ticket: "{{ticket}}"});
     request.send(function (status, responseText) {
       ticket = JSON.parse(responseText);
@@ -89,7 +89,7 @@
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/message/delete/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/ticket/message/delete/", "POST",
           [], {ticket: ticket.id, message: id});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'ticket.message.delete.successful.title' %}", "{% trans 'ticket.message.delete.successful.body' %}", "success").then(success => window.location.reload());
@@ -124,16 +124,16 @@
     });
   }
 
-  function displayEntry(taskwolfWritten, author, date, time, contentElement) {
+  function displayEntry(dulnoWritten, author, date, time, contentElement) {
     let messageContainer = document.createElement("li");
     messageContainer.classList.add("ticket-message-container");
     let messageDescription = document.createElement("div");
     messageDescription.classList.add("ticket-message-description");
-    if (taskwolfWritten) {
-      let taskwolfPicture = document.createElement("img");
-      taskwolfPicture.classList.add("ticket-message-profile-picture");
-      taskwolfPicture.src = "{% static 'img/tickets/taskwolf-profile-picture.png' %}";
-      messageDescription.appendChild(taskwolfPicture);
+    if (dulnoWritten) {
+      let dulnoPicture = document.createElement("img");
+      dulnoPicture.classList.add("ticket-message-profile-picture");
+      dulnoPicture.src = "{% static 'img/tickets/dulno-profile-picture.png' %}";
+      messageDescription.appendChild(dulnoPicture);
     } else {
       let userPicture = document.createElement("i");
       userPicture.classList.add("ticket-message-profile-icon", "fa-regular", "fa-user");
@@ -173,7 +173,7 @@
 
   document.getElementById("ticket-title-change").onclick = function(event) {
     let title = document.getElementById("ticket-title").value;
-    let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/rename/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/ticket/rename/", "POST",
       [], {ticket: ticket.id, title: title});
     request.send(function (status, responseText) {
       Swal.fire("{% trans 'ticket.title.change.successful.title' %}", "{% trans 'ticket.title.change.successful.body' %}", "success").then(success => window.location.reload());
@@ -182,7 +182,7 @@
 
   document.getElementById("ticket-message-add").onclick = function(event) {
     let message = document.getElementById("ticket-answer-field").firstElementChild.innerHTML;
-    let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/message/add/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/ticket/message/add/", "POST",
       [], {ticket: ticket.id, message: message});
     request.send(function (status, responseText) {
       Swal.fire("{% trans 'ticket.message.add.successful.title' %}", "{% trans 'ticket.message.add.successful.body' %}", "success").then(success => window.location.reload());
@@ -198,7 +198,7 @@
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/ticket/delete/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/ticket/delete/", "POST",
           [], {ticket: ticket.id});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'ticket.delete.successful.title' %}", "{% trans 'ticket.delete.successful.body' %}", "success").then(success => window.location.href = "/tickets/");

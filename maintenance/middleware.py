@@ -35,7 +35,7 @@ class MaintenanceMiddleware(object):
     return maintenanceRunning
 
   def applyLanguage(self, request):
-    language = request.COOKIES.get("taskwolf-home-language")
+    language = request.COOKIES.get("dulno-home-language")
     if (language is None):
       translation.activate("en")
     translation.activate(language)

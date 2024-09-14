@@ -27,7 +27,7 @@
   });
 
   document.getElementById("add").onclick = function() {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/webhook/add/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/webhook/add/", "POST",
       [],
       {name: document.getElementById("name").value});
     request.send(function (status, responseText) {

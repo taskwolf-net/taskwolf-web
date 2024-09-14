@@ -65,7 +65,7 @@
   function fetchWebhookData(callback) {
     let location = window.location;
     let id = location.href.replace(location.host, "").replace(location.protocol, "").replace("webhook", "").replaceAll("/", "");
-    let request = new HttpRequest("https://api.taskwolf.net/v1/webhook/find/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/webhook/find/", "POST",
       [], {webhook: id});
     request.send(function (status, responseText) {
       webhook = JSON.parse(responseText);
@@ -102,7 +102,7 @@
     $('#webhook-key-regenerate').tooltip('hide');
     applyTooltips(keyButton, document.getElementById("webhook-key-section-content"),
       "{% trans 'product.webhook.key.copy.tooltip' %}");
-    let request = new HttpRequest("https://api.taskwolf.net/v1/webhook/key/regenerate/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/webhook/key/regenerate/", "POST",
       [], {webhook: webhook.id});
     request.send(function (status, responseText) {
       key = JSON.parse(responseText).key;
@@ -119,7 +119,7 @@
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/webhook/remove/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/webhook/remove/", "POST",
           [], {webhook: webhook.id});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.webhook.delete.successful.title' %}", "{% trans 'product.webhook.delete.successful.body' %}", "success").then(success => window.location.href = "/webhooks/");
@@ -148,7 +148,7 @@
           Swal.fire("{% trans 'product.webhook.rename.empty.title' %}", "{% trans 'product.webhook.rename.empty.body' %}", "error");
           return;
         }
-        let request = new HttpRequest("https://api.taskwolf.net/v1/webhook/rename/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/webhook/rename/", "POST",
           [], {webhook: webhook.id, name: input.value});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.webhook.rename.successful.title' %}", "{% trans 'product.webhook.rename.successful.body' %}", "success").then(success => window.location.reload());

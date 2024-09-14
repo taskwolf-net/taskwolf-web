@@ -18,10 +18,10 @@
 
 <script>
   $(document).ready(function() {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/account/email/change/complete/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/settings/account/email/change/complete/", "POST",
       [], {user: "{{user}}", token: "{{token}}"});
     request.send(function (status, responseText) {
-      Cookie.destroy("token", ".taskwolf.net");
+      Cookie.destroy("token", ".dulno.com");
     });
   });
 </script>

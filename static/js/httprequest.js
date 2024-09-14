@@ -18,7 +18,7 @@ class HttpRequest {
     if (homeToken !== null) {
       headers.push({key: "Home-Authorization", value: "Bearer " + homeToken});
     }
-    let whitelistKey = Cookie.find("taskwolf-whitelist-key");
+    let whitelistKey = Cookie.find("dulno-whitelist-key");
     if (whitelistKey !== null) {
       headers.push({key: "WHITELIST-KEY", value: whitelistKey});
     }
@@ -46,13 +46,13 @@ class HttpRequest {
     if (refreshToken == null) {
       return;
     }
-    let request = new HttpRequest("https://api.taskwolf.net/v1/verification/refresh/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/verification/refresh/", "POST",
       [], {refreshToken: refreshToken});
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
       if (response.success === "true") {
-        Cookie.create("token", response.productApiKey, 60 * 60 * 24 * 30, ".taskwolf.net");
-        Cookie.create("refresh-token", response.refreshToken, 60 * 60 * 24 * 30, ".taskwolf.net");
+        Cookie.create("token", response.productApiKey, 60 * 60 * 24 * 30, ".dulno.com");
+        Cookie.create("refresh-token", response.refreshToken, 60 * 60 * 24 * 30, ".dulno.com");
         self.send(callback);
       }
     });

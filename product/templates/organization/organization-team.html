@@ -39,14 +39,14 @@
   });
 
   function fetchOrganization(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET", []);
+    let request = new HttpRequest("https://api.dulno.com/v1/organization/", "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });
   }
 
   function fetchOrganizationTeams(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/teams/", "GET", []);
+    let request = new HttpRequest("https://api.dulno.com/v1/organization/teams/", "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText).teams);
     });
@@ -192,7 +192,7 @@
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/add/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/organization/team/add/", "POST",
           [], {name: input.value});
         request.send(function (status, responseText) {
           if (status === 400) {
@@ -216,7 +216,7 @@
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/remove/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/organization/team/remove/", "POST",
           [], {team: team});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.organization.team.remove.successful.title' %}",
@@ -294,7 +294,7 @@
   }
 
   function addTeamMember(team, member) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/member/add/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/organization/team/member/add/", "POST",
       [], {team: team, target: member});
     request.send(function (status, responseText) {
       location.reload();
@@ -302,7 +302,7 @@
   }
 
   function removeTeamMember(team, member) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/member/remove/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/organization/team/member/remove/", "POST",
       [], {team: team, target: member});
     request.send(function (status, responseText) {
       location.reload();
@@ -310,7 +310,7 @@
   }
 
   function moveTeam(team, upwards) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/move/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/organization/team/move/", "POST",
       [], {team: team, upwards: upwards});
     request.send(function (status, responseText) {
       location.reload();
@@ -337,7 +337,7 @@
             "{% trans 'product.organization.team.rename.empty.body' %}", "error");
           return;
         }
-        let request = new HttpRequest("https://api.taskwolf.net/v1/organization/team/rename/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/organization/team/rename/", "POST",
           [], {team: team, name: input.value});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.organization.team.rename.successful.title' %}",

@@ -1,14 +1,14 @@
 let highlightedElement = "";
 
 window.addEventListener('load', function () {
-  let url = window.location.href.replace("https://taskwolf.net/", "").replaceAll("/", "");
+  let url = window.location.href.replace("https://dulno.com/", "").replaceAll("/", "");
   if (url === "" || url === "product" || url === "solution" || url === "pricing" ||
     url.includes("login") || url.includes("register") || url.includes("password") ||
     url === "whitelist" || url === "imprint" || url === "privacy-policy"
   ) {
     return;
   }
-  let request = new HttpRequest("https://api.taskwolf.net/v1/tutorial/", "GET", []);
+  let request = new HttpRequest("https://api.dulno.com/v1/tutorial/", "GET", []);
   request.send(function (status, responseText) {
     let tutorial = JSON.parse(responseText);
     if (!tutorial.active) {
@@ -65,7 +65,7 @@ function displayTutorial(tutorial, showCancel) {
 }
 
 function cancelTutorial() {
-  let request = new HttpRequest("https://api.taskwolf.net/v1/tutorial/cancel/", "POST", []);
+  let request = new HttpRequest("https://api.dulno.com/v1/tutorial/cancel/", "POST", []);
   request.send(function (status, responseText) {
     let tutorial = JSON.parse(responseText);
     if (!tutorial.active) {
@@ -76,7 +76,7 @@ function cancelTutorial() {
 }
 
 function continueTutorial() {
-  let request = new HttpRequest("https://api.taskwolf.net/v1/tutorial/next/", "POST", []);
+  let request = new HttpRequest("https://api.dulno.com/v1/tutorial/next/", "POST", []);
   request.send(function (status, responseText) {
     let tutorial = JSON.parse(responseText);
     if (!tutorial.active) {

@@ -97,21 +97,21 @@
   }
 
   function fetchTerminationStatus(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/termination/status/", "GET", []);
+    let request = new HttpRequest("https://api.dulno.com/v1/termination/status/", "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });
   }
 
   function fetchBundle(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/bundle/", "GET", []);
+    let request = new HttpRequest("https://api.dulno.com/v1/bundle/", "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });
   }
 
   function fetchOrganization(callback) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/organization/", "GET", []);
+    let request = new HttpRequest("https://api.dulno.com/v1/organization/", "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });
@@ -126,7 +126,7 @@
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.taskwolf.net/v1/terminate/", "GET", []);
+        let request = new HttpRequest("https://api.dulno.com/v1/terminate/", "GET", []);
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.organization.termination.process.successful.title' %}", "{% trans 'product.organization.termination.process.successful.body' %}", "success").then(success => window.location.reload());
         });

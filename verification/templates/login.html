@@ -38,7 +38,7 @@
 
 <script>
   $(document).ready(function() {
-    let rememberMe = Cookie.find("taskwolf-remember-me");
+    let rememberMe = Cookie.find("dulno-remember-me");
     if (rememberMe != null) {
       document.getElementById("email").value = rememberMe;
     }
@@ -57,10 +57,10 @@
 
   function login(multiFactorCode) {
     if (document.getElementById("remember-check").checked) {
-      Cookie.create("taskwolf-remember-me", document.getElementById("email").value,
+      Cookie.create("dulno-remember-me", document.getElementById("email").value,
         12 * 30 * 24 * 60 * 60);
     }
-    let request = new HttpRequest("https://api.taskwolf.net/v1/verification/login/", "POST", [],
+    let request = new HttpRequest("https://api.dulno.com/v1/verification/login/", "POST", [],
       {email: document.getElementById("email").value, password: document.getElementById("password").value,
         multiFactorCode: multiFactorCode});
     request.send(function (status, responseText) {
@@ -70,8 +70,8 @@
       }
       let success = response.success;
       if (success === true) {
-        Cookie.create("token", response.productApiKey, 60 * 60 * 24 * 30, ".taskwolf.net");
-        Cookie.create("refresh-token", response.refreshToken, 60 * 60 * 24 * 30, ".taskwolf.net");
+        Cookie.create("token", response.productApiKey, 60 * 60 * 24 * 30, ".dulno.com");
+        Cookie.create("refresh-token", response.refreshToken, 60 * 60 * 24 * 30, ".dulno.com");
         if (!redirect()) {
           window.location.href = "/dashboard/";
         }
@@ -114,6 +114,6 @@
   }
 
   document.getElementById("login-external-service-google").onclick = function (event) {
-    window.location.href = "https://accounts.google.com/o/oauth2/auth?access_type=offline&prompt=consent&client_id=544413433596-5i9issjef49s7tedlcmbkfdp750iom2b.apps.googleusercontent.com&redirect_uri=https://api.taskwolf.net/v1/google/login/&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile";
+    window.location.href = "https://accounts.google.com/o/oauth2/auth?access_type=offline&prompt=consent&client_id=544413433596-5i9issjef49s7tedlcmbkfdp750iom2b.apps.googleusercontent.com&redirect_uri=https://api.dulno.com/v1/google/login/&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile";
   }
 </script>

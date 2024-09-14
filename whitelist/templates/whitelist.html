@@ -23,12 +23,12 @@
   });
 
   document.getElementById('verify').onclick = function() {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/whitelist/isValid/", "POST", [],
+    let request = new HttpRequest("https://api.dulno.com/v1/whitelist/isValid/", "POST", [],
       {key: document.getElementById("key").value});
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
       if (response.isValid === true) {
-        Cookie.create("taskwolf-whitelist-key", document.getElementById("key").value,
+        Cookie.create("dulno-whitelist-key", document.getElementById("key").value,
           12 * 30 * 24 * 60 * 60);
         window.location.href = "/";
       } else {

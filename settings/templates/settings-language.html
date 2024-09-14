@@ -27,7 +27,7 @@
 
 <script>
   $(document).ready(function() {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/language/", "GET",
+    let request = new HttpRequest("https://api.dulno.com/v1/settings/language/", "GET",
       []);
     request.send(function (status, responseText) {
       let language = JSON.parse(responseText).language;
@@ -44,7 +44,7 @@
   }
 
   function changeLanguage(code) {
-    let request = new HttpRequest("https://api.taskwolf.net/v1/settings/language/change/", "POST",
+    let request = new HttpRequest("https://api.dulno.com/v1/settings/language/change/", "POST",
       [], {language: code});
     request.send(function (status, responseText) {
       window.location.reload();
