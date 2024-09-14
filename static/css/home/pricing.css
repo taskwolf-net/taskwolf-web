@@ -129,7 +129,7 @@
 .pricing-package {
   width: 20%;
   position: sticky !important;
-  top: 84px !important;
+  top: 87px !important;
   z-index: 100 !important;
   vertical-align: top;
   color: white;
@@ -214,6 +214,8 @@
 @media (min-width: 1350px) {
   .pricing-package-stuck {
     padding-bottom: 20px !important;
+    border-radius: 0;
+    border: none;
   }
 
   .pricing-package-stuck .pricing-package-description {
@@ -238,6 +240,14 @@
 
   .pricing-package-stuck .pricing-package-features {
     display: none;
+  }
+
+  th#pricing-package-free.pricing-package-stuck {
+    border-bottom-left-radius: 20px;
+  }
+
+  th#pricing-package-enterprise.pricing-package-stuck {
+    border-bottom-right-radius: 20px;
   }
 }
 
