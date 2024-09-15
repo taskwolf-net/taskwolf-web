@@ -30,7 +30,7 @@
   $(document).ready(function() {
     displayLoader();
     document.getElementById("accounts-logo").src = "{% static '' %}" +
-      "img/applications/" + sessionStorage.getItem("account-app-logo");
+      "img/applications/" + sessionStorage.getItem("account-app-logo").split(".")[0] + ".webp";
     document.getElementById("accounts-headline").innerHTML =
       sessionStorage.getItem("account-app-name");
     fetchAccountsData(function() {
