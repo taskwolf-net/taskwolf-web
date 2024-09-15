@@ -183,7 +183,7 @@
     let entryElement = document.createElement("li");
     entryElement.classList.add("workflow-component-application-entry");
     let logoElement = document.createElement("img");
-    logoElement.src = "{% static '' %}" + "img/applications/" + logo;
+    logoElement.src = "{% static '' %}" + "img/applications/" + logo.split(".")[0] + ".webp";
     logoElement.width = 48;
     logoElement.height = 48;
     entryElement.appendChild(logoElement);
@@ -323,7 +323,7 @@
         }
       }
       let logoElement = document.createElement("img");
-      logoElement.src = "{% static '' %}" + "img/applications/" + selectedApplicationLogo;
+      logoElement.src = "{% static '' %}" + "img/applications/" + selectedApplicationLogo.split(".")[0] + ".webp";
       applyTooltips(logoElement, accountContentElement, " {% trans 'product.workflow.component.account.link.tooltop' %}");
       logoLinkElement.appendChild(logoElement);
       accountContentElement.appendChild(logoLinkElement);
@@ -478,8 +478,8 @@
   let specificationSelectButtons = [];
   let specificationValues = {};
   let currentPlaceholderElement;
-  let requiredSpecificationletiables = [];
-  let componentsOutputletiables = [];
+  let requiredSpecificationVariables = [];
+  let componentsOutputVariables = [];
 
   $(document).ready(function() {
     new ResizeObserver(() => updateSpecificationsDividerHeight())
@@ -501,12 +501,12 @@
     } else {
       document.getElementById("workflow-component-specifications-placeholders-empty").classList.remove("d-none");
     }
-    findOutputletiables(-1, function(outputletiables) {
-      componentsOutputletiables = componentsOutputletiables.concat(outputletiables);
+    findOutputVariables(-1, function(outputVariables) {
+      componentsOutputVariables = componentsOutputVariables.concat(outputVariables);
     });
     for (let i = 0; i < sessionStorage.getItem("workflow-action-index"); i++) {
-      findOutputletiables(i, function(outputletiables) {
-        componentsOutputletiables = componentsOutputletiables.concat(outputletiables);
+      findOutputVariables(i, function(outputVariables) {
+        componentsOutputVariables = componentsOutputVariables.concat(outputVariables);
       });
     }
   }
@@ -517,27 +517,27 @@
     request.send(function (status, responseText) {
       document.getElementById("workflow-component-specifications-input-list").innerHTML = "";
       let component = JSON.parse(responseText);
-      let inputletiables = component.inputletiables;
-      if (inputletiables.length === 0) {
+      let inputVariables = component.inputVariables;
+      if (inputVariables.length === 0) {
         document.getElementById("workflow-component-specifications-container").style.display = "none";
         document.getElementById("workflow-component-specifications-redundant").style.display = "block";
         updateAdoptability(true);
         selectedComponentSetup = false;
         return;
       }
-      for (let i = 0; i < inputletiables.length; i++) {
-        let inputletiable = inputletiables[i];
+      for (let i = 0; i < inputVariables.length; i++) {
+        let inputletiable = inputVariables[i];
         if (inputletiable.dataType === "TEXT") {
-          addSpecificationInput(inputletiable.identifier, inputletiable.name, inputletiable.description, inputletiable.placeholder, i, inputletiables.length);
+          addSpecificationInput(inputletiable.identifier, inputletiable.name, inputletiable.description, inputletiable.placeholder, i, inputVariables.length);
         }
         if (inputletiable.dataType === "SELECT") {
-          addSpecificationSelect(inputletiable.identifier, inputletiable.name, inputletiable.description, i, inputletiables.length);
+          addSpecificationSelect(inputletiable.identifier, inputletiable.name, inputletiable.description, i, inputVariables.length);
         }
         if (inputletiable.dataType === "FILE") {
-          addSpecificationFile(inputletiable.identifier, inputletiable.name, inputletiable.description, i, inputletiables.length);
+          addSpecificationFile(inputletiable.identifier, inputletiable.name, inputletiable.description, i, inputVariables.length);
         }
         if (inputletiable.type === "REQUIRED") {
-          requiredSpecificationletiables.push(inputletiable.identifier);
+          requiredSpecificationVariables.push(inputletiable.identifier);
         }
       }
       createResetButton(document.getElementById("workflow-component-specifications-input-list"), function() {
@@ -588,8 +588,8 @@
       let selectedComponentContent = JSON.parse(selectedComponent.content);
       setTimeout(function() {
         if (identifier in selectedComponentContent) {
-          for (let i = 0; i < componentsOutputletiables.length; i++) {
-            let letiable = componentsOutputletiables[i];
+          for (let i = 0; i < componentsOutputVariables.length; i++) {
+            let letiable = componentsOutputVariables[i];
             selectedComponentContent[identifier] = selectedComponentContent[identifier].replace(
               "%" + letiable.identifier + "%",
               '<div class="workflow-component-specifications-input-placeholder" contenteditable="false">' +
@@ -606,8 +606,8 @@
   }
 
   function inputSpecificationInput(identifier, value) {
-    for (let i = 0; i < componentsOutputletiables.length; i++) {
-      let letiable = componentsOutputletiables[i];
+    for (let i = 0; i < componentsOutputVariables.length; i++) {
+      let letiable = componentsOutputVariables[i];
       value = value.replace('<div class="workflow-component-specifications-input-placeholder" contenteditable="false">' +
         letiable.name + '</div>', "%" + letiable.identifier + "%")
     }
@@ -831,12 +831,12 @@
 
   function displayPlaceholders(index) {
     document.getElementById("workflow-component-specifications-placeholders-list").innerHTML = "";
-    findOutputletiables(index, function(outputletiables) {
-      for (let i = 0; i < outputletiables.length; i++) {
-        let letiable = outputletiables[i];
+    findOutputVariables(index, function(outputVariables) {
+      for (let i = 0; i < outputVariables.length; i++) {
+        let letiable = outputVariables[i];
         displayPlaceholder(letiable.identifier, letiable.name);
       }
-      if (outputletiables.length === 0) {
+      if (outputVariables.length === 0) {
         let noPlaceholdersAvailableElement = document.createElement("p");
         noPlaceholdersAvailableElement.classList.add("text-center", "mt-4");
         noPlaceholdersAvailableElement.innerHTML = "{% trans 'product.workflow.component.specifications.placeholders.empty' %}";
@@ -845,7 +845,7 @@
     });
   }
 
-  function findOutputletiables(index, callback) {
+  function findOutputVariables(index, callback) {
     let componentType = (index < 0) ? "trigger" : "action";
     let component;
     if (componentType === "trigger") {
@@ -858,7 +858,7 @@
     let request = new HttpRequest("https://api.dulno.com/v1/component/find/", "POST",
       [], {componentType: componentType, module: module, type: type});
     request.send(function (status, responseText) {
-      callback(JSON.parse(responseText).outputletiables);
+      callback(JSON.parse(responseText).outputVariables);
     });
   }
 
@@ -886,14 +886,14 @@
     document.getElementById("workflow-component-specifications-placeholders-list").innerHTML = "";
     specificationSelectButtons = [];
     specificationValues = {};
-    requiredSpecificationletiables = [];
+    requiredSpecificationVariables = [];
     updateAdoptability(false);
   }
 
   function checkAdoptability() {
     let isAdoptable = true;
-    for (let i = 0; i < requiredSpecificationletiables.length; i++) {
-      if (!(requiredSpecificationletiables[i] in specificationValues)) {
+    for (let i = 0; i < requiredSpecificationVariables.length; i++) {
+      if (!(requiredSpecificationVariables[i] in specificationValues)) {
         isAdoptable = false;
         break;
       }

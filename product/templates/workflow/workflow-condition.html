@@ -42,16 +42,16 @@
   let conditionType = "";
   let comparativeValue = "";
   let currentPlaceholderElement;
-  let conditionOutputletiables = [];
+  let conditionOutputVariables = [];
 
   $(document).ready(function() {
     let actionIndex = parseInt(sessionStorage.getItem("workflow-condition-index").split(":")[0]);
-    let fetchedletiables = -1;
+    let fetchedVariables = -1;
     for (let i = -1; i < actionIndex; i++) {
-      findOutputletiables(i, function(outputletiables) {
-        conditionOutputletiables = conditionOutputletiables.concat(outputletiables);
-        fetchedletiables++;
-        if (fetchedletiables === actionIndex) {
+      findOutputVariables(i, function(outputVariables) {
+        conditionOutputVariables = conditionOutputVariables.concat(outputVariables);
+        fetchedVariables++;
+        if (fetchedVariables === actionIndex) {
           performAutoCompletion();
           displayPlaceholdersTabs();
         }
@@ -86,8 +86,8 @@
   }
 
   function autoCompleteInput(identifier, value) {
-    for (let i = 0; i < conditionOutputletiables.length; i++) {
-      let letiable = conditionOutputletiables[i];
+    for (let i = 0; i < conditionOutputVariables.length; i++) {
+      let letiable = conditionOutputVariables[i];
       value = value.replace("%" + letiable.identifier + "%",
         '<div class="workflow-condition-input-placeholder" contenteditable="false">' + letiable.name + '</div>')
     }
@@ -156,8 +156,8 @@
   }
 
   function inputConditionInput(identifier, value) {
-    for (let i = 0; i < conditionOutputletiables.length; i++) {
-      let letiable = conditionOutputletiables[i];
+    for (let i = 0; i < conditionOutputVariables.length; i++) {
+      let letiable = conditionOutputVariables[i];
       value = value.replace('<div class="workflow-condition-input-placeholder" contenteditable="false">' +
         letiable.name + '</div>', "%" + letiable.identifier + "%")
     }
@@ -308,12 +308,12 @@
 
   function displayPlaceholders(index) {
     document.getElementById("workflow-condition-placeholders-list").innerHTML = "";
-    findOutputletiables(index, function(outputletiables) {
-      for (let i = 0; i < outputletiables.length; i++) {
-        let letiable = outputletiables[i];
+    findOutputVariables(index, function(outputVariables) {
+      for (let i = 0; i < outputVariables.length; i++) {
+        let letiable = outputVariables[i];
         displayPlaceholder(letiable.identifier, letiable.name);
       }
-      if (outputletiables.length === 0) {
+      if (outputVariables.length === 0) {
         let noPlaceholdersAvailableElement = document.createElement("p");
         noPlaceholdersAvailableElement.classList.add("text-center", "mt-4");
         noPlaceholdersAvailableElement.innerHTML = "{% trans 'product.workflow.condition.placeholders.empty' %}";
@@ -322,7 +322,7 @@
     });
   }
 
-  function findOutputletiables(index, callback) {
+  function findOutputVariables(index, callback) {
     let componentType = (index < 0) ? "trigger" : "action";
     let component;
     if (componentType === "trigger") {
@@ -335,7 +335,7 @@
     let request = new HttpRequest("https://api.dulno.com/v1/component/find/", "POST",
       [], {componentType: componentType, module: module, type: type});
     request.send(function (status, responseText) {
-      callback(JSON.parse(responseText).outputletiables);
+      callback(JSON.parse(responseText).outputVariables);
     });
   }
 

@@ -7,7 +7,7 @@ window.addEventListener('load', function () {
     return;
   }
   Swal.fire({
-    imageUrl: "https://dulno.com/static/img/home/cookie.png",
+    imageUrl: "https://dulno.com/static/img/home/cookie.webp",
     imageWidth: 128,
     imageHeight: 128,
     title: "Cookies",

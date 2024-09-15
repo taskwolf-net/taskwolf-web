@@ -5,7 +5,7 @@
   <body class="dark">
      {% include 'home-header.html' %}
     <form>
-      <img id="login-logo" src="{% static 'img/logo.png' %}">
+      <img id="login-logo" src="{% static 'img/logo.webp' %}">
       <div class="form-outline mb-4">
         <label for="email" class="form-label">{% trans 'home.login.email' %}</label>
         <input type="email" id="email" class="form-control" placeholder="{% trans 'home.login.email' %}">
@@ -28,7 +28,7 @@
         <div class="login-alternative-divider"></div>
       </div>
       <div id="login-external-services">
-        <button id="login-external-service-google" class="btn login-external-service-button" type="button"><img class="login-external-service-logo" src="{% static 'img/verification/google.jpg' %}">{% trans 'home.login.google' %}</button>
+        <button id="login-external-service-google" class="btn login-external-service-button" type="button"><img class="login-external-service-logo" src="{% static 'img/verification/google.webp' %}">{% trans 'home.login.google' %}</button>
       </div>
     </form>
   </body>

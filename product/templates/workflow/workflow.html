@@ -96,7 +96,7 @@
     componentHeadline.classList.add("workflow-headline");
     if (logo !== "") {
       let logoElement = document.createElement("img");
-      logoElement.src = "{% static '' %}" + "img/applications/" + logo;
+      logoElement.src = "{% static '' %}" + "img/applications/" + logo.split(".")[0] + ".webp";
       logoElement.width = 48;
       logoElement.height = 48;
       componentHeadline.appendChild(logoElement);

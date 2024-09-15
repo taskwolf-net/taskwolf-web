@@ -75,7 +75,7 @@
     entryElement.role = "button";
     entryElement.classList.add("account-application-entry");
     let logoElement = document.createElement("img");
-    logoElement.src = "{% static '' %}" + "img/applications/" + logo;
+    logoElement.src = "{% static '' %}" + "img/applications/" + logo.split(".")[0] + ".webp";
     logoElement.width = 64;
     logoElement.height = 64;
     entryElement.appendChild(logoElement);

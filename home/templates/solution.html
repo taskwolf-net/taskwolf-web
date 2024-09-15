@@ -7,7 +7,7 @@
     <div id="solution-header">
       <div id="solution-header-content">
         <div id="solution-logo-container">
-          <img id="solution-logo" src="{% static 'img/home/solution.png' %}">
+          <img id="solution-logo" src="{% static 'img/home/solution.webp' %}">
           <div id="solution-logo-shine"></div>
         </div>
         <div id="solution-header-content-text">
@@ -215,26 +215,26 @@
 
 <script>
   let triggers = [
-    {logo: "manual.png"},
-    {logo: "scheduler.png"},
-    {logo: "process.png"},
-    {logo: "device.png"},
-    {logo: "webhook.png"},
-    {logo: "database.png"},
-    {logo: "googlecalendar.png"},
-    {logo: "googledrive.png"},
-    {logo: "googledocs.png"},
-    {logo: "gmail.png"},
-    {logo: "discord.png"},
+    {logo: "manual.webp"},
+    {logo: "scheduler.webp"},
+    {logo: "process.webp"},
+    {logo: "device.webp"},
+    {logo: "webhook.webp"},
+    {logo: "database.webp"},
+    {logo: "googlecalendar.webp"},
+    {logo: "googledrive.webp"},
+    {logo: "googledocs.webp"},
+    {logo: "gmail.webp"},
+    {logo: "discord.webp"},
   ];
   let actions = [
-    {logo: "device.png"},
-    {logo: "database.png"},
-    {logo: "googlecalendar.png"},
-    {logo: "googledrive.png"},
-    {logo: "googledocs.png"},
-    {logo: "gmail.png"},
-    {logo: "discord.png"},
+    {logo: "device.webp"},
+    {logo: "database.webp"},
+    {logo: "googlecalendar.webp"},
+    {logo: "googledrive.webp"},
+    {logo: "googledocs.webp"},
+    {logo: "gmail.webp"},
+    {logo: "discord.webp"},
   ];
 
   $(document).ready(function() {
@@ -259,7 +259,7 @@
   function createAppConstellationElement(logo) {
     let element = document.createElement("img");
     element.classList.add("solution-apps-constellations-app");
-    element.src = "{% static '' %}" + "img/applications/" + logo;
+    element.src = "{% static '' %}" + "img/applications/" + logo.split(".")[0] + ".webp";
     return element;
   }
 
