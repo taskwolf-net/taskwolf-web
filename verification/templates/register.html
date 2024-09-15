@@ -235,7 +235,7 @@
 
   function register(callback) {
     grecaptcha.ready(function() {
-      grecaptcha.execute('6LdpvhAqAAAAAFbSWycUwLBbDnS4TaSvjJOofiOg', {action: 'register'}).then(function(token) {
+      grecaptcha.execute('6LdEpEQqAAAAAMifavVkpRB2ganIyA-rqFc6b1mi', {action: 'register'}).then(function(token) {
         let request = new HttpRequest("https://api.dulno.com/v1/verification/register/", "POST", [],
           {email: emailInput.value, name: usernameInput.value, password: passwordInput.value, recaptchaToken: token});
         request.send(function (status, responseText) {
