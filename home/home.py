@@ -79,6 +79,6 @@ async def privacyPolicy(request):
     'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/privacy-policy.css']})
 
 @home_page
-async def terms(request):
-  return render(request, 'terms.html', {'title': gettext("terms.policy.title"),
-    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/terms.css']})
+async def termsOfService(request):
+  return render(request, 'terms-of-service.html', {'title': gettext("home.terms.of.service.title"),
+    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/terms-of-service.css']})

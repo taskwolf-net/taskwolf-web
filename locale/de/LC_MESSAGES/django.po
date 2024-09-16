@@ -74,11 +74,9 @@ msgid "home.footer.legal"
 msgstr "RECHTLICHES"
 msgid "home.footer.imprint"
 msgstr "Impressum"
-msgid "home.footer.terms.of.service"
-msgstr "Nutzungsbedingungen"
 msgid "home.footer.privacy.policy"
 msgstr "Datenschutzerklärung"
-msgid "home.footer.terms"
+msgid "home.footer.terms.of.service"
 msgstr "Nutzungsbedingungen"
 
 # PRODUCT
@@ -674,6 +672,10 @@ msgstr "Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vo
 # PRIVACY POLICY
 msgid "home.privacy.policy.title"
 msgstr "Datenschutzerklärung - Dulno"
+
+# TERMS OF SERVICE
+msgid "home.terms.of.service.title"
+msgstr "Nutzungsbedingungen - Dulno"
 
 # LOGIN
 msgid "home.login.title"

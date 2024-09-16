@@ -74,11 +74,9 @@ msgid "home.footer.legal"
 msgstr "LEGAL"
 msgid "home.footer.imprint"
 msgstr "Imprint"
-msgid "home.footer.terms.of.service"
-msgstr "Terms of Service"
 msgid "home.footer.privacy.policy"
-msgstr "Privacy Policy"
-msgid "home.footer.terms"
+msgstr "Privacy policy"
+msgid "home.footer.terms.of.service"
 msgstr "Terms of service"
 
 # PRODUCT
@@ -673,7 +671,11 @@ msgstr "We are not willing or obliged to participate in dispute resolution proce
 
 # PRIVACY POLICY
 msgid "home.privacy.policy.title"
-msgstr "Privacy Policy - Dulno"
+msgstr "Privacy policy - Dulno"
+
+# TERMS OF SERVICE
+msgid "home.terms.of.service.title"
+msgstr "Terms of service - Dulno"
 
 # LOGIN
 msgid "home.login.title"
@@ -745,11 +747,11 @@ msgstr "Legal requirements"
 msgid "home.registration.legal.check"
 msgstr "By creating your account, you agree to the"
 msgid "home.registration.terms.of.service"
-msgstr "Terms of Service"
+msgstr "Terms of service"
 msgid "home.registration.and"
 msgstr "and"
 msgid "home.registration.privacy.policy"
-msgstr "Privacy Policy"
+msgstr "Privacy policy"
 msgid "home.registration.news"
 msgstr "I would like to be informed about news to improve my experience with Dulno (optional)"
 msgid "home.registration.success.headline"
