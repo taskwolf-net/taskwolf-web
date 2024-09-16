@@ -14,4 +14,5 @@ urlpatterns = [
   path('sale/', home.sale),
   path('imprint/', home.imprint),
   path('privacy-policy/', home.privacyPolicy),
+  path('terms/', home.terms),
 ]

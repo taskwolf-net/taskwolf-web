@@ -78,6 +78,8 @@ msgid "home.footer.terms.of.service"
 msgstr "Terms of Service"
 msgid "home.footer.privacy.policy"
 msgstr "Privacy Policy"
+msgid "home.footer.terms"
+msgstr "Terms of service"
 
 # PRODUCT
 msgid "home.product.title"
