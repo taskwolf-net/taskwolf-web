@@ -54,8 +54,8 @@
                 </div>
                 <span id="package-general-information-price"></span>
               </li>
-              <div class="package-general-information-divider"></div>
-              <li class="package-general-information-entry">
+              <div id="package-general-information-divider-runtime" class="package-general-information-divider"></div>
+              <li id="package-general-information-entry-runtime" class="package-general-information-entry">
                 <div class="package-general-information-entry-description">
                   <div class="package-general-information-entry-icon">
                     <i class="fa-regular fa-clock"></i>
@@ -63,6 +63,16 @@
                   <span>{% trans 'product.package.general.runtime' %}</span>
                 </div>
                 <span id="package-general-information-runtime"></span>
+              </li>
+              <div id="package-general-information-divider-expiration"  class="package-general-information-divider"></div>
+              <li id="package-general-information-entry-expiration" class="package-general-information-entry">
+                <div class="package-general-information-entry-description">
+                  <div class="package-general-information-entry-icon">
+                    <i class="fa-regular fa-clock"></i>
+                  </div>
+                  <span>{% trans 'product.package.general.expiration' %}</span>
+                </div>
+                <span id="package-general-information-expiration"></span>
               </li>
               <div class="package-general-information-divider"></div>
               <li class="package-general-information-entry">
@@ -246,10 +256,18 @@
       findPackageClass(bundle);
     document.getElementById("package-general-information-price").innerHTML =
       bundle.price + " €";
+    $(document.getElementById("package-general-information-entry-runtime"))
+      .toggleClass("d-none", bundle.runtime === "UNBOUND");
+    $(document.getElementById("package-general-information-divider-runtime"))
+      .toggleClass("d-none", bundle.runtime === "UNBOUND");
     document.getElementById("package-general-information-runtime").innerHTML =
-      "1 " + (bundle.runtime === "WEEKLY" ? "{% trans 'product.package.general.runtime.week' %}" :
-        (bundle.runtime === "MONTHLY" ? "{% trans 'product.package.general.runtime.month' %}" :
-          "{% trans 'product.package.general.runtime.year' %}"));
+      findPackageRuntime(bundle);
+    $(document.getElementById("package-general-information-entry-expiration"))
+      .toggleClass("d-none", bundle.runtime !== "UNBOUND");
+    $(document.getElementById("package-general-information-divider-expiration"))
+      .toggleClass("d-none", bundle.runtime !== "UNBOUND");
+    document.getElementById("package-general-information-expiration").innerHTML =
+      Math.ceil(Number(bundle.expiration - Date.now()) / (1000 * 60 * 60 * 24)).toString();
     document.getElementById("package-general-information-workflow-access").innerHTML =
       bundle.workflowAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("package-general-information-workflow-number").innerHTML =
@@ -301,6 +319,16 @@
       return "{% trans 'product.package.general.advanced' %}";
     } else if (bundle.class === "EXPERT") {
       return "{% trans 'product.package.general.expert' %}";
+    }
+  }
+
+  function findPackageRuntime(bundle) {
+    if (bundle.runtime === "WEEKLY") {
+      return "1 {% trans 'product.package.general.runtime.week' %}";
+    } else if (bundle.runtime === "MONTHLY") {
+      return "1 {% trans 'product.package.general.runtime.month' %}";
+    } else if (bundle.runtime === "YEARLY") {
+      return "1 {% trans 'product.package.general.runtime.year' %}";
     }
   }
 

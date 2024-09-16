@@ -56,8 +56,8 @@
                 </div>
                 <span id="organization-package-information-price"></span>
               </li>
-              <div class="organization-package-information-divider"></div>
-              <li class="organization-package-information-entry">
+              <div id="organization-package-information-divider-runtime" class="organization-package-information-divider"></div>
+              <li id="organization-package-information-entry-runtime" class="organization-package-information-entry">
                 <div class="organization-package-information-entry-description">
                   <div class="organization-package-information-entry-icon">
                     <i class="fa-regular fa-clock"></i>
@@ -65,6 +65,16 @@
                   <span>{% trans 'product.organization.package.runtime' %}</span>
                 </div>
                 <span id="organization-package-information-runtime"></span>
+              </li>
+              <div id="organization-package-information-divider-expiration" class="organization-package-information-divider"></div>
+              <li id="organization-package-information-entry-expiration" class="organization-package-information-entry">
+                <div class="organization-package-information-entry-description">
+                  <div class="organization-package-information-entry-icon">
+                    <i class="fa-regular fa-clock"></i>
+                  </div>
+                  <span>{% trans 'product.organization.package.expiration' %}</span>
+                </div>
+                <span id="organization-package-information-expiration"></span>
               </li>
               <div class="organization-package-information-divider"></div>
               <li class="organization-package-information-entry">
@@ -268,10 +278,18 @@
       findPackageClass(bundle);
     document.getElementById("organization-package-information-price").innerHTML =
       bundle.price + " €";
+    $(document.getElementById("organization-package-information-entry-runtime"))
+      .toggleClass("d-none", bundle.runtime === "UNBOUND");
+    $(document.getElementById("organization-package-information-divider-runtime"))
+      .toggleClass("d-none", bundle.runtime === "UNBOUND");
     document.getElementById("organization-package-information-runtime").innerHTML =
-      "1 " + (bundle.runtime === "WEEKLY" ? "{% trans 'product.organization.package.runtime.week' %}" :
-        (bundle.runtime === "MONTHLY" ? "{% trans 'product.organization.package.runtime.month' %}" :
-          "{% trans 'product.organization.package.runtime.year' %}"));
+      findPackageRuntime(bundle);
+    $(document.getElementById("organization-package-information-entry-expiration"))
+      .toggleClass("d-none", bundle.runtime !== "UNBOUND");
+    $(document.getElementById("organization-package-information-divider-expiration"))
+      .toggleClass("d-none", bundle.runtime !== "UNBOUND");
+    document.getElementById("organization-package-information-expiration").innerHTML =
+      Math.ceil(Number(bundle.expiration - Date.now()) / (1000 * 60 * 60 * 24)).toString();
     document.getElementById("organization-package-information-workflow-access").innerHTML =
       bundle.workflowAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("organization-package-information-workflow-number").innerHTML =
@@ -329,6 +347,16 @@
       return "{% trans 'product.organization.package.advanced' %}";
     } else if (bundle.class === "EXPERT") {
       return "{% trans 'product.organization.package.expert' %}";
+    }
+  }
+
+  function findPackageRuntime(bundle) {
+    if (bundle.runtime === "WEEKLY") {
+      return "1 {% trans 'product.organization.package.runtime.week' %}";
+    } else if (bundle.runtime === "MONTHLY") {
+      return "1 {% trans 'product.organization.package.runtime.month' %}";
+    } else if (bundle.runtime === "YEARLY") {
+      return "1 {% trans 'product.organization.package.runtime.year' %}";
     }
   }
 
