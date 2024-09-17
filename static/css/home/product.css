@@ -329,7 +329,7 @@ p {
 }
 
 #product-process-content-text {
-  width: min(calc(1000px), 100%);
+  width: min(calc(1100px), 100%);
   margin: auto;
 }
 
@@ -422,15 +422,6 @@ p {
   padding: 20px;
 }
 
-#product-advanced-functions li i {
-  font-size: 28px;
-  border-radius: 50%;
-  background-color: white;
-  aspect-ratio: 1;
-  color: black;
-  padding: 20px;
-}
-
 #product-advanced-functions li h4 {
   margin-top: 8%;
   margin-bottom: 5%;
@@ -439,6 +430,20 @@ p {
 
 #product-advanced-functions li p {
   text-align: left;
+}
+
+.product-advanced-functions-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  width: 64px;
+  height: 64px;
+  font-size: 28px;
+  border-radius: 50%;
+  background-color: white;
+  aspect-ratio: 1;
+  color: black;
 }
 
 @media (max-width: 1000px) {
@@ -496,4 +501,8 @@ p {
     margin-top: 0;
     margin-bottom: 0;
   }
+}
+
+.text-justify {
+  text-align: justify;
 }

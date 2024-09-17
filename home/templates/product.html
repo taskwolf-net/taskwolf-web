@@ -11,9 +11,6 @@
           <h1 id="product-slogan"><b>{% trans 'home.product.slogan' %}</b></h1>
           <h5 class="text-center mt-4 mb-1">{% trans 'home.product.description.1' %}</h5>
           <h5 class="text-center">{% trans 'home.product.description.2' %}</h5>
-          <div id="product-video-container">
-            <button id="product-video-button" onclick="window.open('https://www.youtube.com/watch?v=ZCUOXfwDnx4');"></button>
-          </div>
         </div>
         <img id="product-logo" src="{% static 'img/logo.webp' %}">
       </div>
@@ -78,8 +75,8 @@
         <div id="product-process-content-text">
           <h3 class="product-content-text-headline">{% trans 'home.product.processes.headline' %}</h3>
           <h1 class="product-content-text-slogan">{% trans 'home.product.processes.slogan' %}</h1>
-          <p>{% trans 'home.product.processes.description.1' %}</p>
-          <p class="mb-5">{% trans 'home.product.processes.description.2' %}</p>
+          <p class="text-justify">{% trans 'home.product.processes.description.1' %}</p>
+          <p class="text-justify mb-5">{% trans 'home.product.processes.description.2' %}</p>
         </div>
         <img id="product-process-content-image" src="{% static 'img/home/process.gif' %}">
       </div>
@@ -94,7 +91,7 @@
        <div id="product-organization-content-text" class="product-animation-left">
          <h3 class="product-content-text-headline">{% trans 'home.product.organizations.headline' %}</h3>
          <h1 class="product-content-text-slogan">{% trans 'home.product.organizations.slogan' %}</h1>
-         <p>{% trans 'home.product.organizations.description' %}</p>
+         <p class="text-justify">{% trans 'home.product.organizations.description' %}</p>
          <ul class="product-content-text-list">
            <li>
              <h5><b>{% trans 'home.product.organizations.owner.headline' %}</b></h5>
@@ -120,8 +117,8 @@
         <div id="product-device-content-text" class="product-animation-right">
           <h3 class="product-content-text-headline">{% trans 'home.product.devices.headline' %}</h3>
           <h1 class="product-content-text-slogan">{% trans 'home.product.devices.slogan' %}</h1>
-          <p>{% trans 'home.product.devices.description.1' %}</p>
-          <p>{% trans 'home.product.devices.description.2' %}</p>
+          <p class="text-justify">{% trans 'home.product.devices.description.1' %}</p>
+          <p class="text-justify">{% trans 'home.product.devices.description.2' %}</p>
         </div>
       </div>
     </div>
@@ -138,32 +135,44 @@
           <p class="text-center">{% trans 'home.product.advanced.description' %}</p>
           <ul id="product-advanced-functions">
             <li>
-              <i class="fa-solid fa-arrow-right-arrow-left"></i>
-              <h4>{% trans 'home.product.advanced.transformation.headline' %}</h4>
-              <p>{% trans 'home.product.advanced.transformation.description' %}</p>
+              <div class="product-advanced-functions-icon">
+                <i class="fa-solid fa-user"></i>
+              </div>
+              <h4>{% trans 'home.product.advanced.account.headline' %}</h4>
+              <p>{% trans 'home.product.advanced.account.description' %}</p>
             </li>
             <li>
-              <i class="fa-solid fa-clock-rotate-left"></i>
+              <div class="product-advanced-functions-icon">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+              </div>
               <h4>{% trans 'home.product.advanced.timeline.headline' %}</h4>
               <p>{% trans 'home.product.advanced.timeline.description' %}</p>
             </li>
             <li>
-              <i class="fa-solid fa-solid fa-filter"></i>
+              <div class="product-advanced-functions-icon">
+                <i class="fa-solid fa-solid fa-filter"></i>
+              </div>
               <h4>{% trans 'home.product.advanced.condition.headline' %}</h4>
               <p>{% trans 'home.product.advanced.condition.description' %}</p>
             </li>
             <li>
-              <i class="material-symbols-outlined">webhook</i>
+              <div class="product-advanced-functions-icon">
+                <i class="fa-solid fa-tower-broadcast"></i>
+              </div>
               <h4>{% trans 'home.product.advanced.webhook.headline' %}</h4>
               <p>{% trans 'home.product.advanced.webhook.description' %}</p>
             </li>
             <li>
-              <i class="material-symbols-outlined">database</i>
+              <div class="product-advanced-functions-icon">
+                <i class="fa-solid fa-database"></i>
+              </div>
               <h4>{% trans 'home.product.advanced.database.headline' %}</h4>
               <p>{% trans 'home.product.advanced.database.description' %}</p>
             </li>
             <li>
-              <i class="material-symbols-outlined">draft</i>
+              <div class="product-advanced-functions-icon">
+                <i class="fa-solid fa-sheet-plastic"></i>
+              </div>
               <h4>{% trans 'home.product.advanced.template.headline' %}</h4>
               <p>{% trans 'home.product.advanced.template.description' %}</p>
             </li>
