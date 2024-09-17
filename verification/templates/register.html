@@ -237,7 +237,9 @@
     grecaptcha.ready(function() {
       grecaptcha.execute('6LdEpEQqAAAAAMifavVkpRB2ganIyA-rqFc6b1mi', {action: 'register'}).then(function(token) {
         let request = new HttpRequest("https://api.dulno.com/v1/verification/register/", "POST", [],
-          {email: emailInput.value, name: usernameInput.value, password: passwordInput.value, recaptchaToken: token});
+          {email: emailInput.value, name: usernameInput.value, password: passwordInput.value, recaptchaToken: token,
+            legalAccepted: document.getElementById("legal-check").checked,
+            newsletter: document.getElementById("notification-check").checked});
         request.send(function (status, responseText) {
           callback(JSON.parse(responseText));
         });
