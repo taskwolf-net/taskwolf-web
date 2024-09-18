@@ -64,10 +64,6 @@
   margin-left: 5%;
 }
 
-#home-name h4 {
-  font-family: Verdana, sans-serif;
-}
-
 #home-languages {
   display: flex;
   justify-content: end;
