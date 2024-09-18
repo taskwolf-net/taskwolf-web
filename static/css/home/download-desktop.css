@@ -36,6 +36,7 @@
 
 #download-desktop-content-text {
   width: 45%;
+  text-align: justify;
 }
 
 @media (max-width: 1300px) {
