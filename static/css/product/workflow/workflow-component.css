@@ -257,7 +257,7 @@ input:-webkit-autofill:active{
 #workflow-component-account-content img {
   width: 96px;
   height: 96px;
-  border-radius: 50%;
+  border-radius: 25%;
   transition-duration: 0.4s;
 }
 
