@@ -2171,7 +2171,7 @@ msgstr "Termination successful"
 msgid "product.organization.termination.process.successful.body"
 msgstr "You have successfully terminated your package"
 msgid "product.organization.termination.not.possible.description"
-msgstr "You cannot terminate your package. This is because you are using the free trial version of Dulno. This expires fully automatically after one week. If you would like to upgrade your package, you can do so <a href='/package/upgrade/'>here</a>."
+msgstr "You cannot terminate your package. This is because you are using the free trial version of Dulno. This expires fully automatically after one week. If you would like to upgrade your package, you can do so <a href='/organization/upgrade/'>here</a>."
 msgid "product.organization.termination.done.description"
 msgstr "You have already canceled your package. Accordingly, we can no longer do anything for you here. Your package expires on %s."
 

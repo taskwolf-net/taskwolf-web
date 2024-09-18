@@ -2171,7 +2171,7 @@ msgstr "Kündigung erfolgreich"
 msgid "product.organization.termination.process.successful.body"
 msgstr "Sie haben Ihr Paket erfolgreich gekündigt"
 msgid "product.organization.termination.not.possible.description"
-msgstr "Sie können Ihr Paket nicht kündigen. Das liegt daran, dass Sie die kostenlose Testversion von Dulno benutzen. Diese läuft nach einer Woche vollautomatisch ab. Wenn Sie Ihr Paket erweitern möchten, können Sie dies <a href='/package/upgrade/'>hier</a> tun."
+msgstr "Sie können Ihr Paket nicht kündigen. Das liegt daran, dass Sie die kostenlose Testversion von Dulno benutzen. Diese läuft nach einer Woche vollautomatisch ab. Wenn Sie Ihr Paket erweitern möchten, können Sie dies <a href='/organization/upgrade/'>hier</a> tun."
 msgid "product.organization.termination.done.description"
 msgstr "Sie haben Ihr Paket bereits storniert. Daher können wir hier nichts mehr für Sie tun. Ihr Paket läuft am %s aus."
 
