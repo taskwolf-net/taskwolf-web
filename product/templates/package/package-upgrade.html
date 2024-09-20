@@ -121,10 +121,10 @@
       individualPackage.price + " €";
     if (bundleRuntime === "MONTHLY") {
       document.getElementById("package-upgrade-package-runtime").innerHTML =
-        "1 {% trans 'home.pricing.time.month' %}";
+        "{% trans 'home.pricing.time.month' %}";
     } else if (bundleRuntime === "YEARLY") {
       document.getElementById("package-upgrade-package-runtime").innerHTML =
-        "1 {% trans 'home.pricing.time.year' %}";
+        "{% trans 'home.pricing.time.year' %}";
     }
     document.getElementById("package-upgrade-package-workflow-number").innerHTML =
       individualPackage.workflowNumberLimit + " {% trans 'home.pricing.summary.workflow.number' %}";

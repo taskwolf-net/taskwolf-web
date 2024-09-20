@@ -101,15 +101,15 @@
   function displayPackageRuntime(packageType, packageRuntime) {
     if (packageType === "FREE") {
       document.getElementById("payment-package-runtime").innerHTML =
-        "1 {% trans 'home.payment.package.runtime.week' %}";
+        "{% trans 'home.payment.package.runtime.week' %}";
       return;
     }
     if (packageRuntime === "MONTHLY") {
       document.getElementById("payment-package-runtime").innerHTML =
-        "1 {% trans 'home.payment.package.runtime.month' %}";
+        "{% trans 'home.payment.package.runtime.month' %}";
     } else if (packageRuntime === "YEARLY") {
       document.getElementById("payment-package-runtime").innerHTML =
-        "1 {% trans 'home.payment.package.runtime.year' %}";
+        "{% trans 'home.payment.package.runtime.year' %}";
     }
   }
 

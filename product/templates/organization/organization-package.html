@@ -352,11 +352,11 @@
 
   function findPackageRuntime(bundle) {
     if (bundle.runtime === "WEEKLY") {
-      return "1 {% trans 'product.organization.package.runtime.week' %}";
+      return "{% trans 'product.organization.package.runtime.week' %}";
     } else if (bundle.runtime === "MONTHLY") {
-      return "1 {% trans 'product.organization.package.runtime.month' %}";
+      return "{% trans 'product.organization.package.runtime.month' %}";
     } else if (bundle.runtime === "YEARLY") {
-      return "1 {% trans 'product.organization.package.runtime.year' %}";
+      return "{% trans 'product.organization.package.runtime.year' %}";
     }
   }
 

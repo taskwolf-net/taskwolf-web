@@ -129,10 +129,10 @@
       organizationPackage.price + " €";
     if (bundleRuntime === "MONTHLY") {
       document.getElementById("organization-upgrade-organization-runtime").innerHTML =
-        "1 {% trans 'home.pricing.time.month' %}";
+        "{% trans 'home.pricing.time.month' %}";
     } else if (bundleRuntime === "YEARLY") {
       document.getElementById("organization-upgrade-organization-runtime").innerHTML =
-        "1 {% trans 'home.pricing.time.year' %}";
+        "{% trans 'home.pricing.time.year' %}";
     }
     document.getElementById("organization-upgrade-organization-workflow-number").innerHTML =
       organizationPackage.workflowNumberLimit + " {% trans 'home.pricing.summary.workflow.number' %}";

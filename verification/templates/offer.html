@@ -153,13 +153,13 @@
   function displayPackageRuntime(packageRuntime) {
     if (packageRuntime === "WEEKLY") {
       document.getElementById("offer-package-runtime").innerHTML =
-        "1 {% trans 'home.offer.package.runtime.week' %}";
+        "{% trans 'home.offer.package.runtime.week' %}";
     } else if (packageRuntime === "MONTHLY") {
       document.getElementById("offer-package-runtime").innerHTML =
-        "1 {% trans 'home.offer.package.runtime.month' %}";
+        "{% trans 'home.offer.package.runtime.month' %}";
     } else if (packageRuntime === "YEARLY") {
       document.getElementById("offer-package-runtime").innerHTML =
-        "1 {% trans 'home.offer.package.runtime.year' %}";
+        "{% trans 'home.offer.package.runtime.year' %}";
     }
   }
 
