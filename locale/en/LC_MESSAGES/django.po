@@ -706,10 +706,6 @@ msgid "home.login.failed.two.factor.title"
 msgstr "2-factor authentication failed"
 msgid "home.login.failed.two.factor.body"
 msgstr "The token entered has either expired or is incorrect. Please try again"
-msgid "home.login.failed.expired.title"
-msgstr "Login has failed"
-msgid "home.login.failed.expired.body"
-msgstr "Your booked package, or that of your organization, has expired."
 
 # REGISTRATION
 msgid "home.registration.title"
@@ -858,6 +854,12 @@ msgid "home.payment.complete.headline"
 msgstr "Payment completed"
 msgid "home.payment.complete.description"
 msgstr "Congratulations! You have successfully completed the payment. You will shortly receive an email from us with all further information and steps. Please also check your spam box."
+
+# EXPIRATION
+msgid "home.expiration.title"
+msgstr "Expiration - Dulno"
+msgid "home.expiration.headline"
+msgstr "Package expired"
 
 # OFFER
 msgid "home.offer.title"

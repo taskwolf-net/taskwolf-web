@@ -8,6 +8,7 @@ urlpatterns = [
   path('login-register/', verification.loginRegister),
   path('payment/', verification.payment),
   path('payment/complete/', verification.paymentComplete),
+  path('expiration/', verification.expiration),
   path('offer/<str:id>/', verification.offer),
   path('password/reset/request/', verification.passwordResetRequest),
   path('password/reset/complete/<str:user>/<str:token>/', verification.passwordResetComplete),

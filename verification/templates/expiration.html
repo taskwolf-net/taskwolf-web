@@ -1,0 +1,74 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark">
+    {% load static %}
+    {% load i18n %}
+    <nav id="navbar">
+      <div id="navbar-content">
+        <a href="/" id="navbar-logo"><img class="dulno-logo" width="70px" height="70px" alt=""></a>
+        <div id="header-control-container">
+          <div id="profile-button-container" class="dropdown">
+            <button class="dropdown-toggle btn" id="profile-button-wrapper" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i id="profile-picture" class="fa-regular fa-user"></i><i id="profile-picture-arrow" class="fa-solid fa-angle-down"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="profile-button-wrapper">
+              <li><button class="dropdown-item" id="logout-button" type="button">{% trans 'product.header.logout' %}</button></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div id="header-space"></div>
+    <form id="expiration-container">
+      <h1 class="text-center fw-bold">{% trans 'home.expiration.headline' %}</h1></br>
+      <span id="expiration-description">Test</span>
+      {% include 'pricing-content.html' %}
+    </form>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    displayLoader();
+    if (!displayExpirationDescription()) {
+      return;
+    }
+    setupPricing(function () {
+      removeLoader();
+    });
+  });
+
+  function displayExpirationDescription() {
+    var hasPersonalPackage = sessionStorage.getItem("expiration-has-personal-package");
+    var hasOwnOrganization = sessionStorage.getItem("expiration-has-own-organization");
+    var isOrganizationMember = sessionStorage.getItem("expiration-is-organization-member");
+    var userName = sessionStorage.getItem("expiration-user-name");
+    if (hasPersonalPackage == null || hasOwnOrganization == null ||
+      isOrganizationMember == null || userName == null
+    ) {
+      window.location.href = "/";
+      return false;
+    }
+    return true;
+  }
+
+  function displayLoader() {
+    let loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("expiration-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("expiration-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("expiration-wrapper").classList.remove("d-none");
+  }
+
+  document.getElementById('logout-button').onclick = function() {
+    Cookie.destroy("token", ".dulno.com");
+    Cookie.destroy("home-token", ".dulno.com");
+    window.location.href = "/";
+  };
+</script>

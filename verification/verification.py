@@ -42,6 +42,11 @@ async def paymentComplete(request):
     'css': ['css/base/verification-header.css', 'css/verification/payment-complete.css']})
 
 @home_page
+async def expiration(request):
+  return render(request, 'expiration.html', {'title': gettext("home.expiration.title"),
+    'css': ['css/verification/expiration.css', 'css/base/pricing-content.css']})
+
+@home_page
 async def offer(request, id):
   return render(request, 'offer.html', {'title': gettext("home.offer.title"),
     'css': ['css/base/verification-header.css', 'css/verification/offer.css'],

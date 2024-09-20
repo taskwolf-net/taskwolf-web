@@ -56,7 +56,8 @@ async def downloadCLI(request):
 @home_page
 async def pricing(request):
   return render(request, 'pricing.html', {'title': gettext("home.pricing.title"),
-    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/pricing.css']})
+    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/pricing.css',
+      'css/base/pricing-content.css']})
 
 @home_page
 async def question(request):

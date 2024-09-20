@@ -95,10 +95,12 @@
           Swal.fire("{% trans 'home.login.failed.confirmation.title' %}", "{% trans 'home.login.failed.confirmation.body' %}", "error");
         } else  if (error === 1003) {
           if (!redirect()) {
-            window.location.href = "/payment/";
+            sessionStorage.setItem("expiration-has-personal-package", response.hasPersonalBundle);
+            sessionStorage.setItem("expiration-has-own-organization", response.hasOwnOrganization);
+            sessionStorage.setItem("expiration-is-organization-member", response.isOrganizationMember);
+            sessionStorage.setItem("expiration-user-name", response.userName);
+            window.location.href = "/expiration/";
           }
-        } else  if (error === 1004) {
-          Swal.fire("{% trans 'home.login.failed.expired.title' %}", "{% trans 'home.login.failed.expired.body' %}", "error");
         }
         document.getElementById("password").value = "";
       }
