@@ -419,7 +419,7 @@
 
   document.getElementById("pricing-class-beginner").onclick = function (event) {
     bundleClass = "BEGINNER";
-    updatePricing();
+    updatePricing(function() {});
     document.getElementById("pricing-class-beginner").classList.add("pricing-switch-active");
     document.getElementById("pricing-class-advanced").classList.remove("pricing-switch-active");
     document.getElementById("pricing-class-expert").classList.remove("pricing-switch-active");
@@ -427,7 +427,7 @@
 
   document.getElementById("pricing-class-advanced").onclick = function (event) {
     bundleClass = "ADVANCED";
-    updatePricing();
+    updatePricing(function() {});
     document.getElementById("pricing-class-beginner").classList.remove("pricing-switch-active");
     document.getElementById("pricing-class-advanced").classList.add("pricing-switch-active");
     document.getElementById("pricing-class-expert").classList.remove("pricing-switch-active");
@@ -435,7 +435,7 @@
 
   document.getElementById("pricing-class-expert").onclick = function (event) {
     bundleClass = "EXPERT";
-    updatePricing();
+    updatePricing(function() {});
     document.getElementById("pricing-class-beginner").classList.remove("pricing-switch-active");
     document.getElementById("pricing-class-advanced").classList.remove("pricing-switch-active");
     document.getElementById("pricing-class-expert").classList.add("pricing-switch-active");
@@ -443,14 +443,14 @@
 
   document.getElementById("pricing-runtime-monthly").onclick = function (event) {
     bundleRuntime = "MONTHLY";
-    updatePricing();
+    updatePricing(function() {});
     document.getElementById("pricing-runtime-monthly").classList.add("pricing-switch-active");
     document.getElementById("pricing-runtime-yearly").classList.remove("pricing-switch-active");
   }
 
   document.getElementById("pricing-runtime-yearly").onclick = function (event) {
     bundleRuntime = "YEARLY";
-    updatePricing();
+    updatePricing(function() {});
     document.getElementById("pricing-runtime-monthly").classList.remove("pricing-switch-active");
     document.getElementById("pricing-runtime-yearly").classList.add("pricing-switch-active");
   }

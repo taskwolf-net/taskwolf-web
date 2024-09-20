@@ -22,9 +22,13 @@
     </nav>
     <div id="header-space"></div>
     <form id="expiration-container">
-      <h1 class="text-center fw-bold">{% trans 'home.expiration.headline' %}</h1></br>
-      <span id="expiration-description">Test</span>
-      {% include 'pricing-content.html' %}
+      <div id="expiration-wrapper" class="d-none">
+        <div id="expiration-header" class="text-center">
+          <h1 id="expiration-headline" class="fw-bold mb-5"></h1>
+          <p id="expiration-description" class="mb-5"></p>
+        </div>
+        {% include 'pricing-content.html' %}
+      </div>
     </form>
   </body>
 </html>
@@ -51,6 +55,27 @@
       window.location.href = "/";
       return false;
     }
+    if (!hasPersonalPackage && !isOrganizationMember) {
+      document.getElementById("expiration-headline").innerText =
+        "{% trans 'home.expiration.new.headline' %}";
+      document.getElementById("expiration-description").innerText =
+        "{% trans 'home.expiration.new.description' %}".replace("%s", userName);
+      return true;
+    }
+    document.getElementById("expiration-headline").innerText =
+      "{% trans 'home.expiration.known.headline' %}";
+    if (hasPersonalPackage && !isOrganizationMember) {
+      document.getElementById("expiration-description").innerText =
+        "{% trans 'home.expiration.personal.description' %}".replace("%s", userName);
+      return true;
+    }
+    if (!hasPersonalPackage && isOrganizationMember) {
+      document.getElementById("expiration-description").innerText =
+        "{% trans 'home.expiration.organisation.description' %}".replace("%s", userName);
+      return true;
+    }
+    document.getElementById("expiration-description").innerText =
+      "{% trans 'home.expiration.mixed.description' %}".replace("%s", userName);
     return true;
   }
 

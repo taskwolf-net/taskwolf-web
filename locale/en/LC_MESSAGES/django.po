@@ -857,9 +857,19 @@ msgstr "Congratulations! You have successfully completed the payment. You will s
 
 # EXPIRATION
 msgid "home.expiration.title"
-msgstr "Expiration - Dulno"
-msgid "home.expiration.headline"
+msgstr "Package - Dulno"
+msgid "home.expiration.new.headline"
+msgstr "Book a package"
+msgid "home.expiration.new.description"
+msgstr "Hello %s, we noticed that you are new to Dulno. Here you can find an overview of the packages we offer. Choose one and get started with automation. We wish you lots of fun!"
+msgid "home.expiration.known.headline"
 msgstr "Package expired"
+msgid "home.expiration.personal.description"
+msgstr "Hello %s, we have noticed that your package has expired at Dulno. Here you can find an overview of the packages we offer. You can either choose to purchase the Individual package again, or you can purchase an organization with the Team package."
+msgid "home.expiration.organisation.description"
+msgstr "Hello %s, we have noticed that your organizations' package has expired. Here you can find an overview of the packages we offer. You can either choose to purchase the Individual package again, or you can purchase an organization with the Team package."
+msgid "home.expiration.mixed.description"
+msgstr "Hello %s, we have noticed that both your own individual and your organizations' packages have expired. Here you can find an overview of the packages we offer. You can either choose to purchase the Individual package again, or you can purchase an organization with the Team package."
 
 # OFFER
 msgid "home.offer.title"

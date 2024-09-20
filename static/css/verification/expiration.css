@@ -1,6 +1,11 @@
 #expiration-container {
   width: min(calc(1500px), 95%);
-  margin: 5vh auto 10vh;
+  margin: 8vh auto 10vh;
+}
+
+#expiration-header {
+  width: min(calc(1100px), 100%);
+  margin: auto;
 }
 
 #navbar {
@@ -32,11 +37,11 @@
 }
 
 #header-space {
-  height: 80px;
+  height: 70px;
 }
 
 #navbar-logo {
-  margin-left: 25px;
+  margin-left: 35px;
 }
 
 #navbar-logo img {

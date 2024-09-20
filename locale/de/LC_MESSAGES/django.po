@@ -857,9 +857,19 @@ msgstr "Herzlichen Glückwunsch! Sie haben die Zahlung erfolgreich abgeschlossen
 
 # EXPIRATION
 msgid "home.expiration.title"
-msgstr "Ablauf - Dulno"
-msgid "home.expiration.headline"
+msgstr "Paket - Dulno"
+msgid "home.expiration.new.headline"
+msgstr "Buchen Sie ein Paket"
+msgid "home.expiration.new.description"
+msgstr "Hallo %s, wir haben festgestellt, dass Sie neu bei Dulno sind. Hier finden Sie eine Übersicht über die Pakete, die wir anbieten. Wählen Sie eines aus und beginnen Sie mit der Automatisierung. Wir wünschen Ihnen viel Spaß!"
+msgid "home.expiration.known.headline"
 msgstr "Paket ausgelaufen"
+msgid "home.expiration.personal.description"
+msgstr "Hallo %s, wir haben festgestellt, dass Ihr Paket bei Dulno abgelaufen ist. Hier finden Sie eine Übersicht über die Pakete, die wir anbieten. Sie können entweder das Einzelpaket erneut erwerben oder eine Organisation mit dem Teampaket kaufen."
+msgid "home.expiration.organisation.description"
+msgstr "Hallo %s, wir haben festgestellt, dass das Paket für Ihre Organisation abgelaufen ist. Hier finden Sie eine Übersicht über die Pakete, die wir anbieten. Sie können entweder das Einzelpaket erneut erwerben oder eine Organisation mit dem Teampaket kaufen."
+msgid "home.expiration.mixed.description"
+msgstr "Hallo %s, wir haben festgestellt, dass sowohl Ihre individuellen als auch die Pakete Ihrer Organisation abgelaufen sind. Hier finden Sie eine Übersicht über die von uns angebotenen Pakete. Sie können entweder das Einzelpaket erneut erwerben oder eine Organisation mit dem Teampaket kaufen."
 
 # OFFER
 msgid "home.offer.title"
