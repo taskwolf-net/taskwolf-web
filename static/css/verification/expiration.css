@@ -124,3 +124,9 @@
     transform: translate(-50%, 30%) !important;
   }
 }
+
+.expiration-divider {
+  width: 75%;
+  margin: 2% auto;
+  border-bottom: 1px #4a4a4a solid;
+}
