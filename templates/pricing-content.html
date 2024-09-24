@@ -476,7 +476,7 @@
     Cookie.create("dulno-package-class", bundleClass, 60 * 60 * 24);
     Cookie.create("dulno-package-runtime", bundleRuntime, 60 * 60 * 24);
     Cookie.create("dulno-package-price", price, 60 * 60 * 24);
-    if (sessionStorage.getItem("home-token") == null) {
+    if (Cookie.find("home-token") == null) {
       window.location.href = "/login-register/?redirect=/payment/";
     } else {
       window.location.href = "/payment/";
