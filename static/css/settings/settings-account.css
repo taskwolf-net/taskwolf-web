@@ -109,6 +109,11 @@ form input:-webkit-autofill:active{
   margin-top: 2%;
 }
 
+#settings-account-delete-disclaimer {
+  text-align: justify;
+  font-size: 15px;
+}
+
 .settings-account-delete-content input {
   background-color: transparent !important;
   border-radius: 5px;
