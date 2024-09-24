@@ -37,7 +37,7 @@
 }
 
 #header-space {
-  height: 70px;
+  height: 80px;
 }
 
 #navbar-logo {
@@ -129,4 +129,8 @@
   width: 75%;
   margin: 2% auto;
   border-bottom: 1px #4a4a4a solid;
+}
+
+.pricing-package {
+  top: 80px !important;
 }
