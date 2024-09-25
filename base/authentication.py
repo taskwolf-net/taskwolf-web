@@ -85,6 +85,60 @@ async def applyLanguage(request):
   translation.activate(language)
   return language
 
+def home_authentication_required(function):
+  @wraps(function)
+  async def authentication(request, *args, **kwargs):
+    authenticationResponse = await isHomeAuthenticated(request)
+    if (authenticationResponse["success"]):
+      if ("data" in authenticationResponse):
+        request.COOKIES["token"] = authenticationResponse["data"]["token"]
+        request.COOKIES["refresh-token"] = authenticationResponse["data"]["refreshToken"]
+      language = await applyHomeLanguage(request)
+      response = await function(request, *args, **kwargs)
+      setCookie(response, "dulno-language", language, 30)
+      setCookie(response, "dulno-home-language", language, 30)
+      if ("data" in authenticationResponse):
+        setCookie(response, "token", authenticationResponse["data"]["token"], 30)
+        setCookie(response, "refresh-token", authenticationResponse["data"]["refreshToken"], 30)
+      return response
+    response = redirect("/")
+    response.delete_cookie("token", domain=".dulno.com")
+    response.delete_cookie("refresh-token", domain=".dulno.com")
+    return response
+  return authentication
+
+async def isHomeAuthenticated(request):
+  token = request.COOKIES.get('home-token')
+  if (token is None):
+    return await isAuthenticated(request)
+  headers = {}
+  applyWhitelistKey(request, headers)
+  response = await asyncio.get_event_loop().run_in_executor(None,
+    partial(requests.post, "http://10.96.0.4/v1/verification/home/isValid/",
+      json = {"token": token}, headers = headers))
+  text = response.text
+  jsonText = json.loads(text)
+  isValid = jsonText["isValid"]
+  if (isValid == "true"):
+    return {"success": True}
+  return {"success": False}
+
+async def applyHomeLanguage(request):
+  token = request.COOKIES.get('token')
+  if (token is None):
+    headers = {"Home-Authorization": "Bearer " + request.COOKIES.get('home-token')}
+  else:
+    headers = {"Authorization": "Bearer " + token}
+  applyWhitelistKey(request, headers)
+  response = await asyncio.get_event_loop().run_in_executor(None,
+    partial(requests.get, "http://10.96.0.4/v1/settings/language/",
+    headers = headers))
+  text = response.text
+  jsonText = json.loads(text)
+  language = jsonText["language"]
+  translation.activate(language)
+  return language
+
 def applyWhitelistKey(request, headers):
   if (not settings.WHITELIST):
     return

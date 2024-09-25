@@ -49,9 +49,11 @@
     window.location.href = "/dashboard/";
   };
   document.getElementById('settings-button').onclick = function() {
+    sessionStorage.setItem("settings-return", window.location.href);
     window.location.href = "/settings/profile/";
   };
   document.getElementById('tickets-button').onclick = function() {
+    sessionStorage.setItem("neutral-return", window.location.href);
     window.location.href = "/tickets/";
   };
   document.getElementById('logout-button').onclick = function() {

@@ -1,10 +1,10 @@
 window.addEventListener('load', function () {
   let url = window.location.href.replace("https://dulno.com/", "").replaceAll("/", "");
   if (url === "" || url === "product" || url === "solution" || url === "pricing" ||
-    url.includes("login") || url.includes("register") || url.includes("password") ||
-    url.includes("offer") || url.includes("download") || url === "payment" ||
-    url === "paymentcomplete" || url === "whitelist" || url === "imprint" ||
-    url === "privacy-policy" || url === "terms-of-service"
+    url === "expiration" || url.includes("login") || url.includes("register") ||
+    url.includes("password") || url.includes("offer") || url.includes("download") ||
+    url === "payment" || url === "paymentcomplete" || url === "whitelist" ||
+    url === "imprint" || url === "privacy-policy" || url === "terms-of-service"
   ) {
     return;
   }

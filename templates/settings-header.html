@@ -3,7 +3,7 @@
 <nav id="navbar" >
   <button id="sidebar-button" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="false" aria-controls="sidebar"></button>
   <div id="navbar-content">
-    <a href="/" id="close-settings"><i class="fa-solid fa-circle-xmark"></i></a>
+    <a id="close-settings"><i class="fa-solid fa-circle-xmark"></i></a>
   </div>
 </nav>
 <div id="header-space"></div>
@@ -47,5 +47,9 @@
       return;
     }
     document.getElementById("sidebar-button").innerHTML ='<i class="fa-solid fa-bars"></i>';
+  }
+
+  document.getElementById("close-settings").onclick = function (event) {
+    window.location.href = sessionStorage.getItem("settings-return");
   }
 </script>
