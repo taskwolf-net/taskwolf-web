@@ -57,7 +57,7 @@
       window.location.href = "/";
       return false;
     }
-    if (!hasPersonalPackage && !isOrganizationMember) {
+    if (hasPersonalPackage === "false" && isOrganizationMember === "false") {
       document.getElementById("expiration-headline").innerText =
         "{% trans 'home.expiration.new.headline' %}";
       document.getElementById("expiration-description").innerText =
@@ -66,12 +66,12 @@
     }
     document.getElementById("expiration-headline").innerText =
       "{% trans 'home.expiration.known.headline' %}";
-    if (hasPersonalPackage && !isOrganizationMember) {
+    if (hasPersonalPackage === "true" && isOrganizationMember === "false") {
       document.getElementById("expiration-description").innerText =
         "{% trans 'home.expiration.personal.description' %}".replace("%s", userName);
       return true;
     }
-    if (!hasPersonalPackage && isOrganizationMember) {
+    if (hasPersonalPackage === "false" && isOrganizationMember === "true") {
       document.getElementById("expiration-description").innerText =
         "{% trans 'home.expiration.organisation.description' %}".replace("%s", userName);
       return true;
