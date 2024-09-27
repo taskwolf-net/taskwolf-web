@@ -5,13 +5,16 @@
   <body class="dark">
     <nav id="navbar">
       <div id="navbar-content">
-        <a href="/" id="navbar-logo"><img class="dulno-logo" width="70px" height="70px" alt=""></a>
+        <a href="/" id="navbar-logo"><img src="{% static 'img/logo-light.webp' %}" class="dulno-logo" width="70px" height="70px" alt=""></a>
         <div id="header-control-container">
           <div id="profile-button-container" class="dropdown">
             <button class="dropdown-toggle btn" id="profile-button-wrapper" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i id="profile-picture" class="fa-regular fa-user"></i><i id="profile-picture-arrow" class="fa-solid fa-angle-down"></i>
             </button>
             <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="profile-button-wrapper">
+              <li><button class="dropdown-item" id="settings-button" type="button">{% trans 'product.header.settings' %}</button></li>
+              <li><button class="dropdown-item" id="tickets-button" type="button">{% trans 'product.header.tickets' %}</button></li>
+              <li><div class="dropdown-divider"></div></li>
               <li><button class="dropdown-item" id="logout-button" type="button">{% trans 'product.header.logout' %}</button></li>
             </ul>
           </div>
@@ -48,14 +51,13 @@
     var hasOwnOrganization = sessionStorage.getItem("expiration-has-own-organization");
     var isOrganizationMember = sessionStorage.getItem("expiration-is-organization-member");
     var userName = sessionStorage.getItem("expiration-user-name");
-    var homeToken = sessionStorage.getItem("home-token");
     if (hasPersonalPackage == null || hasOwnOrganization == null ||
-      isOrganizationMember == null || userName == null || homeToken == null
+      isOrganizationMember == null || userName == null
     ) {
       window.location.href = "/";
       return false;
     }
-    if (!hasPersonalPackage && !isOrganizationMember) {
+    if (hasPersonalPackage === "false" && isOrganizationMember === "false") {
       document.getElementById("expiration-headline").innerText =
         "{% trans 'home.expiration.new.headline' %}";
       document.getElementById("expiration-description").innerText =
@@ -64,12 +66,12 @@
     }
     document.getElementById("expiration-headline").innerText =
       "{% trans 'home.expiration.known.headline' %}";
-    if (hasPersonalPackage && !isOrganizationMember) {
+    if (hasPersonalPackage === "true" && isOrganizationMember === "false") {
       document.getElementById("expiration-description").innerText =
         "{% trans 'home.expiration.personal.description' %}".replace("%s", userName);
       return true;
     }
-    if (!hasPersonalPackage && isOrganizationMember) {
+    if (hasPersonalPackage === "false" && isOrganizationMember === "true") {
       document.getElementById("expiration-description").innerText =
         "{% trans 'home.expiration.organisation.description' %}".replace("%s", userName);
       return true;
@@ -91,9 +93,22 @@
     document.getElementById("expiration-wrapper").classList.remove("d-none");
   }
 
+  document.getElementById('settings-button').onclick = function() {
+    sessionStorage.setItem("settings-return", window.location.href);
+    window.location.href = "/settings/profile/";
+  };
+
+  document.getElementById('tickets-button').onclick = function() {
+    sessionStorage.setItem("neutral-return", window.location.href);
+    window.location.href = "/tickets/";
+  };
+
   document.getElementById('logout-button').onclick = function() {
-    Cookie.destroy("token", ".dulno.com");
-   sessionStorage.removeItem("home-token");
-    window.location.href = "/";
+    let request = new HttpRequest("https://api.dulno.com/v1/verification/logout/",
+      "GET", []);
+    request.send(function (status, responseText) {
+      Cookie.destroy("home-token", ".dulno.com");
+      window.location.href = "/";
+    });
   };
 </script>

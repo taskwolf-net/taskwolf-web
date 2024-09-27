@@ -18,6 +18,10 @@
 
 <script>
   $(document).ready(function() {
+    if (Cookie.find("home-token") != null) {
+      window.location.href = "/expiration/";
+      return;
+    }
     displayLoader();
     setupPricing(function () {
       removeLoader();

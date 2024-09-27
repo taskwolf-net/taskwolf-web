@@ -14,7 +14,7 @@ class HttpRequest {
     if (token !== null) {
       headers.push({key: "Authorization", value: "Bearer " + token});
     }
-    let homeToken = sessionStorage.getItem("home-token");
+    let homeToken = Cookie.find("home-token");
     if (homeToken !== null) {
       headers.push({key: "Home-Authorization", value: "Bearer " + homeToken});
     }

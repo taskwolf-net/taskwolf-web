@@ -83,7 +83,7 @@
 <script>
   $(document).ready(function() {
     displayLoader();
-    if (sessionStorage.getItem("home-token") == null) {
+    if (Cookie.find("home-token") == null) {
       window.location.href = "/login/?redirect=" +
         window.location.href.replace("https://dulno.com", "");
       return;

@@ -116,7 +116,7 @@
 .pricing-package {
   width: 20%;
   position: sticky !important;
-  top: 87px !important;
+  top: 87px;
   z-index: 100 !important;
   vertical-align: top;
   color: white;
