@@ -39,3 +39,8 @@ async def workflowCondition(request):
 async def workflowTimeline(request):
   return render(request, 'workflow/workflow-timeline.html', {'title': gettext('product.workflow.timeline.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflow-timeline.css']})
+
+@authentication_required
+async def workflowConnectMail(request):
+  return render(request, 'workflow/application/mail.html', {'title': gettext('product.workflow.application.mail.title'),
+    'css': ['css/product/workflow/application/mail.css']})

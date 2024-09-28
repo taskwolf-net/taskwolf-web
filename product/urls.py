@@ -10,6 +10,7 @@ urlpatterns = [
   path('workflow/timeline/', workflow.workflowTimeline),
   path('workflow/<str:id>/', workflow.workflow),
   path('workflow/', workflow.workflowCreate),
+  path('mail/connect/', workflow.workflowConnectMail),
   path('processes/', process.processes),
   path('process/', process.process),
   path('process/<str:id>/', process.processSelected),

@@ -1,0 +1,273 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark">
+    <div id="register-container">
+      <div id="register-header">
+        <div>
+          <button id="register-page-back" class="d-none"><i class="fa-solid fa-arrow-left-long"></i></button>
+        </div>
+        <img id="register-logo" src="{% static 'img/logo-light.webp' %}">
+        <div id="register-languages">
+        </div>
+      </div>
+      <div id="register-wrapper">
+        <div id="register-email-container" class="form-outline">
+          <h2 class="register-headline">{% trans 'home.registration.welcome.headline' %}</h2>
+          <label for="email" class="form-label">{% trans 'home.registration.email' %}</label>
+          <input type="email" id="email" class="form-control" placeholder="{% trans 'home.registration.email' %}">
+          <button type="button" id="register-email-continue" class="btn btn-primary d-block px-4 mt-5 mx-auto disabled">{% trans 'home.registration.continue' %}</button>
+        </div>
+        <div id="register-username-container" class="form-outline d-none">
+          <h2 class="register-headline">{% trans 'home.registration.username.headline' %}</h2>
+          <label for="username" class="form-label">{% trans 'home.registration.username' %}</label>
+          <input type="username" id="username" class="form-control" placeholder="{% trans 'home.registration.username' %}">
+          <button type="button" id="register-username-continue" class="btn btn-primary d-block px-4 mt-5 mx-auto disabled">{% trans 'home.registration.continue' %}</button>
+        </div>
+        <div id="register-password-container" class="form-outline d-none was-validated">
+          <h2 class="register-headline">{% trans 'home.registration.password.headline' %}</h2>
+          <label for="password" class="form-label">{% trans 'home.registration.password' %}</label>
+          <input type="password" class="form-control" id="password" minlength="8" name="password" placeholder="{% trans 'home.registration.password' %}" required>
+          <div class="progress mt-3" style="height: 5px;">
+            <div id="progressbar" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 1%;">
+            </div>
+          </div>
+          <div id="feedbackin" class="valid-feedback"></div>
+          <div id="feedbackirn" class="invalid-feedback">8 {% trans 'neutral.password.letters.remaining' %}, {% trans 'neutral.password.special.characters' %}, {% trans 'neutral.password.upper.case.letters' %}, {% trans 'neutral.password.lower.case.letters' %}, {% trans 'neutral.password.numbers' %}</div>
+          <label for="password-repetition" class="form-label mt-4">{% trans 'home.registration.password.repetition' %}</label>
+          <input type="password" id="password-repetition" class="form-control" placeholder="{% trans 'home.registration.password.repetition' %}" required>
+          <button type="button" id="register-password-continue" class="btn btn-primary d-block px-4 mt-5 mx-auto disabled">{% trans 'home.registration.continue' %}</button>
+        </div>
+        <div id="register-legal-container" class="form-outline d-none">
+          <h2 class="register-headline">{% trans 'home.registration.legal.headline' %}</h2>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="legal-check">
+            <label class="form-check-label" for="legal-check">
+              {% trans 'home.registration.legal.check' %}
+              <a class="text-decoration-none" href="/terms-of-service/">{% trans 'home.registration.terms.of.service' %}</a> {% trans 'home.registration.and' %}
+              <a class="text-decoration-none" href="/privacy-policy/">{% trans 'home.registration.privacy.policy' %}</a></label>
+          </div>
+          <div class="form-check mb-3">
+            <input type="checkbox" class="form-check-input" id="notification-check">
+            <label class="form-check-label" for="notification-check">{% trans 'home.registration.news' %}</label>
+          </div>
+          <button type="button" id="register-legal-complete" class="btn btn-success d-block px-4 mt-5 mx-auto disabled">{% trans 'home.registration.complete' %}</button>
+        </div>
+        <div id="register-success-container" class="form-outline d-none">
+          <div class="success-icon-wrapper mb-5">
+            <div class="success-icon">
+              <div class="success-icon__tip"></div>
+              <div class="success-icon__long"></div>
+            </div>
+          </div>
+          <h2 class="register-headline">{% trans 'home.registration.success.headline' %}</h2>
+          <p>{% trans 'home.registration.success.email.description' %}</p>
+          <p>{% trans 'home.registration.success.email.resend.description' %}</p>
+          <button id="register-success-email-resend" type="button" class="btn btn-primary d-block px-4 mt-5 mx-auto">{% trans 'home.registration.success.email.resend' %}</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  let selectionContainers = [document.getElementById("register-email-container")];
+
+  let emailInput = document.getElementById("email");
+  let usernameInput = document.getElementById("username");
+  let passwordInput = document.getElementById("password");
+  let passwordRepetitionInput = document.getElementById("password-repetition");
+
+  document.getElementById("register-page-back").onclick = function (event) {
+    selectionContainers[selectionContainers.length - 1].classList.add("d-none");
+    selectionContainers.pop();
+    let loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("register-wrapper").appendChild(loader);
+    document.getElementById("register-page-back").classList.add("d-none");
+    setTimeout(function () {
+      document.getElementById("register-wrapper")
+        .removeChild(document.getElementsByClassName("loader")[0]);
+      selectionContainers[selectionContainers.length - 1].classList.remove("d-none");
+      $(document.getElementById("register-page-back")).toggleClass("d-none",
+        selectionContainers.length === 1);
+      $(document.getElementById("register-languages")).toggleClass("d-none",
+        selectionContainers.length !== 1);
+      $(document.getElementById("register-login")).toggleClass("d-none",
+        selectionContainers.length !== 1);
+    }, 500);
+  }
+
+  document.getElementById("email").addEventListener('keyup', function(event) {
+    if (event.key === "Enter") {
+      document.getElementById("register-email-continue").click();
+    }
+    $(document.getElementById("register-email-continue")).toggleClass("disabled",
+      document.getElementById("email").value.length === 0);
+  });
+
+  document.getElementById("register-email-continue").onclick = function (event) {
+    let loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("register-wrapper").appendChild(loader);
+    document.getElementById("register-languages").classList.add("d-none");
+    document.getElementById("register-login").classList.add("d-none");
+    document.getElementById("register-email-container").classList.add("d-none");
+    let request = new HttpRequest("https://api.dulno.com/v1/email/exists/", "POST",
+      [], {email: emailInput.value});
+    request.send(function (status, responseText) {
+      let response = JSON.parse(responseText);
+      document.getElementById("register-wrapper")
+        .removeChild(document.getElementsByClassName("loader")[0]);
+      if (response.exists === false) {
+        document.getElementById("register-page-back").classList.remove("d-none");
+        switchSelectionPage(document.getElementById("register-email-container"),
+          document.getElementById("register-username-container"));
+      } else {
+        document.getElementById("register-languages").classList.remove("d-none");
+        document.getElementById("register-login").classList.remove("d-none");
+        document.getElementById("register-email-container").classList.remove("d-none");
+        emailInput.value = "";
+        Swal.fire("{% trans 'home.registration.email.failed.title' %}",
+          "{% trans 'home.registration.email.failed.body' %}", "error");
+      }
+    });
+  }
+
+  document.getElementById("username").addEventListener('keyup', function(event) {
+    if (event.key === "Enter") {
+      document.getElementById("register-username-continue").click();
+    }
+    $(document.getElementById("register-username-continue")).toggleClass("disabled",
+      document.getElementById("username").value.length === 0);
+  });
+
+  document.getElementById("register-username-continue").onclick = function (event) {
+    switchSelectionPageDelayed(document.getElementById("register-username-container"),
+      document.getElementById("register-password-container"));
+  }
+
+  document.getElementById("password-repetition").addEventListener('keyup', function(event) {
+    if (event.key === "Enter") {
+      document.getElementById("register-password-continue").click();
+    }
+    $(document.getElementById("register-password-continue")).toggleClass("disabled",
+      !(passwordInput.value === passwordRepetitionInput.value &&
+        document.getElementById("progressbar").classList.contains("bg-success")));
+  });
+
+  document.getElementById("register-password-continue").onclick = function (event) {
+    if (passwordInput.value !== passwordRepetitionInput.value) {
+      Swal.fire("{% trans 'home.registration.password.repetition.failed.title' %}",
+        "{% trans 'home.registration.password.repetition.failed.body' %}", "error");
+      passwordInput.value = "";
+      passwordRepetitionInput.value = "";
+      updatePasswordProgress();
+      return;
+    }
+    switchSelectionPageDelayed(document.getElementById("register-password-container"),
+      document.getElementById("register-legal-container"));
+  }
+
+  document.getElementById("legal-check").addEventListener('change', (event) => {
+    $(document.getElementById("register-legal-complete")).toggleClass("disabled",
+      !event.currentTarget.checked);
+  })
+
+  document.getElementById("register-legal-complete").onclick = function (event) {
+    if (emailInput.value === "" || usernameInput.value === "" ||
+      passwordInput.value === "" || passwordRepetitionInput.value === ""
+    ) {
+      Swal.fire("{% trans 'home.registration.failed.title' %}",
+        "{% trans 'home.registration.failed.incomplete' %}", "error");
+      return;
+    }
+    if (!passwordInput.checkValidity()) {
+      Swal.fire("{% trans 'home.registration.failed.title' %}",
+        "{% trans 'home.registration.failed.password' %}", "error");
+      return;
+    }
+    if (passwordInput.value !== passwordRepetitionInput.value) {
+      Swal.fire("{% trans 'home.registration.failed.title' %}",
+        "{% trans 'home.registration.failed.password.repetition' %}", "error");
+      passwordInput.value = "";
+      passwordRepetitionInput.value = "";
+      updatePasswordProgress();
+      return;
+    }
+    if (!document.getElementById("legal-check").checked) {
+      Swal.fire("{% trans 'home.registration.failed.title' %}",
+        "{% trans 'home.registration.failed.legal' %}", "error");
+      return;
+    }
+    document.getElementById("register-legal-container").classList.add("d-none");
+    let loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("register-wrapper").appendChild(loader);
+    document.getElementById("register-page-back").classList.add("d-none");
+    register(function (response) {
+      document.getElementById("register-wrapper")
+        .removeChild(document.getElementsByClassName("loader")[0]);
+      if (response.success === true) {
+        sessionStorage.setItem("registration-email", emailInput.value);
+        switchSelectionPage(document.getElementById("register-legal-container"),
+          document.getElementById("register-success-container"))
+      } else {
+        document.getElementById("register-page-back").classList.remove("d-none");
+        document.getElementById("register-legal-container").classList.remove("d-none");
+        let errorCode = response.error;
+        if (errorCode === 1000) {
+          Swal.fire("{% trans 'home.registration.failed.title' %}",
+            "{% trans 'home.registration.failed.already.exists' %}", "error")
+            .then(success => window.location.reload(true));
+        } else if (errorCode === 1001) {
+          Swal.fire("{% trans 'home.registration.failed.title' %}",
+            "{% trans 'home.registration.failed.recaptcha' %}", "error")
+            .then(success => window.location.reload(true));
+        }
+      }
+    });
+  }
+
+  function register(callback) {
+    grecaptcha.ready(function() {
+      grecaptcha.execute('6LdEpEQqAAAAAMifavVkpRB2ganIyA-rqFc6b1mi', {action: 'register'}).then(function(token) {
+        let request = new HttpRequest("https://api.dulno.com/v1/verification/register/", "POST", [],
+          {email: emailInput.value, name: usernameInput.value, password: passwordInput.value, recaptchaToken: token,
+            legalAccepted: document.getElementById("legal-check").checked,
+            newsletter: document.getElementById("notification-check").checked});
+        request.send(function (status, responseText) {
+          callback(JSON.parse(responseText));
+        });
+      });
+    });
+  }
+
+  function switchSelectionPage(currentContainer, nextContainer) {
+    selectionContainers.push(nextContainer);
+    currentContainer.classList.add("d-none");
+    nextContainer.classList.remove("d-none");
+  }
+
+  function switchSelectionPageDelayed(currentContainer, nextContainer) {
+    selectionContainers.push(nextContainer);
+    currentContainer.classList.add("d-none");
+    let loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("register-wrapper").appendChild(loader);
+    document.getElementById("register-page-back").classList.add("d-none");
+    document.getElementById("register-languages").classList.add("d-none");
+    document.getElementById("register-login").classList.add("d-none");
+    setTimeout(function () {
+      document.getElementById("register-page-back").classList.remove("d-none");
+      document.getElementById("register-wrapper")
+        .removeChild(document.getElementsByClassName("loader")[0]);
+      nextContainer.classList.remove("d-none");
+    }, 500);
+  }
+
+  document.getElementById("register-logo").onclick = function (event) {
+    window.location.href = "/";
+  }
+</script>
