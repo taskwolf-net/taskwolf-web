@@ -87,9 +87,9 @@
 
   function autoCompleteInput(identifier, value) {
     for (let i = 0; i < conditionOutputVariables.length; i++) {
-      let letiable = conditionOutputVariables[i];
-      value = value.replace("%" + letiable.identifier + "%",
-        '<div class="workflow-condition-input-placeholder" contenteditable="false">' + letiable.name + '</div>')
+      let variable = conditionOutputVariables[i];
+      value = value.replace("%" + variable.identifier + "%",
+        '<div class="workflow-condition-input-placeholder" contenteditable="false">' + variable.name + '</div>')
     }
     let element = document.getElementById("workflow-condition-input-" + identifier);
     element.innerHTML = value + "<br>";
@@ -157,9 +157,9 @@
 
   function inputConditionInput(identifier, value) {
     for (let i = 0; i < conditionOutputVariables.length; i++) {
-      let letiable = conditionOutputVariables[i];
+      let variable = conditionOutputVariables[i];
       value = value.replace('<div class="workflow-condition-input-placeholder" contenteditable="false">' +
-        letiable.name + '</div>', "%" + letiable.identifier + "%")
+        variable.name + '</div>', "%" + variable.identifier + "%")
     }
     value = value.replace("&nbsp;", " ");
     value = value.replace("&quot;", "\"");
@@ -310,8 +310,8 @@
     document.getElementById("workflow-condition-placeholders-list").innerHTML = "";
     findOutputVariables(index, function(outputVariables) {
       for (let i = 0; i < outputVariables.length; i++) {
-        let letiable = outputVariables[i];
-        displayPlaceholder(letiable.identifier, letiable.name);
+        let variable = outputVariables[i];
+        displayPlaceholder(variable.identifier, variable.name);
       }
       if (outputVariables.length === 0) {
         let noPlaceholdersAvailableElement = document.createElement("p");

@@ -409,6 +409,11 @@ input:-webkit-autofill:active{
   margin: auto;
 }
 
+.workflow-component-specifications-input {
+  max-height: 110px;
+  overflow-y: scroll;
+}
+
 .workflow-component-specifications-input-placeholder {
   width: fit-content;
   padding: 5px;

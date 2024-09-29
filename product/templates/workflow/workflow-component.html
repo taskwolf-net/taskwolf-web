@@ -526,18 +526,19 @@
         return;
       }
       for (let i = 0; i < inputVariables.length; i++) {
-        let inputletiable = inputVariables[i];
-        if (inputletiable.dataType === "TEXT") {
-          addSpecificationInput(inputletiable.identifier, inputletiable.name, inputletiable.description, inputletiable.placeholder, i, inputVariables.length);
+        let inputVariable = inputVariables[i];
+        if (inputVariable.dataType === "TEXT" || inputVariable.dataType === "TEXT_AREA") {
+          addSpecificationInput(inputVariable.identifier, inputVariable.name, inputVariable.description, inputVariable.placeholder,
+            i, inputVariables.length, inputVariable.dataType);
         }
-        if (inputletiable.dataType === "SELECT") {
-          addSpecificationSelect(inputletiable.identifier, inputletiable.name, inputletiable.description, i, inputVariables.length);
+        if (inputVariable.dataType === "SELECT") {
+          addSpecificationSelect(inputVariable.identifier, inputVariable.name, inputVariable.description, i, inputVariables.length);
         }
-        if (inputletiable.dataType === "FILE") {
-          addSpecificationFile(inputletiable.identifier, inputletiable.name, inputletiable.description, i, inputVariables.length);
+        if (inputVariable.dataType === "FILE") {
+          addSpecificationFile(inputVariable.identifier, inputVariable.name, inputVariable.description, i, inputVariables.length);
         }
-        if (inputletiable.type === "REQUIRED") {
-          requiredSpecificationVariables.push(inputletiable.identifier);
+        if (inputVariable.type === "REQUIRED") {
+          requiredSpecificationVariables.push(inputVariable.identifier);
         }
       }
       createResetButton(document.getElementById("workflow-component-specifications-input-list"), function() {
@@ -549,7 +550,7 @@
     });
   }
 
-  function addSpecificationInput(identifier, name, description, placeholder, index, inputsLength) {
+  function addSpecificationInput(identifier, name, description, placeholder, index, inputsLength, dataType) {
     let inputContainerElement = document.createElement("div");
     inputContainerElement.classList.add("workflow-component-specifications-input-container", "form-outline", "mb-4");
     let labelElement = document.createElement("h5");
@@ -563,25 +564,31 @@
     let inputElement = document.createElement("div");
     inputElement.setAttribute("placeholder", placeholder);
     inputElement.contentEditable = "true";
+    if (dataType === "TEXT_AREA") {
+      inputElement.style.height = "110px";
+    }
     inputElement.id = "workflow-component-specifications-input-" + identifier;
     inputElement.classList.add("workflow-component-specifications-input", "form-control");
-    inputElement.onkeydown = function (event) {
-      if (event.key === "Enter") {
-        event.preventDefault();
-      }
-    }
     inputElement.oninput = function (event) {
-      inputSpecificationInput(identifier, event.target.innerHTML);
+      if (!inputElement.innerHTML.endsWith("<br>")) {
+        inputElement.appendChild(document.createElement("br"));
+      }
+      if (inputElement.innerHTML === "<br>") {
+        inputElement.innerHTML = "";
+      }
+      inputSpecificationInput(identifier, inputElement.innerHTML);
     }
     inputElement.ondragover = function (event) {
       event.preventDefault();
     };
     inputElement.ondrop = function (event) {
-      inputElement.innerHTML = inputElement.innerHTML.replaceAll("<br>", "") +
-        '<div class="workflow-component-specifications-input-placeholder" contenteditable="false">' +
-        event.dataTransfer.getData("placeholder-name") + '</div><br>';
+      inputSpecificationDrop(event, inputElement);
       inputSpecificationInput(identifier, inputElement.innerHTML);
     };
+    inputElement.onkeydown = (event) => inputSpecificationKeydown(event);
+    inputElement.onclick = function (event) {
+      inputElement.focus();
+    }
     inputContainerElement.appendChild(inputElement);
     document.getElementById("workflow-component-specifications-input-list").appendChild(inputContainerElement);
     if (selectedComponentSetup && "content" in selectedComponent) {
@@ -589,13 +596,12 @@
       setTimeout(function() {
         if (identifier in selectedComponentContent) {
           for (let i = 0; i < componentsOutputVariables.length; i++) {
-            let letiable = componentsOutputVariables[i];
-            selectedComponentContent[identifier] = selectedComponentContent[identifier].replace(
-              "%" + letiable.identifier + "%",
-              '<div class="workflow-component-specifications-input-placeholder" contenteditable="false">' +
-                letiable.name + '</div>')
+            let variable = componentsOutputVariables[i];
+            selectedComponentContent[identifier] = selectedComponentContent[identifier].replace("%" + variable.identifier + "%",
+              '<div class="workflow-component-specifications-input-placeholder" contenteditable="false" ' +
+                'style="pointer-events: none;">' + variable.name + '</div>')
           }
-          inputElement.innerHTML = selectedComponentContent[identifier] + "<br>";
+          inputElement.innerHTML = selectedComponentContent[identifier].replaceAll("\n", "<br>") + "<br>";
           inputSpecificationInput(identifier, inputElement.innerHTML);
         }
         if (index === inputsLength - 1) {
@@ -605,23 +611,53 @@
     }
   }
 
+  function inputSpecificationDrop(event, inputElement) {
+    const placeholder = document.createElement('div');
+    placeholder.classList.add('workflow-component-specifications-input-placeholder');
+    placeholder.textContent = event.dataTransfer.getData("placeholder-name");
+    placeholder.contentEditable = "false";
+    placeholder.style.pointerEvents = 'none';
+    inputElement.focus();
+    const selection = window.getSelection();
+    const range = selection.rangeCount > 0 ? selection.getRangeAt(0) : document.createRange();
+    range.deleteContents();
+    range.insertNode(placeholder);
+    range.setStartAfter(placeholder);
+    range.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    if (!inputElement.innerHTML.endsWith("<br>")) {
+      inputElement.appendChild(document.createElement("br"));
+    }
+  }
+
+  function inputSpecificationKeydown(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+    if (event.key === 'Enter' || event.key === ' ') {
+      const selection = window.getSelection();
+      const range = selection.rangeCount > 0 ? selection.getRangeAt(0) : document.createRange();
+      const element = event.key === ' ' ? document.createTextNode(' ') : document.createElement('br');
+      range.insertNode(element);
+      range.setStartAfter(element);
+      range.collapse(true);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+    if (event.key === ' ') {
+      event.preventDefault();
+    }
+  }
+
   function inputSpecificationInput(identifier, value) {
     for (let i = 0; i < componentsOutputVariables.length; i++) {
-      let letiable = componentsOutputVariables[i];
-      value = value.replace('<div class="workflow-component-specifications-input-placeholder" contenteditable="false">' +
-        letiable.name + '</div>', "%" + letiable.identifier + "%")
+      let variable = componentsOutputVariables[i];
+      value = value.replace('<div class="workflow-component-specifications-input-placeholder" contenteditable="false" ' +
+        'style="pointer-events: none;">' + variable.name + '</div>', "%" + variable.identifier + "%")
     }
-    value = value.replace("&nbsp;", " ");
-    value = value.replace("&quot;", "\"");
-    value = value.replace("&apos;", "'");
-    value = value.replace("&amp;", "&");
-    value = value.replace("&gt;", ">");
-    value = value.replace("&lt;", "<");
-    value = value.replace("&frasl;", "/");
-    value = value.replace("&nbsp;", " ");
-    value = value.replace("&reg;", "®");
-    value = value.replace("&copy;", "©");
-    value = value.replace("<br>", "");
+    value = value.slice(0, -4);
+    value = value.replaceAll("<br>", "\n");
     if (value === "" && identifier in specificationValues) {
       delete specificationValues[identifier];
     }
@@ -833,8 +869,8 @@
     document.getElementById("workflow-component-specifications-placeholders-list").innerHTML = "";
     findOutputVariables(index, function(outputVariables) {
       for (let i = 0; i < outputVariables.length; i++) {
-        let letiable = outputVariables[i];
-        displayPlaceholder(letiable.identifier, letiable.name);
+        let variable = outputVariables[i];
+        displayPlaceholder(variable.identifier, variable.name);
       }
       if (outputVariables.length === 0) {
         let noPlaceholdersAvailableElement = document.createElement("p");
