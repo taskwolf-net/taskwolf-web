@@ -202,7 +202,8 @@
     preview.classList.add("workflows-preview");
     preview.appendChild(createWorkflowPreviewEntry(triggerLogo));
     for (let i = 0; i < Math.min(actions.length, 2); i++) {
-      preview.appendChild(createWorkflowPreviewEntry(actions[i].actionModuleLogo));
+      preview.appendChild(createWorkflowPreviewEntry(
+        actions.filter(action => action.actionIndex === i)[0].actionModuleLogo));
     }
     previewContainer.appendChild(preview);
     return previewContainer;
