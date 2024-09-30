@@ -11,6 +11,7 @@ urlpatterns = [
   path('workflow/<str:id>/', workflow.workflow),
   path('workflow/', workflow.workflowCreate),
   path('mail/connect/', workflow.workflowConnectMail),
+  path('gitlab/connect/', workflow.workflowConnectGitlab),
   path('processes/', process.processes),
   path('process/', process.process),
   path('process/<str:id>/', process.processSelected),

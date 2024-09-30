@@ -44,3 +44,8 @@ async def workflowTimeline(request):
 async def workflowConnectMail(request):
   return render(request, 'workflow/application/mail.html', {'title': gettext('product.workflow.application.mail.title'),
     'css': ['css/product/workflow/application/mail.css']})
+
+@authentication_required
+async def workflowConnectGitlab(request):
+  return render(request, 'workflow/application/gitlab.html', {'title': gettext('product.workflow.application.gitlab.title'),
+    'css': ['css/product/workflow/application/gitlab.css']})

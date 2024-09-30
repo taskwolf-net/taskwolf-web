@@ -1,0 +1,171 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark">
+    <div id="gitlab-container">
+      <div id="gitlab-header">
+        <div>
+          <button id="gitlab-page-back" class="d-none"><i class="fa-solid fa-arrow-left-long"></i></button>
+        </div>
+        <img id="gitlab-logo" src="{% static 'img/logo-light.webp' %}">
+        <div>
+        </div>
+      </div>
+      <div id="gitlab-wrapper">
+        <div id="gitlab-hostname-container" class="form-outline">
+          <h2 class="gitlab-headline">{% trans 'product.workflow.application.gitlab.hostname.headline' %}</h2>
+          <label for="hostname" class="form-label">{% trans 'product.workflow.application.gitlab.hostname' %}</label>
+          <input type="text" id="hostname" class="form-control" placeholder="gitlab.com, git.xyz.com, ...">
+          <button type="button" id="gitlab-hostname-continue" class="btn btn-primary d-block px-4 mt-5 mx-auto disabled">{% trans 'product.workflow.application.gitlab.continue' %}</button>
+        </div>
+        <div id="gitlab-application-container" class="form-outline d-none">
+          <h2 class="gitlab-headline">{% trans 'product.workflow.application.gitlab.application.headline' %}</h2>
+          <h6>{% trans 'product.workflow.application.gitlab.application.introduction' %}</h6>
+          <ol id="gitlab-application-introduction" class="mb-5">
+            <li>{% trans 'product.workflow.application.gitlab.application.step.1' %}</li>
+            <li>{% trans 'product.workflow.application.gitlab.application.step.2' %}</li>
+            <li>{% trans 'product.workflow.application.gitlab.application.step.3' %}</li>
+            <li>{% trans 'product.workflow.application.gitlab.application.step.4' %}</li>
+            <li>{% trans 'product.workflow.application.gitlab.application.step.5' %}</li>
+            <li>{% trans 'product.workflow.application.gitlab.application.step.6' %}</li>
+            <li>{% trans 'product.workflow.application.gitlab.application.step.7' %}</li>
+          </ol>
+          <label for="application" class="form-label">{% trans 'product.workflow.application.gitlab.application' %}</label>
+          <input type="text" id="application" class="form-control" placeholder="{% trans 'product.workflow.application.gitlab.application' %}">
+          <label for="secret" class="form-label mt-4">{% trans 'product.workflow.application.gitlab.secret' %}</label>
+          <input type="password" id="secret" class="form-control" placeholder="{% trans 'product.workflow.application.gitlab.secret' %}">
+          <button type="button" id="gitlab-application-continue" class="btn btn-primary d-block px-4 mt-5 mx-auto disabled">{% trans 'product.workflow.application.gitlab.continue' %}</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  let selectionContainers = [document.getElementById("gitlab-hostname-container")];
+
+  let hostnameInput = document.getElementById("hostname");
+  let applicationInput = document.getElementById("application");
+  let secretInput = document.getElementById("secret");
+
+  $(document).ready(function() {
+    document.getElementById("hostname").focus();
+  });
+
+  document.getElementById("gitlab-page-back").onclick = function (event) {
+    selectionContainers[selectionContainers.length - 1].classList.add("d-none");
+    selectionContainers.pop();
+    let loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("gitlab-wrapper").appendChild(loader);
+    document.getElementById("gitlab-page-back").classList.add("d-none");
+    setTimeout(function () {
+      document.getElementById("gitlab-wrapper")
+        .removeChild(document.getElementsByClassName("loader")[0]);
+      selectionContainers[selectionContainers.length - 1].classList.remove("d-none");
+      $(document.getElementById("gitlab-page-back")).toggleClass("d-none",
+        selectionContainers.length === 1);
+    }, 500);
+  }
+
+  document.getElementById("hostname").addEventListener('keyup', function(event) {
+    if (event.key === "Enter" && document.getElementById("hostname").value.length > 0) {
+      document.getElementById("gitlab-hostname-continue").click();
+    }
+    $(document.getElementById("gitlab-hostname-continue")).toggleClass("disabled",
+      document.getElementById("hostname").value.length === 0);
+  });
+
+  document.getElementById("gitlab-hostname-continue").onclick = function (event) {
+    if (hostnameInput.value.includes("gitlab.com")) {
+      document.getElementById("gitlab-application-step-redirect").href =
+        "https://gitlab.com/-/user_settings/applications";
+    } else {
+      document.getElementById("gitlab-application-step-redirect").href =
+        "https://" + hostnameInput.value.replaceAll("/", "").replaceAll(":", "")
+          .replaceAll("https", "").replaceAll("http", "") + "/admin/applications";
+    }
+    switchSelectionPageDelayed(document.getElementById("gitlab-hostname-container"),
+      document.getElementById("gitlab-application-container"),
+      document.getElementById("application"));
+  }
+
+  document.getElementById("application").addEventListener('keyup', function(event) {
+    if (event.key === "Enter") {
+      document.getElementById("secret").focus();
+    }
+    $(document.getElementById("gitlab-application-continue")).toggleClass("disabled",
+      !checkApplicationCompleteness());
+  });
+
+  document.getElementById("secret").addEventListener('keyup', function(event) {
+    var applicationCompleted = checkApplicationCompleteness();
+    if (event.key === "Enter" && applicationCompleted) {
+      document.getElementById("gitlab-application-continue").click();
+    }
+    $(document.getElementById("gitlab-application-continue"))
+      .toggleClass("disabled", !applicationCompleted);
+  });
+
+  function checkApplicationCompleteness() {
+    return document.getElementById("application").value.length > 0 &&
+      document.getElementById("secret").value.length > 0
+  }
+
+  document.getElementById("gitlab-application-continue").onclick = function (event) {
+    if (hostnameInput.value === "" || applicationInput.value === "" ||
+      secretInput.value === ""
+    ) {
+      Swal.fire("{% trans 'product.workflow.application.gitlab.failed.title' %}",
+        "{% trans 'product.workflow.application.gitlab.failed.incomplete' %}", "error");
+      return;
+    }
+    document.getElementById("gitlab-application-container").classList.add("d-none");
+    let loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("gitlab-wrapper").appendChild(loader);
+    document.getElementById("gitlab-page-back").classList.add("d-none");
+    connectGitlab(function (response) {
+      document.getElementById("gitlab-wrapper")
+        .removeChild(document.getElementsByClassName("loader")[0]);
+      if (response.success === true) {
+        window.location.href = response.redirect;
+      } else {
+        document.getElementById("gitlab-page-back").classList.remove("d-none");
+        document.getElementById("gitlab-application-container").classList.remove("d-none");
+        Swal.fire("{% trans 'product.workflow.application.gitlab.failed.title' %}",
+          "{% trans 'product.workflow.application.gitlab.failed.already.exists' %}", "error");
+      }
+    });
+  }
+
+  function connectGitlab(callback) {
+    let request = new HttpRequest("https://api.dulno.com/v1/gitlab/add/", "POST", [],
+      {hostname: hostnameInput.value, applicationId: applicationInput.value,
+        secret: secretInput.value});
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function switchSelectionPageDelayed(currentContainer, nextContainer, nextInput) {
+    selectionContainers.push(nextContainer);
+    currentContainer.classList.add("d-none");
+    let loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("gitlab-wrapper").appendChild(loader);
+    document.getElementById("gitlab-page-back").classList.add("d-none");
+    setTimeout(function () {
+      document.getElementById("gitlab-page-back").classList.remove("d-none");
+      document.getElementById("gitlab-wrapper")
+        .removeChild(document.getElementsByClassName("loader")[0]);
+      nextContainer.classList.remove("d-none");
+      nextInput.focus();
+    }, 500);
+  }
+
+  document.getElementById("gitlab-logo").onclick = function (event) {
+    window.location.href = "/";
+  }
+</script>
