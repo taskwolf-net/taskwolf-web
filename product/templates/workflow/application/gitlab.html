@@ -48,6 +48,7 @@
   let hostnameInput = document.getElementById("hostname");
   let applicationInput = document.getElementById("application");
   let secretInput = document.getElementById("secret");
+  let gitlabRedirectWindow;
 
   $(document).ready(function() {
     document.getElementById("hostname").focus();
@@ -78,13 +79,9 @@
   });
 
   document.getElementById("gitlab-hostname-continue").onclick = function (event) {
-    if (hostnameInput.value.includes("gitlab.com")) {
-      document.getElementById("gitlab-application-step-redirect").href =
-        "https://gitlab.com/-/user_settings/applications";
-    } else {
-      document.getElementById("gitlab-application-step-redirect").href =
-        "https://" + hostnameInput.value.replaceAll("/", "").replaceAll(":", "")
-          .replaceAll("https", "").replaceAll("http", "") + "/admin/applications";
+    document.getElementById("gitlab-application-step-redirect").onclick = function (event) {
+      gitlabRedirectWindow = window.open("https://" + hostnameInput.value.replaceAll("/", "").replaceAll(":", "")
+        .replaceAll("https", "").replaceAll("http", "") + "/-/user_settings/applications");
     }
     switchSelectionPageDelayed(document.getElementById("gitlab-hostname-container"),
       document.getElementById("gitlab-application-container"),
@@ -130,6 +127,9 @@
       document.getElementById("gitlab-wrapper")
         .removeChild(document.getElementsByClassName("loader")[0]);
       if (response.success === true) {
+        if (gitlabRedirectWindow != null) {
+          gitlabRedirectWindow.close();
+        }
         window.location.href = response.redirect;
       } else {
         document.getElementById("gitlab-page-back").classList.remove("d-none");
