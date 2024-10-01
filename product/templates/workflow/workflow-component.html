@@ -497,18 +497,21 @@
   function prepareSpecifications() {
     document.getElementById("workflow-component-specifications-container").style.display = "flex";
     document.getElementById("workflow-component-specifications-unable").style.display = "none";
-    fillSpecificationsInputs();
-    if (sessionStorage.getItem("workflow-action-index")) {
-      displayPlaceholdersTabs();
-    } else {
+    var actionIndex = sessionStorage.getItem("workflow-action-index");
+    if (actionIndex == -1) {
       document.getElementById("workflow-component-specifications-placeholders-empty").classList.remove("d-none");
+      fillSpecificationsInputs();
+      return;
     }
-    findOutputVariables(-1, function(outputVariables) {
-      componentsOutputVariables = componentsOutputVariables.concat(outputVariables);
-    });
-    for (let i = 0; i < sessionStorage.getItem("workflow-action-index"); i++) {
+    displayPlaceholdersTabs();
+    var outputCount = -1;
+    for (let i = -1; i < actionIndex; i++) {
       findOutputVariables(i, function(outputVariables) {
         componentsOutputVariables = componentsOutputVariables.concat(outputVariables);
+        outputCount++;
+        if (outputCount == actionIndex) {
+          fillSpecificationsInputs();
+        }
       });
     }
   }
