@@ -450,9 +450,11 @@
       prepareEvent();
     });
     prepareSpecifications();
-    setTimeout(function(){
-      $('#workflow-component-specifications').collapse("toggle");
-    }, 600);
+    if (!selectedComponentSetup) {
+      setTimeout(function() {
+        $('#workflow-component-specifications').collapse("toggle");
+      }, 600);
+    }
   }
 
   function resetEvent(isApplicationSelected) {
@@ -538,7 +540,7 @@
           addSpecificationFile(inputVariable.identifier, inputVariable.name, inputVariable.description, i, inputVariables.length);
         }
         if (inputVariable.dataType === "BOOLEAN") {
-          addSpecificationSwitch(inputVariable.identifier, inputVariable.name, inputVariable.description, i);
+          addSpecificationSwitch(inputVariable.identifier, inputVariable.name, inputVariable.description, i, inputVariables.length);
         }
         if (inputVariable.type === "REQUIRED") {
           requiredSpecificationVariables.push(inputVariable.identifier);
@@ -596,21 +598,17 @@
     document.getElementById("workflow-component-specifications-input-list").appendChild(inputContainerElement);
     if (selectedComponentSetup && "content" in selectedComponent) {
       let selectedComponentContent = JSON.parse(selectedComponent.content);
-      setTimeout(function() {
-        if (identifier in selectedComponentContent) {
-          for (let i = 0; i < componentsOutputVariables.length; i++) {
-            let variable = componentsOutputVariables[i];
-            selectedComponentContent[identifier] = selectedComponentContent[identifier].replace("%" + variable.identifier + "%",
-              '<div class="workflow-component-specifications-input-placeholder" contenteditable="false" ' +
-                'style="pointer-events: none;">' + variable.name + '</div>')
-          }
-          inputElement.innerHTML = selectedComponentContent[identifier].replaceAll("\n", "<br>") + "<br>";
-          inputSpecificationInput(identifier, inputElement.innerHTML);
+      if (identifier in selectedComponentContent) {
+        for (let i = 0; i < componentsOutputVariables.length; i++) {
+          let variable = componentsOutputVariables[i];
+          selectedComponentContent[identifier] = selectedComponentContent[identifier].replace("%" + variable.identifier + "%",
+            '<div class="workflow-component-specifications-input-placeholder" contenteditable="false" ' +
+            'style="pointer-events: none;">' + variable.name + '</div>')
         }
-        if (index === inputsLength - 1) {
-          selectedComponentSetup = false;
-        }
-      }, 200 * index);
+        inputElement.innerHTML = selectedComponentContent[identifier].replaceAll("\n", "<br>") + "<br>";
+        inputSpecificationInput(identifier, inputElement.innerHTML);
+      }
+      checkSetupCompletion();
     }
   }
 
@@ -702,7 +700,7 @@
     if (selectedComponentSetup && "content" in selectedComponent) {
       setTimeout(function(){
         clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton, index, inputsLength);
-      }, 200 * index);
+      }, 500 * index);
     }
   }
 
@@ -726,9 +724,7 @@
         if (selectedComponentSetup && selectedComponent.content !== undefined && JSON.parse(selectedComponent.content)[identifier] === item.identifier) {
           selectSpecificationSelect(identifier, item.identifier, item.name, dropdownContainer, dropdownButton, dropdownList);
         }
-        if (index === inputsLength - 1) {
-          selectedComponentSetup = false;
-        }
+        checkSetupCompletion();
       }
       if (items.length === 0) {
         let itemElement = document.createElement("li");
@@ -804,13 +800,11 @@
     document.getElementById("workflow-component-specifications-input-list").appendChild(inputContainerElement);
     if (selectedComponentSetup && "content" in selectedComponent) {
       let selectedComponentContent = JSON.parse(selectedComponent.content);
-      setTimeout(function() {
-        if (identifier in selectedComponentContent) {
-          selectSpecificationFile(identifier, selectedComponentContent[identifier],
-            fileButton);
-        }
-        selectedComponentSetup = false;
-      }, 200 * index);
+      if (identifier in selectedComponentContent) {
+        selectSpecificationFile(identifier, selectedComponentContent[identifier],
+          fileButton);
+      }
+      checkSetupCompletion();
     }
   }
 
@@ -827,7 +821,7 @@
     checkAdoptability();
   }
 
-  function addSpecificationSwitch(identifier, name, description, index) {
+  function addSpecificationSwitch(identifier, name, description, index, inputsLength) {
     let inputContainerElement = document.createElement("div");
     inputContainerElement.classList.add("workflow-component-specifications-switch-container", "form-outline", "mb-4");
     let labelElement = document.createElement("h5");
@@ -856,13 +850,11 @@
     document.getElementById("workflow-component-specifications-input-list").appendChild(inputContainerElement);
     if (selectedComponentSetup && "content" in selectedComponent) {
       let selectedComponentContent = JSON.parse(selectedComponent.content);
-      setTimeout(function() {
-        if (identifier in selectedComponentContent) {
-          specificationValues[identifier] = selectedComponentContent[identifier];
-          switchInput.checked = selectedComponentContent[identifier] === "true";
-        }
-        selectedComponentSetup = false;
-      }, 200 * index);
+      if (identifier in selectedComponentContent) {
+        specificationValues[identifier] = selectedComponentContent[identifier];
+        switchInput.checked = selectedComponentContent[identifier] === "true";
+      }
+      checkSetupCompletion();
     }
   }
 
@@ -968,6 +960,13 @@
     updateAdoptability(false);
   }
 
+  function checkSetupCompletion() {
+    if (selectedComponentSetup && checkAdoptability()) {
+      selectedComponentSetup = false;
+      $('#workflow-component-specifications').collapse("toggle");
+    }
+  }
+
   function checkAdoptability() {
     let isAdoptable = true;
     for (let i = 0; i < requiredSpecificationVariables.length; i++) {
@@ -977,6 +976,7 @@
       }
     }
     updateAdoptability(isAdoptable);
+    return isAdoptable;
   }
 
   function updateAdoptability(isAdoptable) {
