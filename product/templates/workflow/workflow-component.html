@@ -537,6 +537,9 @@
         if (inputVariable.dataType === "FILE") {
           addSpecificationFile(inputVariable.identifier, inputVariable.name, inputVariable.description, i, inputVariables.length);
         }
+        if (inputVariable.dataType === "BOOLEAN") {
+          addSpecificationSwitch(inputVariable.identifier, inputVariable.name, inputVariable.description, i);
+        }
         if (inputVariable.type === "REQUIRED") {
           requiredSpecificationVariables.push(inputVariable.identifier);
         }
@@ -822,6 +825,45 @@
     fileButton.classList.add("btn-success");
     fileButton.innerText = "{% trans 'product.workflow.component.specifications.file.selected' %}";
     checkAdoptability();
+  }
+
+  function addSpecificationSwitch(identifier, name, description, index) {
+    let inputContainerElement = document.createElement("div");
+    inputContainerElement.classList.add("workflow-component-specifications-switch-container", "form-outline", "mb-4");
+    let labelElement = document.createElement("h5");
+    labelElement.classList.add("workflow-component-specification-headline", "form-label");
+    labelElement.innerHTML = name + ":";
+    inputContainerElement.appendChild(labelElement);
+    let informationElement = document.createElement("h5");
+    informationElement.classList.add("workflow-component-specification-information", "fa", "fa-question-circle");
+    applyTooltips(informationElement, inputContainerElement, description);
+    inputContainerElement.appendChild(informationElement);
+    let switchElement = document.createElement("label");
+    switchElement.classList.add("switch", "mt-2");
+    let switchInput = document.createElement("input");
+    switchInput.type = "checkbox";
+    switchInput.checked = true;
+    specificationValues[identifier] = switchInput.checked.toString();
+    checkAdoptability();
+    switchElement.onclick = function (event) {
+      specificationValues[identifier] = switchInput.checked.toString();
+    }
+    switchElement.appendChild(switchInput);
+    let switchSpan = document.createElement("span");
+    switchSpan.classList.add("slider", "round");
+    switchElement.appendChild(switchSpan);
+    inputContainerElement.appendChild(switchElement);
+    document.getElementById("workflow-component-specifications-input-list").appendChild(inputContainerElement);
+    if (selectedComponentSetup && "content" in selectedComponent) {
+      let selectedComponentContent = JSON.parse(selectedComponent.content);
+      setTimeout(function() {
+        if (identifier in selectedComponentContent) {
+          specificationValues[identifier] = selectedComponentContent[identifier];
+          switchInput.checked = selectedComponentContent[identifier] === "true";
+        }
+        selectedComponentSetup = false;
+      }, 200 * index);
+    }
   }
 
   function displayPlaceholdersTabs() {
