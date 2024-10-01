@@ -533,6 +533,7 @@ input:-webkit-autofill:active{
   margin: auto;
   padding: 0;
   text-align: center;
+  user-select: none;
 }
 
 .workflow-component-specifications-placeholder {
@@ -541,6 +542,7 @@ input:-webkit-autofill:active{
   padding: 10px;
   transition-duration: 0.3s;
   cursor: grab;
+  user-select: none;
 }
 
 .dark .workflow-component-specifications-placeholder {

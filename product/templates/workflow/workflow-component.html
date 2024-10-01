@@ -621,9 +621,27 @@
     placeholder.textContent = event.dataTransfer.getData("placeholder-name");
     placeholder.contentEditable = "false";
     placeholder.style.pointerEvents = 'none';
-    inputElement.focus();
     const selection = window.getSelection();
-    const range = selection.rangeCount > 0 ? selection.getRangeAt(0) : document.createRange();
+    let range;
+    let isInputSelected = true;
+    if (selection.rangeCount > 0) {
+      range = selection.getRangeAt(0);
+      let targetElement = range.commonAncestorContainer;
+      targetElement = targetElement.nodeType === Node.ELEMENT_NODE ?
+        targetElement : targetElement.parentElement;
+      isInputSelected = targetElement === inputElement;
+    }
+    if (selection.rangeCount === 0 || !isInputSelected) {
+      range = document.createRange();
+      range.selectNodeContents(inputElement);
+      range.collapse(false);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      const lastChild = inputElement.lastChild;
+      if (lastChild && lastChild.nodeName === 'BR') {
+        inputElement.removeChild(lastChild);
+      }
+    }
     range.deleteContents();
     range.insertNode(placeholder);
     range.setStartAfter(placeholder);
@@ -641,7 +659,7 @@
     }
     if (event.key === 'Enter' || event.key === ' ') {
       const selection = window.getSelection();
-      const range = selection.rangeCount > 0 ? selection.getRangeAt(0) : document.createRange();
+      const range = selection.getRangeAt(0);
       const element = event.key === ' ' ? document.createTextNode(' ') : document.createElement('br');
       range.insertNode(element);
       range.setStartAfter(element);
