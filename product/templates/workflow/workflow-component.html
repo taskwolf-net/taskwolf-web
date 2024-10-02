@@ -7,7 +7,16 @@
     {% include 'product-sidebar.html' %}
     <div class="sidebar-influenced">
       <div id="workflow-component-container">
-        <h1 id="workflow-component-headline">{% with "product.workflow.component.headline."|add:type as value %}{% trans value %}{% endwith %}</h1>
+        <div id="workflow-component-header">
+          <div class="w-25">
+            <button id="workflow-component-page-back"><i class="fa-solid fa-arrow-left-long"></i></button>
+          </div>
+          <div class="w-50 text-center">
+            <h1 class="fw-bold mb-0">{% with "product.workflow.component.headline."|add:type as value %}{% trans value %}{% endwith %}</h1>
+          </div>
+          <div class="w-25">
+          </div>
+        </div>
         <div class="accordion accordion-flush" id="workflow-component-accordion">
           <div class="accordion-item">
             <h2 class="accordion-header">
@@ -272,8 +281,8 @@
     for (let i = 0; i < resetButtons.length; i++) {
       document.getElementById("workflow-component-application-body").removeChild(resetButtons[i]);
     }
-    selectedApplication = "";
-    selectedApplicationLogo = "";
+    selectedApplication = null;
+    selectedApplicationLogo = null;
     resetAccount();
     resetEvent();
     resetSpecifications();
@@ -1048,6 +1057,79 @@
       "content": JSON.stringify(specificationValues),
       "selected": true
     };
+  }
+
+  document.getElementById("workflow-component-page-back").onclick = function (event) {
+    if (checkUnsavedChanges()) {
+      Swal.fire({
+        title: "{% trans 'product.workflow.component.unsaved.changes.title' %}",
+        text: "{% trans 'product.workflow.component.unsaved.changes.body' %}",
+        icon: "warning",
+        confirmButtonColor: "#dc3545",
+        showCancelButton: true,
+      }).then(result => {
+        if (result.isConfirmed) {
+          window.location.href = "/workflow/";
+        }
+      });
+      return;
+    }
+    window.location.href = "/workflow/";
+  }
+
+  function checkUnsavedChanges() {
+    if ("{{type}}" === "trigger") {
+      return checkUnsavedChangesTrigger();
+    } else {
+      return checkUnsavedChangesAction();
+    }
+  }
+
+  function checkUnsavedChangesTrigger() {
+    var currenTrigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
+    if (!currenTrigger.selected && selectedApplication == null) {
+      return false;
+    }
+    return compareComponents(createComponent(), currenTrigger);
+  }
+
+  function checkUnsavedChangesAction() {
+    let index = parseInt(sessionStorage.getItem("workflow-action-index"));
+    let actions = JSON.parse(sessionStorage.getItem("workflow-actions")).actions;
+    var currentAction = actions.filter(item => item.actionIndex === index)[0];
+    if (!currentAction.selected && selectedApplication == null) {
+      return false;
+    }
+    let component = createComponent();
+    component.actionIndex = index;
+    return compareComponents(component, currentAction);
+  }
+
+  function compareComponents(component1, component2) {
+    var newContent = JSON.parse(component1.content);
+    delete component1.content;
+    var currentContent = JSON.parse(component2.content);
+    delete component2.content;
+    if (!compareJson(component1, component2)) {
+      return true;
+    }
+    return !compareJson(newContent, currentContent);
+  }
+
+  function compareJson(obj1, obj2) {
+    if (obj1 === obj2) return true;
+    if (typeof obj1 !== 'object' || typeof obj2 !== 'object' || obj1 === null || obj2 === null) {
+      return false;
+    }
+    let keys1 = Object.keys(obj1);
+    let keys2 = Object.keys(obj2);
+    if (keys1.length !== keys2.length) return false;
+    for (let key of keys1) {
+      if (!keys2.includes(key) || !compareJson(obj1[key], obj2[key])) {
+        return false;
+      }
+    }
+    return true;
   }
 
   function applyTooltips(element, container, text) {

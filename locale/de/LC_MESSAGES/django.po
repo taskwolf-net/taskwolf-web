@@ -1242,6 +1242,10 @@ msgid "product.workflow.component.reset"
 msgstr "ZURÜCKSETZEN"
 msgid "product.workflow.component.adopt"
 msgstr "ÜBERNEHMEN"
+msgid "product.workflow.component.unsaved.changes.title"
+msgstr "Ungespeicherte Änderungen!"
+msgid "product.workflow.component.unsaved.changes.body"
+msgstr "Es wurden ungesicherte Änderungen gefunden. Sind Sie sicher, dass Sie die Seite verlassen wollen?"
 
 # WORKFLOW - CONDITION
 msgid "product.workflow.condition.title"

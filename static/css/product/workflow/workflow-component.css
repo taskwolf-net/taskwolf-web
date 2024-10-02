@@ -49,11 +49,38 @@ input:-webkit-autofill:active{
   margin: auto;
 }
 
-#workflow-component-headline {
-  font-weight: bold;
-  text-align: center;
+#workflow-component-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
   margin-top: 5%;
   margin-bottom: 5%;
+}
+
+#workflow-component-page-back {
+  width: 52px;
+  height: 52px;
+  border: none;
+  background-color: transparent;
+  border-radius: 50%;
+  font-size: 25px;
+}
+
+.dark #workflow-component-page-back {
+  color: #b5b5b5;
+}
+
+.light #workflow-component-page-back {
+  color: #656565;
+}
+
+.dark #workflow-component-page-back:hover {
+  background-color: #212937;
+}
+
+.light #workflow-component-page-back:hover {
+  background-color: #d3d3d3;
 }
 
 .accordion-item {
