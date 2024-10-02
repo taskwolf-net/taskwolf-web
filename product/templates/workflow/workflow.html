@@ -367,16 +367,13 @@
 
   document.getElementById("workflow-description").oninput = function (event) {
     sessionStorage.setItem("workflow-description", event.target.value);
-    checkPublishability();
   }
 
   function checkPublishability() {
     if (sessionStorage.getItem("workflow-name") === null ||
-      sessionStorage.getItem("workflow-description") === null ||
       sessionStorage.getItem("workflow-trigger") === null ||
       sessionStorage.getItem("workflow-actions") === null ||
-      sessionStorage.getItem("workflow-name") === "" ||
-      sessionStorage.getItem("workflow-description") === ""
+      sessionStorage.getItem("workflow-name") === ""
     ) {
       updatePublishability(false);
       return;
@@ -413,6 +410,9 @@
   document.getElementById("workflow-publish").onclick = function (event) {
     let workflowName = sessionStorage.getItem("workflow-name");
     let workflowDescription = sessionStorage.getItem("workflow-description");
+    if (workflowDescription == null) {
+      workflowDescription = "";
+    }
     let workflowTriggerInformation = JSON.parse(sessionStorage.getItem("workflow-trigger"));
     let workflowTrigger = {
       "module": workflowTriggerInformation["module"],
