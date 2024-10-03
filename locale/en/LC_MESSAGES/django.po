@@ -1280,6 +1280,10 @@ msgid "product.workflow.condition.reset"
 msgstr "RESET"
 msgid "product.workflow.condition.adopt"
 msgstr "ADOPT"
+msgid "product.workflow.condition.unsaved.changes.title"
+msgstr "Unsaved changes!"
+msgid "product.workflow.condition.unsaved.changes.body"
+msgstr "Unsecured changes have been found. Are you sure you want to leave the site?"
 
 # WORKFLOW - TIMELINE
 msgid "product.workflow.timeline.title"

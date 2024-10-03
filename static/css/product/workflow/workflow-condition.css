@@ -54,11 +54,38 @@ input:-webkit-autofill:active{
   margin: auto;
 }
 
-#workflow-condition-headline {
-  font-weight: bold;
-  text-align: center;
+#workflow-condition-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
   margin-top: 5%;
   margin-bottom: 5%;
+}
+
+#workflow-condition-page-back {
+  width: 52px;
+  height: 52px;
+  border: none;
+  background-color: transparent;
+  border-radius: 50%;
+  font-size: 25px;
+}
+
+.dark #workflow-condition-page-back {
+  color: #b5b5b5;
+}
+
+.light #workflow-condition-page-back {
+  color: #656565;
+}
+
+.dark #workflow-condition-page-back:hover {
+  background-color: #212937;
+}
+
+.light #workflow-condition-page-back:hover {
+  background-color: #d3d3d3;
 }
 
 #workflow-condition-inputs {

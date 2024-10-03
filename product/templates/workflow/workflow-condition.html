@@ -7,7 +7,16 @@
     {% include 'product-sidebar.html' %}
     <div class="sidebar-influenced">
       <div id="workflow-condition-container">
-        <h1 id="workflow-condition-headline">{% trans 'product.workflow.condition.headline' %}</h1>
+        <div id="workflow-condition-header">
+          <div class="w-25">
+            <button id="workflow-condition-page-back"><i class="fa-solid fa-arrow-left-long"></i></button>
+          </div>
+          <div class="w-50 text-center">
+            <h1 class="fw-bold mb-0">{% trans 'product.workflow.condition.headline' %}</h1>
+          </div>
+          <div class="w-25">
+          </div>
+        </div>
         <div id="workflow-condition-wrapper">
           <div id="workflow-condition-inputs">
             <h5 id="workflow-condition-inputs-headline" class="text-center">{% trans 'product.workflow.condition.inputs' %}</h5>
@@ -415,6 +424,63 @@
       resetCallback();
     }
     return resetButtonContainer;
+  }
+
+  document.getElementById("workflow-condition-page-back").onclick = function (event) {
+    if (checkUnsavedChanges()) {
+      Swal.fire({
+        title: "{% trans 'product.workflow.condition.unsaved.changes.title' %}",
+        text: "{% trans 'product.workflow.condition.unsaved.changes.body' %}",
+        icon: "warning",
+        confirmButtonColor: "#dc3545",
+        showCancelButton: true,
+      }).then(result => {
+        if (result.isConfirmed) {
+          window.location.href = "/workflow/";
+        }
+      });
+      return;
+    }
+    window.location.href = "/workflow/";
+  }
+
+  function checkUnsavedChanges() {
+    let indexSplit = sessionStorage.getItem("workflow-condition-index").split(":");
+    let actionIndex = parseInt(indexSplit[0]);
+    let conditionIndex = parseInt(indexSplit[1]);
+    let currentCondition = JSON.parse(sessionStorage.getItem("workflow-conditions")).conditions
+      .filter(item => item.actionIndex === actionIndex && item.conditionIndex === conditionIndex)[0];
+    if (!currentCondition.selected && inputValue === "" && comparativeValue === "" && conditionType === "") {
+      return false;
+    }
+    return compareConditions(createCondition(), currentCondition);
+  }
+
+  function compareConditions(condition1, condition2) {
+    let newContent = JSON.parse(condition1.content);
+    delete condition1.content;
+    let currentContent = JSON.parse(condition2.content);
+    delete condition2.content;
+    if (!compareJson(condition1, condition2)) {
+      return true;
+    }
+    return !compareJson(newContent, currentContent);
+  }
+
+  function compareJson(obj1, obj2) {
+    if (obj1 === obj2) return true;
+    if (typeof obj1 !== 'object' || typeof obj2 !== 'object' || obj1 === null || obj2 === null) {
+      return false;
+    }
+    let keys1 = Object.keys(obj1);
+    let keys2 = Object.keys(obj2);
+    if (keys1.length !== keys2.length) return false;
+    for (let key of keys1) {
+      if (!keys2.includes(key) || !compareJson(obj1[key], obj2[key])) {
+        return false;
+      }
+    }
+    return true;
   }
 
   function applyTooltips(element, container, text) {
