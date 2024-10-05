@@ -125,9 +125,9 @@
     inputContainerElement.appendChild(inputElement);
     document.getElementById("workflow-condition-input-list").appendChild(inputContainerElement);
     let quill = setupPlaceholderInput(inputElement.id, name);
-    inputElement.oninput = function (event) {
+    quill.on('text-change', function(delta, oldDelta, source) {
       inputConditionInput(quill, identifier);
-    }
+    });
     inputElement.ondragover = function (event) {
       event.preventDefault();
     };
