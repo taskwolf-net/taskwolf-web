@@ -89,7 +89,9 @@ function setupPlaceholderInput(identifier, placeholderText) {
   }
   PlaceholderBlot.blotName = identifier;
   PlaceholderBlot.tagName = 'span';
-  Quill.register(PlaceholderBlot);
+  if (!Quill.imports['formats/' + identifier]) {
+    Quill.register(PlaceholderBlot);
+  }
 
   const placeholder = document.createElement('div');
   placeholder.classList.add('quill-placeholder');
@@ -141,10 +143,12 @@ function removeTrailingEmptyParagraphs(quill) {
 }
 
 function adjustEditorHeight(quill) {
+  const editor = quill.container.querySelector('.ql-editor');
   const container = quill.container;
-  container.style.height = 'auto';
-  const newHeight = Math.max(container.firstChild.scrollHeight + 14, 37);
-  container.style.height = `${newHeight}px`;
+  editor.style.height = 'auto';
+  const newHeight = Math.max(editor.scrollHeight + 14, 37) + 'px';
+  container.style.height = newHeight;
+  editor.style.height = newHeight;
 }
 
 function updatePlaceholderVisibility(quill, placeholder) {
