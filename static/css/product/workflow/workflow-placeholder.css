@@ -1,0 +1,42 @@
+.placeholder {
+  border-radius: 5px;
+  padding: 5px 0;
+  display: inline-block;
+  user-select: none;
+  opacity: 1 !important;
+  cursor: text !important;
+}
+
+.dark .placeholder {
+  background-color: #474d58;
+}
+
+.light .placeholder {
+  background-color: #b2b2b2;
+}
+
+.ql-editor {
+  padding: 0 !important;
+  font-size: 16px !important;
+}
+
+.dark .ql-container {
+  background-color: #0d1117 !important;
+  color: white !important;
+}
+
+.light .ql-container {
+  background-color: #eaeaea !important;
+  color: black !important;
+}
+
+.quill-placeholder {
+  color: #999;
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  left: 13px;
+  top: 7px;
+  opacity: 1;
+  font-size: 16px !important;
+}

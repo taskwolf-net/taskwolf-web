@@ -5,32 +5,26 @@ form {
   margin-right: auto;
 }
 
-[contenteditable=true]:empty:before {
-  content: attr(placeholder);
-  pointer-events: none;
-  display: block;
-}
-
-.dark input, .dark .workflow-component-specifications-input {
+.dark input {
   background-color: #0d1117 !important;
   color: white !important;
   -webkit-text-fill-color: white;
   border: 1px solid #cecece !important;
 }
 
-.dark input::placeholder, .dark [contenteditable=true]:empty:before {
+.dark input::placeholder {
   color: #828282 !important;
   -webkit-text-fill-color: #828282 !important;
 }
 
-.light input, .light .workflow-component-specifications-input {
+.light input {
   background-color: #eaeaea !important;
   color: black !important;
   -webkit-text-fill-color: black;
   border: 1px solid #4c4c4c !important;
 }
 
-.light input::placeholder, .light [contenteditable=true]:empty:before {
+.light input::placeholder {
   color: #949494 !important;
   -webkit-text-fill-color: #949494 !important;
 }
@@ -434,26 +428,6 @@ input:-webkit-autofill:active{
 .workflow-component-specifications-input-container {
   width: 80%;
   margin: auto;
-}
-
-.workflow-component-specifications-input {
-  max-height: 110px;
-  overflow-y: scroll;
-}
-
-.workflow-component-specifications-input-placeholder {
-  width: fit-content;
-  padding: 5px;
-  border-radius: 5px;
-  display: inline-block;
-}
-
-.dark .workflow-component-specifications-input-placeholder {
-  background-color: #474d58;
-}
-
-.light .workflow-component-specifications-input-placeholder {
-  background-color: #b2b2b2;
 }
 
 .workflow-component-specifications-select-container {

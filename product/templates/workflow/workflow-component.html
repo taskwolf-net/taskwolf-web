@@ -491,6 +491,7 @@
   let currentPlaceholderElement;
   let requiredSpecificationVariables = [];
   let componentsOutputVariables = [];
+  let quillInputElements = [];
 
   $(document).ready(function() {
     new ResizeObserver(() => updateSpecificationsDividerHeight())
@@ -579,116 +580,52 @@
     applyTooltips(informationElement, inputContainerElement, description);
     inputContainerElement.appendChild(informationElement);
     let inputElement = document.createElement("div");
-    inputElement.setAttribute("placeholder", placeholder);
-    inputElement.contentEditable = "true";
     if (dataType === "TEXT_AREA") {
-      inputElement.style.height = "110px";
+      inputElement.style.minHeight = "110px";
     }
     inputElement.id = "workflow-component-specifications-input-" + identifier;
     inputElement.classList.add("workflow-component-specifications-input", "form-control");
+    inputContainerElement.appendChild(inputElement);
+    document.getElementById("workflow-component-specifications-input-list").appendChild(inputContainerElement);
+    let quill = setupPlaceholderInput(inputElement.id, placeholder);
+    quillInputElements.push(quill);
     inputElement.oninput = function (event) {
-      if (!inputElement.innerHTML.endsWith("<br>")) {
-        inputElement.appendChild(document.createElement("br"));
-      }
-      if (inputElement.innerHTML === "<br>") {
-        inputElement.innerHTML = "";
-      }
-      inputSpecificationInput(identifier, inputElement.innerHTML);
+      inputSpecificationInput(quill, identifier);
     }
     inputElement.ondragover = function (event) {
       event.preventDefault();
     };
     inputElement.ondrop = function (event) {
-      inputSpecificationDrop(event, inputElement);
-      inputSpecificationInput(identifier, inputElement.innerHTML);
+      addPlaceholder(quill, inputElement.id, event.dataTransfer.getData("placeholder-name"));
+      inputSpecificationInput(quill, identifier);
     };
-    inputElement.onkeydown = (event) => inputSpecificationKeydown(event);
-    inputElement.onclick = function (event) {
-      inputElement.focus();
-    }
-    inputContainerElement.appendChild(inputElement);
-    document.getElementById("workflow-component-specifications-input-list").appendChild(inputContainerElement);
+    prefillSpecificationInput(identifier, quill);
+  }
+
+  function prefillSpecificationInput(identifier, quill) {
     if (selectedComponentSetup && "content" in selectedComponent) {
       let selectedComponentContent = JSON.parse(selectedComponent.content);
       if (identifier in selectedComponentContent) {
         for (let i = 0; i < componentsOutputVariables.length; i++) {
           let variable = componentsOutputVariables[i];
-          selectedComponentContent[identifier] = selectedComponentContent[identifier].replace("%" + variable.identifier + "%",
-            '<div class="workflow-component-specifications-input-placeholder" contenteditable="false" ' +
-            'style="pointer-events: none;">' + variable.name + '</div>')
+          selectedComponentContent[identifier] = selectedComponentContent[identifier]
+            .replaceAll("%" + variable.identifier + "%",
+              '<span class="placeholder" data-placeholder=" ' +
+                variable.name + ' ">﻿<span contenteditable="false"> ' +
+                variable.name + ' </span>﻿</span>')
         }
-        inputElement.innerHTML = selectedComponentContent[identifier].replaceAll("\n", "<br>") + "<br>";
-        inputSpecificationInput(identifier, inputElement.innerHTML);
+        quill.clipboard.dangerouslyPasteHTML(0, selectedComponentContent[identifier]
+          .split('\n').slice(0, -1)
+          .map(line => "<p>" + (line === "" ? "<br>" : line) + "</p>").join(''));
+        adjustEditorHeight(quill);
+        inputSpecificationInput(quill, identifier);
       }
       checkSetupCompletion();
     }
   }
 
-  function inputSpecificationDrop(event, inputElement) {
-    const placeholder = document.createElement('div');
-    placeholder.classList.add('workflow-component-specifications-input-placeholder');
-    placeholder.textContent = event.dataTransfer.getData("placeholder-name");
-    placeholder.contentEditable = "false";
-    placeholder.style.pointerEvents = 'none';
-    const selection = window.getSelection();
-    let range;
-    let isInputSelected = true;
-    if (selection.rangeCount > 0) {
-      range = selection.getRangeAt(0);
-      let targetElement = range.commonAncestorContainer;
-      targetElement = targetElement.nodeType === Node.ELEMENT_NODE ?
-        targetElement : targetElement.parentElement;
-      isInputSelected = targetElement === inputElement;
-    }
-    if (selection.rangeCount === 0 || !isInputSelected) {
-      range = document.createRange();
-      range.selectNodeContents(inputElement);
-      range.collapse(false);
-      selection.removeAllRanges();
-      selection.addRange(range);
-      const lastChild = inputElement.lastChild;
-      if (lastChild && lastChild.nodeName === 'BR') {
-        inputElement.removeChild(lastChild);
-      }
-    }
-    range.deleteContents();
-    range.insertNode(placeholder);
-    range.setStartAfter(placeholder);
-    range.collapse(true);
-    selection.removeAllRanges();
-    selection.addRange(range);
-    if (!inputElement.innerHTML.endsWith("<br>")) {
-      inputElement.appendChild(document.createElement("br"));
-    }
-  }
-
-  function inputSpecificationKeydown(event) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-    }
-    if (event.key === 'Enter' || event.key === ' ') {
-      const selection = window.getSelection();
-      const range = selection.getRangeAt(0);
-      const element = event.key === ' ' ? document.createTextNode(' ') : document.createElement('br');
-      range.insertNode(element);
-      range.setStartAfter(element);
-      range.collapse(true);
-      selection.removeAllRanges();
-      selection.addRange(range);
-    }
-    if (event.key === ' ') {
-      event.preventDefault();
-    }
-  }
-
-  function inputSpecificationInput(identifier, value) {
-    for (let i = 0; i < componentsOutputVariables.length; i++) {
-      let variable = componentsOutputVariables[i];
-      value = value.replace('<div class="workflow-component-specifications-input-placeholder" contenteditable="false" ' +
-        'style="pointer-events: none;">' + variable.name + '</div>', "%" + variable.identifier + "%")
-    }
-    value = value.slice(0, -4);
-    value = value.replaceAll("<br>", "\n");
+  function inputSpecificationInput(quill, identifier) {
+    let value = findPlaceholderInputContent(quill, componentsOutputVariables);
     if (value === "" && identifier in specificationValues) {
       delete specificationValues[identifier];
     }
@@ -994,6 +931,9 @@
     if (selectedComponentSetup && checkAdoptability()) {
       selectedComponentSetup = false;
       $('#workflow-component-specifications').collapse("toggle");
+      for (var i = 0; i < quillInputElements.length; i++) {
+        adjustEditorHeight(quillInputElements[i]);
+      }
     }
   }
 
