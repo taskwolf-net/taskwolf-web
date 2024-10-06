@@ -589,9 +589,9 @@
     document.getElementById("workflow-component-specifications-input-list").appendChild(inputContainerElement);
     let quill = setupPlaceholderInput(inputElement.id, placeholder);
     quillInputElements.push(quill);
-    inputElement.oninput = function (event) {
+    quill.on('text-change', function(delta, oldDelta, source) {
       inputSpecificationInput(quill, identifier);
-    }
+    });
     inputElement.ondragover = function (event) {
       event.preventDefault();
     };
