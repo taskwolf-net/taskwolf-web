@@ -3,10 +3,37 @@
   margin: auto;
 }
 
-#workflow-timeline-headline {
+#workflow-timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
   margin-top: 5%;
-  text-align: center;
-  font-weight: bold;
+}
+
+#workflow-timeline-page-back {
+  width: 52px;
+  height: 52px;
+  border: none;
+  background-color: transparent;
+  border-radius: 50%;
+  font-size: 25px;
+}
+
+.dark #workflow-timeline-page-back {
+  color: #b5b5b5;
+}
+
+.light #workflow-timeline-page-back {
+  color: #656565;
+}
+
+.dark #workflow-timeline-page-back:hover {
+  background-color: #212937;
+}
+
+.light #workflow-timeline-page-back:hover {
+  background-color: #d3d3d3;
 }
 
 #workflow-timeline-reset {
