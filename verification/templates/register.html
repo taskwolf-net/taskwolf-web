@@ -67,7 +67,6 @@
           <h2 class="register-headline">{% trans 'home.registration.success.headline' %}</h2>
           <p>{% trans 'home.registration.success.email.description' %}</p>
           <p>{% trans 'home.registration.success.email.resend.description' %}</p>
-          <button id="register-success-email-resend" type="button" class="btn btn-primary d-block px-4 mt-5 mx-auto">{% trans 'home.registration.success.email.resend' %}</button>
         </div>
       </div>
     </div>
@@ -81,6 +80,10 @@
   let usernameInput = document.getElementById("username");
   let passwordInput = document.getElementById("password");
   let passwordRepetitionInput = document.getElementById("password-repetition");
+
+  $(document).ready(function() {
+    emailInput.focus();
+  });
 
   document.getElementById("register-page-back").onclick = function (event) {
     selectionContainers[selectionContainers.length - 1].classList.add("d-none");
@@ -126,7 +129,7 @@
       if (response.exists === false) {
         document.getElementById("register-page-back").classList.remove("d-none");
         switchSelectionPage(document.getElementById("register-email-container"),
-          document.getElementById("register-username-container"));
+          document.getElementById("register-username-container"), usernameInput);
       } else {
         document.getElementById("register-languages").classList.remove("d-none");
         document.getElementById("register-login").classList.remove("d-none");
@@ -148,8 +151,14 @@
 
   document.getElementById("register-username-continue").onclick = function (event) {
     switchSelectionPageDelayed(document.getElementById("register-username-container"),
-      document.getElementById("register-password-container"));
+      document.getElementById("register-password-container"), passwordInput);
   }
+
+  document.getElementById("password").addEventListener('keyup', function(event) {
+    if (event.key === "Enter") {
+      passwordRepetitionInput.focus();
+    }
+  });
 
   document.getElementById("password-repetition").addEventListener('keyup', function(event) {
     if (event.key === "Enter") {
@@ -170,7 +179,7 @@
       return;
     }
     switchSelectionPageDelayed(document.getElementById("register-password-container"),
-      document.getElementById("register-legal-container"));
+      document.getElementById("register-legal-container"), null);
   }
 
   document.getElementById("legal-check").addEventListener('change', (event) => {
@@ -215,7 +224,7 @@
       if (response.success === true) {
         sessionStorage.setItem("registration-email", emailInput.value);
         switchSelectionPage(document.getElementById("register-legal-container"),
-          document.getElementById("register-success-container"))
+          document.getElementById("register-success-container"), null);
       } else {
         document.getElementById("register-page-back").classList.remove("d-none");
         document.getElementById("register-legal-container").classList.remove("d-none");
@@ -247,13 +256,16 @@
     });
   }
 
-  function switchSelectionPage(currentContainer, nextContainer) {
+  function switchSelectionPage(currentContainer, nextContainer, nextInput) {
     selectionContainers.push(nextContainer);
     currentContainer.classList.add("d-none");
     nextContainer.classList.remove("d-none");
+    if (nextInput != null) {
+      nextInput.focus();
+    }
   }
 
-  function switchSelectionPageDelayed(currentContainer, nextContainer) {
+  function switchSelectionPageDelayed(currentContainer, nextContainer, nextInput) {
     selectionContainers.push(nextContainer);
     currentContainer.classList.add("d-none");
     let loader = document.createElement("div");
@@ -267,6 +279,9 @@
       document.getElementById("register-wrapper")
         .removeChild(document.getElementsByClassName("loader")[0]);
       nextContainer.classList.remove("d-none");
+      if (nextInput != null) {
+        nextInput.focus();
+      }
     }, 500);
   }
 
@@ -345,7 +360,7 @@
     $("#progressbar").width(progress + "%");
   }
 
-  document.getElementById("register-success-email-resend").onclick = function (event) {
+  function resendRegistrationEmail() {
     let request = new HttpRequest("https://api.dulno.com/v1/verification/email/resend/", "POST", [],
       {email: sessionStorage.getItem("registration-email")});
     request.send(function (status, responseText) {
