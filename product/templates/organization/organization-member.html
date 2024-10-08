@@ -176,7 +176,7 @@
         let request = new HttpRequest("https://api.dulno.com/v1/organization/leave/", "GET");
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.organization.member.leave.successful.title' %}",
-            "{% trans 'product.organization.member.leave.successful.body' %}", "success").then(success => window.location.href = "/organizations/");
+            "{% trans 'product.organization.member.leave.successful.body' %}", "success").then(success => window.location.href = "/");
         });
       }
     });

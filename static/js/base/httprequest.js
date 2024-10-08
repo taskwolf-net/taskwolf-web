@@ -8,6 +8,9 @@ class HttpRequest {
 
   send(callback) {
     let self = this;
+    if (self.headers === undefined) {
+      self.headers = [];
+    }
     let headers = [...self.headers];
     headers.push({key: "Content-Type", value: "application/json"});
     let token = Cookie.find("token");
