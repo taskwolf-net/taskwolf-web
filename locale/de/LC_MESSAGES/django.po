@@ -2278,6 +2278,8 @@ msgid "product.organization.join.failed.link.expired"
 msgstr "Der Einladungslink ist abgelaufen"
 msgid "product.organization.join.failed.full"
 msgstr "Die Organisation ist voll. Es können keine weiteren Mitglieder aufgenommen werden"
+msgid "product.organization.join.continue"
+msgstr "WEITER"
 
 # ACCOUNT - APPS
 msgid "product.account.apps.title"

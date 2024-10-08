@@ -23,6 +23,7 @@
         </div>
         <h1 id="organization-join-headline"></h1>
         <p id="organization-join-description"></p>
+        <button type="button" id="organization-join-continue" class="btn btn-success d-block px-5 mt-5 mx-auto d-none">{% trans 'product.organization.join.continue' %}</button>
       </div>
     </div>
   </body>
@@ -59,7 +60,15 @@
         document.getElementById("organization-join-success").classList.remove("d-none");
         document.getElementById("organization-join-headline").innerText = "{% trans 'product.organization.join.successful.headline' %}";
         document.getElementById("organization-join-description").innerHTML = "{% trans 'product.organization.join.successful.description' %}";
+        document.getElementById("organization-join-continue").classList.remove("d-none");
+        Cookie.create("token", response.productApiKey, 60 * 60 * 24 * 30, ".dulno.com");
+        Cookie.create("refresh-token", response.refreshToken, 60 * 60 * 24 * 30, ".dulno.com");
+        Cookie.create("home-token", response.homeApiKey, 60 * 60, ".dulno.com");
       }
     });
   });
+
+  document.getElementById("organization-join-continue").onclick = function (event) {
+    window.location.href = "/";
+  }
 </script>
