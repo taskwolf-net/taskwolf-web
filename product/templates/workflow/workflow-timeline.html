@@ -8,7 +8,16 @@
     <div class="sidebar-influenced">
       <div id="workflow-timeline-container">
         <div id="workflow-timeline-wrapper" class="d-none">
-          <h1 id="workflow-timeline-headline">{% trans 'product.workflow.timeline.headline' %}</h1>
+          <div id="workflow-timeline-header">
+            <div class="w-25">
+              <button id="workflow-timeline-page-back"><i class="fa-solid fa-arrow-left-long"></i></button>
+            </div>
+            <div class="w-50 text-center">
+              <h1 class="fw-bold mb-0">{% trans 'product.workflow.timeline.headline' %}</h1>
+            </div>
+            <div class="w-25">
+            </div>
+          </div>
           <button type="button" id="workflow-timeline-reset" class="btn btn-danger btn-block d-none">{% trans 'product.workflow.timeline.reset' %}</button>
           <hr id="workflow-timeline-divider" class="hr"/>
           <section id="workflow-timeline-section">
@@ -101,6 +110,10 @@
         });
       }
     });
+  }
+
+  document.getElementById("workflow-timeline-page-back").onclick = function (event) {
+    window.location.href = "/workflow/";
   }
 
   function displayLoader() {
