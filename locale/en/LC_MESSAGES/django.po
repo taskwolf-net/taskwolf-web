@@ -1009,12 +1009,6 @@ msgstr "Accounts"
 msgid "product.sidebar.help"
 msgstr "Help"
 
-# GENERAL
-msgid "target"
-msgstr "Target"
-msgid "target.personal"
-msgstr "Target: You / Personal"
-
 # DASHBOARD
 msgid "product.dashboard.title"
 msgstr "Dashboard - Dulno"

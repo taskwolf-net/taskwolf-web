@@ -75,7 +75,7 @@
       }
       currentTarget = targets.filter((target) =>
         target.id === response.currentTarget)[0];
-      if (currentTarget !== targets[0]) {
+      if (currentTarget.type !== "PERSONAL") {
         setupTeamTargetSelection();
       }
     });
