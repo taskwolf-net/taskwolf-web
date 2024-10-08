@@ -85,7 +85,8 @@ input:-webkit-autofill:active{
 }
 
 #login {
-  margin-top: 50px;
+  margin-top: 30px;
+  margin-bottom: 20px;
   width: 100%;
 }
 
@@ -93,8 +94,8 @@ input:-webkit-autofill:active{
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 4%;
-  margin-bottom: 4%;
+  margin-top: 15px;
+  margin-bottom: 15px;
   font-weight: bold;
 }
 
