@@ -38,9 +38,10 @@ async def payment(request):
     'css': ['css/base/verification-header.css', 'css/verification/payment.css']})
 
 @home_page
-async def paymentComplete(request):
+async def paymentComplete(request, token):
   return render(request, 'payment-complete.html', {'title': gettext("home.payment.complete.title"),
-    'css': ['css/base/verification-header.css', 'css/verification/payment-complete.css']})
+    'css': ['css/base/verification-header.css', 'css/verification/payment-complete.css'],
+    'token': token})
 
 @home_page
 async def expiration(request):

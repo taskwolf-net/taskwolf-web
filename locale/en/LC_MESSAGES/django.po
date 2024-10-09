@@ -858,6 +858,8 @@ msgid "home.payment.complete.headline"
 msgstr "Payment completed"
 msgid "home.payment.complete.description"
 msgstr "Congratulations! You have successfully completed the payment. You will shortly receive an email from us with all further information and steps. Please also check your spam box."
+msgid "home.payment.complete.continue"
+msgstr "CONTINUE"
 
 # EXPIRATION
 msgid "home.expiration.title"

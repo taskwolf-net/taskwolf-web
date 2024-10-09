@@ -14,7 +14,31 @@
         </div>
         <h1 class="text-center fw-bold mt-5 mb-5">{% trans 'home.payment.complete.headline' %}</h1>
         <p>{% trans 'home.payment.complete.description' %}</p>
+        <button type="button" id="payment-complete-continue" class="btn btn-success d-block px-5 mt-5 mx-auto d-none">{% trans 'home.payment.complete.continue' %}</button>
       </div>
     </div>
   </body>
 </html>
+
+<script>
+  $(document).ready(function() {
+    if (Cookie.find("home-token") == null) {
+      return;
+    }
+    let request = new HttpRequest("https://api.dulno.com/v1/stripe/complete/", "POST",
+      [], {token: "{{token}}"});
+    request.send(function (status, responseText) {
+      let response = JSON.parse(responseText);
+      if (response.success === true) {
+        document.getElementById("payment-complete-continue").classList.remove("d-none");
+        Cookie.create("token", response.productApiKey, 60 * 60 * 24 * 30, ".dulno.com");
+        Cookie.create("refresh-token", response.refreshToken, 60 * 60 * 24 * 30, ".dulno.com");
+        Cookie.create("home-token", response.homeApiKey, 60 * 60, ".dulno.com");
+      }
+    });
+  });
+
+  document.getElementById("payment-complete-continue").onclick = function (event) {
+    window.location.href = "/";
+  }
+</script>
