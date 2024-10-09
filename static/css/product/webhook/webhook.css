@@ -1,5 +1,5 @@
 #webhook-container {
-  width: min(calc(1200px - 15vw), 95%);
+  width: min(1000px, 95%);
   margin: auto;
 }
 
