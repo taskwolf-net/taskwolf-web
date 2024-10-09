@@ -1,5 +1,5 @@
 #workflow-timeline-container {
-  width: min(calc(800px), 95%);
+  width: min(1000px, 95%);
   margin: auto;
 }
 
