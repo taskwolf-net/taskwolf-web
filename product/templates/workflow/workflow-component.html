@@ -892,6 +892,10 @@
     }
     let module = component.module;
     let type = component.type;
+    if (type === "") {
+      callback([]);
+      return;
+    }
     let request = new HttpRequest("https://api.dulno.com/v1/component/find/", "POST",
       [], {componentType: componentType, module: module, type: type});
     request.send(function (status, responseText) {
@@ -999,6 +1003,14 @@
     };
   }
 
+  var pageChangeApproved = false;
+
+  window.onbeforeunload = function() {
+    if (!pageChangeApproved && checkUnsavedChanges()) {
+      return "{% trans 'product.workflow.component.unsaved.changes.body' %}";
+    }
+  };
+
   document.getElementById("workflow-component-page-back").onclick = function (event) {
     if (checkUnsavedChanges()) {
       Swal.fire({
@@ -1009,6 +1021,7 @@
         showCancelButton: true,
       }).then(result => {
         if (result.isConfirmed) {
+          pageChangeApproved = true;
           window.location.href = "/workflow/";
         }
       });

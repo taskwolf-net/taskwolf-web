@@ -389,6 +389,13 @@
     let request = new HttpRequest("https://api.dulno.com/v1/workflow/find/", "POST", [], {workflow: id});
     request.send(function (status, responseText) {
       let workflow = JSON.parse(responseText);
+      sessionStorage.removeItem("workflow-name");
+      sessionStorage.removeItem("workflow-description");
+      sessionStorage.removeItem("workflow-trigger");
+      sessionStorage.removeItem("workflow-actions");
+      sessionStorage.removeItem("workflow-conditions");
+      sessionStorage.removeItem("workflow-selected");
+      sessionStorage.removeItem("workflow-id");
       sessionStorage.setItem("workflow-selected", "true");
       sessionStorage.setItem("workflow-id", workflow.id);
       sessionStorage.setItem("workflow-name", workflow.name);

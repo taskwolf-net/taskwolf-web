@@ -405,6 +405,14 @@
     return resetButtonContainer;
   }
 
+  var pageChangeApproved = false;
+
+  window.onbeforeunload = function() {
+    if (!pageChangeApproved && checkUnsavedChanges()) {
+      return "{% trans 'product.workflow.condition.unsaved.changes.body' %}";
+    }
+  };
+
   document.getElementById("workflow-condition-page-back").onclick = function (event) {
     if (checkUnsavedChanges()) {
       Swal.fire({
@@ -415,6 +423,7 @@
         showCancelButton: true,
       }).then(result => {
         if (result.isConfirmed) {
+          pageChangeApproved = true;
           window.location.href = "/workflow/";
         }
       });

@@ -1168,6 +1168,8 @@ msgid "product.workflow.condition"
 msgstr "Condition"
 msgid "product.workflow.condition.description"
 msgstr "Can influence the behavior of the following actions"
+msgid "product.workflow.unsaved.changes"
+msgstr "Unsecured changes have been found. Are you sure you want to leave the site?"
 
 # WORKFLOW - COMPONENT
 msgid "product.workflow.component.trigger.title"

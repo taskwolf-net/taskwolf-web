@@ -65,6 +65,7 @@
       document.getElementById("workflow-timeline").classList.remove("d-none");
       applyTooltips(document.getElementById("workflow-timeline-button"),
         document.getElementById("workflow-timeline"), "{% trans 'product.workflow.timeline' %}");
+
     }
   }
 
@@ -502,6 +503,44 @@
 
   document.getElementById("workflow-timeline-button").onclick = function (event) {
     window.location.href = "/workflow/timeline/";
+  }
+
+  var pageChangeApproved = false;
+
+  window.onbeforeunload = function() {
+    if (!pageChangeApproved && checkUnsavedChanges()) {
+      return "{% trans 'product.workflow.unsaved.changes.body' %}";
+    }
+  };
+
+  function checkUnsavedChanges() {
+    if (sessionStorage.getItem("workflow-selected") == null) {
+      return !checkWorkflowUntouched();
+    }
+    return false;
+  }
+
+  function checkWorkflowUntouched() {
+    var name = sessionStorage.getItem("workflow-name");
+    if (name != null && name !== "") {
+      return false;
+    }
+    var description = sessionStorage.getItem("workflow-description");
+    if (description != null && description !== "") {
+      return false;
+    }
+    var conditions = sessionStorage.getItem("workflow-conditions");
+    if (conditions != null && JSON.parse(conditions).conditions.length > 0) {
+      return false;
+    }
+    if (JSON.parse(sessionStorage.getItem("workflow-trigger")).selected) {
+      return false;
+    }
+    var actions = JSON.parse(sessionStorage.getItem("workflow-actions")).actions;
+    if (actions.length !== 1) {
+      return false;
+    }
+    return !actions[0].selected;
   }
 
   function applyTooltips(element, container, text) {
