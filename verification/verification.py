@@ -20,9 +20,10 @@ async def register(request):
 
 @home_page
 async def registerConfirm(request, user, token):
+  redirect = request.GET.get('redirect', '')
   return render(request, 'register-confirm.html', {'title': gettext("home.registration.confirm.title"),
     'css': ['css/base/home-header.css', 'css/verification/register-confirm.css'],
-    'user': user, 'token': token})
+    'user': user, 'token': token, 'redirect': redirect})
 
 @home_page
 async def loginRegister(request):

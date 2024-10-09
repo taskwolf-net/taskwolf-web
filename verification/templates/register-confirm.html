@@ -18,8 +18,16 @@
         window.location.href = "/";
         return;
       }
-      sessionStorage.setItem("home-token", response.homeApiKey);
-      window.location.href = "/payment/";
+      Cookie.create("home-token", response.homeApiKey, 60 * 60, ".dulno.com");
+      if ("{{redirect}}" !== "") {
+        window.location.href = "{{redirect}}";
+        return;
+      }
+      sessionStorage.setItem("expiration-has-personal-package", "false");
+      sessionStorage.setItem("expiration-has-own-organization", "false");
+      sessionStorage.setItem("expiration-is-organization-member", "false");
+      sessionStorage.setItem("expiration-user-name", response.userName);
+      window.location.href = "/expiration/";
     });
   });
 </script>
