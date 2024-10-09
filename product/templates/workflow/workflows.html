@@ -399,15 +399,19 @@
       sessionStorage.setItem("workflow-selected", "true");
       sessionStorage.setItem("workflow-id", workflow.id);
       sessionStorage.setItem("workflow-name", workflow.name);
+      sessionStorage.setItem("workflow-initial-name", workflow.name);
       sessionStorage.setItem("workflow-description", workflow.description);
-      sessionStorage.setItem("workflow-trigger", JSON.stringify({
+      sessionStorage.setItem("workflow-initial-description", workflow.description);
+      var trigger = JSON.stringify({
         "module": workflow.triggerModule,
         "moduleLogo": workflow.triggerModuleLogo,
         "type": workflow.triggerType,
         "typeDescription": workflow.triggerTypeDescription,
         "content": workflow.triggerContent,
         "selected": true
-      }));
+      });
+      sessionStorage.setItem("workflow-trigger", trigger);
+      sessionStorage.setItem("workflow-initial-trigger", trigger);
       let actions = [];
       for (let i = 0; i < workflow.actions.length; i++) {
         let workflowActionInformation = workflow.actions[i];
@@ -421,7 +425,9 @@
           "selected": true
         });
       }
-      sessionStorage.setItem("workflow-actions", JSON.stringify({actions: actions}));
+      var parsedActions = JSON.stringify({actions: actions});
+      sessionStorage.setItem("workflow-actions", parsedActions);
+      sessionStorage.setItem("workflow-initial-actions", parsedActions);
       let conditions = [];
       for (let i = 0; i < workflow.conditions.length; i++) {
         let workflowConditionInformation = workflow.conditions[i];
@@ -433,7 +439,9 @@
           "selected": true
         });
       }
-      sessionStorage.setItem("workflow-conditions", JSON.stringify({conditions: conditions}));
+      var parsedConditions = JSON.stringify({conditions: conditions});
+      sessionStorage.setItem("workflow-conditions", parsedConditions);
+      sessionStorage.setItem("workflow-initial-conditions", parsedConditions);
       window.location.href = "/workflow/";
     });
   }

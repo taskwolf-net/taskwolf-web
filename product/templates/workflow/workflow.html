@@ -36,6 +36,8 @@
 </html>
 
 <script>
+  var pageChangeApproved = false;
+
   $(document).ready(function() {
     displayWorkflow();
   });
@@ -65,7 +67,6 @@
       document.getElementById("workflow-timeline").classList.remove("d-none");
       applyTooltips(document.getElementById("workflow-timeline-button"),
         document.getElementById("workflow-timeline"), "{% trans 'product.workflow.timeline' %}");
-
     }
   }
 
@@ -122,6 +123,7 @@
         return;
       }
       sessionStorage.setItem("workflow-action-index", index.toString());
+      pageChangeApproved = true;
       window.location.href = "/workflow/" + type + "/";
     }
     document.getElementById("workflow-components").appendChild(componentContainer);
@@ -299,6 +301,7 @@
         return;
       }
       sessionStorage.setItem("workflow-condition-index", actionIndex.toString() + ":" + conditionIndex.toString());
+      pageChangeApproved = true;
       window.location.href = "/workflow/condition/";
     }
     arrowElement.parentNode.insertBefore(componentContainer, arrowElement.nextSibling);
@@ -475,6 +478,7 @@
         sessionStorage.removeItem("workflow-selected");
         sessionStorage.removeItem("workflow-id");
       }
+      pageChangeApproved = true;
       window.location.href = "/workflows/";
     });
   }
@@ -495,6 +499,7 @@
         let request = new HttpRequest("https://api.dulno.com/v1/workflow/remove/", "POST",
           [], {workflow: sessionStorage.getItem("workflow-id")});
         request.send(function (status, responseText) {
+          pageChangeApproved = true;
           Swal.fire("{% trans 'product.workflow.delete.successful.title' %}", "{% trans 'product.workflow.delete.successful.body' %}", "success").then(success => window.location.href = "/workflows/");
         });
       }
@@ -502,10 +507,9 @@
   }
 
   document.getElementById("workflow-timeline-button").onclick = function (event) {
+    pageChangeApproved = true;
     window.location.href = "/workflow/timeline/";
   }
-
-  var pageChangeApproved = false;
 
   window.onbeforeunload = function() {
     if (!pageChangeApproved && checkUnsavedChanges()) {
@@ -517,7 +521,14 @@
     if (sessionStorage.getItem("workflow-selected") == null) {
       return !checkWorkflowUntouched();
     }
-    return false;
+    return checkWorkflowInitialState("name") || checkWorkflowInitialState("description") ||
+      checkWorkflowInitialState("trigger") || checkWorkflowInitialState("actions") ||
+      checkWorkflowInitialState("conditions");
+  }
+
+  function checkWorkflowInitialState(key) {
+    return sessionStorage.getItem("workflow-" + key) !==
+      sessionStorage.getItem("workflow-initial-" + key);
   }
 
   function checkWorkflowUntouched() {
