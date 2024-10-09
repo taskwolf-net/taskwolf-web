@@ -31,6 +31,18 @@
                 <button type="button" id="webhook-key-regenerate" class="btn btn-secondary btn-block"><span class="fa-solid fa-rotate-right"></span></button>
               </div>
             </div>
+            <div id="webhook-testing-section" class="webhook-section mt-5 pt-5">
+              <label class="form-label">{% trans 'product.webhook.testing' %}</label>
+              <div id="webhook-testing-section-content" class="webhook-section-content">
+                <div class="webhook-code">
+                  <button id="webhook-testing-code-copy" class="webhook-code-copy"><i class="fa-solid fa-copy"></i></button>
+                  <label class="me-4">POST</label><label id="webhook-testing-url"></label><label class="ms-4 text-secondary">HTTP/1.1</label><br><br>
+                  <label class="text-info">Authorization:</label> <label>Bearer ********************************</label><br>
+                  <label class="text-info">Content-Type:</label> <label>text/plain</label><br><br>
+                  <label>Some information</label>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -48,6 +60,7 @@
       key = webhook.key;
       document.getElementById("webhook-name").innerHTML = webhook.name;
       document.getElementById("webhook-url").value = webhook.url;
+      document.getElementById("webhook-testing-url").innerText = webhook.url;
       applyTooltips(document.getElementById("webhook-url-copy"),
         document.getElementById("webhook-url-section-content"),
         "{% trans 'product.webhook.url.copy.tooltip' %}");
@@ -108,6 +121,12 @@
       key = JSON.parse(responseText).key;
       document.getElementById("webhook-key").value = key;
     });
+  }
+
+  document.getElementById("webhook-testing-code-copy").onclick = function(event) {
+    navigator.clipboard.writeText('curl -X POST -H "Authorization: Bearer ' +
+      webhook.key + '" -H "Content-Type: text/plain" -d "Some information" ' +
+      webhook.url);
   }
 
   document.getElementById("webhook-delete").onclick = function (event) {

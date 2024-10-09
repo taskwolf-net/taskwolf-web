@@ -1768,6 +1768,8 @@ msgid "product.webhook.key.copied.tooltip"
 msgstr "Kopiert!"
 msgid "product.webhook.key.regenerate.tooltip"
 msgstr "Schlüssel regenerieren"
+msgid "product.webhook.testing"
+msgstr "Ausprobieren:"
 
 # TEMPLATES
 msgid "product.templates.title"

@@ -73,11 +73,7 @@
   display: flex;
 }
 
-#webhook-url-copy {
-  margin-left: 2%;
-}
-
-#webhook-key-copy {
+#webhook-url-copy, #webhook-key-copy {
   margin-left: 2%;
 }
 
@@ -105,4 +101,29 @@
 
 .webhook-rename-content input::placeholder {
   color: #a5a5a5;
+}
+
+.webhook-code {
+  position: relative;
+  background-color: #0a0d12;
+  border: 1px solid #3a3a3a;
+  border-radius: 10px;
+  padding: 20px;
+  width: 100%;
+}
+
+.webhook-code-copy {
+  position: absolute;
+  color: white;
+  background-color: #272727;
+  right: 20px;
+  width: 42px;
+  height: 42px;
+  border-radius: 5px;
+  border: none;
+  font-size: 20px;
+}
+
+.webhook-code-copy:hover {
+  background-color: #383838;
 }
