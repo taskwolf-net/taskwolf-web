@@ -153,9 +153,12 @@
       let response = JSON.parse(responseText);
       resetPackageSelection();
       if (response.success === true) {
+        Cookie.create("token", response.productApiKey, 60 * 60 * 24 * 30, ".dulno.com");
+        Cookie.create("refresh-token", response.refreshToken, 60 * 60 * 24 * 30, ".dulno.com");
+        Cookie.create("home-token", response.homeApiKey, 60 * 60, ".dulno.com");
         Swal.fire("{% trans 'home.payment.trial.successful.title' %}",
           "{% trans 'home.payment.trial.successful.body' %}", "success")
-          .then(success => window.location.href = "/login/");
+          .then(success => window.location.href = "/");
         return;
       }
       let errorCode = response.error;
