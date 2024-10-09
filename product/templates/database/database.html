@@ -60,7 +60,8 @@
 
   function fetchDatabaseData(callback) {
     let location = window.location;
-    let id = location.href.replace(location.host, "").replace(location.protocol, "").replace("database", "").replaceAll("/", "");
+    let id = location.href.replace(location.host, "").replace(location.protocol, "")
+      .replace("database", "").replaceAll("/", "");
     let request = new HttpRequest("https://api.dulno.com/v1/table/find/", "POST",
       [], {table: id});
     request.send(function (status, responseText) {
@@ -113,7 +114,8 @@
     settingsButton.setAttribute("aria-expanded", "false");
     head.appendChild(settingsButton);
     let dropdown = createTableSettingsDropdown([
-        {icon: "fa-trash", content: "{% trans 'product.database.column.settings.delete' %}", color: "text-danger", click: () => openRemoveColumnMenu(name)}
+        {icon: "fa-trash", content: "{% trans 'product.database.column.settings.delete' %}",
+          color: "text-danger", click: () => openRemoveColumnMenu(name)}
       ], []);
     head.appendChild(dropdown);
     entry.appendChild(head);
@@ -132,7 +134,9 @@
         let request = new HttpRequest("https://api.dulno.com/v1/table/column/remove/", "POST",
           [], {table: database.id, columnName: column});
         request.send(function (status, responseText) {
-          Swal.fire("{% trans 'product.database.column.remove.successful.title' %}", "{% trans 'product.database.column.remove.successful.body' %}", "success").then(success => window.location.reload());
+          Swal.fire("{% trans 'product.database.column.remove.successful.title' %}",
+            "{% trans 'product.database.column.remove.successful.body' %}", "success")
+            .then(success => window.location.reload());
         });
       }
     });
@@ -170,13 +174,33 @@
     }).then(result => {
       if (result.isConfirmed) {
         if (input.value.replaceAll(" ", "") === "") {
-          Swal.fire("{% trans 'product.database.rename.empty.title' %}", "{% trans 'product.database.column.add.empty.body' %}", "error");
+          Swal.fire("{% trans 'product.database.rename.empty.title' %}",
+            "{% trans 'product.database.column.add.empty.body' %}", "error");
           return;
         }
         let request = new HttpRequest("https://api.dulno.com/v1/table/column/add/", "POST",
           [], {table: database.id, columnName: input.value});
         request.send(function (status, responseText) {
-          Swal.fire("{% trans 'product.database.column.add.successful.title' %}", "{% trans 'product.database.column.add.successful.body' %}", "success").then(success => window.location.reload());
+          let response = JSON.parse(responseText);
+          if (response.success === true) {
+            Swal.fire("{% trans 'product.database.column.add.successful.title' %}",
+              "{% trans 'product.database.column.add.successful.body' %}", "success")
+              .then(success => window.location.reload());
+          } else {
+            if (response.errorCode === 1000) {
+              Swal.fire("{% trans 'product.database.column.add.failed.title' %}",
+                "{% trans 'product.database.column.add.failed.ineligible' %}", "error");
+            } else if (response.errorCode === 1001) {
+              Swal.fire("{% trans 'product.database.column.add.failed.title' %}",
+                "{% trans 'product.database.column.add.failed.pattern' %}", "error");
+            } else if (response.errorCode === 1002) {
+              Swal.fire("{% trans 'product.database.column.add.failed.title' %}",
+                "{% trans 'product.database.column.add.failed.occupied' %}", "error");
+            } else {
+              Swal.fire("{% trans 'product.database.column.add.failed.title' %}",
+                "", "error");
+            }
+          }
         });
       }
     });
@@ -249,10 +273,14 @@
       [], {table: database.id, row: findRowId(entry), content: rowData});
     request.send(function (status, responseText) {
       if (status === 400) {
-        Swal.fire("{% trans 'product.database.row.edit.failed.limit.reached.title' %}", "{% trans 'product.database.row.edit.failed.limit.reached.body' %}", "error").then(success => window.location.reload());
+        Swal.fire("{% trans 'product.database.row.edit.failed.limit.reached.title' %}",
+          "{% trans 'product.database.row.edit.failed.limit.reached.body' %}", "error")
+          .then(success => window.location.reload());
         return;
       }
-      Swal.fire("{% trans 'product.database.row.edit.successful.title' %}", "{% trans 'product.database.row.edit.successful.body' %}", "success").then(success => window.location.reload());
+      Swal.fire("{% trans 'product.database.row.edit.successful.title' %}",
+        "{% trans 'product.database.row.edit.successful.body' %}", "success")
+        .then(success => window.location.reload());
     });
   }
 
@@ -267,7 +295,9 @@
     let request = new HttpRequest("https://api.dulno.com/v1/table/entry/remove/", "POST",
       [], {table: database.id, row: findRowId(entry)});
     request.send(function (status, responseText) {
-      Swal.fire("{% trans 'product.database.row.delete.successful.title' %}", "{% trans 'product.database.row.delete.successful.body' %}", "success").then(success => window.location.reload());
+      Swal.fire("{% trans 'product.database.row.delete.successful.title' %}",
+        "{% trans 'product.database.row.delete.successful.body' %}", "success")
+        .then(success => window.location.reload());
     });
   }
 
@@ -299,8 +329,10 @@
     settingsButton.setAttribute("aria-expanded", "false");
     entryDiv.appendChild(settingsButton);
     let dropdown = createTableSettingsDropdown([
-        {icon: "fa-pen", content: "{% trans 'product.database.row.settings.edit' %}", click: submitEdit},
-        {icon: "fa-trash", content: "{% trans 'product.database.row.settings.delete' %}", color: "text-danger", click: submitDelete}
+        {icon: "fa-pen", content: "{% trans 'product.database.row.settings.edit' %}",
+          click: submitEdit},
+        {icon: "fa-trash", content: "{% trans 'product.database.row.settings.delete' %}",
+          color: "text-danger", click: submitDelete}
       ], [1]);
     entryDiv.appendChild(dropdown);
     entry.appendChild(entryDiv);
@@ -497,7 +529,9 @@
         let request = new HttpRequest("https://api.dulno.com/v1/table/delete/", "POST",
           [], {table: database.id});
         request.send(function (status, responseText) {
-          Swal.fire("{% trans 'product.database.delete.successful.title' %}", "{% trans 'product.database.delete.successful.body' %}", "success").then(success => window.location.href = "/databases/");
+          Swal.fire("{% trans 'product.database.delete.successful.title' %}",
+            "{% trans 'product.database.delete.successful.body' %}", "success")
+            .then(success => window.location.href = "/databases/");
         });
       }
     });
@@ -520,13 +554,16 @@
     }).then(result => {
       if (result.isConfirmed) {
         if (input.value.replaceAll(" ", "") === "") {
-          Swal.fire("{% trans 'product.database.rename.empty.title' %}", "{% trans 'product.database.rename.empty.body' %}", "error");
+          Swal.fire("{% trans 'product.database.rename.empty.title' %}",
+            "{% trans 'product.database.rename.empty.body' %}", "error");
           return;
         }
         let request = new HttpRequest("https://api.dulno.com/v1/table/rename/", "POST",
           [], {table: database.id, name: input.value});
         request.send(function (status, responseText) {
-          Swal.fire("{% trans 'product.database.rename.successful.title' %}", "{% trans 'product.database.rename.successful.body' %}", "success").then(success => window.location.reload());
+          Swal.fire("{% trans 'product.database.rename.successful.title' %}",
+            "{% trans 'product.database.rename.successful.body' %}", "success")
+            .then(success => window.location.reload());
         });
       }
     });
@@ -542,7 +579,9 @@
         });
       }
     }
-    Swal.fire("{% trans 'product.database.remove.successful.title' %}", "{% trans 'product.database.remove.successful.body' %}", "success").then(success => window.location.reload());
+    Swal.fire("{% trans 'product.database.remove.successful.title' %}",
+      "{% trans 'product.database.remove.successful.body' %}", "success")
+      .then(success => window.location.reload());
   }
 
   function findRowId(row) {
@@ -600,10 +639,14 @@
       [], {table: database.id, row: rowData});
     request.send(function (status, responseText) {
       if (status === 400) {
-        Swal.fire("{% trans 'product.database.insert.failed.limit.reached.title' %}", "{% trans 'product.database.insert.failed.limit.reached.body' %}", "error").then(success => window.location.reload());
+        Swal.fire("{% trans 'product.database.insert.failed.limit.reached.title' %}",
+          "{% trans 'product.database.insert.failed.limit.reached.body' %}", "error")
+          .then(success => window.location.reload());
         return;
       }
-      Swal.fire("{% trans 'product.database.insert.successful.title' %}", "{% trans 'product.database.insert.successful.body' %}", "success").then(success => window.location.reload());
+      Swal.fire("{% trans 'product.database.insert.successful.title' %}",
+        "{% trans 'product.database.insert.successful.body' %}", "success")
+        .then(success => window.location.reload());
     });
   }
 
