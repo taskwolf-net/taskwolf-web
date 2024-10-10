@@ -8,6 +8,10 @@
   background-color: #fafafa !important;
 }
 
+body {
+  zoom: 85%
+}
+
 body::-webkit-scrollbar {
   width: 14px;
 }
