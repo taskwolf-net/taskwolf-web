@@ -513,7 +513,13 @@
     entryInput.id = "devices-filter-owner-" + id;
     entry.appendChild(entryInput);
     entryInput.onclick = function (event) {
-      if (id === "" || pagingFilterOwner === id) {
+      if (id === "") {
+        return;
+      }
+      if (pagingFilterOwner === id) {
+        entryInput.checked = false;
+        pagingFilterOwner = "";
+        updateDevices();
         return;
       }
       pagingFilterOwner = id;
@@ -531,27 +537,33 @@
   }
 
   document.getElementById("devices-filter-platform-android").onclick = function (event) {
-    pagingFilterPlatform = "ANDROID";
-    updateDevices();
+    clickPlatformRadio("ANDROID", "devices-filter-platform-android");
   }
 
   document.getElementById("devices-filter-platform-ios").onclick = function (event) {
-    pagingFilterPlatform = "IOS";
-    updateDevices();
+    clickPlatformRadio("IOS", "devices-filter-platform-ios");
   }
 
   document.getElementById("devices-filter-platform-windows").onclick = function (event) {
-    pagingFilterPlatform = "WINDOWS";
-    updateDevices();
+    clickPlatformRadio("WINDOWS", "devices-filter-platform-windows");
   }
 
   document.getElementById("devices-filter-platform-linux").onclick = function (event) {
-    pagingFilterPlatform = "LINUX";
-    updateDevices();
+    clickPlatformRadio("LINUX", "devices-filter-platform-linux");
   }
 
   document.getElementById("devices-filter-platform-macos").onclick = function (event) {
-    pagingFilterPlatform = "MACOS";
+    clickPlatformRadio("MACOS", "devices-filter-platform-macos");
+  }
+
+  function clickPlatformRadio(platformId, radioId) {
+    if (pagingFilterPlatform === platformId) {
+      document.getElementById(radioId).checked = false;
+      pagingFilterPlatform = "";
+      updateDevices();
+      return;
+    }
+    pagingFilterPlatform = platformId;
     updateDevices();
   }
 

@@ -680,7 +680,13 @@
     entryInput.id = "workflows-filter-creator-" + id;
     entry.appendChild(entryInput);
     entryInput.onclick = function (event) {
-      if (id === "" || pagingFilterCreator === id) {
+      if (id === "") {
+        return;
+      }
+      if (pagingFilterCreator === id) {
+        entryInput.checked = false;
+        pagingFilterCreator = "";
+        updateWorkflows();
         return;
       }
       pagingFilterCreator = id;
@@ -749,6 +755,10 @@
     applyTooltips(entryLogo, entry, name);
     entry.onclick = function (event) {
       if (pagingFilterApplication === id) {
+        document.getElementById("workflows-filter-application-" + pagingFilterApplication)
+          .classList.remove("workflows-filter-application-active");
+        pagingFilterApplication = "";
+        updateWorkflows();
         return;
       }
       if (pagingFilterApplication !== "") {
@@ -763,23 +773,47 @@
   }
 
   document.getElementById("workflows-filter-start-time").oninput = function (event) {
-    let date = new Date(document.getElementById("workflows-filter-start-time").value);
+    let value = document.getElementById("workflows-filter-start-time").value;
+    if (value === "") {
+      pagingFilterStartTime = -1
+      updateWorkflows();
+      return;
+    }
+    let date = new Date(value);
     pagingFilterStartTime = date.getTime();
     updateWorkflows();
   }
 
   document.getElementById("workflows-filter-end-time").oninput = function (event) {
-    let date = new Date(document.getElementById("workflows-filter-end-time").value);
+    let value = document.getElementById("workflows-filter-end-time").value;
+    if (value === "") {
+      pagingFilterEndTime = -1;
+      updateWorkflows();
+      return;
+    }
+    let date = new Date(value);
     pagingFilterEndTime = date.getTime();
     updateWorkflows();
   }
 
   document.getElementById("workflows-filter-state-operational").onclick = function (event) {
+    if (pagingFilterState === "OPERATIONAL") {
+      document.getElementById("workflows-filter-state-operational").checked = false;
+      pagingFilterState = "";
+      updateWorkflows();
+      return;
+    }
     pagingFilterState = "OPERATIONAL";
     updateWorkflows();
   }
 
   document.getElementById("workflows-filter-state-failing").onclick = function (event) {
+    if (pagingFilterState === "FAILING") {
+      document.getElementById("workflows-filter-state-failing").checked = false;
+      pagingFilterState = "";
+      updateWorkflows();
+      return;
+    }
     pagingFilterState = "FAILING";
     updateWorkflows();
   }

@@ -439,7 +439,13 @@
     entryInput.id = "processes-filter-creator-" + id;
     entry.appendChild(entryInput);
     entryInput.onclick = function (event) {
-      if (id === "" || pagingFilterCreator === id) {
+      if (id === "") {
+        return;
+      }
+      if (pagingFilterCreator === id) {
+        entryInput.checked = false;
+        pagingFilterCreator = "";
+        updateProcesses();
         return;
       }
       pagingFilterCreator = id;
@@ -461,13 +467,25 @@
   }
 
   document.getElementById("processes-filter-start-time").oninput = function (event) {
-    let date = new Date(document.getElementById("processes-filter-start-time").value);
+    let value = document.getElementById("processes-filter-start-time").value;
+    if (value === "") {
+      pagingFilterStartTime = -1
+      updateProcesses();
+      return;
+    }
+    let date = new Date(value);
     pagingFilterStartTime = date.getTime();
     updateProcesses();
   }
 
   document.getElementById("processes-filter-end-time").oninput = function (event) {
-    let date = new Date(document.getElementById("processes-filter-end-time").value);
+    let value = document.getElementById("processes-filter-end-time").value;
+    if (value === "") {
+      pagingFilterEndTime = -1;
+      updateProcesses();
+      return;
+    }
+    let date = new Date(value);
     pagingFilterEndTime = date.getTime();
     updateProcesses();
   }

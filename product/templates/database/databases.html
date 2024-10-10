@@ -439,7 +439,13 @@
     entryInput.id = "databases-filter-creator-" + id;
     entry.appendChild(entryInput);
     entryInput.onclick = function (event) {
-      if (id === "" || pagingFilterCreator === id) {
+      if (id === "") {
+        return;
+      }
+      if (pagingFilterCreator === id) {
+        entryInput.checked = false;
+        pagingFilterCreator = "";
+        updateDatabases();
         return;
       }
       pagingFilterCreator = id;
@@ -461,13 +467,25 @@
   }
 
   document.getElementById("databases-filter-start-time").oninput = function (event) {
-    let date = new Date(document.getElementById("databases-filter-start-time").value);
+    let value = document.getElementById("databases-filter-start-time").value;
+    if (value === "") {
+      pagingFilterStartTime = -1
+      updateDatabases();
+      return;
+    }
+    let date = new Date(value);
     pagingFilterStartTime = date.getTime();
     updateDatabases();
   }
 
   document.getElementById("databases-filter-end-time").oninput = function (event) {
-    let date = new Date(document.getElementById("databases-filter-end-time").value);
+    let value = document.getElementById("databases-filter-end-time").value;
+    if (value === "") {
+      pagingFilterEndTime = -1;
+      updateDatabases();
+      return;
+    }
+    let date = new Date(value);
     pagingFilterEndTime = date.getTime();
     updateDatabases();
   }
