@@ -81,7 +81,7 @@ msgstr "Nutzungsbedingungen"
 
 # PRODUCT
 msgid "home.product.title"
-msgstr "Produkt - Dulno"
+msgstr "Dulno"
 msgid "home.product.headline"
 msgstr "Produkt"
 msgid "home.product.slogan"

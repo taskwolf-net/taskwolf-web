@@ -81,7 +81,7 @@ msgstr "Terms of service"
 
 # PRODUCT
 msgid "home.product.title"
-msgstr "Product - Dulno"
+msgstr "Dulno"
 msgid "home.product.headline"
 msgstr "Product"
 msgid "home.product.slogan"
