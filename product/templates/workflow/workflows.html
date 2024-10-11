@@ -177,7 +177,7 @@
     entry.appendChild(createWorkflowPreview(triggerLogo, actions))
     appendWorkflowsCell(entry, "creator", creator, "span").classList.add("workflows-entry-creator");
     appendWorkflowsCell(entry, "created", created, "span").classList.add("workflows-entry-created");
-    if (triggerType === "internal-manual-trigger") {
+    if (triggerType === "manual-trigger") {
       entry.appendChild(createManualRunButton(id));
     } else {
       entry.appendChild(createRunningSwitch(id, armed));
