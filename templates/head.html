@@ -3,9 +3,11 @@
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1" name="viewport" />
   <meta name="robots" content="index, follow">
+  <meta property="og:url" content="https://dulno.com/">
+  <meta property="og:site_name" content="Dulno">
   <meta name="description" content="We offer a code-free automation environment for everyone. Dive deeper into our offer now to optimize your everyday life today.">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
-  <link class="dulno-icon" rel=icon sizes="64x64">
+  <link rel=icon class="dulno-icon" href="{% static 'img/icon-dark.ico' %}" type="image/x-icon" sizes="144x144">
   <link rel="stylesheet" href="{% static 'css/base/main.css' %}">
   <link rel="stylesheet" href="{% static 'css/base/loader.css' %}">
   <link rel="stylesheet" href="{% static 'css/base/maintenance.css' %}">
@@ -51,4 +53,12 @@
   {% else %}
     <title>Dulno</title>
   {% endif %}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Dulno",
+      "url": "https://dulno.com"
+    }
+  </script>
 </head>

@@ -2,13 +2,13 @@ const updateIcon = (event) => {
   var iconElements = document.getElementsByClassName("dulno-icon");
   for (var i = 0; i < iconElements.length; i++) {
     if (event.matches) {
-      iconElements[i].href = "https://dulno.com/static/img/icon-light.webp";
+      iconElements[i].href = "https://dulno.com/static/img/icon-light.ico";
     } else {
-      iconElements[i].href = "https://dulno.com/static/img/icon-dark.webp";
+      iconElements[i].href = "https://dulno.com/static/img/icon-dark.ico";
     }
   }
 };
 
 const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-updateIcon(mediaQuery);
+window.addEventListener('load', () => updateIcon(mediaQuery));
 mediaQuery.addEventListener('change', updateIcon);
