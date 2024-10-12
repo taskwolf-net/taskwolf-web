@@ -845,6 +845,7 @@
     timeInput.classList.add("rounded-2", "py-1", "px-2");
     timeInput.oninput = function (event) {
       specificationValues[identifier] = timeInput.value;
+      checkAdoptability();
     }
     inputContainerElement.appendChild(timeInput);
     document.getElementById("workflow-component-specifications-input-list").appendChild(inputContainerElement);
