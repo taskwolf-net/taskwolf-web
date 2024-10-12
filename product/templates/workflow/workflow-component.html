@@ -557,6 +557,7 @@
         }
         if (inputVariable.dataType === "TIME") {
           addSpecificationTime(inputVariable.identifier, inputVariable.name, inputVariable.description, i, inputVariables.length);
+          specificationValues["timezone"] = Intl.DateTimeFormat().resolvedOptions().timeZone;
         }
         if (inputVariable.type === "REQUIRED") {
           requiredSpecificationVariables.push(inputVariable.identifier);
@@ -569,6 +570,9 @@
         updateAdoptability(false);
         fillSpecificationsInputs();
       });
+      if (selectedApplication === "scheduler") {
+        specificationValues["timezone"] = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      }
     });
   }
 
