@@ -450,8 +450,14 @@ input:-webkit-autofill:active{
   text-align: center;
 }
 
+.workflow-component-specifications-time-container {
+  width: 80%;
+  margin: auto;
+  text-align: center;
+}
+
 @media (max-width: 500px) {
-  .workflow-component-specifications-input-container, .workflow-component-specifications-select-container, .workflow-component-specifications-file-container, .workflow-component-specifications-switch-container {
+  .workflow-component-specifications-input-container, .workflow-component-specifications-select-container, .workflow-component-specifications-file-container, .workflow-component-specifications-switch-container, .workflow-component-specifications-time-container {
     width: 95%;
   }
 }

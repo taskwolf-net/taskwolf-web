@@ -555,10 +555,14 @@
         if (inputVariable.dataType === "BOOLEAN") {
           addSpecificationSwitch(inputVariable.identifier, inputVariable.name, inputVariable.description, i, inputVariables.length);
         }
+        if (inputVariable.dataType === "TIME") {
+          addSpecificationTime(inputVariable.identifier, inputVariable.name, inputVariable.description, i, inputVariables.length);
+        }
         if (inputVariable.type === "REQUIRED") {
           requiredSpecificationVariables.push(inputVariable.identifier);
         }
       }
+      checkAdoptability();
       createResetButton(document.getElementById("workflow-component-specifications-input-list"), function() {
         specificationSelectButtons = [];
         specificationValues = {};
@@ -820,6 +824,35 @@
       if (identifier in selectedComponentContent) {
         specificationValues[identifier] = selectedComponentContent[identifier];
         switchInput.checked = selectedComponentContent[identifier] === "true";
+      }
+      checkSetupCompletion();
+    }
+  }
+
+  function addSpecificationTime(identifier, name, description, index, inputsLength) {
+    let inputContainerElement = document.createElement("div");
+    inputContainerElement.classList.add("workflow-component-specifications-time-container", "form-outline", "mb-4");
+    let labelElement = document.createElement("h5");
+    labelElement.classList.add("workflow-component-specification-headline", "form-label");
+    labelElement.innerHTML = name + ":";
+    inputContainerElement.appendChild(labelElement);
+    let informationElement = document.createElement("h5");
+    informationElement.classList.add("workflow-component-specification-information", "fa", "fa-question-circle");
+    applyTooltips(informationElement, inputContainerElement, description);
+    inputContainerElement.appendChild(informationElement);
+    let timeInput = document.createElement("input");
+    timeInput.type = "time";
+    timeInput.classList.add("rounded-2", "py-1", "px-2");
+    timeInput.oninput = function (event) {
+      specificationValues[identifier] = timeInput.value;
+    }
+    inputContainerElement.appendChild(timeInput);
+    document.getElementById("workflow-component-specifications-input-list").appendChild(inputContainerElement);
+    if (selectedComponentSetup && "content" in selectedComponent) {
+      let selectedComponentContent = JSON.parse(selectedComponent.content);
+      if (identifier in selectedComponentContent) {
+        specificationValues[identifier] = selectedComponentContent[identifier];
+        timeInput.value = selectedComponentContent[identifier];
       }
       checkSetupCompletion();
     }
