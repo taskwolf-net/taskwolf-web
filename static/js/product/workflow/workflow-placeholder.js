@@ -175,5 +175,6 @@ function findPlaceholderInputContent(quill, componentsOutputVariables) {
   value = value.replaceAll("<br>", "");
   value = value.replaceAll("<p>", "");
   value = value.replaceAll("</p>", "\n");
+  value = value.split('\n').slice(0, -1).join('');
   return value;
 }

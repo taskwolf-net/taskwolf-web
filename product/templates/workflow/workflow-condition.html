@@ -152,7 +152,7 @@
         variable.name + ' ">﻿<span contenteditable="false"> ' +
         variable.name + ' </span>﻿</span>')
     }
-    quill.clipboard.dangerouslyPasteHTML(0, value.split('\n').slice(0, -1)
+    quill.clipboard.dangerouslyPasteHTML(0, value.split('\n')
       .map(line => "<p>" + (line === "" ? "<br>" : line) + "</p>").join(''));
     adjustEditorHeight(quill);
     inputConditionInput(quill, identifier);

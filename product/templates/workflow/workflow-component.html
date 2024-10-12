@@ -615,8 +615,8 @@
                 variable.name + ' </span>﻿</span>')
         }
         quill.clipboard.dangerouslyPasteHTML(0, selectedComponentContent[identifier]
-          .split('\n').slice(0, -1)
-          .map(line => "<p>" + (line === "" ? "<br>" : line) + "</p>").join(''));
+          .split('\n').map(line => "<p>" + (line === "" ? "<br>" : line) + "</p>")
+          .join(''));
         adjustEditorHeight(quill);
         inputSpecificationInput(quill, identifier);
       }
