@@ -177,7 +177,7 @@
     entry.appendChild(createWorkflowPreview(triggerLogo, actions))
     appendWorkflowsCell(entry, "creator", creator, "span").classList.add("workflows-entry-creator");
     appendWorkflowsCell(entry, "created", created, "span").classList.add("workflows-entry-created");
-    if (triggerType === "internal-manual-trigger") {
+    if (triggerType === "manual-trigger") {
       entry.appendChild(createManualRunButton(id));
     } else {
       entry.appendChild(createRunningSwitch(id, armed));
@@ -399,15 +399,19 @@
       sessionStorage.setItem("workflow-selected", "true");
       sessionStorage.setItem("workflow-id", workflow.id);
       sessionStorage.setItem("workflow-name", workflow.name);
+      sessionStorage.setItem("workflow-initial-name", workflow.name);
       sessionStorage.setItem("workflow-description", workflow.description);
-      sessionStorage.setItem("workflow-trigger", JSON.stringify({
+      sessionStorage.setItem("workflow-initial-description", workflow.description);
+      var trigger = JSON.stringify({
         "module": workflow.triggerModule,
         "moduleLogo": workflow.triggerModuleLogo,
         "type": workflow.triggerType,
         "typeDescription": workflow.triggerTypeDescription,
         "content": workflow.triggerContent,
         "selected": true
-      }));
+      });
+      sessionStorage.setItem("workflow-trigger", trigger);
+      sessionStorage.setItem("workflow-initial-trigger", trigger);
       let actions = [];
       for (let i = 0; i < workflow.actions.length; i++) {
         let workflowActionInformation = workflow.actions[i];
@@ -421,7 +425,9 @@
           "selected": true
         });
       }
-      sessionStorage.setItem("workflow-actions", JSON.stringify({actions: actions}));
+      var parsedActions = JSON.stringify({actions: actions});
+      sessionStorage.setItem("workflow-actions", parsedActions);
+      sessionStorage.setItem("workflow-initial-actions", parsedActions);
       let conditions = [];
       for (let i = 0; i < workflow.conditions.length; i++) {
         let workflowConditionInformation = workflow.conditions[i];
@@ -433,7 +439,9 @@
           "selected": true
         });
       }
-      sessionStorage.setItem("workflow-conditions", JSON.stringify({conditions: conditions}));
+      var parsedConditions = JSON.stringify({conditions: conditions});
+      sessionStorage.setItem("workflow-conditions", parsedConditions);
+      sessionStorage.setItem("workflow-initial-conditions", parsedConditions);
       window.location.href = "/workflow/";
     });
   }
@@ -672,7 +680,13 @@
     entryInput.id = "workflows-filter-creator-" + id;
     entry.appendChild(entryInput);
     entryInput.onclick = function (event) {
-      if (id === "" || pagingFilterCreator === id) {
+      if (id === "") {
+        return;
+      }
+      if (pagingFilterCreator === id) {
+        entryInput.checked = false;
+        pagingFilterCreator = "";
+        updateWorkflows();
         return;
       }
       pagingFilterCreator = id;
@@ -741,6 +755,10 @@
     applyTooltips(entryLogo, entry, name);
     entry.onclick = function (event) {
       if (pagingFilterApplication === id) {
+        document.getElementById("workflows-filter-application-" + pagingFilterApplication)
+          .classList.remove("workflows-filter-application-active");
+        pagingFilterApplication = "";
+        updateWorkflows();
         return;
       }
       if (pagingFilterApplication !== "") {
@@ -755,23 +773,47 @@
   }
 
   document.getElementById("workflows-filter-start-time").oninput = function (event) {
-    let date = new Date(document.getElementById("workflows-filter-start-time").value);
+    let value = document.getElementById("workflows-filter-start-time").value;
+    if (value === "") {
+      pagingFilterStartTime = -1
+      updateWorkflows();
+      return;
+    }
+    let date = new Date(value);
     pagingFilterStartTime = date.getTime();
     updateWorkflows();
   }
 
   document.getElementById("workflows-filter-end-time").oninput = function (event) {
-    let date = new Date(document.getElementById("workflows-filter-end-time").value);
+    let value = document.getElementById("workflows-filter-end-time").value;
+    if (value === "") {
+      pagingFilterEndTime = -1;
+      updateWorkflows();
+      return;
+    }
+    let date = new Date(value);
     pagingFilterEndTime = date.getTime();
     updateWorkflows();
   }
 
   document.getElementById("workflows-filter-state-operational").onclick = function (event) {
+    if (pagingFilterState === "OPERATIONAL") {
+      document.getElementById("workflows-filter-state-operational").checked = false;
+      pagingFilterState = "";
+      updateWorkflows();
+      return;
+    }
     pagingFilterState = "OPERATIONAL";
     updateWorkflows();
   }
 
   document.getElementById("workflows-filter-state-failing").onclick = function (event) {
+    if (pagingFilterState === "FAILING") {
+      document.getElementById("workflows-filter-state-failing").checked = false;
+      pagingFilterState = "";
+      updateWorkflows();
+      return;
+    }
     pagingFilterState = "FAILING";
     updateWorkflows();
   }

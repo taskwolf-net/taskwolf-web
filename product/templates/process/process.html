@@ -300,6 +300,11 @@
       }
       let self = this;
       if (!self.connecting) {
+        setTimeout(function () {
+          for (let i = 0; i < connections.length; i++) {
+            connections[i].display();
+          }
+        }, 30);
         return;
       }
       if (self.line != null) {
@@ -547,7 +552,7 @@
     processNameLabel.innerText = "{% trans 'product.process.name' %}";
     publishForm.appendChild(processNameLabel);
     let processNameElement = document.createElement("input");
-    processNameElement.classList.add("mb-2");
+    processNameElement.classList.add("mb-4");
     if (process != null) {
       processNameElement.value = process.name;
     }

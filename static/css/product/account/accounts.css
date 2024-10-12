@@ -1,7 +1,38 @@
+#accounts-page-back-container {
+  margin: auto;
+  margin-top: 5vh;
+  width: min(1000px, 95%);
+}
+
+#accounts-page-back {
+  width: 52px;
+  height: 52px;
+  border: none;
+  background-color: transparent;
+  border-radius: 50%;
+  font-size: 25px;
+}
+
+.dark #accounts-page-back {
+  color: #b5b5b5;
+}
+
+.light #accounts-page-back {
+  color: #656565;
+}
+
+.dark #accounts-page-back:hover {
+  background-color: #212937;
+}
+
+.light #accounts-page-back:hover {
+  background-color: #d3d3d3;
+}
+
 #accounts-header {
   margin: auto;
-  margin-top: 3%;
-  width: min(calc(1500px - 15vw), 80%);
+  margin-top: 4vh;
+  width: min(1000px, 95%);
 }
 
 #accounts-logo {
@@ -18,14 +49,14 @@
 }
 
 #accounts-list-headline {
-  width: min(calc(1500px - 15vw), 80%);
+  width: min(1000px, 95%);
   margin: auto;
   margin-top: 2%;
   border-bottom: 2px #4a4a4a solid;
 }
 
 #accounts-list {
-  width: min(calc(1500px - 15vw), 80%);
+  width: min(1000px, 95%);
   margin: 1% auto auto;
   list-style-type: none;
   padding: 0;

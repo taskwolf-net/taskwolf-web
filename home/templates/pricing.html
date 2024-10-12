@@ -23,8 +23,8 @@
     var isOrganizationMember = sessionStorage.getItem("expiration-is-organization-member");
     var userName = sessionStorage.getItem("expiration-user-name");
     var homeToken = Cookie.find("home-token");
-    if (hasPersonalPackage != null || hasOwnOrganization != null ||
-      isOrganizationMember != null || userName != null && homeToken != null
+    if (hasPersonalPackage != null && hasOwnOrganization != null &&
+      isOrganizationMember != null && userName != null && homeToken != null
     ) {
       window.location.href = "/expiration/";
       return;

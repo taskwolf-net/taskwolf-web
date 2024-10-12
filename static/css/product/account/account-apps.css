@@ -3,7 +3,7 @@
   justify-content: center;
   margin: auto;
   margin-top: 2%;
-  width: min(calc(1200px - 15vw), 95%);
+  width: min(1000px, 95%);
 }
 
 #account-apps-headline {
@@ -11,7 +11,7 @@
 }
 
 #account-apps-search-box {
-  width: min(calc(1200px - 15vw), 95%);
+  width: min(1000px, 95%);
   margin: auto;
   margin-top: 2%;
   display: flex;
@@ -65,7 +65,7 @@
 }
 
 #account-apps-list {
-  width: min(calc(1200px - 15vw), 95%);
+  width: min(1000px, 95%);
   list-style-type: none;
   margin: auto;
   padding: 0;
