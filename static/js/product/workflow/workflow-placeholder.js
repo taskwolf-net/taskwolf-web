@@ -1,6 +1,9 @@
 function setupPlaceholderInput(identifier, placeholderText) {
   let quill = new Quill('#' + identifier, {
     theme: 'snow',
+    formats: [
+      identifier
+    ],
     modules: {
       toolbar: false,
       keyboard: {
