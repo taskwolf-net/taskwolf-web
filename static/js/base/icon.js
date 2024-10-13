@@ -10,5 +10,5 @@ const updateIcon = (event) => {
 };
 
 const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-window.addEventListener('load', () => updateIcon(mediaQuery));
+window.addEventListener('DOMContentLoaded', () => updateIcon(mediaQuery));
 mediaQuery.addEventListener('change', updateIcon);
