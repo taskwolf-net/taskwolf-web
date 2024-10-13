@@ -1132,7 +1132,8 @@
     $(element).attr("data-bs-title", text);
     container.classList.add("position-relative");
     new bootstrap.Tooltip(element, {
-      container: container
+      container: container,
+      html: true
     });
   }
 </script>
