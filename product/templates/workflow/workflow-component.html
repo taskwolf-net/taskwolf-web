@@ -542,6 +542,12 @@
       }
       for (let i = 0; i < inputVariables.length; i++) {
         let inputVariable = inputVariables[i];
+        if (inputVariable.type === "REQUIRED") {
+          requiredSpecificationVariables.push(inputVariable.identifier);
+        }
+      }
+      for (let i = 0; i < inputVariables.length; i++) {
+        let inputVariable = inputVariables[i];
         if (inputVariable.dataType === "TEXT" || inputVariable.dataType === "TEXT_AREA") {
           addSpecificationInput(inputVariable.identifier, inputVariable.name, inputVariable.description, inputVariable.placeholder,
             i, inputVariables.length, inputVariable.dataType);
@@ -557,9 +563,6 @@
         }
         if (inputVariable.dataType === "TIME") {
           addSpecificationTime(inputVariable.identifier, inputVariable.name, inputVariable.description, i, inputVariables.length);
-        }
-        if (inputVariable.type === "REQUIRED") {
-          requiredSpecificationVariables.push(inputVariable.identifier);
         }
       }
       checkAdoptability();
