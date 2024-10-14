@@ -982,9 +982,6 @@
     if (selectedComponentSetup && checkAdoptability()) {
       selectedComponentSetup = false;
       $('#workflow-component-specifications').collapse("toggle");
-      for (var i = 0; i < quillInputElements.length; i++) {
-        adjustEditorHeight(quillInputElements[i]);
-      }
       setTimeout(removeLoader, 500);
     }
   }
@@ -1154,5 +1151,8 @@
     document.getElementById("workflow-component-container")
       .removeChild(document.getElementsByClassName("loader")[0]);
     document.getElementById("workflow-component-wrapper").classList.remove("d-none");
+    for (var i = 0; i < quillInputElements.length; i++) {
+      adjustEditorHeight(quillInputElements[i]);
+    }
   }
 </script>
