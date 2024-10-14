@@ -134,6 +134,7 @@
   let selectedComponentSetup = false;
 
   $(document).ready(function() {
+    displayLoader();
     if ("{{type}}" === "trigger" && sessionStorage.getItem("workflow-trigger") !== null) {
       let trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
       if (trigger.selected === true) {
@@ -151,9 +152,6 @@
     }
     if (!(_.isEqual(selectedComponent, {}))) {
       selectedComponentSetup = true;
-      displayLoader();
-    } else {
-      document.getElementById("workflow-component-wrapper").classList.remove("d-none");
     }
     fetchApplicationsData(function() {
       if (selectedComponentSetup) {
@@ -161,6 +159,9 @@
       }
       displayApplications();
       workflowCurrentApplicationFilter = "";
+      if (!selectedComponentSetup) {
+        removeLoader();
+      }
     });
   });
 
