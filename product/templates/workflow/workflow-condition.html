@@ -320,6 +320,10 @@
     }
     let module = component.module;
     let type = component.type;
+    if (type === "") {
+      callback([]);
+      return;
+    }
     let request = new HttpRequest("https://api.dulno.com/v1/component/find/", "POST",
       [], {componentType: componentType, module: module, type: type});
     request.send(function (status, responseText) {
