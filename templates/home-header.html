@@ -14,7 +14,7 @@
         <li class="nav-item"><a class="nav-link {% if 'download' in request.path %}active{% endif %}" href="/download/">{% trans 'home.header.download' %}</a></li>
         <li class="nav-item"><a class="nav-link {% if request.path == '/pricing/' %}active{% endif %}" href="/pricing/">{% trans 'home.header.pricing' %}</a></li>
       </ul>
-      <div class="d-flex justify-content-center justify-content-md-end align-items-center flex-column flex-md-row ms-auto ms-xxl-0 me-xl-5 me-3 mt-4 mt-md-0">
+      <div class="d-flex justify-content-center justify-content-md-end align-items-center flex-column flex-md-row ms-auto ms-xxl-0 me-xl-5 me-md-3 mt-4 mt-md-0">
         <div id="home-languages">
           <input id="home-language-en" class="home-language-flag" src="{% static 'img/languages/en.webp' %}" type="image"/>
           <input id="home-language-de" class="home-language-flag" src="{% static 'img/languages/de.webp' %}" type="image"/>
