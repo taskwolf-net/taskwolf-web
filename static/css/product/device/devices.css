@@ -177,12 +177,6 @@
   list-style-type: none;
 }
 
-@media (max-width: 1200px) {
-  #devices-header {
-    display: block;
-  }
-}
-
 #devices-list {
   position: relative;
   list-style-type: none;
