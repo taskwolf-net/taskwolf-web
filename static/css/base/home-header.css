@@ -26,14 +26,17 @@
   margin-top: 17px;
   margin-bottom: 17px;
   height: 36px;
-  position: relative;
-  z-index: 10;
 }
 
 #home-languages {
   display: flex;
   justify-content: end;
   gap: 20px;
+}
+
+.navbar-logo, #home-languages, #login-button {
+  position: relative;
+  z-index: 10;
 }
 
 .home-language-flag {
