@@ -26,6 +26,8 @@
   margin-top: 17px;
   margin-bottom: 17px;
   height: 36px;
+  position: relative;
+  z-index: 10;
 }
 
 #home-languages {
@@ -44,6 +46,7 @@
   .navbar-nav {
     width: 100%;
     position: absolute;
+    z-index: 1;
   }
 }
 
