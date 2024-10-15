@@ -40,9 +40,6 @@
             <button class="nav-link" id="finances-tab" data-bs-toggle="tab" data-bs-target="#finances-tab-pane" type="button" role="tab" aria-controls="finances-tab-pane" aria-selected="false">{% trans 'home.solution.jobs.finances' %}</button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link" id="human-resources-tab" data-bs-toggle="tab" data-bs-target="#human-resources-tab-pane" type="button" role="tab" aria-controls="human-resources-tab-pane" aria-selected="false">{% trans 'home.solution.jobs.hr' %}</button>
-          </li>
-          <li class="nav-item" role="presentation">
             <button class="nav-link" id="developer-tab" data-bs-toggle="tab" data-bs-target="#developer-tab-pane" type="button" role="tab" aria-controls="developer-tab-pane" aria-selected="false">{% trans 'home.solution.jobs.developer' %}</button>
           </li>
           <li class="nav-item" role="presentation">
@@ -50,6 +47,9 @@
           </li>
           <li class="nav-item" role="presentation">
             <button class="nav-link" id="support-tab" data-bs-toggle="tab" data-bs-target="#support-tab-pane" type="button" role="tab" aria-controls="support-tab-pane" aria-selected="false">{% trans 'home.solution.jobs.support' %}</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="human-resources-tab" data-bs-toggle="tab" data-bs-target="#human-resources-tab-pane" type="button" role="tab" aria-controls="human-resources-tab-pane" aria-selected="false">{% trans 'home.solution.jobs.hr' %}</button>
           </li>
         </ul>
         <div class="tab-content">
@@ -101,22 +101,6 @@
               </div>
             </div>
           </div>
-          <div class="tab-pane fade" id="human-resources-tab-pane" role="tabpanel" aria-labelledby="human-resources-tab" tabindex="0">
-            <div class="solution-job">
-              <div class="solution-jobs-use-case">
-                <h4>{% trans 'home.solution.jobs.hr.use.case.1.title' %}</h4>
-                <label>{% trans 'home.solution.jobs.hr.use.case.1.description' %}</label>
-              </div>
-              <div class="solution-jobs-use-case">
-                <h4>{% trans 'home.solution.jobs.hr.use.case.2.title' %}</h4>
-                <label>{% trans 'home.solution.jobs.hr.use.case.2.description' %}</label>
-              </div>
-              <div class="solution-jobs-use-case">
-                <h4>{% trans 'home.solution.jobs.hr.use.case.3.title' %}</h4>
-                <label>{% trans 'home.solution.jobs.hr.use.case.3.description' %}</label>
-              </div>
-            </div>
-          </div>
           <div class="tab-pane fade" id="developer-tab-pane" role="tabpanel" aria-labelledby="developer-tab" tabindex="0">
             <div class="solution-job">
               <div class="solution-jobs-use-case">
@@ -162,6 +146,22 @@
               <div class="solution-jobs-use-case">
                 <h4>{% trans 'home.solution.jobs.support.use.case.3.title' %}</h4>
                 <label>{% trans 'home.solution.jobs.support.use.case.3.description' %}</label>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="human-resources-tab-pane" role="tabpanel" aria-labelledby="human-resources-tab" tabindex="0">
+            <div class="solution-job">
+              <div class="solution-jobs-use-case">
+                <h4>{% trans 'home.solution.jobs.hr.use.case.1.title' %}</h4>
+                <label>{% trans 'home.solution.jobs.hr.use.case.1.description' %}</label>
+              </div>
+              <div class="solution-jobs-use-case">
+                <h4>{% trans 'home.solution.jobs.hr.use.case.2.title' %}</h4>
+                <label>{% trans 'home.solution.jobs.hr.use.case.2.description' %}</label>
+              </div>
+              <div class="solution-jobs-use-case">
+                <h4>{% trans 'home.solution.jobs.hr.use.case.3.title' %}</h4>
+                <label>{% trans 'home.solution.jobs.hr.use.case.3.description' %}</label>
               </div>
             </div>
           </div>
@@ -221,20 +221,20 @@
     {logo: "device.webp"},
     {logo: "webhook.webp"},
     {logo: "database.webp"},
+    {logo: "mail.webp"},
     {logo: "googlecalendar.webp"},
-    {logo: "googledrive.webp"},
-    {logo: "googledocs.webp"},
-    {logo: "gmail.webp"},
     {logo: "discord.webp"},
+    {logo: "gitlab.webp"},
   ];
   let actions = [
     {logo: "device.webp"},
     {logo: "database.webp"},
+    {logo: "mail.webp"},
     {logo: "googlecalendar.webp"},
-    {logo: "googledrive.webp"},
     {logo: "googledocs.webp"},
-    {logo: "gmail.webp"},
     {logo: "discord.webp"},
+    {logo: "chatgpt.webp"},
+    {logo: "gitlab.webp"},
   ];
 
   $(document).ready(function() {
