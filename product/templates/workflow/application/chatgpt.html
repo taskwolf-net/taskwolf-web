@@ -1,0 +1,85 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark">
+    <div id="chatgpt-container">
+      <div id="chatgpt-header">
+        <div>
+        </div>
+        <img id="chatgpt-logo" src="{% static 'img/logo-light.webp' %}">
+        <div>
+        </div>
+      </div>
+      <div id="chatgpt-wrapper" class="form-outline">
+        <h2 class="chatgpt-headline">{% trans 'product.workflow.application.chatgpt.headline' %}</h2>
+        <label for="api-key" class="form-label">{% trans 'product.workflow.application.chatgpt.api.key' %}</label>
+        <input type="text" id="api-key" class="form-control" placeholder="{% trans 'product.workflow.application.chatgpt.api.key' %}">
+        <label for="organization" class="form-label mt-4">{% trans 'product.workflow.application.chatgpt.organization' %}</label>
+        <input type="text" id="organization" class="form-control" placeholder="{% trans 'product.workflow.application.chatgpt.organization' %}">
+        <button type="button" id="chatgpt-continue" class="btn btn-primary d-block px-4 mt-5 mx-auto disabled">{% trans 'product.workflow.application.chatgpt.continue' %}</button>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    document.getElementById("api-key").focus();
+  });
+
+  document.getElementById("api-key").addEventListener('keyup', function(event) {
+    if (event.key === "Enter") {
+      document.getElementById("secret").focus();
+    }
+    $(document.getElementById("chatgpt-continue"))
+      .toggleClass("disabled", document.getElementById("api-key").value !== "");
+  });
+
+  document.getElementById("secret").addEventListener('keyup', function(event) {
+    var applicationCompleted = checkApplicationCompleteness();
+    if (event.key === "Enter" && applicationCompleted) {
+      document.getElementById("chatgpt-application-continue").click();
+    }
+    $(document.getElementById("chatgpt-application-continue"))
+      .toggleClass("disabled", !applicationCompleted);
+  });
+
+  document.getElementById("chatgpt-application-continue").onclick = function (event) {
+    if (hostnameInput.value === "" || applicationInput.value === "" ||
+      secretInput.value === ""
+    ) {
+      Swal.fire("{% trans 'product.workflow.application.chatgpt.failed.title' %}",
+        "{% trans 'product.workflow.application.chatgpt.failed.incomplete' %}", "error");
+      return;
+    }
+    document.getElementById("chatgpt-application-container").classList.add("d-none");
+    let loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("chatgpt-wrapper").appendChild(loader);
+    connectChatGPT(function (response) {
+      document.getElementById("chatgpt-wrapper")
+        .removeChild(document.getElementsByClassName("loader")[0]);
+      if (response.success === true) {
+        chatgptRedirectWindow.close();
+      } else {
+        document.getElementById("chatgpt-application-container").classList.remove("d-none");
+        Swal.fire("{% trans 'product.workflow.application.chatgpt.failed.title' %}",
+          "{% trans 'product.workflow.application.chatgpt.failed.already.exists' %}", "error");
+      }
+    });
+  }
+
+  function connectChatGPT(callback) {
+    let request = new HttpRequest("https://api.dulno.com/v1/chatgpt/add/", "POST", [],
+      {hostname: hostnameInput.value, applicationId: applicationInput.value,
+        secret: secretInput.value});
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  document.getElementById("chatgpt-logo").onclick = function (event) {
+    window.location.href = "/";
+  }
+</script>
