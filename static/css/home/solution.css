@@ -573,7 +573,13 @@ p {
   }
 }
 
-@media (max-width: calc(58px * 6 + 50px)) {
+@media (max-width: calc(58px * 6 + 20px)) {
+  .solution-apps-constellations-slider {
+    width: calc(58px * 5);
+  }
+}
+
+@media (max-width: calc(58px * 5 + 20px)) {
   .solution-apps-constellations-slider {
     width: calc(58px * 4);
   }
