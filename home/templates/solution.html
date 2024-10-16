@@ -282,6 +282,10 @@
     }
   }
 
+  window.addEventListener('resize', function(event) {
+    resizeDividers();
+  });
+
   function resizeDividers() {
     const svgs = document.getElementsByTagName("svg");
     for (let i = 0; i < svgs.length; i++) {
