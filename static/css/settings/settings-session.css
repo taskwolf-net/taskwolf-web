@@ -6,6 +6,7 @@
 #settings-session-list {
   width: 100%;
   margin-top: 5vh;
+  padding: 0;
 }
 
 #settings-session-list li {
@@ -47,6 +48,7 @@
 .settings-session-status {
   border-radius: 5px;
   padding: 10px;
+  margin-left: 10px;
 }
 
 .settings-session-active {

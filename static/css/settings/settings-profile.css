@@ -1,5 +1,5 @@
 form {
-  width: 45%;
+  width: min(470px, 90%);
   margin-top: 2%;
   margin-left: 5%;
 }
