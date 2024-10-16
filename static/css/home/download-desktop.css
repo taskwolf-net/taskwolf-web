@@ -41,7 +41,7 @@
 
 @media (max-width: 1300px) {
   .download-desktop-container {
-    margin-bottom: 20vh;
+    margin-bottom: 0;
   }
 
   .download-desktop-headline {
@@ -79,14 +79,26 @@
 }
 
 .download-desktop-divider {
-  transform: scaleY(0.5);
-  margin-top: -10%;
-  margin-bottom: -10%;
+  margin-top: 8vh;
+  margin-bottom: 12vh;
 }
 
 .download-desktop-divider svg path {
   fill: #232d3e;
   background-color: #0d1117 !important;
+  transform: scaleY(0.5);
+}
+
+@media (max-width: 1000px) {
+  .download-desktop-divider svg path {
+    transform: scaleY(0.75);
+  }
+}
+
+@media (max-width: 750px) {
+  .download-desktop-divider svg path {
+    transform: scaleY(1);
+  }
 }
 
 .download-desktop-divider-background {
@@ -95,22 +107,6 @@
   height: 10px;
   margin-top: -5px;
   position: absolute;
-}
-
-@media (max-width: 1300px) {
-  .download-desktop-divider {
-    transform: scaleY(0.75);
-    margin-top: -5%;
-    margin-bottom: -5%;
-  }
-}
-
-@media (max-width: 1000px) {
-  .download-desktop-divider {
-    transform: scaleY(1);
-    margin-top: 0;
-    margin-bottom: 0;
-  }
 }
 
 #download-desktop-alternative-list {
