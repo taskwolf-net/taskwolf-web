@@ -171,10 +171,25 @@
 }
 
 #devices-filter-creator-list, #devices-filter-platform-list {
-  height: 130px;
+  max-height: 130px;
   padding: 0 10px;
   overflow: auto;
   list-style-type: none;
+}
+
+@media (max-width: 1300px) {
+  #devices-filter-container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .devices-filter-section {
+    width: 100%;
+  }
+
+  .vr {
+    display: none !important;
+  }
 }
 
 #devices-list {
