@@ -54,6 +54,10 @@
   padding: 5px;
 }
 
+#team-target-button-container {
+  margin-right: 16px;
+}
+
 #target-button-wrapper, #team-target-button-wrapper, #profile-button-wrapper {
   border: none;
   outline: none;
@@ -142,5 +146,25 @@
     left: 50% !important;
     right: auto !important;
     transform: translate(-50%, 30%) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-divider {
+    display: none !important;
+  }
+
+  #target-button-wrapper, #team-target-button-wrapper, #profile-button-wrapper {
+    padding: 10px 5px;
+  }
+
+  #target-button-container {
+    margin-right: 16px;
+  }
+}
+
+@media (max-width: 380px) {
+  #target-button-container, #team-target-button-container {
+    margin-right: 8px !important;
   }
 }
