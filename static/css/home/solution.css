@@ -27,10 +27,23 @@ p {
   }
 }
 
+@media (max-width: 550px) {
+  p {
+    font-size: 14px;
+  }
+}
+
 #solution-header {
   width: 100%;
   background-image: linear-gradient(to bottom right, #232d3e, #586882);
-  padding-top: 2%;
+  padding-top: 4vh;
+  margin-bottom: 5vh;
+}
+
+@media (max-width: 1000px) {
+  #solution-header {
+    margin-bottom: 7vh;
+  }
 }
 
 #solution-header-content {
@@ -38,18 +51,11 @@ p {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: auto;
-  margin-bottom: 2%;
+  margin: auto auto 5vh;
 }
 
 #solution-header-content-text {
   width: 900px;
-}
-
-@media (max-width: 1200px) {
-  #solution-header-content {
-    margin-bottom: 5%;
-  }
 }
 
 #solution-headline {
@@ -62,9 +68,21 @@ p {
   text-align: center;
 }
 
+@media (max-width: 1300px) {
+  #solution-slogan {
+    font-size: 52px !important;
+  }
+}
+
 @media (max-width: 700px) {
   #solution-slogan {
     font-size: 48px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  #solution-slogan {
+    font-size: 40px !important;
   }
 }
 
@@ -144,39 +162,11 @@ p {
 
 @media (max-width: 1300px) {
   #solution-header-content-text {
-    width: 700px;
+    width: 800px;
   }
 }
 
 @media (max-width: 1100px) {
-  #solution-header-content-text {
-    width: 500px;
-  }
-}
-
-@media (max-width: 850px) {
-  #solution-logo-container {
-    width: 250px;
-    height: 250px;
-  }
-
-  #solution-header-content-text {
-    width: 400px;
-  }
-}
-
-@media (max-width: 700px) {
-  #solution-logo-container {
-    width: 200px;
-    height: 200px;
-  }
-
-  #solution-header-content-text {
-    width: 350px;
-  }
-}
-
-@media (max-width: 600px) {
   #solution-logo-container {
     display: none;
   }
@@ -220,6 +210,20 @@ p {
   font-weight: bold;
   text-align: center;
   font-size: 48px !important;
+}
+
+@media (max-width: 1100px) {
+  .solution-content-text-slogan {
+    margin-top: 15px;
+    margin-bottom: 30px;
+    font-size: 38px !important;
+  }
+}
+
+@media (max-width: 500px) {
+  .solution-content-text-slogan {
+    font-size: 32px !important;
+  }
 }
 
 .solution-animation-opacity, .solution-animation-left, .solution-animation-right, .solution-animation-down {
@@ -351,6 +355,12 @@ p {
 @media (max-width: 700px) {
   #solution-jobs-content .nav-item {
     width: calc(100% / 3);
+  }
+}
+
+@media (max-width: 450px) {
+  #solution-jobs-content .nav-item {
+    width: calc(100% / 2);
   }
 }
 
@@ -627,4 +637,10 @@ p {
   height: 10px;
   margin-top: -5px;
   position: absolute;
+}
+
+@media (max-width: 850px) {
+  .solution-linebreak {
+    display: none;
+  }
 }

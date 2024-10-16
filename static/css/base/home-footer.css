@@ -3,6 +3,12 @@
   margin-top: 5vh;
 }
 
+@media (max-width: 1000px) {
+  #home-footer {
+    margin-top: 7vh;
+  }
+}
+
 #home-footer svg {
   fill: #0d1117;
   transform: scale(-1, -1);
