@@ -243,6 +243,7 @@
       checkAnimations();
     });
     displayAppConstellations();
+    resizeDividers();
   });
 
   function displayAppConstellations() {
@@ -282,6 +283,15 @@
           element.classList.remove(animationClass);
         }, 1500)
       }
+    }
+  }
+
+  function resizeDividers() {
+    const svgs = document.getElementsByTagName("svg");
+    for (let i = 0; i < svgs.length; i++) {
+      let svg = svgs[i];
+      const bbox = svg.getBBox();
+      svg.setAttribute('viewBox', `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`);
     }
   }
 </script>

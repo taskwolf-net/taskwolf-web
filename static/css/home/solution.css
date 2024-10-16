@@ -204,7 +204,6 @@ p {
   width: min(calc(1750px), 95%);
   margin-left: auto;
   margin-right: auto;
-  margin-top: 100px;
 }
 
 .solution-content-text-headline {
@@ -288,7 +287,6 @@ p {
 #solution-jobs-content {
   width: min(calc(1500px), 100%);
   margin: auto;
-  margin-bottom: 8%;
 }
 
 #solution-jobs-content .nav-item {
@@ -336,11 +334,7 @@ p {
   }
 }
 
-@media (max-width: 700px) {
-  #solution-jobs-content .nav-item {
-    width: calc(100% / 3);
-  }
-
+@media (max-width: 1000px) {
   .solution-job {
     display: block;
     margin-top: 4%;
@@ -354,10 +348,15 @@ p {
   }
 }
 
+@media (max-width: 700px) {
+  #solution-jobs-content .nav-item {
+    width: calc(100% / 3);
+  }
+}
+
 #solution-apps-content {
   width: min(calc(1500px), 100%);
   margin: auto;
-  margin-bottom: 8%;
 }
 
 #solution-apps-constellations {
@@ -593,10 +592,6 @@ p {
   }
 }
 
-#solution-get-content {
-  margin-bottom: 5%;
-}
-
 #solution-get-content-text {
   width: min(calc(650px), 100%);
   text-align: center;
@@ -604,14 +599,26 @@ p {
 }
 
 .solution-divider {
-  transform: scaleY(0.5);
-  margin-top: -10%;
-  margin-bottom: -10%;
+  margin-top: 12vh;
+  margin-bottom: 8vh;
 }
 
 .solution-divider svg path {
   fill: #232d3e;
   background-color: #0d1117 !important;
+  transform: scaleY(0.5);
+}
+
+@media (max-width: 1000px) {
+  .solution-divider svg path {
+    transform: scaleY(0.75);
+  }
+}
+
+@media (max-width: 750px) {
+  .solution-divider svg path {
+    transform: scaleY(1);
+  }
 }
 
 .solution-divider-background {
@@ -620,20 +627,4 @@ p {
   height: 10px;
   margin-top: -5px;
   position: absolute;
-}
-
-@media (max-width: 1300px) {
-  .solution-divider {
-    transform: scaleY(0.75);
-    margin-top: -5%;
-    margin-bottom: -5%;
-  }
-}
-
-@media (max-width: 1000px) {
-  .solution-divider {
-    transform: scaleY(1);
-    margin-top: 0;
-    margin-bottom: 0;
-  }
 }

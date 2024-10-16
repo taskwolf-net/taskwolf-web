@@ -1,5 +1,6 @@
 #home-footer {
   background-image: linear-gradient(to top left, #586882, #232d3e);
+  margin-top: 5vh;
 }
 
 #home-footer svg {
