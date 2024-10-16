@@ -145,4 +145,8 @@ input:-webkit-autofill:active{
     border: none;
     border-radius: 0;
   }
+
+  #login-logo {
+    margin-top: 4vh;
+  }
 }
