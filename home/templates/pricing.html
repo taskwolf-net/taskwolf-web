@@ -18,10 +18,10 @@
 
 <script>
   $(document).ready(function() {
-    var hasPersonalPackage = sessionStorage.getItem("expiration-has-personal-package");
-    var hasOwnOrganization = sessionStorage.getItem("expiration-has-own-organization");
-    var isOrganizationMember = sessionStorage.getItem("expiration-is-organization-member");
-    var userName = sessionStorage.getItem("expiration-user-name");
+    var hasPersonalPackage = Cookie.find("expiration-has-personal-package");
+    var hasOwnOrganization = Cookie.find("expiration-has-own-organization");
+    var isOrganizationMember = Cookie.find("expiration-is-organization-member");
+    var userName = Cookie.find("expiration-user-name");
     var homeToken = Cookie.find("home-token");
     if (hasPersonalPackage != null && hasOwnOrganization != null &&
       isOrganizationMember != null && userName != null && homeToken != null

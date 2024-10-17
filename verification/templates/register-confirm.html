@@ -23,10 +23,10 @@
         window.location.href = "{{redirect}}";
         return;
       }
-      sessionStorage.setItem("expiration-has-personal-package", "false");
-      sessionStorage.setItem("expiration-has-own-organization", "false");
-      sessionStorage.setItem("expiration-is-organization-member", "false");
-      sessionStorage.setItem("expiration-user-name", response.userName);
+      Cookie.create("expiration-has-personal-package", "false", 60 * 60, ".dulno.com");
+      Cookie.create("expiration-has-own-organization", "false", 60 * 60, ".dulno.com");
+      Cookie.create("expiration-is-organization-member", "false", 60 * 60, ".dulno.com");
+      Cookie.create("expiration-user-name", response.userName, 60 * 60, ".dulno.com");
       window.location.href = "/expiration/";
     });
   });

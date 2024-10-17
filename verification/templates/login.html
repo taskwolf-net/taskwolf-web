@@ -103,10 +103,10 @@
           Swal.fire("{% trans 'home.login.failed.confirmation.title' %}", "{% trans 'home.login.failed.confirmation.body' %}", "error");
         } else  if (error === 1003) {
           if (!redirect()) {
-            sessionStorage.setItem("expiration-has-personal-package", response.hasPersonalBundle);
-            sessionStorage.setItem("expiration-has-own-organization", response.hasOwnOrganization);
-            sessionStorage.setItem("expiration-is-organization-member", response.isOrganizationMember);
-            sessionStorage.setItem("expiration-user-name", response.userName);
+            Cookie.create("expiration-has-personal-package", response.hasPersonalBundle, 60 * 60, ".dulno.com");
+            Cookie.create("expiration-has-own-organization", response.hasOwnOrganization, 60 * 60, ".dulno.com");
+            Cookie.create("expiration-is-organization-member", response.isOrganizationMember, 60 * 60, ".dulno.com");
+            Cookie.create("expiration-user-name", response.userName, 60 * 60, ".dulno.com");
             window.location.href = "/expiration/";
           }
         }
