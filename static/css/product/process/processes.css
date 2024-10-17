@@ -201,10 +201,25 @@
 }
 
 #processes-filter-creator-list, #processes-filter-state-list  {
-  height: 130px;
+  max-height: 130px;
   padding: 0 10px;
   overflow: auto;
   list-style-type: none;
+}
+
+@media (max-width: 1300px) {
+  #processes-filter-container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .processes-filter-section {
+    width: 100%;
+  }
+
+  .vr {
+    display: none !important;
+  }
 }
 
 @media (max-width: 1200px) {

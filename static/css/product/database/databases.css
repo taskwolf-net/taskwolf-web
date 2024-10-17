@@ -200,10 +200,25 @@
 }
 
 #databases-filter-creator-list, #databases-filter-state-list  {
-  height: 130px;
+  max-height: 130px;
   padding: 0 10px;
   overflow: auto;
   list-style-type: none;
+}
+
+@media (max-width: 1300px) {
+  #databases-filter-container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .databases-filter-section {
+    width: 100%;
+  }
+
+  .vr {
+    display: none !important;
+  }
 }
 
 @media (max-width: 1200px) {
