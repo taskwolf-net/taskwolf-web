@@ -9,8 +9,7 @@
         <div id="product-header-content-text">
           <h3 id="product-headline">{% trans 'home.product.headline' %}</h3>
           <h1 id="product-slogan"><b>{% trans 'home.product.slogan' %}</b></h1>
-          <h5 class="text-center mt-4 mb-1">{% trans 'home.product.description.1' %}</h5>
-          <h5 class="text-center">{% trans 'home.product.description.2' %}</h5>
+          <h5 class="text-center mt-4">{% trans 'home.product.description.1' %} <br class="product-linebreak">{% trans 'home.product.description.2' %}</h5>
         </div>
         <img id="product-logo" src="{% static 'img/logo-light.webp' %}">
       </div>
@@ -23,8 +22,7 @@
      <div id="product-workflow-content">
        <h3 class="product-content-text-headline">{% trans 'home.product.workflows.headline' %}</h3>
        <h1 class="product-content-text-slogan">{% trans 'home.product.workflows.slogan' %}</h1>
-       <p class="text-center mt-3 mb-0">{% trans 'home.product.workflows.description.1' %}</p>
-       <p class="text-center">{% trans 'home.product.workflows.description.2' %}</p>
+       <p class="text-center mt-3">{% trans 'home.product.workflows.description.1' %} <br class="product-linebreak">{% trans 'home.product.workflows.description.2' %}</p>
        <div id="product-workflow-content-desktop" class="mt-5">
          <div class="product-workflow-content-text">
            <div id="product-workflow-trigger" class="product-animation-left">
@@ -205,6 +203,7 @@
     $(window).scroll( function(){
       checkAnimations();
     });
+    resizeDividers();
   });
 
   function checkAnimations() {
@@ -226,6 +225,19 @@
           element.classList.remove(animationClass);
         }, 1500)
       }
+    }
+  }
+
+  window.addEventListener('resize', function(event) {
+    resizeDividers();
+  });
+
+  function resizeDividers() {
+    const svgs = document.getElementsByTagName("svg");
+    for (let i = 0; i < svgs.length; i++) {
+      let svg = svgs[i];
+      const bbox = svg.getBBox();
+      svg.setAttribute('viewBox', `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`);
     }
   }
  </script>
