@@ -629,11 +629,19 @@ p {
   .solution-divider svg path {
     transform: scaleY(0.75);
   }
+
+  #solution-header svg path {
+    transform: scaleY(1.5);
+  }
 }
 
 @media (max-width: 750px) {
   .solution-divider svg path {
     transform: scaleY(1);
+  }
+
+  #solution-header svg path {
+    transform: scaleY(2);
   }
 }
 
