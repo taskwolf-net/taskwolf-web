@@ -350,6 +350,11 @@
       accountContentElement.appendChild(descriptionContainerElement);
       if (information.accountExists === true) {
         displaySkipButton();
+      } else {
+        $('#workflow-component-account').collapse("toggle");
+        selectedComponentSetup = false;
+        removeLoader();
+        prepareEvent();
       }
     });
   }
@@ -694,6 +699,7 @@
       [], {componentType: "{{type}}", module: selectedApplication.toLowerCase(), type: selectedEvent, previousInputs: specificationValues, select: identifier});
     request.send(function (status, responseText) {
       let items = JSON.parse(responseText).items;
+      let found = false;
       for (let i = 0; i < items.length; i++) {
         let item = JSON.parse(items[i]);
         let itemElement = document.createElement("li");
@@ -707,9 +713,13 @@
         dropdownList.appendChild(itemElement);
         if (selectedComponentSetup && selectedComponent.content !== undefined && JSON.parse(selectedComponent.content)[identifier] === item.identifier) {
           selectSpecificationSelect(identifier, item.identifier, item.name, dropdownContainer, dropdownButton, dropdownList);
+          found = true;
         }
-        checkSetupCompletion();
       }
+      if (selectedComponentSetup && !found) {
+        specificationValues[identifier] = "";
+      }
+      checkSetupCompletion();
       if (items.length === 0) {
         let itemElement = document.createElement("li");
         itemElement.classList.add("dropdown-item");
