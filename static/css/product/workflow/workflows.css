@@ -624,6 +624,12 @@
   margin-left: 10px;
 }
 
+@media (max-width: 600px) {
+  .workflow-run-button label {
+    display: none;
+  }
+}
+
 .switch {
   position: relative;
   display: inline-block;
