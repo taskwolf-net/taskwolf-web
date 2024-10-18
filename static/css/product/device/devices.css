@@ -198,7 +198,7 @@
   padding: 0;
 }
 
-#devices-list li {
+.device-entry {
   border-bottom: 1px #4a4a4a solid;
   width: 100%;
   display: flex;
@@ -209,7 +209,7 @@
   transition-duration: 0.3s;
 }
 
-#devices-list li div {
+.device-entry div {
   padding: 40px 20px;
   display: flex;
   flex-direction: column;
@@ -217,14 +217,14 @@
   text-align: left;
 }
 
-#devices-list li div span {
+.device-entry div span {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
 
 .devices-entry-id {
-  width: 26% !important;
+  width: 32% !important;
 }
 
 .devices-entry-selector {
@@ -238,7 +238,7 @@
 }
 
 .devices-entry-settings {
-  width: 10% !important;
+  width: 4% !important;
   padding: 0 !important;
 }
 
@@ -255,16 +255,6 @@
 
 .light .devices-list-settings {
   color: black !important;
-}
-
-.device-settings-dropdown {
-  padding: 10px !important;
-}
-
-.device-settings-dropdown-entry {
-  padding: 10px !important;
-  border-radius: 4px;
-  border: none !important;
 }
 
 .device-settings-dropdown-entry i {
@@ -292,7 +282,7 @@
 }
 
 #devices-table-description-id {
-  width: 26% !important;
+  width: 32% !important;
 }
 
 #devices-table-description-selector {
@@ -305,7 +295,7 @@
 }
 
 #devices-table-description-settings {
-  width: 10% !important;
+  width: 4% !important;
 }
 
 #devices-table-description button {
@@ -371,7 +361,7 @@
   }
 
   #devices-table-description-name {
-    width: 40% !important;
+    width: 46% !important;
   }
 
   #devices-table-description-id {
@@ -387,7 +377,7 @@
   }
 
   .devices-entry-name {
-    width: 40% !important;
+    width: 46% !important;
   }
 
   .devices-entry-id {
@@ -401,7 +391,7 @@
   }
 
   #devices-table-description-name {
-    width: 54% !important;
+    width: 60% !important;
   }
 
   #devices-table-description-owner {
@@ -413,7 +403,7 @@
   }
 
   .devices-entry-name {
-    width: 54% !important;
+    width: 60% !important;
   }
 
   .devices-entry-owner {

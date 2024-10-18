@@ -61,7 +61,7 @@
                 <div id="workflow-component-event-body" class="accordion-body">
                   <h4 class="text-center">{% with "product.workflow.component.event.subline."|add:type as value %}{% trans value %}{% endwith %}</h4>
                   <div id="workflow-component-event-dropdown" class="dropdown">
-                    <button class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
                       {% trans 'product.workflow.component.event.headline' %}
                     </button>
                     <ul id="workflow-component-event-dropdown-list" class="dropdown-menu">
@@ -663,7 +663,7 @@
     dropdownContainer.appendChild(informationElement);
     dropdownContainer.classList.add("workflow-component-specifications-select-container", "dropdown");
     let dropdownButton = document.createElement("button");
-    dropdownButton.classList.add("btn", "dropdown-button", "dropdown-toggle");
+    dropdownButton.classList.add("btn", "btn-secondary", "dropdown-toggle");
     if (document.getElementsByClassName("workflow-component-specifications-select-container").length > 0) {
       dropdownButton.setAttribute("disabled", "disabled");
       specificationSelectButtons.push(dropdownButton);

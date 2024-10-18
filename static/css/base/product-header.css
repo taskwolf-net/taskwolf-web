@@ -111,22 +111,6 @@
   margin-right: 50px;
 }
 
-.dark #header-control-container .dropdown-menu {
-  background-color: #2f343a;
-}
-
-.dark #header-control-container .dropdown-item:hover {
-  background-color: #414851;
-}
-
-.dark #header-control-container .active:hover {
-  background-color: #0e57ca;
-}
-
-.light #header-control-container .active:hover {
-  background-color: #5b9dff;
-}
-
 @media (max-width: 575px) {
   #sidebar-button {
     margin-left: 20px;

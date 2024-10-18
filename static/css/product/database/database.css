@@ -218,7 +218,7 @@ tr {
 .database-table-settings-dropdown-divider {
   width: 100%;
   margin: 10px auto;
-  border-bottom: #626e7b 2px solid;
+  border-bottom: #626e7b 1px solid;
 }
 
 #database-remove {

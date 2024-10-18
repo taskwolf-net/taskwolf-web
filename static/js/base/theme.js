@@ -15,10 +15,12 @@ window.addEventListener('load', function () {
   var logoSource;
   if (theme === "dark") {
     document.body.classList.add("dark");
+    document.body.setAttribute("data-bs-theme", "dark");
     logoSource = "logo-light.webp";
   } else {
     document.body.classList.remove("dark");
     document.body.classList.add("light");
+    document.body.setAttribute("data-bs-theme", "light");
     logoSource = "logo-dark.webp";
   }
   var logoElements = document.getElementsByClassName("dulno-logo");

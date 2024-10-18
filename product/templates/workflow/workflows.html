@@ -272,7 +272,7 @@
 
   function createSettingsButton(id) {
     let settingsDiv = document.createElement("div");
-    settingsDiv.classList.add("workflows-entry-settings");
+    settingsDiv.classList.add("workflows-entry-settings", "dropdown");
     let settingsButton = document.createElement("button");
     settingsButton.type = "button";
     settingsButton.classList.add("workflows-entry-settings-button", "fa-solid",
@@ -307,27 +307,29 @@
 
   function createSettingsDropdownDivider() {
     let dropdownDivider = document.createElement("li");
-    dropdownDivider.classList.add("database-table-settings-dropdown-divider");
+    dropdownDivider.innerHTML = "<hr class='dropdown-divider'>";
     return dropdownDivider;
   }
 
   function createSettingsDropdownButton(dropdown, icon, content, color, click) {
     let dropdownEntry = document.createElement("li");
-    dropdownEntry.classList.add("workflows-entry-settings-dropdown-entry", "dropdown-item");
+    var dropdownEntryContainer = document.createElement("button");
+    dropdownEntryContainer.classList.add("workflows-entry-settings-dropdown-entry", "dropdown-item");
     let dropdownEntryIcon = document.createElement("i");
     dropdownEntryIcon.classList.add("fa-solid", icon);
-    dropdownEntry.appendChild(dropdownEntryIcon);
+    dropdownEntryContainer.appendChild(dropdownEntryIcon);
     let dropdownEntryLabel = document.createElement("label");
     dropdownEntryLabel.innerText = content;
-    dropdownEntry.appendChild(dropdownEntryLabel);
+    dropdownEntryContainer.appendChild(dropdownEntryLabel);
     if (color !== undefined) {
       dropdownEntryIcon.classList.add(color);
       dropdownEntryLabel.classList.add(color);
     }
-    dropdownEntry.onclick = function (event) {
+    dropdownEntryContainer.onclick = function (event) {
       $(dropdown).dropdown('toggle');
       click();
     };
+    dropdownEntry.appendChild(dropdownEntryContainer);
     return dropdownEntry;
   }
 

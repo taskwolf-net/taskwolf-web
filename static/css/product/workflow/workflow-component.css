@@ -357,10 +357,14 @@ input:-webkit-autofill:active{
 
 #workflow-component-event-selected b {
   font-size: 22px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 #workflow-component-event-selected p {
   font-size: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .dark #workflow-component-event-selected:hover {
