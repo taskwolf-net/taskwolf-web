@@ -6,11 +6,11 @@
 #webhooks-headline {
   text-align: center;
   font-weight: bold;
-  margin-top: 3%;
+  margin-top: 5vh;
 }
 
 #webhooks-header {
-  margin-top: 3%;
+  margin-top: 5vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -320,31 +320,81 @@
   color: #232323;
 }
 
-@media (max-width: 1000px) {
-  #webhooks-table-description-name {
-    width: 27% !important;
-  }
-
-  .webhooks-entry-name {
-    width: 27% !important;
-  }
-
+@media (max-width: 1350px) {
   #webhooks-table-description li {
-    width: 23%;
+    width: 27%;
+  }
+
+  #webhooks-table-description-selector {
+    width: 6% !important;
+  }
+
+  #webhooks-table-description-name {
+    width: 40% !important;
+  }
+
+  #webhooks-table-description-created {
+    display: none !important;
   }
 
   #webhooks-list li div {
-    width: 23%;
+    width: 27%;
+  }
+
+  .webhooks-entry-selector {
+    width: 6% !important;
+  }
+
+  .webhooks-entry-name {
+    width: 40% !important;
+  }
+
+  .webhooks-entry-created {
+    display: none !important;
   }
 }
 
-@media (max-width: 575px) {
+@media (max-width: 1050px) {
   #webhooks-table-description li {
-    font-size: .8em;
+    width: 35%;
   }
 
-  #webhooks-list li div span {
-    font-size: .8em;
+  #webhooks-table-description-name {
+    width: 65% !important;
+  }
+
+  #webhooks-table-description-creator {
+    display: none !important;
+  }
+
+  #webhooks-list li div {
+    width: 35%;
+  }
+
+  .webhooks-entry-name {
+    width: 65% !important;
+  }
+
+  .webhooks-entry-creator {
+    display: none !important;
+  }
+}
+
+@media (max-width: 800px) {
+  #webhooks-table-description-name {
+    width: 100% !important;
+  }
+
+  #webhooks-table-description-usages {
+    display: none !important;
+  }
+
+  .webhooks-entry-name {
+    width: 100% !important;
+  }
+
+  .webhooks-entry-usages {
+    display: none !important;
   }
 }
 
@@ -438,15 +488,13 @@
   flex-flow: wrap;
   justify-content: center;
   text-align: center;
-  margin-top: 5%;
-  white-space: pre;
+  margin-top: 6vh;
 }
 
 #webhooks-empty-headline, #webhooks-not-found-headline {
   font-size: 20px;
   font-weight: bold;
   width: 100%;
-  margin-bottom: 1%;
 }
 
 #webhooks-empty-link {
