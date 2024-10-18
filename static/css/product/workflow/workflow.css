@@ -309,11 +309,11 @@ input:-webkit-autofill:active{
 }
 
 .dark .workflow-component-add-menu-selector {
-  background-color: #415471;
+  background-color: #4a4f5a;
 }
 
 .dark .workflow-component-add-menu-selector:hover {
-  background-color: #4c6386;
+  background-color: #5b616f;
 }
 
 .light .workflow-component-add-menu-selector {
