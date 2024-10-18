@@ -233,7 +233,7 @@
   padding: 0;
 }
 
-#databases-list li {
+.database-entry {
   border-bottom: 1px #4a4a4a solid;
   width: 100%;
   display: flex;
@@ -244,15 +244,15 @@
   transition-duration: 0.3s;
 }
 
-.dark #databases-list li:hover {
+.dark .database-entry:hover {
   background-color: #19202c !important;
 }
 
-.light #databases-list li:hover {
+.light .database-entry:hover {
   background-color: #cecece !important;
 }
 
-#databases-list li div {
+.database-entry div {
   display: flex;
   width: 20%;
   padding: 40px 20px;
@@ -260,7 +260,7 @@
   flex-direction: column;
 }
 
-#databases-list li div span {
+.database-entry div span {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -320,7 +320,7 @@
     display: none !important;
   }
 
-  #databases-list li div {
+  .database-entry div {
     width: 27%;
   }
 
@@ -350,7 +350,7 @@
     display: none !important;
   }
 
-  #databases-list li div {
+  .database-entry div {
     width: 30%;
   }
 

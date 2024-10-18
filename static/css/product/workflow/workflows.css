@@ -450,7 +450,7 @@
     width: 15% !important;
   }
 
-  #workflows-list li div {
+  .workflow-entry div {
     width: 16%;
   }
 
@@ -488,7 +488,7 @@
     display: none !important;
   }
 
-  #workflows-list li div {
+  .workflow-entry div {
     width: 22%;
   }
 
