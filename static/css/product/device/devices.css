@@ -6,11 +6,11 @@
 #devices-headline {
   text-align: center;
   font-weight: bold;
-  margin-top: 3%;
+  margin-top: 5vh;
 }
 
 #devices-header {
-  margin-top: 3%;
+  margin-top: 5vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -210,7 +210,7 @@
 }
 
 #devices-list li div {
-  padding: 3%;
+  padding: 40px 20px;
   display: flex;
   flex-direction: column;
   width: 20%;
@@ -286,7 +286,7 @@
 
 #devices-table-description li {
   width: 20%;
-  padding: 2% 3%;
+  padding: 20px;
   font-weight: bold;
   font-size: 20px;
 }
@@ -361,13 +361,81 @@
   border: 2px #bc6f30 solid;
 }
 
-@media (max-width: 575px) {
+@media (max-width: 1350px) {
   #devices-table-description li {
-    font-size: .8em;
+    width: 28%;
   }
 
-  #devices-list li div span {
-    font-size: .8em;
+  #devices-table-description-selector {
+    width: 6% !important;
+  }
+
+  #devices-table-description-name {
+    width: 40% !important;
+  }
+
+  #devices-table-description-id {
+    display: none !important;
+  }
+
+  #devices-list li div {
+    width: 28%;
+  }
+
+  .devices-entry-selector {
+    width: 6% !important;
+  }
+
+  .devices-entry-name {
+    width: 40% !important;
+  }
+
+  .devices-entry-id {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1050px) {
+  #devices-table-description li {
+    width: 30%;
+  }
+
+  #devices-table-description-name {
+    width: 54% !important;
+  }
+
+  #devices-table-description-owner {
+    display: none !important;
+  }
+
+  #devices-list li div {
+    width: 30%;
+  }
+
+  .devices-entry-name {
+    width: 54% !important;
+  }
+
+  .devices-entry-owner {
+    display: none !important;
+  }
+}
+
+@media (max-width: 800px) {
+  #devices-table-description-name {
+    width: 100% !important;
+  }
+
+  #devices-table-description-platform {
+    display: none !important;
+  }
+
+  .devices-entry-name {
+    width: 100% !important;
+  }
+
+  .devices-entry-platform {
+    display: none !important;
   }
 }
 
@@ -461,15 +529,13 @@
   flex-flow: wrap;
   justify-content: center;
   text-align: center;
-  margin-top: 5%;
-  white-space: pre;
+  margin-top: 6vh;
 }
 
 #devices-empty-headline, #devices-not-found-headline {
   font-size: 20px;
   font-weight: bold;
   width: 100%;
-  margin-bottom: 1%;
 }
 
 #devices-empty-link {

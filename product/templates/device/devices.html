@@ -54,7 +54,7 @@
             </ul>
           </div>
         </div>
-        <ul id="devices-table-description">
+        <ul id="devices-table-description" class="mt-4 mb-0">
           <li id="devices-table-description-selector">
             <div>
               <input id="devices-selector-global" class="form-check-input" type="checkbox">
@@ -71,7 +71,7 @@
               <i class="devices-table-description-sort fa-solid fa-sort-up ms-2" role="button" type="information"></i>
             </div>
           </li>
-          <li>
+          <li id="devices-table-description-owner">
             <div>
               <span>{% trans 'product.devices.owner' %}</span>
               <i class="devices-table-description-sort fa-solid fa-sort ms-2" role="button" type="owner"></i>
@@ -105,7 +105,7 @@
         <div id="devices-loader">
         </div>
         <div id="devices-empty" class="d-none">
-          <span id="devices-empty-headline">{% trans 'product.devices.empty.headline' %}</span>
+          <p id="devices-empty-headline" class="mb-sm-1 mb-3">{% trans 'product.devices.empty.headline' %}</p>
           <span>{% trans 'product.devices.empty.text' %}</span><a id="devices-empty-link" href="/download/">{% trans 'product.devices.empty.link' %}</a><span>.</span>
         </div>
         <div id="devices-not-found" class="d-none">
@@ -291,6 +291,7 @@
 
   function appendDeviceCell(entry, identifier, information, elementType) {
     let div = document.createElement("div");
+    div.classList.add("devices-entry-" + identifier);
     let element = document.createElement(elementType);
     element.innerText = information;
     element.classList.add("devices-list-" + identifier);
