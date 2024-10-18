@@ -6,11 +6,11 @@
 #workflows-headline {
   text-align: center;
   font-weight: bold;
-  margin-top: 3%;
+  margin-top: 5vh;
 }
 
 #workflows-header {
-  margin-top: 3%;
+  margin-top: 5vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -794,15 +794,13 @@ input:checked + .slider:before {
   flex-flow: wrap;
   justify-content: center;
   text-align: center;
-  margin-top: 5%;
-  white-space: pre;
+  margin-top: 6vh;
 }
 
 #workflows-empty-headline, #workflows-not-found-headline {
   font-size: 20px;
   font-weight: bold;
-  width: 100%;
-  margin-bottom: 1%;
+  width: 100%
 }
 
 #workflows-empty-link {

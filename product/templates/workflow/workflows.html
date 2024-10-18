@@ -119,7 +119,7 @@
         <div id="workflows-loader">
         </div>
         <div id="workflows-empty" class="d-none">
-          <span id="workflows-empty-headline">{% trans 'product.workflows.empty.headline' %}</span>
+          <p id="workflows-empty-headline" class="mb-sm-1 mb-3">{% trans 'product.workflows.empty.headline' %}</p>
           <span>{% trans 'product.workflows.empty.text' %}</span><a id="workflows-empty-link" href="javascript:createWorkflow()">{% trans 'product.workflows.empty.link' %}</a><span>?</span>
         </div>
         <div id="workflows-not-found" class="d-none">
@@ -175,8 +175,8 @@
     nameDiv.appendChild(nameElement);
     entry.appendChild(nameDiv);
     entry.appendChild(createWorkflowPreview(triggerLogo, actions))
-    appendWorkflowsCell(entry, "creator", creator, "span").classList.add("workflows-entry-creator");
-    appendWorkflowsCell(entry, "created", created, "span").classList.add("workflows-entry-created");
+    appendWorkflowsCell(entry, "creator", creator, "span");
+    appendWorkflowsCell(entry, "created", created, "span");
     if (triggerType === "manual-trigger") {
       entry.appendChild(createManualRunButton(id));
     } else {
@@ -456,6 +456,7 @@
 
   function appendWorkflowsCell(entry, identifier, information, elementType) {
     let div = document.createElement("div");
+    div.classList.add("workflows-entry-" + identifier);
     let element = document.createElement(elementType);
     element.innerText = information;
     element.classList.add("workflows-list-" + identifier);
