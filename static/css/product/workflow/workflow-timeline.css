@@ -5,10 +5,18 @@
 
 #workflow-timeline-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   position: relative;
-  margin-top: 5%;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+}
+
+#workflow-timeline-headline {
+  position: absolute;
+  width: calc(100% - 130px);
+  margin-left: 65px;
+  margin-right: 65px;
+  z-index: 1;
 }
 
 #workflow-timeline-page-back {
@@ -18,6 +26,7 @@
   background-color: transparent;
   border-radius: 50%;
   font-size: 25px;
+  z-index: 10;
 }
 
 .dark #workflow-timeline-page-back {
