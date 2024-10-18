@@ -6,11 +6,11 @@
 #databases-headline {
   text-align: center;
   font-weight: bold;
-  margin-top: 3%;
+  margin-top: 5vh;
 }
 
 #databases-header {
-  margin-top: 3%;
+  margin-top: 5vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -260,6 +260,12 @@
   flex-direction: column;
 }
 
+#databases-list li div span {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 .databases-entry-name {
   width: 36% !important;
   text-align: left !important;
@@ -297,13 +303,81 @@
   text-align: center;
 }
 
-@media (max-width: 575px) {
+@media (max-width: 1350px) {
   #databases-table-description li {
-    font-size: .8em;
+    width: 27%;
   }
 
-  #databases-list li div span {
-    font-size: .8em;
+  #databases-table-description-selector {
+    width: 6% !important;
+  }
+
+  #databases-table-description-name {
+    width: 40% !important;
+  }
+
+  #databases-table-description-created {
+    display: none !important;
+  }
+
+  #databases-list li div {
+    width: 27%;
+  }
+
+  .databases-entry-selector {
+    width: 6% !important;
+  }
+
+  .databases-entry-name {
+    width: 40% !important;
+  }
+
+  .databases-entry-created {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1050px) {
+  #databases-table-description li {
+    width: 30%;
+  }
+
+  #databases-table-description-name {
+    width: 70% !important;
+  }
+
+  #databases-table-description-creator {
+    display: none !important;
+  }
+
+  #databases-list li div {
+    width: 30%;
+  }
+
+  .databases-entry-name {
+    width: 70% !important;
+  }
+
+  .databases-entry-creator {
+    display: none !important;
+  }
+}
+
+@media (max-width: 800px) {
+  #databases-table-description-name {
+    width: 100% !important;
+  }
+
+  #databases-table-description-size {
+    display: none !important;
+  }
+
+  .databases-entry-name {
+    width: 100% !important;
+  }
+
+  .databases-entry-size {
+    display: none !important;
   }
 }
 
@@ -397,15 +471,13 @@
   flex-flow: wrap;
   justify-content: center;
   text-align: center;
-  margin-top: 5%;
-  white-space: pre;
+  margin-top: 6vh;
 }
 
 #databases-empty-headline, #databases-not-found-headline {
   font-size: 20px;
   font-weight: bold;
   width: 100%;
-  margin-bottom: 1%;
 }
 
 #databases-empty-link {
