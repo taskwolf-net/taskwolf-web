@@ -15,18 +15,18 @@
         </div>
         <button type="button" id="ticket-create" class="btn btn-primary btn-block">{% trans 'tickets.create' %}</button>
       </div>
-      <ul id="tickets-table-description">
+      <ul id="tickets-table-description" class="mt-4 mb-0">
         <li id="tickets-table-description-title">
           <div>
             <span>{% trans 'tickets.title' %}</span>
           </div>
         </li>
-        <li>
+        <li id="tickets-table-description-type">
           <div>
             <span>{% trans 'tickets.type' %}</span>
           </div>
         </li>
-        <li>
+        <li id="tickets-table-description-status">
           <div>
             <span>{% trans 'tickets.status' %}</span>
           </div>
@@ -34,6 +34,8 @@
       </ul>
       <ul id="tickets-list">
       </ul>
+      <div id="tickets-loader">
+      </div>
       <div id="tickets-empty">
         <span id="tickets-empty-headline">{% trans 'tickets.empty.headline' %}</span>
         <span>{% trans 'tickets.empty.text' %}</span><a id="tickets-empty-link" href="/ticket/create/">{% trans 'tickets.empty.link' %}</a><span>?</span>
@@ -47,8 +49,10 @@
   let ticketsCurrentNameFilter = "";
 
   $(document).ready(function() {
+    displayLoader();
     fetchTicketsData(function() {
       displayTickets();
+      removeLoader();
     });
   });
 
@@ -98,7 +102,7 @@
     entry.role = "button";
     entry.classList.add("ticket-entry");
     let titleDiv = document.createElement("div");
-    titleDiv.classList.add("ticket-entry-title");
+    titleDiv.classList.add("tickets-entry-title");
     let nameElement = document.createElement("span");
     nameElement.innerText = title;
     nameElement.classList.add("tickets-list-title");
@@ -122,6 +126,7 @@
 
   function appendTicketsCell(entry, identifier, information, elementType) {
     let div = document.createElement("div");
+    div.classList.add("tickets-entry-" + identifier);
     let element = document.createElement(elementType);
     element.innerText = information;
     element.classList.add("tickets-list-" + identifier);
@@ -138,4 +143,15 @@
   document.getElementById("ticket-create").onclick = function(event) {
     window.location.href = "/ticket/create/";
   };
+
+  function displayLoader() {
+    let loader = document.createElement("div");
+    loader.classList.add("loader", "loader-list");
+    document.getElementById("tickets-loader").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("tickets-loader").removeChild(
+      document.getElementsByClassName("loader")[0]);
+  }
 </script>

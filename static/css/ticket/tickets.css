@@ -1,13 +1,16 @@
+#tickets-wrapper {
+  width: min(1500px, 95%);
+  margin: auto;
+}
+
 #tickets-headline {
   text-align: center;
   font-weight: bold;
-  margin-top: 2%;
+  margin-top: 5vh;
 }
 
 #tickets-header {
-  width: min(calc(2000px - 15vw), 95%);
-  margin: auto;
-  margin-top: 2%;
+  margin: 5vh auto auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -68,18 +71,13 @@
   margin-left: 2%;
 }
 
-@media (max-width: 400px) {
-  #tickets-header {
-    margin-bottom: 5%;
-  }
-
+@media (max-width: 1200px) {
   #ticket-create {
-    width: 30%;
+    width: fit-content;
   }
 }
 
 #tickets-list {
-  width: min(calc(2000px - 15vw), 95%);
   position: relative;
   list-style-type: none;
   padding: 0;
@@ -106,23 +104,27 @@
 }
 
 #tickets-list li div {
-  padding: 3%;
+  padding: 40px 20px;
   display: flex;
   flex-direction: column;
   width: 20%;
   text-align: left;
 }
 
-.ticket-entry-title {
+#tickets-list li div span {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.tickets-entry-title {
   width: 60% !important;
 }
 
 #tickets-table-description {
-  width: min(calc(2000px - 15vw), 95%);
   position: relative;
   list-style-type: none;
   margin: auto;
-  margin-top: 1%;
   border-bottom: 4px #717171 solid;
   padding: 0;
   display: flex;
@@ -131,7 +133,7 @@
 
 #tickets-table-description li {
   width: 20%;
-  padding: 2% 3%;
+  padding: 20px;
   font-weight: bold;
   font-size: 20px;
 }
@@ -154,13 +156,47 @@
   color: #232323;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 550px) {
   #tickets-table-description li {
-    font-size: .8em;
+    width: 30%;
   }
 
-  #tickets-list li div span {
-    font-size: .8em;
+  #tickets-table-description-title {
+    width: 70% !important;
+  }
+
+  #tickets-table-description-type {
+    display: none !important;
+  }
+
+  #tickets-list li div {
+    width: 30%;
+  }
+
+  .tickets-entry-title {
+    width: 70% !important;
+  }
+
+  .tickets-entry-type {
+    display: none !important;
+  }
+}
+
+@media (max-width: 400px) {
+  #tickets-table-description li {
+    width: 40%;
+  }
+
+  #tickets-table-description-title {
+    width: 60% !important;
+  }
+
+  #tickets-list li div {
+    width: 40%;
+  }
+
+  .tickets-entry-title {
+    width: 60% !important;
   }
 }
 

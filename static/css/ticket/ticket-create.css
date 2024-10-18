@@ -38,7 +38,7 @@ input:-webkit-autofill:active{
 }
 
 #ticket-create-container {
-  width: min(calc(1300px - 15vw), 95%);
+  width: min(1500px, 95%);
   margin: auto;
   text-align: center;
 }
@@ -46,7 +46,8 @@ input:-webkit-autofill:active{
 #ticket-create-headline {
   text-align: center;
   font-weight: bold;
-  margin-top: 2%;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
 }
 
 #ticket-create-type-dropdown {

@@ -5,18 +5,20 @@
   <body class="dark">
     {% include 'neutral-header.html' %}
     <div id="ticket-container">
-      <h1 id="ticket-headline">{% trans 'ticket.headline' %}</h1>
-      <label class="form-label">{% trans 'ticket.title' %}</label>
-      <div id="ticket-title-wrapper" class="form-outline">
-        <input type="title" id="ticket-title" class="form-control" placeholder="{% trans 'ticket.title' %}">
-        <button type="button" id="ticket-title-change" class="btn btn-primary btn-block">{% trans 'ticket.title.change' %}</button>
-      </div>
-      <hr class="hr border-white my-4"/>
-      <ul id="ticket-messages">
-      </ul>
-      <div id="ticket-operations">
-        <button type="button" id="ticket-message-add" class="btn btn-primary disabled">{% trans 'ticket.message.add' %}</button>
-        <button type="button" id="ticket-delete" class="btn btn-danger">{% trans 'ticket.delete' %}</button>
+      <div id="ticket-wrapper" class="d-none">
+        <h1 id="ticket-headline">{% trans 'ticket.headline' %}</h1>
+        <label class="form-label">{% trans 'ticket.title' %}</label>
+        <div id="ticket-title-wrapper" class="form-outline">
+          <input type="title" id="ticket-title" class="form-control" placeholder="{% trans 'ticket.title' %}">
+          <button type="button" id="ticket-title-change" class="btn btn-primary btn-block">{% trans 'ticket.title.change' %}</button>
+        </div>
+        <hr class="hr border-white my-4"/>
+        <ul id="ticket-messages">
+        </ul>
+        <div id="ticket-operations" class="mb-3">
+          <button type="button" id="ticket-message-add" class="btn btn-primary disabled">{% trans 'ticket.message.add' %}</button>
+          <button type="button" id="ticket-delete" class="btn btn-danger">{% trans 'ticket.delete' %}</button>
+        </div>
       </div>
     </div>
   </body>
@@ -27,9 +29,11 @@
   let username;
 
   $(document).ready(function() {
+    displayLoader();
     fetchUsername(function() {
       fetchTicketsData(function() {
         displayTicket();
+        removeLoader();
       });
     });
   });
@@ -205,5 +209,16 @@
         });
       }
     });
+  }
+
+  function displayLoader() {
+    let loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("ticket-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("ticket-container").removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("ticket-wrapper").classList.remove("d-none");
   }
 </script>
