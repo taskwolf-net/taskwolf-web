@@ -66,33 +66,37 @@
   text-align: left;
   border-bottom: 2px #4a4a4a solid;
   padding-bottom: 5px;
-  margin-bottom: 2%;
+  margin-bottom: 3vh;
 }
 
 #organization-members-headline {
   text-align: left;
+  margin-right: 20px;
 }
 
 #organization-members-header {
   display: flex;
-  margin-bottom: 2%;
+  align-items: center;
   border-bottom: 2px #4a4a4a solid;
   padding-bottom: 5px;
+  margin-bottom: 3vh;
 }
 
 #organization-owner, #organization-members {
   list-style-type: none;
-  margin-bottom: 5%;
+  margin-bottom: 5vh;
 }
 
 #organization-invite {
   margin-left: auto;
   display: none;
+  align-self: normal;
 }
 
 #organization-link-regenerate {
   margin-left: 1%;
   display: none;
+  align-self: normal;
 }
 
 #organization-members-empty {

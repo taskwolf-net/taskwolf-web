@@ -123,6 +123,7 @@
     memberIconElement.classList.add("organization-user-icon", "fa-regular", "fa-user");
     memberInformationContainer.appendChild(memberIconElement);
     let memberNameElement = document.createElement("span");
+    memberNameElement.classList.add("text-truncate", "me-3");
     memberNameElement.classList.add("organization-user-name");
     memberNameElement.innerHTML = user;
     memberInformationContainer.appendChild(memberNameElement);
