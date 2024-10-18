@@ -41,3 +41,22 @@
     <h5 id="home-footer-copyright">© 2024 Dulno.com</h5>
   </div>
 </div>
+
+<script>
+  $(document).ready(function() {
+    resizeDividers();
+  });
+
+  window.addEventListener('resize', function(event) {
+    resizeDividers();
+  });
+
+  function resizeDividers() {
+    const svgs = document.getElementsByTagName("svg");
+    for (let i = 0; i < svgs.length; i++) {
+      let svg = svgs[i];
+      const bbox = svg.getBBox();
+      svg.setAttribute('viewBox', `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`);
+    }
+  }
+</script>
