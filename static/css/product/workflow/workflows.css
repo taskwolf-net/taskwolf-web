@@ -6,11 +6,11 @@
 #workflows-headline {
   text-align: center;
   font-weight: bold;
-  margin-top: 3%;
+  margin-top: 5vh;
 }
 
 #workflows-header {
-  margin-top: 3%;
+  margin-top: 5vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -303,7 +303,7 @@
   padding: 0;
 }
 
-#workflows-list li {
+.workflow-entry {
   border-bottom: 1px #4a4a4a solid;
   width: 100%;
   display: flex;
@@ -314,15 +314,15 @@
   transition-duration: 0.3s;
 }
 
-.dark #workflows-list li:hover {
+.dark .workflow-entry:hover {
   background-color: #19202c !important;
 }
 
-.light #workflows-list li:hover {
+.light .workflow-entry:hover {
   background-color: #cecece !important;
 }
 
-#workflows-list li div {
+.workflow-entry div {
   padding: 40px 20px;
   display: flex;
   flex-direction: column;
@@ -330,7 +330,7 @@
   text-align: left;
 }
 
-#workflows-list li div span {
+.workflow-entry div span {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -370,20 +370,6 @@
 
 .light .workflows-entry-settings-button {
   color: black;
-}
-
-.workflows-entry-settings-dropdown {
-  padding: 10px !important;
-}
-
-.workflows-entry-settings-dropdown-entry {
-  padding: 10px !important;
-  border-radius: 4px;
-  border: none !important;
-}
-
-.workflows-entry-settings-dropdown-entry:hover {
-  background-color: #464b54 !important;
 }
 
 .workflows-entry-settings-dropdown-entry i {
@@ -464,7 +450,7 @@
     width: 15% !important;
   }
 
-  #workflows-list li div {
+  .workflow-entry div {
     width: 16%;
   }
 
@@ -502,7 +488,7 @@
     display: none !important;
   }
 
-  #workflows-list li div {
+  .workflow-entry div {
     width: 22%;
   }
 
@@ -622,6 +608,12 @@
 
 .workflow-run-button label {
   margin-left: 10px;
+}
+
+@media (max-width: 600px) {
+  .workflow-run-button label {
+    display: none;
+  }
 }
 
 .switch {
@@ -794,15 +786,13 @@ input:checked + .slider:before {
   flex-flow: wrap;
   justify-content: center;
   text-align: center;
-  margin-top: 5%;
-  white-space: pre;
+  margin-top: 6vh;
 }
 
 #workflows-empty-headline, #workflows-not-found-headline {
   font-size: 20px;
   font-weight: bold;
-  width: 100%;
-  margin-bottom: 1%;
+  width: 100%
 }
 
 #workflows-empty-link {

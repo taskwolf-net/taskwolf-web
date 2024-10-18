@@ -65,19 +65,19 @@
               <i class="databases-table-description-sort fa-solid fa-sort-up ms-2" role="button" type="name"></i>
             </div>
           </li>
-          <li>
+          <li id="databases-table-description-creator">
             <div>
               <span>{% trans 'product.databases.creator' %}</span>
               <i class="databases-table-description-sort fa-solid fa-sort ms-2" role="button" type="creator"></i>
             </div>
           </li>
-          <li>
+          <li id="databases-table-description-created">
             <div>
               <span>{% trans 'product.databases.created' %}</span>
               <i class="databases-table-description-sort fa-solid fa-sort ms-2" role="button" type="created"></i>
             </div>
           </li>
-          <li>
+          <li id="databases-table-description-size">
             <div>
               <span>{% trans 'product.databases.size' %}</span>
               <i class="databases-table-description-sort fa-solid fa-sort ms-2" role="button" type="size"></i>
@@ -98,7 +98,7 @@
         <div id="databases-loader">
         </div>
         <div id="databases-empty" class="d-none">
-          <span id="databases-empty-headline">{% trans 'product.databases.empty.headline' %}</span>
+          <p id="databases-empty-headline" class="mb-sm-1 mb-3">{% trans 'product.databases.empty.headline' %}</p>
           <span>{% trans 'product.databases.empty.text' %}</span><a id="databases-empty-link" href="/database/create/">{% trans 'product.databases.empty.link' %}</a><span>?</span>
         </div>
         <div id="databases-not-found" class="d-none">
@@ -215,6 +215,7 @@
 
   function appendDatabasesCell(entry, identifier, information, elementType) {
     let div = document.createElement("div");
+    div.classList.add("databases-entry-" + identifier);
     let element = document.createElement(elementType);
     element.innerText = information;
     element.classList.add("databases-list-" + identifier);

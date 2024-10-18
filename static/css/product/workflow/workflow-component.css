@@ -45,11 +45,18 @@ input:-webkit-autofill:active{
 
 #workflow-component-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   position: relative;
-  margin-top: 5%;
-  margin-bottom: 5%;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+}
+
+#workflow-component-headline {
+  position: absolute;
+  width: calc(100% - 130px);
+  margin-left: 65px;
+  margin-right: 65px;
+  z-index: 1;
 }
 
 #workflow-component-page-back {
@@ -59,6 +66,7 @@ input:-webkit-autofill:active{
   background-color: transparent;
   border-radius: 50%;
   font-size: 25px;
+  z-index: 10;
 }
 
 .dark #workflow-component-page-back {
@@ -288,14 +296,13 @@ input:-webkit-autofill:active{
 
 #workflow-component-account-description {
   width: 50%;
-  margin: auto;
-  margin-top: 4%;
+  margin: 4vh auto auto;
 }
 
 #workflow-component-account-skip {
   float: right;
   width: 200px;
-  margin-top: 2%;
+  margin-top: 3vh;
   margin-right: 2%;
 }
 
@@ -311,7 +318,7 @@ input:-webkit-autofill:active{
 
 #workflow-component-event-dropdown {
   text-align: center;
-  margin-top: 2%;
+  margin-top: 3vh;
   display: none;
 }
 
@@ -330,9 +337,7 @@ input:-webkit-autofill:active{
 }
 
 #workflow-component-event-selected {
-  margin: auto;
-  margin-top: 4%;
-  margin-bottom: 2%;
+  margin: 4vh auto 3vh;
   width: 40%;
   display: none;
   text-align: center;
@@ -352,10 +357,14 @@ input:-webkit-autofill:active{
 
 #workflow-component-event-selected b {
   font-size: 22px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 #workflow-component-event-selected p {
   font-size: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .dark #workflow-component-event-selected:hover {
@@ -412,8 +421,13 @@ input:-webkit-autofill:active{
   }
 }
 
+#workflow-component-specifications-body {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 #workflow-component-specifications-container {
-  margin-top: 3%;
+  margin-top: 4vh;
   display: none;
 }
 
@@ -590,14 +604,14 @@ input:-webkit-autofill:active{
 
 .workflow-component-reset {
   float: right;
-  margin-top: 2%;
+  margin-top: 3vh;
   margin-right: 2%;
 }
 
 #workflow-component-adopt {
   text-align: center;
-  margin-top: 5%;
-  margin-bottom: 2%;
+  margin-top: 5vh;
+  margin-bottom: 2vh;
   transition-duration: 1s;
 }
 

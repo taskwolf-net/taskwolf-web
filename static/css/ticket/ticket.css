@@ -38,7 +38,7 @@ input:-webkit-autofill:active{
 }
 
 #ticket-container {
-  width: min(calc(1300px - 15vw), 95%);
+  width: min(1200px, 95%);
   margin: auto;
   text-align: center;
 }
@@ -46,8 +46,8 @@ input:-webkit-autofill:active{
 #ticket-headline {
   text-align: center;
   font-weight: bold;
-  margin-top: 2%;
-  margin-bottom: 2%;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
 }
 
 #ticket-title-wrapper {
@@ -67,7 +67,7 @@ input:-webkit-autofill:active{
   position: relative;
   display: flex;
   width: 100%;
-  margin-bottom: 4%;
+  margin-bottom: 4vh;
   border-radius: 10px;
 }
 
@@ -82,14 +82,47 @@ input:-webkit-autofill:active{
 }
 
 .ticket-message-description {
-  width: 20%;
-  margin-top: 2%;
+  width: fit-content;
+  max-width: 300px;
+  margin-top: 5vh;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .ticket-message-profile-picture {
   width: 64px;
   height: 64px;
   border-radius: 40%;
+}
+
+.ticket-message-author {
+  display: inline-block;
+  max-width: 260px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+@media (max-width: 1000px) {
+  .ticket-message-description {
+    max-width: 200px;
+  }
+
+  .ticket-message-author {
+    max-width: 160px;
+  }
+}
+
+@media (max-width: 500px) {
+  .ticket-message-description {
+    max-width: 150px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .ticket-message-author {
+    max-width: 110px;
+  }
 }
 
 .ticket-message-profile-icon {
@@ -232,11 +265,6 @@ input:-webkit-autofill:active{
 
 #ticket-operations {
   display: flex;
-  margin-bottom: 2%;
-}
-
-#ticket-message-add {
-
 }
 
 #ticket-delete {

@@ -65,19 +65,19 @@
               <i class="processes-table-description-sort fa-solid fa-sort-up ms-2" role="button" type="name"></i>
             </div>
           </li>
-          <li>
+          <li id="processes-table-description-creator">
             <div>
               <span>{% trans 'product.processes.creator' %}</span>
               <i class="processes-table-description-sort fa-solid fa-sort ms-2" role="button" type="creator"></i>
             </div>
           </li>
-          <li>
+          <li id="processes-table-description-created">
             <div>
               <span>{% trans 'product.processes.date' %}</span>
               <i class="processes-table-description-sort fa-solid fa-sort ms-2" role="button" type="created"></i>
             </div>
           </li>
-          <li>
+          <li id="processes-table-description-steps">
             <div>
                 <span>{% trans 'product.processes.steps' %}</span>
               <i class="processes-table-description-sort fa-solid fa-sort ms-2" role="button" type="steps"></i>
@@ -98,7 +98,7 @@
         <div id="processes-loader">
         </div>
         <div id="processes-empty" class="d-none">
-          <span id="processes-empty-headline">{% trans 'product.processes.empty.headline' %}</span>
+          <p id="processes-empty-headline" class="mb-sm-1 mb-3">{% trans 'product.processes.empty.headline' %}</p>
           <span>{% trans 'product.processes.empty.text' %}</span><a id="processes-empty-link" href="/process/">{% trans 'product.processes.empty.link' %}</a><span>?</span>
         </div>
         <div id="processes-not-found" class="d-none">
@@ -215,6 +215,7 @@
 
   function appendProcessesCell(entry, identifier, information, elementType) {
     let div = document.createElement("div");
+    div.classList.add("processes-entry-" + identifier);
     let element = document.createElement(elementType);
     element.innerText = information;
     element.classList.add("processes-list-" + identifier);

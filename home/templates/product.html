@@ -203,7 +203,6 @@
     $(window).scroll( function(){
       checkAnimations();
     });
-    resizeDividers();
   });
 
   function checkAnimations() {
@@ -225,19 +224,6 @@
           element.classList.remove(animationClass);
         }, 1500)
       }
-    }
-  }
-
-  window.addEventListener('resize', function(event) {
-    resizeDividers();
-  });
-
-  function resizeDividers() {
-    const svgs = document.getElementsByTagName("svg");
-    for (let i = 0; i < svgs.length; i++) {
-      let svg = svgs[i];
-      const bbox = svg.getBBox();
-      svg.setAttribute('viewBox', `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`);
     }
   }
  </script>

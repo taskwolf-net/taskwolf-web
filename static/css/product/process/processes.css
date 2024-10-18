@@ -6,11 +6,11 @@
 #processes-headline {
   text-align: center;
   font-weight: bold;
-  margin-top: 3%;
+  margin-top: 5vh;
 }
 
 #processes-header {
-  margin-top: 3%;
+  margin-top: 5vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -315,23 +315,81 @@
   color: #232323;
 }
 
-@media (max-width: 575px) {
+@media (max-width: 1350px) {
   #processes-table-description li {
-    font-size: .8em;
+    width: 27%;
   }
 
-  #processes-list li div span {
-    font-size: .8em;
+  #processes-table-description-selector {
+    width: 6% !important;
   }
 
-  #processes-table-description-optimization {
-    text-align: right;
+  #processes-table-description-name {
+    width: 40% !important;
   }
 
-  .processes-list-optimization {
-    padding: 5px;
-    margin-left: auto;
-    margin-right: 0;
+  #processes-table-description-created {
+    display: none !important;
+  }
+
+  #processes-list li div {
+    width: 27%;
+  }
+
+  .processes-entry-selector {
+    width: 6% !important;
+  }
+
+  .processes-entry-name {
+    width: 40% !important;
+  }
+
+  .processes-entry-created {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1050px) {
+  #processes-table-description li {
+    width: 30%;
+  }
+
+  #processes-table-description-name {
+    width: 70% !important;
+  }
+
+  #processes-table-description-creator {
+    display: none !important;
+  }
+
+  #processes-list li div {
+    width: 30%;
+  }
+
+  .processes-entry-name {
+    width: 70% !important;
+  }
+
+  .processes-entry-creator {
+    display: none !important;
+  }
+}
+
+@media (max-width: 800px) {
+  #processes-table-description-name {
+    width: 100% !important;
+  }
+
+  #processes-table-description-steps {
+    display: none !important;
+  }
+
+  .processes-entry-name {
+    width: 100% !important;
+  }
+
+  .processes-entry-steps {
+    display: none !important;
   }
 }
 
@@ -425,15 +483,13 @@
   flex-flow: wrap;
   justify-content: center;
   text-align: center;
-  margin-top: 5%;
-  white-space: pre;
+  margin-top: 6vh;
 }
 
 #processes-empty-headline, #processes-not-found-headline {
   font-size: 20px;
   font-weight: bold;
   width: 100%;
-  margin-bottom: 1%;
 }
 
 #processes-empty-link {

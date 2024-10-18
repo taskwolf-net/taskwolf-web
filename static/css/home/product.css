@@ -335,14 +335,6 @@ p {
   width: 100%;
 }
 
-#product-workflow-content-mobile .product-workflow-content-image {
-  width: 80%;
-  height: auto;
-  display: block;
-  margin: auto;
-  margin-top: 5%;
-}
-
 @media (max-width: 1000px) {
   #product-workflow-content-desktop {
     display: none;
@@ -540,4 +532,18 @@ p {
 
 .text-justify {
   text-align: justify;
+}
+
+@media (max-width: 1000px) {
+  .text-justify {
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: left;
+  }
+}
+
+@media (max-width: 1000px) {
+  .product-workflow-content-image, #product-process-content-image, #product-organization-content-image, #product-device-content-image {
+    display: none;
+  }
 }

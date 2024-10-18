@@ -47,7 +47,6 @@
       createLinuxAlternativeTab("calc(100% / 3)", false);
       createMacOSAlternativeTab("calc(100% / 3)", false);
     }
-    resizeDividers();
   });
 
   function displayForOperatingSystem(detected, tabs) {
@@ -141,18 +140,5 @@
       window.open(downloadFile);
     }
     return button;
-  }
-
-  window.addEventListener('resize', function(event) {
-    resizeDividers();
-  });
-
-  function resizeDividers() {
-    const svgs = document.getElementsByTagName("svg");
-    for (let i = 0; i < svgs.length; i++) {
-      let svg = svgs[i];
-      const bbox = svg.getBBox();
-      svg.setAttribute('viewBox', `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`);
-    }
   }
 </script>

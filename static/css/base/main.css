@@ -56,62 +56,6 @@ h1 {
   color: black !important;
 }
 
-.dropdown-menu {
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.dropdown-menu::-webkit-scrollbar {
-  width: 10px;
-}
-
-.dropdown-menu::-webkit-scrollbar-track {
-  background: #343A40;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-
-.dropdown-menu::-webkit-scrollbar-thumb {
-  background-color: #666b71;
-  border-radius: 10px;
-}
-
-.dark .dropdown-menu {
-  background-color: #212529;
-}
-
-.light .dropdown-menu {
-  background-color: #e6e6e6;
-}
-
-.dark .dropdown-item {
-  color: white !important;
-}
-
-.dark .dropdown-item:hover {
-  background-color: #30363c;
-}
-
-.light .dropdown-item {
-  color: black !important;
-}
-
-.light .dropdown-item:hover {
-  background-color: #d0d0d0;
-}
-
-.dark .dropdown-button {
-  border: 1px solid #505b64 !important;
-  background-color: #212529 !important;
-  color: white;
-}
-
-.light .dropdown-button {
-  border: 1px solid #949494 !important;
-  background-color: #e6e6e6 !important;
-  color: black;
-}
-
 .cookie-banner-container {
   text-align: left !important;
 }

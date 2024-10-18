@@ -9,14 +9,8 @@
       <div id="workflow-component-container">
         <div id="workflow-component-wrapper" class="d-none">
           <div id="workflow-component-header">
-            <div class="w-25">
-              <button id="workflow-component-page-back"><i class="fa-solid fa-arrow-left-long"></i></button>
-            </div>
-            <div class="w-50 text-center">
-              <h1 class="fw-bold mb-0">{% with "product.workflow.component.headline."|add:type as value %}{% trans value %}{% endwith %}</h1>
-            </div>
-            <div class="w-25">
-            </div>
+            <button id="workflow-component-page-back"><i class="fa-solid fa-arrow-left-long"></i></button>
+            <h1 id="workflow-component-headline" class="fw-bold text-center mb-0">{% with "product.workflow.component.headline."|add:type as value %}{% trans value %}{% endwith %}</h1>
           </div>
           <div class="accordion accordion-flush" id="workflow-component-accordion">
             <div class="accordion-item">
@@ -27,7 +21,7 @@
               </h2>
               <div id="workflow-component-application" class="accordion-collapse collapse show" data-bs-parent="#workflow-component-accordion">
                 <div id="workflow-component-application-body" class="accordion-body">
-                  <h4 class="text-center">{% with "product.workflow.component.application.subline."|add:type as value %}{% trans value %}{% endwith %}</h4>
+                  <h4 class="text-center mb-4 mb-xl-0">{% with "product.workflow.component.application.subline."|add:type as value %}{% trans value %}{% endwith %}</h4>
                   <div id="workflow-component-application-name" class="form-outline mb-4">
                     <label for="name" class="form-label">{% trans 'product.workflow.component.application.name' %}</label>
                     <input id="workflow-component-application-name-input" type="name" id="name" class="form-control" placeholder="{% trans 'product.workflow.component.application.name' %}">
@@ -67,7 +61,7 @@
                 <div id="workflow-component-event-body" class="accordion-body">
                   <h4 class="text-center">{% with "product.workflow.component.event.subline."|add:type as value %}{% trans value %}{% endwith %}</h4>
                   <div id="workflow-component-event-dropdown" class="dropdown">
-                    <button class="btn dropdown-button dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
                       {% trans 'product.workflow.component.event.headline' %}
                     </button>
                     <ul id="workflow-component-event-dropdown-list" class="dropdown-menu">
@@ -547,8 +541,7 @@
       if (inputVariables.length === 0) {
         document.getElementById("workflow-component-specifications-container").style.display = "none";
         document.getElementById("workflow-component-specifications-redundant").style.display = "block";
-        updateAdoptability(true);
-        selectedComponentSetup = false;
+        checkSetupCompletion();
         return;
       }
       for (let i = 0; i < inputVariables.length; i++) {
@@ -577,7 +570,7 @@
           specificationValues["timezone"] = Intl.DateTimeFormat().resolvedOptions().timeZone;
         }
       }
-      checkAdoptability();
+      checkSetupCompletion();
       createResetButton(document.getElementById("workflow-component-specifications-input-list"), function() {
         specificationSelectButtons = [];
         specificationValues = {};
@@ -670,7 +663,7 @@
     dropdownContainer.appendChild(informationElement);
     dropdownContainer.classList.add("workflow-component-specifications-select-container", "dropdown");
     let dropdownButton = document.createElement("button");
-    dropdownButton.classList.add("btn", "dropdown-button", "dropdown-toggle");
+    dropdownButton.classList.add("btn", "btn-secondary", "dropdown-toggle");
     if (document.getElementsByClassName("workflow-component-specifications-select-container").length > 0) {
       dropdownButton.setAttribute("disabled", "disabled");
       specificationSelectButtons.push(dropdownButton);

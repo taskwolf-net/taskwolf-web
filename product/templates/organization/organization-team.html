@@ -97,6 +97,7 @@
     let headerElement = document.createElement("div");
     headerElement.classList.add("organization-team-entry-header");
     let nameElement = document.createElement("h2");
+    nameElement.classList.add("text-truncate");
     nameElement.innerHTML = team.name;
     headerElement.appendChild(nameElement);
     if (organization.isOwner === true) {
@@ -117,7 +118,7 @@
 
   function createTeamControls(organization, team, teamIndex, totalTeamSize) {
     let controlElement = document.createElement("div");
-    controlElement.classList.add("d-flex");
+    controlElement.classList.add("d-flex", "ms-3");
     let memberAddElement = document.createElement("span");
     memberAddElement.classList.add("organization-member-add", "fa-solid", "fa-plus");
     memberAddElement.onclick = function (event) {
@@ -351,12 +352,14 @@
     let memberElement = document.createElement("li");
     memberElement.classList.add(prefix);
     let memberInformationContainer = document.createElement("div");
-    memberInformationContainer.classList.add(prefix + "-information");
+    memberInformationContainer.classList.add(prefix + "-information",
+      "text-truncate", "me-3");
     let memberIconElement = document.createElement("i");
     memberIconElement.classList.add(prefix + "-icon", "fa-regular", "fa-user");
     memberInformationContainer.appendChild(memberIconElement);
     let memberNameElement = document.createElement("span");
     memberNameElement.classList.add(prefix + "-name");
+    memberNameElement.classList.add("text-truncate");
     memberNameElement.innerHTML = user;
     memberInformationContainer.appendChild(memberNameElement);
     memberElement.appendChild(memberInformationContainer);

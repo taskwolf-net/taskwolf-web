@@ -1,8 +1,7 @@
 #account-apps-header {
   display: flex;
   justify-content: center;
-  margin: auto;
-  margin-top: 2%;
+  margin: 4vh auto auto;
   width: min(1000px, 95%);
 }
 
@@ -12,8 +11,7 @@
 
 #account-apps-search-box {
   width: min(1000px, 95%);
-  margin: auto;
-  margin-top: 2%;
+  margin: 4vh auto auto;
   display: flex;
   flex-direction: row;
   align-items: center;

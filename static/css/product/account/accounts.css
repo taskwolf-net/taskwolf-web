@@ -1,6 +1,5 @@
 #accounts-page-back-container {
-  margin: auto;
-  margin-top: 5vh;
+  margin: 5vh auto auto;
   width: min(1000px, 95%);
 }
 
@@ -30,8 +29,7 @@
 }
 
 #accounts-header {
-  margin: auto;
-  margin-top: 4vh;
+  margin: 4vh auto auto;
   width: min(1000px, 95%);
 }
 

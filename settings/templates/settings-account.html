@@ -168,8 +168,7 @@
         request.send(function (status, responseText) {
           let success = JSON.parse(responseText).success;
           if (success === true) {
-            Cookie.destroy("token", ".dulno.com");
-            Swal.fire("{% trans 'settings.account.delete.successful.title' %}", "{% trans 'settings.account.delete.successful.body' %}", "success").then(success => window.location.href = "/");
+            Swal.fire("{% trans 'settings.account.delete.successful.title' %}", "{% trans 'settings.account.delete.successful.body' %}", "success").then(success => logout());
           } else {
             Swal.fire("{% trans 'settings.account.delete.failed.title' %}", "{% trans 'settings.account.delete.failed.body' %}", "error");
           }
@@ -182,12 +181,20 @@
     let request = new HttpRequest("https://api.dulno.com/v1/settings/account/unlock/", "GET",
       []);
     request.send(function (status, responseText) {
-      Swal.fire("{% trans 'settings.account.password.set.successful.title' %}", "{% trans 'settings.account.password.set.successful.body' %}", "success").then(success => {
-        Cookie.destroy("token", ".dulno.com");
-        window.location.href = "/";
-      });
+      Swal.fire("{% trans 'settings.account.password.set.successful.title' %}", "{% trans 'settings.account.password.set.successful.body' %}", "success").then(success => logout());
     });
   };
+
+  function logout() {
+    let request = new HttpRequest("https://api.dulno.com/v1/verification/logout/",
+      "GET", []);
+    request.send(function (status, responseText) {
+      Cookie.destroy("token", ".dulno.com");
+      Cookie.destroy("refresh-token", ".dulno.com");
+      Cookie.destroy("home-token", ".dulno.com");
+      window.location.href = "/";
+    });
+  }
 
   let passwordInput = document.getElementById("settings-account-new-password");
 

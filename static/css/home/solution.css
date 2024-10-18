@@ -27,12 +27,6 @@ p {
   }
 }
 
-@media (max-width: 550px) {
-  p {
-    font-size: 14px;
-  }
-}
-
 #solution-header {
   width: 100%;
   background-image: linear-gradient(to bottom right, #232d3e, #586882);

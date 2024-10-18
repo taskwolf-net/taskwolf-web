@@ -8,14 +8,8 @@
     <div class="sidebar-influenced">
       <div id="workflow-condition-container">
         <div id="workflow-condition-header">
-          <div class="w-25">
-            <button id="workflow-condition-page-back"><i class="fa-solid fa-arrow-left-long"></i></button>
-          </div>
-          <div class="w-50 text-center">
-            <h1 class="fw-bold mb-0">{% trans 'product.workflow.condition.headline' %}</h1>
-          </div>
-          <div class="w-25">
-          </div>
+          <button id="workflow-condition-page-back"><i class="fa-solid fa-arrow-left-long"></i></button>
+          <h1 id="workflow-condition-headline" class="fw-bold text-center mb-0">{% trans 'product.workflow.condition.headline' %}</h1>
         </div>
         <div id="workflow-condition-wrapper">
           <div id="workflow-condition-inputs">
@@ -182,7 +176,7 @@
     dropdownContainer.appendChild(informationElement);
     dropdownContainer.classList.add("workflow-condition-select-container", "dropdown");
     let dropdownButton = document.createElement("button");
-    dropdownButton.classList.add("btn", "dropdown-button", "dropdown-toggle");
+    dropdownButton.classList.add("btn", "btn-secondary", "dropdown-toggle");
     if (document.getElementsByClassName("workflow-condition-select-container").length > 0) {
       dropdownButton.setAttribute("disabled", "disabled");
       selectButtons.push(dropdownButton);
