@@ -62,18 +62,18 @@
   }
 }
 
-#pricing-table {
+.pricing-table {
   width: 100%;
   margin: auto;
   table-layout: fixed;
   color: white;
 }
 
-#pricing-table thead tr {
+.pricing-table thead tr {
   background-color: #0d1117 !important;
 }
 
-#pricing-table thead:after {
+.pricing-table thead:after {
   content: "-";
   display: block;
   line-height: 20vh;
@@ -99,16 +99,16 @@
   background-color: #0d1117 !important;
 }
 
-#pricing-table tr {
+.pricing-table tr {
   width: 20%;
   text-align: center;
 }
 
-#pricing-table tr:nth-child(odd) {
+.pricing-table tr:nth-child(odd) {
   background-color: #161d27;
 }
 
-#pricing-table td {
+.pricing-table td {
   padding: 20px;
   border: 1px solid #2b333f;
 }
@@ -209,7 +209,7 @@
     display: none;
   }
 
-  .pricing-package-stuck #pricing-package-enterprise-price {
+  .pricing-package-stuck .pricing-package-enterprise-price {
     margin-bottom: 0 !important;
   }
 
@@ -229,32 +229,32 @@
     display: none;
   }
 
-  th#pricing-package-free.pricing-package-stuck {
+  th.pricing-package-free.pricing-package-stuck {
     border-bottom-left-radius: 20px;
   }
 
-  th#pricing-package-enterprise.pricing-package-stuck {
+  th.pricing-package-enterprise.pricing-package-stuck {
     border-bottom-right-radius: 20px;
   }
 }
 
-#pricing-package-free {
+.pricing-package-free {
   background-color: #162a33;
 }
 
-#pricing-package-individual {
+.pricing-package-individual {
   background-color: #324450;
 }
 
-#pricing-package-team {
+.pricing-package-team {
   background-color: #425460;
 }
 
-#pricing-package-enterprise {
+.pricing-package-enterprise {
   background-color: #62747e;
 }
 
-#pricing-package-enterprise-price {
+.pricing-package-enterprise-price {
   margin-bottom: 60px;
 }
 
@@ -278,20 +278,39 @@
   width: 20% !important;
 }
 
+#pricing-table-container-mobile {
+  display: none;
+}
+
 @media (max-width: 1350px) {
-  #pricing-container {
-    width: 97.5%;
-    margin-left: 2.5%;
+  #pricing-table-container-desktop {
+    display: none;
   }
 
-  #pricing-table-container {
-    width: 100%;
+  #pricing-table-container-mobile {
     display: block;
-    overflow-x: auto;
   }
 
-  #pricing-table {
-    width: 1350px;
+  .pricing-table-advantages {
+    width: 0 !important;
+  }
+
+  #pricing-table-mobile-head {
+    width: min(300px, 100%);
+    margin: auto;
+  }
+
+  #pricing-table-mobile-head .pricing-package {
+    width: 100%;
+  }
+
+  #pricing-table-mobile-body {
+    width: min(650px, 100%);
+    margin: auto;
+  }
+
+  #pricing-table-mobile-body td {
+    width: 50% !important;
   }
 
   .pricing-package {
