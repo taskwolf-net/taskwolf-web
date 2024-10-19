@@ -86,14 +86,13 @@
         </ul>
         <ul id="databases-list">
         </ul>
-        <div id="databases-paging" class="d-none">
-          <button id="databases-selector-delete" type="button" class="btn btn-danger disabled">{% trans 'product.databases.selector.delete' %}</button>
-          <div class="d-flex justify-content-center align-items-center">
-            <a id="databases-previous-page" class="databases-page me-4"><i class="fa-solid fa-chevron-left"></i></a>
+        <div id="databases-paging" class="d-none position-relative">
+          <div class="d-flex justify-content-center align-items-center position-absolute z-0 w-100 mt-5 mt-lg-0 pt-3 pt-lg-0 pb-3 pb-lg-0">
+            <a id="databases-previous-page" class="databases-page me-sm-4"><i class="fa-solid fa-chevron-left"></i></a>
             <div id="databases-pages"></div>
-            <a id="databases-next-page" class="databases-page ms-4"><i class="fa-solid fa-chevron-right"></i></a>
+            <a id="databases-next-page" class="databases-page ms-sm-4"><i class="fa-solid fa-chevron-right"></i></a>
           </div>
-          <div></div>
+          <button id="databases-selector-delete" type="button" class="btn btn-danger disabled z-3">{% trans 'product.databases.selector.delete' %}</button>
         </div>
         <div id="databases-loader">
         </div>
@@ -249,7 +248,7 @@
     if (currentPage - pageVisibilityRange > 0) {
       pagesElement.insertAdjacentHTML("beforeend",
         "<i class='databases-paging-ellipsis databases-paging-ellipsis-start " +
-        "fa-solid fa-ellipsis mx-4'></i>");
+        "fa-solid fa-ellipsis mx-sm-4'></i>");
     }
     for (let i = -pageVisibilityRange + 1; i < pageVisibilityRange; i++) {
       let page = currentPage + i;
@@ -262,7 +261,7 @@
     if (currentPage + pageVisibilityRange < pages - 1) {
       pagesElement.insertAdjacentHTML("beforeend",
         "<i class='databases-paging-ellipsis databases-paging-ellipsis-end " +
-        "fa-solid fa-ellipsis mx-4'></i>");
+        "fa-solid fa-ellipsis mx-sm-4'></i>");
     }
     createPageButton(pagesElement, pages, currentPage, pageState, pages - 1, currentPage === pages - 1);
   }
