@@ -38,6 +38,22 @@
   vertical-align: middle;
   margin-right: 4%;
   border-radius: 25%;
+  width: 80px;
+  height: 80px;
+}
+
+@media (max-width: 800px) {
+  #accounts-logo {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+@media (max-width: 500px) {
+  #accounts-logo {
+    width: 60px;
+    height: 60px;
+  }
 }
 
 #accounts-headline {
@@ -48,8 +64,7 @@
 
 #accounts-list-headline {
   width: min(1000px, 95%);
-  margin: auto;
-  margin-top: 2%;
+  margin: 4vh auto auto;
   border-bottom: 2px #4a4a4a solid;
 }
 
