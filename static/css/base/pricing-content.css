@@ -295,27 +295,46 @@
     width: 0 !important;
   }
 
-  #pricing-table-mobile-head {
+  .pricing-table-mobile-head {
     width: min(300px, 100%);
     margin: auto;
   }
 
-  #pricing-table-mobile-head .pricing-package {
+  .pricing-table-mobile-head .pricing-package {
     width: 100%;
   }
 
-  #pricing-table-mobile-body {
+  .pricing-table-mobile-body {
     width: min(650px, 100%);
     margin: auto;
   }
 
-  #pricing-table-mobile-body td {
+  .pricing-table-mobile-body td {
     width: 50% !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .pricing-table-mobile-body h5 {
+    display: none;
+  }
+
+  .pricing-table thead:after {
+    content: "-";
+    display: block;
+    line-height: 5vh;
+    color: transparent;
   }
 
   .pricing-package {
     position: relative !important;
     top: 0 !important;
     z-index: 0 !important;
+  }
+}
+
+@media (max-width: 450px) {
+  .pricing-table-mobile-head {
+    width: 71.5%;
   }
 }
