@@ -6,8 +6,8 @@
 #webhook-header {
   display: flex;
   justify-content: center;
-  margin-top: 5%;
-  margin-bottom: 10%;
+  margin-top: 5vh;
+  margin-bottom: 10vh;
 }
 
 #webhook-name {
@@ -112,11 +112,23 @@
   width: 100%;
 }
 
+.webhook-code div {
+  position: relative;
+  display: inline-block;
+  width: min(calc(100% - 50px));
+}
+
+.webhook-code div * {
+  max-width: 100%;
+  word-wrap: break-word;
+}
+
 .webhook-code-copy {
   position: absolute;
   color: white;
   background-color: #272727;
-  right: 20px;
+  top: 10px;
+  right: 10px;
   width: 42px;
   height: 42px;
   border-radius: 5px;

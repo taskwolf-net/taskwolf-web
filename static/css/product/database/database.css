@@ -6,8 +6,8 @@
 #database-header {
   display: flex;
   justify-content: center;
-  margin-top: 5%;
-  margin-bottom: 10%;
+  margin-top: 5vh;
+  margin-bottom: 10vh;
 }
 
 #database-name {
