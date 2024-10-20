@@ -2,7 +2,7 @@
 {% load i18n %}
 <html lang="en">
   {% include 'head.html' %}
-  <body class="dark">
+  <body class="dark" data-bs-theme="dark">
     {% include 'product-header.html' %}
     {% include 'product-sidebar.html' %}
     <div class="sidebar-influenced">
@@ -12,7 +12,7 @@
             <button id="accounts-page-back"><i class="fa-solid fa-arrow-left-long"></i></button>
           </div>
           <div id="accounts-header">
-            <img id="accounts-logo" width="80px" height="80px"></img>
+            <img id="accounts-logo"></img>
             <h1 id="accounts-headline"></h1>
           </div>
           <h1 id="accounts-list-headline">{% trans 'product.accounts.headline' %}</h1>
