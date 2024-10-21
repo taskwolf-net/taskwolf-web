@@ -6,7 +6,7 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbar-content">
-    <div class="d-block d-md-flex justify-content-xxl-between align-items-center mb-3 my-md-0 w-100">
+    <div class="d-block d-md-flex justify-content-xxl-between align-items-center mb-3 my-md-0" id="test">
       <a class="d-none d-md-block ms-xl-5 ms-3" href="/"><img class="navbar-logo" src="{% static 'img/logo-header.webp' %}" alt=""></a>
       <ul class="navbar-nav d-flex justify-content-center align-items-center ms-xl-5 ms-lg-4 ms-md-3 ms-xxl-0">
         <li class="nav-item"><a class="nav-link {% if request.path == '/product/' or request.path == '/' %}active{% endif %}" href="/product/">{% trans 'home.header.product' %}</a></li>
@@ -14,12 +14,17 @@
         <li class="nav-item"><a class="nav-link {% if 'download' in request.path %}active{% endif %}" href="/download/">{% trans 'home.header.download' %}</a></li>
         <li class="nav-item"><a class="nav-link {% if request.path == '/pricing/' %}active{% endif %}" href="/pricing/">{% trans 'home.header.pricing' %}</a></li>
       </ul>
-      <div class="d-flex justify-content-center justify-content-md-end align-items-center flex-column flex-md-row ms-auto ms-xxl-0 me-xl-5 me-md-3 mt-4 mt-md-0">
-        <div id="home-languages">
-          <input id="home-language-en" class="home-language-flag" src="{% static 'img/languages/en.webp' %}" type="image"/>
-          <input id="home-language-de" class="home-language-flag" src="{% static 'img/languages/de.webp' %}" type="image"/>
+      <div class="d-flex justify-content-center justify-content-md-end align-items-center flex-column-reverse flex-md-row ms-auto ms-xxl-0 me-xl-5 me-md-3 mt-4 mt-md-0">
+        <div id="home-languages" class="dropdown mt-3 mt-md-0">
+          <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img id="home-language-current" class="home-language-flag">
+          </button>
+          <ul class="dropdown-menu">
+            <li><button id="home-language-en" class="btn btn-secondary"><img class="home-language-flag" src="{% static 'img/languages/en.webp' %}"></button></li>
+            <li><button id="home-language-de" class="btn btn-secondary"><img class="home-language-flag" src="{% static 'img/languages/de.webp' %}"></button></li>
+          </ul>
         </div>
-        <a href="/login/" class="btn btn-info ms-xl-5 ms-md-4 mt-3 mt-md-0" id="login-button" role="button">{% trans 'home.header.login' %}</a>
+        <a href="/login/" class="btn btn-info ms-md-4" id="login-button" role="button">{% trans 'home.header.login' %}</a>
       </div>
     </div>
   </div>
@@ -27,6 +32,16 @@
 <div id="header-space"></div>
 
 <script>
+  $(document).ready(function() {
+    let language = Cookie.find("dulno-home-language");
+    if (language == null) {
+      language = "en";
+    }
+    document.getElementById("home-language-" + language).classList.add("d-none");
+    document.getElementById("home-language-current").src =
+      "https://dulno.com/static/img/languages/" + language + ".webp";
+  });
+
   document.getElementById("home-language-en").onclick = function (event) {
     Cookie.create("dulno-home-language", "en", 60 * 60 * 24 * 365, ".dulno.com");
     window.location.reload();

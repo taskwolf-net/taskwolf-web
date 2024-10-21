@@ -5,13 +5,18 @@
   <body class="dark" data-bs-theme="dark">
     {% include 'home-header.html' %}
     <div id="product-header">
-      <div id="product-header-content">
-        <div id="product-header-content-text">
-          <h3 id="product-headline">{% trans 'home.product.headline' %}</h3>
-          <h1 id="product-slogan"><b>{% trans 'home.product.slogan' %}</b></h1>
-          <h5 class="text-center mt-4">{% trans 'home.product.description.1' %} <br class="product-linebreak">{% trans 'home.product.description.2' %}</h5>
+      <div id="product-header-content-wrapper">
+        <div id="product-header-content">
+          <div id="product-header-content-text">
+            <h3 id="product-headline">{% trans 'home.product.headline' %}</h3>
+            <h1 id="product-slogan"><b>{% trans 'home.product.slogan' %}</b></h1>
+            <h5 class="text-center mt-4">{% trans 'home.product.description.1' %} <br class="product-linebreak">{% trans 'home.product.description.2' %}</h5>
+            <div class="text-center">
+              <a class="btn btn-light px-5 mt-5" href="/pricing/" role="button">{% trans 'home.product.try' %}</a>
+            </div>
+          </div>
+          <img id="product-logo" src="{% static 'img/logo-light.webp' %}">
         </div>
-        <img id="product-logo" src="{% static 'img/logo-light.webp' %}">
       </div>
       <svg x="0px" y="0px" viewBox="0 0 1440 110">
         <path d="M685.6,38.8C418.7-11.1,170.2,9.9,0,30v96h1440V30C1252.7,52.2,1010,99.4,685.6,38.8z"/>
