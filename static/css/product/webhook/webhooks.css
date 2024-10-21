@@ -267,14 +267,13 @@
 }
 
 .webhooks-entry-name {
-  width: 36% !important;
+  width: calc(36% - 60px) !important;
 }
 
 .webhooks-entry-selector {
-  width: 4% !important;
+  width: 60px !important;
   text-align: center;
 }
-
 
 .webhooks-list-name {
   white-space: normal !important;
@@ -298,11 +297,11 @@
 }
 
 #webhooks-table-description-name {
-  width: 36% !important;
+  width: calc(36% - 60px) !important;
 }
 
 #webhooks-table-description-selector {
-  width: 4% !important;
+  width: 60px !important;
   text-align: center;
 }
 
@@ -322,15 +321,11 @@
 
 @media (max-width: 1350px) {
   #webhooks-table-description li {
-    width: 27%;
-  }
-
-  #webhooks-table-description-selector {
-    width: 6% !important;
+    width: 30%;
   }
 
   #webhooks-table-description-name {
-    width: 40% !important;
+    width: calc(40% - 60px) !important;
   }
 
   #webhooks-table-description-created {
@@ -338,15 +333,11 @@
   }
 
   #webhooks-list li div {
-    width: 27%;
-  }
-
-  .webhooks-entry-selector {
-    width: 6% !important;
+    width: 30%;
   }
 
   .webhooks-entry-name {
-    width: 40% !important;
+    width: calc(40% - 60px) !important;
   }
 
   .webhooks-entry-created {
@@ -360,7 +351,7 @@
   }
 
   #webhooks-table-description-name {
-    width: 65% !important;
+    width: calc(65% - 60px) !important;
   }
 
   #webhooks-table-description-creator {
@@ -372,7 +363,7 @@
   }
 
   .webhooks-entry-name {
-    width: 65% !important;
+    width: calc(65% - 60px) !important;
   }
 
   .webhooks-entry-creator {
@@ -382,7 +373,7 @@
 
 @media (max-width: 800px) {
   #webhooks-table-description-name {
-    width: 100% !important;
+    width: calc(100% - 60px) !important;
   }
 
   #webhooks-table-description-usages {
@@ -390,7 +381,7 @@
   }
 
   .webhooks-entry-name {
-    width: 100% !important;
+    width: calc(100% - 60px) !important;
   }
 
   .webhooks-entry-usages {

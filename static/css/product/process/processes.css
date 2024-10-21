@@ -268,11 +268,11 @@
 }
 
 .processes-entry-name {
-  width: 36% !important;
+  width: calc(36% - 60px) !important;
 }
 
 .processes-entry-selector {
-  width: 4% !important;
+  width: 60px !important;
   text-align: center;
 }
 
@@ -293,11 +293,11 @@
 }
 
 #processes-table-description-name {
-  width: 36% !important;
+  width: calc(36% - 60px) !important;
 }
 
 #processes-table-description-selector {
-  width: 4% !important;
+  width: 60px !important;
   text-align: center;
 }
 
@@ -317,15 +317,11 @@
 
 @media (max-width: 1350px) {
   #processes-table-description li {
-    width: 27%;
-  }
-
-  #processes-table-description-selector {
-    width: 6% !important;
+    width: 30%;
   }
 
   #processes-table-description-name {
-    width: 40% !important;
+    width: calc(40% - 60px) !important;
   }
 
   #processes-table-description-created {
@@ -333,15 +329,11 @@
   }
 
   #processes-list li div {
-    width: 27%;
-  }
-
-  .processes-entry-selector {
-    width: 6% !important;
+    width: 30%;
   }
 
   .processes-entry-name {
-    width: 40% !important;
+    width: calc(40% - 60px) !important;
   }
 
   .processes-entry-created {
@@ -355,7 +347,7 @@
   }
 
   #processes-table-description-name {
-    width: 70% !important;
+    width: calc(70% - 60px) !important;
   }
 
   #processes-table-description-creator {
@@ -367,7 +359,7 @@
   }
 
   .processes-entry-name {
-    width: 70% !important;
+    width: calc(70% - 60px) !important;
   }
 
   .processes-entry-creator {
@@ -377,7 +369,7 @@
 
 @media (max-width: 800px) {
   #processes-table-description-name {
-    width: 100% !important;
+    width: calc(100% - 60px) !important;
   }
 
   #processes-table-description-steps {
@@ -385,7 +377,7 @@
   }
 
   .processes-entry-name {
-    width: 100% !important;
+    width: calc(100% - 60px) !important;
   }
 
   .processes-entry-steps {

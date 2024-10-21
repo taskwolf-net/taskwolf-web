@@ -267,12 +267,12 @@
 }
 
 .databases-entry-name {
-  width: 36% !important;
+  width: calc(36% - 60px) !important;
   text-align: left !important;
 }
 
 .databases-entry-selector {
-  width: 4% !important;
+  width: 60px !important;
   text-align: center;
 }
 
@@ -294,26 +294,22 @@
 }
 
 #databases-table-description-name {
-  width: 36% !important;
+  width: calc(36% - 60px) !important;
   text-align: left !important;
 }
 
 #databases-table-description-selector {
-  width: 4% !important;
+  width: 60px !important;
   text-align: center;
 }
 
 @media (max-width: 1350px) {
   #databases-table-description li {
-    width: 27%;
-  }
-
-  #databases-table-description-selector {
-    width: 6% !important;
+    width: 30%;
   }
 
   #databases-table-description-name {
-    width: 40% !important;
+    width: calc(40% - 60px) !important;
   }
 
   #databases-table-description-created {
@@ -321,15 +317,11 @@
   }
 
   .database-entry div {
-    width: 27%;
-  }
-
-  .databases-entry-selector {
-    width: 6% !important;
+    width: 30%;
   }
 
   .databases-entry-name {
-    width: 40% !important;
+    width: calc(40% - 60px) !important;
   }
 
   .databases-entry-created {
@@ -343,7 +335,7 @@
   }
 
   #databases-table-description-name {
-    width: 70% !important;
+    width: calc(70% - 60px) !important;
   }
 
   #databases-table-description-creator {
@@ -355,7 +347,7 @@
   }
 
   .databases-entry-name {
-    width: 70% !important;
+    width: calc(70% - 60px) !important;
   }
 
   .databases-entry-creator {
@@ -365,7 +357,7 @@
 
 @media (max-width: 800px) {
   #databases-table-description-name {
-    width: 100% !important;
+    width: calc(100% - 60px) !important;
   }
 
   #databases-table-description-size {
@@ -373,7 +365,7 @@
   }
 
   .databases-entry-name {
-    width: 100% !important;
+    width: calc(100% - 60px) !important;
   }
 
   .databases-entry-size {
