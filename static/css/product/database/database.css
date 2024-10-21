@@ -1,18 +1,30 @@
-#database-container {
-  width: min(calc(1800px - 15vw), 95%);
-  margin: auto;
-}
-
 #database-header {
+  width: min(1200px, 95%);
   display: flex;
   justify-content: center;
-  margin-top: 5vh;
-  margin-bottom: 10vh;
+  margin: 5vh auto 10vh;
+  position: relative;
 }
 
 #database-name {
   position: absolute;
   font-weight: bold;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 75%;
+  margin: auto;
+}
+
+@media (max-width: 1200px) {
+  #database-name {
+    top: 8vh;
+    width: 90%;
+  }
+
+  #database-header {
+    margin-bottom: 18vh;
+  }
 }
 
 #database-modification {
@@ -35,8 +47,21 @@
   color: black;
 }
 
+#database-table-wrapper {
+  max-width: min(1200px, 100%);
+  margin: auto;
+  overflow-x: auto;
+  border-radius: 10px;
+}
+
+#database-table-container {
+  display: inline-block;
+  min-width: max(100%, 800px);
+  white-space: nowrap;
+}
+
 #database-table {
-  width: min(calc(1800px - 15vw), 100%);
+  width: 100%;
 }
 
 .dark #database-table {
@@ -253,9 +278,9 @@ tr {
 }
 
 .database-row-edit-modification {
-  padding: 0 1.0rem !important;
-  vertical-align: middle;
-  text-align: right;
+  display: flex;
+  justify-content: end;
+  align-items: center;
   white-space: normal;
   text-overflow: unset;
 }
