@@ -14,7 +14,7 @@
   border-bottom: 1px #c8c8c8 solid;
 }
 
-#test {
+#navbar-content-wrapper {
   width: min(1500px, 100%);
   margin: auto;
 }
@@ -33,33 +33,9 @@
   height: 36px;
 }
 
-.navbar-logo, #home-languages, #login-button {
+.navbar-logo, #login-button {
   position: relative;
   z-index: 10;
-}
-
-.home-language-flag {
-  width: 50px;
-  height: 28px;
-  border-radius: 5px;
-}
-
-#home-languages .dropdown-menu {
-  min-width: auto !important;
-  width: auto !important;
-  padding: 0;
-  border: none;
-}
-
-#home-languages .dropdown-menu li {
-  width: max-content;
-  height: max-content;
-  padding: 0;
-}
-
-#home-languages .dropdown-item {
-  width: max-content;
-  height: max-content;
 }
 
 @media (min-width: 1399px) {

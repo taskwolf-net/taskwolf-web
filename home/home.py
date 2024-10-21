@@ -25,61 +25,72 @@ async def product(request):
   token = request.COOKIES.get('token')
   if (token is None):
     return render(request, 'product.html', {'title': gettext("home.product.title"),
-      'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/product.css']})
+      'css': ['css/base/home-header.css', 'css/base/home-language.css',
+        'css/base/home-footer.css', 'css/home/product.css']})
   return redirect("/dashboard/")
 
 @home_page
 async def solution(request):
   return render(request, 'solution.html', {'title': gettext("home.solution.title"),
-    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/solution.css']})
+    'css': ['css/base/home-header.css', 'css/base/home-language.css',
+      'css/base/home-footer.css', 'css/home/solution.css']})
 
 @home_page
 async def downloadPlatform(request):
   return render(request, 'download-platform.html', {'title': gettext("home.download.platform.title"),
-    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/download-platform.css']})
+    'css': ['css/base/home-header.css', 'css/base/home-language.css',
+      'css/base/home-footer.css', 'css/home/download-platform.css']})
 
 @home_page
 async def downloadDesktop(request):
   return render(request, 'download-desktop.html', {'title': gettext("home.download.desktop.title"),
-    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/download-desktop.css']})
+    'css': ['css/base/home-header.css', 'css/base/home-language.css',
+      'css/base/home-footer.css', 'css/home/download-desktop.css']})
 
 @home_page
 async def downloadMobile(request):
   return render(request, 'download-mobile.html', {'title': gettext("home.download.mobile.title"),
-    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/download-mobile.css']})
+    'css': ['css/base/home-header.css', 'css/base/home-language.css',
+      'css/base/home-footer.css', 'css/home/download-mobile.css']})
 
 @home_page
 async def downloadCLI(request):
   return render(request, 'download-cli.html', {'title': gettext("home.download.cli.title"),
-    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/download-cli.css']})
+    'css': ['css/base/home-header.css', 'css/base/home-language.css',
+      'css/base/home-footer.css', 'css/home/download-cli.css']})
 
 @home_page
 async def pricing(request):
   return render(request, 'pricing.html', {'title': gettext("home.pricing.title"),
-    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/pricing.css',
-      'css/base/pricing-content.css']})
+    'css': ['css/base/home-header.css', 'css/base/home-language.css',
+      'css/base/home-footer.css', 'css/home/pricing.css', 'css/base/pricing-content.css']})
 
 @home_page
 async def question(request):
   return render(request, 'question.html', {'title': gettext("home.question.title"),
-    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/question.css']})
+    'css': ['css/base/home-header.css', 'css/base/home-language.css',
+      'css/base/home-footer.css', 'css/home/question.css']})
 
 @home_page
 async def sale(request):
   return render(request, 'sale.html', {'title': gettext("home.sale.title"),
-    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/sale.css']})
+    'css': ['css/base/home-header.css', 'css/base/home-language.css',
+      'css/base/home-footer.css', 'css/home/sale.css']})
 
 @home_page
 async def imprint(request):
   return render(request, 'imprint.html', {'title': gettext("home.imprint.title"),
-    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/imprint.css']})
+    'css': ['css/base/home-header.css', 'css/base/home-language.css',
+      'css/base/home-footer.css', 'css/home/imprint.css']})
 
 @home_page
 async def privacyPolicy(request):
   return render(request, 'privacy-policy.html', {'title': gettext("home.privacy.policy.title"),
-    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/privacy-policy.css']})
+    'css': ['css/base/home-header.css', 'css/base/home-language.css',
+      'css/base/home-footer.css', 'css/home/privacy-policy.css']})
 
 @home_page
 async def termsOfService(request):
   return render(request, 'terms-of-service.html', {'title': gettext("home.terms.of.service.title"),
-    'css': ['css/base/home-header.css', 'css/base/home-footer.css', 'css/home/terms-of-service.css']})
+    'css': ['css/base/home-header.css', 'css/base/home-language.css',
+      'css/base/home-footer.css', 'css/home/terms-of-service.css']})

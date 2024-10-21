@@ -15,7 +15,7 @@ async def accountSettings(request):
 
 def changeEmailComplete(request, user, token):
   return render(request, 'email-change-complete.html', {'title': gettext('settings.account.email.title'),
-    'css': ['css/base/home-header.css', 'css/settings/email-change-complete.css'],
+    'css': ['css/base/home-header.css', 'css/base/home-language.css', 'css/settings/email-change-complete.css'],
     'user': user, 'token': token})
 
 @home_authentication_required

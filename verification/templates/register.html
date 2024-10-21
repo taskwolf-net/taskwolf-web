@@ -10,10 +10,7 @@
           <button id="register-page-back" class="d-none"><i class="fa-solid fa-arrow-left-long"></i></button>
         </div>
         <img id="register-logo" src="{% static 'img/logo-light.webp' %}">
-        <div id="register-languages">
-          <input id="register-language-en" class="register-language-flag" src="{% static 'img/languages/en.webp' %}" type="image"/>
-          <input id="register-language-de" class="register-language-flag" src="{% static 'img/languages/de.webp' %}" type="image"/>
-        </div>
+        {% include 'home-language.html' %}
       </div>
       <div id="register-wrapper">
         <div id="register-email-container" class="form-outline">
@@ -368,16 +365,6 @@
       Swal.fire("{% trans 'home.registration.success.email.resend.success.title' %}",
         "{% trans 'home.registration.success.email.resend.success.body' %}", "success");
     });
-  }
-
-  document.getElementById("register-language-en").onclick = function (event) {
-    Cookie.create("dulno-home-language", "en", 60 * 60 * 24 * 365, ".dulno.com");
-    window.location.reload(true);
-  }
-
-  document.getElementById("register-language-de").onclick = function (event) {
-    Cookie.create("dulno-home-language", "de", 60 * 60 * 24 * 365, ".dulno.com");
-    window.location.reload(true);
   }
 
   document.getElementById("register-logo").onclick = function (event) {

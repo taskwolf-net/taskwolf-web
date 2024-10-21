@@ -42,5 +42,5 @@ async def organizationTermination(request):
 @home_page
 async def organizationJoin(request, organization, token):
   return render(request, 'organization/organization-join.html', {'title': gettext('product.organization.join.title'),
-    'css': ['css/base/verification-header.css', 'css/product/organization/organization-join.css'],
+    'css': ['css/base/verification-header.css', 'css/base/home-language.css', 'css/product/organization/organization-join.css'],
     'organization': organization, 'token': token})
