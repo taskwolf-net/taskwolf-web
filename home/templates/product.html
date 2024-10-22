@@ -15,7 +15,7 @@
               <a class="btn btn-light px-5 mt-5" href="/pricing/" role="button">{% trans 'home.product.try' %}</a>
             </div>
           </div>
-          <img id="product-logo" src="{% static 'img/home/desktop.webp' %}">
+          <img id="product-logo" src="{% static 'img/home/product.webp' %}">
         </div>
         <div id="product-scroll-arrow">&#x2193;</div>
       </div>
@@ -245,6 +245,6 @@
   });
 
   document.getElementById("product-scroll-arrow").addEventListener("click", function() {
-    window.scrollBy({top: window.innerHeight, behavior: "smooth"});
+    window.scrollBy({top: window.innerHeight * 8/7, behavior: "smooth"});
   });
  </script>
