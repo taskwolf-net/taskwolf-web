@@ -27,5 +27,6 @@ window.addEventListener('load', function () {
     }
   }).then((result) => {
     Cookie.create("dulno-cookies", true, 60 * 60 * 24 * 365);
+    window.location.reload();
   });
 });
