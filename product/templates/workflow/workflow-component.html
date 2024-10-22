@@ -61,7 +61,7 @@
                 <div id="workflow-component-event-body" class="accordion-body">
                   <h4 class="text-center">{% with "product.workflow.component.event.subline."|add:type as value %}{% trans value %}{% endwith %}</h4>
                   <div id="workflow-component-event-dropdown" class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
                       {% trans 'product.workflow.component.event.headline' %}
                     </button>
                     <ul id="workflow-component-event-dropdown-list" class="dropdown-menu">
@@ -663,7 +663,7 @@
     dropdownContainer.appendChild(informationElement);
     dropdownContainer.classList.add("workflow-component-specifications-select-container", "dropdown");
     let dropdownButton = document.createElement("button");
-    dropdownButton.classList.add("btn", "btn-secondary", "dropdown-toggle");
+    dropdownButton.classList.add("btn", "btn-dark", "dropdown-toggle");
     if (document.getElementsByClassName("workflow-component-specifications-select-container").length > 0) {
       dropdownButton.setAttribute("disabled", "disabled");
       specificationSelectButtons.push(dropdownButton);
@@ -688,10 +688,12 @@
 
   function clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton, index, inputsLength) {
     dropdownList.innerHTML = "";
+    dropdownList.appendChild(createSpecificationSelectLoader());
     let request = new HttpRequest("https://api.dulno.com/v1/component/select/items/", "POST",
       [], {componentType: "{{type}}", module: selectedApplication.toLowerCase(), type: selectedEvent, previousInputs: specificationValues, select: identifier});
     request.send(function (status, responseText) {
       let items = JSON.parse(responseText).items;
+      dropdownList.innerHTML = "";
       let found = false;
       for (let i = 0; i < items.length; i++) {
         let item = JSON.parse(items[i]);
@@ -723,6 +725,23 @@
         dropdownList.appendChild(itemElement);
       }
     });
+  }
+
+  function createSpecificationSelectLoader() {
+    let loaderEntry = document.createElement("li");
+    loaderEntry.classList.add("dropdown-item");
+    let loaderSpinnerContainer = document.createElement("div");
+    loaderSpinnerContainer.classList.add("d-flex", "justify-content-center");
+    let loaderSpinner = document.createElement("div");
+    loaderSpinner.classList.add("spinner-border", "spinner-border-sm");
+    loaderSpinner.role = "status";
+    let loaderSpan = document.createElement("span");
+    loaderSpan.classList.add("visually-hidden");
+    loaderSpan.innerText = "Loading...";
+    loaderSpinner.appendChild(loaderSpan);
+    loaderSpinnerContainer.appendChild(loaderSpinner);
+    loaderEntry.appendChild(loaderSpinnerContainer);
+    return loaderEntry;
   }
 
   function selectSpecificationSelect(selectIdentifier, itemIdentifier, itemName, dropdownContainer, dropdownButton, dropdownList) {
@@ -770,7 +789,7 @@
     let fileButton = document.createElement("button");
     fileButton.type = "button";
     fileButton.innerText = "{% trans 'product.workflow.component.specifications.file.pending' %}";
-    fileButton.classList.add("workflow-component-specifications-file", "btn", "btn-secondary");
+    fileButton.classList.add("workflow-component-specifications-file", "btn", "btn-dark");
     fileButton.onclick = function (event) {
       fileSelectorElement.click();
     }
@@ -802,7 +821,7 @@
     if (value !== "") {
       specificationValues[identifier] = value;
     }
-    fileButton.classList.remove("btn-secondary");
+    fileButton.classList.remove("btn-dark");
     fileButton.classList.add("btn-success");
     fileButton.innerText = "{% trans 'product.workflow.component.specifications.file.selected' %}";
     checkAdoptability();
