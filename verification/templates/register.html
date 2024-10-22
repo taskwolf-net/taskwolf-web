@@ -95,7 +95,7 @@
       selectionContainers[selectionContainers.length - 1].classList.remove("d-none");
       $(document.getElementById("register-page-back")).toggleClass("d-none",
         selectionContainers.length === 1);
-      $(document.getElementById("register-languages")).toggleClass("d-none",
+      $(document.getElementById("home-languages")).toggleClass("d-none",
         selectionContainers.length !== 1);
       $(document.getElementById("register-login")).toggleClass("d-none",
         selectionContainers.length !== 1);
@@ -114,7 +114,7 @@
     let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("register-wrapper").appendChild(loader);
-    document.getElementById("register-languages").classList.add("d-none");
+    document.getElementById("home-languages").classList.add("d-none");
     document.getElementById("register-login").classList.add("d-none");
     document.getElementById("register-email-container").classList.add("d-none");
     let request = new HttpRequest("https://api.dulno.com/v1/email/exists/", "POST",
@@ -128,7 +128,7 @@
         switchSelectionPage(document.getElementById("register-email-container"),
           document.getElementById("register-username-container"), usernameInput);
       } else {
-        document.getElementById("register-languages").classList.remove("d-none");
+        document.getElementById("home-languages").classList.remove("d-none");
         document.getElementById("register-login").classList.remove("d-none");
         document.getElementById("register-email-container").classList.remove("d-none");
         emailInput.value = "";
@@ -270,7 +270,7 @@
     loader.classList.add("loader");
     document.getElementById("register-wrapper").appendChild(loader);
     document.getElementById("register-page-back").classList.add("d-none");
-    document.getElementById("register-languages").classList.add("d-none");
+    document.getElementById("home-languages").classList.add("d-none");
     document.getElementById("register-login").classList.add("d-none");
     setTimeout(function () {
       document.getElementById("register-page-back").classList.remove("d-none");
