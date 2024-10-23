@@ -229,6 +229,7 @@
     runLabel.innerHTML = "{% trans 'product.workflows.execute' %}";
     runButton.appendChild(runLabel);
     runButton.onclick = function (event) {
+      loaderPopup();
       let request = new HttpRequest("https://api.dulno.com/v1/workflow/manual/execute/", "POST",
         [], {workflow: id});
       request.send(function (status, responseText) {
@@ -892,6 +893,7 @@
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
+        loaderPopup();
         let request = new HttpRequest("https://api.dulno.com/v1/workflow/remove/", "POST",
           [], {workflow: id});
         request.send(function (status, responseText) {
@@ -902,6 +904,7 @@
   }
 
   function duplicateWorkflow(id) {
+    loaderPopup();
     let request = new HttpRequest("https://api.dulno.com/v1/workflow/duplicate/", "POST",
       [], {workflow: id});
     request.send(function (status, responseText) {
@@ -932,5 +935,18 @@
   function removeLoader() {
     document.getElementById("workflows-loader").removeChild(
       document.getElementsByClassName("loader")[0]);
+  }
+
+  function loaderPopup() {
+    Swal.fire({
+      html: `
+        <div style="display: flex; justify-content: center; align-items: center; height: calc(340px - 4rem)">
+          <div class="spinner-border" role="status" style="width: 4rem; height: 4rem;">
+            <span class="visually-hidden">Loading</span>
+          </div>
+        </div>
+      `,
+      showConfirmButton: false
+    });
   }
 </script>

@@ -453,6 +453,14 @@
   }
 
   function publish(name, description, trigger, actions, conditions) {
+    var publishButton = document.getElementById("workflow-publish");
+    publishButton.classList.add("disabled");
+    publishButton.classList.remove("workflow-publish-enabled");
+    publishButton.innerHTML = `
+      {% trans 'product.workflow.publish' %}
+      <span class="spinner-border spinner-border-sm ms-2" aria-hidden="true"></span>
+      <span class="visually-hidden" role="status">Loading...</span>
+    `;
     let isSelected = sessionStorage.getItem("workflow-selected") !== null;
     let requestBody = {name: name, description: description, trigger: trigger, actions: actions, conditions: conditions};
     if (isSelected) {
@@ -461,6 +469,12 @@
     let request = new HttpRequest("https://api.dulno.com/v1/workflow" + (isSelected ? "/update/" : "/add/"), "POST",
       [], requestBody);
     request.send(function (status, responseText) {
+      if (status !== 200) {
+        var publishButton = document.getElementById("workflow-publish");
+        publishButton.classList.remove("disabled");
+        publishButton.classList.add("workflow-publish-enabled");
+        publishButton.innerHTML = "{% trans 'product.workflow.publish' %}";
+      }
       if (status === 413) {
         Swal.fire("{% trans 'product.workflow.publish.too.big.title' %}", "{% trans 'product.workflow.publish.too.big.body' %}", "error");
         return;
@@ -496,6 +510,7 @@
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
+        loaderPopup();
         let request = new HttpRequest("https://api.dulno.com/v1/workflow/remove/", "POST",
           [], {workflow: sessionStorage.getItem("workflow-id")});
         request.send(function (status, responseText) {
@@ -561,6 +576,19 @@
     container.classList.add("position-relative");
     new bootstrap.Tooltip(element, {
       container: container
+    });
+  }
+
+  function loaderPopup() {
+    Swal.fire({
+      html: `
+        <div style="display: flex; justify-content: center; align-items: center; height: calc(340px - 4rem)">
+          <div class="spinner-border" role="status" style="width: 4rem; height: 4rem;">
+            <span class="visually-hidden">Loading</span>
+          </div>
+        </div>
+      `,
+      showConfirmButton: false
     });
   }
 </script>
