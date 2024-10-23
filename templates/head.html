@@ -56,10 +56,19 @@
   {% endif %}
   <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Dulno",
-      "url": "https://dulno.com"
+      "@context" : "https://schema.org",
+      "@type" : "WebSite",
+      "name" : "Dulno",
+      "url" : "https://dulno.com/",
+      "logo": "https://dulno.com/static/img/icon-dark.ico",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://dulno.com/?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
     }
   </script>
 </head>
