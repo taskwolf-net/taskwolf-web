@@ -81,7 +81,7 @@
               </h2>
               <div id="workflow-component-specifications" class="accordion-collapse collapse" data-bs-parent="#workflow-component-accordion">
                 <div id="workflow-component-specifications-body" class="accordion-body">
-                  <h4 class="text-center">{% with "product.workflow.component.specifications.subline."|add:type as value %}{% trans value %}{% endwith %}</h4>
+                  <h4 class="text-center mb-4">{% with "product.workflow.component.specifications.subline."|add:type as value %}{% trans value %}{% endwith %}</h4>
                   <div id="workflow-component-specifications-container">
                     <div id="workflow-component-specifications-inputs">
                       <h5 id="workflow-component-specifications-inputs-headline" class="text-center">{% trans 'product.workflow.component.specifications.inputs.title' %}</h5>
@@ -975,15 +975,72 @@
   function displayPlaceholder(identifier, name) {
     let placeholderElement = document.createElement("li");
     placeholderElement.classList.add("workflow-component-specifications-placeholder");
+    preparePlaceholderDrag(identifier, name, placeholderElement);
+    let placeholderNameElement = document.createElement("b");
+    placeholderNameElement.innerHTML = name;
+    placeholderElement.appendChild(placeholderNameElement);
+    document.getElementById("workflow-component-specifications-placeholders-list").appendChild(placeholderElement);
+  }
+
+  function preparePlaceholderDrag(identifier, name, placeholderElement) {
     placeholderElement.draggable= "true";
     placeholderElement.ondragstart = function (event) {
       event.dataTransfer.setData("placeholder-identifier", identifier);
       event.dataTransfer.setData("placeholder-name", name);
     }
-    let placeholderNameElement = document.createElement("b");
-    placeholderNameElement.innerHTML = name;
-    placeholderElement.appendChild(placeholderNameElement);
-    document.getElementById("workflow-component-specifications-placeholders-list").appendChild(placeholderElement);
+    let offsetX = 0, offsetY = 0;
+    let isDragging = false;
+    function startDrag(event) {
+      event.preventDefault();
+      isDragging = true;
+      const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+      const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+      offsetX = clientX - placeholderElement.offsetLeft;
+      offsetY = clientY - placeholderElement.offsetTop;
+      placeholderElement.classList.add("dragging");
+    }
+    function drag(event) {
+      if (!isDragging) {
+        return;
+      }
+      event.preventDefault();
+      const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+      const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+      placeholderElement.style.position = "absolute";
+      placeholderElement.style.left = `${clientX - offsetX}px`;
+      placeholderElement.style.top = `${clientY - offsetY}px`;
+    }
+    function endDrag(event) {
+      if (!isDragging) {
+        return;
+      }
+      isDragging = false;
+      placeholderElement.classList.remove("dragging");
+      placeholderElement.style.position = "";
+      placeholderElement.style.left = "";
+      placeholderElement.style.top = "";
+      const touch = event.changedTouches ? event.changedTouches[0] : null;
+      const clientX = touch ? touch.clientX : event.clientX;
+      const clientY = touch ? touch.clientY : event.clientY;
+      const touchedElement = document.elementFromPoint(clientX, clientY);
+      if (touchedElement) {
+        const dropEvent = new Event('drop', {
+          bubbles: true,
+          cancelable: true
+        });
+        dropEvent.dataTransfer = {
+          getData: (type) => {
+            if (type === "placeholder-identifier") return identifier;
+            if (type === "placeholder-name") return name;
+            return null;
+          }
+        };
+        touchedElement.dispatchEvent(dropEvent);
+      }
+    }
+    placeholderElement.addEventListener('touchstart', startDrag);
+    document.addEventListener('touchmove', drag);
+    document.addEventListener('touchend', endDrag);
   }
 
   function resetSpecifications() {

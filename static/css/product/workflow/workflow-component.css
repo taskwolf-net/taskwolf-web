@@ -514,6 +514,24 @@ input:-webkit-autofill:active{
   margin-bottom: 4%;
 }
 
+@media (max-width: 600px) {
+  #workflow-component-specifications-container {
+    flex-direction: column;
+  }
+
+  #workflow-component-specifications-divider {
+    display: none !important;
+  }
+
+  #workflow-component-specifications-inputs, #workflow-component-specifications-placeholders {
+    width: 100%;
+  }
+
+  #workflow-component-specifications-inputs {
+    margin-bottom: 50px;
+  }
+}
+
 #workflow-component-container .nav-tabs {
   width: 90%;
   margin: auto;
