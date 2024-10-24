@@ -6,7 +6,7 @@
   animation-delay: -0.16s;
   position: relative;
   margin-left: 50%;
-  margin-top: calc(50vh - 80px + 2em);
+  margin-top: calc(50vh - 70px + 2em);
 }
 
 .dark .loader {
