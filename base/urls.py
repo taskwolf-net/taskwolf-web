@@ -2,5 +2,6 @@ from django.urls import path, include
 from . import base
 
 urlpatterns = [
-  path('close/', base.close)
+  path('favicon.ico', base.favicon),
+  path('close/', base.close),
 ]
