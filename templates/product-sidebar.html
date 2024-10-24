@@ -3,7 +3,7 @@
 <div class="collapse collapse-horizontal" id="sidebar">
   <div id="sidebar-content">
     <ul class="navbar-nav ml-auto h-100 d-flex align-items-center">
-      <li class="sidebar-item  {% if request.path == '/dashboard/' or request.path == '/' %}sidebar-active{% endif %} mt-3">
+      <li class="sidebar-item mt-3 {% if request.path == '/dashboard/' or request.path == '/' %}sidebar-active{% endif %}">
         <a href="/dashboard/" class="sidebar-link nav-link" aria-current="page"><span class="sidebar-icon material-symbols-outlined">house</span><span>{% trans 'product.sidebar.dashboard' %}</span></a>
       </li>
       <li class="sidebar-divider"></li>
@@ -36,8 +36,8 @@
       <li id="sidebar-package" class="sidebar-item d-none {% if 'package' in request.path %}sidebar-active{% endif %}">
         <a href="/package/" class="sidebar-link nav-link" aria-current="page"><span class="sidebar-icon material-symbols-outlined">account_balance</span><span>{% trans 'product.sidebar.package' %}</span></a>
       </li>
-      <li class="sidebar-divider"></li>
-      <li class="sidebar-item {% if request.path == '/help/' %}sidebar-active{% endif %}">
+      <li class="sidebar-divider mt-auto"></li>
+      <li class="sidebar-item mb-2 {% if request.path == '/help/' %}sidebar-active{% endif %}">
         <a href="/help/" class="sidebar-link nav-link" aria-current="page"><span class="sidebar-icon material-symbols-outlined">help</span><span>{% trans 'product.sidebar.help' %}</span></a>
       </li>
     </ul>

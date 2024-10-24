@@ -88,10 +88,3 @@
     font-size: 28px;
   }
 }
-
-@media(max-height: 600px) {
-  .sidebar-divider {
-    margin: 0;
-    border: none;
-  }
-}
