@@ -200,8 +200,8 @@
       () => addCondition(actionIndex, conditionIndex)));
     Swal.fire({
       title: "{% trans 'product.workflow.add.component.title' %}",
-      buttons: [true, false],
       html: content,
+      showConfirmButton: false
     });
   }
 
