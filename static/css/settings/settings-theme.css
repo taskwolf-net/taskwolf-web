@@ -44,12 +44,31 @@
   margin: 0 auto 32px;
 }
 
-.dark .settings-theme-selected {
-  color: #49dc47 !important;
+.settings-theme-selected {
+  border: 2px #0d6efd solid;
+  position: relative;
 }
 
-.light .settings-theme-selected {
-  color: #20bc1e !important;
+.settings-theme-selected::before {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  top: -12.5px;
+  left: -12.5px;
+  padding: 10px;
+  color: white;
+  border-radius: 50%;
+  background-color: #0d6efd;
+  z-index: 10;
+  font-size: 15px;
+  width: 25px;
+  height: 25px;
+  font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f00c";
 }
 
 @media (max-width: 1000px) {
