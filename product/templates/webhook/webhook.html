@@ -161,9 +161,18 @@
     let text = document.createElement("p");
     text.innerText = "{% trans 'product.webhook.rename.body' %}";
     content.appendChild(text);
+    let inputContainer = document.createElement("div");
+    inputContainer.classList.add("mb-3", "mx-auto");
+    inputContainer.style.width = "min(260px, 100%)";
     let input = document.createElement("input");
+    input.classList.add("w-100");
     input.placeholder = "{% trans 'product.webhook.rename.name' %}";
-    content.appendChild(input);
+    input.maxLength = 64;
+    input.addEventListener('input', tickInputMaxLength);
+    inputContainer.appendChild(input);
+    input.parentElement.classList.add('max-length-badged');
+    tickInputMaxLength(input);
+    content.appendChild(inputContainer);
     Swal.fire({
       title: "{% trans 'product.webhook.rename.title' %}",
       html: content,
@@ -182,6 +191,21 @@
         });
       }
     });
+  }
+
+  function tickInputMaxLength(element) {
+    if (element.target) {
+      element = element.target
+    }
+    let limit = element.maxLength;
+    let parent = element.parentElement;
+    let length = element.value.length;
+    parent.dataset['limit'] = limit;
+    parent.dataset['remaining'] = limit - length;
+    parent.classList.remove('max-length-reached');
+    if (length === limit) {
+      parent.classList.add('max-length-reached');
+    }
   }
 
   function applyTooltips(element, container, text) {

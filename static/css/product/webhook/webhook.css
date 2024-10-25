@@ -8,11 +8,29 @@
   justify-content: center;
   margin-top: 5vh;
   margin-bottom: 10vh;
+  position: relative;
 }
 
 #webhook-name {
   position: absolute;
+  text-align: center;
   font-weight: bold;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 75%;
+  margin: auto;
+}
+
+@media (max-width: 1200px) {
+  #webhook-name {
+    top: 8vh;
+    width: 90%;
+  }
+
+  #webhook-header {
+    margin-bottom: 18vh;
+  }
 }
 
 #webhook-modification {
@@ -101,6 +119,28 @@
 
 .webhook-rename-content input::placeholder {
   color: #a5a5a5;
+}
+
+input[maxlength] {
+  position: relative;
+}
+
+.max-length-badged[data-remaining] {
+  position: relative;
+
+  &:after {
+    content: attr(data-remaining) " / " attr(data-limit);
+    display: inline-block;
+    position: absolute;
+    bottom: -20px;
+    right: 5px;
+    pointer-events: none;
+    font-size: 0.75em;
+  }
+
+  &.max-length-reached::after {
+    color: #dc3545;
+  }
 }
 
 .webhook-code {
