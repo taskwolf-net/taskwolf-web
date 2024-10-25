@@ -10,7 +10,7 @@
         <h1>{% trans 'product.database.create.headline' %}</h1></br>
         <div class="form-outline mb-4">
           <label for="name" class="form-label">{% trans 'product.database.create.name' %}</label>
-          <input type="name" id="name" class="form-control" placeholder="{% trans 'product.database.create.name' %}">
+          <input type="name" id="name" class="form-control" maxlength=64 placeholder="{% trans 'product.database.create.name' %}">
         </div>
         <button type="button" id="create" class="btn btn-primary mb-4">{% trans 'product.database.create.button' %}</button></br>
       </form>
@@ -19,6 +19,29 @@
 </html>
 
 <script>
+  $(document).ready(function() {
+    for (let element of [...document.querySelectorAll('input[maxlength]')]) {
+      element.addEventListener('input', tickInputMaxLength)
+      element.parentElement.classList.add('max-length-badged');
+      tickInputMaxLength(element)
+    }
+  });
+
+  function tickInputMaxLength(element) {
+    if (element.target) {
+      element = element.target
+    }
+    let limit = element.maxLength;
+    let parent = element.parentElement;
+    let length = element.value.length;
+    parent.dataset['limit'] = limit;
+    parent.dataset['remaining'] = limit - length;
+    parent.classList.remove('max-length-reached');
+    if (length === limit) {
+      parent.classList.add('max-length-reached');
+    }
+  }
+
   document.getElementById("name").addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
       event.preventDefault();
