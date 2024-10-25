@@ -168,6 +168,24 @@ input:-webkit-autofill:active{
   margin-bottom: 4%;
 }
 
+@media (max-width: 600px) {
+  #workflow-condition-wrapper {
+    flex-direction: column;
+  }
+
+  #workflow-condition-divider {
+    display: none !important;
+  }
+
+  #workflow-condition-inputs, #workflow-condition-placeholders {
+    width: 100%;
+  }
+
+  #workflow-condition-inputs {
+    margin-bottom: 50px;
+  }
+}
+
 #workflow-condition-container .nav-tabs {
   width: 90%;
   margin: auto;

@@ -333,10 +333,89 @@
       event.dataTransfer.setData("placeholder-identifier", identifier);
       event.dataTransfer.setData("placeholder-name", name);
     }
+    preparePlaceholderDrag(identifier, name, placeholderElement);
     let placeholderNameElement = document.createElement("b");
     placeholderNameElement.innerHTML = name;
     placeholderElement.appendChild(placeholderNameElement);
     document.getElementById("workflow-condition-placeholders-list").appendChild(placeholderElement);
+  }
+
+  function preparePlaceholderDrag(identifier, name, placeholderElement) {
+    placeholderElement.draggable = "true";
+    placeholderElement.ondragstart = function (event) {
+      event.dataTransfer.setData("placeholder-identifier", identifier);
+      event.dataTransfer.setData("placeholder-name", name);
+    }
+    let offsetX = 0, offsetY = 0;
+    let isDragging = false;
+    const scrollThreshold = 150;
+    const scrollSpeed = 50;
+    let scrollTimeout = null;
+    function startDrag(event) {
+      event.preventDefault();
+      isDragging = true;
+      const clientX = (event.touches ? event.touches[0].clientX : event.clientX) + window.scrollX;
+      const clientY = (event.touches ? event.touches[0].clientY : event.clientY) + window.scrollY;
+      offsetX = clientX - placeholderElement.offsetLeft;
+      offsetY = clientY - placeholderElement.offsetTop;
+      placeholderElement.classList.add("dragging");
+    }
+    function drag(event) {
+      if (!isDragging) {
+        return;
+      }
+      event.preventDefault();
+      const clientX = (event.touches ? event.touches[0].clientX : event.clientX) + window.scrollX;
+      const clientY = (event.touches ? event.touches[0].clientY : event.clientY) + window.scrollY;
+      placeholderElement.style.position = "absolute";
+      placeholderElement.style.left = `${clientX - offsetX}px`;
+      placeholderElement.style.top = `${clientY - offsetY}px`;
+      const { top, bottom } = placeholderElement.getBoundingClientRect();
+      if (top < scrollThreshold) {
+        window.scrollBy(0, -scrollSpeed);
+        scrollTimeout = setTimeout(() => drag(event), 100);
+      } else if (bottom > window.innerHeight - scrollThreshold) {
+        window.scrollBy(0, scrollSpeed);
+        scrollTimeout = setTimeout(() => drag(event), 100);
+      }
+    }
+    function endDrag(event) {
+      if (!isDragging) {
+        return;
+      }
+      isDragging = false;
+      placeholderElement.classList.remove("dragging");
+      placeholderElement.style.position = "";
+      placeholderElement.style.left = "";
+      placeholderElement.style.top = "";
+      const touch = event.changedTouches ? event.changedTouches[0] : null;
+      const clientX = touch ? touch.clientX : event.clientX;
+      const clientY = touch ? touch.clientY : event.clientY;
+      const touchedElement = document.elementFromPoint(clientX, clientY);
+      if (touchedElement) {
+        const dropEvent = new Event('drop', {
+          bubbles: true,
+          cancelable: true
+        });
+        dropEvent.dataTransfer = {
+          getData: (type) => {
+            if (type === "placeholder-identifier") return identifier;
+            if (type === "placeholder-name") return name;
+            return null;
+          }
+        };
+        touchedElement.dispatchEvent(dropEvent);
+      }
+    }
+    placeholderElement.addEventListener('touchstart', startDrag);
+    document.addEventListener('touchmove', function (event) {
+      if (scrollTimeout != null) {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = null;
+      }
+      drag(event);
+    });
+    document.addEventListener('touchend', endDrag);
   }
 
   function checkAdoptability() {

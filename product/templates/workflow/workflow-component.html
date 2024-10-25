@@ -983,7 +983,7 @@
   }
 
   function preparePlaceholderDrag(identifier, name, placeholderElement) {
-    placeholderElement.draggable= "true";
+    placeholderElement.draggable = "true";
     placeholderElement.ondragstart = function (event) {
       event.dataTransfer.setData("placeholder-identifier", identifier);
       event.dataTransfer.setData("placeholder-name", name);
