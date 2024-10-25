@@ -990,11 +990,14 @@
     }
     let offsetX = 0, offsetY = 0;
     let isDragging = false;
+    const scrollThreshold = 150;
+    const scrollSpeed = 50;
+    let scrollTimeout = null;
     function startDrag(event) {
       event.preventDefault();
       isDragging = true;
-      const clientX = event.touches ? event.touches[0].clientX : event.clientX;
-      const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+      const clientX = (event.touches ? event.touches[0].clientX : event.clientX) + window.scrollX;
+      const clientY = (event.touches ? event.touches[0].clientY : event.clientY) + window.scrollY;
       offsetX = clientX - placeholderElement.offsetLeft;
       offsetY = clientY - placeholderElement.offsetTop;
       placeholderElement.classList.add("dragging");
@@ -1004,11 +1007,19 @@
         return;
       }
       event.preventDefault();
-      const clientX = event.touches ? event.touches[0].clientX : event.clientX;
-      const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+      const clientX = (event.touches ? event.touches[0].clientX : event.clientX) + window.scrollX;
+      const clientY = (event.touches ? event.touches[0].clientY : event.clientY) + window.scrollY;
       placeholderElement.style.position = "absolute";
       placeholderElement.style.left = `${clientX - offsetX}px`;
       placeholderElement.style.top = `${clientY - offsetY}px`;
+      const { top, bottom } = placeholderElement.getBoundingClientRect();
+      if (top < scrollThreshold) {
+        window.scrollBy(0, -scrollSpeed);
+        scrollTimeout = setTimeout(() => drag(event), 100);
+      } else if (bottom > window.innerHeight - scrollThreshold) {
+        window.scrollBy(0, scrollSpeed);
+        scrollTimeout = setTimeout(() => drag(event), 100);
+      }
     }
     function endDrag(event) {
       if (!isDragging) {
@@ -1039,7 +1050,13 @@
       }
     }
     placeholderElement.addEventListener('touchstart', startDrag);
-    document.addEventListener('touchmove', drag);
+    document.addEventListener('touchmove', function (event) {
+      if (scrollTimeout != null) {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = null;
+      }
+      drag(event);
+    });
     document.addEventListener('touchend', endDrag);
   }
 
