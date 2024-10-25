@@ -154,10 +154,12 @@ input:-webkit-autofill:active{
 
 .dark #ticket-answer-field {
   color: white !important;
+  border: 1px white solid;
 }
 
 .light #ticket-answer-field {
   color: black !important;
+  border: 1px black solid;
 }
 
 .ticket-message-delete {

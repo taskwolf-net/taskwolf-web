@@ -1,4 +1,22 @@
 function setupPlaceholderInput(identifier, placeholderText) {
+  var Embed = Quill.import('blots/embed');
+  class PlaceholderBlot extends Embed {
+    static create(value) {
+      let node = super.create();
+      node.classList.add('placeholder');
+      node.setAttribute('data-placeholder', value);
+      node.innerText = value;
+      return node;
+    }
+
+    static value(node) {
+      return node.getAttribute('data-placeholder');
+    }
+  }
+  PlaceholderBlot.blotName = identifier;
+  PlaceholderBlot.tagName = 'span';
+  Quill.register(PlaceholderBlot);
+
   let quill = new Quill('#' + identifier, {
     theme: 'snow',
     formats: [
@@ -75,26 +93,6 @@ function setupPlaceholderInput(identifier, placeholderText) {
       }
     }
   });
-
-  var Embed = Quill.import('blots/embed');
-  class PlaceholderBlot extends Embed {
-    static create(value) {
-      let node = super.create();
-      node.classList.add('placeholder');
-      node.setAttribute('data-placeholder', value);
-      node.innerText = value;
-      return node;
-    }
-
-    static value(node) {
-      return node.getAttribute('data-placeholder');
-    }
-  }
-  PlaceholderBlot.blotName = identifier;
-  PlaceholderBlot.tagName = 'span';
-  if (!Quill.imports['formats/' + identifier]) {
-    Quill.register(PlaceholderBlot);
-  }
 
   const placeholder = document.createElement('div');
   placeholder.classList.add('quill-placeholder');
