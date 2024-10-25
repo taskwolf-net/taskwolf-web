@@ -551,22 +551,38 @@
     let processNameLabel = document.createElement("h5");
     processNameLabel.innerText = "{% trans 'product.process.name' %}";
     publishForm.appendChild(processNameLabel);
+    let processNameElementContainer = document.createElement("div");
+    processNameElementContainer.classList.add("mb-5", "mx-auto");
+    processNameElementContainer.style.width = "min(260px, 100%)";
     let processNameElement = document.createElement("input");
-    processNameElement.classList.add("mb-4");
+    processNameElement.classList.add("w-100");
     if (process != null) {
       processNameElement.value = process.name;
     }
     processNameElement.placeholder = "{% trans 'product.process.name' %}";
-    publishForm.appendChild(processNameElement);
+    processNameElement.maxLength = 64;
+    processNameElement.addEventListener('input', tickInputMaxLength);
+    processNameElementContainer.appendChild(processNameElement);
+    processNameElement.parentElement.classList.add('max-length-badged');
+    tickInputMaxLength(processNameElement);
+    publishForm.appendChild(processNameElementContainer);
     let processDescriptionLabel = document.createElement("h5");
     processDescriptionLabel.innerText = "{% trans 'product.process.description' %}";
     publishForm.appendChild(processDescriptionLabel);
+    let processDescriptionElementContainer = document.createElement("div");
+    processDescriptionElementContainer.classList.add("mb-4", "mx-auto");
+    processDescriptionElementContainer.style.width = "min(260px, 100%)";
     let processDescriptionElement = document.createElement("input");
     if (process != null) {
       processDescriptionElement.value = process.description;
     }
     processDescriptionElement.placeholder = "{% trans 'product.process.description' %}";
-    publishForm.appendChild(processDescriptionElement);
+    processDescriptionElement.maxLength = 64;
+    processDescriptionElement.addEventListener('input', tickInputMaxLength);
+    processDescriptionElementContainer.appendChild(processDescriptionElement);
+    processDescriptionElement.parentElement.classList.add('max-length-badged');
+    tickInputMaxLength(processDescriptionElement);
+    publishForm.appendChild(processDescriptionElementContainer);
     Swal.fire({
       title: "{% trans 'product.process.publish.title' %}",
       html: publishForm,
@@ -586,6 +602,21 @@
       }
       updateProcess(processNameElement.value, processDescriptionElement.value);
     });
+  }
+
+  function tickInputMaxLength(element) {
+    if (element.target) {
+      element = element.target
+    }
+    let limit = element.maxLength;
+    let parent = element.parentElement;
+    let length = element.value.length;
+    parent.dataset['limit'] = limit;
+    parent.dataset['remaining'] = limit - length;
+    parent.classList.remove('max-length-reached');
+    if (length === limit) {
+      parent.classList.add('max-length-reached');
+    }
   }
 
   function checkProcessIntegrity() {
