@@ -12,7 +12,9 @@
           <form>
             <div class="form-outline mb-4">
               <label for="settings-profile-name" class="form-label">{% trans 'settings.profile.name' %}</label>
-              <input id="settings-profile-name" type="name" class="form-control" placeholder="{% trans 'settings.profile.name' %}">
+              <div>
+                <input id="settings-profile-name" type="name" class="form-control" maxlength=32 placeholder="{% trans 'settings.profile.name' %}">
+              </div>
               <button id="settings-profile-update-button" type="button" class="btn btn-success mt-4">{% trans 'settings.profile.name.update' %}</button>
             </div>
           </form>
@@ -32,7 +34,27 @@
       []);
     request.send(function (status, responseText) {
       document.getElementById("settings-profile-name").value = JSON.parse(responseText).username;
+      for (let element of [...document.querySelectorAll('input[maxlength]')]) {
+        element.addEventListener('input', tickInputMaxLength)
+        element.parentElement.classList.add('max-length-badged');
+        tickInputMaxLength(element)
+      }
     });
+  }
+
+  function tickInputMaxLength(element) {
+    if (element.target) {
+      element = element.target
+    }
+    let limit = element.maxLength;
+    let parent = element.parentElement;
+    let length = element.value.length;
+    parent.dataset['limit'] = limit;
+    parent.dataset['remaining'] = limit - length;
+    parent.classList.remove('max-length-reached');
+    if (length === limit) {
+      parent.classList.add('max-length-reached');
+    }
   }
 
   document.getElementById("settings-profile-name").addEventListener("keypress", function(event) {

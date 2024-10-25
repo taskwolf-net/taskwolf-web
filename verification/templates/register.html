@@ -22,7 +22,9 @@
         <div id="register-username-container" class="form-outline d-none">
           <h2 class="register-headline">{% trans 'home.registration.username.headline' %}</h2>
           <label for="username" class="form-label">{% trans 'home.registration.username' %}</label>
-          <input type="username" id="username" class="form-control" placeholder="{% trans 'home.registration.username' %}">
+          <div>
+            <input type="username" id="username" class="form-control" maxlength=32 placeholder="{% trans 'home.registration.username' %}">
+          </div>
           <button type="button" id="register-username-continue" class="btn btn-primary d-block px-4 mt-5 mx-auto disabled">{% trans 'home.registration.continue' %}</button>
         </div>
         <div id="register-password-container" class="form-outline d-none was-validated">
@@ -80,7 +82,27 @@
 
   $(document).ready(function() {
     emailInput.focus();
+    for (let element of [...document.querySelectorAll('input[maxlength]')]) {
+      element.addEventListener('input', tickInputMaxLength)
+      element.parentElement.classList.add('max-length-badged');
+      tickInputMaxLength(element)
+    }
   });
+
+  function tickInputMaxLength(element) {
+    if (element.target) {
+      element = element.target
+    }
+    let limit = element.maxLength;
+    let parent = element.parentElement;
+    let length = element.value.length;
+    parent.dataset['limit'] = limit;
+    parent.dataset['remaining'] = limit - length;
+    parent.classList.remove('max-length-reached');
+    if (length === limit) {
+      parent.classList.add('max-length-reached');
+    }
+  }
 
   document.getElementById("register-page-back").onclick = function (event) {
     selectionContainers[selectionContainers.length - 1].classList.add("d-none");

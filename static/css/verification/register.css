@@ -101,6 +101,28 @@ input:-webkit-autofill:active{
   box-shadow: inset 0 0 20px 20px #23232329;
 }
 
+input[maxlength] {
+  position: relative;
+}
+
+.max-length-badged[data-remaining] {
+  position: relative;
+
+  &:after {
+    content: attr(data-remaining) " / " attr(data-limit);
+    display: inline-block;
+    position: absolute;
+    bottom: -20px;
+    right: 5px;
+    pointer-events: none;
+    font-size: 0.75em;
+  }
+
+  &.max-length-reached::after {
+    color: #dc3545;
+  }
+}
+
 .form-label {
   text-align: left;
   width: 100%;
