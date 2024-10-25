@@ -57,4 +57,11 @@
       }
     });
   });
+
+  document.fonts.ready.then(function() {
+    const icons = document.querySelectorAll('.material-symbols-outlined');
+    icons.forEach(icon => {
+      icon.classList.add('loaded');
+    });
+  });
 </script>

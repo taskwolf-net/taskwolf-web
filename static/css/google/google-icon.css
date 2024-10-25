@@ -2,7 +2,6 @@
   font-family: 'Material Symbols Outlined';
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
   src: url(https://dulno.com/static/css/google/google-icon.woff2) format('woff2');
 }
 
@@ -20,4 +19,10 @@
   direction: ltr;
   -moz-font-feature-settings: 'liga';
   -moz-osx-font-smoothing: grayscale;
+  visibility: hidden;
+  position: relative;
+}
+
+.material-symbols-outlined.loaded {
+  visibility: visible;
 }
