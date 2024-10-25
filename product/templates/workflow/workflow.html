@@ -20,11 +20,11 @@
         <div id="workflow-inputs">
           <div class="form-outline mb-4">
             <label for="workflow-name" class="form-label">{% trans 'product.workflow.name' %}</label>
-            <input type="name" id="workflow-name" class="form-control" placeholder="{% trans 'product.workflow.name' %}">
+            <input type="name" id="workflow-name" class="form-control" maxlength=64 placeholder="{% trans 'product.workflow.name' %}">
           </div>
           <div class="form-outline mb-5">
             <label for="workflow-description" class="form-label">{% trans 'product.workflow.description' %}</label>
-            <input type="description" id="workflow-description" class="form-control" placeholder="{% trans 'product.workflow.description' %}">
+            <input type="description" id="workflow-description" class="form-control" maxlength=128 placeholder="{% trans 'product.workflow.description' %}">
           </div>
           <hr id="workflow-divider" class="hr mb-5"/>
         </div>
@@ -40,7 +40,27 @@
 
   $(document).ready(function() {
     displayWorkflow();
+    for (let element of [...document.querySelectorAll('input[maxlength]')]) {
+      element.addEventListener('input', tickInputMaxLength)
+      element.parentElement.classList.add('max-length-badged');
+      tickInputMaxLength(element)
+    }
   });
+
+  function tickInputMaxLength(element) {
+    if (element.target) {
+      element = element.target
+    }
+    let limit = element.maxLength;
+    let parent = element.parentElement;
+    let length = element.value.length;
+    parent.dataset['limit'] = limit;
+    parent.dataset['remaining'] = limit - length;
+    parent.classList.remove('max-length-reached');
+    if (length === limit) {
+      parent.classList.add('max-length-reached');
+    }
+  }
 
   function displayWorkflow() {
     document.getElementById("workflow-components").innerHTML = "";
