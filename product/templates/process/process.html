@@ -577,7 +577,7 @@
       processDescriptionElement.value = process.description;
     }
     processDescriptionElement.placeholder = "{% trans 'product.process.description' %}";
-    processDescriptionElement.maxLength = 64;
+    processDescriptionElement.maxLength = 128;
     processDescriptionElement.addEventListener('input', tickInputMaxLength);
     processDescriptionElementContainer.appendChild(processDescriptionElement);
     processDescriptionElement.parentElement.classList.add('max-length-badged');
