@@ -133,6 +133,8 @@
     messageContainer.classList.add("ticket-message-container");
     let messageDescription = document.createElement("div");
     messageDescription.classList.add("ticket-message-description");
+    messageDescription.appendChild(document.createElement("br"));
+    messageDescription.appendChild(document.createElement("br"));
     if (dulnoWritten) {
       let dulnoPicture = document.createElement("img");
       dulnoPicture.classList.add("ticket-message-profile-picture");
