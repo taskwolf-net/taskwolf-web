@@ -73,8 +73,9 @@
     request.send(function (status, responseText) {
       if (status !== 200) {
         Swal.fire("{% trans 'home.question.create.limit.title' %}", "{% trans 'home.question.create.limit.body' %}", "error");
+        return;
       }
-      let success = JSON.parse(responseText).status;
+      let success = JSON.parse(responseText).success;
       if (!success) {
         Swal.fire("{% trans 'home.question.create.failed.title' %}", "{% trans 'home.question.create.failed.body' %}", "error");
         return;

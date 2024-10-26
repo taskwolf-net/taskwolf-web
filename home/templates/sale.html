@@ -180,8 +180,9 @@
     request.send(function (status, responseText) {
       if (status !== 200) {
         Swal.fire("{% trans 'home.sale.create.limit.title' %}", "{% trans 'home.sale.create.limit.body' %}", "error");
+        return;
       }
-      let success = JSON.parse(responseText).status;
+      let success = JSON.parse(responseText).success;
       if (!success) {
         Swal.fire("{% trans 'home.sale.create.failed.title' %}", "{% trans 'home.sale.create.failed.body' %}", "error");
         return;
