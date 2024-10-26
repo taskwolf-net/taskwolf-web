@@ -5,7 +5,10 @@
   <body class="dark" data-bs-theme="dark">
     {% include 'neutral-header.html' %}
     <div id="ticket-create-container">
-      <h1 id="ticket-create-headline">{% trans 'ticket.create.headline' %}</h1>
+      <div id="ticket-create-header">
+        <button id="ticket-create-page-back"><i class="fa-solid fa-arrow-left-long"></i></button>
+        <h1 id="ticket-create-headline" class="fw-bold text-center mb-0">{% trans 'ticket.create.headline' %}</h1>
+      </div>
       <div class="form-outline mb-4">
         <label for="ticket-title" class="form-label">{% trans 'ticket.create.title' %}</label>
         <input type="title" id="ticket-title" class="form-control" placeholder="{% trans 'ticket.create.title' %}">
@@ -86,7 +89,24 @@
     let request = new HttpRequest("https://api.dulno.com/v1/ticket/create/", "POST",
       [], {title: title, type: ticketType, message: message});
     request.send(function (status, responseText) {
-      Swal.fire("{% trans 'ticket.create.successful.title' %}", "{% trans 'ticket.create.successful.body' %}", "success").then(success => window.location.href = "/tickets/");
+      if (status !== 200) {
+        Swal.fire("{% trans 'ticket.create.failed.title' %}",
+          "{% trans 'ticket.create.failed' %}", "error");
+        return;
+      }
+      let success = JSON.parse(responseText).success;
+      if (!success) {
+        Swal.fire("{% trans 'ticket.create.failed.title' %}",
+          "{% trans 'ticket.create.limit' %}", "error");
+        return;
+      }
+      Swal.fire("{% trans 'ticket.create.successful.title' %}",
+        "{% trans 'ticket.create.successful.body' %}", "success")
+        .then(success => window.location.href = "/tickets/");
     });
+  }
+
+  document.getElementById("ticket-create-page-back").onclick = function (event) {
+    window.location.href = "/tickets/";
   }
 </script>

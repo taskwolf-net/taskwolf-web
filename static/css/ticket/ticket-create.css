@@ -43,11 +43,46 @@ input:-webkit-autofill:active{
   text-align: center;
 }
 
-#ticket-create-headline {
-  text-align: center;
-  font-weight: bold;
+#ticket-create-header {
+  display: flex;
+  align-items: center;
+  position: relative;
   margin-top: 5vh;
   margin-bottom: 5vh;
+}
+
+#ticket-create-headline {
+  position: absolute;
+  width: calc(100% - 130px);
+  margin-left: 65px;
+  margin-right: 65px;
+  z-index: 1;
+}
+
+#ticket-create-page-back {
+  width: 52px;
+  height: 52px;
+  border: none;
+  background-color: transparent;
+  border-radius: 50%;
+  font-size: 25px;
+  z-index: 10;
+}
+
+.dark #ticket-create-page-back {
+  color: #b5b5b5;
+}
+
+.light #ticket-create-page-back {
+  color: #656565;
+}
+
+.dark #ticket-create-page-back:hover {
+  background-color: #212937;
+}
+
+.light #ticket-create-page-back:hover {
+  background-color: #d3d3d3;
 }
 
 #ticket-create-type-dropdown {

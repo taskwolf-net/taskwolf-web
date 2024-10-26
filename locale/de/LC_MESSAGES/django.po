@@ -2726,6 +2726,12 @@ msgid "ticket.create.successful.title"
 msgstr "Erstellt!"
 msgid "ticket.create.successful.body"
 msgstr "Du hast das Ticket erfolgreich erstellt!"
+msgid "ticket.create.failed.title"
+msgstr "Erstellung fehlgeschlagen"
+msgid "ticket.create.failed"
+msgstr "Bei der Erstellung Ihres Tickets ist ein Fehler aufgetreten. Bitte versuchen Sie es in ein paar Minuten erneut"
+msgid "ticket.create.limit"
+msgstr "Sie haben bereits 5 offene Tickets. Daher können Sie kein neues Ticket eröffnen. Bitte schließen Sie zuerst die offenen Tickets und erstellen Sie dann Ihr neues Ticket."
 
 # TICKET
 msgid "ticket.page.title"
