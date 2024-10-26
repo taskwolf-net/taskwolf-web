@@ -6,7 +6,10 @@
     {% include 'neutral-header.html' %}
     <div id="ticket-container">
       <div id="ticket-wrapper" class="d-none">
-        <h1 id="ticket-headline">{% trans 'ticket.headline' %}</h1>
+        <div id="ticket-header">
+          <button id="ticket-page-back"><i class="fa-solid fa-arrow-left-long"></i></button>
+          <h1 id="ticket-headline" class="fw-bold text-center mb-0">{% trans 'ticket.headline' %}</h1>
+        </div>
         <label class="form-label">{% trans 'ticket.title' %}</label>
         <div id="ticket-title-wrapper" class="form-outline">
           <input type="title" id="ticket-title" class="form-control" placeholder="{% trans 'ticket.title' %}">
@@ -138,7 +141,13 @@
     if (dulnoWritten) {
       let dulnoPicture = document.createElement("img");
       dulnoPicture.classList.add("ticket-message-profile-picture");
-      dulnoPicture.src = "{% static 'img/tickets/dulno-profile-picture.webp' %}";
+      let theme = Cookie.find("dulno-theme");
+      theme = theme == null ? "dark" : theme;
+      if (theme === "dark") {
+        dulnoPicture.src = "{% static 'img/logo-light.webp' %}";
+      } else {
+        dulnoPicture.src = "{% static 'img/logo-dark.webp' %}";
+      }
       messageDescription.appendChild(dulnoPicture);
     } else {
       let userPicture = document.createElement("i");
@@ -212,6 +221,10 @@
         });
       }
     });
+  }
+
+  document.getElementById("ticket-page-back").onclick = function (event) {
+    window.location.href = "/tickets/";
   }
 
   function displayLoader() {

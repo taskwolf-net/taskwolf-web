@@ -43,11 +43,46 @@ input:-webkit-autofill:active{
   text-align: center;
 }
 
-#ticket-headline {
-  text-align: center;
-  font-weight: bold;
+#ticket-header {
+  display: flex;
+  align-items: center;
+  position: relative;
   margin-top: 5vh;
   margin-bottom: 5vh;
+}
+
+#ticket-headline {
+  position: absolute;
+  width: calc(100% - 130px);
+  margin-left: 65px;
+  margin-right: 65px;
+  z-index: 1;
+}
+
+#ticket-page-back {
+  width: 52px;
+  height: 52px;
+  border: none;
+  background-color: transparent;
+  border-radius: 50%;
+  font-size: 25px;
+  z-index: 10;
+}
+
+.dark #ticket-page-back {
+  color: #b5b5b5;
+}
+
+.light #ticket-page-back {
+  color: #656565;
+}
+
+.dark #ticket-page-back:hover {
+  background-color: #212937;
+}
+
+.light #ticket-page-back:hover {
+  background-color: #d3d3d3;
 }
 
 #ticket-title-wrapper {
