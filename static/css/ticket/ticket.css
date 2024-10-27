@@ -308,6 +308,6 @@ input:-webkit-autofill:active{
   display: flex;
 }
 
-#ticket-delete {
+#ticket-close {
   margin-left: auto;
 }
