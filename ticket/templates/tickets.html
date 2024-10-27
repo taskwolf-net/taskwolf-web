@@ -7,6 +7,7 @@
     <div id="tickets-wrapper">
       <h1 id="tickets-headline">{% trans 'tickets.headline' %}</h1>
       <div id="tickets-header">
+        <button type="button" id="tickets-filter" class="btn"><i class="fa-solid fa-sliders"></i></button>
         <div id="tickets-search-box">
           <input id="tickets-search-input" placeholder=" {% trans 'tickets.search' %}" type="text" class="form-control" value="" autocomplete="off">
           <button type="button">
@@ -15,64 +16,100 @@
         </div>
         <button type="button" id="ticket-create" class="btn btn-primary btn-block">{% trans 'tickets.create' %}</button>
       </div>
+      <div id="tickets-filter-container" class="rounded-4 py-3 mt-4 d-none">
+        <div class="tickets-filter-section">
+          <h5 class="text-center fw-bold my-4">{% trans 'tickets.type' %}</h5>
+          <ul id="tickets-filter-type-list">
+            <li class="form-check">
+              <input class="form-check-input" type="radio" name="tickets-filter-type" id="tickets-filter-type-request">
+              <label class="form-check-label" role="button" onclick="document.getElementById('tickets-filter-type-request').click()">{% trans 'tickets.type.request' %}</label>
+            </li>
+            <li class="form-check">
+              <input class="form-check-input" type="radio" name="tickets-filter-type" id="tickets-filter-type-bug">
+              <label class="form-check-label" role="button" onclick="document.getElementById('tickets-filter-type-bug').click()">{% trans 'tickets.type.bug' %}</label>
+            </li>
+          </ul>
+        </div>
+        <div class="vr"></div>
+        <div class="tickets-filter-section">
+          <h5 class="text-center fw-bold my-4">{% trans 'tickets.status' %}</h5>
+          <ul id="tickets-filter-status-list">
+            <li class="form-check">
+              <input class="form-check-input" type="radio" name="tickets-filter-status" id="tickets-filter-status-open">
+              <label class="form-check-label" role="button" onclick="document.getElementById('tickets-filter-status-open').click()">{% trans 'tickets.status.open' %}</label>
+            </li>
+            <li class="form-check">
+              <input class="form-check-input" type="radio" name="tickets-filter-status" id="tickets-filter-status-closed">
+              <label class="form-check-label" role="button" onclick="document.getElementById('tickets-filter-status-closed').click()">{% trans 'tickets.status.closed' %}</label>
+            </li>
+          </ul>
+        </div>
+      </div>
       <ul id="tickets-table-description" class="mt-4 mb-0">
+        <li id="tickets-table-description-selector">
+          <div>
+            <input id="tickets-selector-global" class="form-check-input" type="checkbox">
+          </div>
+        </li>
         <li id="tickets-table-description-title">
           <div>
             <span>{% trans 'tickets.title' %}</span>
+            <i class="tickets-table-description-sort fa-solid fa-sort-up ms-2" role="button" type="title"></i>
           </div>
         </li>
         <li id="tickets-table-description-type">
           <div>
             <span>{% trans 'tickets.type' %}</span>
+            <i class="tickets-table-description-sort fa-solid fa-sort-up ms-2" role="button" type="type"></i>
           </div>
         </li>
         <li id="tickets-table-description-status">
           <div>
             <span>{% trans 'tickets.status' %}</span>
+            <i class="tickets-table-description-sort fa-solid fa-sort-up ms-2" role="button" type="status"></i>
           </div>
         </li>
       </ul>
       <ul id="tickets-list">
       </ul>
+      <div id="tickets-paging" class="d-none position-relative">
+        <div class="d-flex justify-content-center align-items-center position-absolute z-0 w-100 mt-5 mt-lg-0 pt-3 pt-lg-0 pb-3 pb-lg-0">
+          <a id="tickets-previous-page" class="tickets-page me-sm-4"><i class="fa-solid fa-chevron-left"></i></a>
+          <div id="tickets-pages"></div>
+          <a id="tickets-next-page" class="tickets-page ms-sm-4"><i class="fa-solid fa-chevron-right"></i></a>
+        </div>
+        <button id="tickets-selector-delete" type="button" class="btn btn-danger disabled z-3">{% trans 'tickets.selector.close' %}</button>
+      </div>
       <div id="tickets-loader">
       </div>
       <div id="tickets-empty">
         <span id="tickets-empty-headline">{% trans 'tickets.empty.headline' %}</span>
         <span>{% trans 'tickets.empty.text' %}</span><a id="tickets-empty-link" href="/ticket/create/">{% trans 'tickets.empty.link' %}</a><span>?</span>
       </div>
+      <div id="tickets-not-found" class="d-none">
+        <span id="tickets-not-found-headline">{% trans 'tickets.not.found.headline' %}</span>
+      </div>
     </div>
   </body>
 </html>
 
 <script>
-  let tickets;
-  let ticketsCurrentNameFilter = "";
+  let entryCheckboxes = [];
 
   $(document).ready(function() {
     displayLoader();
-    fetchTicketsData(function() {
-      displayTickets();
+    fetchTicketsPage(0, function(tickets, pageState, pageNumber) {
       removeLoader();
+      updatePaging(pageNumber, 0, pageState, tickets,
+        document.getElementById("tickets-empty"));
     });
   });
 
-  function fetchTicketsData(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/tickets/personal/", "GET",
-      []);
-    request.send(function (status, responseText) {
-      tickets = JSON.parse(responseText).tickets;
-      callback();
-    });
-  }
-
-  function displayTickets() {
+  function displayTickets(tickets) {
     document.getElementById("tickets-list").innerHTML = "";
     let displayedTickets = 0;
     for (let i = 0; i < tickets.length; i++) {
       let entry = tickets[i];
-      if(!(shouldDisplayTicketEntry(entry))) {
-        continue;
-      }
       let type = "";
       if (entry.type.toUpperCase() === "REQUEST") {
         type = "{% trans 'tickets.type.request' %}";
@@ -90,17 +127,11 @@
     }
   }
 
-  function shouldDisplayTicketEntry(entry) {
-    return ticketsCurrentNameFilter.length === 0 ||
-      entry.title.toLowerCase().includes(ticketsCurrentNameFilter.toLowerCase()) ||
-      entry.type.toLowerCase().includes(ticketsCurrentNameFilter.toLowerCase()) ||
-      entry.status.toLowerCase().includes(ticketsCurrentNameFilter.toLowerCase());
-  }
-
   function displayTicket(id, title, type, status) {
     let entry = document.createElement('li');
     entry.role = "button";
     entry.classList.add("ticket-entry");
+    entry.appendChild(createTicketsSelector(id));
     let titleDiv = document.createElement("div");
     titleDiv.classList.add("tickets-entry-title");
     let nameElement = document.createElement("span");
@@ -124,6 +155,60 @@
     window.location.href = "/ticket/" + id + "/";
   }
 
+  function createTicketsSelector(id) {
+    let selector = document.createElement("div");
+    selector.classList.add("tickets-entry-selector");
+    let input = document.createElement("input");
+    input.classList.add("form-check-input");
+    input.type = "checkbox";
+    input.onchange = function (event) {
+      let checkboxSelected = false;
+      for (let i = 0; i < entryCheckboxes.length; i++) {
+        if (entryCheckboxes[i].checkbox.checked) {
+          checkboxSelected = true;
+          break;
+        }
+      }
+      let deleteButton = document.getElementById("tickets-selector-delete");
+      if (!checkboxSelected) {
+        deleteButton.classList.add("disabled");
+      } else {
+        deleteButton.classList.remove("disabled");
+      }
+    }
+    selector.appendChild(input);
+    entryCheckboxes.push({checkbox: selector.firstChild, id: id})
+    return selector;
+  }
+
+  document.getElementById("tickets-selector-global").onclick = function (event) {
+    let checkboxSelected = document.getElementById("tickets-selector-global").checked;
+    for (let i = 0; i < entryCheckboxes.length; i++) {
+      entryCheckboxes[i].checkbox.checked = checkboxSelected;
+    }
+    let deleteButton = document.getElementById("tickets-selector-delete");
+    if (!checkboxSelected) {
+      deleteButton.classList.add("disabled");
+    } else {
+      deleteButton.classList.remove("disabled");
+    }
+  }
+
+  document.getElementById("tickets-selector-delete").onclick = function (event) {
+    for (let i = 0; i < entryCheckboxes.length; i++) {
+      let entry = entryCheckboxes[i];
+      if (entry.checkbox.checked) {
+        let request = new HttpRequest("https://api.dulno.com/v1/ticket/remove/", "POST",
+          [], {ticket: entry.id});
+        request.send(function (status, responseText) {
+        });
+      }
+    }
+    Swal.fire("{% trans 'product.tickets.selector.delete.successful.title' %}",
+      "{% trans 'product.tickets.selector.delete.successful.body' %}", "success")
+      .then(success => window.location.reload());
+  }
+
   function appendTicketsCell(entry, identifier, information, elementType) {
     let div = document.createElement("div");
     div.classList.add("tickets-entry-" + identifier);
@@ -135,9 +220,246 @@
     return element;
   }
 
+  const pageVisibilityRange = 2;
+  let pagingStartingPoint = "";
+  let pagingSorting = "title";
+  let pagingOrder = "ASCENDING";
+  let pagingFilterSearch = "";
+  let pagingFilterType = "";
+  let pagingFilterStatus = "";
+
+  function displayPaging(pages, currentPage, pageState) {
+    displayPagingShiftButton("tickets-previous-page", currentPage > 0,
+      pages, currentPage, pageState, -1);
+    displayPagingShiftButton("tickets-next-page", currentPage < pages - 1,
+      pages, currentPage, pageState, 1);
+    let pagesElement = document.getElementById("tickets-pages");
+    pagesElement.innerHTML = "";
+    createPageButton(pagesElement, pages, currentPage, pageState, 0, currentPage === 0);
+    if (pages === 1) {
+      return;
+    }
+    if (currentPage - pageVisibilityRange > 0) {
+      pagesElement.insertAdjacentHTML("beforeend",
+        "<i class='tickets-paging-ellipsis tickets-paging-ellipsis-start " +
+        "fa-solid fa-ellipsis mx-sm-4'></i>");
+    }
+    for (let i = -pageVisibilityRange + 1; i < pageVisibilityRange; i++) {
+      let page = currentPage + i;
+      if (page < 1 || page >= pages - 1) {
+        continue;
+      }
+      createPageButton(pagesElement, pages, currentPage, pageState, page,
+        page === currentPage);
+    }
+    if (currentPage + pageVisibilityRange < pages - 1) {
+      pagesElement.insertAdjacentHTML("beforeend",
+        "<i class='tickets-paging-ellipsis tickets-paging-ellipsis-end " +
+        "fa-solid fa-ellipsis mx-sm-4'></i>");
+    }
+    createPageButton(pagesElement, pages, currentPage, pageState, pages - 1, currentPage === pages - 1);
+  }
+
+  function displayPagingShiftButton(id, isEnabled, pages, currentPage, pageState, direction) {
+    let button = document.getElementById(id);
+    if (isEnabled) {
+      button.classList.remove("tickets-page-disabled");
+    } else {
+      button.classList.add("tickets-page-disabled");
+    }
+    button.onclick = function (event) {
+      if (!isEnabled) {
+        return;
+      }
+      shiftPage(pages, currentPage, pageState, direction);
+    }
+  }
+
+  function createPageButton(pagesElement, pages, currentPage, pageState, page, isActive) {
+    let button = document.createElement("a");
+    button.classList.add("tickets-page");
+    if (isActive) {
+      button.classList.add("tickets-page-active");
+    }
+    button.innerHTML = page + 1;
+    button.onclick = function (event) {
+      onPageButtonClick(pages, currentPage, pageState, page);
+    };
+    pagesElement.appendChild(button);
+  }
+
+  function onPageButtonClick(pages, currentPage, pageState, page) {
+    if (page === currentPage) {
+      return;
+    }
+    if (Math.abs(page - currentPage) === 1) {
+      shiftPage(pages, currentPage, pageState, page - currentPage);
+      return;
+    }
+    fetchTicketsPage(page, function(tickets, pageState, pageNumber) {
+      updatePaging(pageNumber, page, pageState, tickets,
+        document.getElementById("tickets-not-found"));
+    });
+  }
+
+  function fetchTicketsPage(targetPage, callback) {
+    let body = createPagingBody();
+    body.search = pagingFilterSearch;
+    body.targetPage = targetPage;
+    let request = new HttpRequest("https://api.dulno.com/v1/tickets/page/",
+      "POST", [], body);
+    request.send(function (status, responseText) {
+      let response = JSON.parse(responseText);
+      pagingStartingPoint = targetPage === 0 ? "FORWARD" : "BACKWARD";
+      callback(response.tickets, response.page, response.pageNumber);
+    });
+  }
+
+  function shiftPage(pages, currentPage, pageState, direction) {
+    let newPage = currentPage + direction;
+    if (newPage === 0 || newPage === pages - 1) {
+      pagingStartingPoint = newPage === 0 ? "FORWARD" : "BACKWARD";
+      fetchTicketsPage(newPage, function(tickets, pageState, pageNumber) {
+        updatePaging(pageNumber, newPage, pageState, tickets,
+          document.getElementById("tickets-not-found"));
+      });
+      return;
+    }
+    let body = createPagingBody();
+    body.pageState = pageState;
+    body.startingPoint = pagingStartingPoint;
+    body.direction = direction < 0 ? "BACKWARD" : "FORWARD";
+    let request = new HttpRequest("https://api.dulno.com/v1/tickets/page/shift/",
+      "POST", [], body);
+    request.send(function (status, responseText) {
+      let response = JSON.parse(responseText);
+      let newPage = currentPage + direction;
+      updatePaging(response.pageNumber, newPage, response.page,
+        response.tickets, document.getElementById("tickets-not-found"));
+    });
+  }
+
+  function createPagingBody() {
+    let body = {sorting: pagingSorting, order: pagingOrder};
+    if (pagingFilterType !== "") {
+      body.type = pagingFilterType;
+    }
+    if (pagingFilterStatus !== "") {
+      body.status = pagingFilterStatus;
+    }
+    return body;
+  }
+
+  function updateTickets() {
+    fetchTicketsPage(0, function(tickets, pageState, pageNumber) {
+      updatePaging(pageNumber, 0, pageState, tickets,
+        document.getElementById("tickets-not-found"));
+    });
+  }
+
+  function updatePaging(pageNumber, currentPage, pageState, tickets, emptyElement) {
+    document.getElementById("tickets-selector-global").checked = false;
+    entryCheckboxes = [];
+    document.getElementById("tickets-selector-delete").classList.add("disabled");
+    displayTickets(tickets);
+    document.getElementById("tickets-empty").classList.add("d-none");
+    document.getElementById("tickets-not-found").classList.add("d-none");
+    if (tickets.length === 0) {
+      emptyElement.classList.remove("d-none");
+      document.getElementById("tickets-paging").classList.add("d-none");
+    } else {
+      emptyElement.classList.add("d-none");
+      displayPaging(pageNumber, currentPage, pageState);
+      document.getElementById("tickets-paging").classList.remove("d-none");
+    }
+  }
+
+  document.getElementById("tickets-filter-type-request").onclick = function (event) {
+    if (pagingFilterType === "REQUEST") {
+      document.getElementById("tickets-filter-type-request").checked = false;
+      pagingFilterType = "";
+      updateTickets();
+      return;
+    }
+    pagingFilterType = "REQUEST";
+    updateTickets();
+  }
+
+  document.getElementById("tickets-filter-type-bug").onclick = function (event) {
+    if (pagingFilterType === "BUG") {
+      document.getElementById("tickets-filter-type-bug").checked = false;
+      pagingFilterType = "";
+      updateTickets();
+      return;
+    }
+    pagingFilterType = "BUG";
+    updateTickets();
+  }
+
+  document.getElementById("tickets-filter-status-open").onclick = function (event) {
+    if (pagingFilterStatus === "OPEN") {
+      document.getElementById("tickets-filter-status-open").checked = false;
+      pagingFilterStatus = "";
+      updateTickets();
+      return;
+    }
+    pagingFilterStatus = "OPEN";
+    updateTickets();
+  }
+
+  document.getElementById("tickets-filter-status-closed").onclick = function (event) {
+    if (pagingFilterStatus === "CLOSED") {
+      document.getElementById("tickets-filter-status-closed").checked = false;
+      pagingFilterStatus = "";
+      updateTickets();
+      return;
+    }
+    pagingFilterStatus = "CLOSED";
+    updateTickets();
+  }
+
+  let currentSearchTimeout = -1;
+
   document.getElementById("tickets-search-input").oninput = function(event) {
-    ticketsCurrentNameFilter = event.target.value;
-    displayTickets();
+    if (currentSearchTimeout !== -1) {
+      clearTimeout(currentSearchTimeout);
+    }
+    currentSearchTimeout = setTimeout(function () {
+      currentSearchTimeout = -1;
+      pagingFilterSearch = event.target.value;
+      updateTickets();
+    }, 500);
+  };
+
+  let sortingElements = document.getElementsByClassName("tickets-table-description-sort");
+  for (let i = 0; i < sortingElements.length; i++) {
+    let sortingElement = sortingElements[i];
+    sortingElement.onclick = function (event) {
+      updateSorting(sortingElement);
+    }
+  }
+
+  function updateSorting(selectedElement) {
+    for (let i = 0; i < sortingElements.length; i++) {
+      let sortingElement = sortingElements[i];
+      sortingElement.classList.remove("fa-sort-up", "fa-sort-down");
+      sortingElement.classList.add("fa-sort");
+    }
+    let selectedSorting = selectedElement.getAttribute("type");
+    selectedElement.classList.remove("fa-sort");
+    if (pagingSorting === selectedSorting) {
+      pagingOrder = pagingOrder === "ASCENDING" ? "DESCENDING" : "ASCENDING";
+      selectedElement.classList.add(pagingOrder === "DESCENDING" ? "fa-sort-down" : "fa-sort-up");
+    } else {
+      pagingOrder = "ASCENDING";
+      selectedElement.classList.add("fa-sort-up");
+    }
+    pagingSorting = selectedSorting;
+    updateTickets();
+  }
+
+  document.getElementById("tickets-filter").onclick = function(event) {
+    document.getElementById("tickets-filter-container").classList.toggle("d-none");
   };
 
   document.getElementById("ticket-create").onclick = function(event) {
