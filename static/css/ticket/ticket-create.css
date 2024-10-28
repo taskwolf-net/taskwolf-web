@@ -38,7 +38,7 @@ input:-webkit-autofill:active{
 }
 
 #ticket-create-container {
-  width: min(1500px, 95%);
+  width: min(1200px, 95%);
   margin: auto;
   text-align: center;
 }

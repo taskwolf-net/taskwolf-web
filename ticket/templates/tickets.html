@@ -35,7 +35,7 @@
           <h5 class="text-center fw-bold my-4">{% trans 'tickets.status' %}</h5>
           <ul id="tickets-filter-status-list">
             <li class="form-check">
-              <input class="form-check-input" type="radio" name="tickets-filter-status" id="tickets-filter-status-open">
+              <input class="form-check-input" type="radio" name="tickets-filter-status" id="tickets-filter-status-open" checked>
               <label class="form-check-label" role="button" onclick="document.getElementById('tickets-filter-status-open').click()">{% trans 'tickets.status.open' %}</label>
             </li>
             <li class="form-check">
@@ -60,13 +60,13 @@
         <li id="tickets-table-description-type">
           <div>
             <span>{% trans 'tickets.type' %}</span>
-            <i class="tickets-table-description-sort fa-solid fa-sort-up ms-2" role="button" type="type"></i>
+            <i class="tickets-table-description-sort fa-solid fa-sort ms-2" role="button" type="type"></i>
           </div>
         </li>
         <li id="tickets-table-description-status">
           <div>
             <span>{% trans 'tickets.status' %}</span>
-            <i class="tickets-table-description-sort fa-solid fa-sort-up ms-2" role="button" type="status"></i>
+            <i class="tickets-table-description-sort fa-solid fa-sort ms-2" role="button" type="status"></i>
           </div>
         </li>
       </ul>
@@ -78,12 +78,12 @@
           <div id="tickets-pages"></div>
           <a id="tickets-next-page" class="tickets-page ms-sm-4"><i class="fa-solid fa-chevron-right"></i></a>
         </div>
-        <button id="tickets-selector-delete" type="button" class="btn btn-danger disabled z-3">{% trans 'tickets.selector.close' %}</button>
+        <button id="tickets-selector-close" type="button" class="btn btn-danger disabled z-3">{% trans 'tickets.selector.close' %}</button>
       </div>
       <div id="tickets-loader">
       </div>
-      <div id="tickets-empty">
-        <span id="tickets-empty-headline">{% trans 'tickets.empty.headline' %}</span>
+      <div id="tickets-empty" class="d-none">
+        <span id="tickets-empty-headline" class="mb-sm-1 mb-3">{% trans 'tickets.empty.headline' %}</span>
         <span>{% trans 'tickets.empty.text' %}</span><a id="tickets-empty-link" href="/ticket/create/">{% trans 'tickets.empty.link' %}</a><span>?</span>
       </div>
       <div id="tickets-not-found" class="d-none">
@@ -146,6 +146,10 @@
       appendTicketsCell(entry, "status", "{% trans 'tickets.status.closed' %}", "span").classList.add("text-danger");
     }
     entry.onclick = function (event) {
+      let target = event.target;
+      if (Boolean(target.closest(".tickets-entry-selector"))) {
+        return;
+      }
       clickTicket(id);
     }
     document.getElementById("tickets-list").appendChild(entry);
@@ -169,7 +173,7 @@
           break;
         }
       }
-      let deleteButton = document.getElementById("tickets-selector-delete");
+      let deleteButton = document.getElementById("tickets-selector-close");
       if (!checkboxSelected) {
         deleteButton.classList.add("disabled");
       } else {
@@ -186,7 +190,7 @@
     for (let i = 0; i < entryCheckboxes.length; i++) {
       entryCheckboxes[i].checkbox.checked = checkboxSelected;
     }
-    let deleteButton = document.getElementById("tickets-selector-delete");
+    let deleteButton = document.getElementById("tickets-selector-close");
     if (!checkboxSelected) {
       deleteButton.classList.add("disabled");
     } else {
@@ -194,18 +198,18 @@
     }
   }
 
-  document.getElementById("tickets-selector-delete").onclick = function (event) {
+  document.getElementById("tickets-selector-close").onclick = function (event) {
     for (let i = 0; i < entryCheckboxes.length; i++) {
       let entry = entryCheckboxes[i];
       if (entry.checkbox.checked) {
-        let request = new HttpRequest("https://api.dulno.com/v1/ticket/remove/", "POST",
+        let request = new HttpRequest("https://api.dulno.com/v1/ticket/close/", "POST",
           [], {ticket: entry.id});
         request.send(function (status, responseText) {
         });
       }
     }
-    Swal.fire("{% trans 'product.tickets.selector.delete.successful.title' %}",
-      "{% trans 'product.tickets.selector.delete.successful.body' %}", "success")
+    Swal.fire("{% trans 'tickets.selector.close.successful.title' %}",
+      "{% trans 'tickets.selector.close.successful.body' %}", "success")
       .then(success => window.location.reload());
   }
 
@@ -226,7 +230,7 @@
   let pagingOrder = "ASCENDING";
   let pagingFilterSearch = "";
   let pagingFilterType = "";
-  let pagingFilterStatus = "";
+  let pagingFilterStatus = "OPEN";
 
   function displayPaging(pages, currentPage, pageState) {
     displayPagingShiftButton("tickets-previous-page", currentPage > 0,
@@ -360,7 +364,7 @@
   function updatePaging(pageNumber, currentPage, pageState, tickets, emptyElement) {
     document.getElementById("tickets-selector-global").checked = false;
     entryCheckboxes = [];
-    document.getElementById("tickets-selector-delete").classList.add("disabled");
+    document.getElementById("tickets-selector-close").classList.add("disabled");
     displayTickets(tickets);
     document.getElementById("tickets-empty").classList.add("d-none");
     document.getElementById("tickets-not-found").classList.add("d-none");
