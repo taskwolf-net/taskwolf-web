@@ -262,7 +262,7 @@
   color: #232323;
 }
 
-@media (max-width: 550px) {
+@media (max-width: 700px) {
   #tickets-table-description li {
     width: 30%;
   }
@@ -288,7 +288,7 @@
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 500px) {
   #tickets-table-description li {
     width: 40%;
   }
@@ -303,6 +303,24 @@
 
   .tickets-entry-title {
     width: calc(60% - 60px) !important;
+  }
+}
+
+@media (max-width: 400px) {
+  #tickets-table-description-title {
+    width: calc(100% - 60px) !important;
+  }
+
+  #tickets-table-description-status {
+    display: none !important;
+  }
+
+  .tickets-entry-title {
+    width: calc(100% - 60px) !important;
+  }
+
+  .tickets-entry-status {
+    display: none !important;
   }
 }
 
