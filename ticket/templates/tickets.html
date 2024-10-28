@@ -51,6 +51,10 @@
             <input id="tickets-selector-global" class="form-check-input" type="checkbox">
           </div>
         </li>
+        <li id="tickets-table-description-notification">
+          <div>
+          </div>
+        </li>
         <li id="tickets-table-description-title">
           <div>
             <span>{% trans 'tickets.title' %}</span>
@@ -117,7 +121,7 @@
       if (entry.type.toUpperCase() === "BUG") {
         type = "{% trans 'tickets.type.bug' %}";
       }
-      displayTicket(entry.id, entry.title, type, entry.status);
+      displayTicket(entry.id, entry.title, type, entry.status, entry.lastMessageSeen);
       displayedTickets++;
     }
     if (displayedTickets === 0) {
@@ -127,11 +131,23 @@
     }
   }
 
-  function displayTicket(id, title, type, status) {
+  function displayTicket(id, title, type, status, lastMessageSeen) {
     let entry = document.createElement('li');
     entry.role = "button";
     entry.classList.add("ticket-entry");
     entry.appendChild(createTicketsSelector(id));
+    let notificationDiv = document.createElement("div");
+    notificationDiv.classList.add("tickets-entry-notification", "position-relative");
+    if (!lastMessageSeen) {
+      var notificationContainer = document.createElement("span");
+      notificationContainer.classList.add("p-1", "bg-danger", "border", "border-light",
+        "rounded-circle");
+      var notification = document.createElement("span");
+      notification.classList.add("visually-hidden");
+      notificationContainer.appendChild(notification);
+      notificationDiv.appendChild(notificationContainer);
+    }
+    entry.appendChild(notificationDiv);
     let titleDiv = document.createElement("div");
     titleDiv.classList.add("tickets-entry-title");
     let nameElement = document.createElement("span");

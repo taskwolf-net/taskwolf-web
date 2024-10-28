@@ -22,12 +22,25 @@
       <div class="navbar-divider vr ms-3 me-3"></div>
       <div id="profile-button-container" class="dropdown">
         <button class="dropdown-toggle btn" id="profile-button-wrapper" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i id="profile-picture" class="fa-regular fa-user"></i><i id="profile-picture-arrow" class="fa-solid fa-angle-down"></i>
+          <div class="position-relative">
+            <i id="profile-picture" class="fa-regular fa-user"></i>
+            <span class="ticket-notification d-none position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+              <span class="visually-hidden"></span>
+            </span>
+          </div>
+          <i id="profile-picture-arrow" class="fa-solid fa-angle-down"></i>
         </button>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profile-button-wrapper">
           <li><button class="dropdown-item" id="dashboard-button" type="button">{% trans 'product.header.dashboard' %}</button></li>
           <li><button class="dropdown-item" id="settings-button" type="button">{% trans 'product.header.settings' %}</button></li>
-          <li><button class="dropdown-item" id="tickets-button" type="button">{% trans 'product.header.tickets' %}</button></li>
+          <li>
+            <button class="dropdown-item position-relative" id="tickets-button" type="button">
+              {% trans 'product.header.tickets' %}
+              <span class="ticket-notification d-none position-absolute top-50 translate-middle ms-3 p-1 bg-danger border border-light rounded-circle">
+                <span class="visually-hidden"></span>
+              </span>
+            </button>
+          </li>
           <li><hr class="dropdown-divider"></li>
           <li><button class="dropdown-item" id="logout-button" type="button">{% trans 'product.header.logout' %}</button></li>
         </ul>
@@ -43,6 +56,7 @@
 
   $(document).ready(function() {
     setupTargetSelection();
+    setupTicketNotification();
   });
 
   document.getElementById('dashboard-button').onclick = function() {
@@ -152,6 +166,24 @@
       "POST", [], {target: target.id, isGlobal: isGlobal});
     request.send(function (status, responseText) {
       window.location.reload();
+    });
+  }
+
+  function setupTicketNotification() {
+    fetchTicketNotificationData(function(hasUnseenTickets) {
+      if (hasUnseenTickets) {
+        for (let element of [...document.getElementsByClassName("ticket-notification")]) {
+          element.classList.remove("d-none");
+        }
+      }
+    });
+  }
+
+  function fetchTicketNotificationData(callback) {
+    let request = new HttpRequest("https://api.dulno.com/v1/tickets/unseen/", "GET",
+      []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText).unseenTickets);
     });
   }
 

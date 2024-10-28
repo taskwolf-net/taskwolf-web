@@ -214,11 +214,16 @@
 }
 
 .tickets-entry-title {
-  width: calc(60% - 60px) !important;
+  width: calc(60% - 110px) !important;
 }
 
 .tickets-entry-selector {
   width: 60px !important;
+  text-align: center;
+}
+
+.tickets-entry-notification {
+  width: 50px !important;
   text-align: center;
 }
 
@@ -240,11 +245,16 @@
 }
 
 #tickets-table-description-title {
-  width: calc(60% - 60px) !important;
+  width: calc(60% - 110px) !important;
 }
 
 #tickets-table-description-selector {
   width: 60px !important;
+  text-align: center;
+}
+
+#tickets-table-description-notification {
+  width: 50px !important;
   text-align: center;
 }
 
@@ -268,7 +278,7 @@
   }
 
   #tickets-table-description-title {
-    width: calc(70% - 60px) !important;
+    width: calc(70% - 110px) !important;
   }
 
   #tickets-table-description-type {
@@ -280,7 +290,7 @@
   }
 
   .tickets-entry-title {
-    width: calc(70% - 60px) !important;
+    width: calc(70% - 110px) !important;
   }
 
   .tickets-entry-type {
@@ -294,7 +304,7 @@
   }
 
   #tickets-table-description-title {
-    width: calc(60% - 60px) !important;
+    width: calc(60% - 110px) !important;
   }
 
   #tickets-list li div {
@@ -302,13 +312,13 @@
   }
 
   .tickets-entry-title {
-    width: calc(60% - 60px) !important;
+    width: calc(60% - 110px) !important;
   }
 }
 
 @media (max-width: 400px) {
   #tickets-table-description-title {
-    width: calc(100% - 60px) !important;
+    width: calc(100% - 110px) !important;
   }
 
   #tickets-table-description-status {
@@ -316,7 +326,7 @@
   }
 
   .tickets-entry-title {
-    width: calc(100% - 60px) !important;
+    width: calc(100% - 110px) !important;
   }
 
   .tickets-entry-status {
