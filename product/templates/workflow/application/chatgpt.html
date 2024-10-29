@@ -33,7 +33,7 @@
       document.getElementById("organization").focus();
     }
     $(document.getElementById("chatgpt-continue"))
-      .toggleClass("disabled", document.getElementById("api-key").value !== "");
+      .toggleClass("disabled", document.getElementById("api-key").value === "");
   });
 
   document.getElementById("organization").addEventListener('keyup', function(event) {
@@ -51,12 +51,13 @@
     document.getElementById("chatgpt-wrapper").classList.add("d-none");
     let loader = document.createElement("div");
     loader.classList.add("loader");
-    document.getElementById("chatgpt-wrapper").appendChild(loader);
+    document.getElementById("chatgpt-container").appendChild(loader);
     connectChatGPT(function (response) {
-      document.getElementById("chatgpt-wrapper")
+      document.getElementById("chatgpt-container")
         .removeChild(document.getElementsByClassName("loader")[0]);
       if (response.success === true) {
         window.close();
+        window.location.href = "https://dulno.com/";
       } else {
         document.getElementById("chatgpt-wrapper").classList.remove("d-none");
         Swal.fire("{% trans 'product.workflow.application.chatgpt.failed.title' %}",
