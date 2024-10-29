@@ -224,11 +224,11 @@
 }
 
 .devices-entry-id {
-  width: 32% !important;
+  width: calc(40% - 120px) !important;
 }
 
 .devices-entry-selector {
-  width: 4% !important;
+  width: 60px !important;
   text-align: center;
 }
 
@@ -238,7 +238,7 @@
 }
 
 .devices-entry-settings {
-  width: 4% !important;
+  width: 60px !important;
   padding: 0 !important;
 }
 
@@ -282,11 +282,11 @@
 }
 
 #devices-table-description-id {
-  width: 32% !important;
+  width: calc(40% - 120px) !important;
 }
 
 #devices-table-description-selector {
-  width: 4% !important;
+  width: 60px !important;
   text-align: center;
 }
 
@@ -295,7 +295,7 @@
 }
 
 #devices-table-description-settings {
-  width: 4% !important;
+  width: 60px !important;
 }
 
 #devices-table-description button {
@@ -356,12 +356,8 @@
     width: 28%;
   }
 
-  #devices-table-description-selector {
-    width: 6% !important;
-  }
-
   #devices-table-description-name {
-    width: 46% !important;
+    width: calc(44% - 120px) !important;
   }
 
   #devices-table-description-id {
@@ -372,12 +368,8 @@
     width: 28%;
   }
 
-  .devices-entry-selector {
-    width: 6% !important;
-  }
-
   .devices-entry-name {
-    width: 46% !important;
+    width: calc(44% - 120px) !important;
   }
 
   .devices-entry-id {
@@ -391,7 +383,7 @@
   }
 
   #devices-table-description-name {
-    width: 60% !important;
+    width: calc(70% - 120px) !important;
   }
 
   #devices-table-description-owner {
@@ -403,7 +395,7 @@
   }
 
   .devices-entry-name {
-    width: 60% !important;
+    width: calc(70% - 120px) !important;
   }
 
   .devices-entry-owner {
@@ -413,7 +405,7 @@
 
 @media (max-width: 800px) {
   #devices-table-description-name {
-    width: 100% !important;
+    width: calc(100% - 120px) !important;
   }
 
   #devices-table-description-platform {
@@ -421,7 +413,7 @@
   }
 
   .devices-entry-name {
-    width: 100% !important;
+    width: calc(100% - 120px) !important;
   }
 
   .devices-entry-platform {
