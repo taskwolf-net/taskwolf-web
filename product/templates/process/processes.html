@@ -153,6 +153,11 @@
       if (Boolean(target.closest(".processes-entry-selector"))) {
         return;
       }
+      if (window.innerWidth <= 800 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        Swal.fire("{% trans 'product.processes.click.mobile.title' %}",
+          "{% trans 'product.processes.click.mobile.body' %}", "error");
+        return;
+      }
       window.location.href = "/process/" + id + "/";
     }
     document.getElementById("processes-list").appendChild(entry);
