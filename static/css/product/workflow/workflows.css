@@ -337,7 +337,7 @@
 }
 
 .workflows-entry-name {
-  width: 35% !important;
+  width: calc(43% - 120px) !important;
 }
 
 .workflows-entry-preview {
@@ -349,12 +349,12 @@
 }
 
 .workflows-entry-settings {
-  width: 4% !important;
+  width: 60px !important;
   padding: 0 !important;
 }
 
 .workflows-entry-selector {
-  width: 4% !important;
+  width: 60px !important;
 }
 
 .workflows-entry-settings-button {
@@ -398,7 +398,7 @@
 }
 
 #workflows-table-description-name {
-  width: 35% !important;
+  width: calc(43% - 120px) !important;
 }
 
 #workflows-table-description-preview {
@@ -411,12 +411,12 @@
 }
 
 #workflows-table-description-settings {
-  width: 4% !important;
+  width: 60px !important;
   padding: 0 !important;
 }
 
 #workflows-table-description-selector {
-  width: 4% !important;
+  width: 60px !important;
 }
 
 #workflows-table-description button {
@@ -439,7 +439,7 @@
   }
 
   #workflows-table-description-name {
-    width: 27% !important;
+    width: calc(35% - 120px) !important;
   }
 
   #workflows-table-description-preview {
@@ -455,7 +455,7 @@
   }
 
   .workflows-entry-name {
-    width: 27% !important;
+    width: calc(35% - 120px) !important;
   }
 
   .workflows-entry-preview {
@@ -472,12 +472,8 @@
     width: 22%;
   }
 
-  #workflows-table-description-selector {
-    width: 6% !important;
-  }
-
   #workflows-table-description-name {
-    width: 27% !important;
+    width: calc(37% - 120px) !important;
   }
 
   #workflows-table-description-preview {
@@ -492,12 +488,8 @@
     width: 22%;
   }
 
-  .workflows-entry-selector {
-    width: 6% !important;
-  }
-
   .workflows-entry-name {
-    width: 27% !important;
+    width: calc(37% - 120px) !important;
   }
 
   .workflows-entry-preview {
@@ -511,11 +503,11 @@
 
 @media (max-width: 1050px) {
   #workflows-table-description-name {
-    width: 35% !important;
+    width: calc(50% - 120px) !important;
   }
 
   #workflows-table-description-preview {
-    width: 35% !important;
+    width: 30% !important;
   }
 
   #workflows-table-description-creator {
@@ -527,11 +519,11 @@
   }
 
   .workflows-entry-name {
-    width: 35% !important;
+    width: calc(50% - 120px) !important;
   }
 
   .workflows-entry-preview {
-    width: 35% !important;
+    width: 30% !important;
   }
 
   .workflows-entry-creator {
@@ -544,12 +536,8 @@
 }
 
 @media (max-width: 900px) {
-  #workflows-table-description-selector {
-    width: 10% !important;
-  }
-
   #workflows-table-description-name {
-    width: 61% !important;
+    width: calc(75% - 120px) !important;
   }
 
   #workflows-table-description-preview {
@@ -560,12 +548,8 @@
     width: 25% !important;
   }
 
-  .workflows-entry-selector {
-    width: 10% !important;
-  }
-
   .workflows-entry-name {
-    width: 61% !important;
+    width: calc(75% - 120px) !important;
   }
 
   .workflows-entry-preview {
@@ -574,6 +558,32 @@
 
   .workflows-entry-is-running {
     width: 25% !important;
+  }
+}
+
+@media (max-width: 500px) {
+  #workflows-table-description-name {
+    width: calc(66% - 80px) !important;
+  }
+
+  #workflows-table-description-is-running {
+    width: 34% !important;
+  }
+
+  #workflows-table-description-settings {
+    width: 20px !important;
+  }
+
+  .workflows-entry-name {
+    width: calc(66% - 80px) !important;
+  }
+
+  .workflows-entry-is-running {
+    width: 34% !important;
+  }
+
+  .workflows-entry-settings {
+    width: 20px !important;
   }
 }
 
