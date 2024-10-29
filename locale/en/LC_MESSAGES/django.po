@@ -1347,7 +1347,7 @@ msgstr "We have found out that you have already registered an email with the sam
 
 # WORKFLOW - APPLICATION - GITLAB
 msgid "product.workflow.application.gitlab.title"
-msgstr "Connect gitlab - Dulno"
+msgstr "Connect Gitlab - Dulno"
 msgid "product.workflow.application.gitlab.continue"
 msgstr "Continue"
 msgid "product.workflow.application.gitlab.hostname.headline"
@@ -1382,6 +1382,24 @@ msgid "product.workflow.application.gitlab.failed.incomplete"
 msgstr "You have not filled in all fields. To connect your Gitlab to Dulno, you must fill in all the previous fields"
 msgid "product.workflow.application.gitlab.failed.already.exists"
 msgstr "We have found out that you have already registered a Gitlab instance with the same hostname. Please delete it first to create a new Gitlab instance with this hostname"
+
+# WORKFLOW - APPLICATION - CHATGPT
+msgid "product.workflow.application.chatgpt.title"
+msgstr "Connect ChatGPT - Dulno"
+msgid "product.workflow.application.chatgpt.continue"
+msgstr "Continue"
+msgid "product.workflow.application.chatgpt.headline"
+msgstr "Connect your ChatGPT with Dulno"
+msgid "product.workflow.application.chatgpt.api.key"
+msgstr "API key"
+msgid "product.workflow.application.chatgpt.organization"
+msgstr "Organization (optional)"
+msgid "product.workflow.application.chatgpt.failed.title"
+msgstr "Connection to ChatGPT failed"
+msgid "product.workflow.application.chatgpt.failed.incomplete"
+msgstr "You have not filled in all fields. To connect your ChatGPT to Dulno, you must fill in the required fields"
+msgid "product.workflow.application.chatgpt.failed.error"
+msgstr "The request to access your ChatGPT has failed. You have probably entered an incorrect API key or organization. Please check your input"
 
 # PROCESSES
 msgid "product.processes.title"

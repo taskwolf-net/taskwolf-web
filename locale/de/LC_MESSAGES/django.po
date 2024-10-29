@@ -1383,6 +1383,24 @@ msgstr "Sie haben nicht alle Felder ausgefüllt. Um Ihr Gitlab mit Dulno zu verb
 msgid "product.workflow.application.gitlab.failed.already.exists"
 msgstr "Wir haben festgestellt, dass Sie bereits eine Gitlab-Instanz mit demselben Hostnamen registriert haben. Bitte löschen Sie diese zuerst, um eine neue Gitlab-Instanz mit diesem Hostnamen zu erstellen"
 
+# WORKFLOW - APPLICATION - CHATGPT
+msgid "product.workflow.application.chatgpt.title"
+msgstr "ChatGPT verbinden - Dulno"
+msgid "product.workflow.application.chatgpt.continue"
+msgstr "Weiter"
+msgid "product.workflow.application.chatgpt.headline"
+msgstr "Verbinden Sie Ihr ChatGPT mit Dulno"
+msgid "product.workflow.application.chatgpt.api.key"
+msgstr "API-Schlüssel"
+msgid "product.workflow.application.chatgpt.organization"
+msgstr "Organisation (optional)"
+msgid "product.workflow.application.chatgpt.failed.title"
+msgstr "Verbindung zu ChatGPT fehlgeschlagen"
+msgid "product.workflow.application.chatgpt.failed.incomplete"
+msgstr "Sie haben nicht alle Felder ausgefüllt. Um Ihr ChatGPT mit Dulno zu verbinden, müssen Sie die erforderlichen Felder ausfüllen"
+msgid "product.workflow.application.chatgpt.failed.error"
+msgstr "Die Anfrage, auf Ihr ChatGPT zuzugreifen, ist fehlgeschlagen. Sie haben wahrscheinlich einen falschen API-Schlüssel oder eine falsche Organisation eingegeben. Bitte überprüfen Sie Ihre Eingabe"
+
 # PROCESSES
 msgid "product.processes.title"
 msgstr "Prozesse - Dulno"

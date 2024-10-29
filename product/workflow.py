@@ -55,3 +55,8 @@ async def workflowConnectMail(request):
 async def workflowConnectGitlab(request):
   return render(request, 'workflow/application/gitlab.html', {'title': gettext('product.workflow.application.gitlab.title'),
     'css': ['css/product/workflow/application/gitlab.css']})
+
+@authentication_required
+async def workflowConnectChatGPT(request):
+  return render(request, 'workflow/application/chatgpt.html', {'title': gettext('product.workflow.application.chatgpt.title'),
+    'css': ['css/product/workflow/application/chatgpt.css']})

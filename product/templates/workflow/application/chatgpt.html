@@ -30,30 +30,25 @@
 
   document.getElementById("api-key").addEventListener('keyup', function(event) {
     if (event.key === "Enter") {
-      document.getElementById("secret").focus();
+      document.getElementById("organization").focus();
     }
     $(document.getElementById("chatgpt-continue"))
       .toggleClass("disabled", document.getElementById("api-key").value !== "");
   });
 
-  document.getElementById("secret").addEventListener('keyup', function(event) {
-    var applicationCompleted = checkApplicationCompleteness();
-    if (event.key === "Enter" && applicationCompleted) {
-      document.getElementById("chatgpt-application-continue").click();
+  document.getElementById("organization").addEventListener('keyup', function(event) {
+    if (event.key === "Enter") {
+      document.getElementById("chatgpt-continue").click();
     }
-    $(document.getElementById("chatgpt-application-continue"))
-      .toggleClass("disabled", !applicationCompleted);
   });
 
-  document.getElementById("chatgpt-application-continue").onclick = function (event) {
-    if (hostnameInput.value === "" || applicationInput.value === "" ||
-      secretInput.value === ""
-    ) {
+  document.getElementById("chatgpt-continue").onclick = function (event) {
+    if (document.getElementById("api-key").value === "") {
       Swal.fire("{% trans 'product.workflow.application.chatgpt.failed.title' %}",
         "{% trans 'product.workflow.application.chatgpt.failed.incomplete' %}", "error");
       return;
     }
-    document.getElementById("chatgpt-application-container").classList.add("d-none");
+    document.getElementById("chatgpt-wrapper").classList.add("d-none");
     let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("chatgpt-wrapper").appendChild(loader);
@@ -61,19 +56,19 @@
       document.getElementById("chatgpt-wrapper")
         .removeChild(document.getElementsByClassName("loader")[0]);
       if (response.success === true) {
-        chatgptRedirectWindow.close();
+        window.close();
       } else {
-        document.getElementById("chatgpt-application-container").classList.remove("d-none");
+        document.getElementById("chatgpt-wrapper").classList.remove("d-none");
         Swal.fire("{% trans 'product.workflow.application.chatgpt.failed.title' %}",
-          "{% trans 'product.workflow.application.chatgpt.failed.already.exists' %}", "error");
+          "{% trans 'product.workflow.application.chatgpt.failed.error' %}", "error");
       }
     });
   }
 
   function connectChatGPT(callback) {
     let request = new HttpRequest("https://api.dulno.com/v1/chatgpt/add/", "POST", [],
-      {hostname: hostnameInput.value, applicationId: applicationInput.value,
-        secret: secretInput.value});
+      {accessToken: document.getElementById("api-key").value,
+        organization: document.getElementById("organization").value});
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });
