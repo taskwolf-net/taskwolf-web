@@ -25,40 +25,42 @@
           </div>
           <div id="organization-payments">
             <h3 class="fw-bold mb-4">{% trans 'product.organization.payment.your.payments' %}</h3>
-            <ul id="organization-payment-description">
-              <li>
-                <div>
-                  <span class="me-2">{% trans 'product.organization.payment.time' %}</span>
-                  <i class="fa-regular fa-calendar-days"></i>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span class="me-2">{% trans 'product.organization.payment.amount' %}</span>
-                  <i class="fa-solid fa-coins"></i>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span class="me-2">{% trans 'product.organization.payment.method' %}</span>
-                  <i class="fa-solid fa-money-check"></i>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span class="me-2">{% trans 'product.organization.payment.status' %}</span>
-                  <i class="fa-solid fa-bars-progress"></i>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span class="me-2">{% trans 'product.organization.payment.invoice' %}</span>
-                  <i class="fa-solid fa-file-invoice"></i>
-                </div>
-              </li>
-            </ul>
-            <ul id="organization-payment-list">
-            </ul>
+            <div id="organization-payment-content">
+              <ul id="organization-payment-description">
+                <li>
+                  <div>
+                    <span class="me-2">{% trans 'product.organization.payment.time' %}</span>
+                    <i class="fa-regular fa-calendar-days"></i>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <span class="me-2">{% trans 'product.organization.payment.amount' %}</span>
+                    <i class="fa-solid fa-coins"></i>
+                  </div>
+                </li>
+                <li id="organization-payment-description-method">
+                  <div>
+                    <span class="me-2">{% trans 'product.organization.payment.method' %}</span>
+                    <i class="fa-solid fa-money-check"></i>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <span class="me-2">{% trans 'product.organization.payment.status' %}</span>
+                    <i class="fa-solid fa-bars-progress"></i>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <span class="me-2">{% trans 'product.organization.payment.invoice' %}</span>
+                    <i class="fa-solid fa-file-invoice"></i>
+                  </div>
+                </li>
+              </ul>
+              <ul id="organization-payment-list">
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -110,7 +112,9 @@
     let entry = document.createElement('li');
     appendPaymentCell(entry, "time", time, "span");
     appendPaymentCell(entry, "amount", amount + " €", "span");
-    entry.appendChild(createPaymentMethodElement(method));
+    var methodElement = createPaymentMethodElement(method);
+    methodElement.classList.add("organization-payment-entry-method");
+    entry.appendChild(methodElement);
     entry.appendChild(createPaymentStatusElement(status));
     entry.appendChild(createPaymentInvoiceButton(invoice));
     document.getElementById("organization-payment-list").appendChild(entry);

@@ -57,6 +57,7 @@
   border-radius: 5px;
   margin-top: 50px;
   margin-bottom: 50px;
+  position: relative;
 }
 
 .dark #package-payments {
@@ -69,9 +70,15 @@
   border: 1px #a0a0a0 solid;
 }
 
-#package-payment-list {
+#package-payment-content {
   width: min(1000px, 100%);
+  margin: auto;
+  overflow-x: auto;
   position: relative;
+  padding-bottom: 10px;
+}
+
+#package-payment-list {
   list-style-type: none;
   padding: 0;
   margin: auto;
@@ -113,11 +120,8 @@
 }
 
 #package-payment-description {
-  width: min(1000px, 100%);
-  position: relative;
   list-style-type: none;
-  margin: auto;
-  margin-top: 1%;
+  margin: 1% auto auto;
   border-bottom: 2px #717171 solid;
   padding: 0;
   display: flex;
@@ -163,7 +167,23 @@
   color: #72571c;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1250px) {
+  #package-payment-description li div i {
+    display: none;
+  }
+}
+
+@media (max-width: 1000px) {
+  #package-payment-description-method, .package-payment-entry-method {
+    display: none;
+  }
+
+  #package-payment-description li, #package-payment-list li div {
+    width: 25%;
+  }
+}
+
+@media (max-width: 600px) {
   #package-payment-description li {
     font-size: .8em;
   }
@@ -181,23 +201,8 @@
   }
 }
 
-@media (max-width: 900px) {
-  .package-payment-invoice {
-    font-size: .6em !important;
-    padding: .2rem .4rem !important;
-  }
-}
-
-@media (max-width: 500px) {
-  #package-payment-description li {
-    font-size: .6em;
-  }
-
-  #package-payment-list li div span {
-    font-size: .6em;
-  }
-
-  .package-payment-invoice {
-    padding: .12rem .24rem !important;
+@media (max-width: 550px) {
+  #package-payment-list, #package-payment-description {
+    width: 460px;
   }
 }
