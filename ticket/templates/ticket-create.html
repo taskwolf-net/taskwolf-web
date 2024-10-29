@@ -11,7 +11,7 @@
       </div>
       <div class="form-outline mb-4">
         <label for="ticket-title" class="form-label">{% trans 'ticket.create.title' %}</label>
-        <input type="title" id="ticket-title" class="form-control" placeholder="{% trans 'ticket.create.title' %}">
+        <input type="title" id="ticket-title" class="form-control" maxlength=64 placeholder="{% trans 'ticket.create.title' %}">
       </div>
       <div class="form-outline mb-4">
         <label class="form-label">{% trans 'ticket.create.type' %}</label>
@@ -38,6 +38,29 @@
 
 <script>
   let ticketType = "";
+
+  $(document).ready(function() {
+    for (let element of [...document.querySelectorAll('input[maxlength]')]) {
+      element.addEventListener('input', tickInputMaxLength)
+      element.parentElement.classList.add('max-length-badged');
+      tickInputMaxLength(element)
+    }
+  });
+
+  function tickInputMaxLength(element) {
+    if (element.target) {
+      element = element.target
+    }
+    let limit = element.maxLength;
+    let parent = element.parentElement;
+    let length = element.value.length;
+    parent.dataset['limit'] = limit;
+    parent.dataset['remaining'] = limit - length;
+    parent.classList.remove('max-length-reached');
+    if (length === limit) {
+      parent.classList.add('max-length-reached');
+    }
+  }
 
   let quill = new Quill('#ticket-message', {
     modules: {

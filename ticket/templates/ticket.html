@@ -12,7 +12,9 @@
         </div>
         <label class="form-label">{% trans 'ticket.title' %}</label>
         <div id="ticket-title-wrapper" class="form-outline">
-          <input type="title" id="ticket-title" class="form-control" placeholder="{% trans 'ticket.title' %}">
+          <div class="w-100">
+            <input type="title" id="ticket-title" class="form-control" maxlength=64 placeholder="{% trans 'ticket.title' %}">
+          </div>
           <button type="button" id="ticket-title-change" class="btn btn-primary btn-block">{% trans 'ticket.title.change' %}</button>
         </div>
         <hr class="hr border-white my-4"/>
@@ -36,11 +38,30 @@
     fetchUsername(function() {
       fetchTicketsData(function() {
         displayTicket();
+        for (let element of [...document.querySelectorAll('input[maxlength]')]) {
+          element.addEventListener('input', tickInputMaxLength);
+          element.parentElement.classList.add('max-length-badged');
+          tickInputMaxLength(element);
+        }
         removeLoader();
       });
     });
   });
 
+  function tickInputMaxLength(element) {
+    if (element.target) {
+      element = element.target
+    }
+    let limit = element.maxLength;
+    let parent = element.parentElement;
+    let length = element.value.length;
+    parent.dataset['limit'] = limit;
+    parent.dataset['remaining'] = limit - length;
+    parent.classList.remove('max-length-reached');
+    if (length === limit) {
+      parent.classList.add('max-length-reached');
+    }
+  }
   function fetchUsername(callback) {
     let request = new HttpRequest("https://api.dulno.com/v1/settings/profile/username/", "GET",
       []);
