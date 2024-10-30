@@ -14,9 +14,11 @@
       <div id="chatgpt-wrapper" class="form-outline">
         <h2 class="chatgpt-headline">{% trans 'product.workflow.application.chatgpt.headline' %}</h2>
         <label for="api-key" class="form-label">{% trans 'product.workflow.application.chatgpt.api.key' %}</label>
-        <input type="text" id="api-key" class="form-control" placeholder="{% trans 'product.workflow.application.chatgpt.api.key' %}">
+        <input type="text" id="api-key" class="form-control mb-3" placeholder="{% trans 'product.workflow.application.chatgpt.api.key' %}">
+        <span class="text-secondary-emphasis">{% trans 'product.workflow.application.chatgpt.api.key.description' %}</span>
         <label for="organization" class="form-label mt-4">{% trans 'product.workflow.application.chatgpt.organization' %}</label>
-        <input type="text" id="organization" class="form-control" placeholder="{% trans 'product.workflow.application.chatgpt.organization' %}">
+        <input type="text" id="organization" class="form-control mb-3" placeholder="{% trans 'product.workflow.application.chatgpt.organization' %}">
+        <span class="text-secondary-emphasis">{% trans 'product.workflow.application.chatgpt.organization.description' %}</span>
         <button type="button" id="chatgpt-continue" class="btn btn-primary d-block px-4 mt-5 mx-auto disabled">{% trans 'product.workflow.application.chatgpt.continue' %}</button>
       </div>
     </div>
