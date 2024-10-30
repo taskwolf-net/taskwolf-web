@@ -482,11 +482,10 @@ input:-webkit-autofill:active{
 }
 
 .workflow-component-specifications-select-list {
-  width: 100%;
-}
-
-.workflow-component-specifications-select-list {
-  width: 100%;
+  width: calc(100%);
+  scale: 1.005;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .workflow-component-specifications-selected-item b {
