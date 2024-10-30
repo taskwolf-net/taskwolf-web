@@ -26,6 +26,8 @@
 </html>
 
 <script>
+  let chatgptRedirectWindows = [];
+
   $(document).ready(function() {
     document.getElementById("api-key").focus();
   });
@@ -58,6 +60,9 @@
       document.getElementById("chatgpt-container")
         .removeChild(document.getElementsByClassName("loader")[0]);
       if (response.success === true) {
+        for (let redirectWindow of chatgptRedirectWindows) {
+          redirectWindow.close();
+        }
         window.close();
         window.location.href = "https://dulno.com/";
       } else {
@@ -75,6 +80,14 @@
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });
+  }
+
+  document.getElementById("chatgpt-api-key-redirect").onclick = function (event) {
+    chatgptRedirectWindows.push(window.open("https://platform.openai.com/api-keys"));
+  }
+
+  document.getElementById("chatgpt-organization-redirect").onclick = function (event) {
+    chatgptRedirectWindows.push(window.open("https://platform.openai.com/settings"));
   }
 
   document.getElementById("chatgpt-logo").onclick = function (event) {
