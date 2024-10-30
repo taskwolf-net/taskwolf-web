@@ -18,14 +18,25 @@
   width: 52px;
   height: 52px;
   border: none;
-  color: #b5b5b5;
   background-color: transparent;
   border-radius: 50%;
   font-size: 25px;
 }
 
-#mail-page-back:hover {
+.dark #mail-page-back {
+  color: #b5b5b5;
+}
+
+.light #mail-page-back {
+  color: #656565;
+}
+
+.dark #mail-page-back:hover {
   background-color: #212937;
+}
+
+.light #mail-page-back:hover {
+  background-color: #d3d3d3;
 }
 
 #mail-logo {
