@@ -18,14 +18,25 @@
   width: 52px;
   height: 52px;
   border: none;
-  color: #b5b5b5;
   background-color: transparent;
   border-radius: 50%;
   font-size: 25px;
 }
 
-#gitlab-page-back:hover {
+.dark #gitlab-page-back {
+  color: #b5b5b5;
+}
+
+.light #gitlab-page-back {
+  color: #656565;
+}
+
+.dark #gitlab-page-back:hover {
   background-color: #212937;
+}
+
+.light #gitlab-page-back:hover {
+  background-color: #d3d3d3;
 }
 
 #gitlab-logo {
