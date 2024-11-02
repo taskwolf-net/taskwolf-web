@@ -71,6 +71,7 @@ input:-webkit-autofill:active{
 #remember-check-label {
   width: 100%;
   text-align: left;
+  user-select: none;
 }
 
 #login-logo {
