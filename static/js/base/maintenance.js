@@ -18,6 +18,7 @@ function displayMaintenanceBanner(maintenance) {
   maintenanceBanner.classList.add("maintenance-banner");
   maintenanceBanner.appendChild(document.createElement("div"));
   let maintenanceInformation = document.createElement("b");
+  maintenanceInformation.classList.add("me-3");
   maintenanceInformation.innerHTML = buildMaintenanceInformation(maintenance);
   maintenanceBanner.appendChild(maintenanceInformation);
   let closeButton = document.createElement("a");
@@ -61,9 +62,9 @@ function generateMaintenanceInformationFormat() {
   }
   let text = "";
   if (language === "en") {
-    text = "+++ Maintenance work on {0} - Estimated duration: {1} minutes - All services will be unavailable +++"
+    text = "+++ Maintenance work on {0} - Estimated duration: {1} minutes - All services will be temporarily unavailable +++"
   } else if (language === "de") {
-    text = "+++ Wartungsarbeiten am {0} - Geschätzte Dauer: {1} Minuten - Alle Dienste werden nicht verfügbar sein +++";
+    text = "+++ Wartungsarbeiten am {0} - Geschätzte Dauer: {1} Minuten - Alle Dienste werden vorübergehend nicht verfügbar sein +++";
   }
   return text;
 }

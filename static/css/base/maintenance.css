@@ -15,5 +15,33 @@
 }
 
 .maintenance-header-space {
-  height: 140px !important;
+  height: calc(60px + var(--header-space)) !important;
+}
+
+@media (max-width: 800px) {
+  .maintenance-banner {
+    height: 100px;
+  }
+
+  .maintenance-header {
+    margin-top: 100px;
+  }
+
+  .maintenance-header-space {
+    height: calc(100px + var(--header-space)) !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .maintenance-banner {
+    height: 150px;
+  }
+
+  .maintenance-header {
+    margin-top: 150px;
+  }
+
+  .maintenance-header-space {
+    height: calc(150px + var(--header-space)) !important;
+  }
 }

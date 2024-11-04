@@ -1,3 +1,7 @@
+:root {
+  --header-space: 52px;
+}
+
 #verification-header {
   display: flex;
   justify-content: space-between;
