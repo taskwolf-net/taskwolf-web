@@ -23,7 +23,6 @@ async def workflowTrigger(request):
   return render(request, 'workflow/workflow-component.html', {'title': gettext('product.workflow.component.trigger.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflow-component.css',
       'css/product/workflow/workflow-placeholder.css'],
-    'script': ['https://dulno.com/static/js/product/workflow/workflow-placeholder.js'],
     'type': 'trigger', 'typename': "Trigger"})
 
 @authentication_required
@@ -31,15 +30,13 @@ async def workflowAction(request):
   return render(request, 'workflow/workflow-component.html', {'title': gettext('product.workflow.component.action.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflow-component.css',
       'css/product/workflow/workflow-placeholder.css'],
-    'script': ['https://dulno.com/static/js/product/workflow/workflow-placeholder.js'],
     'type': 'action', 'typename': "Action"})
 
 @authentication_required
 async def workflowCondition(request):
   return render(request, 'workflow/workflow-condition.html', {'title': gettext('product.workflow.condition.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflow-condition.css',
-      'css/product/workflow/workflow-placeholder.css'],
-    'script': ['https://dulno.com/static/js/product/workflow/workflow-placeholder.js']})
+      'css/product/workflow/workflow-placeholder.css']})
 
 @authentication_required
 async def workflowTimeline(request):

@@ -13,7 +13,7 @@ SECRET_KEY = '***REMOVED***'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['dulno.com']
+ALLOWED_HOSTS = ['dulno.com', '0.0.0.0']
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
 
@@ -125,3 +125,25 @@ LANGUAGES = (
 )
 
 WHITELIST = False
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+          'level': 'DEBUG',
+          'class': 'logging.StreamHandler',
+        },
+        'custom_handler': {
+            'level': 'ERROR',
+            'class': 'errors.exception.ExceptionHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'custom_handler'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}

@@ -15,7 +15,6 @@ async def register(request):
   redirect = request.GET.get('redirect', '')
   return render(request, 'register.html', {'title': gettext("home.registration.title"),
     'css': ['css/base/home-header.css', 'css/base/home-language.css', 'css/verification/register.css'],
-    'script': ['https://www.google.com/recaptcha/api.js?render=6LdEpEQqAAAAAMifavVkpRB2ganIyA-rqFc6b1mi'],
     'redirect': redirect})
 
 @home_page
