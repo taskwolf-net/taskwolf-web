@@ -1,3 +1,7 @@
+:root {
+  --header-space: 70px;
+}
+
 #expiration-container {
   width: min(calc(1500px), 95%);
   margin: 8vh auto 10vh;
