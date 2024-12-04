@@ -12,7 +12,7 @@
   z-index: 100;
   position: fixed !important;
   width: 100%;
-  height: 80px;
+  height: 70px;
   display: flex;
   align-items: center;
 }
@@ -37,7 +37,7 @@
 }
 
 #header-space {
-  height: 80px;
+  height: 70px;
 }
 
 #navbar-logo {
@@ -98,23 +98,17 @@
   position: relative;
   display: flex;
   margin-left: auto;
-  margin-right: 50px;
+  margin-right: 35px;
 }
 
-.dark #header-control-container .dropdown-menu {
-  background-color: #2f343a;
-}
+@media(max-width: 1000px) {
+  #navbar-logo {
+    margin-left: 25px;
+  }
 
-.dark #header-control-container .dropdown-item:hover {
-  background-color: #414851;
-}
-
-.dark #header-control-container .active:hover {
-  background-color: #0e57ca;
-}
-
-.light #header-control-container .active:hover {
-  background-color: #5b9dff;
+  #header-control-container {
+    margin-right: 25px;
+  }
 }
 
 @media(min-width: 575px) {
@@ -132,5 +126,5 @@
 }
 
 .pricing-package {
-  top: 80px !important;
+  top: 70px !important;
 }

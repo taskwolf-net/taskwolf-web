@@ -2,19 +2,32 @@
 {% load i18n %}
 <html lang="en">
   {% include 'head.html' %}
-  <body class="dark">
+  <body class="dark" data-bs-theme="dark">
     <nav id="navbar">
       <div id="navbar-content">
-        <a href="/" id="navbar-logo"><img src="{% static 'img/logo-light.webp' %}" class="dulno-logo" width="70px" height="70px" alt=""></a>
+        <a href="/" id="navbar-logo"><img src="{% static 'img/logo-light.webp' %}" class="dulno-logo" width="60px" height="60px" alt=""></a>
         <div id="header-control-container">
           <div id="profile-button-container" class="dropdown">
             <button class="dropdown-toggle btn" id="profile-button-wrapper" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i id="profile-picture" class="fa-regular fa-user"></i><i id="profile-picture-arrow" class="fa-solid fa-angle-down"></i>
+              <div class="position-relative">
+                <i id="profile-picture" class="fa-regular fa-user"></i>
+                <span class="ticket-notification d-none position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+              <span class="visually-hidden"></span>
+            </span>
+              </div>
+              <i id="profile-picture-arrow" class="fa-solid fa-angle-down"></i>
             </button>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profile-button-wrapper">
               <li><button class="dropdown-item" id="settings-button" type="button">{% trans 'product.header.settings' %}</button></li>
-              <li><button class="dropdown-item" id="tickets-button" type="button">{% trans 'product.header.tickets' %}</button></li>
-              <li><div class="dropdown-divider"></div></li>
+              <li>
+                <button class="dropdown-item position-relative" id="tickets-button" type="button">
+                  {% trans 'product.header.tickets' %}
+                  <span class="ticket-notification d-none position-absolute top-50 translate-middle ms-3 p-1 bg-danger border border-light rounded-circle">
+                <span class="visually-hidden"></span>
+              </span>
+                </button>
+              </li>
+              <li><hr class="dropdown-divider"></li>
               <li><button class="dropdown-item" id="logout-button" type="button">{% trans 'product.header.logout' %}</button></li>
             </ul>
           </div>
@@ -41,6 +54,7 @@
     if (!displayExpirationDescription()) {
       return;
     }
+    setupTicketNotification();
     setupPricing(function () {
       removeLoader();
     });
@@ -80,6 +94,24 @@
     document.getElementById("expiration-description").innerText =
       "{% trans 'home.expiration.mixed.description' %}".replace("%s", userName);
     return true;
+  }
+
+  function setupTicketNotification() {
+    fetchTicketNotificationData(function(hasUnseenTickets) {
+      if (hasUnseenTickets) {
+        for (let element of [...document.getElementsByClassName("ticket-notification")]) {
+          element.classList.remove("d-none");
+        }
+      }
+    });
+  }
+
+  function fetchTicketNotificationData(callback) {
+    let request = new HttpRequest("https://api.dulno.com/v1/tickets/unseen/", "GET",
+      []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText).unseenTickets);
+    });
   }
 
   function displayLoader() {
