@@ -50,6 +50,13 @@
   });
 
   document.getElementById('create').onclick = function() {
+    let createButton = document.getElementById("create");
+    createButton.classList.add("disabled");
+    createButton.innerHTML = `
+      {% trans 'product.database.create.button' %}
+      <span class="spinner-border spinner-border-sm ms-2" aria-hidden="true"></span>
+      <span class="visually-hidden" role="status">Loading...</span>
+    `;
     let name = document.getElementById("name").value;
     if (name === "") {
       Swal.fire("{% trans 'product.database.create.empty.title' %}", "{% trans 'product.database.create.empty.body' %}", "error");
@@ -58,12 +65,16 @@
     let request = new HttpRequest("https://api.dulno.com/v1/table/create/", "POST",
       [], {name: document.getElementById("name").value});
     request.send(function (status, responseText) {
+      if (status !== 200) {
+        createButton.classList.remove("disabled");
+        createButton.innerHTML = "{% trans 'product.database.create.button' %}";
+      }
       if (status === 400) {
         Swal.fire("{% trans 'product.database.create.limit.reached.title' %}",
           "{% trans 'product.database.create.limit.reached.body' %}", "error");
         return;
       }
-      window.location.href = "/databases/";
+      window.location.href = "/database/" + JSON.parse(responseText).table + "/";
     });
   };
 </script>

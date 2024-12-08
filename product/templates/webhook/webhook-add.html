@@ -50,16 +50,27 @@
   });
 
   document.getElementById("add").onclick = function() {
+    let addButton = document.getElementById("add");
+    addButton.classList.add("disabled");
+    addButton.innerHTML = `
+      {% trans 'product.webhook.add.button' %}
+      <span class="spinner-border spinner-border-sm ms-2" aria-hidden="true"></span>
+      <span class="visually-hidden" role="status">Loading...</span>
+    `;
     let request = new HttpRequest("https://api.dulno.com/v1/webhook/add/", "POST",
       [],
       {name: document.getElementById("name").value});
     request.send(function (status, responseText) {
+      if (status !== 200) {
+        addButton.classList.remove("disabled");
+        addButton.innerHTML = "{% trans 'product.webhook.add.button' %}";
+      }
       if (status === 400) {
         Swal.fire("{% trans 'product.webhook.add.limit.reached.title' %}",
           "{% trans 'product.webhook.add.limit.reached.body' %}", "error");
         return;
       }
-      window.location.href = "/webhooks/";
+      window.location.href = "/webhook/" + JSON.parse(responseText).webhook + "/";
     });
   };
 </script>
