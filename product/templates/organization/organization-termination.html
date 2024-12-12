@@ -8,17 +8,7 @@
     <div class="sidebar-influenced">
       <div id="organization-termination-container">
         <div id="organization-termination-wrapper" class="d-none">
-          <div>
-            <ul class="nav nav-tabs">
-              <li class="nav-item"><a class="nav-link" href="/organization/members/">{% trans 'product.organization.tab.member' %}</a></li>
-              <li class="nav-item"><a class="nav-link" href="/organization/teams/">{% trans 'product.organization.tab.team' %}</a></li>
-              <li class="nav-item"><a class="nav-link" href="/organization/package/">{% trans 'product.organization.tab.package' %}</a></li>
-              <li class="nav-item"><a class="nav-link" href="/organization/limitations/">{% trans 'product.organization.tab.limitation' %}</a></li>
-              <li class="nav-item"><a class="nav-link" href="/organization/payments/">{% trans 'product.organization.tab.payment' %}</a></li>
-              <li class="nav-item"><a class="nav-link" href="/organization/upgrade/">{% trans 'product.organization.tab.upgrade' %}</a></li>
-              <li class="nav-item"><a class="nav-link nav-link-active" href="/organization/termination/">{% trans 'product.organization.tab.termination' %}</a></li>
-            </ul>
-          </div>
+          {% include 'organization-tab.html' %}
           <div id="organization-termination-disclaimer">
             <h4 class="fw-bold mb-4">{% trans 'product.organization.termination.headline' %}</h4>
             <p class="mb-0">{% trans 'product.organization.termination.description' %}</p>

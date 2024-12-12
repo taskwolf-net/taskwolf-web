@@ -1,0 +1,13 @@
+{% load static %}
+{% load i18n %}
+<div>
+  <ul class="organization-tabs">
+    <li class="{% if 'member' in request.path %}organization-tab-active{% endif %}"><a href="/organization/members/">{% trans 'product.organization.tab.member' %}</a></li>
+    <li class="{% if 'team' in request.path %}organization-tab-active{% endif %}"><a href="/organization/teams/">{% trans 'product.organization.tab.team' %}</a></li>
+    <li class="{% if 'package' in request.path %}organization-tab-active{% endif %}"><a href="/organization/package/">{% trans 'product.organization.tab.package' %}</a></li>
+    <li class="{% if 'limitation' in request.path %}organization-tab-active{% endif %}"><a href="/organization/limitations/">{% trans 'product.organization.tab.limitation' %}</a></li>
+    <li class="{% if 'payment' in request.path %}organization-tab-active{% endif %}"><a href="/organization/payments/">{% trans 'product.organization.tab.payment' %}</a></li>
+    <li class="{% if 'upgrade' in request.path %}organization-tab-active{% endif %}"><a href="/organization/upgrade/">{% trans 'product.organization.tab.upgrade' %}</a></li>
+    <li class="{% if 'termination' in request.path %}organization-tab-active{% endif %}"><a href="/organization/termination/">{% trans 'product.organization.tab.termination' %}</a></li>
+  </ul>
+</div>

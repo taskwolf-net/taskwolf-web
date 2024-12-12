@@ -1,0 +1,11 @@
+{% load static %}
+{% load i18n %}
+<div>
+  <ul class="package-tabs">
+    <li class="{% if 'general' in request.path %}package-tab-active{% endif %}"><a href="/package/general/">{% trans 'product.package.tab.general' %}</a></li>
+    <li class="{% if 'limitation' in request.path %}package-tab-active{% endif %}"><a href="/package/limitations/">{% trans 'product.package.tab.limitation' %}</a></li>
+    <li class="{% if 'payment' in request.path %}package-tab-active{% endif %}"><a href="/package/payments/">{% trans 'product.package.tab.payment' %}</a></li>
+    <li class="{% if 'upgrade' in request.path %}package-tab-active{% endif %}"><a href="/package/upgrade/">{% trans 'product.package.tab.upgrade' %}</a></li>
+    <li class="{% if 'termination' in request.path %}package-tab-active{% endif %}"><a href="/package/termination/">{% trans 'product.package.tab.termination' %}</a></li>
+  </ul>
+</div>

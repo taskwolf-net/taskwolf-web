@@ -31,10 +31,10 @@
         <a href="/account/apps/" class="sidebar-link nav-link" aria-current="page"><span class="sidebar-icon material-symbols-outlined">link</span><span>{% trans 'product.sidebar.accounts' %}</span></a>
       </li>
       <li id="sidebar-organization" class="sidebar-item d-none {% if 'organization' in request.path %}sidebar-active{% endif %}">
-        <a href="/organization/" class="sidebar-link nav-link" aria-current="page"><span class="sidebar-icon material-symbols-outlined">groups</span><span>{% trans 'product.sidebar.organization' %}</span></a>
+        <a href="/organization/members/" class="sidebar-link nav-link" aria-current="page"><span class="sidebar-icon material-symbols-outlined">groups</span><span>{% trans 'product.sidebar.organization' %}</span></a>
       </li>
       <li id="sidebar-package" class="sidebar-item d-none {% if 'package' in request.path %}sidebar-active{% endif %}">
-        <a href="/package/" class="sidebar-link nav-link" aria-current="page"><span class="sidebar-icon material-symbols-outlined">account_balance</span><span>{% trans 'product.sidebar.package' %}</span></a>
+        <a href="/package/general/" class="sidebar-link nav-link" aria-current="page"><span class="sidebar-icon material-symbols-outlined">account_balance</span><span>{% trans 'product.sidebar.package' %}</span></a>
       </li>
       <li class="sidebar-divider mt-auto"></li>
       <li class="sidebar-item mb-2 {% if request.path == '/help/' %}sidebar-active{% endif %}">
