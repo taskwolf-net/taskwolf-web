@@ -204,12 +204,12 @@
     iconContainer.classList.add("workflow-component-add", "fa-solid", "fa-add");
     buttonContainer.appendChild(iconContainer);
     iconContainer.addEventListener("click", function(event) {
-      openComponentAddMenu(actionIndex, conditionIndex);
+      openComponentAddBetweenMenu(actionIndex, conditionIndex);
     });
     return buttonContainer;
   }
 
-  function openComponentAddMenu(actionIndex, conditionIndex) {
+  function openComponentAddBetweenMenu(actionIndex, conditionIndex) {
     let content = document.createElement("div");
     content.classList.add("workflow-component-add-menu");
     content.appendChild(createComponentAddSelector("fa-square-caret-right",
@@ -364,14 +364,39 @@
     iconContainer.classList.add("workflow-action-add", "fa-solid", "fa-plus");
     buttonContainer.appendChild(iconContainer);
     iconContainer.addEventListener("click", function(event) {
-      let actions = JSON.parse(sessionStorage.getItem("workflow-actions")).actions;
-      let component = createEmptyComponent("{% trans 'product.workflow.action.description' %}");
-      component.actionIndex = actions.length;
-      actions.push(component);
-      sessionStorage.setItem("workflow-actions", JSON.stringify({actions: actions}));
-      displayWorkflow();
+      openComponentAddEndMenu();
     });
     document.getElementById("workflow-components").appendChild(buttonContainer);
+  }
+
+  function openComponentAddEndMenu() {
+    let content = document.createElement("div");
+    content.classList.add("workflow-component-add-menu");
+    content.appendChild(createComponentAddSelector("fa-square-caret-right",
+      "{% trans 'product.workflow.add.component.action' %}",
+      () => addActionAtTheEnd()));
+    content.appendChild(createComponentAddSelector("fa-arrow-rotate-left",
+      "{% trans 'product.workflow.add.component.loop' %}",
+      () => addLoop()));
+    Swal.fire({
+      title: "{% trans 'product.workflow.add.component.title' %}",
+      html: content,
+      showConfirmButton: false
+    });
+  }
+
+  function addActionAtTheEnd() {
+    let actions = JSON.parse(sessionStorage.getItem("workflow-actions")).actions;
+    let component = createEmptyComponent("{% trans 'product.workflow.action.description' %}");
+    component.actionIndex = actions.length;
+    actions.push(component);
+    sessionStorage.setItem("workflow-actions", JSON.stringify({actions: actions}));
+    displayWorkflow();
+  }
+
+  function addLoop() {
+    //TODO: ADD LOOP
+    displayWorkflow();
   }
 
   function createEmptyComponent(description) {
