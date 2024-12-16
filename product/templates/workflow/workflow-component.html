@@ -137,13 +137,15 @@
         selectedComponent = trigger;
       }
     }
-    let actionIndex = sessionStorage.getItem("workflow-action-index");
-    let actions = sessionStorage.getItem("workflow-actions");
-    if ("{{type}}" === "action" && actionIndex !== null && actions != null && JSON.parse(actions).actions.length > actionIndex) {
-      let action = JSON.parse(sessionStorage.getItem("workflow-actions")).actions
-        .filter(item => item.actionIndex === parseInt(sessionStorage.getItem("workflow-action-index")))[0];
-      if (action.selected === true) {
-        selectedComponent = action;
+    let index = sessionStorage.getItem("workflow-step-index");
+    let stepsContent = sessionStorage.getItem("workflow-steps");
+    if ("{{type}}" === "action" && index !== null && steps != null) {
+      let steps = JSON.parse(stepsContent).steps;
+      if (steps.length > index) {
+        let step = steps.filter(item => item.index === parseInt(index))[0];
+        if (step.selected === true) {
+          selectedComponent = step;
+        }
       }
     }
     if (!(_.isEqual(selectedComponent, {}))) {
@@ -514,19 +516,20 @@
   function prepareSpecifications() {
     document.getElementById("workflow-component-specifications-container").style.display = "flex";
     document.getElementById("workflow-component-specifications-unable").style.display = "none";
-    var actionIndex = sessionStorage.getItem("workflow-action-index");
-    if (actionIndex == -1) {
-      document.getElementById("workflow-component-specifications-placeholders-empty").classList.remove("d-none");
+    let index = parseInt(sessionStorage.getItem("workflow-step-index"));
+    if (index === -1) {
+      document.getElementById("workflow-component-specifications-placeholders-empty")
+        .classList.remove("d-none");
       fillSpecificationsInputs();
       return;
     }
     displayPlaceholdersTabs();
-    var outputCount = -1;
-    for (let i = -1; i < actionIndex; i++) {
+    let outputCount = -1;
+    for (let i = -1; i < index; i++) {
       findOutputVariables(i, function(outputVariables) {
         componentsOutputVariables = componentsOutputVariables.concat(outputVariables);
         outputCount++;
-        if (outputCount == actionIndex) {
+        if (outputCount === index) {
           fillSpecificationsInputs();
         }
       });
@@ -559,16 +562,16 @@
             i, inputVariables.length, inputVariable.dataType);
         }
         if (inputVariable.dataType === "SELECT") {
-          addSpecificationSelect(inputVariable.identifier, inputVariable.name, inputVariable.description, i, inputVariables.length);
+          addSpecificationSelect(inputVariable.identifier, inputVariable.name, inputVariable.description, i);
         }
         if (inputVariable.dataType === "FILE") {
-          addSpecificationFile(inputVariable.identifier, inputVariable.name, inputVariable.description, i, inputVariables.length);
+          addSpecificationFile(inputVariable.identifier, inputVariable.name, inputVariable.description);
         }
         if (inputVariable.dataType === "BOOLEAN") {
-          addSpecificationSwitch(inputVariable.identifier, inputVariable.name, inputVariable.description, i, inputVariables.length);
+          addSpecificationSwitch(inputVariable.identifier, inputVariable.name, inputVariable.description);
         }
         if (inputVariable.dataType === "TIME") {
-          addSpecificationTime(inputVariable.identifier, inputVariable.name, inputVariable.description, i, inputVariables.length);
+          addSpecificationTime(inputVariable.identifier, inputVariable.name, inputVariable.description);
           specificationValues["timezone"] = Intl.DateTimeFormat().resolvedOptions().timeZone;
         }
       }
@@ -652,7 +655,7 @@
     checkAdoptability();
   }
 
-  function addSpecificationSelect(identifier, name, description, index, inputsLength) {
+  function addSpecificationSelect(identifier, name, description, index) {
     let dropdownContainer = document.createElement("div");
     dropdownContainer.classList.add("mb-4");
     let labelElement = document.createElement("h5");
@@ -678,17 +681,17 @@
     dropdownList.classList.add("workflow-component-specifications-select-list", "dropdown-menu");
     dropdownContainer.appendChild(dropdownList);
     dropdownButton.addEventListener("click", function (event) {
-      clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton, index, inputsLength);
+      clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton);
     });
     document.getElementById("workflow-component-specifications-input-list").appendChild(dropdownContainer);
     if (selectedComponentSetup && "content" in selectedComponent) {
       setTimeout(function(){
-        clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton, index, inputsLength);
+        clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton);
       }, 500 * index);
     }
   }
 
-  function clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton, index, inputsLength) {
+  function clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton) {
     dropdownList.innerHTML = "";
     dropdownList.appendChild(createSpecificationSelectLoader());
     let request = new HttpRequest("https://api.dulno.com/v1/component/select/items/", "POST",
@@ -762,7 +765,7 @@
     checkAdoptability();
   }
 
-  function addSpecificationFile(identifier, name, description, index, inputsLength) {
+  function addSpecificationFile(identifier, name, description) {
     let inputContainerElement = document.createElement("div");
     inputContainerElement.classList.add("workflow-component-specifications-file-container", "form-outline", "mb-4");
     let labelElement = document.createElement("h5");
@@ -829,7 +832,7 @@
     checkAdoptability();
   }
 
-  function addSpecificationSwitch(identifier, name, description, index, inputsLength) {
+  function addSpecificationSwitch(identifier, name, description) {
     let inputContainerElement = document.createElement("div");
     inputContainerElement.classList.add("workflow-component-specifications-switch-container", "form-outline", "mb-4");
     let labelElement = document.createElement("h5");
@@ -866,7 +869,7 @@
     }
   }
 
-  function addSpecificationTime(identifier, name, description, index, inputsLength) {
+  function addSpecificationTime(identifier, name, description) {
     let inputContainerElement = document.createElement("div");
     inputContainerElement.classList.add("workflow-component-specifications-time-container", "form-outline", "mb-4");
     let labelElement = document.createElement("h5");
@@ -919,7 +922,9 @@
       linkElement.classList.add("nav-link-active");
       displayPlaceholders(index);
     }
-    linkElement.innerHTML = (index < 0) ? "{% trans 'product.workflow.component.specifications.placeholders.trigger' %}" : ((index + 1) + ". {% trans 'product.workflow.component.specifications.placeholders.action' %}");
+    linkElement.innerHTML = (index < 0) ?
+      "{% trans 'product.workflow.component.specifications.placeholders.trigger' %}" :
+      ((index + 1) + ". {% trans 'product.workflow.component.specifications.placeholders.action' %}");
     tabElement.appendChild(linkElement);
     tabElement.onclick = function (event) {
       clickPlaceholdersTab(index, linkElement);
@@ -959,7 +964,8 @@
     if (componentType === "trigger") {
       component = JSON.parse(sessionStorage.getItem("workflow-trigger"));
     } else {
-      component = JSON.parse(sessionStorage.getItem("workflow-actions")).actions.filter(element => element.actionIndex === index)[0];
+      component = JSON.parse(sessionStorage.getItem("workflow-steps"))
+        .steps.filter(element => element.index === index)[0];
     }
     let module = component.module;
     let type = component.type;
@@ -1129,16 +1135,16 @@
 
   function saveAction() {
     let component = createComponent();
-    let index = parseInt(sessionStorage.getItem("workflow-action-index"));
-    component.actionIndex = index;
-    if (sessionStorage.getItem("workflow-actions") === null) {
-      sessionStorage.setItem("workflow-actions", JSON.stringify({actions: [component]}));
+    let index = parseInt(sessionStorage.getItem("workflow-step-index"));
+    component.index = index;
+    if (sessionStorage.getItem("workflow-steps") === null) {
+      sessionStorage.setItem("workflow-steps", JSON.stringify({steps: [component]}));
     } else {
-      let actions = JSON.parse(sessionStorage.getItem("workflow-actions")).actions;
-      actions = actions.filter(item => item.actionIndex !== index);
-      actions.push(component);
-      sessionStorage.removeItem("workflow-action-index");
-      sessionStorage.setItem("workflow-actions", JSON.stringify({actions: actions}));
+      let steps = JSON.parse(sessionStorage.getItem("workflow-steps")).steps;
+      steps = steps.filter(item => item.index !== index);
+      steps.push(component);
+      sessionStorage.removeItem("workflow-step-index");
+      sessionStorage.setItem("workflow-steps", JSON.stringify({steps: steps}));
     }
   }
 
@@ -1197,14 +1203,14 @@
   }
 
   function checkUnsavedChangesAction() {
-    let index = parseInt(sessionStorage.getItem("workflow-action-index"));
-    let actions = JSON.parse(sessionStorage.getItem("workflow-actions")).actions;
-    var currentAction = actions.filter(item => item.actionIndex === index)[0];
+    let index = parseInt(sessionStorage.getItem("workflow-step-index"));
+    let steps = JSON.parse(sessionStorage.getItem("workflow-steps")).steps;
+    var currentAction = steps.filter(item => item.index === index)[0];
     if (!currentAction.selected && selectedApplication == null) {
       return false;
     }
     let component = createComponent();
-    component.actionIndex = index;
+    component.index = index;
     return compareComponents(component, currentAction);
   }
 
