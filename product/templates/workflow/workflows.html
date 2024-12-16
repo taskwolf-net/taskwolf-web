@@ -394,8 +394,7 @@
       sessionStorage.removeItem("workflow-name");
       sessionStorage.removeItem("workflow-description");
       sessionStorage.removeItem("workflow-trigger");
-      sessionStorage.removeItem("workflow-actions");
-      sessionStorage.removeItem("workflow-conditions");
+      sessionStorage.removeItem("workflow-steps");
       sessionStorage.removeItem("workflow-selected");
       sessionStorage.removeItem("workflow-id");
       sessionStorage.setItem("workflow-selected", "true");
@@ -405,6 +404,7 @@
       sessionStorage.setItem("workflow-description", workflow.description);
       sessionStorage.setItem("workflow-initial-description", workflow.description);
       let trigger = JSON.stringify({
+        "kind": "trigger",
         "module": workflow.triggerModule,
         "moduleLogo": workflow.triggerModuleLogo,
         "type": workflow.triggerType,
@@ -414,10 +414,11 @@
       });
       sessionStorage.setItem("workflow-trigger", trigger);
       sessionStorage.setItem("workflow-initial-trigger", trigger);
-      let actions = [];
+      let steps = [];
       for (let i = 0; i < workflow.actions.length; i++) {
         let workflowActionInformation = workflow.actions[i];
-        actions.push({
+        steps.push({
+          "kind": "action",
           "index": workflowActionInformation.actionIndex,
           "module": workflowActionInformation.actionModule,
           "moduleLogo": workflowActionInformation.actionModuleLogo,
@@ -427,31 +428,27 @@
           "selected": true
         });
       }
-      let parsedActions = JSON.stringify({actions: actions});
-      sessionStorage.setItem("workflow-actions", parsedActions);
-      sessionStorage.setItem("workflow-initial-actions", parsedActions);
-      let conditions = [];
       for (let i = 0; i < workflow.conditions.length; i++) {
         let workflowConditionInformation = workflow.conditions[i];
-        conditions.push({
+        steps.push({
+          "kind": "condition",
           "index": workflowConditionInformation.conditionIndex,
           "type": workflowConditionInformation.conditionType,
           "content": workflowConditionInformation.conditionContent,
           "selected": true
         });
       }
-      let parsedConditions = JSON.stringify({conditions: conditions});
-      sessionStorage.setItem("workflow-conditions", parsedConditions);
-      sessionStorage.setItem("workflow-initial-conditions", parsedConditions);
-      let loop = {"enabled": workflow.loop.loopEnabled};
       if (workflow.loop.loopEnabled) {
-        loop["index"] = workflow.loop.loopIndex;
-        loop["type"] = workflow.loop.loopType;
-        loop["content"] = workflow.loop.loopContent;
+        steps.push({
+          "kind": "loop",
+          "index": workflow.loop.loopIndex,
+          "type": workflow.loop.loopType,
+          "content": workflow.loop.loopContent
+        });
       }
-      let parsedLoop = JSON.stringify({loop: loop});
-      sessionStorage.setItem("workflow-loop", parsedLoop);
-      sessionStorage.setItem("workflow-initial-loop", parsedLoop);
+      let parseSteps = JSON.stringify({steps: steps});
+      sessionStorage.setItem("workflow-steps", parseSteps);
+      sessionStorage.setItem("workflow-initial-steps", parseSteps);
       window.location.href = "/workflow/";
     });
   }
@@ -885,8 +882,7 @@
     sessionStorage.removeItem("workflow-name");
     sessionStorage.removeItem("workflow-description");
     sessionStorage.removeItem("workflow-trigger");
-    sessionStorage.removeItem("workflow-actions");
-    sessionStorage.removeItem("workflow-conditions");
+    sessionStorage.removeItem("workflow-steps");
     sessionStorage.removeItem("workflow-selected");
     sessionStorage.removeItem("workflow-id");
     window.location.href = "/workflow/";
