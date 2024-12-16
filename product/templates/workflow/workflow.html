@@ -71,13 +71,15 @@
       document.getElementById("workflow-description").value = sessionStorage.getItem("workflow-description");
     }
     if (sessionStorage.getItem("workflow-trigger") === null) {
-      sessionStorage.setItem("workflow-trigger", JSON.stringify(createEmptyComponent("{% trans 'product.workflow.trigger.description' %}")));
+      sessionStorage.setItem("workflow-trigger", JSON.stringify(
+        createEmptyComponent("{% trans 'product.workflow.trigger.description' %}")));
     }
     let trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
-    createComponentElement("{% trans 'product.workflow.trigger' %}", trigger.typeDescription, trigger.moduleLogo, "trigger", -1, trigger.selected);
+    createComponentElement("{% trans 'product.workflow.trigger' %}",
+      trigger.typeDescription, trigger.moduleLogo, "trigger", -1, trigger.selected);
     if (sessionStorage.getItem("workflow-actions") === null) {
       let component = createEmptyComponent("{% trans 'product.workflow.action.description' %}");
-      component.actionIndex = 0;
+      component.index = 0;
       sessionStorage.setItem("workflow-actions", JSON.stringify({actions: [component]}));
     }
     displayActions();
@@ -91,13 +93,20 @@
   }
 
   function displayActions() {
+    let actions = JSON.parse(sessionStorage.getItem("workflow-actions")).actions;
     let conditions = sessionStorage.getItem("workflow-conditions") == null ? [] :
       JSON.parse(sessionStorage.getItem("workflow-conditions")).conditions;
-    let actions = JSON.parse(sessionStorage.getItem("workflow-actions")).actions;
-    for (let i = 0; i < actions.length; i++) {
-      let action = actions.filter(element => element.actionIndex === i)[0];
+    for (let i = 0; i < actions.length + conditions.length; i++) {
+      let action = actions.filter(element => element.index === i)[0];
+      if (action !== null) {
+        createComponentElement((i + 1) + ". {% trans 'product.workflow.action' %}",
+          action.typeDescription, action.moduleLogo, "action", i, action.selected);
+      }
+      let condition = conditions.filter(element => element.index === i)[0];
+      if (condition !== null) {
+        createConditionElement(arrow, condition.actionIndex, j, condition.selected);
+      }
       let arrow = drawArrow(i);
-      createComponentElement((i + 1) + ". {% trans 'product.workflow.action' %}", action.typeDescription, action.moduleLogo, "action", i, action.selected);
       let actionConditions = conditions.filter(element => element.actionIndex === i);
       for (let j = 0; j < actionConditions.length; j++) {
         let condition = actionConditions.filter(element => element.conditionIndex === j)[0];
@@ -111,7 +120,10 @@
     let componentContainer = document.createElement("div");
     componentContainer.role = "button";
     componentContainer.classList.add("workflow-entry", "workflow-" + type);
-    if (type === "action" && ((sessionStorage.getItem("workflow-actions") != null && JSON.parse(sessionStorage.getItem("workflow-actions")).actions.length > 1) || (!selected && index > 0))) {
+    if (type === "action" && ((sessionStorage.getItem("workflow-actions") != null &&
+      JSON.parse(sessionStorage.getItem("workflow-actions")).actions.length > 1) ||
+      (!selected && index > 0))
+    ) {
       createActionRemoveButton(index, componentContainer);
     }
     let componentHeadline = document.createElement("div");
@@ -139,7 +151,9 @@
     componentContainer.appendChild(document.createElement("br"));
     componentContainer.appendChild(document.createElement("br"));
     componentContainer.onclick = function (event) {
-      if (event.target.classList.contains("workflow-action-remove-container") || event.target.classList.contains("workflow-action-remove")) {
+      if (event.target.classList.contains("workflow-action-remove-container") ||
+        event.target.classList.contains("workflow-action-remove")
+      ) {
         return;
       }
       sessionStorage.setItem("workflow-action-index", index.toString());
@@ -176,7 +190,8 @@
             condition.actionIndex -= 1;
           }
         }
-        sessionStorage.setItem("workflow-conditions", JSON.stringify({conditions: conditions}));
+        sessionStorage.setItem("workflow-conditions",
+          JSON.stringify({conditions: conditions}));
       }
       displayWorkflow();
     });
@@ -185,7 +200,8 @@
 
   function drawArrow(index) {
     let arrow = createArrow();
-    document.getElementById("workflow-components").appendChild(createComponentAddButton(index, 0));
+    document.getElementById("workflow-components").appendChild(
+      createComponentAddButton(index, 0));
     document.getElementById("workflow-components").appendChild(arrow);
     return arrow;
   }
@@ -197,27 +213,27 @@
     return arrowContainer;
   }
 
-  function createComponentAddButton(actionIndex, conditionIndex) {
+  function createComponentAddButton(index) {
     let buttonContainer = document.createElement("div");
     buttonContainer.classList.add("workflow-component-add-container");
     let iconContainer = document.createElement("i");
     iconContainer.classList.add("workflow-component-add", "fa-solid", "fa-add");
     buttonContainer.appendChild(iconContainer);
     iconContainer.addEventListener("click", function(event) {
-      openComponentAddMenu(actionIndex, conditionIndex);
+      openComponentAddMenu(index);
     });
     return buttonContainer;
   }
 
-  function openComponentAddMenu(actionIndex, conditionIndex) {
+  function openComponentAddMenu(index) {
     let content = document.createElement("div");
     content.classList.add("workflow-component-add-menu");
     content.appendChild(createComponentAddSelector("fa-square-caret-right",
       "{% trans 'product.workflow.add.component.action' %}",
-      () => addActionInBetween(actionIndex, conditionIndex)));
+      () => addActionInBetween(index)));
     content.appendChild(createComponentAddSelector("fa-filter",
       "{% trans 'product.workflow.add.component.condition' %}",
-      () => addCondition(actionIndex, conditionIndex)));
+      () => addCondition(index)));
     Swal.fire({
       title: "{% trans 'product.workflow.add.component.title' %}",
       html: content,
@@ -284,7 +300,9 @@
       let conditions = JSON.parse(sessionStorage.getItem("workflow-conditions")).conditions;
       for (let i = 0; i < conditions.length; i++) {
         let conditionEntry = conditions[i];
-        if (conditionEntry.actionIndex === actionIndex && conditionEntry.conditionIndex >= conditionIndex) {
+        if (conditionEntry.actionIndex === actionIndex &&
+          conditionEntry.conditionIndex >= conditionIndex
+        ) {
           conditionEntry.conditionIndex += 1;
         }
       }
@@ -317,10 +335,13 @@
     componentContainer.appendChild(document.createElement("br"));
     componentContainer.appendChild(document.createElement("br"));
     componentContainer.onclick = function (event) {
-      if (event.target.classList.contains("workflow-condition-remove-container") || event.target.classList.contains("workflow-condition-remove")) {
+      if (event.target.classList.contains("workflow-condition-remove-container") ||
+        event.target.classList.contains("workflow-condition-remove")
+      ) {
         return;
       }
-      sessionStorage.setItem("workflow-condition-index", actionIndex.toString() + ":" + conditionIndex.toString());
+      sessionStorage.setItem("workflow-condition-index",
+        actionIndex.toString() + ":" + conditionIndex.toString());
       pageChangeApproved = true;
       window.location.href = "/workflow/condition/";
     }
@@ -349,7 +370,8 @@
             actionConditions[i].conditionIndex -= 1;
           }
         }
-        conditions.conditions = conditions.conditions.filter(item => item.actionIndex !== actionIndex).concat(actionConditions);
+        conditions.conditions = conditions.conditions
+          .filter(item => item.actionIndex !== actionIndex).concat(actionConditions);
         sessionStorage.setItem("workflow-conditions", JSON.stringify(conditions));
       }
       displayWorkflow();
@@ -448,7 +470,7 @@
     for (let i = 0; i < workflowActionsInformation.length; i++) {
       let workflowActionInformation = workflowActionsInformation[i];
       workflowActions.push({
-        "index": workflowActionInformation["actionIndex"],
+        "index": workflowActionInformation["index"],
         "module": workflowActionInformation["module"],
         "type": workflowActionInformation["type"],
         "content": workflowActionInformation["content"]
@@ -458,21 +480,22 @@
       publish(workflowName, workflowDescription, workflowTrigger, workflowActions, []);
       return;
     }
-    let workflowConditionsInformation = JSON.parse(sessionStorage.getItem("workflow-conditions")).conditions;
+    let workflowConditionsInformation = JSON.parse(
+      sessionStorage.getItem("workflow-conditions")).conditions;
     let workflowConditions = [];
     for (let i = 0; i < workflowConditionsInformation.length; i++) {
       let workflowConditionInformation = workflowConditionsInformation[i];
       workflowConditions.push({
-        "actionIndex": workflowConditionInformation["actionIndex"],
-        "conditionIndex": workflowConditionInformation["conditionIndex"],
+        "index": workflowConditionInformation["index"],
         "type": workflowConditionInformation["type"],
         "content": workflowConditionInformation["content"]
       });
     }
-    publish(workflowName, workflowDescription, workflowTrigger, workflowActions, workflowConditions);
+    publish(workflowName, workflowDescription, workflowTrigger, workflowActions,
+      workflowConditions);
   }
 
-  function publish(name, description, trigger, actions, conditions) {
+  function publish(name, description, trigger, actions, conditions, loop) {
     var publishButton = document.getElementById("workflow-publish");
     publishButton.classList.add("disabled");
     publishButton.classList.remove("workflow-publish-enabled");
@@ -482,12 +505,13 @@
       <span class="visually-hidden" role="status">Loading...</span>
     `;
     let isSelected = sessionStorage.getItem("workflow-selected") !== null;
-    let requestBody = {name: name, description: description, trigger: trigger, actions: actions, conditions: conditions};
+    let requestBody = {name: name, description: description, trigger: trigger,
+      actions: actions, conditions: conditions, loop: loop};
     if (isSelected) {
       requestBody.workflow = sessionStorage.getItem("workflow-id");
     }
-    let request = new HttpRequest("https://api.dulno.com/v1/workflow" + (isSelected ? "/update/" : "/add/"), "POST",
-      [], requestBody);
+    let request = new HttpRequest("https://api.dulno.com/v1/workflow" +
+      (isSelected ? "/update/" : "/add/"), "POST", [], requestBody);
     request.send(function (status, responseText) {
       if (status !== 200) {
         var publishButton = document.getElementById("workflow-publish");
@@ -496,11 +520,13 @@
         publishButton.innerHTML = "{% trans 'product.workflow.publish' %}";
       }
       if (status === 413) {
-        Swal.fire("{% trans 'product.workflow.publish.too.big.title' %}", "{% trans 'product.workflow.publish.too.big.body' %}", "error");
+        Swal.fire("{% trans 'product.workflow.publish.too.big.title' %}",
+          "{% trans 'product.workflow.publish.too.big.body' %}", "error");
         return;
       }
       if (status === 400) {
-        Swal.fire("{% trans 'product.workflow.publish.limit.reached.title' %}", "{% trans 'product.workflow.publish.limit.reached.body' %}", "error");
+        Swal.fire("{% trans 'product.workflow.publish.limit.reached.title' %}",
+          "{% trans 'product.workflow.publish.limit.reached.body' %}", "error");
         return;
       }
       sessionStorage.removeItem("workflow-name");
@@ -508,6 +534,7 @@
       sessionStorage.removeItem("workflow-trigger");
       sessionStorage.removeItem("workflow-actions");
       sessionStorage.removeItem("workflow-conditions");
+      sessionStorage.removeItem("workflow-loop");
       if (isSelected) {
         sessionStorage.removeItem("workflow-selected");
         sessionStorage.removeItem("workflow-id");
@@ -535,7 +562,9 @@
           [], {workflow: sessionStorage.getItem("workflow-id")});
         request.send(function (status, responseText) {
           pageChangeApproved = true;
-          Swal.fire("{% trans 'product.workflow.delete.successful.title' %}", "{% trans 'product.workflow.delete.successful.body' %}", "success").then(success => window.location.href = "/workflows/");
+          Swal.fire("{% trans 'product.workflow.delete.successful.title' %}",
+            "{% trans 'product.workflow.delete.successful.body' %}", "success")
+            .then(success => window.location.href = "/workflows/");
         });
       }
     });
@@ -558,7 +587,7 @@
     }
     return checkWorkflowInitialState("name") || checkWorkflowInitialState("description") ||
       checkWorkflowInitialState("trigger") || checkWorkflowInitialState("actions") ||
-      checkWorkflowInitialState("conditions");
+      checkWorkflowInitialState("conditions")|| checkWorkflowInitialState("loop");
   }
 
   function checkWorkflowInitialState(key) {
@@ -577,6 +606,10 @@
     }
     var conditions = sessionStorage.getItem("workflow-conditions");
     if (conditions != null && JSON.parse(conditions).conditions.length > 0) {
+      return false;
+    }
+    var loop = sessionStorage.getItem("workflow-loop");
+    if (loop != null && JSON.parse(loop).loop.enabled) {
       return false;
     }
     if (JSON.parse(sessionStorage.getItem("workflow-trigger")).selected) {

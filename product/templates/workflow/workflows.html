@@ -162,6 +162,7 @@
   }
 
   function displayWorkflow(id, name, creator, created, armed, triggerType, triggerLogo, actions) {
+    actions.sort(function (a, b) {return a.actionIndex - b.actionIndex;});
     let entry = document.createElement('li');
     entry.role = "button";
     entry.classList.add("workflow-entry");
@@ -201,8 +202,7 @@
     preview.classList.add("workflows-preview");
     preview.appendChild(createWorkflowPreviewEntry(triggerLogo));
     for (let i = 0; i < Math.min(actions.length, 2); i++) {
-      preview.appendChild(createWorkflowPreviewEntry(
-        actions.filter(action => action.actionIndex === i)[0].actionModuleLogo));
+      preview.appendChild(createWorkflowPreviewEntry(actions[i].actionModuleLogo));
     }
     previewContainer.appendChild(preview);
     return previewContainer;
@@ -404,7 +404,7 @@
       sessionStorage.setItem("workflow-initial-name", workflow.name);
       sessionStorage.setItem("workflow-description", workflow.description);
       sessionStorage.setItem("workflow-initial-description", workflow.description);
-      var trigger = JSON.stringify({
+      let trigger = JSON.stringify({
         "module": workflow.triggerModule,
         "moduleLogo": workflow.triggerModuleLogo,
         "type": workflow.triggerType,
@@ -418,7 +418,7 @@
       for (let i = 0; i < workflow.actions.length; i++) {
         let workflowActionInformation = workflow.actions[i];
         actions.push({
-          "actionIndex": workflowActionInformation.actionIndex,
+          "index": workflowActionInformation.actionIndex,
           "module": workflowActionInformation.actionModule,
           "moduleLogo": workflowActionInformation.actionModuleLogo,
           "type": workflowActionInformation.actionType,
@@ -427,23 +427,31 @@
           "selected": true
         });
       }
-      var parsedActions = JSON.stringify({actions: actions});
+      let parsedActions = JSON.stringify({actions: actions});
       sessionStorage.setItem("workflow-actions", parsedActions);
       sessionStorage.setItem("workflow-initial-actions", parsedActions);
       let conditions = [];
       for (let i = 0; i < workflow.conditions.length; i++) {
         let workflowConditionInformation = workflow.conditions[i];
         conditions.push({
-          "actionIndex": workflowConditionInformation.conditionActionIndex,
-          "conditionIndex": workflowConditionInformation.conditionConditionIndex,
+          "index": workflowConditionInformation.conditionIndex,
           "type": workflowConditionInformation.conditionType,
           "content": workflowConditionInformation.conditionContent,
           "selected": true
         });
       }
-      var parsedConditions = JSON.stringify({conditions: conditions});
+      let parsedConditions = JSON.stringify({conditions: conditions});
       sessionStorage.setItem("workflow-conditions", parsedConditions);
       sessionStorage.setItem("workflow-initial-conditions", parsedConditions);
+      let loop = {"enabled": workflow.loop.loopEnabled};
+      if (workflow.loop.loopEnabled) {
+        loop["index"] = workflow.loop.loopIndex;
+        loop["type"] = workflow.loop.loopType;
+        loop["content"] = workflow.loop.loopContent;
+      }
+      let parsedLoop = JSON.stringify({loop: loop});
+      sessionStorage.setItem("workflow-loop", parsedLoop);
+      sessionStorage.setItem("workflow-initial-loop", parsedLoop);
       window.location.href = "/workflow/";
     });
   }
