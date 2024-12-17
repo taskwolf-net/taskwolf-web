@@ -7,32 +7,34 @@
     {% include 'product-sidebar.html' %}
     <div class="sidebar-influenced">
       <div id="workflow-condition-container">
-        <div id="workflow-condition-header">
-          <button id="workflow-condition-page-back"><i class="fa-solid fa-arrow-left-long"></i></button>
-          <h1 id="workflow-condition-headline" class="fw-bold text-center mb-0">{% trans 'product.workflow.condition.headline' %}</h1>
-        </div>
-        <div id="workflow-condition-wrapper">
-          <div id="workflow-condition-inputs">
-            <h5 id="workflow-condition-inputs-headline" class="text-center">{% trans 'product.workflow.condition.inputs' %}</h5>
-            <hr class="w-100 hr"/>
-            <div id="workflow-condition-input-list">
+        <div id="workflow-condition-wrapper" class="d-none">
+          <div id="workflow-condition-header">
+            <button id="workflow-condition-page-back"><i class="fa-solid fa-arrow-left-long"></i></button>
+            <h1 id="workflow-condition-headline" class="fw-bold text-center mb-0">{% trans 'product.workflow.condition.headline' %}</h1>
+          </div>
+          <div id="workflow-condition-content">
+            <div id="workflow-condition-inputs">
+              <h5 id="workflow-condition-inputs-headline" class="text-center">{% trans 'product.workflow.condition.inputs' %}</h5>
+              <hr class="w-100 hr"/>
+              <div id="workflow-condition-input-list">
+              </div>
+            </div>
+            <div id="workflow-condition-divider">
+              <div class="vr"></div>
+            </div>
+            <div id="workflow-condition-placeholders">
+              <h5 id="workflow-condition-placeholders-headline" class="text-center">{% trans 'product.workflow.condition.placeholders' %}</h5>
+              <hr class="w-100 hr"/>
+              <ul id="workflow-condition-placeholders-tabs" class="nav nav-tabs d-none">
+              </ul>
+              <p id="workflow-condition-placeholders-empty" class="text-center d-none">{% trans 'product.workflow.condition.placeholders.tabs.empty' %}</p>
+              <ul id="workflow-condition-placeholders-list">
+              </ul>
             </div>
           </div>
-          <div id="workflow-condition-divider">
-            <div class="vr"></div>
+          <div id="workflow-condition-adopt">
+            <button id="workflow-condition-adopt-button" type="button" class="btn btn-success disabled">{% trans 'product.workflow.condition.adopt' %}</button>
           </div>
-          <div id="workflow-condition-placeholders">
-            <h5 id="workflow-condition-placeholders-headline" class="text-center">{% trans 'product.workflow.condition.placeholders' %}</h5>
-            <hr class="w-100 hr"/>
-            <ul id="workflow-condition-placeholders-tabs" class="nav nav-tabs d-none">
-            </ul>
-            <p id="workflow-condition-placeholders-empty" class="text-center d-none">{% trans 'product.workflow.condition.placeholders.tabs.empty' %}</p>
-            <ul id="workflow-condition-placeholders-list">
-            </ul>
-          </div>
-        </div>
-        <div id="workflow-condition-adopt">
-          <button id="workflow-condition-adopt-button" type="button" class="btn btn-success disabled">{% trans 'product.workflow.condition.adopt' %}</button>
         </div>
       </div>
     </div>
@@ -50,35 +52,33 @@
   let conditionOutputVariables = [];
 
   $(document).ready(function() {
-    let actionIndex = parseInt(sessionStorage.getItem("workflow-condition-index").split(":")[0]);
+    displayLoader();
+    let index = parseInt(sessionStorage.getItem("workflow-step-index"));
+    let steps = JSON.parse(sessionStorage.getItem("workflow-steps")).steps;
     let fetchedVariables = -1;
-    for (let i = -1; i < actionIndex; i++) {
+    let stepFinished = function() {
+      fetchedVariables++;
+      if (fetchedVariables === index) {
+        displayConditionInputs();
+        displayPlaceholdersTabs();
+      }
+    }
+    for (let i = -1; i < index; i++) {
+      if (i >= 0 && steps.filter(step => step.index === i)[0].kind !== "action") {
+        stepFinished();
+        continue;
+      }
       findOutputVariables(i, function(outputVariables) {
         conditionOutputVariables = conditionOutputVariables.concat(outputVariables);
-        fetchedVariables++;
-        if (fetchedVariables === actionIndex) {
-          displayConditionInputs();
-          displayPlaceholdersTabs();
-        }
+        stepFinished();
       });
     }
   });
 
   function displayConditionInputs() {
-    let indexes = sessionStorage.getItem("workflow-condition-index").split(":");
-    let actionIndex = parseInt(indexes[0]);
-    let conditionIndex = parseInt(indexes[1]);
-    if (sessionStorage.getItem("workflow-conditions") === null) {
-      fillConditionInputs(null);
-      return;
-    }
-    let actionConditions = JSON.parse(sessionStorage.getItem("workflow-conditions"))
-      .conditions.filter(item => item.actionIndex === actionIndex);
-    if (actionConditions.length <= conditionIndex) {
-      fillConditionInputs(null);
-      return;
-    }
-    let condition = actionConditions[conditionIndex];
+    let index = parseInt(sessionStorage.getItem("workflow-step-index"));
+    let steps = JSON.parse(sessionStorage.getItem("workflow-steps")).steps;
+    let condition = steps.filter(item => item.index === index)[0];
     if (condition.selected === false) {
       fillConditionInputs(null);
       return;
@@ -220,6 +220,7 @@
         if (conditionType !== "" && item.identifier === conditionType) {
           selectConditionSelect(identifier, item.identifier, item.name,
             dropdownContainer, dropdownButton, dropdownList);
+          setTimeout(removeLoader, 500);
         }
       }
     });
@@ -243,39 +244,42 @@
   }
 
   function displayPlaceholdersTabs() {
-    let trigger = sessionStorage.getItem("workflow-trigger");
-    let actions = sessionStorage.getItem("workflow-actions");
-    if (trigger == null && (actions == null || actions.length === 0)) {
+    let trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
+    if ((trigger.content === "" && trigger.type === "") ||
+      sessionStorage.getItem("workflow-step-index") === "-1"
+    ) {
       document.getElementById("workflow-condition-placeholders-empty").classList.remove("d-none");
       return;
     }
-    if (trigger != null) {
-      displayPlaceholdersTab(-1);
-    }
-    if ((actions != null && actions.length > 0)) {
-      for (let i = 0; i < parseInt(sessionStorage.getItem("workflow-condition-index").split(":")[0]); i++) {
-        if (i < actions.length) {
-          displayPlaceholdersTab(i);
-        }
+    displayPlaceholdersTab(-1);
+    let steps = JSON.parse(sessionStorage.getItem("workflow-steps")).steps;
+    let actionIndex = 0;
+    for (let i = 0; i < sessionStorage.getItem("workflow-step-index"); i++) {
+      if (steps.filter(step => step.index === i)[0].kind !== "action") {
+        continue;
       }
+      displayPlaceholdersTab(i, actionIndex);
+      actionIndex++;
     }
     document.getElementById("workflow-condition-placeholders-tabs").classList.remove("d-none");
   }
 
-  function displayPlaceholdersTab(index) {
+  function displayPlaceholdersTab(stepIndex, actionIndex) {
     let tabElement = document.createElement("li");
     tabElement.classList.add("nav-item");
     let linkElement = document.createElement("a");
     linkElement.classList.add("nav-link");
-    if (index === -1) {
+    if (stepIndex === -1) {
       currentPlaceholderElement = linkElement;
       linkElement.classList.add("nav-link-active");
-      displayPlaceholders(index);
+      displayPlaceholders(stepIndex);
     }
-    linkElement.innerHTML = (index < 0) ? "{% trans 'product.workflow.condition.placeholders.trigger' %}" : ((index + 1) + ". {% trans 'product.workflow.condition.placeholders.action' %}");
+    linkElement.innerHTML = (stepIndex < 0) ?
+      "{% trans 'product.workflow.condition.placeholders.trigger' %}" :
+      ((actionIndex + 1) + ". {% trans 'product.workflow.condition.placeholders.action' %}");
     tabElement.appendChild(linkElement);
     tabElement.onclick = function (event) {
-      clickPlaceholdersTab(index, linkElement);
+      clickPlaceholdersTab(stepIndex, linkElement);
     }
     document.getElementById("workflow-condition-placeholders-tabs").appendChild(tabElement);
   }
@@ -312,7 +316,8 @@
     if (componentType === "trigger") {
       component = JSON.parse(sessionStorage.getItem("workflow-trigger"));
     } else {
-      component = JSON.parse(sessionStorage.getItem("workflow-actions")).actions.filter(element => element.actionIndex === index)[0];
+      component = JSON.parse(sessionStorage.getItem("workflow-steps"))
+        .steps.filter(element => element.index === index)[0];
     }
     let module = component.module;
     let type = component.type;
@@ -437,30 +442,29 @@
 
   document.getElementById("workflow-condition-adopt-button").addEventListener("click", function(event) {
     saveCondition();
+    pageChangeApproved = true;
     window.location.href = "/workflow/";
   });
 
   function saveCondition() {
-    if (sessionStorage.getItem("workflow-conditions") === null) {
-      sessionStorage.setItem("workflow-conditions", JSON.stringify({conditions: [createCondition()]}));
+    let component = createCondition();
+    let index = parseInt(sessionStorage.getItem("workflow-step-index"));
+    component.index = index;
+    if (sessionStorage.getItem("workflow-steps") === null) {
+      sessionStorage.setItem("workflow-steps", JSON.stringify({steps: [component]}));
     } else {
-      let conditions = JSON.parse(sessionStorage.getItem("workflow-conditions")).conditions;
-      let indexes = sessionStorage.getItem("workflow-condition-index").split(":");
-      conditions = conditions.filter(item => !(item.actionIndex === parseInt(indexes[0]) && item.conditionIndex === parseInt(indexes[1])));
-      let component = createCondition();
-      if (sessionStorage.getItem("workflow-condition-index") !== null) {
-        sessionStorage.removeItem("workflow-condition-index");
-      }
-      conditions.push(component);
-      sessionStorage.setItem("workflow-conditions", JSON.stringify({conditions: conditions}));
+      let steps = JSON.parse(sessionStorage.getItem("workflow-steps")).steps;
+      steps = steps.filter(item => item.index !== index);
+      steps.push(component);
+      sessionStorage.removeItem("workflow-step-index");
+      sessionStorage.setItem("workflow-steps", JSON.stringify({steps: steps}));
     }
   }
 
   function createCondition() {
     return {
+      "kind": "condition",
       "type": conditionType,
-      "actionIndex": parseInt(sessionStorage.getItem("workflow-condition-index").split(":")[0]),
-      "conditionIndex": parseInt(sessionStorage.getItem("workflow-condition-index").split(":")[1]),
       "content": JSON.stringify({
         "inputValue": inputValue,
         "comparativeValue": comparativeValue
@@ -512,15 +516,17 @@
   }
 
   function checkUnsavedChanges() {
-    let indexSplit = sessionStorage.getItem("workflow-condition-index").split(":");
-    let actionIndex = parseInt(indexSplit[0]);
-    let conditionIndex = parseInt(indexSplit[1]);
-    let currentCondition = JSON.parse(sessionStorage.getItem("workflow-conditions")).conditions
-      .filter(item => item.actionIndex === actionIndex && item.conditionIndex === conditionIndex)[0];
-    if (!currentCondition.selected && inputValue === "" && comparativeValue === "" && conditionType === "") {
+    let index = parseInt(sessionStorage.getItem("workflow-step-index"));
+    let steps = JSON.parse(sessionStorage.getItem("workflow-steps")).steps;
+    let currentCondition = steps.filter(item => item.index === index)[0];
+    if (!currentCondition.selected && inputValue === "" &&
+      comparativeValue === "" && conditionType === ""
+    ) {
       return false;
     }
-    return compareConditions(createCondition(), currentCondition);
+    let component = createCondition();
+    component.index = index;
+    return compareConditions(component, currentCondition);
   }
 
   function compareConditions(condition1, condition2) {
@@ -558,5 +564,20 @@
     new bootstrap.Tooltip(element, {
       container: container
     });
+  }
+
+  function displayLoader() {
+    let loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("workflow-condition-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("workflow-condition-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("workflow-condition-wrapper").classList.remove("d-none");
+    for (var i = 0; i < quillInputElements.length; i++) {
+      adjustEditorHeight(quillInputElements[i]);
+    }
   }
 </script>

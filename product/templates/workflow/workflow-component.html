@@ -534,7 +534,7 @@
       }
     }
     for (let i = -1; i < index; i++) {
-      if (steps.filter(step => step.index = i)[0].kind !== "action") {
+      if (i >= 0 && steps.filter(step => step.index === i)[0].kind !== "action") {
         stepFinished();
         continue;
       }
@@ -920,7 +920,7 @@
     let steps = JSON.parse(sessionStorage.getItem("workflow-steps")).steps;
     let actionIndex = 0;
     for (let i = 0; i < sessionStorage.getItem("workflow-step-index"); i++) {
-      if (steps.filter(step => step.index = i)[0].kind !== "action") {
+      if (steps.filter(step => step.index === i)[0].kind !== "action") {
         continue;
       }
       displayPlaceholdersTab(i, actionIndex);
