@@ -84,7 +84,8 @@
     }
     let trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
     createComponentElement("{% trans 'product.workflow.trigger' %}",
-      trigger.typeDescription, trigger.moduleLogo, "trigger", -1, trigger.selected);
+      trigger.typeDescription, trigger.moduleLogo, "trigger", -1, trigger.selected,
+      document.getElementById("workflow-components"));
     displayActions();
     checkPublishability();
     if (sessionStorage.getItem("workflow-selected") !== null) {
@@ -99,30 +100,40 @@
     let steps = JSON.parse(sessionStorage.getItem("workflow-steps")).steps;
     steps.sort(function (a, b) {return a.index - b.index;});
     let actions = steps.filter(item => item.kind === "action");
+    let parent = document.getElementById("workflow-components");
+    let inLoopIndex = -1;
     for (let i = 0; i < steps.length; i++) {
       let step = steps.filter(element => element.index === i)[0];
-      drawArrow(i);
+      if (inLoopIndex !== 0) {
+        drawArrow(i, parent);
+      }
+      if (inLoopIndex >= 0) {
+        inLoopIndex++;
+      }
       if (step.kind === "action") {
         let actionNumber = actions.indexOf(step);
         createComponentElement(
           (actionNumber + 1) + ". {% trans 'product.workflow.action' %}",
-          step.typeDescription, step.moduleLogo, "action", i, step.selected);
-      }
-      if (step.kind === "condition") {
-        createConditionElement(i, step.selected);
+          step.typeDescription, step.moduleLogo, "action", i, step.selected, parent);
+      } else if (step.kind === "condition") {
+        createConditionElement(i, step.selected, parent);
+      } else if (step.kind === "loop") {
+        createLoopElement(i, step.selected);
+        parent = document.getElementById("workflow-loop-body");
+        inLoopIndex = 0;
       }
     }
-    createAddActionButton();
+    createAddActionButton(parent);
   }
 
-  function createComponentElement(title, description, logo, type, index, selected) {
+  function createComponentElement(title, description, logo, type, index, selected, parent) {
     let componentContainer = document.createElement("div");
     componentContainer.role = "button";
     componentContainer.classList.add("workflow-entry", "workflow-" + type);
     let actionCount = JSON.parse(sessionStorage.getItem("workflow-steps")).steps
       .filter(item => item.kind === "action").length;
     if (type === "action" && ((actionCount > 1) || (!selected && index > 0))) {
-      createActionRemoveButton(index, componentContainer);
+      createStepRemoveButton(index, componentContainer);
     }
     let componentHeadline = document.createElement("div");
     componentHeadline.classList.add("workflow-headline");
@@ -148,36 +159,14 @@
     componentContainer.appendChild(componentDescription);
     componentContainer.appendChild(document.createElement("br"));
     componentContainer.appendChild(document.createElement("br"));
-    componentContainer.onclick = function (event) {
-      if (event.target.classList.contains("workflow-action-remove-container") ||
-        event.target.classList.contains("workflow-action-remove")
-      ) {
-        return;
-      }
-      sessionStorage.setItem("workflow-step-index", index.toString());
-      pageChangeApproved = true;
-      window.location.href = "/workflow/" + type + "/";
-    }
-    document.getElementById("workflow-components").appendChild(componentContainer);
+    componentContainer.onclick = (event) => clickStep(index, type, event);
+    parent.appendChild(componentContainer);
   }
 
-  function createActionRemoveButton(index, componentContainer) {
-    let actionRemoveContainer = document.createElement("div");
-    actionRemoveContainer.classList.add("workflow-action-remove-container");
-    let iconContainer = document.createElement("i");
-    iconContainer.classList.add("workflow-action-remove", "fa-solid", "fa-xmark");
-    actionRemoveContainer.appendChild(iconContainer);
-    actionRemoveContainer.addEventListener("click", function(event) {
-      removeStep(index);
-    });
-    componentContainer.appendChild(actionRemoveContainer);
-  }
-
-  function drawArrow(index) {
+  function drawArrow(index, parent) {
     let arrow = createArrow();
-    document.getElementById("workflow-components").appendChild(
-      createComponentAddButton(index));
-    document.getElementById("workflow-components").appendChild(arrow);
+    parent.appendChild(createComponentAddButton(index));
+    parent.appendChild(arrow);
     return arrow;
   }
 
@@ -252,11 +241,11 @@
     insertStep(index, condition);
   }
 
-  function createConditionElement(index, selected) {
+  function createConditionElement(index, selected, parent) {
     let componentContainer = document.createElement("div");
     componentContainer.role = "button";
     componentContainer.classList.add("workflow-entry", "workflow-condition");
-    createConditionRemoveButton(index, componentContainer);
+    createStepRemoveButton(index, componentContainer);
     let componentHeadline = document.createElement("div");
     componentHeadline.classList.add("workflow-headline");
     let componentHeadlineContent = document.createElement("h1");
@@ -274,29 +263,60 @@
     componentContainer.appendChild(componentDescription);
     componentContainer.appendChild(document.createElement("br"));
     componentContainer.appendChild(document.createElement("br"));
-    componentContainer.onclick = function (event) {
-      if (event.target.classList.contains("workflow-condition-remove-container") ||
-        event.target.classList.contains("workflow-condition-remove")
-      ) {
-        return;
-      }
-      sessionStorage.setItem("workflow-step-index", index.toString());
-      pageChangeApproved = true;
-      window.location.href = "/workflow/condition/";
+    componentContainer.onclick = (event) => clickStep(index, "condition", event);
+    parent.appendChild(componentContainer);
+  }
+
+  function createLoopElement(index, selected) {
+    let componentContainer = document.createElement("div");
+    componentContainer.role = "button";
+    componentContainer.classList.add("workflow-entry", "workflow-loop");
+    createStepRemoveButton(index, componentContainer);
+    let componentHeadline = document.createElement("div");
+    componentHeadline.classList.add("workflow-headline");
+    let componentHeadlineContent = document.createElement("h1");
+    componentHeadlineContent.innerHTML = "{% trans 'product.workflow.loop' %}";
+    if (selected) {
+      componentContainer.classList.add("workflow-entry-selected");
+      componentHeadline.classList.add("workflow-headline-selected");
     }
+    componentHeadline.appendChild(componentHeadlineContent);
+    componentContainer.appendChild(componentHeadline);
+    componentContainer.appendChild(document.createElement("br"));
+    let componentDescription = document.createElement("span");
+    componentDescription.innerHTML = "{% trans 'product.workflow.loop.description' %}";
+    componentDescription.classList.add("workflow-entry-description");
+    componentContainer.appendChild(componentDescription);
+    componentContainer.appendChild(document.createElement("br"));
+    componentContainer.appendChild(document.createElement("br"));
+    let componentBody = document.createElement("div");
+    componentBody.id = "workflow-loop-body";
+    componentContainer.append(componentBody);
+    componentContainer.onclick = (event) => clickStep(index, "loop", event);
     document.getElementById("workflow-components").appendChild(componentContainer);
   }
 
-  function createConditionRemoveButton(index, componentContainer) {
-    let conditionRemoveContainer = document.createElement("div");
-    conditionRemoveContainer.classList.add("workflow-condition-remove-container");
+  function clickStep(index, type, event) {
+    if (event.target.classList.contains("workflow-step-remove-container") ||
+      event.target.classList.contains("workflow-step-remove")
+    ) {
+      return;
+    }
+    sessionStorage.setItem("workflow-step-index", index.toString());
+    pageChangeApproved = true;
+    window.location.href = "/workflow/" + type +"/";
+  }
+
+  function createStepRemoveButton(index, container) {
+    let stepRemoveContainer = document.createElement("div");
+    stepRemoveContainer.classList.add("workflow-step-remove-container");
     let iconContainer = document.createElement("i");
-    iconContainer.classList.add("workflow-condition-remove", "fa-solid", "fa-xmark");
-    conditionRemoveContainer.appendChild(iconContainer);
-    conditionRemoveContainer.addEventListener("click", function(event) {
+    iconContainer.classList.add("workflow-step-remove", "fa-solid", "fa-xmark");
+    stepRemoveContainer.appendChild(iconContainer);
+    stepRemoveContainer.addEventListener("click", function(event) {
       removeStep(index);
     });
-    componentContainer.appendChild(conditionRemoveContainer);
+    container.appendChild(stepRemoveContainer);
   }
 
   function insertStep(index, component) {
@@ -323,7 +343,7 @@
     displayWorkflow();
   }
 
-  function createAddActionButton() {
+  function createAddActionButton(parent) {
     let buttonContainer = document.createElement("div");
     buttonContainer.classList.add("workflow-action-add-container");
     let iconContainer = document.createElement("i");
@@ -332,7 +352,7 @@
     iconContainer.addEventListener("click", function(event) {
       openComponentAddEndMenu();
     });
-    document.getElementById("workflow-components").appendChild(buttonContainer);
+    parent.appendChild(buttonContainer);
   }
 
   function openComponentAddEndMenu() {
@@ -359,8 +379,15 @@
   }
 
   function addLoop() {
-    //TODO: ADD LOOP
-    displayWorkflow();
+    let loop = {
+      "kind": "loop",
+      "type": "",
+      "index": JSON.parse(sessionStorage.getItem("workflow-steps")).steps.length,
+      "content": "{}",
+      "selected": false
+    }
+    insertStep(loop.index, loop);
+    addActionAtTheEnd();
   }
 
   function createEmptyComponent(kind, description) {

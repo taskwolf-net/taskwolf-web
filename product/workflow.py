@@ -39,6 +39,12 @@ async def workflowCondition(request):
       'css/product/workflow/workflow-placeholder.css']})
 
 @authentication_required
+async def workflowLoop(request):
+  return render(request, 'workflow/workflow-loop.html', {'title': gettext('product.workflow.loop.title'),
+    'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflow-loop.css',
+      'css/product/workflow/workflow-placeholder.css']})
+
+@authentication_required
 async def workflowTimeline(request):
   return render(request, 'workflow/workflow-timeline.html', {'title': gettext('product.workflow.timeline.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflow-timeline.css']})

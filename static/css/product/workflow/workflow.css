@@ -262,7 +262,7 @@ input[maxlength] {
   padding-right: 20px;
 }
 
-.workflow-action-remove-container, .workflow-condition-remove-container {
+.workflow-step-remove-container {
   position: absolute;
   width: 32px;
   height: 32px;
@@ -276,12 +276,26 @@ input[maxlength] {
   transition-duration: 0.4s;
 }
 
-.dark .workflow-action-remove-container, .dark .workflow-condition-remove-container {
+.dark .workflow-step-remove-container {
   background-color: #a90000;
 }
 
-.light .workflow-action-remove-container, .light .workflow-condition-remove-container {
+.light .workflow-step-remove-container {
   background-color: #ff3434;
+}
+
+#workflow-loop-body {
+  padding: 50px;
+  border-radius: 6px;
+  border: 2px #747474 solid;
+}
+
+.dark #workflow-loop-body {
+  background-color: #0d1117 !important;
+}
+
+.light #workflow-loop-body {
+  background-color: #eaeaea !important;
 }
 
 .workflow-component-add-container {
