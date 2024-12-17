@@ -50,6 +50,7 @@
   let comparativeValue = "";
   let currentPlaceholderElement;
   let conditionOutputVariables = [];
+  let quillInputElements = [];
 
   $(document).ready(function() {
     displayLoader();
@@ -61,6 +62,9 @@
       if (fetchedVariables === index) {
         displayConditionInputs();
         displayPlaceholdersTabs();
+        if (conditionType === "") {
+          removeLoader();
+        }
       }
     }
     for (let i = -1; i < index; i++) {
@@ -121,6 +125,7 @@
     inputContainerElement.appendChild(inputElement);
     document.getElementById("workflow-condition-input-list").appendChild(inputContainerElement);
     let quill = setupPlaceholderInput(inputElement.id, name);
+    quillInputElements.push(quill);
     quill.on('text-change', function(delta, oldDelta, source) {
       inputConditionInput(quill, identifier);
     });
