@@ -284,8 +284,26 @@ input[maxlength] {
   background-color: #ff3434;
 }
 
+.workflow-loop-wrapper {
+  position: relative;
+  display: flex;
+}
+
+.workflow-loop {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  z-index: 1;
+}
+
 #workflow-loop-body {
+  position: relative;
+  z-index: 2;
+  width: 100%;
   padding: 50px;
+  margin: 180px 20px 20px;
   border-radius: 6px;
   border: 2px #747474 solid;
 }
@@ -337,6 +355,14 @@ input[maxlength] {
   display: flex;
   gap: 30px;
   justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+
+@media (max-width: 700px) {
+  .workflow-component-add-menu {
+    flex-direction: column;
+  }
 }
 
 .workflow-component-add-menu-selector {
