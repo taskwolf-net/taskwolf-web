@@ -190,7 +190,7 @@ input[maxlength] {
   background-color: #36393e;
 }
 
-.dark .workflow-entry:hover {
+.dark .workflow-entry:hover:not(:has(:hover > #workflow-loop-body)) {
   background-color: #43474d !important;
 }
 
@@ -198,7 +198,7 @@ input[maxlength] {
   background-color: #c5c5c5;
 }
 
-.light .workflow-entry:hover {
+.light .workflow-entry:hover:not(:has(:hover > #workflow-loop-body)) {
   background-color: #b9b9b9 !important;
 }
 
@@ -206,7 +206,7 @@ input[maxlength] {
   background-color: #1b232f !important;
 }
 
-.dark .workflow-entry-selected:hover {
+.dark .workflow-entry-selected:hover:not(:has(:hover > #workflow-loop-body)) {
   background-color: #242f3f !important;
 }
 
@@ -214,7 +214,7 @@ input[maxlength] {
   background-color: #e5e5e5 !important;
 }
 
-.light .workflow-entry-selected:hover {
+.light .workflow-entry-selected:hover:not(:has(:hover > #workflow-loop-body)) {
   background-color: #d0d0d0 !important;
 }
 
