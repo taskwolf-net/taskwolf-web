@@ -1190,11 +1190,15 @@ msgid "product.workflow.specifications.file.pending"
 msgstr "Select a file"
 msgid "product.workflow.specifications.file.selected"
 msgstr "File selected"
-msgid "product.workflow.specifications.placeholders.trigger"
+
+# WORKFLOW - PLACEHOLDER
+msgid "product.workflow.placeholders.trigger"
 msgstr "Trigger"
-msgid "product.workflow.specifications.placeholders.action"
+msgid "product.workflow.placeholders.action"
 msgstr "Action"
-msgid "product.workflow.specifications.placeholders.empty"
+msgid "product.workflow.placeholders.loop"
+msgstr "Loop"
+msgid "product.workflow.placeholders.empty"
 msgstr "This component does not have a placeholder."
 
 # WORKFLOW - COMPONENT

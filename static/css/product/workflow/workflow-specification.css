@@ -52,32 +52,6 @@
   overflow: hidden;
 }
 
-
-.workflow-specification-placeholder {
-  margin-top: 5%;
-  border-radius: 10px;
-  padding: 10px;
-  transition-duration: 0.3s;
-  cursor: grab;
-  user-select: none;
-}
-
-.dark .workflow-specification-placeholder {
-  background-color: #323438;
-}
-
-.light .workflow-specification-placeholder {
-  background-color: #b2b2b2;
-}
-
-.dark .workflow-specification-placeholder:hover {
-  background-color: #45484d;
-}
-
-.light .workflow-specification-placeholder:hover {
-  background-color: #959595;
-}
-
 .workflow-specification-select-empty:hover {
   background-color: rgba(0,0,0,0) !important;
 }

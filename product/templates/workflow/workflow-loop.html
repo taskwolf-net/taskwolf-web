@@ -78,8 +78,6 @@
   </body>
 </html>
 
-<script src="https://dulno.com/static/js/product/workflow/workflow-placeholder.js"></script>
-
 <script>
   let selectedComponent = {};
   let selectedApplication;
@@ -207,9 +205,11 @@
 </script>
 
 {% include 'workflow/workflow-specification.html' %}
+{% include 'workflow/workflow-placeholder.html' %}
 
 <script>
   specificationPrefix = "workflow-loop-specifications";
+  placeholderPrefix = "workflow-loop-specifications";
   adoptButton = document.getElementById("workflow-loop-adopt-button");
   fetchSpecificationInputs = function (callback) {
     let request = new HttpRequest("https://api.dulno.com/v1/loop/find/", "POST",

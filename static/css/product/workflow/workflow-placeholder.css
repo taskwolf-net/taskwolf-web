@@ -40,3 +40,28 @@
   opacity: 1;
   font-size: 16px !important;
 }
+
+.workflow-placeholder {
+  margin-top: 5%;
+  border-radius: 10px;
+  padding: 10px;
+  transition-duration: 0.3s;
+  cursor: grab;
+  user-select: none;
+}
+
+.dark .workflow-placeholder {
+  background-color: #323438;
+}
+
+.light .workflow-placeholder {
+  background-color: #b2b2b2;
+}
+
+.dark .workflow-placeholder:hover {
+  background-color: #45484d;
+}
+
+.light .workflow-placeholder:hover {
+  background-color: #959595;
+}

@@ -1,0 +1,409 @@
+{% load static %}
+{% load i18n %}
+<script>
+  let placeholderPrefix;
+
+  function preparePlaceholders(callback) {
+    let index = parseInt(sessionStorage.getItem("workflow-step-index"));
+    if (index === -1) {
+      document.getElementById(specificationPrefix + "-placeholders-empty")
+        .classList.remove("d-none");
+      fillSpecificationsInputs();
+      return;
+    }
+    displayPlaceholdersTabs();
+    let steps = JSON.parse(sessionStorage.getItem("workflow-steps")).steps;
+    let outputCount = -1;
+    let stepFinished = function() {
+      outputCount++;
+      if (outputCount === index) {
+        callback();
+      }
+    }
+    for (let i = -1; i < index; i++) {
+      if (i < 0) {
+        stepFinished();
+        continue;
+      }
+      let stepKind = steps.filter(step => step.index === i)[0].kind;
+      if (stepKind !== "action" && stepKind !== "loop") {
+        stepFinished();
+        continue;
+      }
+      findOutputVariables(i, stepKind, function(outputVariables) {
+        componentsOutputVariables = componentsOutputVariables.concat(outputVariables);
+        stepFinished();
+      });
+    }
+  }
+
+  function displayPlaceholdersTabs() {
+    let trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
+    if ((trigger.content === "" && trigger.type === "") ||
+      sessionStorage.getItem("workflow-step-index") === "-1"
+    ) {
+      document.getElementById(placeholderPrefix + "-placeholders-empty").classList.remove("d-none");
+      return;
+    }
+    displayPlaceholdersTab(-1, "trigger", -1);
+    let steps = JSON.parse(sessionStorage.getItem("workflow-steps")).steps;
+    let actionIndex = 0;
+    for (let i = 0; i < sessionStorage.getItem("workflow-step-index"); i++) {
+      let stepKind = steps.filter(step => step.index === i)[0].kind;
+      if (stepKind !== "action" && stepKind !== "loop") {
+        continue;
+      }
+      displayPlaceholdersTab(i, stepKind, actionIndex);
+      if (stepKind === "action") {
+        actionIndex++;
+      }
+    }
+    document.getElementById(placeholderPrefix + "-placeholders-tabs").classList.remove("d-none");
+  }
+
+  function displayPlaceholdersTab(stepIndex, stepKind, actionIndex) {
+    let tabElement = document.createElement("li");
+    tabElement.classList.add("nav-item");
+    let linkElement = document.createElement("a");
+    linkElement.classList.add("nav-link");
+    if (stepIndex === -1) {
+      currentPlaceholderElement = linkElement;
+      linkElement.classList.add("nav-link-active");
+      displayPlaceholders(stepIndex, stepKind);
+    }
+    if (stepKind === "trigger") {
+      linkElement.innerHTML = "{% trans 'product.workflow.placeholders.trigger' %}";
+    } else if (stepKind === "action") {
+      linkElement.innerHTML = (actionIndex + 1) + ". {% trans 'product.workflow.placeholders.action' %}";
+    } else if (stepKind === "loop") {
+      linkElement.innerHTML = "{% trans 'product.workflow.placeholders.loop' %}";
+    }
+    tabElement.appendChild(linkElement);
+    tabElement.onclick = function (event) {
+      clickPlaceholdersTab(stepIndex, stepKind, linkElement);
+    }
+    document.getElementById(placeholderPrefix + "-placeholders-tabs").appendChild(tabElement);
+  }
+
+  function clickPlaceholdersTab(stepIndex, stepKind, tabElement) {
+    if (currentPlaceholderElement === tabElement) {
+      return;
+    }
+    currentPlaceholderElement.classList.remove("nav-link-active");
+    tabElement.classList.add("nav-link-active");
+    currentPlaceholderElement = tabElement;
+    displayPlaceholders(stepIndex, stepKind);
+  }
+
+  function displayPlaceholders(stepIndex, stepKind) {
+    document.getElementById(placeholderPrefix + "-placeholders-list").innerHTML = "";
+    findOutputVariables(stepIndex, stepKind, function(outputVariables) {
+      for (let i = 0; i < outputVariables.length; i++) {
+        let variable = outputVariables[i];
+        displayPlaceholder(variable.identifier, variable.name);
+      }
+      if (outputVariables.length === 0) {
+        let noPlaceholdersAvailableElement = document.createElement("p");
+        noPlaceholdersAvailableElement.classList.add("text-center", "mt-4");
+        noPlaceholdersAvailableElement.innerHTML = "{% trans 'product.workflow.placeholders.empty' %}";
+        document.getElementById(placeholderPrefix + "-placeholders-list").appendChild(noPlaceholdersAvailableElement);
+      }
+    });
+  }
+
+  function findOutputVariables(stepIndex, stepKind, callback) {
+    let component;
+    if (stepKind === "trigger") {
+      component = JSON.parse(sessionStorage.getItem("workflow-trigger"));
+    } else {
+      component = JSON.parse(sessionStorage.getItem("workflow-steps"))
+        .steps.filter(element => element.index === stepIndex)[0];
+    }
+    let type = component.type;
+    if (type === "") {
+      callback([]);
+      return;
+    }
+    let request;
+    if (stepKind === "trigger" || stepKind === "action") {
+      request = new HttpRequest("https://api.dulno.com/v1/component/find/", "POST",
+        [], {componentType: stepKind, module: component.module, type: type});
+    } else {
+      request = new HttpRequest("https://api.dulno.com/v1/loop/find/", "POST", [],
+        {identifier: type});
+    }
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText).outputVariables);
+    });
+  }
+
+  function displayPlaceholder(identifier, name) {
+    let placeholderElement = document.createElement("li");
+    placeholderElement.classList.add("workflow-placeholder");
+    preparePlaceholderDrag(identifier, name, placeholderElement);
+    let placeholderNameElement = document.createElement("b");
+    placeholderNameElement.innerHTML = name;
+    placeholderElement.appendChild(placeholderNameElement);
+    document.getElementById(placeholderPrefix + "-placeholders-list").appendChild(placeholderElement);
+  }
+
+  function preparePlaceholderDrag(identifier, name, placeholderElement) {
+    placeholderElement.draggable = "true";
+    placeholderElement.ondragstart = function (event) {
+      event.dataTransfer.setData("placeholder-identifier", identifier);
+      event.dataTransfer.setData("placeholder-name", name);
+    }
+    let offsetX = 0, offsetY = 0;
+    let isDragging = false;
+    const scrollThreshold = 150;
+    const scrollSpeed = 50;
+    let scrollTimeout = null;
+    function startDrag(event) {
+      event.preventDefault();
+      isDragging = true;
+      const clientX = (event.touches ? event.touches[0].clientX : event.clientX) + window.scrollX;
+      const clientY = (event.touches ? event.touches[0].clientY : event.clientY) + window.scrollY;
+      offsetX = clientX - placeholderElement.offsetLeft;
+      offsetY = clientY - placeholderElement.offsetTop;
+      placeholderElement.classList.add("dragging");
+    }
+    function drag(event) {
+      if (!isDragging) {
+        return;
+      }
+      event.preventDefault();
+      const clientX = (event.touches ? event.touches[0].clientX : event.clientX) + window.scrollX;
+      const clientY = (event.touches ? event.touches[0].clientY : event.clientY) + window.scrollY;
+      placeholderElement.style.position = "absolute";
+      placeholderElement.style.left = `${clientX - offsetX}px`;
+      placeholderElement.style.top = `${clientY - offsetY}px`;
+      const { top, bottom } = placeholderElement.getBoundingClientRect();
+      if (top < scrollThreshold) {
+        window.scrollBy(0, -scrollSpeed);
+        scrollTimeout = setTimeout(() => drag(event), 100);
+      } else if (bottom > window.innerHeight - scrollThreshold) {
+        window.scrollBy(0, scrollSpeed);
+        scrollTimeout = setTimeout(() => drag(event), 100);
+      }
+    }
+    function endDrag(event) {
+      if (!isDragging) {
+        return;
+      }
+      isDragging = false;
+      placeholderElement.classList.remove("dragging");
+      placeholderElement.style.position = "";
+      placeholderElement.style.left = "";
+      placeholderElement.style.top = "";
+      const touch = event.changedTouches ? event.changedTouches[0] : null;
+      const clientX = touch ? touch.clientX : event.clientX;
+      const clientY = touch ? touch.clientY : event.clientY;
+      const touchedElement = document.elementFromPoint(clientX, clientY);
+      if (touchedElement) {
+        const dropEvent = new Event('drop', {
+          bubbles: true,
+          cancelable: true
+        });
+        dropEvent.dataTransfer = {
+          getData: (type) => {
+            if (type === "placeholder-identifier") return identifier;
+            if (type === "placeholder-name") return name;
+            return null;
+          }
+        };
+        touchedElement.dispatchEvent(dropEvent);
+      }
+    }
+    placeholderElement.addEventListener('touchstart', startDrag);
+    document.addEventListener('touchmove', function (event) {
+      if (scrollTimeout != null) {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = null;
+      }
+      drag(event);
+    });
+    document.addEventListener('touchend', endDrag);
+  }
+
+  function setupPlaceholderInput(identifier, placeholderText) {
+    var Embed = Quill.import('blots/embed');
+    class PlaceholderBlot extends Embed {
+      static create(value) {
+        let node = super.create();
+        node.classList.add('placeholder');
+        node.setAttribute('data-placeholder', value);
+        node.innerText = value;
+        return node;
+      }
+
+      static value(node) {
+        return node.getAttribute('data-placeholder');
+      }
+    }
+    PlaceholderBlot.blotName = identifier;
+    PlaceholderBlot.tagName = 'span';
+    Quill.register(PlaceholderBlot);
+
+    let quill = new Quill('#' + identifier, {
+      theme: 'snow',
+      formats: [
+        identifier
+      ],
+      modules: {
+        toolbar: false,
+        keyboard: {
+          bindings: {
+            custom_backspace: {
+              key: 'Backspace',
+              handler: function(range, context) {
+                if (range.index === 0) return true;
+
+                let [prevBlot, offset] = quill.getLeaf(range.index - 1);
+                if (prevBlot instanceof PlaceholderBlot) {
+                  quill.deleteText(range.index - 1, 1, Quill.sources.USER);
+                  return false;
+                }
+
+                let length = quill.getLength();
+                let lastLine = quill.getLine(length - 2)[0];
+                if (range.index >= length - 1 && lastLine && lastLine.domNode.innerText.trim() === "") {
+                  quill.deleteText(range.index - 1, 1, Quill.sources.USER);
+                  return false;
+                }
+                return true;
+              }
+            },
+            custom_delete: {
+              key: 'Delete',
+              handler: function(range, context) {
+                let [nextBlot, offset] = quill.getLeaf(range.index);
+                if (nextBlot instanceof PlaceholderBlot) {
+                  quill.deleteText(range.index, 1, Quill.sources.USER);
+                  return false;
+                }
+
+                let length = quill.getLength();
+                let lastLine = quill.getLine(length - 2)[0];
+
+                if (range.index === length - 1 && lastLine && lastLine.domNode.innerText.trim() === "") {
+                  quill.deleteText(range.index - 1, 1, Quill.sources.USER);
+                  return false;
+                }
+                return true;
+              }
+            },
+            custom_left: {
+              key: 'ArrowLeft',
+              handler: function(range, context) {
+                if (range.index === 0) return true;
+
+                let [prevBlot, offset] = quill.getLeaf(range.index - 1);
+                if (prevBlot instanceof PlaceholderBlot) {
+                  quill.setSelection(range.index - 1, 0, Quill.sources.USER);
+                  return false;
+                }
+                return true;
+              }
+            },
+            custom_right: {
+              key: 'ArrowRight',
+              handler: function(range, context) {
+                let [nextBlot, offset] = quill.getLeaf(range.index);
+                if (nextBlot instanceof PlaceholderBlot) {
+                  quill.setSelection(range.index + 1, 0, Quill.sources.USER);
+                  return false;
+                }
+                return true;
+              }
+            }
+          }
+        }
+      }
+    });
+
+    const placeholder = document.createElement('div');
+    placeholder.classList.add('quill-placeholder');
+    placeholder.textContent = placeholderText;
+    quill.container.appendChild(placeholder);
+
+    quill.on('text-change', function(delta, oldDelta, source) {
+      removeTrailingEmptyParagraphs(quill);
+      adjustEditorHeight(quill);
+      updatePlaceholderVisibility(quill, placeholder);
+    });
+
+    quill.container.addEventListener('click', function(event) {
+      const range = quill.getSelection();
+      if (range) {
+        let [blot, offset] = quill.getLeaf(range.index);
+        const cursorPosition = range.index;
+        if (blot.domNode.nodeType === Node.TEXT_NODE && offset === blot.length()) {
+          let nextBlot = blot.next;
+          let placeholderCount = 0;
+          while (nextBlot instanceof PlaceholderBlot) {
+            placeholderCount++;
+            nextBlot = nextBlot.next;
+            if (!nextBlot || !(nextBlot instanceof PlaceholderBlot)) {
+              break;
+            }
+          }
+          if (placeholderCount > 0 && (!nextBlot || !(nextBlot instanceof PlaceholderBlot))) {
+            quill.setSelection(cursorPosition + placeholderCount, Quill.sources.USER);
+            event.preventDefault();
+          }
+        }
+      }
+    });
+
+    removeTrailingEmptyParagraphs(quill);
+    adjustEditorHeight(quill);
+    updatePlaceholderVisibility(quill, placeholder);
+
+    return quill;
+  }
+
+  function removeTrailingEmptyParagraphs(quill) {
+    const length = quill.getLength();
+    const [lastBlot, offset] = quill.getLeaf(length - 2);
+    if (lastBlot && lastBlot.domNode.nodeType === Node.ELEMENT_NODE && lastBlot.domNode.tagName === 'P' && lastBlot.domNode.innerHTML === '<br>') {
+      quill.deleteText(length - 2, 1, Quill.sources.SILENT);
+    }
+  }
+
+  function adjustEditorHeight(quill) {
+    const editor = quill.container.querySelector('.ql-editor');
+    const container = quill.container;
+    editor.style.height = 'auto';
+    const newHeight = Math.max(editor.scrollHeight + 14, 37) + 'px';
+    container.style.height = newHeight;
+    editor.style.height = newHeight;
+  }
+
+  function updatePlaceholderVisibility(quill, placeholder) {
+    const isEmpty = quill.getLength() <= 1;
+    placeholder.style.opacity = isEmpty ? '1' : '0';
+  }
+
+  function addPlaceholder(quill, identifier, name) {
+    var range = quill.getSelection(true);
+    if (range) {
+      quill.insertEmbed(range.index, identifier, ' ' + name + ' ', Quill.sources.USER);
+      quill.setSelection(range.index + 1, Quill.sources.SILENT);
+    }
+  }
+
+  function findPlaceholderInputContent(quill, componentsOutputVariables) {
+    let value = quill.root.innerHTML;
+    for (let i = 0; i < componentsOutputVariables.length; i++) {
+      let variable = componentsOutputVariables[i];
+      value = value.replaceAll('<span class="placeholder" data-placeholder=" ' +
+        variable.name + ' ">﻿<span contenteditable="false"> ' +
+        variable.name + ' </span>﻿</span>', "%" + variable.identifier + "%");
+    }
+    value = value.replaceAll("<br>", "");
+    value = value.replaceAll("<p>", "");
+    value = value.replaceAll("</p>", "\n");
+    value = value.split('\n').slice(0, -1).join('');
+    return value;
+  }
+</script>

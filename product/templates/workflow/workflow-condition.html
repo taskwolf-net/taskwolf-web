@@ -41,7 +41,7 @@
   </body>
 </html>
 
-<script src="https://dulno.com/static/js/product/workflow/workflow-placeholder.js"></script>
+{% include 'workflow/workflow-placeholder.html' %}
 
 <script>
   let selectButtons = [];
@@ -49,34 +49,18 @@
   let conditionType = "";
   let comparativeValue = "";
   let currentPlaceholderElement;
-  let conditionOutputVariables = [];
+  let componentsOutputVariables = [];
   let quillInputElements = [];
+  placeholderPrefix = "workflow-condition";
 
   $(document).ready(function() {
     displayLoader();
-    let index = parseInt(sessionStorage.getItem("workflow-step-index"));
-    let steps = JSON.parse(sessionStorage.getItem("workflow-steps")).steps;
-    let fetchedVariables = -1;
-    let stepFinished = function() {
-      fetchedVariables++;
-      if (fetchedVariables === index) {
-        displayConditionInputs();
-        displayPlaceholdersTabs();
-        if (conditionType === "") {
-          removeLoader();
-        }
+    preparePlaceholders(function() {
+      displayConditionInputs();
+      if (conditionType === "") {
+        removeLoader();
       }
-    }
-    for (let i = -1; i < index; i++) {
-      if (i >= 0 && steps.filter(step => step.index === i)[0].kind !== "action") {
-        stepFinished();
-        continue;
-      }
-      findOutputVariables(i, function(outputVariables) {
-        conditionOutputVariables = conditionOutputVariables.concat(outputVariables);
-        stepFinished();
-      });
-    }
+    });
   });
 
   function displayConditionInputs() {
@@ -146,8 +130,8 @@
     }
     var value = identifier === "condition-input-value" ? content.inputValue :
       content.comparativeValue;
-    for (let i = 0; i < conditionOutputVariables.length; i++) {
-      let variable = conditionOutputVariables[i];
+    for (let i = 0; i < componentsOutputVariables.length; i++) {
+      let variable = componentsOutputVariables[i];
       value = value.replaceAll("%" + variable.identifier + "%",
         '<span class="placeholder" data-placeholder=" ' +
         variable.name + ' ">﻿<span contenteditable="false"> ' +
@@ -160,7 +144,7 @@
   }
 
   function inputConditionInput(quill, identifier) {
-    let value = findPlaceholderInputContent(quill, conditionOutputVariables);
+    let value = findPlaceholderInputContent(quill, componentsOutputVariables);
     if (identifier === "condition-input-value") {
       inputValue = value;
     }
@@ -246,188 +230,6 @@
       selectButtons.shift().removeAttribute("disabled");
     }
     checkAdoptability();
-  }
-
-  function displayPlaceholdersTabs() {
-    let trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
-    if ((trigger.content === "" && trigger.type === "") ||
-      sessionStorage.getItem("workflow-step-index") === "-1"
-    ) {
-      document.getElementById("workflow-condition-placeholders-empty").classList.remove("d-none");
-      return;
-    }
-    displayPlaceholdersTab(-1);
-    let steps = JSON.parse(sessionStorage.getItem("workflow-steps")).steps;
-    let actionIndex = 0;
-    for (let i = 0; i < sessionStorage.getItem("workflow-step-index"); i++) {
-      if (steps.filter(step => step.index === i)[0].kind !== "action") {
-        continue;
-      }
-      displayPlaceholdersTab(i, actionIndex);
-      actionIndex++;
-    }
-    document.getElementById("workflow-condition-placeholders-tabs").classList.remove("d-none");
-  }
-
-  function displayPlaceholdersTab(stepIndex, actionIndex) {
-    let tabElement = document.createElement("li");
-    tabElement.classList.add("nav-item");
-    let linkElement = document.createElement("a");
-    linkElement.classList.add("nav-link");
-    if (stepIndex === -1) {
-      currentPlaceholderElement = linkElement;
-      linkElement.classList.add("nav-link-active");
-      displayPlaceholders(stepIndex);
-    }
-    linkElement.innerHTML = (stepIndex < 0) ?
-      "{% trans 'product.workflow.condition.placeholders.trigger' %}" :
-      ((actionIndex + 1) + ". {% trans 'product.workflow.condition.placeholders.action' %}");
-    tabElement.appendChild(linkElement);
-    tabElement.onclick = function (event) {
-      clickPlaceholdersTab(stepIndex, linkElement);
-    }
-    document.getElementById("workflow-condition-placeholders-tabs").appendChild(tabElement);
-  }
-
-  function clickPlaceholdersTab(index, tabElement) {
-    if (currentPlaceholderElement === tabElement) {
-      return;
-    }
-    currentPlaceholderElement.classList.remove("nav-link-active");
-    tabElement.classList.add("nav-link-active");
-    currentPlaceholderElement = tabElement;
-    displayPlaceholders(index);
-  }
-
-  function displayPlaceholders(index) {
-    document.getElementById("workflow-condition-placeholders-list").innerHTML = "";
-    findOutputVariables(index, function(outputVariables) {
-      for (let i = 0; i < outputVariables.length; i++) {
-        let variable = outputVariables[i];
-        displayPlaceholder(variable.identifier, variable.name);
-      }
-      if (outputVariables.length === 0) {
-        let noPlaceholdersAvailableElement = document.createElement("p");
-        noPlaceholdersAvailableElement.classList.add("text-center", "mt-4");
-        noPlaceholdersAvailableElement.innerHTML = "{% trans 'product.workflow.condition.placeholders.empty' %}";
-        document.getElementById("workflow-condition-placeholders-list").appendChild(noPlaceholdersAvailableElement);
-      }
-    });
-  }
-
-  function findOutputVariables(index, callback) {
-    let componentType = (index < 0) ? "trigger" : "action";
-    let component;
-    if (componentType === "trigger") {
-      component = JSON.parse(sessionStorage.getItem("workflow-trigger"));
-    } else {
-      component = JSON.parse(sessionStorage.getItem("workflow-steps"))
-        .steps.filter(element => element.index === index)[0];
-    }
-    let module = component.module;
-    let type = component.type;
-    if (type === "") {
-      callback([]);
-      return;
-    }
-    let request = new HttpRequest("https://api.dulno.com/v1/component/find/", "POST",
-      [], {componentType: componentType, module: module, type: type});
-    request.send(function (status, responseText) {
-      callback(JSON.parse(responseText).outputVariables);
-    });
-  }
-
-  function displayPlaceholder(identifier, name) {
-    let placeholderElement = document.createElement("li");
-    placeholderElement.classList.add("workflow-condition-placeholder");
-    placeholderElement.draggable= "true";
-    placeholderElement.ondragstart = function (event) {
-      event.dataTransfer.setData("placeholder-identifier", identifier);
-      event.dataTransfer.setData("placeholder-name", name);
-    }
-    preparePlaceholderDrag(identifier, name, placeholderElement);
-    let placeholderNameElement = document.createElement("b");
-    placeholderNameElement.innerHTML = name;
-    placeholderElement.appendChild(placeholderNameElement);
-    document.getElementById("workflow-condition-placeholders-list").appendChild(placeholderElement);
-  }
-
-  function preparePlaceholderDrag(identifier, name, placeholderElement) {
-    placeholderElement.draggable = "true";
-    placeholderElement.ondragstart = function (event) {
-      event.dataTransfer.setData("placeholder-identifier", identifier);
-      event.dataTransfer.setData("placeholder-name", name);
-    }
-    let offsetX = 0, offsetY = 0;
-    let isDragging = false;
-    const scrollThreshold = 150;
-    const scrollSpeed = 50;
-    let scrollTimeout = null;
-    function startDrag(event) {
-      event.preventDefault();
-      isDragging = true;
-      const clientX = (event.touches ? event.touches[0].clientX : event.clientX) + window.scrollX;
-      const clientY = (event.touches ? event.touches[0].clientY : event.clientY) + window.scrollY;
-      offsetX = clientX - placeholderElement.offsetLeft;
-      offsetY = clientY - placeholderElement.offsetTop;
-      placeholderElement.classList.add("dragging");
-    }
-    function drag(event) {
-      if (!isDragging) {
-        return;
-      }
-      event.preventDefault();
-      const clientX = (event.touches ? event.touches[0].clientX : event.clientX) + window.scrollX;
-      const clientY = (event.touches ? event.touches[0].clientY : event.clientY) + window.scrollY;
-      placeholderElement.style.position = "absolute";
-      placeholderElement.style.left = `${clientX - offsetX}px`;
-      placeholderElement.style.top = `${clientY - offsetY}px`;
-      const { top, bottom } = placeholderElement.getBoundingClientRect();
-      if (top < scrollThreshold) {
-        window.scrollBy(0, -scrollSpeed);
-        scrollTimeout = setTimeout(() => drag(event), 100);
-      } else if (bottom > window.innerHeight - scrollThreshold) {
-        window.scrollBy(0, scrollSpeed);
-        scrollTimeout = setTimeout(() => drag(event), 100);
-      }
-    }
-    function endDrag(event) {
-      if (!isDragging) {
-        return;
-      }
-      isDragging = false;
-      placeholderElement.classList.remove("dragging");
-      placeholderElement.style.position = "";
-      placeholderElement.style.left = "";
-      placeholderElement.style.top = "";
-      const touch = event.changedTouches ? event.changedTouches[0] : null;
-      const clientX = touch ? touch.clientX : event.clientX;
-      const clientY = touch ? touch.clientY : event.clientY;
-      const touchedElement = document.elementFromPoint(clientX, clientY);
-      if (touchedElement) {
-        const dropEvent = new Event('drop', {
-          bubbles: true,
-          cancelable: true
-        });
-        dropEvent.dataTransfer = {
-          getData: (type) => {
-            if (type === "placeholder-identifier") return identifier;
-            if (type === "placeholder-name") return name;
-            return null;
-          }
-        };
-        touchedElement.dispatchEvent(dropEvent);
-      }
-    }
-    placeholderElement.addEventListener('touchstart', startDrag);
-    document.addEventListener('touchmove', function (event) {
-      if (scrollTimeout != null) {
-        clearTimeout(scrollTimeout);
-        scrollTimeout = null;
-      }
-      drag(event);
-    });
-    document.addEventListener('touchend', endDrag);
   }
 
   function checkAdoptability() {
