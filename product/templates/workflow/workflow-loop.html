@@ -1,0 +1,306 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark" data-bs-theme="dark">
+    {% include 'product-header.html' %}
+    {% include 'product-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="workflow-loop-container">
+        <div id="workflow-loop-wrapper" class="d-none">
+          <div id="workflow-loop-header">
+            <button id="workflow-loop-page-back"><i class="fa-solid fa-arrow-left-long"></i></button>
+            <h1 id="workflow-loop-headline" class="fw-bold text-center mb-0">{% trans 'product.workflow.loop.headline' %}</h1>
+          </div>
+          <div class="accordion accordion-flush" id="workflow-loop-accordion">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button id="workflow-loop-type-button" class="accordion-button show" type="button" data-bs-toggle="collapse" data-bs-target="#workflow-loop-type" aria-expanded="false" aria-controls="workflow-loop-type">
+                  {% trans 'product.workflow.loop.type.headline' %}
+                </button>
+              </h2>
+              <div id="workflow-loop-type" class="accordion-collapse collapse show" data-bs-parent="#workflow-loop-accordion">
+                <div id="workflow-loop-type-body" class="accordion-body">
+                  <h4 class="text-center">{% trans 'product.workflow.loop.type.subline' %}</h4>
+                  <div id="workflow-loop-type-dropdown" class="dropdown">
+                    <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                      {% trans 'product.workflow.loop.type.headline' %}
+                    </button>
+                    <ul id="workflow-loop-type-dropdown-list" class="dropdown-menu">
+                    </ul>
+                  </div>
+                  <div id="workflow-loop-type-selected">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#workflow-loop-specifications" aria-expanded="false" aria-controls="workflow-loop-specifications">
+                  {% trans 'product.workflow.loop.specifications.headline' %}
+                </button>
+              </h2>
+              <div id="workflow-loop-specifications" class="accordion-collapse collapse" data-bs-parent="#workflow-loop-accordion">
+                <div id="workflow-loop-specifications-body" class="accordion-body">
+                  <h4 class="text-center mb-4">{% trans 'product.workflow.loop.specifications.subline' %}</h4>
+                  <div id="workflow-loop-specifications-container">
+                    <div id="workflow-loop-specifications-inputs">
+                      <h5 id="workflow-loop-specifications-inputs-headline" class="text-center">{% trans 'product.workflow.loop.specifications.inputs.title' %}</h5>
+                      <hr class="w-100 hr"/>
+                      <div id="workflow-loop-specifications-input-list">
+                      </div>
+                    </div>
+                    <div id="workflow-loop-specifications-divider">
+                      <div class="vr"></div>
+                    </div>
+                    <div id="workflow-loop-specifications-placeholders">
+                      <h5 id="workflow-loop-specifications-placeholders-headline" class="text-center">{% trans 'product.workflow.loop.specifications.placeholders.title' %}</h5>
+                      <hr class="w-100 hr"/>
+                      <ul id="workflow-loop-specifications-placeholders-tabs" class="nav nav-tabs d-none">
+                      </ul>
+                      <p id="workflow-loop-specifications-placeholders-empty" class="text-center d-none">{% trans 'product.workflow.loop.specifications.placeholders.tabs.empty' %}</p>
+                      <ul id="workflow-loop-specifications-placeholders-list">
+                      </ul>
+                    </div>
+                  </div>
+                  <h6 id="workflow-loop-specifications-unable" class="mt-5 text-center">{% trans 'product.workflow.loop.specifications.unable' %}</h6>
+                  <h6 id="workflow-loop-specifications-redundant" class="mt-5 text-center">{% trans 'product.workflow.loop.specifications.redundant' %}</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="workflow-loop-adopt">
+            <button id="workflow-loop-adopt-button" type="button" class="btn btn-success disabled">{% trans 'product.workflow.loop.adopt' %}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script src="https://dulno.com/static/js/product/workflow/workflow-placeholder.js"></script>
+
+<script>
+  let selectedComponent = {};
+  let selectedApplication;
+  let selectedComponentSetup = false;
+  let selectedType;
+  let selectedTypeDescription;
+
+  $(document).ready(function() {
+    displayLoader();
+    let index = sessionStorage.getItem("workflow-step-index");
+    let stepsContent = sessionStorage.getItem("workflow-steps");
+    if (index !== null && stepsContent != null) {
+      index = parseInt(index);
+      let steps = JSON.parse(stepsContent).steps;
+      if (steps.length > index) {
+        let step = steps.filter(item => item.index === index)[0];
+        if (step.selected === true) {
+          selectedComponent = step;
+        }
+      }
+    }
+    if (!(_.isEqual(selectedComponent, {}))) {
+      selectedComponentSetup = true;
+    }
+    fetchLoopTypes(function (types) {
+      fillTypeDropdown(types);
+      if (!selectedComponentSetup) {
+        removeLoader();
+      }
+    });
+  });
+
+  function fetchLoopTypes(callback) {
+    let request = new HttpRequest("https://api.dulno.com/v1/loops/find/", "GET", []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText).loops);
+    });
+  }
+
+  function fillTypeDropdown(types) {
+    document.getElementById("workflow-loop-type-dropdown-list").innerHTML = "";
+    for (let i = 0; i < types.length; i++) {
+      let type = types[i];
+      addTypeDropdownEntry(type.identifier, type.name, type.description);
+    }
+  }
+
+  function addTypeDropdownEntry(identifier, name, description) {
+    let entryElement = document.createElement("li");
+    entryElement.classList.add("dropdown-item");
+    let nameElement = document.createElement("b");
+    nameElement.classList.add("workflow-loop-type-name");
+    nameElement.innerHTML = name;
+    entryElement.appendChild(nameElement);
+    entryElement.appendChild(document.createElement("br"));
+    let descriptionElement = document.createElement("span");
+    descriptionElement.classList.add("workflow-loop-type-description");
+    descriptionElement.innerHTML = description;
+    entryElement.appendChild(descriptionElement);
+    entryElement.onclick = function (type) {
+      selectType(identifier, name, description);
+    }
+    document.getElementById("workflow-loop-type-dropdown-list").appendChild(entryElement);
+    if (selectedComponentSetup && selectedComponent.type === identifier) {
+      selectType(identifier, name, description);
+    }
+  }
+
+  function selectType(identifier, name, description) {
+    selectedType = identifier;
+    selectedTypeDescription = description;
+    document.getElementById("workflow-loop-type-dropdown").style.display = "none";
+    let selectedElement = document.getElementById("workflow-loop-type-selected");
+    let nameElement = document.createElement("b");
+    nameElement.id = "workflow-loop-type-selected-name";
+    nameElement.innerHTML = name;
+    selectedElement.appendChild(nameElement);
+    let dividerElement = document.createElement("hr");
+    dividerElement.classList.add("hr");
+    selectedElement.appendChild(dividerElement);
+    let descriptionElement = document.createElement("p");
+    descriptionElement.id = "workflow-loop-type-selected-description";
+    descriptionElement.innerHTML = description;
+    selectedElement.appendChild(descriptionElement);
+    selectedElement.style.display = "block";
+    createResetButton(document.getElementById("workflow-loop-type-body"), function() {
+      resetType();
+    });
+    prepareSpecifications();
+    if (!selectedComponentSetup) {
+      setTimeout(function() {
+        $('#workflow-loop-specifications').collapse("toggle");
+      }, 600);
+    }
+  }
+
+  function resetType() {
+    let resetButtons = document.getElementById("workflow-loop-type-body").getElementsByClassName("workflow-loop-reset");
+    for (let i = 0; i < resetButtons.length; i++) {
+      document.getElementById("workflow-loop-type-body").removeChild(resetButtons[i]);
+    }
+    let selectedElement = document.getElementById("workflow-loop-type-selected");
+    selectedElement.innerHTML = "";
+    selectedElement.style.display = "none";
+    document.getElementById("workflow-loop-type-dropdown").style.display = "block";
+    selectedType = "";
+    selectedTypeDescription = "";
+    resetSpecifications();
+  }
+
+  function createResetButton(container, resetCallback) {
+    let resetButtonContainer = document.createElement("div");
+    resetButtonContainer.classList.add("workflow-loop-reset");
+    let resetButton = document.createElement("button");
+    resetButton.type = "button";
+    resetButton.classList.add("btn", "btn-danger");
+    resetButton.innerHTML = "{% trans 'product.workflow.loop.reset' %}";
+    resetButtonContainer.appendChild(resetButton);
+    container.appendChild(resetButtonContainer);
+    resetButton.onclick = function (event) {
+      resetCallback();
+    }
+    return resetButtonContainer;
+  }
+</script>
+
+{% include 'workflow/workflow-specification.html' %}
+
+<script>
+  specificationPrefix = "workflow-loop-specifications";
+  adoptButton = document.getElementById("workflow-loop-adopt-button");
+  fetchSpecificationInputs = function (callback) {
+    let request = new HttpRequest("https://api.dulno.com/v1/loop/find/", "POST",
+      [], {identifier: selectedType});
+    request.send(function (status, responseText) {
+      return callback(status, responseText);
+    });
+  }
+
+  adoptButton.addEventListener("click", function(type) {
+    saveLoop();
+    pageChangeApproved = true;
+    window.location.href = "/workflow/";
+  });
+
+  function saveLoop() {
+    let component = createLoop();
+    let index = parseInt(sessionStorage.getItem("workflow-step-index"));
+    component.index = index;
+    if (sessionStorage.getItem("workflow-steps") === null) {
+      sessionStorage.setItem("workflow-steps", JSON.stringify({steps: [component]}));
+    } else {
+      let steps = JSON.parse(sessionStorage.getItem("workflow-steps")).steps;
+      steps = steps.filter(item => item.index !== index);
+      steps.push(component);
+      sessionStorage.removeItem("workflow-step-index");
+      sessionStorage.setItem("workflow-steps", JSON.stringify({steps: steps}));
+    }
+  }
+
+  function createLoop() {
+    return {
+      "kind": "loop",
+      "type": selectedType,
+      "typeDescription": selectedTypeDescription,
+      "content": JSON.stringify(specificationValues),
+      "selected": true
+    };
+  }
+
+  var pageChangeApproved = false;
+
+  window.onbeforeunload = function() {
+    if (!pageChangeApproved && checkUnsavedChanges()) {
+      return "{% trans 'product.workflow.loop.unsaved.changes.body' %}";
+    }
+  };
+
+  document.getElementById("workflow-loop-page-back").onclick = function (type) {
+    if (checkUnsavedChanges()) {
+      Swal.fire({
+        title: "{% trans 'product.workflow.loop.unsaved.changes.title' %}",
+        text: "{% trans 'product.workflow.loop.unsaved.changes.body' %}",
+        icon: "warning",
+        confirmButtonColor: "#dc3545",
+        showCancelButton: true,
+      }).then(result => {
+        if (result.isConfirmed) {
+          pageChangeApproved = true;
+          window.location.href = "/workflow/";
+        }
+      });
+      return;
+    }
+    window.location.href = "/workflow/";
+  }
+
+  function checkUnsavedChanges() {
+    let index = parseInt(sessionStorage.getItem("workflow-step-index"));
+    let steps = JSON.parse(sessionStorage.getItem("workflow-steps")).steps;
+    let currentLoop = steps.filter(item => item.index === index)[0];
+    if (!currentLoop.selected && selectedType == null) {
+      return false;
+    }
+    let component = createLoop();
+    component.index = index;
+    return compareComponents(component, currentLoop);
+  }
+
+  function displayLoader() {
+    let loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("workflow-loop-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("workflow-loop-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("workflow-loop-wrapper").classList.remove("d-none");
+    for (var i = 0; i < quillInputElements.length; i++) {
+      adjustEditorHeight(quillInputElements[i]);
+    }
+  }
+</script>

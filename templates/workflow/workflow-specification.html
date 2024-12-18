@@ -1,0 +1,682 @@
+{% load static %}
+{% load i18n %}
+<script>
+  let specificationSelectButtons = [];
+  let specificationValues = {};
+  let currentPlaceholderElement;
+  let requiredSpecificationVariables = [];
+  let componentsOutputVariables = [];
+  let quillInputElements = [];
+  let specificationPrefix;
+  let adoptButton;
+  let fetchSpecificationInputs;
+
+  window.addEventListener('load', function () {
+    new ResizeObserver(() => updateSpecificationsDividerHeight())
+      .observe(document.getElementById(specificationPrefix + "-container"));
+  });
+
+  function updateSpecificationsDividerHeight() {
+    let height = document.getElementById(specificationPrefix + "-container").offsetHeight;
+    document.getElementById(specificationPrefix + "-divider").style.height =
+      height + "px";
+  }
+
+  function prepareSpecifications() {
+    document.getElementById(specificationPrefix + "-container").style.display = "flex";
+    document.getElementById(specificationPrefix + "-unable").style.display = "none";
+    let index = parseInt(sessionStorage.getItem("workflow-step-index"));
+    if (index === -1) {
+      document.getElementById(specificationPrefix + "-placeholders-empty")
+        .classList.remove("d-none");
+      fillSpecificationsInputs();
+      return;
+    }
+    displayPlaceholdersTabs();
+    let steps = JSON.parse(sessionStorage.getItem("workflow-steps")).steps;
+    let outputCount = -1;
+    let stepFinished = function() {
+      outputCount++;
+      if (outputCount === index) {
+        fillSpecificationsInputs();
+      }
+    }
+    for (let i = -1; i < index; i++) {
+      if (i >= 0 && steps.filter(step => step.index === i)[0].kind !== "action") {
+        stepFinished();
+        continue;
+      }
+      findOutputVariables(i, function(outputVariables) {
+        componentsOutputVariables = componentsOutputVariables.concat(outputVariables);
+        stepFinished();
+      });
+    }
+  }
+
+  function fillSpecificationsInputs() {
+    fetchSpecificationInputs(function (status, responseText) {
+      document.getElementById(specificationPrefix + "-input-list").innerHTML = "";
+      let component = JSON.parse(responseText);
+      let inputVariables = component.inputVariables;
+      if (inputVariables.length === 0) {
+        document.getElementById(specificationPrefix + "-container").style.display = "none";
+        document.getElementById(specificationPrefix + "-redundant").style.display = "block";
+        checkSetupCompletion();
+        return;
+      }
+      for (let i = 0; i < inputVariables.length; i++) {
+        let inputVariable = inputVariables[i];
+        if (inputVariable.type === "REQUIRED") {
+          requiredSpecificationVariables.push(inputVariable.identifier);
+        }
+      }
+      for (let i = 0; i < inputVariables.length; i++) {
+        let inputVariable = inputVariables[i];
+        if (inputVariable.dataType === "TEXT" || inputVariable.dataType === "TEXT_AREA") {
+          addSpecificationInput(inputVariable.identifier, inputVariable.name, inputVariable.description, inputVariable.placeholder,
+            i, inputVariables.length, inputVariable.dataType);
+        }
+        if (inputVariable.dataType === "SELECT") {
+          addSpecificationSelect(inputVariable.identifier, inputVariable.name, inputVariable.description, i);
+        }
+        if (inputVariable.dataType === "FILE") {
+          addSpecificationFile(inputVariable.identifier, inputVariable.name, inputVariable.description);
+        }
+        if (inputVariable.dataType === "BOOLEAN") {
+          addSpecificationSwitch(inputVariable.identifier, inputVariable.name, inputVariable.description);
+        }
+        if (inputVariable.dataType === "TIME") {
+          addSpecificationTime(inputVariable.identifier, inputVariable.name, inputVariable.description);
+          specificationValues["timezone"] = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        }
+      }
+      checkSetupCompletion();
+      createResetButton(document.getElementById(specificationPrefix + "-input-list"), function() {
+        specificationSelectButtons = [];
+        specificationValues = {};
+        updateAdoptability(false);
+        fillSpecificationsInputs();
+      });
+      if (selectedApplication === "scheduler") {
+        specificationValues["timezone"] = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      }
+    });
+  }
+
+  function addSpecificationInput(identifier, name, description, placeholder, index, inputsLength, dataType) {
+    let inputContainerElement = document.createElement("div");
+    inputContainerElement.classList.add("workflow-specification-input-container", "form-outline", "mb-4");
+    let labelElement = document.createElement("h5");
+    labelElement.classList.add("workflow-specification-headline", "form-label");
+    labelElement.innerHTML = name + ":";
+    inputContainerElement.appendChild(labelElement);
+    let informationElement = document.createElement("h5");
+    informationElement.classList.add("workflow-specification-information", "fa", "fa-question-circle");
+    applyTooltips(informationElement, inputContainerElement, description);
+    inputContainerElement.appendChild(informationElement);
+    let inputElement = document.createElement("div");
+    if (dataType === "TEXT_AREA") {
+      inputElement.style.minHeight = "110px";
+    }
+    inputElement.id = "workflow-specification-input-" + identifier;
+    inputElement.classList.add("workflow-specification-input", "form-control");
+    inputContainerElement.appendChild(inputElement);
+    document.getElementById(specificationPrefix + "-input-list").appendChild(inputContainerElement);
+    let quill = setupPlaceholderInput(inputElement.id, placeholder);
+    quillInputElements.push(quill);
+    quill.on('text-change', function(delta, oldDelta, source) {
+      inputSpecificationInput(quill, identifier);
+    });
+    inputElement.ondragover = function (event) {
+      event.preventDefault();
+    };
+    inputElement.ondrop = function (event) {
+      addPlaceholder(quill, inputElement.id, event.dataTransfer.getData("placeholder-name"));
+      inputSpecificationInput(quill, identifier);
+    };
+    prefillSpecificationInput(identifier, quill);
+  }
+
+  function prefillSpecificationInput(identifier, quill) {
+    if (selectedComponentSetup && "content" in selectedComponent) {
+      let selectedComponentContent = JSON.parse(selectedComponent.content);
+      if (identifier in selectedComponentContent) {
+        for (let i = 0; i < componentsOutputVariables.length; i++) {
+          let variable = componentsOutputVariables[i];
+          selectedComponentContent[identifier] = selectedComponentContent[identifier]
+            .replaceAll("%" + variable.identifier + "%",
+              '<span class="placeholder" data-placeholder=" ' +
+              variable.name + ' ">﻿<span contenteditable="false"> ' +
+              variable.name + ' </span>﻿</span>')
+        }
+        quill.clipboard.dangerouslyPasteHTML(0, selectedComponentContent[identifier]
+          .split('\n').map(line => "<p>" + (line === "" ? "<br>" : line) + "</p>")
+          .join(''));
+        adjustEditorHeight(quill);
+        inputSpecificationInput(quill, identifier);
+      }
+      checkSetupCompletion();
+    }
+  }
+
+  function inputSpecificationInput(quill, identifier) {
+    let value = findPlaceholderInputContent(quill, componentsOutputVariables);
+    if (value === "" && identifier in specificationValues) {
+      delete specificationValues[identifier];
+    }
+    if (value !== "") {
+      specificationValues[identifier] = value;
+    }
+    checkAdoptability();
+  }
+
+  function addSpecificationSelect(identifier, name, description, index) {
+    let dropdownContainer = document.createElement("div");
+    dropdownContainer.classList.add("mb-4");
+    let labelElement = document.createElement("h5");
+    labelElement.classList.add("workflow-specification-headline", "form-label");
+    labelElement.innerHTML = name + ":";
+    dropdownContainer.appendChild(labelElement);
+    let informationElement = document.createElement("h5");
+    informationElement.classList.add("workflow-specification-information", "fa", "fa-question-circle");
+    applyTooltips(informationElement, dropdownContainer, description);
+    dropdownContainer.appendChild(informationElement);
+    dropdownContainer.classList.add("workflow-specification-select-container", "dropdown");
+    let dropdownButton = document.createElement("button");
+    dropdownButton.classList.add("btn", "btn-dark", "dropdown-toggle");
+    if (document.getElementsByClassName("workflow-specification-select-container").length > 0) {
+      dropdownButton.setAttribute("disabled", "disabled");
+      specificationSelectButtons.push(dropdownButton);
+    }
+    $(dropdownButton).attr('data-bs-toggle','dropdown');
+    dropdownButton.type = "button";
+    dropdownButton.innerHTML = name;
+    dropdownContainer.appendChild(dropdownButton);
+    let dropdownList = document.createElement("ul");
+    dropdownList.classList.add("workflow-specification-select-list", "dropdown-menu");
+    dropdownContainer.appendChild(dropdownList);
+    dropdownButton.addEventListener("click", function (event) {
+      clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton);
+    });
+    document.getElementById(specificationPrefix + "-input-list").appendChild(dropdownContainer);
+    if (selectedComponentSetup && "content" in selectedComponent) {
+      setTimeout(function(){
+        clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton);
+      }, 500 * index);
+    }
+  }
+
+  function clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton) {
+    dropdownList.innerHTML = "";
+    dropdownList.appendChild(createSpecificationSelectLoader());
+    let request = new HttpRequest("https://api.dulno.com/v1/component/select/items/", "POST",
+      [], {componentType: "{{type}}", module: selectedApplication.toLowerCase(), type: selectedEvent, previousInputs: specificationValues, select: identifier});
+    request.send(function (status, responseText) {
+      let items = JSON.parse(responseText).items;
+      dropdownList.innerHTML = "";
+      let found = false;
+      for (let i = 0; i < items.length; i++) {
+        let item = JSON.parse(items[i]);
+        let itemElement = document.createElement("li");
+        itemElement.classList.add("dropdown-item");
+        let itemNameName = document.createElement("b");
+        itemNameName.innerHTML = item.name;
+        itemElement.appendChild(itemNameName);
+        itemElement.onclick = function (event) {
+          selectSpecificationSelect(identifier, item.identifier, item.name, dropdownContainer, dropdownButton, dropdownList);
+        }
+        dropdownList.appendChild(itemElement);
+        if (selectedComponentSetup && selectedComponent.content !== undefined && JSON.parse(selectedComponent.content)[identifier] === item.identifier) {
+          selectSpecificationSelect(identifier, item.identifier, item.name, dropdownContainer, dropdownButton, dropdownList);
+          found = true;
+        }
+      }
+      if (selectedComponentSetup && !found) {
+        specificationValues[identifier] = "";
+      }
+      checkSetupCompletion();
+      if (items.length === 0) {
+        let itemElement = document.createElement("li");
+        itemElement.classList.add("dropdown-item");
+        itemElement.classList.add("workflow-specification-select-empty");
+        let itemNameName = document.createElement("b");
+        itemNameName.innerHTML = "{% trans 'product.workflow.specifications.empty' %}";
+        itemElement.appendChild(itemNameName);
+        dropdownList.appendChild(itemElement);
+      }
+    });
+  }
+
+  function createSpecificationSelectLoader() {
+    let loaderEntry = document.createElement("li");
+    loaderEntry.classList.add("dropdown-item");
+    let loaderSpinnerContainer = document.createElement("div");
+    loaderSpinnerContainer.classList.add("d-flex", "justify-content-center");
+    let loaderSpinner = document.createElement("div");
+    loaderSpinner.classList.add("spinner-border", "spinner-border-sm");
+    loaderSpinner.role = "status";
+    let loaderSpan = document.createElement("span");
+    loaderSpan.classList.add("visually-hidden");
+    loaderSpan.innerText = "Loading...";
+    loaderSpinner.appendChild(loaderSpan);
+    loaderSpinnerContainer.appendChild(loaderSpinner);
+    loaderEntry.appendChild(loaderSpinnerContainer);
+    return loaderEntry;
+  }
+
+  function selectSpecificationSelect(selectIdentifier, itemIdentifier, itemName, dropdownContainer, dropdownButton, dropdownList) {
+    specificationValues[selectIdentifier] = itemIdentifier;
+    dropdownContainer.removeChild(dropdownButton);
+    dropdownContainer.removeChild(dropdownList);
+    let itemElement = document.createElement("div");
+    itemElement.classList.add("workflow-specification-selected-item");
+    let itemNameElement = document.createElement("b");
+    itemNameElement.innerHTML = itemName;
+    itemElement.appendChild(itemNameElement);
+    dropdownContainer.appendChild(itemElement);
+    if (specificationSelectButtons.length > 0) {
+      specificationSelectButtons.shift().removeAttribute("disabled");
+    }
+    checkAdoptability();
+  }
+
+  function addSpecificationFile(identifier, name, description) {
+    let inputContainerElement = document.createElement("div");
+    inputContainerElement.classList.add("workflow-specification-file-container", "form-outline", "mb-4");
+    let labelElement = document.createElement("h5");
+    labelElement.classList.add("workflow-specification-headline", "form-label");
+    labelElement.innerHTML = name + ":";
+    inputContainerElement.appendChild(labelElement);
+    let informationElement = document.createElement("h5");
+    informationElement.classList.add("workflow-specification-information", "fa", "fa-question-circle");
+    applyTooltips(informationElement, inputContainerElement, description);
+    inputContainerElement.appendChild(informationElement);
+    let fileSelectorElement = document.createElement("input");
+    fileSelectorElement.type = "file";
+    fileSelectorElement.classList.add("d-none");
+    fileSelectorElement.onchange = function (event) {
+      let reader = new FileReader();
+      reader.onload = function() {
+        let binary = '';
+        let bytes = new Uint8Array(reader.result);
+        for (let i = 0; i < bytes.byteLength; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        selectSpecificationFile(identifier, btoa(binary), fileButton);
+      }
+      reader.readAsArrayBuffer(this.files[0]);
+    }
+    let fileButton = document.createElement("button");
+    fileButton.type = "button";
+    fileButton.innerText = "{% trans 'product.workflow.specifications.file.pending' %}";
+    fileButton.classList.add("workflow-specification-file", "btn", "btn-dark");
+    fileButton.onclick = function (event) {
+      fileSelectorElement.click();
+    }
+    fileButton.ondragover = function (event) {
+      event.preventDefault();
+    };
+    fileButton.ondrop = function (event) {
+      let value = fileButton.value.substring(0, fileButton.selectionStart) +
+        "%" + event.dataTransfer.getData("placeholder-identifier") + "%" +
+        fileButton.value.substring(fileButton.selectionStart);
+      selectSpecificationFile(identifier, value, fileButton);
+    };
+    inputContainerElement.appendChild(fileButton);
+    document.getElementById(specificationPrefix + "-input-list").appendChild(inputContainerElement);
+    if (selectedComponentSetup && "content" in selectedComponent) {
+      let selectedComponentContent = JSON.parse(selectedComponent.content);
+      if (identifier in selectedComponentContent) {
+        selectSpecificationFile(identifier, selectedComponentContent[identifier],
+          fileButton);
+      }
+      checkSetupCompletion();
+    }
+  }
+
+  function selectSpecificationFile(identifier, value, fileButton) {
+    if (value === "" && identifier in specificationValues) {
+      delete specificationValues[identifier];
+    }
+    if (value !== "") {
+      specificationValues[identifier] = value;
+    }
+    fileButton.classList.remove("btn-dark");
+    fileButton.classList.add("btn-success");
+    fileButton.innerText = "{% trans 'product.workflow.specifications.file.selected' %}";
+    checkAdoptability();
+  }
+
+  function addSpecificationSwitch(identifier, name, description) {
+    let inputContainerElement = document.createElement("div");
+    inputContainerElement.classList.add("workflow-specification-switch-container", "form-outline", "mb-4");
+    let labelElement = document.createElement("h5");
+    labelElement.classList.add("workflow-specification-headline", "form-label");
+    labelElement.innerHTML = name + ":";
+    inputContainerElement.appendChild(labelElement);
+    let informationElement = document.createElement("h5");
+    informationElement.classList.add("workflow-specification-information", "fa", "fa-question-circle");
+    applyTooltips(informationElement, inputContainerElement, description);
+    inputContainerElement.appendChild(informationElement);
+    let switchElement = document.createElement("label");
+    switchElement.classList.add("switch", "mt-2");
+    let switchInput = document.createElement("input");
+    switchInput.type = "checkbox";
+    switchInput.checked = true;
+    specificationValues[identifier] = switchInput.checked.toString();
+    checkAdoptability();
+    switchElement.onclick = function (event) {
+      specificationValues[identifier] = switchInput.checked.toString();
+    }
+    switchElement.appendChild(switchInput);
+    let switchSpan = document.createElement("span");
+    switchSpan.classList.add("slider", "round");
+    switchElement.appendChild(switchSpan);
+    inputContainerElement.appendChild(switchElement);
+    document.getElementById(specificationPrefix + "-input-list").appendChild(inputContainerElement);
+    if (selectedComponentSetup && "content" in selectedComponent) {
+      let selectedComponentContent = JSON.parse(selectedComponent.content);
+      if (identifier in selectedComponentContent) {
+        specificationValues[identifier] = selectedComponentContent[identifier];
+        switchInput.checked = selectedComponentContent[identifier] === "true";
+      }
+      checkSetupCompletion();
+    }
+  }
+
+  function addSpecificationTime(identifier, name, description) {
+    let inputContainerElement = document.createElement("div");
+    inputContainerElement.classList.add("workflow-specification-time-container", "form-outline", "mb-4");
+    let labelElement = document.createElement("h5");
+    labelElement.classList.add("workflow-specification-headline", "form-label");
+    labelElement.innerHTML = name + ":";
+    inputContainerElement.appendChild(labelElement);
+    let informationElement = document.createElement("h5");
+    informationElement.classList.add("workflow-specification-information", "fa", "fa-question-circle");
+    applyTooltips(informationElement, inputContainerElement, description);
+    inputContainerElement.appendChild(informationElement);
+    let timeInput = document.createElement("input");
+    timeInput.type = "time";
+    timeInput.classList.add("rounded-2", "py-1", "px-2");
+    timeInput.oninput = function (event) {
+      specificationValues[identifier] = timeInput.value;
+      checkAdoptability();
+    }
+    inputContainerElement.appendChild(timeInput);
+    document.getElementById(specificationPrefix + "-input-list").appendChild(inputContainerElement);
+    if (selectedComponentSetup && "content" in selectedComponent) {
+      let selectedComponentContent = JSON.parse(selectedComponent.content);
+      if (identifier in selectedComponentContent) {
+        specificationValues[identifier] = selectedComponentContent[identifier];
+        timeInput.value = selectedComponentContent[identifier];
+      }
+      checkSetupCompletion();
+    }
+  }
+
+  function displayPlaceholdersTabs() {
+    let trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
+    if ((trigger.content === "" && trigger.type === "") ||
+      sessionStorage.getItem("workflow-step-index") === "-1"
+    ) {
+      document.getElementById(specificationPrefix + "-placeholders-empty").classList.remove("d-none");
+      return;
+    }
+    displayPlaceholdersTab(-1);
+    let steps = JSON.parse(sessionStorage.getItem("workflow-steps")).steps;
+    let actionIndex = 0;
+    for (let i = 0; i < sessionStorage.getItem("workflow-step-index"); i++) {
+      if (steps.filter(step => step.index === i)[0].kind !== "action") {
+        continue;
+      }
+      displayPlaceholdersTab(i, actionIndex);
+      actionIndex++;
+    }
+    document.getElementById(specificationPrefix + "-placeholders-tabs").classList.remove("d-none");
+  }
+
+  function displayPlaceholdersTab(stepIndex, actionIndex) {
+    let tabElement = document.createElement("li");
+    tabElement.classList.add("nav-item");
+    let linkElement = document.createElement("a");
+    linkElement.classList.add("nav-link");
+    if (stepIndex === -1) {
+      currentPlaceholderElement = linkElement;
+      linkElement.classList.add("nav-link-active");
+      displayPlaceholders(stepIndex);
+    }
+    linkElement.innerHTML = (stepIndex < 0) ?
+      "{% trans 'product.workflow.specifications.placeholders.trigger' %}" :
+      ((actionIndex + 1) + ". {% trans 'product.workflow.specifications.placeholders.action' %}");
+    tabElement.appendChild(linkElement);
+    tabElement.onclick = function (event) {
+      clickPlaceholdersTab(stepIndex, linkElement);
+    }
+    document.getElementById(specificationPrefix + "-placeholders-tabs").appendChild(tabElement);
+  }
+
+  function clickPlaceholdersTab(index, tabElement) {
+    if (currentPlaceholderElement === tabElement) {
+      return;
+    }
+    currentPlaceholderElement.classList.remove("nav-link-active");
+    tabElement.classList.add("nav-link-active");
+    currentPlaceholderElement = tabElement;
+    displayPlaceholders(index);
+  }
+
+  function displayPlaceholders(index) {
+    document.getElementById(specificationPrefix + "-placeholders-list").innerHTML = "";
+    findOutputVariables(index, function(outputVariables) {
+      for (let i = 0; i < outputVariables.length; i++) {
+        let variable = outputVariables[i];
+        displayPlaceholder(variable.identifier, variable.name);
+      }
+      if (outputVariables.length === 0) {
+        let noPlaceholdersAvailableElement = document.createElement("p");
+        noPlaceholdersAvailableElement.classList.add("text-center", "mt-4");
+        noPlaceholdersAvailableElement.innerHTML = "{% trans 'product.workflow.specifications.placeholders.empty' %}";
+        document.getElementById(specificationPrefix + "-placeholders-list").appendChild(noPlaceholdersAvailableElement);
+      }
+    });
+  }
+
+  function findOutputVariables(index, callback) {
+    let componentType = (index < 0) ? "trigger" : "action";
+    let component;
+    if (componentType === "trigger") {
+      component = JSON.parse(sessionStorage.getItem("workflow-trigger"));
+    } else {
+      component = JSON.parse(sessionStorage.getItem("workflow-steps"))
+        .steps.filter(element => element.index === index)[0];
+    }
+    let module = component.module;
+    let type = component.type;
+    if (type === "") {
+      callback([]);
+      return;
+    }
+    let request = new HttpRequest("https://api.dulno.com/v1/component/find/", "POST",
+      [], {componentType: componentType, module: module, type: type});
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText).outputVariables);
+    });
+  }
+
+  function displayPlaceholder(identifier, name) {
+    let placeholderElement = document.createElement("li");
+    placeholderElement.classList.add("workflow-specification-placeholder");
+    preparePlaceholderDrag(identifier, name, placeholderElement);
+    let placeholderNameElement = document.createElement("b");
+    placeholderNameElement.innerHTML = name;
+    placeholderElement.appendChild(placeholderNameElement);
+    document.getElementById(specificationPrefix + "-placeholders-list").appendChild(placeholderElement);
+  }
+
+  function preparePlaceholderDrag(identifier, name, placeholderElement) {
+    placeholderElement.draggable = "true";
+    placeholderElement.ondragstart = function (event) {
+      event.dataTransfer.setData("placeholder-identifier", identifier);
+      event.dataTransfer.setData("placeholder-name", name);
+    }
+    let offsetX = 0, offsetY = 0;
+    let isDragging = false;
+    const scrollThreshold = 150;
+    const scrollSpeed = 50;
+    let scrollTimeout = null;
+    function startDrag(event) {
+      event.preventDefault();
+      isDragging = true;
+      const clientX = (event.touches ? event.touches[0].clientX : event.clientX) + window.scrollX;
+      const clientY = (event.touches ? event.touches[0].clientY : event.clientY) + window.scrollY;
+      offsetX = clientX - placeholderElement.offsetLeft;
+      offsetY = clientY - placeholderElement.offsetTop;
+      placeholderElement.classList.add("dragging");
+    }
+    function drag(event) {
+      if (!isDragging) {
+        return;
+      }
+      event.preventDefault();
+      const clientX = (event.touches ? event.touches[0].clientX : event.clientX) + window.scrollX;
+      const clientY = (event.touches ? event.touches[0].clientY : event.clientY) + window.scrollY;
+      placeholderElement.style.position = "absolute";
+      placeholderElement.style.left = `${clientX - offsetX}px`;
+      placeholderElement.style.top = `${clientY - offsetY}px`;
+      const { top, bottom } = placeholderElement.getBoundingClientRect();
+      if (top < scrollThreshold) {
+        window.scrollBy(0, -scrollSpeed);
+        scrollTimeout = setTimeout(() => drag(event), 100);
+      } else if (bottom > window.innerHeight - scrollThreshold) {
+        window.scrollBy(0, scrollSpeed);
+        scrollTimeout = setTimeout(() => drag(event), 100);
+      }
+    }
+    function endDrag(event) {
+      if (!isDragging) {
+        return;
+      }
+      isDragging = false;
+      placeholderElement.classList.remove("dragging");
+      placeholderElement.style.position = "";
+      placeholderElement.style.left = "";
+      placeholderElement.style.top = "";
+      const touch = event.changedTouches ? event.changedTouches[0] : null;
+      const clientX = touch ? touch.clientX : event.clientX;
+      const clientY = touch ? touch.clientY : event.clientY;
+      const touchedElement = document.elementFromPoint(clientX, clientY);
+      if (touchedElement) {
+        const dropEvent = new Event('drop', {
+          bubbles: true,
+          cancelable: true
+        });
+        dropEvent.dataTransfer = {
+          getData: (type) => {
+            if (type === "placeholder-identifier") return identifier;
+            if (type === "placeholder-name") return name;
+            return null;
+          }
+        };
+        touchedElement.dispatchEvent(dropEvent);
+      }
+    }
+    placeholderElement.addEventListener('touchstart', startDrag);
+    document.addEventListener('touchmove', function (event) {
+      if (scrollTimeout != null) {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = null;
+      }
+      drag(event);
+    });
+    document.addEventListener('touchend', endDrag);
+  }
+
+  function resetSpecifications() {
+    document.getElementById(specificationPrefix + "-container").style.display = "none";
+    document.getElementById(specificationPrefix + "-unable").style.display = "block";
+    document.getElementById(specificationPrefix + "-redundant").style.display = "none";
+    document.getElementById(specificationPrefix + "-placeholders-empty").classList.add("d-none");
+    document.getElementById(specificationPrefix + "-placeholders-tabs").classList.add("d-none");
+    document.getElementById(specificationPrefix + "-placeholders-tabs").innerText = "";
+    document.getElementById(specificationPrefix + "-placeholders-list").innerHTML = "";
+    specificationSelectButtons = [];
+    specificationValues = {};
+    requiredSpecificationVariables = [];
+    updateAdoptability(false);
+  }
+
+  function checkSetupCompletion() {
+    if (checkAdoptability() && selectedComponentSetup) {
+      selectedComponentSetup = false;
+      let specifications = Object.keys(specificationValues);
+      for (let i = specifications.length - 1; i >= 0; i--) {
+        if (specificationValues[specifications[i]] === "") {
+          delete specificationValues[specifications[i]];
+        }
+      }
+      checkAdoptability();
+      $('#' + specificationPrefix).collapse("toggle");
+      setTimeout(removeLoader, 500);
+    }
+  }
+
+  function checkAdoptability() {
+    let isAdoptable = true;
+    for (let i = 0; i < requiredSpecificationVariables.length; i++) {
+      if (!(requiredSpecificationVariables[i] in specificationValues)) {
+        isAdoptable = false;
+        break;
+      }
+    }
+    updateAdoptability(isAdoptable);
+    return isAdoptable;
+  }
+
+  function updateAdoptability(isAdoptable) {
+    if (isAdoptable) {
+      adoptButton.classList.remove("disabled");
+      adoptButton.classList.add("workflow-adopt-enabled");
+    } else {
+      adoptButton.classList.add("disabled");
+      adoptButton.classList.remove("workflow-adopt-enabled");
+    }
+  }
+
+  function compareComponents(component1, component2) {
+    var newContent = JSON.parse(component1.content);
+    delete component1.content;
+    var currentContent = JSON.parse(component2.content);
+    delete component2.content;
+    if (!compareJson(component1, component2)) {
+      return true;
+    }
+    return !compareJson(newContent, currentContent);
+  }
+
+  function compareJson(obj1, obj2) {
+    if (obj1 === obj2) return true;
+    if (typeof obj1 !== 'object' || typeof obj2 !== 'object' || obj1 === null || obj2 === null) {
+      return false;
+    }
+    let keys1 = Object.keys(obj1);
+    let keys2 = Object.keys(obj2);
+    if (keys1.length !== keys2.length) return false;
+    for (let key of keys1) {
+      if (!keys2.includes(key) || !compareJson(obj1[key], obj2[key])) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function applyTooltips(element, container, text) {
+    $(element).attr("data-bs-toggle", "tooltip");
+    $(element).attr("data-bs-placement", "top");
+    $(element).attr("data-bs-title", text);
+    container.classList.add("position-relative");
+    new bootstrap.Tooltip(element, {
+      container: container,
+      html: true
+    });
+  }
+</script>

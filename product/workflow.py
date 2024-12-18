@@ -22,14 +22,14 @@ async def workflowCreate(request):
 async def workflowTrigger(request):
   return render(request, 'workflow/workflow-component.html', {'title': gettext('product.workflow.component.trigger.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflow-component.css',
-      'css/product/workflow/workflow-placeholder.css'],
+      'css/product/workflow/workflow-placeholder.css', 'css/product/workflow/workflow-specification.css'],
     'type': 'trigger', 'typename': "Trigger"})
 
 @authentication_required
 async def workflowAction(request):
   return render(request, 'workflow/workflow-component.html', {'title': gettext('product.workflow.component.action.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflow-component.css',
-      'css/product/workflow/workflow-placeholder.css'],
+      'css/product/workflow/workflow-placeholder.css', 'css/product/workflow/workflow-specification.css'],
     'type': 'action', 'typename': "Action"})
 
 @authentication_required
@@ -42,7 +42,7 @@ async def workflowCondition(request):
 async def workflowLoop(request):
   return render(request, 'workflow/workflow-loop.html', {'title': gettext('product.workflow.loop.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/workflow/workflow-loop.css',
-      'css/product/workflow/workflow-placeholder.css']})
+      'css/product/workflow/workflow-placeholder.css', 'css/product/workflow/workflow-specification.css']})
 
 @authentication_required
 async def workflowTimeline(request):
