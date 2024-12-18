@@ -21,12 +21,8 @@
       }
     }
     for (let i = -1; i < index; i++) {
-      if (i < 0) {
-        stepFinished();
-        continue;
-      }
-      let stepKind = steps.filter(step => step.index === i)[0].kind;
-      if (stepKind !== "action" && stepKind !== "loop") {
+      let stepKind = i < 0 ? "trigger" : steps.filter(step => step.index === i)[0].kind;
+      if (stepKind !== "trigger" && stepKind !== "action" && stepKind !== "loop") {
         stepFinished();
         continue;
       }
