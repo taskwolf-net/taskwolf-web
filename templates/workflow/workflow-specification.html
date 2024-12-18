@@ -138,25 +138,26 @@
   }
 
   function prefillSpecificationInput(identifier, quill) {
-    if (selectedComponentSetup && "content" in selectedComponent) {
-      let selectedComponentContent = JSON.parse(selectedComponent.content);
-      if (identifier in selectedComponentContent) {
-        for (let i = 0; i < componentsOutputVariables.length; i++) {
-          let variable = componentsOutputVariables[i];
-          selectedComponentContent[identifier] = selectedComponentContent[identifier]
-            .replaceAll("%" + variable.identifier + "%",
-              '<span class="placeholder" data-placeholder=" ' +
-              variable.name + ' ">﻿<span contenteditable="false"> ' +
-              variable.name + ' </span>﻿</span>')
-        }
-        quill.clipboard.dangerouslyPasteHTML(0, selectedComponentContent[identifier]
-          .split('\n').map(line => "<p>" + (line === "" ? "<br>" : line) + "</p>")
-          .join(''));
-        adjustEditorHeight(quill);
-        inputSpecificationInput(quill, identifier);
-      }
-      checkSetupCompletion();
+    if (!("content" in selectedComponent)) {
+      return;
     }
+    let selectedComponentContent = JSON.parse(selectedComponent.content);
+    if (identifier in selectedComponentContent) {
+      for (let i = 0; i < componentsOutputVariables.length; i++) {
+        let variable = componentsOutputVariables[i];
+        selectedComponentContent[identifier] = selectedComponentContent[identifier]
+          .replaceAll("%" + variable.identifier + "%",
+            '<span class="placeholder" data-placeholder=" ' +
+            variable.name + ' ">﻿<span contenteditable="false"> ' +
+            variable.name + ' </span>﻿</span>')
+      }
+      quill.clipboard.dangerouslyPasteHTML(0, selectedComponentContent[identifier]
+        .split('\n').map(line => "<p>" + (line === "" ? "<br>" : line) + "</p>")
+        .join(''));
+      adjustEditorHeight(quill);
+      inputSpecificationInput(quill, identifier);
+    }
+    checkSetupCompletion();
   }
 
   function inputSpecificationInput(quill, identifier) {
