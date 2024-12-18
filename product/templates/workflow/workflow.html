@@ -473,12 +473,12 @@
           "content": workflowStepInformation["content"]
         });
       } else if (workflowStepInformation.kind === "loop") {
-        workflowConditions.push({
+        workflowLoop = {
           "enabled": true,
           "index": workflowStepInformation["index"],
           "type": workflowStepInformation["type"],
           "content": workflowStepInformation["content"]
-        });
+        };
       }
     }
     publish(workflowName, workflowDescription, workflowTrigger, workflowActions,
