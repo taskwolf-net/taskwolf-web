@@ -126,11 +126,26 @@
         [], {componentType: stepKind, module: component.module, type: type});
     } else {
       request = new HttpRequest("https://api.dulno.com/v1/loop/find/", "POST", [],
-        {identifier: type});
+        {identifier: type, currentContent: JSON.parse(component.content),
+          previousComponents: findPreviousComponentsContent(stepIndex)});
     }
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText).outputVariables);
     });
+  }
+
+  function findPreviousComponentsContent(stepIndex) {
+    let previousComponents = JSON.parse(sessionStorage.getItem("workflow-steps")).steps
+      .filter(element => element.kind === "action" && element.index < stepIndex &&
+        element.selected === true)
+      .map(element => function () {
+        return {module: element.module, type: element.type};
+      });
+    let trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
+    if (trigger.selected === true) {
+      previousComponents.unshift({module: trigger.module, type: trigger.type});
+    }
+    return previousComponents;
   }
 
   function displayPlaceholder(identifier, name) {

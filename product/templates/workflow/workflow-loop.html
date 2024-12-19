@@ -212,8 +212,12 @@
   placeholderPrefix = "workflow-loop-specifications";
   adoptButton = document.getElementById("workflow-loop-adopt-button");
   fetchSpecificationInputs = function (callback) {
+    let stepIndex = parseInt(sessionStorage.getItem("workflow-step-index"));
+    let component = JSON.parse(sessionStorage.getItem("workflow-steps"))
+      .steps.filter(element => element.index === stepIndex)[0];
     let request = new HttpRequest("https://api.dulno.com/v1/loop/find/", "POST",
-      [], {identifier: selectedType});
+      [], {identifier: selectedType, currentContent: JSON.parse(component.content),
+        previousComponents: findPreviousComponentsContent(stepIndex)});
     request.send(function (status, responseText) {
       return callback(status, responseText);
     });
