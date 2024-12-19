@@ -138,7 +138,7 @@
     let previousComponents = JSON.parse(sessionStorage.getItem("workflow-steps")).steps
       .filter(element => element.kind === "action" && element.index < stepIndex &&
         element.selected === true)
-      .map(element => function () {
+      .map(element => {
         return {module: element.module, type: element.type};
       });
     let trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
