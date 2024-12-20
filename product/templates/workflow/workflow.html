@@ -495,8 +495,11 @@
       <span class="visually-hidden" role="status">Loading...</span>
     `;
     let isSelected = sessionStorage.getItem("workflow-selected") !== null;
+    let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    let timeLocale = navigator.language.split("-")[0];
     let requestBody = {name: name, description: description, trigger: trigger,
-      actions: actions, conditions: conditions, loop: loop};
+      actions: actions, conditions: conditions, loop: loop, timeZone: timeZone,
+      timeLocale: timeLocale};
     if (isSelected) {
       requestBody.workflow = sessionStorage.getItem("workflow-id");
     }
