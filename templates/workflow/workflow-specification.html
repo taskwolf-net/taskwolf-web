@@ -108,7 +108,8 @@
       event.preventDefault();
     };
     inputElement.ondrop = function (event) {
-      addPlaceholder(quill, inputElement.id, event.dataTransfer.getData("placeholder-name"));
+      addPlaceholder(quill, inputElement.id, event.dataTransfer.getData("placeholder-identifier"),
+        event.dataTransfer.getData("placeholder-name"));
       inputSpecificationInput(quill, identifier);
     };
     prefillSpecificationInput(identifier, quill);
@@ -124,8 +125,8 @@
         let variable = componentsOutputVariables[i];
         selectedComponentContent[identifier] = selectedComponentContent[identifier]
           .replaceAll("%" + variable.identifier + "%",
-            '<span class="placeholder" data-placeholder=" ' +
-            variable.name + ' ">﻿<span contenteditable="false"> ' +
+            '<span class="placeholder" data-placeholder="' +
+            variable.identifier + ':' + variable.name + '">﻿<span contenteditable="false"> ' +
             variable.name + ' </span>﻿</span>')
       }
       quill.clipboard.dangerouslyPasteHTML(0, selectedComponentContent[identifier]

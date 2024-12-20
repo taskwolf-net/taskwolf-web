@@ -243,7 +243,7 @@
         let node = super.create();
         node.classList.add('placeholder');
         node.setAttribute('data-placeholder', value);
-        node.innerText = value;
+        node.innerText = " " + value.split(":")[1] + " ";
         return node;
       }
 
@@ -395,10 +395,11 @@
     placeholder.style.opacity = isEmpty ? '1' : '0';
   }
 
-  function addPlaceholder(quill, identifier, name) {
+  function addPlaceholder(quill, identifier, variableId, variableName) {
     var range = quill.getSelection(true);
     if (range) {
-      quill.insertEmbed(range.index, identifier, ' ' + name + ' ', Quill.sources.USER);
+      quill.insertEmbed(range.index, identifier, variableId + ':' + variableName,
+        Quill.sources.USER);
       quill.setSelection(range.index + 1, Quill.sources.SILENT);
     }
   }
@@ -407,8 +408,8 @@
     let value = quill.root.innerHTML;
     for (let i = 0; i < componentsOutputVariables.length; i++) {
       let variable = componentsOutputVariables[i];
-      value = value.replaceAll('<span class="placeholder" data-placeholder=" ' +
-        variable.name + ' ">﻿<span contenteditable="false"> ' +
+      value = value.replaceAll('<span class="placeholder" data-placeholder="' +
+        variable.identifier + ':' + variable.name + '">﻿<span contenteditable="false"> ' +
         variable.name + ' </span>﻿</span>', "%" + variable.identifier + "%");
     }
     value = value.replaceAll("<br>", "");
