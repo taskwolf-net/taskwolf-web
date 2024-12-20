@@ -119,9 +119,9 @@ async def isHomeAuthenticated(request):
   text = response.text
   jsonText = json.loads(text)
   isValid = jsonText["isValid"]
-  if (isValid == "true"):
-    return {"success": True}
-  return {"success": False}
+  if (isValid == "false"):
+    return await isAuthenticated(request)
+  return {"success": True}
 
 async def applyHomeLanguage(request):
   token = request.COOKIES.get('token')

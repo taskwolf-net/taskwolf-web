@@ -162,7 +162,7 @@
   }
 
   function displayWorkflow(id, name, creator, created, armed, triggerType, triggerLogo, actions) {
-    actions.sort(function (a, b) {return a.index - b.index;});
+    actions.sort(function (a, b) {return a.actionIndex - b.actionIndex;});
     let entry = document.createElement('li');
     entry.role = "button";
     entry.classList.add("workflow-entry");

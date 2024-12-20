@@ -134,6 +134,7 @@
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
+        loaderPopup();
         let request = new HttpRequest("https://api.dulno.com/v1/table/column/remove/", "POST",
           [], {table: database.id, columnName: column});
         request.send(function (status, responseText) {
@@ -190,6 +191,7 @@
             "{% trans 'product.database.column.add.empty.body' %}", "error");
           return;
         }
+        loaderPopup();
         let request = new HttpRequest("https://api.dulno.com/v1/table/column/add/", "POST",
           [], {table: database.id, columnName: input.value});
         request.send(function (status, responseText) {
@@ -208,6 +210,9 @@
             } else if (response.errorCode === 1002) {
               Swal.fire("{% trans 'product.database.column.add.failed.title' %}",
                 "{% trans 'product.database.column.add.failed.occupied' %}", "error");
+            } else if (response.errorCode === 1003) {
+              Swal.fire("{% trans 'product.database.column.add.failed.title' %}",
+                "{% trans 'product.database.column.add.failed.limit' %}", "error");
             } else {
               Swal.fire("{% trans 'product.database.column.add.failed.title' %}",
                 "", "error");
@@ -731,6 +736,19 @@
     }
     document.getElementById("database-table-container").removeChild(
       document.getElementById("database-table-empty"));
+  }
+
+  function loaderPopup() {
+    Swal.fire({
+      html: `
+        <div style="display: flex; justify-content: center; align-items: center; height: calc(340px - 4rem)">
+          <div class="spinner-border" role="status" style="width: 4rem; height: 4rem;">
+            <span class="visually-hidden">Loading</span>
+          </div>
+        </div>
+      `,
+      showConfirmButton: false
+    });
   }
 
   function displayLoader() {
