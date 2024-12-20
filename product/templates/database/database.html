@@ -208,6 +208,9 @@
             } else if (response.errorCode === 1002) {
               Swal.fire("{% trans 'product.database.column.add.failed.title' %}",
                 "{% trans 'product.database.column.add.failed.occupied' %}", "error");
+            } else if (response.errorCode === 1003) {
+              Swal.fire("{% trans 'product.database.column.add.failed.title' %}",
+                "{% trans 'product.database.column.add.failed.limit' %}", "error");
             } else {
               Swal.fire("{% trans 'product.database.column.add.failed.title' %}",
                 "", "error");
