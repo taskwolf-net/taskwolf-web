@@ -308,6 +308,31 @@ input[maxlength] {
   border: 2px #747474 solid;
 }
 
+@media (max-width: 1200px) {
+  #workflow-loop-body {
+    margin: 200px 20px 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  #workflow-loop-body {
+    margin: 220px 20px 20px;
+  }
+}
+
+@media (max-width: 450px) {
+  #workflow-loop-body {
+    margin: 240px 10px 10px;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 350px) {
+  #workflow-loop-body {
+    margin: 260px 10px 10px;
+  }
+}
+
 .dark #workflow-loop-body {
   background-color: #0d1117 !important;
 }
