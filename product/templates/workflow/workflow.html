@@ -281,7 +281,10 @@
     let steps = JSON.parse(sessionStorage.getItem("workflow-steps")).steps;
     let stepsBehindTarget = steps.filter(item => item.index >= index);
     for (let i = 0; i < stepsBehindTarget.length; i++) {
-      stepsBehindTarget[i].index = stepsBehindTarget[i].index + 1;
+      let stepBehindTarget = stepsBehindTarget[i];
+      stepBehindTarget.content = shiftContentPlaceholders(index,
+        stepBehindTarget.content, 1);
+      stepBehindTarget.index = stepBehindTarget.index + 1;
     }
     steps.push(component);
     sessionStorage.setItem("workflow-steps", JSON.stringify({steps: steps}));
@@ -294,11 +297,33 @@
     let stepsBehindTarget = steps.steps.filter(item => item.index > index);
     steps.steps = steps.steps.filter(item => !(item.index > index));
     for (let i = 0; i < stepsBehindTarget.length; i++) {
-      stepsBehindTarget[i].index -= 1;
+      let stepBehindTarget = stepsBehindTarget[i];
+      stepBehindTarget.content = shiftContentPlaceholders(index,
+        stepBehindTarget.content, -1);
+      stepBehindTarget.index = stepBehindTarget.index - 1;
     }
     steps.steps = steps.steps.concat(stepsBehindTarget);
     sessionStorage.setItem("workflow-steps", JSON.stringify(steps));
     displayWorkflow();
+  }
+
+  function shiftContentPlaceholders(index, content, addition) {
+    let placeholders = content.match(/%[^%]*%/g) || [];
+    for (let placeholder of placeholders) {
+      let sections = placeholder.replaceAll("%", "").split("-");
+      let position = sections[0];
+      let variable = sections[1];
+      if (position === "trigger") {
+        continue;
+      }
+      let placeholderIndex = parseInt(position.replace("step", ""));
+      if (placeholderIndex < index) {
+        continue;
+      }
+      content = content.replace(placeholder,
+        "%step" + (placeholderIndex + addition) + "-" + variable + "%");
+    }
+    return content;
   }
 
   function createAddActionButton(parent) {

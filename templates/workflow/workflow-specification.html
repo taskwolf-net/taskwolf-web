@@ -122,12 +122,17 @@
     let selectedComponentContent = JSON.parse(selectedComponent.content);
     if (identifier in selectedComponentContent) {
       for (let i = 0; i < componentsOutputVariables.length; i++) {
-        let variable = componentsOutputVariables[i];
-        selectedComponentContent[identifier] = selectedComponentContent[identifier]
-          .replaceAll("%" + variable.identifier + "%",
-            '<span class="placeholder" data-placeholder="' +
-            variable.identifier + ':' + variable.name + '">﻿<span contenteditable="false"> ' +
-            variable.name + ' </span>﻿</span>')
+        let entry = componentsOutputVariables[i];
+        let index = entry.index;
+        let prefix = findPlaceholderPrefix(index);
+        let variables = entry.variables;
+        for (let i = 0; i < variables.length; i++) {
+          let variable = variables[i];
+          selectedComponentContent[identifier] = selectedComponentContent[identifier]
+            .replaceAll("%" + prefix + variable.identifier + "%", '<span class="placeholder" data-placeholder="' +
+              prefix + variable.identifier + ':' + variable.name + '">﻿<span contenteditable="false"> ' +
+              variable.name + ' </span>﻿</span>')
+        }
       }
       quill.clipboard.dangerouslyPasteHTML(0, selectedComponentContent[identifier]
         .split('\n').map(line => "<p>" + (line === "" ? "<br>" : line) + "</p>")
