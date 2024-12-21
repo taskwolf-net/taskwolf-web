@@ -577,8 +577,7 @@
       return !checkWorkflowUntouched();
     }
     return checkWorkflowInitialState("name") || checkWorkflowInitialState("description") ||
-      checkWorkflowInitialState("trigger") || checkWorkflowInitialState("actions") ||
-      checkWorkflowInitialState("conditions")|| checkWorkflowInitialState("loop");
+      checkWorkflowInitialState("trigger") || checkWorkflowInitialState("steps");
   }
 
   function checkWorkflowInitialState(key) {
