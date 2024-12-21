@@ -496,7 +496,7 @@
     `;
     let isSelected = sessionStorage.getItem("workflow-selected") !== null;
     let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    let timeLocale = navigator.language.split("-")[0];
+    let timeLocale = navigator.language;
     let requestBody = {name: name, description: description, trigger: trigger,
       actions: actions, conditions: conditions, loop: loop, timeZone: timeZone,
       timeLocale: timeLocale};
