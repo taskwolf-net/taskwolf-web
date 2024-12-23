@@ -13,15 +13,45 @@
       </div>
       <div id="google-maps-wrapper" class="form-outline">
         <h2 class="google-maps-headline">{% trans 'product.workflow.application.google.maps.headline' %}</h2>
-        <h6>{% trans 'product.workflow.application.google.maps.introduction' %}</h6>
+        <h5 class="fw-bold">{% trans 'product.workflow.application.google.maps.introduction' %}</h5>
         <ol id="google-maps-introduction" class="mb-5">
-          <li>{% trans 'product.workflow.application.google.maps.step.1' %}</li>
+          <li class="mb-4">
+            <h6 class="fw-bold">{% trans 'product.workflow.application.google.maps.step.1' %}</h6>
+            <ul>
+              <li>{% trans 'product.workflow.application.google.maps.step.1.1' %}</li>
+              <li>{% trans 'product.workflow.application.google.maps.step.1.2' %}</li>
+              <li>{% trans 'product.workflow.application.google.maps.step.1.3' %}</li>
+              <li>{% trans 'product.workflow.application.google.maps.step.1.4' %}</li>
+            </ul>
+          </li>
+          <li class="mb-4">
+            <h6 class="fw-bold">{% trans 'product.workflow.application.google.maps.step.2' %}</h6>
+            <ul>
+              <li>{% trans 'product.workflow.application.google.maps.step.2.1' %}</li>
+              <li>
+                {% trans 'product.workflow.application.google.maps.step.2.2' %}
+                <ul>
+                  <li>Places</li>
+                  <li>Geocoding</li>
+                  <li>Geolocation</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <h6 class="fw-bold">{% trans 'product.workflow.application.google.maps.step.3' %}</h6>
+            <ul>
+              <li>{% trans 'product.workflow.application.google.maps.step.3.1' %}</li>
+              <li>{% trans 'product.workflow.application.google.maps.step.3.2' %}</li>
+              <li>{% trans 'product.workflow.application.google.maps.step.3.3' %}</li>
+            </ul>
+          </li>
         </ol>
         <label for="name" class="form-label">{% trans 'product.workflow.application.google.maps.name' %}</label>
         <input type="text" id="name" class="form-control" placeholder="{% trans 'product.workflow.application.google.maps.name' %}">
         <label for="api-key" class="form-label mt-4">{% trans 'product.workflow.application.google.maps.api.key' %}</label>
         <input type="text" id="api-key" class="form-control" placeholder="{% trans 'product.workflow.application.google.maps.api.key' %}">
-        <button type="button" id="google-maps-continue" class="btn btn-primary d-block px-4 mt-5 mx-auto disabled">{% trans 'product.workflow.application.google.maps.continue' %}</button>
+        <button type="button" id="google-maps-continue" class="btn btn-primary d-block px-4 my-5 mx-auto disabled">{% trans 'product.workflow.application.google.maps.continue' %}</button>
       </div>
     </div>
   </body>
@@ -87,6 +117,10 @@
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });
+  }
+
+  document.getElementById("google-maps-cloud-console-redirect").onclick = function (event) {
+    googleMapsRedirectWindow.push(window.open("https://console.cloud.google.com/"));
   }
 
   document.getElementById("google-maps-logo").onclick = function (event) {
