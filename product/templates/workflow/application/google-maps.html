@@ -1,0 +1,95 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark" data-bs-theme="dark">
+    <div id="google-maps-container">
+      <div id="google-maps-header">
+        <div>
+        </div>
+        <img id="google-maps-logo" class="dulno-logo">
+        <div>
+        </div>
+      </div>
+      <div id="google-maps-wrapper" class="form-outline">
+        <h2 class="google-maps-headline">{% trans 'product.workflow.application.google.maps.headline' %}</h2>
+        <h6>{% trans 'product.workflow.application.google.maps.introduction' %}</h6>
+        <ol id="google-maps-introduction" class="mb-5">
+          <li>{% trans 'product.workflow.application.google.maps.step.1' %}</li>
+        </ol>
+        <label for="name" class="form-label">{% trans 'product.workflow.application.google.maps.name' %}</label>
+        <input type="text" id="name" class="form-control" placeholder="{% trans 'product.workflow.application.google.maps.name' %}">
+        <label for="api-key" class="form-label mt-4">{% trans 'product.workflow.application.google.maps.api.key' %}</label>
+        <input type="text" id="api-key" class="form-control" placeholder="{% trans 'product.workflow.application.google.maps.api.key' %}">
+        <button type="button" id="google-maps-continue" class="btn btn-primary d-block px-4 mt-5 mx-auto disabled">{% trans 'product.workflow.application.google.maps.continue' %}</button>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  let nameInput = document.getElementById("name");
+  let apiKeyInput = document.getElementById("api-key");
+  let googleMapsRedirectWindow = [];
+
+  $(document).ready(function() {
+    nameInput.focus();
+  });
+
+  nameInput.addEventListener('keyup', function(event) {
+    if (event.key === "Enter") {
+      apiKeyInput.focus();
+    }
+    $(document.getElementById("google-maps-continue"))
+      .toggleClass("disabled", !checkGoogleMapsCompleteness());
+  });
+
+  apiKeyInput.addEventListener('keyup', function(event) {
+    if (event.key === "Enter") {
+      document.getElementById("google-maps-continue").click();
+    }
+    $(document.getElementById("google-maps-continue"))
+      .toggleClass("disabled", !checkGoogleMapsCompleteness());
+  });
+
+  function checkGoogleMapsCompleteness() {
+    return nameInput.value.length > 0 && apiKeyInput.value.length > 0;
+  }
+
+  document.getElementById("google-maps-continue").onclick = function (event) {
+    if (nameInput.value === "" || apiKeyInput.value === "") {
+      Swal.fire("{% trans 'product.workflow.application.google.maps.failed.title' %}",
+        "{% trans 'product.workflow.application.google.maps.failed.incomplete' %}", "error");
+      return;
+    }
+    document.getElementById("google-maps-wrapper").classList.add("d-none");
+    let loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("google-maps-container").appendChild(loader);
+    connectGoogleMaps(function (response) {
+      document.getElementById("google-maps-container")
+        .removeChild(document.getElementsByClassName("loader")[0]);
+      if (response.success === true) {
+        for (let redirectWindow of googleMapsRedirectWindow) {
+          redirectWindow.close();
+        }
+        window.close();
+        window.location.href = "https://dulno.com/";
+      } else {
+        document.getElementById("google-maps-wrapper").classList.remove("d-none");
+      }
+    });
+  }
+
+  function connectGoogleMaps(callback) {
+    let request = new HttpRequest("https://api.dulno.com/v1/google/maps/add/", "POST", [],
+      {name: nameInput.value, apiKey: apiKeyInput.value});
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  document.getElementById("google-maps-logo").onclick = function (event) {
+    window.location.href = "/";
+  }
+</script>

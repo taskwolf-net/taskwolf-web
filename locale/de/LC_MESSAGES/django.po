@@ -1449,6 +1449,22 @@ msgstr "Sie haben nicht alle Felder ausgefüllt. Um Ihr ChatGPT mit Dulno zu ver
 msgid "product.workflow.application.chatgpt.failed.error"
 msgstr "Die Anfrage, auf Ihr ChatGPT zuzugreifen, ist fehlgeschlagen. Sie haben wahrscheinlich einen falschen API-Schlüssel oder eine falsche Organisation eingegeben. Bitte überprüfen Sie Ihre Eingabe"
 
+# WORKFLOW - APPLICATION - GOOGLE MAPS
+msgid "product.workflow.application.google.maps.title"
+msgstr "Google Maps verbinden - Dulno"
+msgid "product.workflow.application.google.maps.continue"
+msgstr "Weiter"
+msgid "product.workflow.application.google.maps.headline"
+msgstr "Verbinden Sie Ihr Gooogle Maps mit Dulno"
+msgid "product.workflow.application.google.maps.name"
+msgstr "Name"
+msgid "product.workflow.application.google.maps.api.key"
+msgstr "API-Schlüssel"
+msgid "product.workflow.application.google.maps.failed.title"
+msgstr "Verbindung zu Google Maps fehlgeschlagen"
+msgid "product.workflow.application.google.maps.failed.incomplete"
+msgstr "Sie haben nicht alle Felder ausgefüllt. Um Ihr Google Maps mit Dulno zu verbinden, müssen Sie die erforderlichen Felder ausfüllen"
+
 # PROCESSES
 msgid "product.processes.title"
 msgstr "Prozesse - Dulno"

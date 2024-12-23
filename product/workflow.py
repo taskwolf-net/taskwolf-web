@@ -63,3 +63,8 @@ async def workflowConnectGitlab(request):
 async def workflowConnectChatGPT(request):
   return render(request, 'workflow/application/chatgpt.html', {'title': gettext('product.workflow.application.chatgpt.title'),
     'css': ['css/product/workflow/application/chatgpt.css']})
+
+@authentication_required
+async def workflowConnectGoogleMaps(request):
+  return render(request, 'workflow/application/google-maps.html', {'title': gettext('product.workflow.application.google.maps.title'),
+    'css': ['css/product/workflow/application/google-maps.css']})
