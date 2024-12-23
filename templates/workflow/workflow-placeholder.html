@@ -136,6 +136,7 @@
 
   function findPreviousComponentsContent(stepIndex) {
     let previousComponents = JSON.parse(sessionStorage.getItem("workflow-steps")).steps
+      .sort(function (a, b) {return a.index - b.index;})
       .filter(element => element.kind === "action" && element.index < stepIndex &&
         element.selected === true)
       .map(element => {
