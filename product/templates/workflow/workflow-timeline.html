@@ -51,7 +51,7 @@
   function displayTimeline() {
     document.getElementById("workflow-timeline").innerHTML = "";
     for (let i = 0; i < timeline.length; i++) {
-      displayEntry(timeline[i]);
+      displayEntry(timeline[i], i === 0);
     }
     if (timeline.length === 0) {
       document.getElementById("workflow-timeline-empty").style.display = "block";
@@ -60,7 +60,7 @@
     }
   }
 
-  function displayEntry(entry) {
+  function displayEntry(entry, isFirst) {
     let entryElement = document.createElement("li");
     entryElement.classList.add("timeline-item", "mb-5");
     let entryHeaderElement = document.createElement("div");
@@ -74,6 +74,27 @@
     entryDateElement.innerHTML = entry.time;
     entryHeaderElement.appendChild(entryDateElement);
     entryElement.appendChild(entryHeaderElement);
+    if (entry.isFailure) {
+      let entryFailureContainer = document.createElement("div");
+      entryFailureContainer.classList.add("w-100", "mb-3", "d-flex", "justify-content-between", "align-items-start");
+      let entryFailureElement = document.createElement("h6");
+      entryFailureElement.classList.add("mb-0");
+      entryFailureElement.innerHTML = "<b>{% trans 'product.workflow.timeline.cause' %}: </b>" + entry.failureModuleName + " - " + entry.failureStepName;
+      entryFailureContainer.appendChild(entryFailureElement);
+      if (isFirst && checkWorkflowStepsInitialState()) {
+        let step = JSON.parse(sessionStorage.getItem("workflow-steps"))
+          .steps.filter(item => item.index === entry.failureStepIndex)[0];
+        let entryFailureViewButton = document.createElement("button");
+        entryFailureViewButton.classList.add("btn", "btn-primary", "px-2", "ms-3");
+        entryFailureViewButton.innerText = "{% trans 'product.workflow.timeline.view' %}";
+        entryFailureViewButton.onclick = function (event) {
+          sessionStorage.setItem("workflow-step-index", step.index.toString());
+          window.location.href = "/workflow/" + step.kind +"/";
+        };
+        entryFailureContainer.appendChild(entryFailureViewButton);
+      }
+      entryElement.appendChild(entryFailureContainer);
+    }
     let entryDescriptionElement = document.createElement("p");
     entryDescriptionElement.innerHTML = entry.description;
     entryElement.appendChild(entryDescriptionElement);
@@ -86,6 +107,11 @@
       entryTitleElement.classList.add("text-danger");
     }
     document.getElementById("workflow-timeline").appendChild(entryElement);
+  }
+
+  function checkWorkflowStepsInitialState() {
+    return sessionStorage.getItem("workflow-steps") ===
+      sessionStorage.getItem("workflow-initial-steps");
   }
 
   document.getElementById("workflow-timeline-reset").onclick = function (event) {

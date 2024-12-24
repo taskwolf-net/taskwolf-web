@@ -1354,6 +1354,10 @@ msgid "product.workflow.timeline.reset.successful.title"
 msgstr "Zurückgesetzt!"
 msgid "product.workflow.timeline.reset.successful.body"
 msgstr "Du hast den Verlauf erfolgreich zurückgesetzt!"
+msgid "product.workflow.timeline.cause"
+msgstr "Ursache"
+msgid "product.workflow.timeline.view"
+msgstr "Ansehen"
 
 # WORKFLOW - APPLICATION - MAIL
 msgid "product.workflow.application.mail.title"
