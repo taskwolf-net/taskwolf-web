@@ -56,14 +56,6 @@
   background-color: rgba(0,0,0,0) !important;
 }
 
-.workflow-specification-headline {
-  position: absolute;
-}
-
-.workflow-specification-information {
-  margin-left: calc(100% - 20px);
-}
-
 .workflow-adopt-enabled {
   -moz-box-shadow: 0 0 50px rgba(136, 255, 113, 0.5);
   -webkit-box-shadow: 0 0 50px rgba(136, 255, 113, 0.5);

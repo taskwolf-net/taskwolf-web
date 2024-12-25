@@ -5,6 +5,7 @@
   let specificationValues = {};
   let currentPlaceholderElement;
   let requiredSpecificationVariables = [];
+  let dynamicInputVariables = [];
   let componentsOutputVariables = [];
   let quillInputElements = [];
   let specificationPrefix;
@@ -41,56 +42,59 @@
         checkSetupCompletion();
         return;
       }
-      for (let i = 0; i < inputVariables.length; i++) {
-        let inputVariable = inputVariables[i];
-        if (inputVariable.type === "REQUIRED") {
-          requiredSpecificationVariables.push(inputVariable.identifier);
-        }
-      }
-      for (let i = 0; i < inputVariables.length; i++) {
-        let inputVariable = inputVariables[i];
-        if (inputVariable.dataType === "TEXT" || inputVariable.dataType === "TEXT_AREA") {
-          addSpecificationInput(inputVariable.identifier, inputVariable.name, inputVariable.description, inputVariable.placeholder,
-            i, inputVariables.length, inputVariable.dataType);
-        }
-        if (inputVariable.dataType === "SELECT") {
-          addSpecificationSelect(inputVariable.identifier, inputVariable.name, inputVariable.description, i);
-        }
-        if (inputVariable.dataType === "FILE") {
-          addSpecificationFile(inputVariable.identifier, inputVariable.name, inputVariable.description);
-        }
-        if (inputVariable.dataType === "BOOLEAN") {
-          addSpecificationSwitch(inputVariable.identifier, inputVariable.name, inputVariable.description);
-        }
-        if (inputVariable.dataType === "TIME") {
-          addSpecificationTime(inputVariable.identifier, inputVariable.name, inputVariable.description);
-          specificationValues["timezone"] = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        }
-      }
-      checkSetupCompletion();
-      createResetButton(document.getElementById(specificationPrefix + "-input-list"), function() {
-        specificationSelectButtons = [];
-        specificationValues = {};
-        updateAdoptability(false);
-        fillSpecificationsInputs();
-      });
-      if (selectedApplication === "scheduler") {
-        specificationValues["timezone"] = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      }
+      displayInputs(inputVariables);
     });
+  }
+
+  function displayInputs(inputVariables) {
+    let resetButton = document.getElementById(specificationPrefix + "-input-list")
+      .getElementsByClassName("workflow-component-reset");
+    if (resetButton.length > 0) {
+      resetButton[0].remove();
+    }
+    for (let i = 0; i < inputVariables.length; i++) {
+      let inputVariable = inputVariables[i];
+      if (inputVariable.type === "REQUIRED") {
+        requiredSpecificationVariables.push(inputVariable.identifier);
+      }
+    }
+    for (let i = 0; i < inputVariables.length; i++) {
+      let inputVariable = inputVariables[i];
+      if (inputVariable.dataType === "TEXT" || inputVariable.dataType === "TEXT_AREA") {
+        addSpecificationInput(inputVariable.identifier, inputVariable.name, inputVariable.description, inputVariable.placeholder,
+          i, inputVariables.length, inputVariable.dataType);
+      } else if (inputVariable.dataType === "SELECT") {
+        addSpecificationSelect(inputVariable.identifier, inputVariable.name, inputVariable.description, i);
+      } else if (inputVariable.dataType === "FILE") {
+        addSpecificationFile(inputVariable.identifier, inputVariable.name, inputVariable.description);
+      } else if (inputVariable.dataType === "BOOLEAN") {
+        addSpecificationSwitch(inputVariable.identifier, inputVariable.name, inputVariable.description);
+      } else if (inputVariable.dataType === "TIME") {
+        addSpecificationTime(inputVariable.identifier, inputVariable.name, inputVariable.description);
+        specificationValues["timezone"] = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      } else if (inputVariable.dataType === "DYNAMIC") {
+        dynamicInputVariables.push({identifier: inputVariable.identifier,
+          requiredPredecessors: inputVariable.requiredPredecessors, alive: false});
+      }
+    }
+    checkSetupCompletion();
+    createResetButton(document.getElementById(specificationPrefix + "-input-list"), function() {
+      specificationSelectButtons = [];
+      specificationValues = {};
+      dynamicInputVariables = [];
+      requiredSpecificationVariables = [];
+      updateAdoptability(false);
+      fillSpecificationsInputs();
+    });
+    if (selectedApplication === "scheduler") {
+      specificationValues["timezone"] = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    }
   }
 
   function addSpecificationInput(identifier, name, description, placeholder, index, inputsLength, dataType) {
     let inputContainerElement = document.createElement("div");
     inputContainerElement.classList.add("workflow-specification-input-container", "form-outline", "mb-4");
-    let labelElement = document.createElement("h5");
-    labelElement.classList.add("workflow-specification-headline", "form-label");
-    labelElement.innerHTML = name + ":";
-    inputContainerElement.appendChild(labelElement);
-    let informationElement = document.createElement("h5");
-    informationElement.classList.add("workflow-specification-information", "fa", "fa-question-circle");
-    applyTooltips(informationElement, inputContainerElement, description);
-    inputContainerElement.appendChild(informationElement);
+    inputContainerElement.appendChild(createSpecificationHeadline(name, description));
     let inputElement = document.createElement("div");
     if (dataType === "TEXT_AREA") {
       inputElement.style.minHeight = "110px";
@@ -157,14 +161,7 @@
   function addSpecificationSelect(identifier, name, description, index) {
     let dropdownContainer = document.createElement("div");
     dropdownContainer.classList.add("mb-4");
-    let labelElement = document.createElement("h5");
-    labelElement.classList.add("workflow-specification-headline", "form-label");
-    labelElement.innerHTML = name + ":";
-    dropdownContainer.appendChild(labelElement);
-    let informationElement = document.createElement("h5");
-    informationElement.classList.add("workflow-specification-information", "fa", "fa-question-circle");
-    applyTooltips(informationElement, dropdownContainer, description);
-    dropdownContainer.appendChild(informationElement);
+    dropdownContainer.appendChild(createSpecificationHeadline(name, description));
     dropdownContainer.classList.add("workflow-specification-select-container", "dropdown");
     let dropdownButton = document.createElement("button");
     dropdownButton.classList.add("btn", "btn-dark", "dropdown-toggle");
@@ -267,14 +264,7 @@
   function addSpecificationFile(identifier, name, description) {
     let inputContainerElement = document.createElement("div");
     inputContainerElement.classList.add("workflow-specification-file-container", "form-outline", "mb-4");
-    let labelElement = document.createElement("h5");
-    labelElement.classList.add("workflow-specification-headline", "form-label");
-    labelElement.innerHTML = name + ":";
-    inputContainerElement.appendChild(labelElement);
-    let informationElement = document.createElement("h5");
-    informationElement.classList.add("workflow-specification-information", "fa", "fa-question-circle");
-    applyTooltips(informationElement, inputContainerElement, description);
-    inputContainerElement.appendChild(informationElement);
+    inputContainerElement.appendChild(createSpecificationHeadline(name, description));
     let fileSelectorElement = document.createElement("input");
     fileSelectorElement.type = "file";
     fileSelectorElement.classList.add("d-none");
@@ -334,14 +324,7 @@
   function addSpecificationSwitch(identifier, name, description) {
     let inputContainerElement = document.createElement("div");
     inputContainerElement.classList.add("workflow-specification-switch-container", "form-outline", "mb-4");
-    let labelElement = document.createElement("h5");
-    labelElement.classList.add("workflow-specification-headline", "form-label");
-    labelElement.innerHTML = name + ":";
-    inputContainerElement.appendChild(labelElement);
-    let informationElement = document.createElement("h5");
-    informationElement.classList.add("workflow-specification-information", "fa", "fa-question-circle");
-    applyTooltips(informationElement, inputContainerElement, description);
-    inputContainerElement.appendChild(informationElement);
+    inputContainerElement.appendChild(createSpecificationHeadline(name, description));
     let switchElement = document.createElement("label");
     switchElement.classList.add("switch", "mt-2");
     let switchInput = document.createElement("input");
@@ -371,14 +354,7 @@
   function addSpecificationTime(identifier, name, description) {
     let inputContainerElement = document.createElement("div");
     inputContainerElement.classList.add("workflow-specification-time-container", "form-outline", "mb-4");
-    let labelElement = document.createElement("h5");
-    labelElement.classList.add("workflow-specification-headline", "form-label");
-    labelElement.innerHTML = name + ":";
-    inputContainerElement.appendChild(labelElement);
-    let informationElement = document.createElement("h5");
-    informationElement.classList.add("workflow-specification-information", "fa", "fa-question-circle");
-    applyTooltips(informationElement, inputContainerElement, description);
-    inputContainerElement.appendChild(informationElement);
+    inputContainerElement.appendChild(createSpecificationHeadline(name, description));
     let timeInput = document.createElement("input");
     timeInput.type = "time";
     timeInput.classList.add("rounded-2", "py-1", "px-2");
@@ -398,6 +374,55 @@
     }
   }
 
+  function createSpecificationHeadline(name, description) {
+    let headlineContainer = document.createElement("div");
+    headlineContainer.classList.add("d-flex", "justify-content-between", "align-items-center");
+    let labelElement = document.createElement("h5");
+    labelElement.classList.add("workflow-specification-headline", "form-label");
+    labelElement.innerHTML = name + ":";
+    headlineContainer.appendChild(labelElement);
+    if (description && description !== "") {
+      let informationElement = document.createElement("h5");
+      informationElement.classList.add("workflow-specification-information", "fa", "fa-question-circle");
+      applyTooltips(informationElement, headlineContainer, description);
+      headlineContainer.appendChild(informationElement);
+    }
+    return headlineContainer;
+  }
+
+  function checkDynamicInputs(callback) {
+    let competedInputs = 0;
+    for (let dynamicInputVariable of dynamicInputVariables) {
+      let isFulfilled = true;
+      for (let predecessor of dynamicInputVariable.requiredPredecessors) {
+        if (!(predecessor in specificationValues)) {
+          isFulfilled = false;
+          break;
+        }
+      }
+      if (isFulfilled && !dynamicInputVariable.alive) {
+        dynamicInputVariable.alive = true;
+        let body = {componentType: "{{type}}", module: selectedApplication.toLowerCase(),
+          type: selectedEvent, content: specificationValues, dynamic: dynamicInputVariable.identifier};
+        let request = new HttpRequest("https://api.dulno.com/v1/component/dynamic/inputs/",
+          "POST", [], body);
+        request.send(function (status, responseText) {
+          let dynamicInputs = JSON.parse(responseText).dynamicInputs;
+          displayInputs(dynamicInputs);
+          competedInputs++;
+          if (competedInputs === dynamicInputVariables.length) {
+            callback();
+          }
+        });
+      } else {
+        competedInputs++;
+      }
+    }
+    if (competedInputs === dynamicInputVariables.length) {
+      callback();
+    }
+  }
+
   function resetSpecifications() {
     document.getElementById(specificationPrefix + "-container").style.display = "none";
     document.getElementById(specificationPrefix + "-unable").style.display = "block";
@@ -408,35 +433,42 @@
     document.getElementById(specificationPrefix + "-placeholders-list").innerHTML = "";
     specificationSelectButtons = [];
     specificationValues = {};
+    dynamicInputVariables = [];
     requiredSpecificationVariables = [];
     updateAdoptability(false);
   }
 
   function checkSetupCompletion() {
-    if (checkAdoptability() && selectedComponentSetup) {
-      selectedComponentSetup = false;
-      let specifications = Object.keys(specificationValues);
-      for (let i = specifications.length - 1; i >= 0; i--) {
-        if (specificationValues[specifications[i]] === "") {
-          delete specificationValues[specifications[i]];
+    checkAdoptability(function (isAdoptable) {
+      if (isAdoptable && selectedComponentSetup) {
+        selectedComponentSetup = false;
+        let specifications = Object.keys(specificationValues);
+        for (let i = specifications.length - 1; i >= 0; i--) {
+          if (specificationValues[specifications[i]] === "") {
+            delete specificationValues[specifications[i]];
+          }
         }
+        checkAdoptability();
+        $('#' + specificationPrefix).collapse("toggle");
+        setTimeout(removeLoader, 500);
       }
-      checkAdoptability();
-      $('#' + specificationPrefix).collapse("toggle");
-      setTimeout(removeLoader, 500);
-    }
+    });
   }
 
-  function checkAdoptability() {
-    let isAdoptable = true;
-    for (let i = 0; i < requiredSpecificationVariables.length; i++) {
-      if (!(requiredSpecificationVariables[i] in specificationValues)) {
-        isAdoptable = false;
-        break;
+  function checkAdoptability(callback) {
+    checkDynamicInputs(function () {
+      let isAdoptable = true;
+      for (let i = 0; i < requiredSpecificationVariables.length; i++) {
+        if (!(requiredSpecificationVariables[i] in specificationValues)) {
+          isAdoptable = false;
+          break;
+        }
       }
-    }
-    updateAdoptability(isAdoptable);
-    return isAdoptable;
+      updateAdoptability(isAdoptable);
+      if (callback) {
+        callback(isAdoptable);
+      }
+    });
   }
 
   function updateAdoptability(isAdoptable) {
