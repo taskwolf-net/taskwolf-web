@@ -62,8 +62,9 @@
 }
 
 .workflow-specification-list-add {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
+  aspect-ratio: 1;
   border-radius: 50%;
   border: none;
   margin: auto;
@@ -74,6 +75,22 @@
 
 .workflow-specification-list-add:hover {
   background-color: #0b5fda;
+}
+
+.workflow-specification-list-remove {
+  width: 30px;
+  height: 30px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: none;
+  margin: auto;
+  background-color: #dc3545;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.workflow-specification-list-remove:hover {
+  background-color: #bf2d3b;
 }
 
 .workflow-adopt-enabled {
