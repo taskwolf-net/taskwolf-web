@@ -29,8 +29,13 @@
   text-align: center;
 }
 
+.workflow-specification-list-container {
+  width: 80%;
+  margin: auto;
+}
+
 @media (max-width: 500px) {
-  .workflow-specification-input-container, .workflow-specification-select-container, .workflow-specification-file-container, .workflow-specification-switch-container, .workflow-specification-time-container {
+  .workflow-specification-input-container, .workflow-specification-select-container, .workflow-specification-file-container, .workflow-specification-switch-container, .workflow-specification-time-container, .workflow-specification-list-container {
     width: 95%;
   }
 }
@@ -54,6 +59,21 @@
 
 .workflow-specification-select-empty:hover {
   background-color: rgba(0,0,0,0) !important;
+}
+
+.workflow-specification-list-add {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  margin: auto;
+  background-color: #0d6efd;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.workflow-specification-list-add:hover {
+  background-color: #0b5fda;
 }
 
 .workflow-adopt-enabled {

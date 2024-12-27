@@ -61,8 +61,7 @@
     for (let i = 0; i < inputVariables.length; i++) {
       let inputVariable = inputVariables[i];
       if (inputVariable.dataType === "TEXT" || inputVariable.dataType === "TEXT_AREA") {
-        addSpecificationInput(inputVariable.identifier, inputVariable.name, inputVariable.description, inputVariable.placeholder,
-          i, inputVariables.length, inputVariable.dataType);
+        addSpecificationInput(inputVariable.identifier, inputVariable.name, inputVariable.description, inputVariable.placeholder, inputVariable.dataType);
       } else if (inputVariable.dataType === "SELECT") {
         addSpecificationSelect(inputVariable.identifier, inputVariable.name, inputVariable.description, i);
       } else if (inputVariable.dataType === "FILE") {
@@ -72,6 +71,8 @@
       } else if (inputVariable.dataType === "TIME") {
         addSpecificationTime(inputVariable.identifier, inputVariable.name, inputVariable.description);
         specificationValues["timezone"] = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      } else if (inputVariable.dataType === "LIST") {
+        addSpecificationList(inputVariable.identifier, inputVariable.name, inputVariable.description);
       } else if (inputVariable.dataType === "DYNAMIC") {
         dynamicInputVariables.push({identifier: inputVariable.identifier,
           requiredPredecessors: inputVariable.requiredPredecessors, alive: false});
@@ -91,7 +92,7 @@
     }
   }
 
-  function addSpecificationInput(identifier, name, description, placeholder, index, inputsLength, dataType) {
+  function addSpecificationInput(identifier, name, description, placeholder, dataType) {
     let inputContainerElement = document.createElement("div");
     inputContainerElement.classList.add("workflow-specification-input-container", "form-outline", "mb-4");
     inputContainerElement.appendChild(createSpecificationHeadline(name, description));
@@ -372,6 +373,87 @@
       }
       checkSetupCompletion();
     }
+  }
+
+  function addSpecificationList(identifier, name, description) {
+    let inputContainerElement = document.createElement("div");
+    inputContainerElement.classList.add("workflow-specification-list-container", "form-outline", "mb-4");
+    inputContainerElement.appendChild(createSpecificationHeadline(name, description));
+    let inputListElement = document.createElement("div");
+    inputContainerElement.appendChild(inputListElement);
+    document.getElementById(specificationPrefix + "-input-list").appendChild(inputContainerElement);
+    let currentInputIndex = 0;
+    createSpecificationListInput(inputListElement, identifier, currentInputIndex);
+    currentInputIndex++;
+    let inputAddButton = document.createElement("div");
+    inputAddButton.classList.add("workflow-specification-list-add", "d-flex", "justify-content-center", "align-items-center");
+    inputAddButton.onclick = function (event) {
+      createSpecificationListInput(inputListElement, identifier, currentInputIndex);
+      currentInputIndex++;
+    }
+    let inputAddButtonIcon = document.createElement("h4");
+    inputAddButtonIcon.classList.add("fa-solid", "fa-add", "mb-0");
+    inputAddButton.appendChild(inputAddButtonIcon);
+    inputContainerElement.appendChild(inputAddButton);
+    //prefillSpecificationList(identifier, quill);
+  }
+
+  function prefillSpecificationList(identifier, quill) {
+    /*if (!("content" in selectedComponent)) {
+      return;
+    }
+    let selectedComponentContent = JSON.parse(selectedComponent.content);
+    if (identifier in selectedComponentContent) {
+      for (let i = 0; i < componentsOutputVariables.length; i++) {
+        let entry = componentsOutputVariables[i];
+        let index = entry.index;
+        let prefix = findPlaceholderPrefix(index);
+        let variables = entry.variables;
+        for (let i = 0; i < variables.length; i++) {
+          let variable = variables[i];
+          selectedComponentContent[identifier] = selectedComponentContent[identifier]
+            .replaceAll("%" + prefix + variable.identifier + "%", '<span class="placeholder" data-placeholder="' +
+              prefix + variable.identifier + ':' + variable.name + '">﻿<span contenteditable="false"> ' +
+              variable.name + ' </span>﻿</span>')
+        }
+      }
+      quill.clipboard.dangerouslyPasteHTML(0, selectedComponentContent[identifier]
+        .split('\n').map(line => "<p>" + (line === "" ? "<br>" : line) + "</p>")
+        .join(''));
+      adjustEditorHeight(quill);
+      inputSpecificationInput(quill, identifier);
+    }
+    checkSetupCompletion();*/
+  }
+
+  function createSpecificationListInput(container, identifier, index) {
+    let inputElement = document.createElement("div");
+    inputElement.id = "workflow-specification-list-input-" + identifier + "-" + index;
+    inputElement.classList.add("workflow-specification-input", "form-control", "mb-4");
+    container.appendChild(inputElement);
+    let quill = setupPlaceholderInput(inputElement.id, "");
+    quillInputElements.push(quill);
+    quill.on('text-change', function(delta, oldDelta, source) {
+      inputSpecificationListInput(quill, identifier, index);
+    });
+    inputElement.ondragover = function (event) {
+      event.preventDefault();
+    };
+    inputElement.ondrop = function (event) {
+      addPlaceholder(quill, inputElement.id, event.dataTransfer.getData("placeholder-identifier"),
+        event.dataTransfer.getData("placeholder-name"));
+      inputSpecificationListInput(quill, identifier, index);
+    };
+    inputSpecificationListInput(quill, identifier, index);
+  }
+
+  function inputSpecificationListInput(quill, identifier, index) {
+    let value = findPlaceholderInputContent(quill, componentsOutputVariables);
+    let specificationValue = specificationValues[identifier];
+    let json = specificationValue ? JSON.parse(specificationValue) : [];
+    json[index] = value;
+    specificationValues[identifier] = JSON.stringify(json);
+    checkAdoptability();
   }
 
   function createSpecificationHeadline(name, description) {
