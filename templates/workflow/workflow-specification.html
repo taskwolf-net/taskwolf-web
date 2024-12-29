@@ -73,6 +73,8 @@
         specificationValues["timezone"] = Intl.DateTimeFormat().resolvedOptions().timeZone;
       } else if (inputVariable.dataType === "LIST") {
         addSpecificationList(inputVariable.identifier, inputVariable.name, inputVariable.description);
+      } else if (inputVariable.dataType === "MAP") {
+        addSpecificationMap(inputVariable.identifier, inputVariable.name, inputVariable.description);
       } else if (inputVariable.dataType === "DYNAMIC") {
         dynamicInputVariables.push({identifier: inputVariable.identifier,
           requiredPredecessors: inputVariable.requiredPredecessors, alive: false});
@@ -478,6 +480,141 @@
     checkAdoptability();
   }
 
+  function addSpecificationMap(identifier, name, description) {
+    let specificationMap = {identifier: identifier, entries: []};
+    let inputContainerElement = document.createElement("div");
+    inputContainerElement.classList.add("workflow-specification-map-container", "form-outline", "mb-4");
+    inputContainerElement.appendChild(createSpecificationHeadline(name, description));
+    let inputListElement = document.createElement("div");
+    inputListElement.classList.add("mt-4");
+    inputContainerElement.appendChild(inputListElement);
+    document.getElementById(specificationPrefix + "-input-list").appendChild(inputContainerElement);
+    createSpecificationMapEntry(specificationMap, inputListElement);
+    let entryAddButton = document.createElement("div");
+    entryAddButton.classList.add("workflow-specification-map-add", "d-flex", "justify-content-center", "align-items-center");
+    entryAddButton.onclick = function (event) {
+      createSpecificationMapEntry(specificationMap, inputListElement);
+    }
+    let entryAddButtonIcon = document.createElement("h6");
+    entryAddButtonIcon.classList.add("fa-solid", "fa-add", "mb-0");
+    entryAddButton.appendChild(entryAddButtonIcon);
+    inputContainerElement.appendChild(entryAddButton);
+    prefillSpecificationMap(specificationMap, inputListElement);
+  }
+
+  function prefillSpecificationMap(specificationMap, container) {
+    let identifier = specificationMap.identifier;
+    let content = replaceSelectedComponentPlaceholders(identifier);
+    if (!content) {
+      return;
+    }
+    let mapEntries = JSON.parse(content[identifier]);
+    let mapKeys = Object.keys(mapEntries);
+    for (let i = 0; i < mapKeys.length; i++) {
+      if (i > 0) {
+        createSpecificationMapEntry(specificationMap, container);
+      }
+      let entry = specificationMap.entries[i];
+      entry.key = mapKeys[i];
+      entry.value = mapEntries[entry.key];
+      prefillSpecificationMapInput(specificationMap, entry, "key");
+      prefillSpecificationMapInput(specificationMap, entry, "value");
+    }
+    checkSetupCompletion();
+  }
+
+  function prefillSpecificationMapInput(specificationMap, mapEntry, type) {
+    let quill = mapEntry[type + "Quill"];
+    quill.clipboard.dangerouslyPasteHTML(0, mapEntry[type].split('\n')
+      .map(line => "<p>" + (line === "" ? "<br>" : line) + "</p>")
+      .join(''));
+    adjustEditorHeight(quill);
+    inputSpecificationMapInput(quill, specificationMap.identifier, mapEntry, "key");
+  }
+
+  function createSpecificationMapEntry(specificationMap, container) {
+    let mapEntry = {identifier: Math.random().toString(36).slice(2, 7), key: "", value: ""};
+    specificationMap.entries.push(mapEntry);
+    let entryContainer = document.createElement("div");
+    entryContainer.classList.add("d-flex", "align-items-center", "mb-4");
+    container.appendChild(entryContainer);
+    createSpecificationMapEntryInput(entryContainer, specificationMap, mapEntry, "key");
+    createSpecificationMapEntryInput(entryContainer, specificationMap, mapEntry, "value");
+    let entryRemoveButton = document.createElement("div");
+    entryRemoveButton.classList.add("workflow-specification-map-remove",
+      "d-flex", "justify-content-center", "align-items-center", "ms-4");
+    if (specificationMap.entries.length === 1) {
+      entryRemoveButton.classList.add("d-none");
+    }
+    if (specificationMap.entries.length === 2) {
+      specificationMap.entries[0].removeButton.classList.remove("d-none");
+    }
+    entryRemoveButton.onclick = function (event) {
+      removeSpecificationMapEntry(specificationMap, mapEntry, entryContainer);
+    }
+    let entryRemoveButtonIcon = document.createElement("h6");
+    entryRemoveButtonIcon.classList.add("fa-solid", "fa-minus", "mb-0");
+    entryRemoveButton.appendChild(entryRemoveButtonIcon);
+    entryContainer.appendChild(entryRemoveButton);
+    mapEntry.removeButton = entryRemoveButton;
+  }
+
+  function createSpecificationMapEntryInput(container, specificationMap, mapEntry, type) {
+    let identifier = specificationMap.identifier;
+    let inputElement = document.createElement("div");
+    inputElement.id = "workflow-specification-list-input-" + identifier + "-" +
+      mapEntry.identifier + "-" + type;
+    inputElement.classList.add("workflow-specification-input", "form-control");
+    if (type === "key") {
+      inputElement.classList.add("me-3");
+    }
+    container.appendChild(inputElement);
+    let quill = setupPlaceholderInput(inputElement.id, "");
+    mapEntry[type + "Quill"] = quill;
+    quillInputElements.push(quill);
+    quill.on('text-change', function(delta, oldDelta, source) {
+      inputSpecificationMapInput(quill, identifier, mapEntry, type);
+    });
+    inputElement.ondragover = function (event) {
+      event.preventDefault();
+    };
+    inputElement.ondrop = function (event) {
+      addPlaceholder(quill, inputElement.id, event.dataTransfer.getData("placeholder-identifier"),
+        event.dataTransfer.getData("placeholder-name"));
+      inputSpecificationMapInput(quill, identifier, mapEntry, type);
+    };
+    inputSpecificationMapInput(quill, identifier, mapEntry, type);
+  }
+
+  function removeSpecificationMapEntry(specificationMap, mapEntry, container) {
+    let identifier = specificationMap.identifier;
+    container.remove();
+    let specificationValue = specificationValues[identifier];
+    let json = specificationValue ? JSON.parse(specificationValue) : {};
+    delete json[mapEntry.key];
+    specificationValues[identifier] = JSON.stringify(json);
+    specificationMap.entries = specificationMap.entries.filter(entry => entry !== mapEntry);
+    if (specificationMap.entries.length === 1) {
+      specificationMap.entries[0].removeButton.classList.add("d-none");
+    }
+  }
+
+  function inputSpecificationMapInput(quill, identifier, mapEntry, type) {
+    let value = findPlaceholderInputContent(quill, componentsOutputVariables);
+    let specificationValue = specificationValues[identifier];
+    let json = specificationValue ? JSON.parse(specificationValue) : {};
+    if (type === "key") {
+      delete json[mapEntry.key];
+      json[value] = mapEntry.value;
+      mapEntry.key = value;
+    } else {
+      json[mapEntry.key] = value;
+      mapEntry.value = value;
+    }
+    specificationValues[identifier] = JSON.stringify(json);
+    checkAdoptability();
+  }
+
   function createSpecificationHeadline(name, description) {
     let headlineContainer = document.createElement("div");
     headlineContainer.classList.add("d-flex", "justify-content-between", "align-items-center");
@@ -543,9 +680,9 @@
       for (let i = 0; i < variables.length; i++) {
         let variable = variables[i];
         selectedComponentContent[identifier] = selectedComponentContent[identifier]
-          .replaceAll("%" + prefix + variable.identifier + "%", '<span class="placeholder" data-placeholder="' +
-            prefix + variable.identifier + ':' + variable.name + '">﻿<span contenteditable="false"> ' +
-            variable.name + ' </span>﻿</span>')
+          .replaceAll("%" + prefix + variable.identifier + "%", "<span class='placeholder' data-placeholder='" +
+            prefix + variable.identifier + ":" + variable.name + "'>﻿<span contenteditable='false'> " +
+            variable.name + " </span>﻿</span>")
       }
     }
     return selectedComponentContent;
