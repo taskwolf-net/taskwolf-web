@@ -667,7 +667,7 @@
   }
 
   function replaceSelectedComponentPlaceholders(identifier) {
-    if (!("content" in selectedComponent)) {
+    if (!selectedComponentSetup || !("content" in selectedComponent)) {
       return false;
     }
     let selectedComponentContent = JSON.parse(selectedComponent.content);
