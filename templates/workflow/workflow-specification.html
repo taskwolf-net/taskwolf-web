@@ -569,7 +569,9 @@
       inputElement.classList.add("me-3");
     }
     container.appendChild(inputElement);
-    let quill = setupPlaceholderInput(inputElement.id, "");
+    let quill = setupPlaceholderInput(inputElement.id, type === "key" ?
+      "{% trans 'product.workflow.specifications.map.key' %}" :
+      "{% trans 'product.workflow.specifications.map.value' %}");
     mapEntry[type + "Quill"] = quill;
     quillInputElements.push(quill);
     quill.on('text-change', function(delta, oldDelta, source) {
