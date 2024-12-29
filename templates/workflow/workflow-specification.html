@@ -515,21 +515,21 @@
         createSpecificationMapEntry(specificationMap, container);
       }
       let entry = specificationMap.entries[i];
-      entry.key = mapKeys[i];
-      entry.value = mapEntries[entry.key];
-      prefillSpecificationMapInput(specificationMap, entry, "key");
-      prefillSpecificationMapInput(specificationMap, entry, "value");
+      let entryKey = mapKeys[i];
+      let entryValue = mapEntries[entryKey];
+      prefillSpecificationMapInput(specificationMap, entry, "key", entryKey);
+      prefillSpecificationMapInput(specificationMap, entry, "value", entryValue);
     }
     checkSetupCompletion();
   }
 
-  function prefillSpecificationMapInput(specificationMap, mapEntry, type) {
+  function prefillSpecificationMapInput(specificationMap, mapEntry, type, value) {
     let quill = mapEntry[type + "Quill"];
-    quill.clipboard.dangerouslyPasteHTML(0, mapEntry[type].split('\n')
+    quill.clipboard.dangerouslyPasteHTML(0, value.split('\n')
       .map(line => "<p>" + (line === "" ? "<br>" : line) + "</p>")
       .join(''));
     adjustEditorHeight(quill);
-    inputSpecificationMapInput(quill, specificationMap.identifier, mapEntry, "key");
+    inputSpecificationMapInput(quill, specificationMap.identifier, mapEntry, type);
   }
 
   function createSpecificationMapEntry(specificationMap, container) {
