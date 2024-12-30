@@ -1190,6 +1190,10 @@ msgid "product.workflow.specifications.file.pending"
 msgstr "Select a file"
 msgid "product.workflow.specifications.file.selected"
 msgstr "File selected"
+msgid "product.workflow.specifications.map.key"
+msgstr "Name"
+msgid "product.workflow.specifications.map.value"
+msgstr "Value"
 
 # WORKFLOW - PLACEHOLDER
 msgid "product.workflow.placeholders.trigger"
