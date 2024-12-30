@@ -75,25 +75,7 @@
     entryHeaderElement.appendChild(entryDateElement);
     entryElement.appendChild(entryHeaderElement);
     if (entry.isFailure) {
-      let entryFailureContainer = document.createElement("div");
-      entryFailureContainer.classList.add("w-100", "mb-3", "d-flex", "justify-content-between", "align-items-start");
-      let entryFailureElement = document.createElement("h6");
-      entryFailureElement.classList.add("mb-0");
-      entryFailureElement.innerHTML = "<b>{% trans 'product.workflow.timeline.cause' %}: </b>" + entry.failureModuleName + " - " + entry.failureStepName;
-      entryFailureContainer.appendChild(entryFailureElement);
-      if (isFirst && checkWorkflowStepsInitialState()) {
-        let step = JSON.parse(sessionStorage.getItem("workflow-steps"))
-          .steps.filter(item => item.index === entry.failureStepIndex)[0];
-        let entryFailureViewButton = document.createElement("button");
-        entryFailureViewButton.classList.add("btn", "btn-primary", "px-2", "ms-3");
-        entryFailureViewButton.innerText = "{% trans 'product.workflow.timeline.view' %}";
-        entryFailureViewButton.onclick = function (event) {
-          sessionStorage.setItem("workflow-step-index", step.index.toString());
-          window.location.href = "/workflow/" + step.kind +"/";
-        };
-        entryFailureContainer.appendChild(entryFailureViewButton);
-      }
-      entryElement.appendChild(entryFailureContainer);
+      entryElement.appendChild(createEntryFailureElement(entry, isFirst));
     }
     let entryDescriptionElement = document.createElement("p");
     entryDescriptionElement.innerHTML = entry.description;
@@ -107,6 +89,30 @@
       entryTitleElement.classList.add("text-danger");
     }
     document.getElementById("workflow-timeline").appendChild(entryElement);
+  }
+
+  function createEntryFailureElement(entry, isFirst) {
+    let entryFailureContainer = document.createElement("div");
+    entryFailureContainer.classList.add("w-100", "mb-3", "d-flex", "justify-content-between", "align-items-start");
+    let entryFailureElement = document.createElement("h6");
+    entryFailureElement.classList.add("mb-0");
+    entryFailureElement.innerHTML = "<b>{% trans 'product.workflow.timeline.cause' %}: </b>" + entry.failureModuleName + " - " + entry.failureStepName;
+    entryFailureContainer.appendChild(entryFailureElement);
+    if (isFirst && checkWorkflowStepsInitialState()) {
+      let index = entry.failureStepIndex;
+      let step = index < 0 ? JSON.parse(sessionStorage.getItem("workflow-trigger")) :
+        JSON.parse(sessionStorage.getItem("workflow-steps")).steps
+          .filter(item => item.index === index)[0];
+      let entryFailureViewButton = document.createElement("button");
+      entryFailureViewButton.classList.add("btn", "btn-primary", "px-2", "ms-3");
+      entryFailureViewButton.innerText = "{% trans 'product.workflow.timeline.view' %}";
+      entryFailureViewButton.onclick = function (event) {
+        sessionStorage.setItem("workflow-step-index", index.toString());
+        window.location.href = "/workflow/" + step.kind +"/";
+      };
+      entryFailureContainer.appendChild(entryFailureViewButton);
+    }
+    return entryFailureContainer;
   }
 
   function checkWorkflowStepsInitialState() {
