@@ -477,9 +477,12 @@
     let location = window.location;
     let id = location.href.replace(location.host, "").replace(location.protocol, "").replace("process", "").replaceAll("/", "");
     if (id === "") {
-      steps.push(new Step(draw, -850, -75, "START", "{% trans 'product.process.start' %}", "{% trans 'product.process.description' %}", [], null));
-      steps.push(new Step(draw, -150, -75, "TASK", "{% trans 'product.process.step' %}", "{% trans 'product.process.description' %}", [], null));
-      steps.push(new Step(draw, 500, -75, "END", "{% trans 'product.process.end' %}", "{% trans 'product.process.description' %}", [], null));
+      steps.push(new Step(draw, -850, -75, "START", "{% trans 'product.process.start' %}",
+        "{% trans 'product.process.description' %}", [], null));
+      steps.push(new Step(draw, -150, -75, "TASK", "{% trans 'product.process.step' %}",
+        "{% trans 'product.process.description' %}", [], null));
+      steps.push(new Step(draw, 500, -75, "END", "{% trans 'product.process.end' %}",
+        "{% trans 'product.process.description' %}", [], null));
       initialDisplay();
       return;
     }
@@ -518,7 +521,8 @@
   }
 
   function initialDisplay() {
-    display({width: 4000, height: 4000, x: -2000, y: -2000});
+    display({width: 1000, height: 1000, w: 1000, h: 1000, x: -500, y: -500,
+      x2: 500, y2: 500, cx: 0, cy: 0});
   }
 
   function display(box) {
@@ -542,22 +546,25 @@
   }
 
   document.getElementById("process-add-start").onclick = function (event) {
-    let step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "START",
-      "Start", "Description", [], null);
+    let step = new Step(draw, previousBox.cx - 850, previousBox.cy - 375, "START",
+      "{% trans 'product.process.start' %}", "{% trans 'product.process.description' %}",
+      [], null);
     step.display();
     steps.push(step);
   }
 
   document.getElementById("process-add-step").onclick = function (event) {
-    let step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "TASK",
-      "Step", "Description", [], null);
+    let step = new Step(draw, previousBox.cx - 150, previousBox.cy - 375, "TASK",
+      "{% trans 'product.process.step' %}", "{% trans 'product.process.description' %}",
+      [], null);
     step.display();
     steps.push(step);
   }
 
   document.getElementById("process-add-end").onclick = function (event) {
-    let step = new Step(draw, previousBox.cx - 150, previousBox.cy - 75, "END",
-      "End", "Description", [], null);
+    let step = new Step(draw, previousBox.cx + 500, previousBox.cy - 375, "END",
+      "{% trans 'product.process.end' %}", "{% trans 'product.process.description' %}",
+      [], null);
     step.display();
     steps.push(step);
   }

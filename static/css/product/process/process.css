@@ -81,6 +81,14 @@ body {
   display: none;
 }
 
+#process-add-wrapper .dropdown-toggle[aria-expanded="true"] {
+  transform: rotate(135deg);
+}
+
+#process-add-wrapper .dropdown-toggle {
+  transition: all ease 0.2s;
+}
+
 #process-content {
   display: flex;
   width: 100%;
