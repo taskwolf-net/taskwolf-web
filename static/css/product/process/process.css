@@ -1,3 +1,7 @@
+body {
+  overflow-y: hidden;
+}
+
 #process-wrapper {
   width: 100%;
   height: calc(100% - 155px);
@@ -20,25 +24,8 @@
 }
 
 #process-delete-wrapper {
-  margin-right: auto;
-  margin-left: 20px;
-}
-
-#process-component-wrapper {
-  width: 100%;
-  text-align: center;
   margin-right: 20px;
   margin-left: 20px;
-}
-
-#process-add-start, #process-add-step, #process-add-end {
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
-#process-add-step {
-  margin-left: 20px;
-  margin-right: 20px;
 }
 
 #process-publish-wrapper {
@@ -56,17 +43,7 @@
   margin-left: 20px;
 }
 
-@media (max-width: 1400px) {
-  #process-modification {
-    height: 100px;
-  }
-}
-
 @media (max-width: 1200px) {
-  #process-modification {
-    height: 150px;
-  }
-
   #process-publish-wrapper {
     display: block;
     text-align: center;
@@ -75,21 +52,18 @@
   #process-publish {
     margin-left: 0;
   }
+}
 
-  #process-component-wrapper {
-    margin-left: 5px;
-    margin-right: 5px;
-  }
-
-  #process-add-step {
-    margin-left: 0;
-    margin-right: 0;
+@media (max-width: 575px) {
+  #process-modification {
+    height: 100px;
   }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 400px) {
   #process-delete-wrapper {
     margin-left: 5px;
+    margin-right: 5px;
   }
 
   #process-publish-wrapper {
@@ -97,10 +71,14 @@
   }
 }
 
-@media (max-width: 575px) {
-  #process-modification {
-    height: 250px;
-  }
+#process-add-wrapper {
+  position: absolute;
+  right: 30px;
+  bottom: 30px;
+}
+
+#process-add-wrapper .dropdown-toggle::after {
+  display: none;
 }
 
 #process-content {
