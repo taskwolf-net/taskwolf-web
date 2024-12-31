@@ -30,16 +30,24 @@
           </div>
           <div class="collapse collapse-horizontal" id="process-step-sidebar">
            <div id="process-step-sidebar-content">
-             <button id="process-step-sidebar-close"><i class="fa-solid fa-xmark"></i></button>
-             <h3 class="text-center font-weight-bold mt-3">{% trans "product.process.step" %}</h3>
-             <div class="process-step-sidebar-entry">
-               <label class="form-label">{% trans "product.process.step.title" %}</label>
-               <input id="process-step-title" class="form-control" placeholder="{% trans 'product.process.step.title' %}">
+             <div class="position-relative mt-4 mb-4">
+               <div id="process-step-sidebar-close" class="d-flex justify-content-center align-items-center" role="button">
+                 <h4 class="fa-solid fa-xmark mb-0"></h4>
+               </div>
+               <h3 class="text-center font-weight-bold mb-0">{% trans "product.process.step" %}</h3>
              </div>
+             <div class="process-step-sidebar-divider"></div>
              <div class="process-step-sidebar-entry">
-               <label class="form-label">{% trans "product.process.step.description" %}</label>
-               <textarea id="process-step-description" class="form-control" placeholder="{% trans 'product.process.step.description' %}"></textarea>
+               <div>
+                 <label class="form-label">{% trans "product.process.step.title" %}</label>
+                 <input id="process-step-title" class="form-control" placeholder="{% trans 'product.process.step.title' %}">
+               </div>
+               <div class="mt-3">
+                 <label class="form-label">{% trans "product.process.step.description" %}</label>
+                 <textarea id="process-step-description" class="form-control" placeholder="{% trans 'product.process.step.description' %}"></textarea>
+               </div>
              </div>
+             <div class="process-step-sidebar-divider"></div>
              <div class="process-step-sidebar-entry">
                <label class="form-label">{% trans "product.process.step.todos" %}</label>
                <p id="process-step-todos-empty" class="text-secondary d-none">{% trans "product.process.step.todos.empty" %}</p>
@@ -48,6 +56,7 @@
                <input id="process-step-todo-input" class="form-control" placeholder="{% trans 'product.process.step.todo' %}">
                <button id="process-step-todo-add" type="button" class="btn btn-secondary">{% trans "product.process.step.todo.add" %}</button>
              </div>
+             <div class="process-step-sidebar-divider"></div>
              <div class="process-step-sidebar-entry">
                <label class="form-label">{% trans "product.process.step.workflow" %}</label>
                <div id="process-step-workflow" class="dropdown">
@@ -58,8 +67,11 @@
                  </ul>
                </div>
              </div>
+             <div class="process-step-sidebar-divider"></div>
              <div class="process-step-sidebar-entry text-center">
-               <button id="process-step-adopt" type="button" class="btn btn-success mt-3">{% trans "product.process.step.adopt" %}</button>
+               <button id="process-step-adopt" class="btn btn-success d-block mt-4 mx-auto px-5">
+                 <span class="fa-solid fa-check me-2"></span>{% trans "product.process.step.adopt" %}
+               </button>
              </div>
            </div>
           </div>

@@ -161,9 +161,11 @@ body {
 }
 
 #process-step-sidebar {
-  width: 300px !important;
+  width: 300px;
+  min-width: 300px;
   transition: 0s;
   border-left: 1px #4a4a4a solid;
+  overflow-y: auto;
 }
 
 .dark #process-step-sidebar {
@@ -174,14 +176,21 @@ body {
   background-color: #f8f9fa;
 }
 
+.dark .process-step-sidebar-divider {
+  border-bottom: 1px #4a4a4a solid;
+}
+
+.light .process-step-sidebar-divider {
+  border-bottom: 1px #c8c8c8 solid;
+}
+
 #process-step-sidebar-content {
   width: 299px !important;
 }
 
- .process-step-sidebar-entry {
+.process-step-sidebar-entry {
   width: 90%;
-  margin: auto;
-  margin-top: 30px;
+  margin: 30px auto;
 }
 
 .dark .process-step-sidebar-entry input, .dark .process-step-sidebar-entry textarea {
@@ -196,22 +205,33 @@ body {
 
 #process-step-sidebar-close {
   position: absolute;
-  right: 10px;
-  width: 28px;
-  height: 28px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: none;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition-duration: 0.2s;
   border-radius: 50%;
+  width: 36px;
+  height: 36px;
 }
 
 .dark #process-step-sidebar-close {
-  background-color: #a90000;
+  background-color: #30363c;
 }
 
 .light #process-step-sidebar-close {
-  background-color: #ff3434;
+  background-color: #d1d1d1;
+}
+
+.dark #process-step-sidebar-close:hover {
+  background-color: #434c54;
+}
+
+.light #process-step-sidebar-close:hover {
+  background-color: #b5b5b5;
+}
+
+#process-step-adopt {
+  margin-bottom: 180px;
 }
 
 #process-description {
