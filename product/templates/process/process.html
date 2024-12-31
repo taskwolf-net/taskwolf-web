@@ -105,23 +105,23 @@
       let group = self.draw.group();
       let subGroup = self.draw.group();
       group.add(subGroup);
-      let outerRect = subGroup.rect(300, 150).move(-150, -75).radius(10);
+      self.outerRect = subGroup.rect(300, 150).move(-150, -75).radius(10);
       if (this.state === "ACTIVE") {
-        outerRect.fill("#49ff1d");
+        self.outerRect.fill("#49ff1d");
       } else {
-        outerRect.fill(isDarkTheme ? "#1b232f" : "#c5c5c5")
+        self.outerRect.fill(isDarkTheme ? "#1b232f" : "#c5c5c5")
       }
       let innerRect = subGroup.rect(290, 140).move(-145, -70).radius(10).fill(isDarkTheme ? "#3d4b5a" : "#e5e5e5");
       let divider = subGroup.rect(250, 2).move(-125, -25).radius(10).fill(isDarkTheme ? "#4b5c6f" : "#a2a2a2");
       group.on("mouseover", function() {
         if (self.state === "INACTIVE") {
-          outerRect.animate(300, "<>").fill(isDarkTheme ? "#334056" : "#787878");
+          self.outerRect.animate(300, "<>").fill(isDarkTheme ? "#334056" : "#787878");
         }
         innerRect.animate(300, "<>").fill(isDarkTheme ? "#4b5c6f" : "#bebebe");
         divider.animate(300, "<>").fill(isDarkTheme ? "#6b84a0" : "#9b9b9b");
       }).on("mouseout", function() {
         if (self.state === "INACTIVE") {
-          outerRect.animate(300, "<>").fill(isDarkTheme ? "#1b232f" : "#c5c5c5");
+          self.outerRect.animate(300, "<>").fill(isDarkTheme ? "#1b232f" : "#c5c5c5");
         }
         innerRect.animate(300, "<>").fill(isDarkTheme ? "#3d4b5a" : "#e5e5e5");
         divider.animate(300, "<>").fill(isDarkTheme ? "#4b5c6f" : "#a2a2a2");
@@ -238,6 +238,7 @@
 
     activate() {
       this.state = "ACTIVE";
+      this.outerRect.fill("#49ff1d");
       if (this.workflow == null) {
         return;
       }
@@ -249,6 +250,7 @@
 
     deactivate() {
       this.state = "INACTIVE";
+      this.outerRect.fill(isDarkTheme ? "#1b232f" : "#c5c5c5");
     }
   }
 
@@ -426,10 +428,12 @@
 
     activate() {
       this.state = "ACTIVE";
+      this.display();
     }
 
     deactivate() {
       this.state = "INACTIVE";
+      this.display();
     }
   }
 </script>
@@ -869,7 +873,6 @@
 
   function activateStep(step, loop, after) {
     step.activate();
-    display(previousBox);
     if (!loop) {
       after(step);
     }
@@ -879,7 +882,6 @@
       }
       if (findStepConnections(step).length === 0) {
         step.deactivate();
-        display(previousBox);
       }
       if (loop) {
         activateConnection(step, loop, after);
@@ -904,7 +906,6 @@
         }
       }, 800);
     }
-    display(previousBox);
   }
 
   document.getElementById("process-execution-abort").onclick = function (event) {
@@ -919,6 +920,5 @@
       connections[i].deactivate();
     }
     currentActiveSteps = [];
-    display(previousBox);
   }
 </script>
