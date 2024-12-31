@@ -34,7 +34,7 @@
                <div id="process-step-sidebar-close" class="d-flex justify-content-center align-items-center" role="button">
                  <h4 class="fa-solid fa-xmark mb-0"></h4>
                </div>
-               <h3 class="text-center font-weight-bold mb-0">{% trans "product.process.step" %}</h3>
+               <h3 class="text-center font-weight-bold mb-0">{% trans "product.process.step.headline" %}</h3>
              </div>
              <div class="process-step-sidebar-divider"></div>
              <div class="process-step-sidebar-entry">
@@ -81,9 +81,9 @@
             <h2 class="fa-solid fa-add mb-0 p-2"></h2>
           </button>
           <ul class="dropdown-menu mb-2 py-2 text-center">
-            <li><h5 id="process-add-start" class="dropdown-item text-success-emphasis py-2 px-4 mb-0">{% trans "product.process.start.add" %}</h5></li>
-            <li><h5 id="process-add-step" class="dropdown-item text-primary-emphasis py-2 px-4 my-2">{% trans "product.process.step.add" %}</h5></li>
-            <li><h5 id="process-add-end" class="dropdown-item text-danger-emphasis py-2 px-4 mb-0">{% trans "product.process.end.add" %}</h5></li>
+            <li><h5 id="process-add-start" class="dropdown-item text-success-emphasis py-2 px-4 mb-0">{% trans "product.process.start" %}</h5></li>
+            <li><h5 id="process-add-step" class="dropdown-item text-primary-emphasis py-2 px-4 my-2">{% trans "product.process.step" %}</h5></li>
+            <li><h5 id="process-add-end" class="dropdown-item text-danger-emphasis py-2 px-4 mb-0">{% trans "product.process.end" %}</h5></li>
           </ul>
         </div>
       </div>
@@ -477,9 +477,9 @@
     let location = window.location;
     let id = location.href.replace(location.host, "").replace(location.protocol, "").replace("process", "").replaceAll("/", "");
     if (id === "") {
-      steps.push(new Step(draw, -850, -75, "START", "Start", "Description", [], null));
-      steps.push(new Step(draw, -150, -75, "TASK", "Step", "Description", [], null));
-      steps.push(new Step(draw, 500, -75, "END", "End", "Description", [], null));
+      steps.push(new Step(draw, -850, -75, "START", "{% trans 'product.process.start' %}", "{% trans 'product.process.description' %}", [], null));
+      steps.push(new Step(draw, -150, -75, "TASK", "{% trans 'product.process.step' %}", "{% trans 'product.process.description' %}", [], null));
+      steps.push(new Step(draw, 500, -75, "END", "{% trans 'product.process.end' %}", "{% trans 'product.process.description' %}", [], null));
       initialDisplay();
       return;
     }
