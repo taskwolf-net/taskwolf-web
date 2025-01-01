@@ -395,14 +395,14 @@
       this.draw = draw;
       this.origin = origin;
       this.destination = destination;
-      this.line = null;
-      this.hitBox = null;
+      this.group = null;
+      this.lines = [];
       this.state = "INACTIVE";
     }
 
     display() {
       let self = this;
-      if (self.line != null) {
+      if (self.group != null) {
         self.remove();
       }
       let originX = self.origin.x + 330;
@@ -416,22 +416,33 @@
       if (this.state === "ACTIVE") {
         color = "#49ff1d";
       }
-      self.line = self.draw.line(originX + 2, originY, destinationX - 2, destinationY).stroke({
-        color: color,
-        width: 4,
-        linecap: "round",
-      });
-      self.hitBox = self.draw.line(originX + 10, originY, destinationX - 10, destinationY).stroke({
-        color: "rgba(0,0,0,0)",
-        width: 20,
-        linecap: "round",
-      }).on("mouseover", function () {
+      self.group = self.draw.group();
+      if (originX + 50 < destinationX - 50) {
+        let half = originX - ((originX - destinationX) / 2);
+        self.drawLine(self.group, color, originX + 2, originY, half, originY);
+        self.drawLine(self.group, color, half, originY, half, destinationY);
+        self.drawLine(self.group, color, half, destinationY, destinationX - 2, destinationY);
+      } else {
+        let half = originY - ((originY - destinationY) / 2);
+        self.drawLine(self.group, color, originX + 2, originY, originX + 50, originY);
+        self.drawLine(self.group, color, originX + 50, originY, originX + 50, half);
+        self.drawLine(self.group, color, originX + 50, half, destinationX - 50, half);
+        self.drawLine(self.group, color, destinationX - 50, destinationY, destinationX - 50, half);
+        self.drawLine(self.group, color, destinationX - 50, destinationY, destinationX - 2, destinationY);
+      }
+      self.drawLine(self.group, color, destinationX - 10, destinationY - 8, destinationX - 2, destinationY);
+      self.drawLine(self.group, color, destinationX - 10, destinationY + 8, destinationX - 2, destinationY);
+      self.group.on("mouseover", function () {
         if (self.state === "INACTIVE") {
-          self.line.animate(300, "<>").stroke({color: "#ff3737"});
+          for (let line of self.lines) {
+            line.animate(300, "<>").stroke({color: "#ff3737"});
+          }
         }
       }).on("mouseout", function () {
         if (self.state === "INACTIVE") {
-          self.line.animate(300, "<>").stroke({color: color});
+          for (let line of self.lines) {
+            line.animate(300, "<>").stroke({color: color});
+          }
         }
       }).on("click", function() {
         connections.splice(connections.indexOf(self), 1);
@@ -439,9 +450,22 @@
       });
     }
 
+    drawLine(group, color, originX, originY, destinationX, destinationY) {
+      this.lines.push(group.line(originX, originY, destinationX, destinationY).stroke({
+        color: color,
+        width: 4,
+        linecap: "round",
+      }));
+      group.line(originX + 10, originY, destinationX - 10, destinationY).stroke({
+        color: "rgba(0,0,0,0)",
+        width: 20,
+        linecap: "round",
+      });
+    }
+
     remove() {
-      this.line.remove();
-      this.hitBox.remove();
+      this.group.remove();
+      this.lines = [];
     }
 
     activate() {
