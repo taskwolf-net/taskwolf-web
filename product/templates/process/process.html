@@ -109,6 +109,7 @@
         this.outgoingConnectingPoint = new ConnectionPoint(draw, this, 150, 0, "origin");
       }
       this.state = "INACTIVE";
+      this.alignmentLines = [];
     }
 
     display() {
@@ -154,8 +155,59 @@
         }
         self.x = e.detail.box.x;
         self.y = e.detail.box.y;
+        this.checkMovementAlignment(e, group);
         moved = true;
+      }).on("dragend", e => {
+        for (let previousLine of this.alignmentLines) {
+          previousLine.remove();
+        }
       });
+    }
+
+    checkMovementAlignment(event, group) {
+      for (let previousLine of this.alignmentLines) {
+        previousLine.remove();
+      }
+      for (let other of steps) {
+        if (other === this) {
+          continue;
+        }
+        let otherX = other.x + ((this.type === "START" && ["TASK", "END"].includes(other.type)) ? 15 : 0) -
+          ((other.type === "START" && ["TASK", "END"].includes(this.type)) ? 15 : 0);
+        if (Math.abs(event.detail.box.x - otherX) < 15) {
+          this.x = otherX;
+          event.detail.box.x = this.x;
+          event.preventDefault();
+          group.move(this.x, this.y);
+          let centerX = this.x + 150 + (["TASK", "END"].includes(this.type) ? 15 : 0);
+          let relationY = this.y < other.y;
+          this.drawAlignment(
+            centerX, this.y + (relationY ? 157 : 3),
+            centerX, other.y + (relationY ? 3 : 157)
+          );
+        }
+        if (Math.abs(event.detail.box.y - other.y) < 15) {
+          this.y = other.y;
+          event.detail.box.y = this.y;
+          event.preventDefault();
+          group.move(this.x, this.y);
+          let relationX = this.x < other.x;
+          let selfAddition = (this.type === "TASK") ? 15 : 0;
+          let otherAddition = (other.type === "TASK") ? 15 : 0;
+          this.drawAlignment(
+            this.x + (relationX ? 315 + selfAddition : 0), this.y + 79,
+            other.x + (relationX ? 0 : 315 + otherAddition), this.y + 79,
+          );
+        }
+      }
+    }
+
+    drawAlignment(originX, originY, destinationX, destinationY) {
+      this.alignmentLines.push(this.draw.line(originX, originY, destinationX, destinationY).stroke({
+        color: "#dd45ff",
+        width: 4,
+        linecap: "round"
+      }));
     }
 
     displayConnectionPoints(group) {
