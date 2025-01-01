@@ -559,12 +559,14 @@
     let location = window.location;
     let id = location.href.replace(location.host, "").replace(location.protocol, "").replace("process", "").replaceAll("/", "");
     if (id === "") {
-      steps.push(new Step(draw, -850, -75, "START", "{% trans 'product.process.start' %}",
+      steps.push(new Step(draw, -850, -160, "START", "{% trans 'product.process.start' %}",
         "{% trans 'product.process.description' %}", [], null));
-      steps.push(new Step(draw, -150, -75, "TASK", "{% trans 'product.process.step' %}",
+      steps.push(new Step(draw, -150, -160, "TASK", "{% trans 'product.process.step' %}",
         "{% trans 'product.process.description' %}", [], null));
-      steps.push(new Step(draw, 500, -75, "END", "{% trans 'product.process.end' %}",
+      steps.push(new Step(draw, 500, -160, "END", "{% trans 'product.process.end' %}",
         "{% trans 'product.process.description' %}", [], null));
+      connections.push(new Connection(draw, steps[0], steps[1]));
+      connections.push(new Connection(draw, steps[1], steps[2]));
       initialDisplay();
       return;
     }
@@ -652,18 +654,25 @@
   }
 
   document.getElementById("process-publish").onclick = function (event) {
+    publish();
+  }
+
+  function publish() {
     if (!checkProcessIntegrity()) {
-      Swal.fire("{% trans 'product.process.publish.integrity.title' %}", "{% trans 'product.process.publish.integrity.body' %}", "error");
+      Swal.fire("{% trans 'product.process.publish.integrity.title' %}",
+        "{% trans 'product.process.publish.integrity.body' %}", "error");
       return;
     }
+    let publishContent = document.createElement("div");
+    publishContent.classList.add("d-md-flex", "align-items-center", "justify-content-between", "position-relative", "my-4");
     let publishForm = document.createElement("div");
-    publishForm.classList.add("process-publish-form");
+    publishForm.classList.add("process-publish-form", "position-relative", "my-3");
     let processNameLabel = document.createElement("h5");
+    processNameLabel.classList.add("text-start");
     processNameLabel.innerText = "{% trans 'product.process.name' %}";
     publishForm.appendChild(processNameLabel);
     let processNameElementContainer = document.createElement("div");
-    processNameElementContainer.classList.add("mb-5", "mx-auto");
-    processNameElementContainer.style.width = "min(260px, 100%)";
+    processNameElementContainer.classList.add("mb-4", "mx-auto");
     let processNameElement = document.createElement("input");
     processNameElement.classList.add("w-100");
     if (process != null) {
@@ -677,12 +686,13 @@
     tickInputMaxLength(processNameElement);
     publishForm.appendChild(processNameElementContainer);
     let processDescriptionLabel = document.createElement("h5");
+    processDescriptionLabel.classList.add("text-start");
     processDescriptionLabel.innerText = "{% trans 'product.process.description' %}";
     publishForm.appendChild(processDescriptionLabel);
     let processDescriptionElementContainer = document.createElement("div");
     processDescriptionElementContainer.classList.add("mb-4", "mx-auto");
-    processDescriptionElementContainer.style.width = "min(260px, 100%)";
     let processDescriptionElement = document.createElement("input");
+    processDescriptionElement.classList.add("w-100");
     if (process != null) {
       processDescriptionElement.value = process.description;
     }
@@ -693,17 +703,34 @@
     processDescriptionElement.parentElement.classList.add('max-length-badged');
     tickInputMaxLength(processDescriptionElement);
     publishForm.appendChild(processDescriptionElementContainer);
+    publishContent.appendChild(publishForm);
+    let divider = document.createElement("div");
+    divider.classList.add("d-md-block", "d-none", "vr", "mx-5");
+    divider.style.width = "2px";
+    publishContent.appendChild(divider);
+    let loaderContainer = document.createElement("div");
+    loaderContainer.classList.add("d-md-block", "d-none", "w-50", "position-relative", "my-2");
+    let loader = document.createElement("div");
+    loader.classList.add("process-publish-form-loader", "mx-auto");
+    loaderContainer.appendChild(loader);
+    let motivation = document.createElement("p");
+    motivation.classList.add("mt-4", "mb-0");
+    motivation.innerHTML = "{% trans 'product.process.publish.motivation' %}";
+    loaderContainer.appendChild(motivation);
+    publishContent.appendChild(loaderContainer);
     Swal.fire({
       title: "{% trans 'product.process.publish.title' %}",
-      html: publishForm,
-      icon: "warning",
+      width: 800,
+      html: publishContent,
       showCancelButton: true,
     }).then(result => {
       if (!result.isConfirmed) {
         return;
       }
-      if (processNameElement.value === "" || processDescriptionElement.value === "") {
-        Swal.fire("{% trans 'product.process.publish.incomplete.title' %}", "{% trans 'product.process.publish.incomplete.body' %}", "error");
+      if (processNameElement.value === "") {
+        Swal.fire("{% trans 'product.process.publish.incomplete.title' %}",
+          "{% trans 'product.process.publish.incomplete.body' %}", "error")
+          .then(result => publish());
         return;
       }
       if (process == null) {
