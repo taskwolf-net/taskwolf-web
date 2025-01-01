@@ -378,6 +378,12 @@
       }
       let origin = this.type === "origin" ? self.step : aimedConnectionPoint.step;
       let destination = this.type === "destination" ? self.step : aimedConnectionPoint.step;
+      if (connections.filter(connection => connection.origin === origin &&
+        connection.destination === destination).length > 0
+      ) {
+        aimedConnectionPoint = null;
+        return;
+      }
       let connection = new Connection(draw, origin, destination);
       connection.display();
       connections.push(connection);
