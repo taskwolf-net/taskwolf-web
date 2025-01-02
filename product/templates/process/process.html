@@ -422,7 +422,7 @@
 
     connect() {
       let self = this;
-      if (aimedConnectionPoint.step === self.step || aimedConnectionPoint.type === self.type) {
+      if (aimedConnectionPoint.type === self.type) {
         aimedConnectionPoint = null;
         return;
       }
@@ -467,7 +467,13 @@
         color = "#49ff1d";
       }
       self.group = self.draw.group();
-      if (originX + 50 < destinationX - 50) {
+      if (this.origin === this.destination) {
+        self.drawLine(self.group, color, originX + 2, originY, originX + 50, originY);
+        self.drawLine(self.group, color, originX + 50, originY, originX + 50, originY - 150);
+        self.drawLine(self.group, color, originX + 50, originY - 150, destinationX - 50, destinationY - 150);
+        self.drawLine(self.group, color, destinationX - 50, destinationY, destinationX - 50, destinationY - 150);
+        self.drawLine(self.group, color, destinationX - 50, destinationY, destinationX - 2, destinationY);
+      } else if (originX + 50 < destinationX - 50) {
         let half = originX - ((originX - destinationX) / 2);
         self.drawLine(self.group, color, originX + 2, originY, half, originY);
         self.drawLine(self.group, color, half, originY, half, destinationY);
