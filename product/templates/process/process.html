@@ -161,6 +161,9 @@
         for (let previousLine of this.alignmentLines) {
           previousLine.remove();
         }
+        for (let i = 0; i < connections.length; i++) {
+          connections[i].display();
+        }
       });
     }
 
@@ -174,7 +177,7 @@
         }
         let otherX = other.x + ((this.type === "START" && ["TASK", "END"].includes(other.type)) ? 15 : 0) -
           ((other.type === "START" && ["TASK", "END"].includes(this.type)) ? 15 : 0);
-        if (Math.abs(event.detail.box.x - otherX) < 15) {
+        if (Math.abs(event.detail.box.x - otherX) < 10) {
           this.x = otherX;
           event.detail.box.x = this.x;
           event.preventDefault();
@@ -186,7 +189,7 @@
             centerX, other.y + (relationY ? 3 : 157)
           );
         }
-        if (Math.abs(event.detail.box.y - other.y) < 15) {
+        if (Math.abs(event.detail.box.y - other.y) < 10) {
           this.y = other.y;
           event.detail.box.y = this.y;
           event.preventDefault();
@@ -371,11 +374,6 @@
       }
       let self = this;
       if (!self.connecting) {
-        setTimeout(function () {
-          for (let i = 0; i < connections.length; i++) {
-            connections[i].display();
-          }
-        }, 30);
         return;
       }
       if (self.line != null) {
@@ -613,11 +611,11 @@
     previousBox = box;
     draw.clear();
     displayBackground(box);
-    for (let i = 0; i < steps.length; i++) {
-      steps[i].display();
-    }
     for (let i = 0; i < connections.length; i++) {
       connections[i].display();
+    }
+    for (let i = 0; i < steps.length; i++) {
+      steps[i].display();
     }
   }
 
