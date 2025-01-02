@@ -303,15 +303,130 @@
       return button;
     }
 
-    activate() {
-      this.state = "ACTIVE";
-      this.outerRect.fill("#49ff1d");
-      if (this.workflow == null) {
+    activate(callback) {
+      let self = this;
+      self.state = "ACTIVE";
+      self.outerRect.fill("#49ff1d");
+      if (self.workflow == null) {
+        callback();
         return;
       }
-      let request = new HttpRequest("https://api.dulno.com/v1/process/workflow/execute/", "POST",
-        [], {workflow: this.workflow.id});
+      let request = new HttpRequest("https://api.dulno.com/v1/process/workflow/inputs/",
+        "POST", [], {workflow: self.workflow.id});
       request.send(function (status, responseText) {
+        let response = JSON.parse(responseText);
+        let inputs = response.inputs;
+        if (inputs.length === 0) {
+          self.executeWorkflow(callback, []);
+          return;
+        }
+        self.openWorkflowWindow(callback, response.workflow, inputs);
+      });
+    }
+
+    openWorkflowWindow(callback, workflowName, inputs) {
+      let self = this;
+      let workflowContainer = document.createElement("div");
+      let workflowNameElement = document.createElement("h6");
+      workflowNameElement.classList.add("mb-4");
+      workflowNameElement.innerText = workflowName;
+      workflowContainer.appendChild(workflowNameElement);
+      let workflowContent = document.createElement("div");
+      workflowContent.classList.add("position-relative", "mb-4");
+      let workflowForm = document.createElement("div");
+      workflowForm.classList.add("process-workflow-form", "position-relative", "w-100", "my-3");
+      let inputElements = [];
+      for (let i = 0; i < inputs.length; i++) {
+        let input = inputs[i];
+        let inputContainer = document.createElement("div");
+        inputContainer.classList.add("mx-auto");
+        if (i < inputs.length - 1) {
+          inputContainer.classList.add("mb-4");
+        }
+        let inputLabel = document.createElement("h5");
+        inputLabel.classList.add("text-start");
+        inputLabel.innerText = input;
+        inputContainer.appendChild(inputLabel);
+        let inputElement = document.createElement("input");
+        inputElement.classList.add("w-100");
+        inputElement.addEventListener("keypress", function(event) {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            if (i < inputs.length - 1) {
+              inputElements[i + 1].element.focus();
+            } else {
+              Swal.clickConfirm();
+            }
+          }
+        });
+        inputContainer.appendChild(inputElement);
+        workflowForm.appendChild(inputContainer);
+        inputElements.push({name: input, element: inputElement});
+      }
+      workflowContent.appendChild(workflowForm);
+      workflowContainer.appendChild(workflowContent);
+      Swal.fire({
+        title: "{% trans 'product.process.workflow.title' %}",
+        width: 600,
+        html: workflowContainer,
+        showCancelButton: true,
+        cancelButtonText: "{% trans 'product.process.workflow.skip' %}",
+        showDenyButton: true,
+        denyButtonColor: "#dc3545",
+        denyButtonText: "{% trans 'product.process.workflow.cancel' %}",
+      }).then(result => {
+        if (result.isDenied) {
+          abortProcessExecution();
+          return;
+        }
+        if (!result.isConfirmed) {
+          callback();
+          return;
+        }
+        let inputs = {};
+        for (let input of inputElements) {
+          inputs[input.name] = input.element.value;
+        }
+        self.executeWorkflow(callback, inputs);
+      });
+      inputElements[0].element.focus();
+    }
+
+    executeWorkflow(callback, inputs) {
+      let loaderContainer = document.createElement("div");
+      loaderContainer.classList.add("my-5");
+      let loader = document.createElement("div");
+      loader.classList.add("process-workflow-loader", "mx-auto");
+      loaderContainer.appendChild(loader);
+      let description = document.createElement("p");
+      description.classList.add("mt-5", "mb-0");
+      description.innerHTML = "{% trans 'product.process.workflow.loading' %}";
+      loaderContainer.appendChild(description);
+      Swal.fire({
+        html: loaderContainer,
+        showConfirmButton: false,
+      });
+      let request = new HttpRequest("https://api.dulno.com/v1/process/workflow/execute/", "POST",
+        [], {workflow: this.workflow.id, inputs: inputs});
+      request.send(function (status, responseText) {
+        let success = JSON.parse(responseText).success;
+        setTimeout(function () {
+          if (success) {
+            Swal.fire({
+              title: "{% trans 'product.process.workflow.execution.successful.title' %}",
+              text: "{% trans 'product.process.workflow.execution.successful.body' %}",
+              icon: "success",
+              timer: 1000,
+              timerProgressBar: true,
+            }).then(result => callback());
+          } else {
+            Swal.fire({
+              title: "{% trans 'product.process.workflow.execution.failure.title' %}",
+              text: "{% trans 'product.process.workflow.execution.failure.body' %}",
+              icon: "error",
+            }).then(result => callback());
+          }
+        }, 1000);
       });
     }
 
@@ -727,6 +842,7 @@
       width: 800,
       html: publishContent,
       showCancelButton: true,
+      cancelButtonText: "{% trans 'popup.cancel' %}",
     }).then(result => {
       if (!result.isConfirmed) {
         return;
@@ -873,6 +989,7 @@
       icon: "warning",
       confirmButtonColor: "#dc3545",
       showCancelButton: true,
+      cancelButtonText: "{% trans 'popup.cancel' %}",
     }).then(result => {
       if (result.isConfirmed) {
         let request = new HttpRequest("https://api.dulno.com/v1/process/remove/", "POST",
@@ -1003,22 +1120,45 @@
     }
   }
 
+  let completedSteps = [];
+  let pendingSteps = [];
+
   function activateStep(step, loop, after) {
-    step.activate();
+    pendingSteps.push(step);
+    if (pendingSteps.length === 1) {
+      step.activate(function () {
+        pendingSteps.shift();
+        completeStepActivation(step, loop);
+      });
+    }
     if (!loop) {
       after(step);
     }
-    setTimeout(function() {
-      if (step.state === "INACTIVE") {
-        return;
-      }
-      if (findStepConnections(step).length === 0) {
-        step.deactivate();
-      }
-      if (loop) {
-        activateConnection(step, loop, after);
-      }
-    }, 800);
+  }
+
+  function completeStepActivation(step, loop, after) {
+    completedSteps.push(step);
+    if (pendingSteps.length > 0) {
+      let target = pendingSteps.shift();
+      target.activate(function () {
+        completeStepActivation(target, loop, after);
+      });
+    } else {
+      setTimeout(function() {
+        for (let completedStep of completedSteps) {
+          if (completedStep.state === "INACTIVE") {
+            return;
+          }
+          if (findStepConnections(completedStep).length === 0) {
+            completedStep.deactivate();
+          }
+          if (loop) {
+            activateConnection(completedStep, loop, after);
+          }
+        }
+        completedSteps = [];
+      }, 800);
+    }
   }
 
   function activateConnection(step, loop, after) {
@@ -1052,5 +1192,7 @@
       connections[i].deactivate();
     }
     currentActiveSteps = [];
+    pendingSteps = [];
+    completedSteps = [];
   }
 </script>
