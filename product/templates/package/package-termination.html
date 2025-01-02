@@ -101,6 +101,7 @@
       icon: "warning",
       confirmButtonColor: "#dc3545",
       showCancelButton: true,
+      cancelButtonText: "{% trans 'popup.cancel' %}",
     }).then(result => {
       if (result.isConfirmed) {
         let request = new HttpRequest("https://api.dulno.com/v1/terminate/", "GET", []);
