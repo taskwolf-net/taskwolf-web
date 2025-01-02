@@ -142,6 +142,7 @@
       subGroup.on("click", function() {
         if (!moved) {
           self.displayStepSidebar();
+          history.pop();
         }
         moved = false;
       });
@@ -1026,11 +1027,10 @@
       momentConnections.push({origin: steps.indexOf(connection.origin),
         destination: steps.indexOf(connection.destination)});
     }
-    let moment = {
+    return {
       steps: momentSteps,
       connections: momentConnections
     };
-    return moment;
   }
 
   window.addEventListener('keydown', function (event) {
@@ -1063,6 +1063,7 @@
         steps[connection.destination]));
     }
     display(previousBox);
+    abortProcessExecution();
   }
 </script>
 
@@ -1131,6 +1132,7 @@
 </script>
 
 <script>
+  let executionTimeouts = [];
   let currentActiveSteps = [];
 
   document.getElementById("process-run").onclick = function (event) {
@@ -1208,7 +1210,7 @@
         completeStepActivation(target, loop, after);
       });
     } else {
-      setTimeout(function() {
+      executionTimeouts.push(setTimeout(function() {
         for (let completedStep of completedSteps) {
           if (completedStep.state === "INACTIVE") {
             return;
@@ -1221,7 +1223,7 @@
           }
         }
         completedSteps = [];
-      }, 800);
+      }, 800));
     }
   }
 
@@ -1232,7 +1234,7 @@
       for (let i = 0; i < stepConnections.length; i++) {
         stepConnections[i].activate();
       }
-      setTimeout(function() {
+      executionTimeouts.push(setTimeout(function() {
         for (let i = 0; i < stepConnections.length; i++) {
           if (stepConnections[i].state === "INACTIVE") {
             continue;
@@ -1240,7 +1242,7 @@
           stepConnections[i].deactivate();
           activateStep(stepConnections[i].destination, loop, after);
         }
-      }, 800);
+      }, 800));
     }
   }
 
@@ -1255,6 +1257,10 @@
     for (let i = 0; i < connections.length; i++) {
       connections[i].deactivate();
     }
+    for (let i = 0; i < executionTimeouts.length; i++) {
+      clearTimeout(executionTimeouts[i]);
+    }
+    executionTimeouts = [];
     currentActiveSteps = [];
     pendingSteps = [];
     completedSteps = [];
