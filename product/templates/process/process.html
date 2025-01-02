@@ -164,6 +164,8 @@
         for (let i = 0; i < connections.length; i++) {
           connections[i].display();
         }
+      }).on("dragstart", e => {
+        captureMoment();
       });
     }
 
@@ -549,6 +551,7 @@
         aimedConnectionPoint = null;
         return;
       }
+      captureMoment();
       let connection = new Connection(draw, origin, destination);
       connection.display();
       connections.push(connection);
@@ -616,6 +619,7 @@
           }
         }
       }).on("click", function() {
+        captureMoment();
         connections.splice(connections.indexOf(self), 1);
         self.remove();
       });
@@ -659,6 +663,8 @@
   let mouseDown = false;
   let aimedConnectionPoint = null;
   let currentSelectedStep = null;
+  let history = [];
+  let revertedHistory = [];
 
   let draw = SVG().addTo(document.getElementById("process-graph"))
     .size("100%", "100%")
@@ -749,6 +755,7 @@
   }
 
   document.getElementById("process-add-start").onclick = function (event) {
+    captureMoment();
     let step = new Step(draw, previousBox.cx - 850, previousBox.cy - 375, "START",
       "{% trans 'product.process.start' %}", "{% trans 'product.process.description' %}",
       [], null);
@@ -757,6 +764,7 @@
   }
 
   document.getElementById("process-add-step").onclick = function (event) {
+    captureMoment();
     let step = new Step(draw, previousBox.cx - 150, previousBox.cy - 375, "TASK",
       "{% trans 'product.process.step' %}", "{% trans 'product.process.description' %}",
       [], null);
@@ -765,6 +773,7 @@
   }
 
   document.getElementById("process-add-end").onclick = function (event) {
+    captureMoment();
     let step = new Step(draw, previousBox.cx + 500, previousBox.cy - 375, "END",
       "{% trans 'product.process.end' %}", "{% trans 'product.process.description' %}",
       [], null);
@@ -999,6 +1008,61 @@
         });
       }
     });
+  }
+
+  function captureMoment() {
+    history.push(compileCurrentMoment());
+  }
+
+  function compileCurrentMoment() {
+    let momentSteps = [];
+    for (let step of steps) {
+      momentSteps.push({x: step.x, y: step.y, type: step.type,
+        title: step.title, description: step.description, todos: step.todos,
+        workflow: step.workflow});
+    }
+    let momentConnections = [];
+    for (let connection of connections) {
+      momentConnections.push({origin: steps.indexOf(connection.origin),
+        destination: steps.indexOf(connection.destination)});
+    }
+    let moment = {
+      steps: momentSteps,
+      connections: momentConnections
+    };
+    return moment;
+  }
+
+  window.addEventListener('keydown', function (event) {
+    if (event.ctrlKey && event.shiftKey && event.keyCode === 90) {
+      if (revertedHistory.length === 0) {
+        return;
+      }
+      let moment = revertedHistory.pop();
+      captureMoment();
+      loadMoment(moment);
+    } else if (event.ctrlKey && event.keyCode === 90) {
+      if (history.length === 0) {
+        return;
+      }
+      let moment = history.pop();
+      revertedHistory.push(compileCurrentMoment());
+      loadMoment(moment);
+    }
+  });
+
+  function loadMoment(moment) {
+    steps = [];
+    for (let step of moment.steps) {
+      steps.push(new Step(draw, step.x, step.y, step.type, step.title,
+        step.description, step.todos, step.workflow));
+    }
+    connections = [];
+    for (let connection of moment.connections) {
+      connections.push(new Connection(draw, steps[connection.origin],
+        steps[connection.destination]));
+    }
+    display(previousBox);
   }
 </script>
 
