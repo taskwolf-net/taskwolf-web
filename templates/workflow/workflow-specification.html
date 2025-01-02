@@ -77,7 +77,7 @@
         addSpecificationMap(inputVariable.identifier, inputVariable.name, inputVariable.description);
       } else if (inputVariable.dataType === "DYNAMIC") {
         dynamicInputVariables.push({identifier: inputVariable.identifier,
-          requiredPredecessors: inputVariable.requiredPredecessors, alive: false});
+          requiredPredecessors: inputVariable.requiredPredecessors, alive: false, filled: false});
       }
     }
     checkSetupCompletion();
@@ -651,13 +651,14 @@
           "POST", [], body);
         request.send(function (status, responseText) {
           let dynamicInputs = JSON.parse(responseText).dynamicInputs;
+          dynamicInputVariable.filled = true;
           displayInputs(dynamicInputs);
           competedInputs++;
           if (competedInputs === dynamicInputVariables.length) {
             callback();
           }
         });
-      } else {
+      } else if (dynamicInputVariable.filled) {
         competedInputs++;
       }
     }
