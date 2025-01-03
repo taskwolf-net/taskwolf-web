@@ -694,7 +694,7 @@
         "{% trans 'product.process.description' %}", [], null));
       connections.push(new Connection(draw, steps[0], steps[1]));
       connections.push(new Connection(draw, steps[1], steps[2]));
-      initialDisplay();
+      display();
       return;
     }
     fetchProcessData(id, function() {
