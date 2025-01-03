@@ -139,9 +139,10 @@
         innerRect.animate(300, "<>").fill(isDarkTheme ? "#3d4b5a" : "#e5e5e5");
         divider.animate(300, "<>").fill(isDarkTheme ? "#4b5c6f" : "#a2a2a2");
       });
-      subGroup.on("click", function() {
+      subGroup.on("click touchend", function() {
         if (!moved) {
           self.displayStepSidebar();
+          mouseDown = true;
           history.pop();
         }
         moved = false;
@@ -251,9 +252,8 @@
     displayRemoveButton(group) {
       let self = this;
       let button = group.foreignObject(32, 32).move(128, -80)
-        .add(SVG("<div class='process-step-remove'><i class='fa-solid fa-xmark'></i></div>", true))
-        .node.childNodes[0];
-      button.addEventListener("click", function() {
+        .add(SVG("<div class='process-step-remove'><i class='fa-solid fa-xmark'></i></div>", true));
+      button.on("click touchend", function() {
         group.remove();
         steps.splice(steps.indexOf(self), 1);
         for (let i = connections.length - 1; i >= 0; i--) {
@@ -456,16 +456,16 @@
       let self = this;
       let outerCircle = group.circle(30).move(self.x - 15, self.y - 15).fill(self.outerCircleColor);
       let innerCircle = group.circle(26).move(self.x - 13, self.y - 13).fill(self.innerCircleColor);
-      innerCircle.on("mousedown", function () {
+      innerCircle.on("mousedown touchstart", function () {
         mouseDown = true;
         self.connecting = true;
-      }).on("mouseover", function () {
+      }).on("mouseover pointerenter", function () {
         outerCircle.animate(300, "<>").fill("#b0b0b0");
         innerCircle.animate(300, "<>").fill("#e1e1e1");
         if (mouseDown) {
           aimedConnectionPoint = self;
         }
-      }).on("mouseout", function () {
+      }).on("mouseout pointerleave", function () {
         if (self.connecting) {
           return;
         }
@@ -480,7 +480,7 @@
         let mouseY = event.detail.box.y;
         self.drag(mouseX, mouseY);
       });
-      self.draw.on("mouseup", event => {
+      self.draw.on("mouseup touchend", event => {
         mouseDown = false;
         self.releaseMouse(outerCircle, innerCircle);
       });
@@ -619,7 +619,7 @@
             line.animate(300, "<>").stroke({color: color});
           }
         }
-      }).on("click", function() {
+      }).on("click touchend", function() {
         captureMoment();
         connections.splice(connections.indexOf(self), 1);
         self.remove();
@@ -660,24 +660,25 @@
   let process = null;
   let steps = [];
   let connections = [];
-  let previousBox;
   let mouseDown = false;
   let aimedConnectionPoint = null;
   let currentSelectedStep = null;
   let history = [];
   let revertedHistory = [];
+  let background = null;
+  const width = window.innerWidth;
+  const height = window.innerHeight;
 
   let draw = SVG().addTo(document.getElementById("process-graph"))
     .size("100%", "100%")
-    .viewbox("-500 -500 1000 1000")
-    .panZoom({ zoomMin: 0.5, zoomMax: 3, zoomFactor: 0.1});
+    .viewbox(-width / 2, -height / 2, width, height)
+    .panZoom({zoomMin: 0.3, zoomMax: 3, zoomFactor: 0.1, oneFingerPan: true});
 
-  draw.on("panning", event => {
-    let box = event.detail.box;
-    display(box);
+  draw.on("panning zoom", event => {
+    updateBackgroundPosition();
   });
 
-  draw.on("mousedown", function (event) {
+  draw.on("mousedown touchstart", function (event) {
     $("#process-step-sidebar").collapse("hide");
   });
 
@@ -727,18 +728,12 @@
       let destination = stepIdRelation.filter((step) => step.id === entry.connectionDestinationStep)[0].step;
       connections.push(new Connection(draw, origin, destination));
     }
-    initialDisplay();
+    display();
   }
 
-  function initialDisplay() {
-    display({width: 1000, height: 1000, w: 1000, h: 1000, x: -500, y: -500,
-      x2: 500, y2: 500, cx: 0, cy: 0});
-  }
-
-  function display(box) {
-    previousBox = box;
+  function display() {
     draw.clear();
-    displayBackground(box);
+    displayBackground();
     for (let i = 0; i < connections.length; i++) {
       connections[i].display();
     }
@@ -747,37 +742,49 @@
     }
   }
 
-  function displayBackground(box) {
-    let background = draw.pattern(100, 100, function(add) {
+  function displayBackground() {
+    let pattern = draw.pattern(100, 100, function(add) {
       add.rect(8, 2).move(46, 49).radius(2).fill("#bababa");
       add.rect(2, 8).move(49, 46).radius(2).fill("#bababa");
     });
-    draw.rect(10000, 10000).move(box.x - 5000, box.y - 5000).fill(background);
+    background = draw.rect().fill(pattern);
+    updateBackgroundPosition();
+  }
+
+  function updateBackgroundPosition() {
+    let box = draw.viewbox();
+    let factor = 1 / draw.zoom();
+    let addition = 250;
+    background.size(width * factor + 2 * addition, height * factor + 2 * addition)
+      .move(box.x - addition, box.y - addition);
   }
 
   document.getElementById("process-add-start").onclick = function (event) {
     captureMoment();
-    let step = new Step(draw, previousBox.cx - 850, previousBox.cy - 375, "START",
-      "{% trans 'product.process.start' %}", "{% trans 'product.process.description' %}",
-      [], null);
+    let viewport = draw.viewbox();
+    let step = new Step(draw, viewport.cx - 850, viewport.cy - 375,
+      "START", "{% trans 'product.process.start' %}",
+      "{% trans 'product.process.description' %}", [], null);
     step.display();
     steps.push(step);
   }
 
   document.getElementById("process-add-step").onclick = function (event) {
     captureMoment();
-    let step = new Step(draw, previousBox.cx - 150, previousBox.cy - 375, "TASK",
-      "{% trans 'product.process.step' %}", "{% trans 'product.process.description' %}",
-      [], null);
+    let viewport = draw.viewbox();
+    let step = new Step(draw, viewport.cx - 150, viewport.cy - 375,
+      "TASK", "{% trans 'product.process.step' %}",
+      "{% trans 'product.process.description' %}", [], null);
     step.display();
     steps.push(step);
   }
 
   document.getElementById("process-add-end").onclick = function (event) {
     captureMoment();
-    let step = new Step(draw, previousBox.cx + 500, previousBox.cy - 375, "END",
-      "{% trans 'product.process.end' %}", "{% trans 'product.process.description' %}",
-      [], null);
+    let viewport = draw.viewbox();
+    let step = new Step(draw, viewport.cx + 500, viewport.cy - 375,
+      "END", "{% trans 'product.process.end' %}",
+      "{% trans 'product.process.description' %}", [], null);
     step.display();
     steps.push(step);
   }
@@ -1062,7 +1069,7 @@
       connections.push(new Connection(draw, steps[connection.origin],
         steps[connection.destination]));
     }
-    display(previousBox);
+    display();
     abortProcessExecution();
   }
 </script>
@@ -1119,7 +1126,7 @@
     currentSelectedStep.title = document.getElementById("process-step-title").value;
     currentSelectedStep.description = document.getElementById("process-step-description").value;
     $("#process-step-sidebar").collapse("hide");
-    display(previousBox);
+    display();
   }
 
   document.querySelector("#process-step-sidebar").addEventListener("show.bs.collapse", function () {
