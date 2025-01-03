@@ -107,10 +107,6 @@ input[maxlength] {
   background-color: #d3d3d3;
 }
 
-#ticket-title-wrapper {
-  display: flex;
-}
-
 #ticket-title-change {
   margin-left: 5%;
 }

@@ -10,12 +10,14 @@
           <button id="ticket-page-back"><i class="fa-solid fa-arrow-left-long"></i></button>
           <h1 id="ticket-headline" class="fw-bold text-center mb-0">{% trans 'ticket.headline' %}</h1>
         </div>
-        <label class="form-label">{% trans 'ticket.title' %}</label>
         <div id="ticket-title-wrapper" class="form-outline">
-          <div class="w-100">
-            <input type="title" id="ticket-title" class="form-control" maxlength=64 placeholder="{% trans 'ticket.title' %}">
+          <label class="form-label">{% trans 'ticket.title' %}</label>
+          <div class="d-flex">
+            <div class="w-100">
+              <input type="title" id="ticket-title" class="form-control" maxlength=64 placeholder="{% trans 'ticket.title' %}">
+            </div>
+            <button type="button" id="ticket-title-change" class="btn btn-primary btn-block">{% trans 'ticket.title.change' %}</button>
           </div>
-          <button type="button" id="ticket-title-change" class="btn btn-primary btn-block">{% trans 'ticket.title.change' %}</button>
         </div>
         <hr class="hr border-white my-5"/>
         <ul id="ticket-messages">
@@ -84,20 +86,25 @@
     document.getElementById("ticket-title").value = ticket.title;
     if (ticket.status === "OPEN") {
       document.getElementById("ticket-close").classList.remove("d-none");
+    } else {
+      document.getElementById("ticket-operations").classList.add("d-none");
+      document.getElementById("ticket-title-wrapper").classList.add("d-none");
     }
     for (let i = 0; i < ticket.messages.length; i++) {
-      displayMessage(ticket.messages[i], i);
+      displayMessage(ticket, ticket.messages[i], i);
     }
-    displayAnswerField();
+    if (ticket.status === "OPEN") {
+      displayAnswerField();
+    }
   }
 
-  function displayMessage(message, index) {
+  function displayMessage(ticket, message, index) {
     let messageElement = document.createElement("div");
     messageElement.classList.add("ticket-message", "ql-editor");
     messageElement.innerHTML = message.message;
     let entry = displayEntry(!message.selfWritten, message.author,
       message.time.split(" ")[0], message.time.split(" ")[1], messageElement);
-    if (index > 0 && message.selfWritten) {
+    if (ticket.status === "OPEN" && index > 0 && message.selfWritten) {
       let deleteButton = document.createElement("button");
       deleteButton.type = "button";
       deleteButton.classList.add("ticket-message-delete");
