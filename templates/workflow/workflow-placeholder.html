@@ -70,7 +70,7 @@
     if (stepKind === "trigger") {
       linkElement.innerHTML = "{% trans 'product.workflow.placeholders.trigger' %}";
     } else if (stepKind === "action") {
-      linkElement.innerHTML = (actionIndex + 1) + ". {% trans 'product.workflow.placeholders.action' %}";
+      linkElement.innerHTML = (actionIndex + 1) + ". " + "{% trans 'product.workflow.placeholders.action' %}";
     } else if (stepKind === "loop") {
       linkElement.innerHTML = "{% trans 'product.workflow.placeholders.loop' %}";
     }
