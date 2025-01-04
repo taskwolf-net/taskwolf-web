@@ -51,7 +51,7 @@
 
   function displayForOperatingSystem(detected, tabs) {
     document.getElementById("download-desktop-content-text").innerHTML +=
-      "<p>{% trans 'home.download.desktop.instruction' %}</p>";
+      "<p>" + "{% trans 'home.download.desktop.instruction' %}" + "</p>";
     if (detected === "WINDOWS") {
       document.getElementById("download-desktop-content-text").appendChild(
         createDownloadButton("{% trans 'home.download.desktop.windows.download' %}",
