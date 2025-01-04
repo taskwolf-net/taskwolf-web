@@ -9,7 +9,6 @@ function obfuscateJs(jsCode, excludes) {
     compact: true,
     controlFlowFlattening: true,
     deadCodeInjection: true,
-    debugProtection: true,
     disableConsoleOutput: true,
     identifierNamesGenerator: 'hexadecimal',
     stringArrayEncoding: ['base64'],
