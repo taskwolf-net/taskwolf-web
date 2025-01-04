@@ -122,7 +122,7 @@
     cardIcon.classList.add("fa-solid", "fa-credit-card", "me-2");
     cardElement.appendChild(cardIcon);
     let cardName = document.createElement("span");
-    cardName.innerHTML = " ({% trans 'product.package.payment.method.card' %})";
+    cardName.innerHTML = " (" + "{% trans 'product.package.payment.method.card' %}" + ")";
     cardElement.appendChild(cardName);
     return cardElement;
   }

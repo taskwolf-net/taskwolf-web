@@ -167,7 +167,7 @@
       [], {componentType: "{{type}}"});
     applicationsRequest.send(function (status, applicationsResponseText) {
       applications = JSON.parse(applicationsResponseText).modules;
-      let hotApplicationsRequest = new HttpRequest("https://api.dulno.com/v1/modules/{{type}}/hot/", "GET", []);
+      let hotApplicationsRequest = new HttpRequest("https://api.dulno.com/v1/modules/" + "{{type}}" + "/hot/", "GET", []);
       hotApplicationsRequest.send(function (status, hotApplicationsResponseText) {
         hotApplications = JSON.parse(hotApplicationsResponseText).modules;
         callback();

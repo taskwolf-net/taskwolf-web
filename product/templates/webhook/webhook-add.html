@@ -52,8 +52,7 @@
   document.getElementById("add").onclick = function() {
     let addButton = document.getElementById("add");
     addButton.classList.add("disabled");
-    addButton.innerHTML = `
-      {% trans 'product.webhook.add.button' %}
+    addButton.innerHTML = "{% trans 'product.webhook.add.button' %}" + `
       <span class="spinner-border spinner-border-sm ms-2" aria-hidden="true"></span>
       <span class="visually-hidden" role="status">Loading...</span>
     `;

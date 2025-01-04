@@ -398,7 +398,7 @@
   document.getElementById("register-login").onclick = function (event) {
     let addition = "";
     if ("{{redirect}}" !== "") {
-      addition += "?redirect={{redirect}}";
+      addition += "?redirect=" + "{{redirect}}";
     }
     window.location.href = "/login/" + addition;
   }

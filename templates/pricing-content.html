@@ -987,21 +987,21 @@
     }
     if (packageName === "team" || packageName === "enterprise") {
       displayPackageCell("pricing-package-feature-organization-member-", packageName,
-        packageData.organizationMemberLimit, " {% trans 'home.pricing.summary.organization.member' %}");
+        packageData.organizationMemberLimit, "{% trans 'home.pricing.summary.organization.member' %}");
       displayPackageCell("pricing-package-feature-organization-team-", packageName,
-        packageData.organizationTeamLimit, " {% trans 'home.pricing.summary.organization.team' %}");
+        packageData.organizationTeamLimit, "{% trans 'home.pricing.summary.organization.team' %}");
     }
     displayPackageCell("pricing-package-feature-workflow-number-", packageName,
-      packageData.workflowNumberLimit, " {% trans 'home.pricing.summary.workflow.number' %}");
+      packageData.workflowNumberLimit, "{% trans 'home.pricing.summary.workflow.number' %}");
     displayPackageCell("pricing-package-feature-workflow-operation-", packageName,
-      packageData.workflowOperationLimit, " {% trans 'home.pricing.summary.workflow.operation' %}");
+      packageData.workflowOperationLimit, "{% trans 'home.pricing.summary.workflow.operation' %}");
     displayPackageCell("pricing-package-feature-process-number-", packageName,
-      packageData.processNumberLimit, " {% trans 'home.pricing.summary.process.number' %}");
+      packageData.processNumberLimit, "{% trans 'home.pricing.summary.process.number' %}");
     displayPackageCell("pricing-package-feature-database-number-", packageName,
-      packageData.databaseNumberLimit, " {% trans 'home.pricing.summary.database.number' %}");
+      packageData.databaseNumberLimit, "{% trans 'home.pricing.summary.database.number' %}");
     let dataLimit = packageData.databaseDataLimit;
     displayPackageCell("pricing-package-feature-database-data-", packageName,
-      dataLimit, (dataLimit > 0 ? " GB" : "") + " {% trans 'home.pricing.summary.database.data' %}");
+      dataLimit, (dataLimit > 0 ? " GB" : "") + "{% trans 'home.pricing.summary.database.data' %}");
     displayPackageCell("pricing-availability-", packageName, true);
     displayPackageCell("pricing-workflow-access-", packageName, packageData.workflowAccess);
     displayPackageCell("pricing-workflow-number-", packageName, packageData.workflowNumberLimit);
@@ -1041,7 +1041,7 @@
       suffix = "";
     }
     for (let element of document.getElementsByClassName(packageCellId + packageName)) {
-      element.innerHTML = value + suffix;
+      element.innerHTML = value  + " " + suffix;
     }
   }
 

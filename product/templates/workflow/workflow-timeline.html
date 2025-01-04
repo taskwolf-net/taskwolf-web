@@ -96,7 +96,7 @@
     entryFailureContainer.classList.add("w-100", "mb-3", "d-flex", "justify-content-between", "align-items-start");
     let entryFailureElement = document.createElement("h6");
     entryFailureElement.classList.add("mb-0");
-    entryFailureElement.innerHTML = "<b>{% trans 'product.workflow.timeline.cause' %}: </b>" + entry.failureModuleName + " - " + entry.failureStepName;
+    entryFailureElement.innerHTML = "<b>" + "{% trans 'product.workflow.timeline.cause' %}" + ": </b>" + entry.failureModuleName + " - " + entry.failureStepName;
     entryFailureContainer.appendChild(entryFailureElement);
     if (isFirst && checkWorkflowStepsInitialState()) {
       let index = entry.failureStepIndex;

@@ -188,7 +188,7 @@
       [], {offer: "{{offer}}"});
     request.send(function (status, responseText) {
       if (status === 403) {
-        window.location.href = "/login/?redirect=/offer/{{offer}}/";
+        window.location.href = "/login/?redirect=/offer/" + "{{offer}}" + "/";
         return;
       }
       callback(JSON.parse(responseText));

@@ -52,8 +52,7 @@
   document.getElementById('create').onclick = function() {
     let createButton = document.getElementById("create");
     createButton.classList.add("disabled");
-    createButton.innerHTML = `
-      {% trans 'product.database.create.button' %}
+    createButton.innerHTML = "{% trans 'product.database.create.button' %}" + `
       <span class="spinner-border spinner-border-sm ms-2" aria-hidden="true"></span>
       <span class="visually-hidden" role="status">Loading...</span>
     `;

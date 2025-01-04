@@ -112,7 +112,7 @@
       if (step.kind === "action") {
         let actionNumber = actions.indexOf(step);
         createComponentElement(
-          (actionNumber + 1) + ". {% trans 'product.workflow.action' %}",
+          (actionNumber + 1) + ". " + "{% trans 'product.workflow.action' %}",
           step.typeDescription, step.moduleLogo, "action", i, step.selected,
           parent, removeButton);
       } else if (step.kind === "condition") {
@@ -514,8 +514,7 @@
     var publishButton = document.getElementById("workflow-publish");
     publishButton.classList.add("disabled");
     publishButton.classList.remove("workflow-publish-enabled");
-    publishButton.innerHTML = `
-      {% trans 'product.workflow.publish' %}
+    publishButton.innerHTML = "{% trans 'product.workflow.publish' %}" + `
       <span class="spinner-border spinner-border-sm ms-2" aria-hidden="true"></span>
       <span class="visually-hidden" role="status">Loading...</span>
     `;
