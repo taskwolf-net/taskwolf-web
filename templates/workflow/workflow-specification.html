@@ -651,12 +651,13 @@
           "POST", [], body);
         request.send(function (status, responseText) {
           let dynamicInputs = JSON.parse(responseText).dynamicInputs;
-          dynamicInputVariable.filled = true;
           displayInputs(dynamicInputs);
+          dynamicInputVariable.filled = true;
           competedInputs++;
           if (competedInputs === dynamicInputVariables.length) {
             callback();
           }
+          checkSetupCompletion();
         });
       } else if (dynamicInputVariable.filled) {
         competedInputs++;
@@ -707,8 +708,11 @@
   }
 
   function checkSetupCompletion() {
+    if (!selectedComponentSetup) {
+      return;
+    }
     checkAdoptability(function (isAdoptable) {
-      if (isAdoptable && selectedComponentSetup) {
+      if (isAdoptable) {
         selectedComponentSetup = false;
         let specifications = Object.keys(specificationValues);
         for (let i = specifications.length - 1; i >= 0; i--) {
