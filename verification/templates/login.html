@@ -74,12 +74,12 @@
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
       if ("homeApiKey" in response) {
-        Cookie.create("home-token", response.homeApiKey, 60 * 60, ".dulno.com");
+        Cookie.create("home-token", response.homeApiKey, 60 * 60);
       }
       let success = response.success;
       if (success === true) {
-        Cookie.create("token", response.productApiKey, 60 * 60 * 24 * 30, ".dulno.com");
-        Cookie.create("refresh-token", response.refreshToken, 60 * 60 * 24 * 30, ".dulno.com");
+        Cookie.create("token", response.productApiKey, 60 * 60 * 24 * 30);
+        Cookie.create("refresh-token", response.refreshToken, 60 * 60 * 24 * 30);
         if (!redirect()) {
           window.location.href = "/dashboard/";
         }
@@ -103,10 +103,10 @@
           Swal.fire("{% trans 'home.login.failed.confirmation.title' %}", "{% trans 'home.login.failed.confirmation.body' %}", "error");
         } else  if (error === 1003) {
           if (!redirect()) {
-            Cookie.create("expiration-has-personal-package", response.hasPersonalBundle, 60 * 60, ".dulno.com");
-            Cookie.create("expiration-has-own-organization", response.hasOwnOrganization, 60 * 60, ".dulno.com");
-            Cookie.create("expiration-is-organization-member", response.isOrganizationMember, 60 * 60, ".dulno.com");
-            Cookie.create("expiration-user-name", response.userName, 60 * 60, ".dulno.com");
+            Cookie.create("expiration-has-personal-package", response.hasPersonalBundle, 60 * 60);
+            Cookie.create("expiration-has-own-organization", response.hasOwnOrganization, 60 * 60);
+            Cookie.create("expiration-is-organization-member", response.isOrganizationMember, 60 * 60);
+            Cookie.create("expiration-user-name", response.userName, 60 * 60);
             window.location.href = "/expiration/";
           }
         }

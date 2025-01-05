@@ -6,6 +6,7 @@ import json
 import jwt
 import datetime
 from home import home
+from app.settings import BACKEND_ENDPOINT, COOKIE_DOMAIN, DEVELOPMENT
 from django.utils import translation
 from django.conf import settings
 from django.shortcuts import redirect
@@ -28,8 +29,8 @@ def authentication_required(function):
         setCookie(response, "refresh-token", authenticationResponse["data"]["refreshToken"], 30)
       return response
     response = redirect("/")
-    response.delete_cookie("token", domain=".dulno.com")
-    response.delete_cookie("refresh-token", domain=".dulno.com")
+    response.delete_cookie("token", domain=COOKIE_DOMAIN)
+    response.delete_cookie("refresh-token", domain=COOKIE_DOMAIN)
     return response
   return authentication
 
@@ -40,7 +41,7 @@ async def isAuthenticated(request):
   headers = {}
   applyWhitelistKey(request, headers)
   response = await asyncio.get_event_loop().run_in_executor(None,
-    partial(requests.post, "http://10.96.0.4/v1/verification/isValid/",
+    partial(requests.post, BACKEND_ENDPOINT + "/v1/verification/isValid/",
       json = {"token": token}, headers = headers))
   if (response.status_code == 417):
     return await refreshAuthentication(request)
@@ -58,7 +59,7 @@ async def refreshAuthentication(request):
   headers = {}
   applyWhitelistKey(request, headers)
   response = await asyncio.get_event_loop().run_in_executor(None,
-    partial(requests.post, "http://10.96.0.4/v1/verification/refresh/",
+    partial(requests.post, BACKEND_ENDPOINT + "/v1/verification/refresh/",
       json = {"refreshToken": refreshToken}, headers = headers))
   text = response.text
   jsonText = json.loads(text)
@@ -77,7 +78,7 @@ async def applyLanguage(request):
   headers = {"Authorization": "Bearer " + token}
   applyWhitelistKey(request, headers)
   response = await asyncio.get_event_loop().run_in_executor(None,
-    partial(requests.get, "http://10.96.0.4/v1/settings/language/",
+    partial(requests.get, BACKEND_ENDPOINT + "/v1/settings/language/",
     headers = headers))
   text = response.text
   jsonText = json.loads(text)
@@ -102,8 +103,8 @@ def home_authentication_required(function):
         setCookie(response, "refresh-token", authenticationResponse["data"]["refreshToken"], 30)
       return response
     response = redirect("/")
-    response.delete_cookie("token", domain=".dulno.com")
-    response.delete_cookie("refresh-token", domain=".dulno.com")
+    response.delete_cookie("token", domain=COOKIE_DOMAIN)
+    response.delete_cookie("refresh-token", domain=COOKIE_DOMAIN)
     return response
   return authentication
 
@@ -114,7 +115,7 @@ async def isHomeAuthenticated(request):
   headers = {}
   applyWhitelistKey(request, headers)
   response = await asyncio.get_event_loop().run_in_executor(None,
-    partial(requests.post, "http://10.96.0.4/v1/verification/home/isValid/",
+    partial(requests.post, BACKEND_ENDPOINT + "/v1/verification/home/isValid/",
       json = {"token": token}, headers = headers))
   text = response.text
   jsonText = json.loads(text)
@@ -131,7 +132,7 @@ async def applyHomeLanguage(request):
     headers = {"Authorization": "Bearer " + token}
   applyWhitelistKey(request, headers)
   response = await asyncio.get_event_loop().run_in_executor(None,
-    partial(requests.get, "http://10.96.0.4/v1/settings/language/",
+    partial(requests.get, BACKEND_ENDPOINT + "/v1/settings/language/",
     headers = headers))
   text = response.text
   jsonText = json.loads(text)
@@ -149,5 +150,5 @@ def applyWhitelistKey(request, headers):
 def setCookie(response, key, value, expirationDays):
   expires = datetime.datetime.strftime(datetime.datetime.utcnow() +
     datetime.timedelta(days=expirationDays), "%a, %d-%b-%Y %H:%M:%S GMT")
-  response.set_cookie(key, value, expires=expires, domain=".dulno.com",
-    secure=True)
+  response.set_cookie(key, value, expires=expires, domain=COOKIE_DOMAIN,
+    secure=(DEVELOPMENT == False))

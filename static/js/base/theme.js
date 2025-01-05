@@ -9,7 +9,7 @@ window.addEventListener('load', function () {
     return;
   }
   if (Cookie.find("dulno-theme") == null) {
-    Cookie.create("dulno-theme", "dark", 60 * 60 * 24 * 365, ".dulno.com");
+    Cookie.create("dulno-theme", "dark", 60 * 60 * 24 * 365);
   }
   let theme = Cookie.find("dulno-theme");
   var logoSource;
@@ -25,6 +25,6 @@ window.addEventListener('load', function () {
   }
   var logoElements = document.getElementsByClassName("dulno-logo");
   for (var i = 0; i < logoElements.length; i++) {
-    logoElements[i].src = "https://dulno.com/static/img/" + logoSource;
+    logoElements[i].src = "/static/img/" + logoSource;
   }
 });

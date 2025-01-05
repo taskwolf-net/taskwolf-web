@@ -61,9 +61,9 @@
         document.getElementById("organization-join-headline").innerText = "{% trans 'product.organization.join.successful.headline' %}";
         document.getElementById("organization-join-description").innerHTML = "{% trans 'product.organization.join.successful.description' %}";
         document.getElementById("organization-join-continue").classList.remove("d-none");
-        Cookie.create("token", response.productApiKey, 60 * 60 * 24 * 30, ".dulno.com");
-        Cookie.create("refresh-token", response.refreshToken, 60 * 60 * 24 * 30, ".dulno.com");
-        Cookie.create("home-token", response.homeApiKey, 60 * 60, ".dulno.com");
+        Cookie.create("token", response.productApiKey, 60 * 60 * 24 * 30);
+        Cookie.create("refresh-token", response.refreshToken, 60 * 60 * 24 * 30);
+        Cookie.create("home-token", response.homeApiKey, 60 * 60);
       }
     });
   });

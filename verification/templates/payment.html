@@ -153,9 +153,9 @@
       let response = JSON.parse(responseText);
       resetPackageSelection();
       if (response.success === true) {
-        Cookie.create("token", response.productApiKey, 60 * 60 * 24 * 30, ".dulno.com");
-        Cookie.create("refresh-token", response.refreshToken, 60 * 60 * 24 * 30, ".dulno.com");
-        Cookie.create("home-token", response.homeApiKey, 60 * 60, ".dulno.com");
+        Cookie.create("token", response.productApiKey, 60 * 60 * 24 * 30);
+        Cookie.create("refresh-token", response.refreshToken, 60 * 60 * 24 * 30);
+        Cookie.create("home-token", response.homeApiKey, 60 * 60);
         Swal.fire("{% trans 'home.payment.trial.successful.title' %}",
           "{% trans 'home.payment.trial.successful.body' %}", "success")
           .then(success => window.location.href = "/");

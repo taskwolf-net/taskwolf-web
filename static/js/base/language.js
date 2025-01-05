@@ -6,5 +6,5 @@ window.addEventListener('load', function () {
   if (language !== "en" && language !== "de") {
     language = "en";
   }
-  Cookie.create("dulno-home-language", language, 60 * 60 * 24 * 365, ".dulno.com");
+  Cookie.create("dulno-home-language", language, 60 * 60 * 24 * 365);
 });

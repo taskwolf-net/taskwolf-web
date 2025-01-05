@@ -35,8 +35,10 @@ let Cookie = {
       expires: expires_at.toGMTString(),
       path: "/",
       domain: domain,
-      secure: true,
     };
+    if (!location.host.includes("0.0.0.0")) {
+      content.secure = true;
+    }
     let cookie = Object.keys(content).map(function(key) {
       return [(key === "name") ? name : key, content[key]].join("=");
     }).join(";");

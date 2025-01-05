@@ -2,9 +2,9 @@ const updateIcon = (event) => {
   var iconElements = document.getElementsByClassName("dulno-icon");
   for (var i = 0; i < iconElements.length; i++) {
     if (event.matches) {
-      iconElements[i].href = "https://dulno.com/static/img/icon-light.ico";
+      iconElements[i].href = "/static/img/icon-light.ico";
     } else {
-      iconElements[i].href = "https://dulno.com/static/img/icon-dark.ico";
+      iconElements[i].href = "/static/img/icon-dark.ico";
     }
   }
 };

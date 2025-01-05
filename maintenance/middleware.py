@@ -6,6 +6,7 @@ import requests
 import json
 from django.shortcuts import redirect
 from django.utils import translation
+from app.settings import BACKEND_ENDPOINT
 
 class MaintenanceMiddleware(object):
   async_capable = True
@@ -31,7 +32,7 @@ class MaintenanceMiddleware(object):
 
   async def isRunning(self, request):
     response = await asyncio.get_event_loop().run_in_executor(None,
-       partial(requests.get, "http://10.96.0.4/v1/maintenance/running/"))
+       partial(requests.get, BACKEND_ENDPOINT + "/v1/maintenance/running/"))
     text = response.text
     jsonText = json.loads(text)
     maintenanceRunning = jsonText["found"]

@@ -40,7 +40,7 @@ function displayMaintenanceBanner(maintenance) {
 }
 
 function acknowledgeMaintenance(maintenance) {
-  Cookie.create("maintenance", maintenance.id, 60 * 60 * 24 * 30, ".dulno.com");
+  Cookie.create("maintenance", maintenance.id, 60 * 60 * 24 * 30);
   window.location.reload();
 }
 

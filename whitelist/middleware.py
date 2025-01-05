@@ -5,6 +5,7 @@ import asyncio
 import requests
 import json
 from django.shortcuts import redirect
+from app.settings import BACKEND_ENDPOINT
 
 class WhitelistMiddleware(object):
   async_capable = True
@@ -28,7 +29,7 @@ class WhitelistMiddleware(object):
     if (key is None):
       return False
     response = await asyncio.get_event_loop().run_in_executor(None,
-    partial(requests.post, "http://10.96.0.4/v1/whitelist/isValid/",
+    partial(requests.post, BACKEND_ENDPOINT + "/v1/whitelist/isValid/",
       json = {"key": key}))
     text = response.text
     jsonText = json.loads(text)

@@ -140,7 +140,7 @@
     let request = new HttpRequest("https://api.dulno.com/v1/verification/logout/",
       "GET", []);
     request.send(function (status, responseText) {
-      Cookie.destroy("home-token", ".dulno.com");
+      Cookie.destroy("home-token");
       window.location.href = "/";
     });
   };

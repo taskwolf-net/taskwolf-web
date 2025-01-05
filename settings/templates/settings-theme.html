@@ -32,12 +32,12 @@
   });
 
   document.getElementById("settings-theme-dark").onclick = function(event) {
-    Cookie.create("dulno-theme", "dark", 60 * 60 * 24 * 365, ".dulno.com");
+    Cookie.create("dulno-theme", "dark", 60 * 60 * 24 * 365);
     window.location.reload();
   }
 
   document.getElementById("settings-theme-light").onclick = function(event) {
-    Cookie.create("dulno-theme", "light", 60 * 60 * 24 * 365, ".dulno.com");
+    Cookie.create("dulno-theme", "light", 60 * 60 * 24 * 365);
     window.location.reload();
   }
 </script>

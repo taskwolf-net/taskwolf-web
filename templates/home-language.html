@@ -17,16 +17,16 @@
     }
     document.getElementById("home-language-" + language).classList.add("d-none");
     document.getElementById("home-language-current").src =
-      "https://dulno.com/static/img/languages/" + language + ".webp";
+      "/static/img/languages/" + language + ".webp";
   });
 
   document.getElementById("home-language-en").onclick = function (event) {
-    Cookie.create("dulno-home-language", "en", 60 * 60 * 24 * 365, ".dulno.com");
+    Cookie.create("dulno-home-language", "en", 60 * 60 * 24 * 365);
     window.location.reload();
   }
 
   document.getElementById("home-language-de").onclick = function (event) {
-    Cookie.create("dulno-home-language", "de", 60 * 60 * 24 * 365, ".dulno.com");
+    Cookie.create("dulno-home-language", "de", 60 * 60 * 24 * 365);
     window.location.reload();
   }
 </script>

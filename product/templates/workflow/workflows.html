@@ -759,7 +759,7 @@
       entry.classList.add("workflows-filter-application-active");
     }
     let entryLogo = document.createElement("img");
-    entryLogo.src = "https://dulno.com/static/img/applications/" + logo.split(".")[0] + ".webp";
+    entryLogo.src = "/static/img/applications/" + logo.split(".")[0] + ".webp";
     entry.appendChild(entryLogo);
     applyTooltips(entryLogo, entry, name);
     entry.onclick = function (event) {

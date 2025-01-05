@@ -55,15 +55,15 @@
     if (detected === "WINDOWS") {
       document.getElementById("download-desktop-content-text").appendChild(
         createDownloadButton("{% trans 'home.download.desktop.windows.download' %}",
-          "https://dulno.com/static/download/dulno-1.0.0.exe"));
+          "/static/download/dulno-1.0.0.exe"));
     } else if (detected === "LINUX") {
       document.getElementById("download-desktop-content-text").appendChild(
         createDownloadButton("{% trans 'home.download.desktop.linux.download' %}",
-          "https://dulno.com/static/download/dulno-1.0.0.deb"));
+          "/static/download/dulno-1.0.0.deb"));
     } else if (detected === "MACOS") {
       document.getElementById("download-desktop-content-text").appendChild(
         createDownloadButton("{% trans 'home.download.desktop.macos.download' %}",
-          "https://dulno.com/static/download/"));
+          "/static/download/"));
     }
     for (let i = 0; i < tabs.length; i++) {
       if (tabs[i] === "WINDOWS") {
@@ -80,21 +80,21 @@
     createAlternativeTab("download-desktop-windows",
       "{% trans 'home.download.desktop.windows' %}",
       "{% trans 'home.download.desktop.windows.download' %}",
-      "https://dulno.com/static/download/dulno-1.0.0.exe", width, selected);
+      "/static/download/dulno-1.0.0.exe", width, selected);
   }
 
   function createLinuxAlternativeTab(width, selected) {
     createAlternativeTab("download-desktop-linux",
       "{% trans 'home.download.desktop.linux' %}",
       "{% trans 'home.download.desktop.linux.download' %}",
-      "https://dulno.com/static/download/dulno-1.0.0.deb", width, selected);
+      "/static/download/dulno-1.0.0.deb", width, selected);
   }
 
   function createMacOSAlternativeTab(width, selected) {
     createAlternativeTab("download-desktop-macos",
       "{% trans 'home.download.desktop.macos' %}",
       "{% trans 'home.download.desktop.macos.download' %}",
-      "https://dulno.com/static/download/", width, selected);
+      "/static/download/", width, selected);
   }
 
   function createAlternativeTab(
