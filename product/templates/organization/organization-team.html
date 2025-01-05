@@ -67,7 +67,7 @@
       let teamAddEntry = document.createElement("li");
       let teamAddButton = document.createElement("button");
       teamAddButton.id = "organization-team-add";
-      teamAddButton.innerHTML = "+ {% trans 'product.organization.team.create' %}";
+      teamAddButton.innerHTML = "+ " + "{% trans 'product.organization.team.create' %}";
       teamAddButton.onclick = (event) => addTeam();
       teamAddEntry.appendChild(teamAddButton);
       document.getElementById("organization-teams").appendChild(teamAddEntry);

@@ -119,15 +119,15 @@
         "{% trans 'home.pricing.time.year' %}";
     }
     document.getElementById("package-upgrade-package-workflow-number").innerHTML =
-      individualPackage.workflowNumberLimit + " {% trans 'home.pricing.summary.workflow.number' %}";
+      individualPackage.workflowNumberLimit + " " + "{% trans 'home.pricing.summary.workflow.number' %}";
     document.getElementById("package-upgrade-package-workflow-operation").innerHTML =
-      individualPackage.workflowOperationLimit + " {% trans 'home.pricing.summary.workflow.operation' %}";
+      individualPackage.workflowOperationLimit + " " + "{% trans 'home.pricing.summary.workflow.operation' %}";
     document.getElementById("package-upgrade-package-process-number").innerHTML =
-      individualPackage.processNumberLimit + " {% trans 'home.pricing.summary.process.number' %}";
+      individualPackage.processNumberLimit + " " + "{% trans 'home.pricing.summary.process.number' %}";
     document.getElementById("package-upgrade-package-database-number").innerHTML =
-      individualPackage.databaseNumberLimit + " {% trans 'home.pricing.summary.database.number' %}";
+      individualPackage.databaseNumberLimit + " " + "{% trans 'home.pricing.summary.database.number' %}";
     document.getElementById("package-upgrade-package-database-data").innerHTML =
-      individualPackage.databaseDataLimit + " GB {% trans 'home.pricing.summary.database.data' %}";
+      individualPackage.databaseDataLimit + " GB " + "{% trans 'home.pricing.summary.database.data' %}";
   }
 
   function fetchPackage(packageName, callback) {
