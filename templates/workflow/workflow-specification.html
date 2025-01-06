@@ -637,7 +637,7 @@
     for (let dynamicInputVariable of dynamicInputVariables) {
       let isFulfilled = true;
       for (let predecessor of dynamicInputVariable.requiredPredecessors) {
-        if (!(predecessor in specificationValues)) {
+        if (!(predecessor in specificationValues) || specificationValues[predecessor] === "") {
           isFulfilled = false;
           break;
         }
@@ -658,7 +658,7 @@
           }
           checkSetupCompletion();
         });
-      } else if (dynamicInputVariable.filled) {
+      } else {
         competedInputs++;
       }
     }
@@ -717,7 +717,9 @@
       return;
     }
     checkAdoptability(function (isAdoptable) {
-      if (isAdoptable) {
+      let dynamicInputsCompleted =
+        dynamicInputVariables.every(input => !input.alive || (input.alive && input.filled));
+      if (isAdoptable && dynamicInputsCompleted) {
         selectedComponentSetup = false;
         let specifications = Object.keys(specificationValues);
         for (let i = specifications.length - 1; i >= 0; i--) {
@@ -734,13 +736,7 @@
 
   function checkAdoptability(callback) {
     checkDynamicInputs(function () {
-      let isAdoptable = true;
-      for (let i = 0; i < requiredSpecificationVariables.length; i++) {
-        if (!(requiredSpecificationVariables[i] in specificationValues)) {
-          isAdoptable = false;
-          break;
-        }
-      }
+      let isAdoptable = requiredSpecificationVariables.every(key => key in specificationValues);
       updateAdoptability(isAdoptable);
       if (callback) {
         callback(isAdoptable);
