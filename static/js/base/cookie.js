@@ -30,9 +30,9 @@ let Cookie = {
       name: escape(value),
       expires: expires_at.toGMTString(),
       path: "/",
-      domain: "." + location.host,
+      domain: "." + window.location.hostname,
     };
-    if (!location.host.includes("0.0.0.0")) {
+    if (!window.location.hostname.includes("0.0.0.0")) {
       content.secure = true;
     }
     let cookie = Object.keys(content).map(function(key) {
