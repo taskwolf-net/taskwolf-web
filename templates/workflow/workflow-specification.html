@@ -39,7 +39,7 @@
       if (inputVariables.length === 0) {
         document.getElementById(specificationPrefix + "-container").style.display = "none";
         document.getElementById(specificationPrefix + "-redundant").style.display = "block";
-        checkSetupCompletion();
+        updateAdoptability(true);
         return;
       }
       displayInputs(inputVariables);
