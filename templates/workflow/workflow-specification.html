@@ -40,6 +40,10 @@
         document.getElementById(specificationPrefix + "-container").style.display = "none";
         document.getElementById(specificationPrefix + "-redundant").style.display = "block";
         updateAdoptability(true);
+        if (selectedComponentSetup) {
+          selectedComponentSetup = false;
+          finishSpecificationSetup();
+        }
         return;
       }
       displayInputs(inputVariables);
@@ -728,10 +732,14 @@
           }
         }
         checkAdoptability();
-        $('#' + specificationPrefix).collapse("toggle");
-        setTimeout(removeLoader, 500);
+        finishSpecificationSetup();
       }
     });
+  }
+
+  function finishSpecificationSetup() {
+    $('#' + specificationPrefix).collapse("toggle");
+    setTimeout(removeLoader, 500);
   }
 
   function checkAdoptability(callback) {
