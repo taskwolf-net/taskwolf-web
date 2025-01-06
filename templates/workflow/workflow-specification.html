@@ -102,7 +102,7 @@
     if (dataType === "TEXT_AREA") {
       inputElement.style.minHeight = "110px";
     }
-    inputElement.id = "workflow-specification-input-" + identifier.replaceAll(" ", "-");
+    inputElement.id = "workflow-specification-input-" + generateElementIdentifier(32);
     inputElement.classList.add("workflow-specification-input", "form-control");
     inputContainerElement.appendChild(inputElement);
     document.getElementById(specificationPrefix + "-input-list").appendChild(inputContainerElement);
@@ -414,8 +414,7 @@
     let inputContainer = document.createElement("div");
     inputContainer.classList.add("d-flex", "align-items-center", "mb-4");
     let inputElement = document.createElement("div");
-    inputElement.id = "workflow-specification-list-input-" + identifier.replaceAll(" ", "-") + "-" +
-      listInput.identifier;
+    inputElement.id = "workflow-specification-list-input-" + generateElementIdentifier(32);
     inputElement.classList.add("workflow-specification-input", "form-control");
     inputContainer.appendChild(inputElement);
     let inputRemoveButton = document.createElement("div");
@@ -690,6 +689,12 @@
       }
     }
     return selectedComponentContent;
+  }
+
+  function generateElementIdentifier(length) {
+    return Array.from({ length }, () =>
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+        [Math.floor(Math.random() * 62)]).join('')
   }
 
   function resetSpecifications() {
