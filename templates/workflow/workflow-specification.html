@@ -79,6 +79,8 @@
       } else if (inputVariable.dataType === "TIME") {
         addSpecificationTime(inputVariable.identifier, inputVariable.name, inputVariable.description);
         specificationValues["timezone"] = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      } else if (inputVariable.dataType === "COLOR") {
+        addSpecificationColor(inputVariable.identifier, inputVariable.name, inputVariable.description);
       } else if (inputVariable.dataType === "LIST") {
         addSpecificationList(inputVariable.identifier, inputVariable.name, inputVariable.description);
       } else if (inputVariable.dataType === "MAP") {
@@ -361,6 +363,29 @@
       if (identifier in selectedComponentContent) {
         specificationValues[identifier] = selectedComponentContent[identifier];
         timeInput.value = selectedComponentContent[identifier];
+      }
+      completeVariableSetup(identifier);
+    }
+  }
+
+  function addSpecificationColor(identifier, name, description) {
+    let inputContainerElement = document.createElement("div");
+    inputContainerElement.classList.add("workflow-specification-color-container", "form-outline", "mb-4");
+    inputContainerElement.appendChild(createSpecificationHeadline(name, description));
+    let colorInput = document.createElement("input");
+    colorInput.type = "color";
+    colorInput.classList.add("rounded-2", "p-0", "border", "border-0");
+    colorInput.oninput = function (event) {
+      specificationValues[identifier] = colorInput.value;
+      checkAdoptability();
+    }
+    inputContainerElement.appendChild(colorInput);
+    document.getElementById(specificationPrefix + "-input-list").appendChild(inputContainerElement);
+    if (selectedComponentSetup && "content" in selectedComponent) {
+      let selectedComponentContent = JSON.parse(selectedComponent.content);
+      if (identifier in selectedComponentContent) {
+        specificationValues[identifier] = selectedComponentContent[identifier];
+        colorInput.value = selectedComponentContent[identifier];
       }
       completeVariableSetup(identifier);
     }

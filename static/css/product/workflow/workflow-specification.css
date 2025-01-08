@@ -29,6 +29,12 @@
   text-align: center;
 }
 
+.workflow-specification-color-container {
+  width: 80%;
+  margin: auto;
+  text-align: center;
+}
+
 .workflow-specification-list-container {
   width: 80%;
   margin: auto;
@@ -40,7 +46,10 @@
 }
 
 @media (max-width: 500px) {
-  .workflow-specification-input-container, .workflow-specification-select-container, .workflow-specification-file-container, .workflow-specification-switch-container, .workflow-specification-time-container, .workflow-specification-list-container, .workflow-specification-map-container {
+  .workflow-specification-input-container, .workflow-specification-select-container,
+  .workflow-specification-file-container, .workflow-specification-switch-container,
+  .workflow-specification-time-container, .workflow-specification-color-container,
+  .workflow-specification-list-container, .workflow-specification-map-container {
     width: 95%;
   }
 }
