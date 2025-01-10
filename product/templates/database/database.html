@@ -49,6 +49,7 @@
   let database;
   let currentPageContent;
   let rowCheckboxes = [];
+  let rowPlaceholders = [];
 
   $(document).ready(function() {
     displayLoader();
@@ -251,7 +252,9 @@
     }
     let remainingLines = Math.ceil((window.innerHeight - 70 - 2 * 75 - 87 - content.length * 69) / 69);
     for (let i = 0; i < remainingLines; i++) {
-      body.appendChild(displayEmptyTableRow());
+      let placeholder = displayTableRowPlaceholder();
+      rowPlaceholders.push(placeholder);
+      body.appendChild(placeholder);
     }
   }
 
@@ -260,21 +263,72 @@
     let checkbox = createCheckboxElement(function(event) {
       clickRowCheckbox();
     });
-    rowCheckboxes.push({checkbox: checkbox.firstChild, row: entry})
+    rowCheckboxes.push({checkbox: checkbox.firstChild, row: entry});
     row.appendChild(checkbox);
     let columns = database.columns;
     let cells = entry.cells;
     for (let i = 0; i < columns.length; i++) {
       let column = columns[i].name;
       let cell = document.createElement("td");
-      cell.innerText = cells.filter((cell) => cell.column === column)[0].value;
+      cell.onclick = function (event) {
+        editTableCell(entry, column, cell);
+      }
+      let values = cells.filter((cell) => cell.column === column);
+      if (values.length > 0 && values[0].value !== "") {
+        cell.innerText = values[0].value;
+      } else {
+        cell.innerHTML = "&nbsp;";
+      }
       row.appendChild(cell);
     }
     row.appendChild(document.createElement("td"));
     return row;
   }
 
-  function displayEmptyTableRow() {
+  function editTableCell(entry, column, cell) {
+    cell.classList.add("database-table-cell-editing");
+    let currentText = cell.innerText;
+    if (cell.innerHTML === "&nbsp;") {
+      currentText = "";
+    }
+    let input = document.createElement("input");
+    input.type = "text";
+    input.value = currentText;
+    input.classList.add("database-table-cell-editor");
+    cell.innerText = "";
+    cell.appendChild(input);
+    input.focus();
+    input.select();
+    input.addEventListener("blur", () => {
+      let value = input.value;
+      cell.innerText = value;
+      cell.classList.remove("database-table-cell-editing");
+      if (entry.cells[column] === value) {
+        return;
+      }
+      entry.cells[column] = value;
+      submitTableEdit(entry, column, value);
+    });
+    input.addEventListener("keypress", (event) => {
+      if (event.key === "Enter") {
+        input.blur();
+      }
+    });
+  }
+
+  function submitTableEdit(entry, column, value) {
+    let request = new HttpRequest("https://api.dulno.com/v1/table/entry/update/", "POST",
+      [], {table: database.id, row: findRowId(entry), column: column, value: value});
+    request.send(function (status, responseText) {
+      let response = JSON.parse(responseText);
+      if (!response.success) {
+        Swal.fire("{% trans 'product.database.row.edit.failed.limit.reached.title' %}",
+          "{% trans 'product.database.row.edit.failed.limit.reached.body' %}", "error");
+      }
+    });
+  }
+
+  function displayTableRowPlaceholder() {
     let row = document.createElement("tr");
     let checkbox = document.createElement("td");
     checkbox.classList.add("database-table-checkbox");
@@ -286,27 +340,6 @@
       row.appendChild(cell);
     }
     return row;
-  }
-
-  function submitTableEdit(entry, cells) {
-    let rowData = {};
-    for (let i = 0; i < cells.length; i++) {
-      let cell = cells[i];
-      rowData[cell.column] = cell.input.value;
-    }
-    let request = new HttpRequest("https://api.dulno.com/v1/table/entry/update/", "POST",
-      [], {table: database.id, row: findRowId(entry), content: rowData});
-    request.send(function (status, responseText) {
-      if (status === 400) {
-        Swal.fire("{% trans 'product.database.row.edit.failed.limit.reached.title' %}",
-          "{% trans 'product.database.row.edit.failed.limit.reached.body' %}", "error")
-          .then(success => window.location.reload());
-        return;
-      }
-      Swal.fire("{% trans 'product.database.row.edit.successful.title' %}",
-        "{% trans 'product.database.row.edit.successful.body' %}", "success")
-        .then(success => window.location.reload());
-    });
   }
 
   function clickRowCheckbox() {
@@ -533,27 +566,35 @@
   }
 
   document.getElementById("database-insert").onclick = function (event) {
-
-  }
-
-  function submitTableInsert(cells) {
-    let rowData = {};
-    for (let i = 0; i < cells.length; i++) {
-      let cell = cells[i];
-      rowData[cell.column] = cell.input.value;
-    }
+    let insertButton = document.getElementById("database-insert");
+    insertButton.classList.add("disabled");
+    insertButton.innerHTML = "{% trans 'product.database.insert' %}" + `
+      <span class="spinner-border spinner-border-sm ms-2" aria-hidden="true"></span>
+      <span class="visually-hidden" role="status">Loading...</span>
+    `;
     let request = new HttpRequest("https://api.dulno.com/v1/table/entry/insert/", "POST",
-      [], {table: database.id, row: rowData});
+      [], {table: database.id});
     request.send(function (status, responseText) {
-      if (status === 400) {
+      let response = JSON.parse(responseText);
+      if (!response.success) {
         Swal.fire("{% trans 'product.database.insert.failed.limit.reached.title' %}",
-          "{% trans 'product.database.insert.failed.limit.reached.body' %}", "error")
-          .then(success => window.location.reload());
+          "{% trans 'product.database.insert.failed.limit.reached.body' %}", "error");
         return;
       }
-      Swal.fire("{% trans 'product.database.insert.successful.title' %}",
-        "{% trans 'product.database.insert.successful.body' %}", "success")
-        .then(success => window.location.reload());
+      insertButton.classList.remove("disabled");
+      insertButton.innerHTML = "{% trans 'product.database.insert' %}";
+      let row = displayTableRow({cells: [{column: "id", value: response.id}]});
+      if (rowPlaceholders.length > 0) {
+        let placeholder = rowPlaceholders.shift();
+        placeholder.parentNode.insertBefore(row, placeholder);
+        placeholder.remove();
+      } else {
+        document.getElementById("database-table-body").appendChild(row);
+      }
+      if (rowPlaceholders.length === 0) {
+        let table = document.getElementById("database-table-container");
+        table.scrollTo({ top: table.scrollHeight, behavior: 'smooth' });
+      }
     });
   }
 

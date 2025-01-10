@@ -161,23 +161,27 @@ tr:last-child {
   margin-right: 10px;
 }
 
-#database-table-empty {
-  width: 100%;
+
+#database-remove {
+  margin-left: 20px;
+}
+
+#database-insert {
+  margin-right: 20px;
+}
+
+.database-table-cell-editor {
+  background-color: transparent !important;
+  border: none !important;
+  outline: none;
+  padding: 0;
   margin: 0;
-  padding: 20px;
-  text-align: center;
-  font-weight: bold;
-  border-bottom: 1px #373e45 solid;
+  width: 100%;
+  height: 20px;
 }
 
-.database-row-settings-container {
-  display: block;
-}
-
-.database-row-settings {
-  border: none;
-  float: right;
-  margin-right: 10px;
+.database-table-cell-editing {
+  outline: 2px solid deepskyblue;
 }
 
 .database-table-settings-dropdown {
@@ -201,52 +205,6 @@ tr:last-child {
   width: 100%;
   margin: 10px auto;
   border-bottom: #626e7b 1px solid;
-}
-
-#database-remove {
-  margin-left: 20px;
-}
-
-#database-insert {
-  margin-right: 20px;
-}
-
-.database-row-edit-cell {
-  padding: 1.0rem 1.0rem !important;
-}
-
-.database-row-edit-cell-input {
-  width: 100%;
-  border: #66727f 1px solid;
-  border-radius: 5px;
-  outline: none;
-  padding: 0.5rem 0.5rem !important;
-}
-
-.dark .database-row-edit-cell-input {
-  color: white;
-}
-
-.light .database-row-edit-cell-input {
-  color: black;
-}
-
-.database-row-edit-modification {
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  white-space: normal;
-  text-overflow: unset;
-}
-
-.database-row-edit-submit {
-  margin-right: 10px !important;
-}
-
-.database-row-edit-exit {
-  border: none;
-  color: #ff5454;
-  scale: 1.2;
 }
 
 #database-table-controls {
