@@ -9,32 +9,35 @@
       <div id="database-container">
         <div id="database-wrapper" class="d-none">
           <div id="database-header">
-            <h2 id="database-name"></h2>
-            <div id="database-modification">
-              <button id="database-delete" type="button" class="btn btn-danger">{% trans 'product.database.delete' %}</button>
-              <button id="database-rename" type="button" class="fa-solid fa-pen-to-square"></button>
-            </div>
-          </div>
-          <div id="database-table-wrapper">
-            <div id="database-table-container">
-              <table id="database-table">
-                <thead id="database-table-head">
-                </thead>
-                <tbody id="database-table-body">
-                </tbody>
-              </table>
-              <div id="database-table-paging">
-                <button id="database-remove" type="button" class="btn btn-danger disabled">{% trans 'product.database.remove' %}</button>
-                <div class="mx-auto">
-                  <div id="database-table-page-control" class="d-flex justify-content-center align-items-center">
-                    <a id="database-previous-page" class="database-page me-4"><i class="fa-solid fa-chevron-left"></i></a>
-                    <div id="database-pages"></div>
-                    <a id="database-next-page" class="database-page ms-4"><i class="fa-solid fa-chevron-right"></i></a>
-                  </div>
-                </div>
-                <button id="database-insert" type="button" class="btn btn-primary">{% trans 'product.database.insert' %}</button>
+            <div class="d-flex align-items-center">
+              <div id="database-page-back-container">
+                <button id="database-page-back"><i class="fa-solid fa-arrow-left-long"></i></button>
+              </div>
+              <h3 id="database-name" class="text-truncate"></h3>
+              <div id="database-rename-container" class="d-flex justify-content-center align-items-center ms-4" style="width: 48px; height: 32px;">
+                <h4 id="database-rename" role="button" class="mb-0 fa-solid fa-pen-to-square"></h4>
               </div>
             </div>
+            <div class="d-flex align-items-center">
+              <div id="database-download-container" class="d-flex justify-content-center align-items-center" style="width: 48px; height: 32px;">
+                <h4 id="database-download" role="button" class="mb-0 fa-solid fa-download"></h4>
+              </div>
+              <div id="database-delete-container" class="d-flex justify-content-center align-items-center ms-3" style="width: 48px; height: 32px;">
+                <h4 id="database-delete" role="button" class="mb-0 fa-solid fa-trash-can text-danger"></h4>
+              </div>
+            </div>
+          </div>
+          <div id="database-table-container">
+            <table id="database-table">
+              <thead id="database-table-head">
+              </thead>
+              <tbody id="database-table-body">
+              </tbody>
+            </table>
+          </div>
+          <div id="database-table-controls">
+            <button id="database-remove" type="button" class="btn btn-danger disabled">{% trans 'product.database.remove' %}</button>
+            <button id="database-insert" type="button" class="btn btn-primary">{% trans 'product.database.insert' %}</button>
           </div>
         </div>
       </div>
@@ -45,7 +48,6 @@
 <script>
   let database;
   let currentPageContent;
-  let inserting = false;
   let rowCheckboxes = [];
 
   $(document).ready(function() {
@@ -59,6 +61,12 @@
         updatePaging(pageNumber, 0, pageState, content);
       });
     });
+    applyTooltips(document.getElementById("database-download-container"),
+      document.getElementById("database-download"), "{% trans 'product.database.download' %}");
+    applyTooltips(document.getElementById("database-rename-container"),
+      document.getElementById("database-rename"), "{% trans 'product.database.rename' %}");
+    applyTooltips(document.getElementById("database-delete-container"),
+      document.getElementById("database-delete"), "{% trans 'product.database.delete' %}");
   });
 
   function fetchDatabaseData(callback) {
@@ -102,11 +110,10 @@
 
   function createTableColumnHead(name) {
     let entry = document.createElement("th");
-    let columnWidth = ((document.getElementById("database-table-container").offsetWidth - 240) / database.columns.length) + "px";
-    entry.style = "width: " + columnWidth + "; max-width: " + columnWidth;
     let head = document.createElement("div");
     head.classList.add("database-column-head");
     let columnName = document.createElement("b");
+    columnName.classList.add("text-truncate");
     columnName.innerText = name;
     head.appendChild(columnName);
     let settingsButton = document.createElement("button");
@@ -149,16 +156,28 @@
 
   function createTableAddColumnButton() {
     let entry = document.createElement("th");
-    entry.id = "database-column-add-head";
+    let dropdown = document.createElement("div");
+    dropdown.classList.add("dropdown");
     let button = document.createElement("button");
-    button.id = "database-column-add";
+    button.classList.add("btn", "dropdown-toggle");
     button.type = "button";
-    button.classList.add("btn", "btn-secondary");
-    button.innerText = "{% trans 'product.database.column.add' %}";
-    button.onclick = function(event) {
+    button.setAttribute("data-bs-toggle", "dropdown");
+    button.onclick = function (event) {
+      event.preventDefault();
       openAddColumnMenu();
     }
-    entry.appendChild(button);
+    let buttonIcons = document.createElement("h5");
+    buttonIcons.classList.add("fa-solid", "fa-plus", "mb-0", "me-2");
+    button.appendChild(buttonIcons);
+    let buttonText = document.createElement("span");
+    buttonText.innerText = "{% trans 'product.database.column.add' %}";
+    button.appendChild(buttonText);
+    dropdown.appendChild(button);
+    /*let dropdownMenu = document.createElement("ul");
+    dropdownMenu.classList.add("dropdown-menu");
+    dropdownMenu.innerHTML = '<li><a className="dropdown-item" href="#">Action</a></li>';
+    dropdown.appendChild(dropdownMenu);*/
+    entry.appendChild(dropdown);
     return entry;
   }
 
@@ -183,7 +202,6 @@
     Swal.fire({
       title: "{% trans 'product.database.column.add.title' %}",
       html: content,
-      icon: "info",
       showCancelButton: true,
       cancelButtonText: "{% trans 'popup.cancel' %}",
     }).then(result => {
@@ -231,8 +249,9 @@
     for (let i = 0; i < content.length; i++) {
       body.appendChild(displayTableRow(content[i]));
     }
-    if (content.length === 0) {
-      displayTableEmptyLabel();
+    let remainingLines = Math.ceil((window.innerHeight - 70 - 2 * 75 - 87 - content.length * 69) / 69);
+    for (let i = 0; i < remainingLines; i++) {
+      body.appendChild(displayEmptyTableRow());
     }
   }
 
@@ -244,42 +263,29 @@
     rowCheckboxes.push({checkbox: checkbox.firstChild, row: entry})
     row.appendChild(checkbox);
     let columns = database.columns;
-    let cellWidth = ((document.getElementById("database-table-container").offsetWidth - 240) / database.columns.length) + "px";
     let cells = entry.cells;
     for (let i = 0; i < columns.length; i++) {
       let column = columns[i].name;
       let cell = document.createElement("td");
-      cell.style = "width: " + cellWidth + "; max-width: " + cellWidth;
       cell.innerText = cells.filter((cell) => cell.column === column)[0].value;
       row.appendChild(cell);
     }
-    row.appendChild(createTableRowSettingsElement(() => editTableRow(entry, row),
-      () => deleteTableRow(entry)));
+    row.appendChild(document.createElement("td"));
     return row;
   }
 
-  function editTableRow(entry, row) {
-    let originalContent = [...row.childNodes];
-    row.innerHTML = "";
-    row.appendChild(document.createElement("td"));
+  function displayEmptyTableRow() {
+    let row = document.createElement("tr");
+    let checkbox = document.createElement("td");
+    checkbox.classList.add("database-table-checkbox");
+    row.appendChild(checkbox);
     let columns = database.columns;
-    let cells = [];
-    for (let i = 0; i < columns.length; i++) {
-      let column = columns[i].name;
+    for (let i = 0; i < columns.length + 1; i++) {
       let cell = document.createElement("td");
-      cell.classList.add("database-row-edit-cell");
-      let input = document.createElement("input");
-      input.classList.add("database-row-edit-cell-input");
-      input.value = entry.cells.filter((cell) => cell.column === column)[0].value;
-      cell.appendChild(input);
+      cell.innerHTML = "&nbsp;";
       row.appendChild(cell);
-      cells.push({column: column, input: input})
     }
-    let modificationCell = document.createElement("td");
-    modificationCell.classList.add("database-row-edit-modification");
-    modificationCell.appendChild(createRowEditSubmitButton(() => submitTableEdit(entry, cells)));
-    modificationCell.appendChild(createRowEditExitButton(() => exitTableEdit(row, originalContent)));
-    row.appendChild(modificationCell);
+    return row;
   }
 
   function submitTableEdit(entry, cells) {
@@ -303,23 +309,6 @@
     });
   }
 
-  function exitTableEdit(row, originalContent) {
-    row.innerHTML = "";
-    for (let i = 0; i < originalContent.length; i++) {
-      row.appendChild(originalContent[i]);
-    }
-  }
-
-  function deleteTableRow(entry) {
-    let request = new HttpRequest("https://api.dulno.com/v1/table/entry/remove/", "POST",
-      [], {table: database.id, row: findRowId(entry)});
-    request.send(function (status, responseText) {
-      Swal.fire("{% trans 'product.database.row.delete.successful.title' %}",
-        "{% trans 'product.database.row.delete.successful.body' %}", "success")
-        .then(success => window.location.reload());
-    });
-  }
-
   function clickRowCheckbox() {
     let checkboxSelected = false;
     for (let i = 0; i < rowCheckboxes.length; i++) {
@@ -334,28 +323,6 @@
     } else {
       removeButton.classList.remove("disabled");
     }
-  }
-
-  function createTableRowSettingsElement(submitEdit, submitDelete) {
-    let entry = document.createElement("td");
-    let entryDiv = document.createElement("div");
-    entryDiv.classList.add("database-row-settings-container");
-    let settingsButton = document.createElement("button");
-    settingsButton.type = "button";
-    settingsButton.classList.add("database-row-settings", "fa-solid",
-      "fa-ellipsis-vertical");
-    settingsButton.setAttribute("data-bs-toggle", "dropdown");
-    settingsButton.setAttribute("aria-expanded", "false");
-    entryDiv.appendChild(settingsButton);
-    let dropdown = createTableSettingsDropdown([
-        {icon: "fa-pen", content: "{% trans 'product.database.row.settings.edit' %}",
-          click: submitEdit},
-        {icon: "fa-trash", content: "{% trans 'product.database.row.settings.delete' %}",
-          color: "text-danger", click: submitDelete}
-      ], [1]);
-    entryDiv.appendChild(dropdown);
-    entry.appendChild(entryDiv);
-    return entry;
   }
 
   function createTableSettingsDropdown(buttons, dividers) {
@@ -403,6 +370,7 @@
 
   function createCheckboxElement(click) {
     let entry = document.createElement("td");
+    entry.classList.add("database-table-checkbox");
     let input = document.createElement("input");
     input.classList.add("form-check-input");
     input.type = "checkbox";
@@ -411,81 +379,7 @@
     return entry;
   }
 
-  const pageVisibilityRange = 2;
   let pagingStartingPoint = "";
-
-  function displayPaging(pages, currentPage, pageState) {
-    displayPagingShiftButton("database-previous-page", currentPage > 0,
-      pages, currentPage, pageState, -1);
-    displayPagingShiftButton("database-next-page", currentPage < pages - 1,
-      pages, currentPage, pageState, 1);
-    let pagesElement = document.getElementById("database-pages");
-    pagesElement.innerHTML = "";
-    createPageButton(pagesElement, pages, currentPage, pageState, 0, currentPage === 0);
-    if (pages === 1) {
-      return;
-    }
-    if (currentPage - pageVisibilityRange > 0) {
-      pagesElement.insertAdjacentHTML("beforeend",
-        "<i class='database-paging-ellipsis database-paging-ellipsis-start " +
-        "fa-solid fa-ellipsis mx-4'></i>");
-    }
-    for (let i = -pageVisibilityRange + 1; i < pageVisibilityRange; i++) {
-      let page = currentPage + i;
-      if (page < 1 || page >= pages - 1) {
-        continue;
-      }
-      createPageButton(pagesElement, pages, currentPage, pageState, page,
-        page === currentPage);
-    }
-    if (currentPage + pageVisibilityRange < pages - 1) {
-      pagesElement.insertAdjacentHTML("beforeend",
-        "<i class='database-paging-ellipsis database-paging-ellipsis-end " +
-        "fa-solid fa-ellipsis mx-4'></i>");
-    }
-    createPageButton(pagesElement, pages, currentPage, pageState, pages - 1, currentPage === pages - 1);
-  }
-
-  function displayPagingShiftButton(id, isEnabled, pages, currentPage, pageState, direction) {
-    let button = document.getElementById(id);
-    if (isEnabled) {
-      button.classList.remove("database-page-disabled");
-    } else {
-      button.classList.add("database-page-disabled");
-    }
-    button.onclick = function (event) {
-      if (!isEnabled) {
-        return;
-      }
-      shiftPage(pages, currentPage, pageState, direction);
-    }
-  }
-
-  function createPageButton(pagesElement, pages, currentPage, pageState, page, isActive) {
-    let button = document.createElement("a");
-    button.classList.add("database-page");
-    if (isActive) {
-      button.classList.add("database-page-active");
-    }
-    button.innerHTML = page + 1;
-    button.onclick = function (event) {
-      onPageButtonClick(pages, currentPage, pageState, page);
-    };
-    pagesElement.appendChild(button);
-  }
-
-  function onPageButtonClick(pages, currentPage, pageState, page) {
-    if (page === currentPage) {
-      return;
-    }
-    if (Math.abs(page - currentPage) === 1) {
-      shiftPage(pages, currentPage, pageState, page - currentPage);
-      return;
-    }
-    fetchDatabasePage(page, function(database, pageState, pageNumber) {
-      updatePaging(pageNumber, page, pageState, database);
-    });
-  }
 
   function fetchDatabasePage(targetPage, callback) {
     let body = {};
@@ -529,12 +423,6 @@
     currentPageContent = database;
     document.getElementById("database-remove").classList.add("disabled");
     fillTableContent(database);
-    if (database.length === 0) {
-      document.getElementById("database-table-page-control").classList.add("d-none");
-    } else {
-      displayPaging(pageNumber, currentPage, pageState);
-      document.getElementById("database-table-page-control").classList.remove("d-none");
-    }
   }
 
   document.getElementById("database-delete").onclick = function (event) {
@@ -562,6 +450,7 @@
     let content = document.createElement("div");
     content.classList.add("database-rename-content");
     let text = document.createElement("p");
+    text.classList.add("mb-4");
     text.innerText = "{% trans 'product.database.rename.body' %}";
     content.appendChild(text);
     let inputContainer = document.createElement("div");
@@ -579,7 +468,6 @@
     Swal.fire({
       title: "{% trans 'product.database.rename.title' %}",
       html: content,
-      icon: "info",
       showCancelButton: true,
       cancelButtonText: "{% trans 'popup.cancel' %}",
     }).then(result => {
@@ -598,6 +486,7 @@
         });
       }
     });
+    input.focus();
   }
 
   function tickInputMaxLength(element) {
@@ -644,35 +533,7 @@
   }
 
   document.getElementById("database-insert").onclick = function (event) {
-    if (inserting) {
-      return;
-    }
-    displayTableInsertRow();
-    inserting = true;
-    document.getElementById("database-insert").classList.add("disabled");
-    removeTableEmptyLabel();
-  }
 
-  function displayTableInsertRow() {
-    let row = document.createElement("tr");
-    row.appendChild(document.createElement("td"));
-    let columns = database.columns;
-    let cells = [];
-    for (let i = 0; i < columns.length; i++) {
-      let cell = document.createElement("td");
-      cell.classList.add("database-row-edit-cell");
-      let input = document.createElement("input");
-      input.classList.add("database-row-edit-cell-input");
-      cell.appendChild(input);
-      row.appendChild(cell);
-      cells.push({column: columns[i].name, input: input})
-    }
-    let modificationCell = document.createElement("td");
-    modificationCell.classList.add("database-row-edit-modification");
-    modificationCell.appendChild(createRowEditSubmitButton(() => submitTableInsert(cells)));
-    modificationCell.appendChild(createRowEditExitButton(() => exitTableInsert(row)));
-    row.appendChild(modificationCell);
-    document.getElementById("database-table-body").appendChild(row);
   }
 
   function submitTableInsert(cells) {
@@ -696,50 +557,8 @@
     });
   }
 
-  function exitTableInsert(row) {
-    document.getElementById("database-table-body").removeChild(row);
-    inserting = false;
-    document.getElementById("database-insert").classList.remove("disabled");
-    if (currentPageContent.length === 0) {
-      displayTableEmptyLabel();
-    }
-  }
-
-  function createRowEditSubmitButton(click) {
-    let button = document.createElement("button");
-    button.classList.add("database-row-edit-submit", "btn", "btn-success");
-    button.type = "button";
-    button.innerText = "{% trans 'product.database.insert.submit' %}";
-    button.onclick = function(event) {
-      button.classList.add("disabled");
-      click();
-    };
-    return button;
-  }
-
-  function createRowEditExitButton(click) {
-    let exitButton = document.createElement("button");
-    exitButton.type = "button";
-    exitButton.classList.add("database-row-edit-exit", "fa-regular",
-      "fa-circle-xmark");
-    exitButton.onclick = click;
-    return exitButton;
-  }
-
-  function displayTableEmptyLabel() {
-    let emptyLabel = document.createElement("h5");
-    emptyLabel.id = "database-table-empty";
-    emptyLabel.innerText = "{% trans 'product.database.empty' %}";
-    document.getElementById("database-table-container").insertBefore(emptyLabel,
-      document.getElementById("database-table-paging"));
-  }
-
-  function removeTableEmptyLabel() {
-    if (currentPageContent.length > 0) {
-      return;
-    }
-    document.getElementById("database-table-container").removeChild(
-      document.getElementById("database-table-empty"));
+  document.getElementById("database-page-back").onclick = function (event) {
+    window.location.href = "/databases/";
   }
 
   function loaderPopup() {
@@ -764,5 +583,15 @@
   function removeLoader() {
     document.getElementById("database-container").removeChild(document.getElementsByClassName("loader")[0]);
     document.getElementById("database-wrapper").classList.remove("d-none");
+  }
+
+  function applyTooltips(element, container, text) {
+    $(element).attr("data-bs-toggle", "tooltip");
+    $(element).attr("data-bs-placement", "top");
+    $(element).attr("data-bs-title", text);
+    container.classList.add("position-relative");
+    new bootstrap.Tooltip(element, {
+      container: container
+    });
   }
 </script>
