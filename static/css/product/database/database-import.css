@@ -86,9 +86,17 @@ input[maxlength] {
   background-color: rgba(40, 167, 69, 0.1) !important;
 }
 
+.database-import-upload-success:hover {
+  background-color: rgba(40, 167, 69, 0.15) !important;
+}
+
 .database-import-upload-failure {
   border-color: #dc3545 !important;
   background-color: rgba(220, 53, 69, 0.1) !important;
+}
+
+.database-import-upload-failure:hover {
+  background-color: rgba(220, 53, 69, 0.15) !important;
 }
 
 #database-import-upload p {
