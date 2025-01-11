@@ -100,7 +100,6 @@ th:last-child, td:last-child {
   border-right: none !important;
   width: 100% !important;
   max-width: 100% !important;
-  min-width: 100% !important;
 }
 
 .dark td {
@@ -161,15 +160,6 @@ tr:last-child {
   margin-right: 10px;
 }
 
-
-#database-remove {
-  margin-left: 20px;
-}
-
-#database-insert {
-  margin-right: 20px;
-}
-
 .database-table-cell-editor {
   background-color: transparent !important;
   border: none !important;
@@ -216,6 +206,21 @@ tr:last-child {
   height: 75px;
   padding-left: 25px;
   padding-right: 25px;
+}
+
+@keyframes database-download-green {
+  10% { color: #36df3d; }
+  90% { color: #36df3d; }
+}
+
+@keyframes database-row-new-dark {
+  40% { background-color: #171e28; }
+  60% { background-color: #171e28; }
+}
+
+@keyframes database-row-new-light {
+  40% { background-color: #efefef; }
+  60% { background-color: #efefef; }
 }
 
 .database-rename-content input, .database-column-add-content input {

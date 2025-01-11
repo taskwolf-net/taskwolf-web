@@ -36,7 +36,11 @@
             </table>
           </div>
           <div id="database-table-controls">
-            <button id="database-remove" type="button" class="btn btn-danger disabled">{% trans 'product.database.remove' %}</button>
+            <div class="d-flex align-items-center">
+              <button id="database-remove" type="button" class="btn btn-danger disabled">{% trans 'product.database.remove' %}</button>
+              <button id="database-clear" type="button" class="btn btn-danger d-none">{% trans 'product.database.clear' %}</button>
+              <h4 id="database-selection-count" class="ms-4 mb-0"></h4>
+            </div>
             <button id="database-insert" type="button" class="btn btn-primary">{% trans 'product.database.insert' %}</button>
           </div>
         </div>
@@ -47,9 +51,11 @@
 
 <script>
   let database;
-  let currentPageContent;
+  let currentPage = "";
+  let pageSize = -1;
   let rowCheckboxes = [];
   let rowPlaceholders = [];
+  let fetchingNextPage = true;
 
   $(document).ready(function() {
     displayLoader();
@@ -57,9 +63,10 @@
       database = result;
       document.getElementById("database-name").innerHTML = database.name;
       fillTableHead();
-      fetchDatabasePage(0, function(content, pageState, pageNumber) {
+      fetchFirstDatabasePage(function(response) {
+        updatePaging(response);
+        displayTablePlaceholders();
         removeLoader();
-        updatePaging(pageNumber, 0, pageState, content);
       });
     });
     applyTooltips(document.getElementById("database-download-container"),
@@ -79,6 +86,45 @@
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });
+  }
+
+  function fetchFirstDatabasePage(callback) {
+    pageSize = Math.ceil((window.innerHeight - 70 - 2 * 75 - 87 + 200) / 69);
+    let request = new HttpRequest("https://api.dulno.com/v1/table/content/page/first/",
+      "POST", [], {table: database.id, pageSize: pageSize});
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  document.getElementById("database-table-container").addEventListener("scroll", () => {
+    let container = document.getElementById("database-table-container");
+    const scrollTop = container.scrollTop;
+    const scrollHeight = container.scrollHeight;
+    const clientHeight = container.clientHeight;
+    if (!fetchingNextPage && currentPage !== "" && scrollHeight - scrollTop - clientHeight <= 200) {
+      fetchNextDatabasePage(function (response) {
+        updatePaging(response);
+      })
+    }
+  });
+
+  function fetchNextDatabasePage(callback) {
+    if (fetchingNextPage) {
+      return;
+    }
+    fetchingNextPage = true;
+    let request = new HttpRequest("https://api.dulno.com/v1/table/content/page/next/",
+      "POST", [], {table: database.id, pageState: currentPage, pageSize: pageSize});
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function updatePaging(response) {
+    fetchingNextPage = false;
+    currentPage = response.page;
+    fillTableContent(response.content);
   }
 
   function fillTableHead() {
@@ -102,10 +148,18 @@
       rowCheckboxes[i].checkbox.checked = checkboxSelected;
     }
     let removeButton = document.getElementById("database-remove");
+    let clearButton = document.getElementById("database-clear");
     if (!checkboxSelected) {
+      clearButton.classList.add("d-none");
+      removeButton.classList.remove("d-none");
       removeButton.classList.add("disabled");
-    } else if (currentPageContent.length > 0) {
-      removeButton.classList.remove("disabled");
+      document.getElementById("database-selection-count").innerText = "";
+    } else if (rowCheckboxes.length > 0) {
+      clearButton.classList.remove("d-none");
+      removeButton.classList.add("d-none");
+      document.getElementById("database-selection-count").innerText =
+        "{% trans 'product.database.rows.all' %}" + " " +
+        "{% trans 'product.database.rows.selected' %}";
     }
   }
 
@@ -246,15 +300,8 @@
 
   function fillTableContent(content) {
     let body = document.getElementById("database-table-body");
-    body.innerHTML = "";
     for (let i = 0; i < content.length; i++) {
       body.appendChild(displayTableRow(content[i]));
-    }
-    let remainingLines = Math.ceil((window.innerHeight - 70 - 2 * 75 - 87 - content.length * 69) / 69);
-    for (let i = 0; i < remainingLines; i++) {
-      let placeholder = displayTableRowPlaceholder();
-      rowPlaceholders.push(placeholder);
-      body.appendChild(placeholder);
     }
   }
 
@@ -301,7 +348,11 @@
     input.select();
     input.addEventListener("blur", () => {
       let value = input.value;
-      cell.innerText = value;
+      if (value === "") {
+        cell.innerHTML = "&nbsp;";
+      } else {
+        cell.innerText = value;
+      }
       cell.classList.remove("database-table-cell-editing");
       if (entry.cells[column] === value) {
         return;
@@ -328,6 +379,16 @@
     });
   }
 
+  function displayTablePlaceholders() {
+    let body = document.getElementById("database-table-body");
+    let remainingLines = Math.ceil((window.innerHeight - 70 - 2 * 75 - 87 - rowCheckboxes.length * 69) / 69);
+    for (let i = 0; i < remainingLines; i++) {
+      let placeholder = displayTableRowPlaceholder();
+      rowPlaceholders.push(placeholder);
+      body.appendChild(placeholder);
+    }
+  }
+
   function displayTableRowPlaceholder() {
     let row = document.createElement("tr");
     let checkbox = document.createElement("td");
@@ -343,17 +404,36 @@
   }
 
   function clickRowCheckbox() {
-    let checkboxSelected = false;
+    let selected = 0;
     for (let i = 0; i < rowCheckboxes.length; i++) {
       if (rowCheckboxes[i].checkbox.checked) {
-        checkboxSelected = true;
-        break;
+        selected++;
       }
     }
+    let global = document.getElementById("database-table-checkbox-global");
+    if (global.checked) {
+      global.checked = false;
+    } else if (selected === rowCheckboxes.length) {
+      global.checked = true;
+    }
     let removeButton = document.getElementById("database-remove");
-    if (!checkboxSelected) {
+    let clearButton = document.getElementById("database-clear");
+    if (selected === 0) {
+      document.getElementById("database-selection-count").innerText = "";
+      clearButton.classList.add("d-none");
+      removeButton.classList.remove("d-none");
       removeButton.classList.add("disabled");
+    } else if (selected === rowCheckboxes.length) {
+      document.getElementById("database-selection-count").innerText =
+        "{% trans 'product.database.rows.all' %}" + " " +
+        "{% trans 'product.database.rows.selected' %}";
+      clearButton.classList.remove("d-none");
+      removeButton.classList.add("d-none");
     } else {
+      document.getElementById("database-selection-count").innerText =
+        selected + " " + "{% trans 'product.database.rows.selected' %}";
+      clearButton.classList.add("d-none");
+      removeButton.classList.remove("d-none");
       removeButton.classList.remove("disabled");
     }
   }
@@ -407,55 +487,61 @@
     let input = document.createElement("input");
     input.classList.add("form-check-input");
     input.type = "checkbox";
+    input.checked = rowCheckboxes.length === 0 ? false :
+      document.getElementById("database-table-checkbox-global").checked;
     input.onchange = click;
     entry.appendChild(input);
     return entry;
   }
 
-  let pagingStartingPoint = "";
-
-  function fetchDatabasePage(targetPage, callback) {
-    let body = {};
-    body.table = database.id;
-    body.targetPage = targetPage;
-    let request = new HttpRequest("https://api.dulno.com/v1/table/content/page/",
-      "POST", [], body);
-    request.send(function (status, responseText) {
-      let response = JSON.parse(responseText);
-      pagingStartingPoint = targetPage === 0 ? "FORWARD" : "BACKWARD";
-      callback(response.content, response.page, response.pageNumber);
-    });
+  document.getElementById("database-download").onclick = async function (event) {
+    let downloadButton = document.getElementById("database-download");
+    let parent = document.getElementById("database-download-container");
+    downloadButton.remove();
+    let spinnerContainer = document.createElement("div");
+    spinnerContainer.classList.add("spinner-border");
+    spinnerContainer.role = "status";
+    let spinner = document.createElement("div");
+    spinner.classList.add("visually-hidden");
+    spinnerContainer.appendChild(spinner);
+    parent.appendChild(spinnerContainer);
+    let blob = await downloadTable();
+    let url = URL.createObjectURL(blob);
+    let a = document.createElement("a");
+    a.href = url;
+    a.download = database.name + ".csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    spinnerContainer.remove();
+    parent.appendChild(downloadButton);
+    downloadButton.style.animation = 'database-download-green 1.5s ease';
+    setTimeout(function() {
+      downloadButton.style.animation = '';
+    }, 2000);
   }
 
-  function shiftPage(pages, currentPage, pageState, direction) {
-    let newPage = currentPage + direction;
-    if (newPage === 0 || newPage === pages - 1) {
-      pagingStartingPoint = newPage === 0 ? "FORWARD" : "BACKWARD";
-      fetchDatabasePage(newPage, function(database, pageState, pageNumber) {
-        updatePaging(pageNumber, newPage, pageState, database);
-      });
-      return;
+  async function downloadTable() {
+    let response = await fetch("https://api.dulno.com/v1/table/download/", {
+      method: "POST",
+      headers: createRequestHeaders(),
+      body: JSON.stringify({table: database.id})
+    });
+    return await response.blob();
+  }
+
+  function createRequestHeaders() {
+    let headers = {};
+    let token = Cookie.find("token");
+    if (token !== null) {
+      headers["Authorization"] = "Bearer " + token;
     }
-    let body = {};
-    body.table = database.id;
-    body.pageState = pageState;
-    body.startingPoint = pagingStartingPoint;
-    body.direction = direction < 0 ? "BACKWARD" : "FORWARD";
-    let request = new HttpRequest("https://api.dulno.com/v1/table/content/page/shift/",
-      "POST", [], body);
-    request.send(function (status, responseText) {
-      let response = JSON.parse(responseText);
-      let newPage = currentPage + direction;
-      updatePaging(response.pageNumber, newPage, response.page, response.content);
-    });
-  }
-
-  function updatePaging(pageNumber, currentPage, pageState, database) {
-    document.getElementById("database-table-checkbox-global").checked = false;
-    rowCheckboxes = [];
-    currentPageContent = database;
-    document.getElementById("database-remove").classList.add("disabled");
-    fillTableContent(database);
+    let whitelistKey = Cookie.find("dulno-whitelist-key");
+    if (whitelistKey !== null) {
+      headers["WHITELIST-KEY"] = whitelistKey;
+    }
+    return headers;
   }
 
   document.getElementById("database-delete").onclick = function (event) {
@@ -513,9 +599,10 @@
         let request = new HttpRequest("https://api.dulno.com/v1/table/rename/", "POST",
           [], {table: database.id, name: input.value});
         request.send(function (status, responseText) {
+          database.name = input.value;
+          document.getElementById("database-name").innerHTML = database.name;
           Swal.fire("{% trans 'product.database.rename.successful.title' %}",
-            "{% trans 'product.database.rename.successful.body' %}", "success")
-            .then(success => window.location.reload());
+            "{% trans 'product.database.rename.successful.body' %}", "success");
         });
       }
     });
@@ -538,18 +625,65 @@
   }
 
   document.getElementById("database-remove").onclick = function (event) {
-    for (let i = 0; i < rowCheckboxes.length; i++) {
-      let entry = rowCheckboxes[i];
-      if (entry.checkbox.checked) {
-        let request = new HttpRequest("https://api.dulno.com/v1/table/entry/remove/", "POST",
-          [], {table: database.id, row: findRowId(entry.row)});
+    Swal.fire({
+      title: "{% trans 'product.database.remove.title' %}",
+      text: "{% trans 'product.database.remove.body' %}",
+      icon: "warning",
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+      cancelButtonText: "{% trans 'popup.cancel' %}",
+    }).then(result => {
+      if (result.isConfirmed) {
+        loaderPopup();
+        let rows = [];
+        let elements = [];
+        for (let i = rowCheckboxes.length - 1; i >= 0; i--) {
+          let entry = rowCheckboxes[i];
+          if (entry.checkbox.checked) {
+            rows.push(findRowId(entry.row));
+            elements.push(entry.checkbox.parentNode.parentNode);
+            rowCheckboxes.splice(i, 1);
+          }
+        }
+        let request = new HttpRequest("https://api.dulno.com/v1/table/entries/remove/", "POST",
+          [], {table: database.id, rows: rows});
         request.send(function (status, responseText) {
+          for (let element of elements) {
+            element.remove();
+          }
+          for (let placeholder of rowPlaceholders) {
+            placeholder.remove();
+          }
+          displayTablePlaceholders();
+          document.getElementById("database-selection-count").innerText = "";
+          document.getElementById("database-remove").classList.add("disabled");
+          Swal.fire("{% trans 'product.database.remove.successful.title' %}",
+            "{% trans 'product.database.remove.successful.body' %}", "success");
         });
       }
-    }
-    Swal.fire("{% trans 'product.database.remove.successful.title' %}",
-      "{% trans 'product.database.remove.successful.body' %}", "success")
-      .then(success => window.location.reload());
+    });
+  }
+
+  document.getElementById("database-clear").onclick = function (event) {
+    Swal.fire({
+      title: "{% trans 'product.database.clear.title' %}",
+      text: "{% trans 'product.database.clear.body' %}",
+      icon: "warning",
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+      cancelButtonText: "{% trans 'popup.cancel' %}",
+    }).then(result => {
+      if (result.isConfirmed) {
+        loaderPopup();
+        let request = new HttpRequest("https://api.dulno.com/v1/table/clear/", "POST",
+          [], {table: database.id});
+        request.send(function (status, responseText) {
+          Swal.fire("{% trans 'product.database.clear.successful.title' %}",
+            "{% trans 'product.database.clear.successful.body' %}", "success")
+            .then(success => window.location.reload());
+        });
+      }
+    });
   }
 
   function findRowId(row) {
@@ -585,16 +719,20 @@
       insertButton.innerHTML = "{% trans 'product.database.insert' %}";
       let row = displayTableRow({cells: [{column: "id", value: response.id}]});
       if (rowPlaceholders.length > 0) {
-        let placeholder = rowPlaceholders.shift();
-        placeholder.parentNode.insertBefore(row, placeholder);
-        placeholder.remove();
+        rowPlaceholders.shift().remove();
+      }
+      let table = document.getElementById("database-table");
+      table.insertBefore(row, table.firstChild);
+      if (Cookie.find("dulno-theme") === "dark") {
+        row.style.animation = 'database-row-new-dark 0.8s ease';
       } else {
-        document.getElementById("database-table-body").appendChild(row);
+        row.style.animation = 'database-row-new-light 0.8s ease';
       }
-      if (rowPlaceholders.length === 0) {
-        let table = document.getElementById("database-table-container");
-        table.scrollTo({ top: table.scrollHeight, behavior: 'smooth' });
-      }
+      setTimeout(function() {
+        row.style.animation = '';
+      }, 1000);
+      let container = document.getElementById("database-table-container");
+      container.scrollTo({top: 0, behavior: 'smooth'});
     });
   }
 
