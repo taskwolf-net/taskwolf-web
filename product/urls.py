@@ -20,6 +20,7 @@ urlpatterns = [
   path('process/<str:id>/', process.processSelected),
   path('databases/', database.databases),
   path('database/create/', database.databaseCreate),
+  path('database/import/', database.databaseImport),
   path('database/<str:id>/', database.database),
   path('webhooks/', webhook.webhooks),
   path('webhook/add/', webhook.addWebhook),

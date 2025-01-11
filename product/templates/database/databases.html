@@ -16,6 +16,9 @@
               <i class="fa fa-search"></i>
             </button>
           </div>
+          <div id="database-import-container">
+            <button type="button" id="database-import" class="btn btn-primary btn-block"><i class="fa-solid fa-upload px-2"></i></button>
+          </div>
           <button type="button" id="database-create" class="btn btn-primary btn-block">{% trans 'product.databases.create' %}</button>
         </div>
         <div id="databases-filter-container" class="rounded-4 py-3 mt-4 d-none">
@@ -123,6 +126,8 @@
       organization = result;
       displayDatabasesCreatorFilter();
     });
+    applyTooltips(document.getElementById("database-import-container"),
+      document.getElementById("database-import"), "{% trans 'product.databases.import' %}");
   });
 
   function displayDatabases(databases) {
@@ -552,6 +557,10 @@
     window.location.href = "/database/create/";
   };
 
+  document.getElementById("database-import").onclick = function(event) {
+    window.location.href = "/database/import/";
+  };
+
   function displayLoader() {
     let loader = document.createElement("div");
     loader.classList.add("loader", "loader-list");
@@ -561,5 +570,15 @@
   function removeLoader() {
     document.getElementById("databases-loader").removeChild(
       document.getElementsByClassName("loader")[0]);
+  }
+
+  function applyTooltips(element, container, text) {
+    $(element).attr("data-bs-toggle", "tooltip");
+    $(element).attr("data-bs-placement", "top");
+    $(element).attr("data-bs-title", text);
+    container.classList.add("position-relative");
+    new bootstrap.Tooltip(element, {
+      container: container
+    });
   }
 </script>

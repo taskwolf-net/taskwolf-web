@@ -17,3 +17,8 @@ async def database(request, id):
 async def databaseCreate(request):
   return render(request, 'database/database-create.html', {'title': gettext('product.database.create.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/database/database-create.css']})
+
+@authentication_required
+async def databaseImport(request):
+  return render(request, 'database/database-import.html', {'title': gettext('product.database.import.title'),
+    'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/database/database-import.css']})
