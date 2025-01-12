@@ -138,7 +138,12 @@
     head.appendChild(checkbox);
     let columns = database.columns;
     for (let i = 0; i < columns.length; i++) {
-      head.appendChild(createTableColumnHead(columns[i].name));
+      let columnName = columns[i].name;
+      let dropdown = createTableDropdown([
+        {icon: "fa-trash", content: "{% trans 'product.database.column.settings.delete' %}",
+          color: "text-danger", click: () => openRemoveColumnMenu(columnName)}
+      ], []);
+      head.appendChild(createTableColumnHead(columnName, "fa-t", dropdown));
     }
     head.appendChild(createTableAddColumnButton());
     document.getElementById("database-table-head").appendChild(head);
@@ -165,27 +170,28 @@
     }
   }
 
-  function createTableColumnHead(name) {
+  function createTableColumnHead(name, icon, dropdown) {
     let entry = document.createElement("th");
+    let container = document.createElement("div");
+    container.role = "button";
+    container.classList.add("user-select-none");
+    container.setAttribute("data-bs-toggle", "dropdown");
+    container.setAttribute("aria-expanded", "false");
     let head = document.createElement("div");
     head.classList.add("database-column-head");
+    let columnIcon = document.createElement("h6");
+    columnIcon.classList.add("database-column-icon", "fa-solid", icon, "mb-0", "me-3");
+    head.appendChild(columnIcon);
     let columnName = document.createElement("b");
     columnName.classList.add("text-truncate");
     columnName.innerText = name;
     head.appendChild(columnName);
-    let settingsButton = document.createElement("button");
-    settingsButton.type = "button";
-    settingsButton.classList.add("database-column-settings", "fa-solid",
-      "fa-angle-down");
-    settingsButton.setAttribute("data-bs-toggle", "dropdown");
-    settingsButton.setAttribute("aria-expanded", "false");
-    head.appendChild(settingsButton);
-    let dropdown = createTableSettingsDropdown([
-        {icon: "fa-trash", content: "{% trans 'product.database.column.settings.delete' %}",
-          color: "text-danger", click: () => openRemoveColumnMenu(name)}
-      ], []);
+    let arrow = document.createElement("i");
+    arrow.classList.add("database-column-arrow", "fa-solid", "fa-angle-down", "me-2");
+    head.appendChild(arrow);
     head.appendChild(dropdown);
-    entry.appendChild(head);
+    container.appendChild(head);
+    entry.appendChild(container);
     return entry;
   }
 
@@ -212,30 +218,20 @@
   }
 
   function createTableAddColumnButton() {
-    let entry = document.createElement("th");
-    let dropdown = document.createElement("div");
-    dropdown.classList.add("dropdown");
-    let button = document.createElement("button");
-    button.classList.add("btn", "dropdown-toggle");
-    button.type = "button";
-    button.setAttribute("data-bs-toggle", "dropdown");
-    button.onclick = function (event) {
-      event.preventDefault();
-      openAddColumnMenu();
-    }
-    let buttonIcons = document.createElement("h5");
-    buttonIcons.classList.add("fa-solid", "fa-plus", "mb-0", "me-2");
-    button.appendChild(buttonIcons);
-    let buttonText = document.createElement("span");
-    buttonText.innerText = "{% trans 'product.database.column.add' %}";
-    button.appendChild(buttonText);
-    dropdown.appendChild(button);
-    /*let dropdownMenu = document.createElement("ul");
-    dropdownMenu.classList.add("dropdown-menu");
-    dropdownMenu.innerHTML = '<li><a className="dropdown-item" href="#">Action</a></li>';
-    dropdown.appendChild(dropdownMenu);*/
-    entry.appendChild(dropdown);
-    return entry;
+    let dropdown = createTableDropdown([
+      {icon: "fa-t", content: "{% trans 'product.database.column.type.text' %}",
+        click: () => openAddColumnMenu()},
+      {icon: "fa-align-left", content: "{% trans 'product.database.column.type.text.area' %}",
+        click: () => openAddColumnMenu()},
+      {icon: "fa-calendar-days", content: "{% trans 'product.database.column.type.date' %}",
+        click: () => openAddColumnMenu()},
+      {icon: "fa-toggle-on", content: "{% trans 'product.database.column.type.switch' %}",
+        click: () => openAddColumnMenu()},
+      {icon: "fa-square-check", content: "{% trans 'product.database.column.type.checkbox' %}",
+        click: () => openAddColumnMenu()}
+    ], []);
+    return createTableColumnHead("{% trans 'product.database.column.add' %}",
+      "fa-plus", dropdown);
   }
 
   function openAddColumnMenu() {
@@ -443,34 +439,34 @@
     }
   }
 
-  function createTableSettingsDropdown(buttons, dividers) {
+  function createTableDropdown(buttons, dividers) {
     let dropdown = document.createElement("ul");
-    dropdown.classList.add("database-table-settings-dropdown", "dropdown-menu");
+    dropdown.classList.add("database-table-dropdown", "dropdown-menu", "mt-1");
     for (let i = 0; i < buttons.length; i++) {
       for (let j = 0; j < dividers.length; j++) {
         if (dividers[j] === i) {
-          dropdown.appendChild(createTableSettingsDropdownDivider());
+          dropdown.appendChild(createTableDropdownDivider());
           break;
         }
       }
       let button = buttons[i];
-      dropdown.appendChild(createTableSettingsDropdownButton(dropdown, button.icon,
+      dropdown.appendChild(createTableDropdownButton(dropdown, button.icon,
         button.content, button.color, button.click));
     }
     return dropdown;
   }
 
-  function createTableSettingsDropdownDivider() {
+  function createTableDropdownDivider() {
     let dropdownDivider = document.createElement("li");
-    dropdownDivider.classList.add("database-table-settings-dropdown-divider");
+    dropdownDivider.classList.add("database-table-dropdown-divider");
     return dropdownDivider;
   }
 
-  function createTableSettingsDropdownButton(dropdown, icon, content, color, click) {
+  function createTableDropdownButton(dropdown, icon, content, color, click) {
     let dropdownEntry = document.createElement("li");
-    dropdownEntry.classList.add("database-table-settings-dropdown-entry", "dropdown-item");
+    dropdownEntry.classList.add("database-table-dropdown-entry", "dropdown-item");
     let dropdownEntryIcon = document.createElement("i");
-    dropdownEntryIcon.classList.add("fa-solid", icon);
+    dropdownEntryIcon.classList.add("fa-solid", icon, "text-center");
     dropdownEntry.appendChild(dropdownEntryIcon);
     let dropdownEntryLabel = document.createElement("label");
     dropdownEntryLabel.innerText = content;
@@ -480,7 +476,7 @@
       dropdownEntryLabel.classList.add(color);
     }
     dropdownEntry.onclick = function (event) {
-      $(dropdown).dropdown('toggle');
+      new bootstrap.Dropdown(dropdown).hide();
       click();
     };
     return dropdownEntry;

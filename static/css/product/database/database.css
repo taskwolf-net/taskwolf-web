@@ -105,12 +105,19 @@ th, td {
   width: 250px !important;
   max-width: 250px !important;
   min-width: 250px !important;
-  padding: 1.5rem 1.0rem !important;
   border-right: #626e7b 1px solid !important;
   white-space: nowrap !important;
   text-overflow: ellipsis !important;
   overflow: hidden !important;
   box-sizing: border-box !important;
+}
+
+th {
+  padding: 0.6rem 0.4rem !important;
+}
+
+td {
+  padding: 1.5rem 1.0rem !important;
 }
 
 th:last-child, td:last-child {
@@ -164,13 +171,41 @@ tr:last-child {
 .database-column-head {
   display: flex;
   align-items: center;
+  padding: 0.4rem 0.2rem;
+  border-radius: 5px;
+  transition-duration: 0.3s;
 }
 
-.database-column-settings {
-  border: none;
-  margin-left: 10px;
+.dark .database-column-head:hover, .dark .show .database-column-head {
+  background-color: #19202a;
+}
+
+.light .database-column-head:hover, .light .show .database-column-head {
+  background-color: #eaeaea;
+}
+
+.database-column-icon {
+  padding: 0.4rem 0.4rem;
+  border-radius: 5px;
+  margin-left: 5px;
+}
+
+.dark .database-column-icon {
+  background-color: #252f3d;
+}
+
+.light .database-column-icon {
+  background-color: #d7d7d7;
+}
+
+.database-column-arrow {
+  transition: all ease 0.2s;
   scale: 1.2;
-  background-color: transparent;
+  margin-left: 10px;
+}
+
+.show .database-column-arrow {
+  transform: scaleY(-1) !important;
 }
 
 #database-column-add {
@@ -191,24 +226,25 @@ tr:last-child {
   outline: 2px solid deepskyblue;
 }
 
-.database-table-settings-dropdown {
+.database-table-dropdown {
   padding: 10px !important;
+  width: 236px;
 }
 
-.database-table-settings-dropdown-entry {
+.database-table-dropdown-entry {
   padding: 10px !important;
   border-radius: 4px;
 }
 
-.database-table-settings-dropdown-entry i {
+.database-table-dropdown-entry i {
   width: 20px;
 }
 
-.database-table-settings-dropdown-entry label {
+.database-table-dropdown-entry label {
   margin-left: 15px;
 }
 
-.database-table-settings-dropdown-divider {
+.database-table-dropdown-divider {
   width: 100%;
   margin: 10px auto;
   border-bottom: #626e7b 1px solid;
