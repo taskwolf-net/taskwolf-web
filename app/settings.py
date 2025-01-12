@@ -11,7 +11,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '***REMOVED***'
 
 # Whether the project should be configured in development mode
-DEVELOPMENT = True
+DEVELOPMENT = False
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = DEVELOPMENT
