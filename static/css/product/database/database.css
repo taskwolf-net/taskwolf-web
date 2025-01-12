@@ -51,6 +51,23 @@
   margin-bottom: 0;
 }
 
+@media (max-width: 550px) {
+  #database-header {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  #database-name {
+    margin-left: 10px;
+  }
+}
+
+@media (max-width: 450px) {
+  #database-name, #database-rename {
+    display: none;
+  }
+}
+
 #database-table-container {
   width: 100%;
   height: calc(100vh - 70px - 2 * 75px);
