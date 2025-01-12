@@ -333,6 +333,9 @@
   }
 
   function editTableCell(entry, column, cell) {
+    if (cell.classList.contains("database-table-cell-editing")) {
+      return;
+    }
     cell.classList.add("database-table-cell-editing");
     let currentText = cell.innerText;
     if (cell.innerHTML === "&nbsp;") {
