@@ -114,11 +114,19 @@
       uploadSelection.classList.remove("d-none");
       fileList.innerHTML = "";
       let listItem = document.createElement("li");
+      let itemDescription = document.createElement("div");
+      itemDescription.classList.add("d-flex", "align-items-center", "w-75", "position-relative");
       let itemName = document.createElement("span");
-      itemName.textContent = `${file.name} (${formatFileSize(file.size)})`;
-      listItem.append(itemName);
+      itemName.classList.add("text-truncate");
+      itemName.textContent = file.name;
+      itemDescription.appendChild(itemName);
+      let itemSize = document.createElement("span");
+      itemSize.classList.add("ms-1");
+      itemSize.textContent = `(${formatFileSize(file.size)})`;
+      itemDescription.appendChild(itemSize);
+      listItem.append(itemDescription);
       let itemRemove = document.createElement("i");
-      itemRemove.classList.add("database-import-upload-remove", "fa-solid", "fa-xmark");
+      itemRemove.classList.add("database-import-upload-remove", "fa-solid", "fa-xmark", "ms-2");
       itemRemove.onclick = function (event) {
         uploadSelection.classList.add("d-none");
         selectedFile = null;
@@ -127,7 +135,8 @@
       listItem.append(itemRemove);
       fileList.appendChild(listItem);
       selectedFile = file;
-      document.getElementById("name").value = file.name.replace(".csv", "");
+      document.getElementById("name").value = file.name.replace(".csv", "").slice(0, 64);
+      tickInputMaxLength(document.getElementById("name"));
     }
   }
 
