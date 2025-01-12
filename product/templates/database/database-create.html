@@ -51,17 +51,17 @@
   });
 
   document.getElementById('create').onclick = function() {
+    let name = document.getElementById("name").value;
+    if (name === "") {
+      Swal.fire("{% trans 'product.database.create.empty.title' %}", "{% trans 'product.database.create.empty.body' %}", "error");
+      return;
+    }
     let createButton = document.getElementById("create");
     createButton.classList.add("disabled");
     createButton.innerHTML = "{% trans 'product.database.create.button' %}" + `
       <span class="spinner-border spinner-border-sm ms-2" aria-hidden="true"></span>
       <span class="visually-hidden" role="status">Loading...</span>
     `;
-    let name = document.getElementById("name").value;
-    if (name === "") {
-      Swal.fire("{% trans 'product.database.create.empty.title' %}", "{% trans 'product.database.create.empty.body' %}", "error");
-      return;
-    }
     let request = new HttpRequest("https://api.dulno.com/v1/table/create/", "POST",
       [], {name: document.getElementById("name").value});
     request.send(function (status, responseText) {

@@ -25,6 +25,12 @@
           <input type="name" id="name" class="form-control" maxlength=64 placeholder="{% trans 'product.database.import.name' %}">
         </div>
         <button type="button" id="import" class="btn btn-primary mb-5">{% trans 'product.database.import.button' %}</button></br>
+        <div id="database-import-progress" class="d-none">
+          <div class="progress w-75 mx-auto mb-4" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+            <div id="database-import-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated"></div>
+          </div>
+          <p id="database-import-status" class="text-secondary mb-5">{% trans 'product.database.table.created' %}</p>
+        </div>
       </form>
     </div>
   </body>
@@ -157,31 +163,82 @@
     }
   });
 
-  document.getElementById('import').onclick = function() {
+  document.getElementById('import').onclick = async function() {
+    let name = document.getElementById("name").value;
+    if (name === "" || selectedFile == null) {
+      Swal.fire("{% trans 'product.database.import.empty.title' %}",
+        "{% trans 'product.database.import.empty.body' %}", "error");
+      return;
+    }
     let importButton = document.getElementById("import");
     importButton.classList.add("disabled");
     importButton.innerHTML = "{% trans 'product.database.import.button' %}" + `
       <span class="spinner-border spinner-border-sm ms-2" aria-hidden="true"></span>
       <span class="visually-hidden" role="status">Loading...</span>
     `;
-    let name = document.getElementById("name").value;
-    if (name === "") {
-      Swal.fire("{% trans 'product.database.import.empty.title' %}", "{% trans 'product.database.import.empty.body' %}", "error");
-      return;
-    }
-    let request = new HttpRequest("https://api.dulno.com/v1/table/import/", "POST",
-      [], {name: document.getElementById("name").value});
-    request.send(function (status, responseText) {
-      if (status !== 200) {
-        importButton.classList.remove("disabled");
-        importButton.innerHTML = "{% trans 'product.database.import.button' %}";
-      }
-      if (status === 400) {
-        Swal.fire("{% trans 'product.database.import.limit.reached.title' %}",
-          "{% trans 'product.database.import.limit.reached.body' %}", "error");
-        return;
-      }
-      window.location.href = "/database/" + JSON.parse(responseText).table + "/";
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("name", name);
+    const response = await fetch("https://api.dulno.com/v1/table/import/", {
+      method: "POST",
+      headers: createRequestHeaders(),
+      body: formData,
     });
+    await readImportResponse(response);
   };
+
+  async function readImportResponse(response) {
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+    let rows = -1;
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) {
+        break;
+      }
+      const chunk = decoder.decode(value, { stream: true });
+      const lines = chunk.split("\n");
+      for (const line of lines) {
+        if (line.startsWith("data:")) {
+          let data = line.substring(5).trim();
+          if (data === "") {
+            continue;
+          }
+          let response = JSON.parse(data);
+          if (response.type === "LIMIT") {
+            let importButton = document.getElementById("import");
+            importButton.classList.remove("disabled");
+            importButton.innerHTML = "{% trans 'product.database.import.button' %}";
+            Swal.fire("{% trans 'product.database.import.limit.reached.title' %}",
+              "{% trans 'product.database.import.limit.reached.body' %}", "error");
+            break;
+          } else if (response.type === "TABLE") {
+            document.getElementById("database-import-progress").classList.remove("d-none");
+          } else if (response.type === "ROWS") {
+            rows = response.number;
+          } else if (response.type === "INSERTION") {
+            document.getElementById("database-import-progress-bar").style.width =
+              (100 * (response.progress / rows)) + "%";
+          } else if (response.type === "FINISH") {
+            setTimeout(function () {
+              window.location.href = "/database/" + response.table + "/";
+            }, 2000);
+          }
+        }
+      }
+    }
+  }
+
+  function createRequestHeaders() {
+    let headers = {};
+    let token = Cookie.find("token");
+    if (token !== null) {
+      headers["Authorization"] = "Bearer " + token;
+    }
+    let whitelistKey = Cookie.find("dulno-whitelist-key");
+    if (whitelistKey !== null) {
+      headers["WHITELIST-KEY"] = whitelistKey;
+    }
+    return headers;
+  }
 </script>
