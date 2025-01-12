@@ -190,6 +190,7 @@
   async function readImportResponse(response) {
     const reader = response.body.getReader();
     const decoder = new TextDecoder("utf-8");
+    let progressBar = document.getElementById("database-import-progress-bar");
     let rows = -1;
     while (true) {
       const { done, value } = await reader.read();
@@ -216,9 +217,11 @@
             document.getElementById("database-import-progress").classList.remove("d-none");
           } else if (response.type === "ROWS") {
             rows = response.number;
+            if (rows === 0) {
+              progressBar.style.width = "100%";
+            }
           } else if (response.type === "INSERTION") {
-            document.getElementById("database-import-progress-bar").style.width =
-              (100 * (response.progress / rows)) + "%";
+            progressBar.style.width = (100 * (response.progress / rows)) + "%";
           } else if (response.type === "FINISH") {
             setTimeout(function () {
               window.location.href = "/database/" + response.table + "/";
