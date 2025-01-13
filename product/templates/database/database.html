@@ -138,12 +138,12 @@
     head.appendChild(checkbox);
     let columns = database.columns;
     for (let i = 0; i < columns.length; i++) {
-      let columnName = columns[i].name;
+      let column = columns[i];
       let dropdown = createTableDropdown([
         {icon: "fa-trash", content: "{% trans 'product.database.column.settings.delete' %}",
-          color: "text-danger", click: () => openRemoveColumnMenu(columnName)}
+          color: "text-danger", click: () => openRemoveColumnMenu(column.id)}
       ], []);
-      head.appendChild(createTableColumnHead(columnName, "fa-t", dropdown));
+      head.appendChild(createTableColumnHead(column.name, "fa-t", dropdown));
     }
     head.appendChild(createTableAddColumnButton());
     document.getElementById("database-table-head").appendChild(head);
@@ -207,7 +207,7 @@
       if (result.isConfirmed) {
         loaderPopup();
         let request = new HttpRequest("https://api.dulno.com/v1/table/column/remove/", "POST",
-          [], {table: database.id, columnName: column});
+          [], {table: database.id, column: column});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.database.column.remove.successful.title' %}",
             "{% trans 'product.database.column.remove.successful.body' %}", "success")
@@ -220,21 +220,21 @@
   function createTableAddColumnButton() {
     let dropdown = createTableDropdown([
       {icon: "fa-t", content: "{% trans 'product.database.column.type.text' %}",
-        click: () => openAddColumnMenu()},
+        click: () => openAddColumnMenu("TEXT")},
       {icon: "fa-align-left", content: "{% trans 'product.database.column.type.text.area' %}",
-        click: () => openAddColumnMenu()},
+        click: () => openAddColumnMenu("TEXT_AREA")},
       {icon: "fa-calendar-days", content: "{% trans 'product.database.column.type.date' %}",
-        click: () => openAddColumnMenu()},
+        click: () => openAddColumnMenu("DATE")},
       {icon: "fa-toggle-on", content: "{% trans 'product.database.column.type.switch' %}",
-        click: () => openAddColumnMenu()},
+        click: () => openAddColumnMenu("SWITCH")},
       {icon: "fa-square-check", content: "{% trans 'product.database.column.type.checkbox' %}",
-        click: () => openAddColumnMenu()}
+        click: () => openAddColumnMenu("CHECKBOX")}
     ], []);
     return createTableColumnHead("{% trans 'product.database.column.add' %}",
       "fa-plus", dropdown);
   }
 
-  function openAddColumnMenu() {
+  function openAddColumnMenu(type) {
     let content = document.createElement("div");
     content.classList.add("database-column-add-content");
     let text = document.createElement("p");
@@ -266,7 +266,7 @@
         }
         loaderPopup();
         let request = new HttpRequest("https://api.dulno.com/v1/table/column/add/", "POST",
-          [], {table: database.id, columnName: input.value});
+          [], {table: database.id, columnName: input.value, columnType: type});
         request.send(function (status, responseText) {
           let response = JSON.parse(responseText);
           if (response.success === true) {
@@ -275,15 +275,6 @@
               .then(success => window.location.reload());
           } else {
             if (response.errorCode === 1000) {
-              Swal.fire("{% trans 'product.database.column.add.failed.title' %}",
-                "{% trans 'product.database.column.add.failed.ineligible' %}", "error");
-            } else if (response.errorCode === 1001) {
-              Swal.fire("{% trans 'product.database.column.add.failed.title' %}",
-                "{% trans 'product.database.column.add.failed.pattern' %}", "error");
-            } else if (response.errorCode === 1002) {
-              Swal.fire("{% trans 'product.database.column.add.failed.title' %}",
-                "{% trans 'product.database.column.add.failed.occupied' %}", "error");
-            } else if (response.errorCode === 1003) {
               Swal.fire("{% trans 'product.database.column.add.failed.title' %}",
                 "{% trans 'product.database.column.add.failed.limit' %}", "error");
             } else {
@@ -313,7 +304,7 @@
     let columns = database.columns;
     let cells = entry.cells;
     for (let i = 0; i < columns.length; i++) {
-      let column = columns[i].name;
+      let column = columns[i].id;
       let cell = document.createElement("td");
       cell.onclick = function (event) {
         editTableCell(entry, column, cell);
@@ -375,7 +366,8 @@
       let response = JSON.parse(responseText);
       if (!response.success) {
         Swal.fire("{% trans 'product.database.row.edit.failed.limit.reached.title' %}",
-          "{% trans 'product.database.row.edit.failed.limit.reached.body' %}", "error");
+          "{% trans 'product.database.row.edit.failed.limit.reached.body' %}", "error")
+          .then(success => window.location.reload());
       }
     });
   }
