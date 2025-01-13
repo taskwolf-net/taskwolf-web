@@ -139,18 +139,26 @@
     let columns = database.columns;
     for (let i = 0; i < columns.length; i++) {
       let column = columns[i];
-      let dropdown = createTableDropdown([
-        {icon: "fa-pen", content: "{% trans 'product.database.column.settings.rename' %}",
-          click: () => {}},
-        {icon: "fa-circle-arrow-left", content: "{% trans 'product.database.column.settings.move.left' %}",
-          click: () => {}},
-        {icon: "fa-circle-arrow-right", content: "{% trans 'product.database.column.settings.move.right' %}",
-          click: () => {}},
-        {icon: "fa-trash", content: "{% trans 'product.database.column.settings.delete' %}",
-          color: "text-danger", click: () => openRemoveColumnMenu(column.id)}
-      ], [1, 3]);
-      head.appendChild(createTableColumnHead(column.name,
-        findColumnIcon(column.type), dropdown));
+      var entries = [];
+      entries.push({icon: "fa-pen", content: "{% trans 'product.database.column.settings.rename' %}",
+        click: () => editColumnName(column)});
+      if (i > 0) {
+        entries.push({icon: "fa-circle-arrow-left", content: "{% trans 'product.database.column.settings.move.left' %}",
+          click: () => moveColumn(column, -1)});
+      }
+      if (i < columns.length - 1) {
+        entries.push({icon: "fa-circle-arrow-right", content: "{% trans 'product.database.column.settings.move.right' %}",
+          click: () => moveColumn(column, 1)});
+      }
+      entries.push({icon: "fa-trash", content: "{% trans 'product.database.column.settings.delete' %}",
+        color: "text-danger", click: () => openRemoveColumnMenu(column.id)});
+      let dropdown = createTableDropdown(entries, columns.length > 1 ? [1, entries.length - 1] : []);
+      let element = createTableColumnHead(column.id, column.name,
+        findColumnIcon(column.type), dropdown);
+      element.ondblclick = function (event) {
+        editColumnName(column);
+      }
+      head.appendChild(element);
     }
     head.appendChild(createTableAddColumnButton());
     document.getElementById("database-table-head").appendChild(head);
@@ -177,29 +185,80 @@
     }
   }
 
-  function createTableColumnHead(name, icon, dropdown) {
+  function createTableColumnHead(id, name, icon, dropdown) {
     let entry = document.createElement("th");
     let container = document.createElement("div");
+    container.id = "database-column-container-" + id;
     container.role = "button";
     container.classList.add("user-select-none");
     container.setAttribute("data-bs-toggle", "dropdown");
     container.setAttribute("aria-expanded", "false");
     let head = document.createElement("div");
+    head.id = "database-column-" + id;
     head.classList.add("database-column-head");
     let columnIcon = document.createElement("h6");
     columnIcon.classList.add("database-column-icon", "fa-solid", icon, "mb-0", "me-3");
     head.appendChild(columnIcon);
-    let columnName = document.createElement("b");
+    let columnName = document.createElement(id === "add" ? "b" : "span");
+    columnName.id = "database-column-name-" + id;
     columnName.classList.add("text-truncate");
     columnName.innerText = name;
     head.appendChild(columnName);
     let arrow = document.createElement("i");
+    arrow.id = "database-column-arrow-" + id;
     arrow.classList.add("database-column-arrow", "fa-solid", "fa-angle-down", "me-2");
     head.appendChild(arrow);
     head.appendChild(dropdown);
     container.appendChild(head);
     entry.appendChild(container);
     return entry;
+  }
+
+  function editColumnName(column) {
+    let containerElement = document.getElementById("database-column-container-" + column.id);
+    let headElement = document.getElementById("database-column-" + column.id);
+    let nameElement = document.getElementById("database-column-name-" + column.id);
+    let arrowElement = document.getElementById("database-column-arrow-" + column.id);
+    let input = document.createElement("input");
+    input.type = "text";
+    input.value = column.name;
+    input.maxLength = 64;
+    input.classList.add("database-column-editor", "me-1");
+    nameElement.classList.add("d-none");
+    arrowElement.classList.add("d-none");
+    headElement.appendChild(input);
+    containerElement.classList.add("editing");
+    input.focus();
+    input.select();
+    input.addEventListener("blur", () => {
+      let value = input.value;
+      input.remove();
+      nameElement.classList.remove("d-none");
+      arrowElement.classList.remove("d-none");
+      containerElement.classList.remove("editing");
+      nameElement.innerText = value;
+      column.name = value;
+      let request = new HttpRequest("https://api.dulno.com/v1/table/column/rename/", "POST",
+        [], {table: database.id, columnId: column.id, columnName: value});
+      request.send(function (status, responseText) {
+      });
+    });
+    input.addEventListener("keypress", (event) => {
+      if (event.key === "Enter") {
+        input.blur();
+      }
+    });
+  }
+
+  function moveColumn(column, offset) {
+    let index = database.columns.indexOf(column) + 1;
+    const rows = document.getElementById("database-table").rows;
+    for (let i = 0; i < rows.length; i++) {
+      const cells = rows[i].cells;
+      const temp = cells[index].innerHTML;
+      cells[index].innerHTML = cells[index + offset].innerHTML;
+      cells[index + offset].innerHTML = temp;
+    }
   }
 
   function openRemoveColumnMenu(column) {
@@ -237,7 +296,7 @@
       {icon: findColumnIcon("CHECKBOX"), content: "{% trans 'product.database.column.type.checkbox' %}",
         click: () => openAddColumnMenu("CHECKBOX")}
     ], []);
-    return createTableColumnHead("{% trans 'product.database.column.add' %}",
+    return createTableColumnHead("add", "{% trans 'product.database.column.add' %}",
       "fa-plus", dropdown);
   }
 

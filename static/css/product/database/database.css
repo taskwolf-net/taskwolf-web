@@ -176,11 +176,11 @@ tr:last-child {
   transition-duration: 0.3s;
 }
 
-.dark .database-column-head:hover, .dark .show .database-column-head {
+.dark .database-column-head:hover, .dark .show .database-column-head, .dark .editing .database-column-head {
   background-color: #19202a;
 }
 
-.light .database-column-head:hover, .light .show .database-column-head {
+.light .database-column-head:hover, .light .show .database-column-head, .light .editing .database-column-head {
   background-color: #eaeaea;
 }
 
@@ -212,7 +212,7 @@ tr:last-child {
   margin-right: 10px;
 }
 
-.database-table-cell-editor {
+.database-table-cell-editor, .database-column-editor {
   background-color: transparent !important;
   border: none !important;
   outline: none;
