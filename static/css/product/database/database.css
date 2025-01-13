@@ -226,6 +226,31 @@ tr:last-child {
   outline: 2px solid deepskyblue;
 }
 
+.database-table-cell-date {
+  padding: 1.0rem 0.5rem !important;
+  text-align: center;
+}
+
+.database-table-cell-date input {
+  width: calc(100% - 1rem);
+  border-radius: 5px;
+  padding: 0.5rem 0.5rem;
+}
+
+.dark .database-table-cell-date input {
+  background-color: #0d1117 !important;
+  color: white !important;
+  -webkit-text-fill-color: white;
+  border: 1px solid #cecece !important;
+}
+
+.light .database-table-cell-date input {
+  background-color: #eaeaea !important;
+  color: black !important;
+  -webkit-text-fill-color: black;
+  border: 1px solid #4c4c4c !important;
+}
+
 .database-table-dropdown {
   padding: 10px !important;
   width: 236px;
@@ -276,7 +301,7 @@ tr:last-child {
   60% { background-color: #efefef; }
 }
 
-.database-rename-content input, .database-column-add-content input {
+.database-rename-content input, .database-column-add-content input, .database-text-area-edit-content textarea {
   background-color: transparent;
   border-radius: 5px;
   box-shadow: none;
@@ -284,17 +309,17 @@ tr:last-child {
   padding: 10px !important;
 }
 
-.dark .database-rename-content input, .dark .database-column-add-content input {
+.dark .database-rename-content input, .dark .database-column-add-content input, .dark .database-text-area-edit-content textarea {
   border: 1px solid white;
   color: white;
 }
 
-.light .database-rename-content input, .light .database-column-add-content input {
+.light .database-rename-content input, .light .database-column-add-content input, .light  .database-text-area-edit-content textarea {
   border: 1px solid black;
   color: black;
 }
 
-.database-rename-content input::placeholder, .database-column-add-content input::placeholder {
+.database-rename-content input::placeholder, .database-column-add-content input::placeholder, .database-text-area-edit-content textarea::placeholder {
   color: #a5a5a5;
 }
 

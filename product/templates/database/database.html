@@ -323,26 +323,40 @@
     rowCheckboxes.push({checkbox: checkbox.firstChild, row: entry});
     row.appendChild(checkbox);
     let columns = database.columns;
-    let cells = entry.cells;
     for (let i = 0; i < columns.length; i++) {
-      let column = columns[i].id;
-      let cell = document.createElement("td");
-      cell.onclick = function (event) {
-        editTableCell(entry, column, cell);
+      let column = columns[i];
+      if (column.type === "TEXT" || column.type === "TEXT_AREA") {
+        row.appendChild(createTextTableCell(entry, column));
+      } else if (column.type === "DATE") {
+        row.appendChild(createDateTableCell(entry, column));
+      } else if (column.type === "SWITCH" || column.type === "CHECKBOX") {
+        row.appendChild(createBooleanTableCell(entry, column));
       }
-      let values = cells.filter((cell) => cell.column === column);
-      if (values.length > 0 && values[0].value !== "") {
-        cell.innerText = values[0].value;
-      } else {
-        cell.innerHTML = "&nbsp;";
-      }
-      row.appendChild(cell);
     }
     row.appendChild(document.createElement("td"));
     return row;
   }
 
-  function editTableCell(entry, column, cell) {
+  function createTextTableCell(entry, column) {
+    let cell = document.createElement("td");
+    cell.onclick = function (event) {
+      if (column.type === "TEXT") {
+        editTableTextCell(entry, column.id, cell);
+      } else  if (column.type === "TEXT_AREA") {
+        editTableTextAreaCell(entry, column.id, cell);
+      }
+    }
+    let entryCell = entry.cells.filter((some) => some.column === column.id)[0];
+    if (entryCell && entryCell.value !== null && entryCell.value !== "") {
+      cell.innerText = entryCell.value.replaceAll("\n", "");
+    } else {
+      cell.innerHTML = "&nbsp;";
+    }
+    return cell;
+  }
+
+
+  function editTableTextCell(entry, column, cell) {
     if (cell.classList.contains("database-table-cell-editing")) {
       return;
     }
@@ -360,17 +374,13 @@
     input.focus();
     input.select();
     input.addEventListener("blur", () => {
-      let value = input.value;
+      let value = input.value.replaceAll("\n", "");
       if (value === "") {
         cell.innerHTML = "&nbsp;";
       } else {
         cell.innerText = value;
       }
       cell.classList.remove("database-table-cell-editing");
-      if (entry.cells[column] === value) {
-        return;
-      }
-      entry.cells[column] = value;
       submitTableEdit(entry, column, value);
     });
     input.addEventListener("keypress", (event) => {
@@ -380,7 +390,95 @@
     });
   }
 
+  function editTableTextAreaCell(entry, column, cell) {
+    cell.classList.add("database-table-cell-editing");
+    let content = document.createElement("div");
+    content.classList.add("database-text-area-edit-content");
+    let inputContainer = document.createElement("div");
+    inputContainer.classList.add("mb-3", "mt-2", "mx-auto", "w-100");
+    let input = document.createElement("textarea");
+    input.classList.add("w-100");
+    input.placeholder = "{% trans 'product.database.text.area.edit.placeholder' %}";
+    let entryCell = entry.cells.filter((some) => some.column === column)[0];
+    if (entryCell && entryCell.value !== null && entryCell.value !== "") {
+      input.value = entryCell.value;
+    }
+    input.addEventListener('input', function (event) {
+      let value = input.value;
+      if (value === "") {
+        cell.innerHTML = "&nbsp;";
+      } else {
+        cell.innerText = value.replaceAll("\n", "");
+      }
+    });
+    inputContainer.appendChild(input);
+    content.appendChild(inputContainer);
+    Swal.fire({
+      title: "{% trans 'product.database.text.area.edit.title' %}",
+      html: content,
+      showCancelButton: true,
+      cancelButtonText: "{% trans 'popup.cancel' %}",
+    }).then(result => {
+      cell.classList.remove("database-table-cell-editing");
+      if (result.isConfirmed) {
+        submitTableEdit(entry, column, input.value);
+      }
+    });
+    input.focus();
+  }
+
+  function createDateTableCell(entry, column) {
+    let cell = document.createElement("td");
+    cell.classList.add("database-table-cell-date");
+    let input = document.createElement("input");
+    input.type = "date";
+    let entryCell = entry.cells.filter((some) => some.column === column.id)[0];
+    if (entryCell && entryCell.value !== null && entryCell.value !== "") {
+      input.value = entryCell.value;
+    }
+    input.oninput = function (event) {
+      submitTableEdit(entry, column.id, input.value);
+    }
+    cell.appendChild(input);
+    return cell;
+  }
+
+  function createBooleanTableCell(entry, column) {
+    let cell = document.createElement("td");
+    let inputContainer = document.createElement("div");
+    inputContainer.classList.add("p-0", "text-center");
+    if (column.type === "SWITCH") {
+      inputContainer.classList.add("form-switch");
+    }
+    let input = document.createElement("input");
+    input.classList.add("form-check-input", "m-0");
+    input.type = "checkbox";
+    if (column.type === "SWITCH") {
+      input.role = "switch";
+    }
+    input.style.scale = "1.8";
+    let entryCell = entry.cells.filter((some) => some.column === column.id)[0];
+    if (entryCell && entryCell.value !== null && entryCell.value !== "") {
+      input.checked = entryCell.value;
+    }
+    input.onchange = function (event) {
+      submitTableEdit(entry, column.id, input.checked);
+    }
+    inputContainer.appendChild(input);
+    cell.appendChild(inputContainer);
+    return cell;
+  }
+
   function submitTableEdit(entry, column, value) {
+    let cell = entry.cells.filter((some) => some.column === column)[0];
+    if (!cell) {
+      cell = {column: column, value: value};
+      entry.cells.push(cell);
+    } else if (cell.value === value) {
+      return;
+    } else {
+      cell.value = value;
+    }
     let request = new HttpRequest("https://api.dulno.com/v1/table/entry/update/", "POST",
       [], {table: database.id, row: findRowId(entry), column: column, value: value});
     request.send(function (status, responseText) {
