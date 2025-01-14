@@ -53,6 +53,7 @@
 
 <script>
   let database;
+  let databaseContent = [];
   let currentPage = "";
   let pageSize = -1;
   let rowCheckboxes = [];
@@ -126,6 +127,7 @@
   function updatePaging(response) {
     fetchingNextPage = false;
     currentPage = response.page;
+    databaseContent = databaseContent.concat(response.content);
     fillTableContent(response.content);
   }
 
@@ -139,7 +141,7 @@
     let columns = database.columns;
     for (let i = 0; i < columns.length; i++) {
       let column = columns[i];
-      var entries = [];
+      let entries = [];
       entries.push({icon: "fa-pen", content: "{% trans 'product.database.column.settings.rename' %}",
         click: () => editColumnName(column)});
       if (i > 0) {
@@ -167,7 +169,7 @@
   function clickGlobalCheckbox() {
     let checkboxSelected = document.getElementById("database-table-checkbox-global").checked;
     for (let i = 0; i < rowCheckboxes.length; i++) {
-      rowCheckboxes[i].checkbox.checked = checkboxSelected;
+      rowCheckboxes[i].checkbox.firstChild.checked = checkboxSelected;
     }
     let removeButton = document.getElementById("database-remove");
     let clearButton = document.getElementById("database-clear");
@@ -251,14 +253,21 @@
   }
 
   function moveColumn(column, offset) {
-    let index = database.columns.indexOf(column) + 1;
-    const rows = document.getElementById("database-table").rows;
-    for (let i = 0; i < rows.length; i++) {
-      const cells = rows[i].cells;
-      const temp = cells[index].innerHTML;
-      cells[index].innerHTML = cells[index + offset].innerHTML;
-      cells[index + offset].innerHTML = temp;
-    }
+    let index = database.columns.indexOf(column);
+    database.columns[index] = database.columns[index + offset];
+    database.columns[index + offset] = column;
+    let globalChecked = document.getElementById("database-table-checkbox-global").checked;
+    document.getElementById("database-table-head").innerHTML = "";
+    document.getElementById("database-table-body").innerHTML = "";
+    fillTableHead();
+    document.getElementById("database-table-checkbox-global").checked = globalChecked;
+    fillTableContent(databaseContent);
+    displayTablePlaceholders();
+    let request = new HttpRequest("https://api.dulno.com/v1/table/column/move/", "POST",
+      [], {table: database.id, sourceColumn: column.id, targetColumn:
+        database.columns[index].id});
+    request.send(function (status, responseText) {
+    });
   }
 
   function openRemoveColumnMenu(column) {
@@ -370,16 +379,21 @@
   function fillTableContent(content) {
     let body = document.getElementById("database-table-body");
     for (let i = 0; i < content.length; i++) {
-      body.appendChild(displayTableRow(content[i]));
+      body.appendChild(displayTableRow(content[i], i));
     }
   }
 
-  function displayTableRow(entry) {
+  function displayTableRow(entry, index) {
     let row = document.createElement("tr");
-    let checkbox = createCheckboxElement(function(event) {
-      clickRowCheckbox();
-    });
-    rowCheckboxes.push({checkbox: checkbox.firstChild, row: entry});
+    let checkbox;
+    if (rowCheckboxes.length < databaseContent.length) {
+      checkbox = createCheckboxElement(function(event) {
+        clickRowCheckbox();
+      });
+      rowCheckboxes.push({checkbox: checkbox, row: entry});
+    } else {
+      checkbox = rowCheckboxes[index].checkbox;
+    }
     row.appendChild(checkbox);
     let columns = database.columns;
     for (let i = 0; i < columns.length; i++) {
@@ -577,7 +591,7 @@
   function clickRowCheckbox() {
     let selected = 0;
     for (let i = 0; i < rowCheckboxes.length; i++) {
-      if (rowCheckboxes[i].checkbox.checked) {
+      if (rowCheckboxes[i].checkbox.firstChild.checked) {
         selected++;
       }
     }
@@ -658,8 +672,8 @@
     let input = document.createElement("input");
     input.classList.add("form-check-input");
     input.type = "checkbox";
-    input.checked = rowCheckboxes.length === 0 ? false :
-      document.getElementById("database-table-checkbox-global").checked;
+    let globalCheckbox = document.getElementById("database-table-checkbox-global");
+    input.checked = globalCheckbox ? globalCheckbox.checked : false;
     input.onchange = click;
     entry.appendChild(input);
     return entry;
@@ -810,9 +824,9 @@
         let elements = [];
         for (let i = rowCheckboxes.length - 1; i >= 0; i--) {
           let entry = rowCheckboxes[i];
-          if (entry.checkbox.checked) {
+          if (entry.checkbox.firstChild.checked) {
             rows.push(findRowId(entry.row));
-            elements.push(entry.checkbox.parentNode.parentNode);
+            elements.push(entry.checkbox.parentNode);
             rowCheckboxes.splice(i, 1);
           }
         }
