@@ -79,6 +79,9 @@
       } else if (inputVariable.dataType === "TIME") {
         addSpecificationTime(inputVariable.identifier, inputVariable.name, inputVariable.description);
         specificationValues["timezone"] = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      } else if (inputVariable.dataType === "DATE") {
+        addSpecificationDate(inputVariable.identifier, inputVariable.name, inputVariable.description);
+        specificationValues["timezone"] = Intl.DateTimeFormat().resolvedOptions().timeZone;
       } else if (inputVariable.dataType === "COLOR") {
         addSpecificationColor(inputVariable.identifier, inputVariable.name, inputVariable.description);
       } else if (inputVariable.dataType === "LIST") {
@@ -363,6 +366,29 @@
       if (identifier in selectedComponentContent) {
         specificationValues[identifier] = selectedComponentContent[identifier];
         timeInput.value = selectedComponentContent[identifier];
+      }
+      completeVariableSetup(identifier);
+    }
+  }
+
+  function addSpecificationDate(identifier, name, description) {
+    let inputContainerElement = document.createElement("div");
+    inputContainerElement.classList.add("workflow-specification-date-container", "form-outline", "mb-4");
+    inputContainerElement.appendChild(createSpecificationHeadline(name, description));
+    let dateInput = document.createElement("input");
+    dateInput.type = "date";
+    dateInput.classList.add("rounded-2", "py-1", "px-2");
+    dateInput.oninput = function (event) {
+      specificationValues[identifier] = dateInput.value;
+      checkAdoptability();
+    }
+    inputContainerElement.appendChild(dateInput);
+    document.getElementById(specificationPrefix + "-input-list").appendChild(inputContainerElement);
+    if (selectedComponentSetup && "content" in selectedComponent) {
+      let selectedComponentContent = JSON.parse(selectedComponent.content);
+      if (identifier in selectedComponentContent) {
+        specificationValues[identifier] = selectedComponentContent[identifier];
+        dateInput.value = selectedComponentContent[identifier];
       }
       completeVariableSetup(identifier);
     }
