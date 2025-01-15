@@ -262,6 +262,7 @@
     fillTableHead();
     document.getElementById("database-table-checkbox-global").checked = globalChecked;
     fillTableContent(databaseContent);
+    rowPlaceholders = [];
     displayTablePlaceholders();
     let request = new HttpRequest("https://api.dulno.com/v1/table/column/move/", "POST",
       [], {table: database.id, sourceColumn: column.id, targetColumn:
@@ -386,7 +387,7 @@
   function displayTableRow(entry, index) {
     let row = document.createElement("tr");
     let checkbox;
-    if (rowCheckboxes.length < databaseContent.length) {
+    if (rowCheckboxes.length < databaseContent.length || !index) {
       checkbox = createCheckboxElement(function(event) {
         clickRowCheckbox();
       });
@@ -566,7 +567,7 @@
 
   function displayTablePlaceholders() {
     let body = document.getElementById("database-table-body");
-    let remainingLines = Math.ceil((window.innerHeight - 70 - 2 * 75 - 87 - rowCheckboxes.length * 69) / 69);
+    let remainingLines = Math.ceil((window.innerHeight - 70 - 2 * 75 - 87 - databaseContent.length * 69) / 69);
     for (let i = 0; i < remainingLines; i++) {
       let placeholder = displayTableRowPlaceholder();
       rowPlaceholders.push(placeholder);
@@ -828,6 +829,7 @@
             rows.push(findRowId(entry.row));
             elements.push(entry.checkbox.parentNode);
             rowCheckboxes.splice(i, 1);
+            databaseContent.splice(databaseContent.indexOf(entry.row), 1);
           }
         }
         let request = new HttpRequest("https://api.dulno.com/v1/table/entries/remove/", "POST",
@@ -839,6 +841,7 @@
           for (let placeholder of rowPlaceholders) {
             placeholder.remove();
           }
+          rowPlaceholders = [];
           displayTablePlaceholders();
           document.getElementById("database-selection-count").innerText = "";
           document.getElementById("database-remove").classList.add("disabled");
