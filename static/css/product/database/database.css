@@ -120,6 +120,13 @@ td {
   padding: 1.5rem 1.0rem !important;
 }
 
+td label {
+  width: 100%;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  overflow: hidden !important;
+}
+
 th:last-child, td:last-child {
   border-right: none !important;
   width: 100% !important;
@@ -220,6 +227,11 @@ tr:last-child {
   margin: 0;
   width: 100%;
   height: 20px;
+}
+
+.database-editor-hidden {
+  visibility: hidden !important;
+  width: 0 !important;
 }
 
 .database-table-cell-editing {

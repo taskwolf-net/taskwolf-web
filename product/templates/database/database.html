@@ -196,7 +196,6 @@
     container.setAttribute("data-bs-toggle", "dropdown");
     container.setAttribute("aria-expanded", "false");
     let head = document.createElement("div");
-    head.id = "database-column-" + id;
     head.classList.add("database-column-head");
     let columnIcon = document.createElement("h6");
     columnIcon.classList.add("database-column-icon", "fa-solid", icon, "mb-0", "me-3");
@@ -206,6 +205,13 @@
     columnName.classList.add("text-truncate");
     columnName.innerText = name;
     head.appendChild(columnName);
+    let input = document.createElement("input");
+    input.id = "database-column-input-" + id;
+    input.type = "text";
+    input.value = name;
+    input.maxLength = 64;
+    input.classList.add("database-column-editor", "me-1", "database-editor-hidden");
+    head.appendChild(input);
     let arrow = document.createElement("i");
     arrow.id = "database-column-arrow-" + id;
     arrow.classList.add("database-column-arrow", "fa-solid", "fa-angle-down", "me-2");
@@ -218,23 +224,18 @@
 
   function editColumnName(column) {
     let containerElement = document.getElementById("database-column-container-" + column.id);
-    let headElement = document.getElementById("database-column-" + column.id);
     let nameElement = document.getElementById("database-column-name-" + column.id);
+    let inputElement = document.getElementById("database-column-input-" + column.id);
     let arrowElement = document.getElementById("database-column-arrow-" + column.id);
-    let input = document.createElement("input");
-    input.type = "text";
-    input.value = column.name;
-    input.maxLength = 64;
-    input.classList.add("database-column-editor", "me-1");
     nameElement.classList.add("d-none");
     arrowElement.classList.add("d-none");
-    headElement.appendChild(input);
+    inputElement.classList.remove("database-editor-hidden");
     containerElement.classList.add("editing");
-    input.focus();
-    input.select();
-    input.addEventListener("blur", () => {
-      let value = input.value;
-      input.remove();
+    inputElement.focus();
+    inputElement.select();
+    inputElement.addEventListener("blur", () => {
+      let value = inputElement.value;
+      inputElement.classList.add("database-editor-hidden");
       nameElement.classList.remove("d-none");
       arrowElement.classList.remove("d-none");
       containerElement.classList.remove("editing");
@@ -245,9 +246,9 @@
       request.send(function (status, responseText) {
       });
     });
-    input.addEventListener("keypress", (event) => {
+    inputElement.addEventListener("keypress", (event) => {
       if (event.key === "Enter") {
-        input.blur();
+        inputElement.blur();
       }
     });
   }
@@ -399,8 +400,10 @@
     let columns = database.columns;
     for (let i = 0; i < columns.length; i++) {
       let column = columns[i];
-      if (column.type === "TEXT" || column.type === "TEXT_AREA") {
+      if (column.type === "TEXT") {
         row.appendChild(createTextTableCell(entry, column));
+      } else if (column.type === "TEXT_AREA") {
+        row.appendChild(createTextAreaTableCell(entry, column));
       } else if (column.type === "DATE") {
         row.appendChild(createDateTableCell(entry, column));
       } else if (column.type === "SWITCH" || column.type === "CHECKBOX") {
@@ -413,12 +416,58 @@
 
   function createTextTableCell(entry, column) {
     let cell = document.createElement("td");
+    let cellContent = document.createElement("text");
+    cell.appendChild(cellContent);
+    let input = document.createElement("input");
+    input.type = "text";
+    input.classList.add("database-table-cell-editor", "database-editor-hidden");
+    cell.appendChild(input);
+    let entryCell = entry.cells.filter((some) => some.column === column.id)[0];
+    if (entryCell && entryCell.value !== null && entryCell.value !== "") {
+      let value = entryCell.value.replaceAll("\n", "");
+      cellContent.innerText = value;
+      input.value = value;
+    } else {
+      cellContent.innerHTML = "&nbsp;";
+    }
     cell.onclick = function (event) {
-      if (column.type === "TEXT") {
-        editTableTextCell(entry, column.id, cell);
-      } else  if (column.type === "TEXT_AREA") {
-        editTableTextAreaCell(entry, column.id, cell);
+      editTableTextCell(entry, column.id, cell, cellContent, input);
+    }
+    return cell;
+  }
+
+  function editTableTextCell(entry, column, cell, cellContent, input) {
+    if (cell.classList.contains("database-table-cell-editing")) {
+      return;
+    }
+    cell.classList.add("database-table-cell-editing");
+    cellContent.classList.add("d-none");
+    input.classList.remove("database-editor-hidden");
+    input.focus();
+    input.select();
+    input.addEventListener("blur", () => {
+      let value = input.value.replaceAll("\n", "");
+      if (value === "") {
+        cellContent.innerHTML = "&nbsp;";
+      } else {
+        cellContent.innerText = value;
       }
+      cell.classList.remove("database-table-cell-editing");
+      cellContent.classList.remove("d-none");
+      input.classList.add("database-editor-hidden");
+      submitTableEdit(entry, column, value);
+    });
+    input.addEventListener("keypress", (event) => {
+      if (event.key === "Enter") {
+        input.blur();
+      }
+    });
+  }
+
+  function createTextAreaTableCell(entry, column) {
+    let cell = document.createElement("td");
+    cell.onclick = function (event) {
+      editTableTextAreaCell(entry, column.id, cell);
     }
     let entryCell = entry.cells.filter((some) => some.column === column.id)[0];
     if (entryCell && entryCell.value !== null && entryCell.value !== "") {
@@ -427,41 +476,6 @@
       cell.innerHTML = "&nbsp;";
     }
     return cell;
-  }
-
-
-  function editTableTextCell(entry, column, cell) {
-    if (cell.classList.contains("database-table-cell-editing")) {
-      return;
-    }
-    cell.classList.add("database-table-cell-editing");
-    let currentText = cell.innerText;
-    if (cell.innerHTML === "&nbsp;") {
-      currentText = "";
-    }
-    let input = document.createElement("input");
-    input.type = "text";
-    input.value = currentText;
-    input.classList.add("database-table-cell-editor");
-    cell.innerText = "";
-    cell.appendChild(input);
-    input.focus();
-    input.select();
-    input.addEventListener("blur", () => {
-      let value = input.value.replaceAll("\n", "");
-      if (value === "") {
-        cell.innerHTML = "&nbsp;";
-      } else {
-        cell.innerText = value;
-      }
-      cell.classList.remove("database-table-cell-editing");
-      submitTableEdit(entry, column, value);
-    });
-    input.addEventListener("keypress", (event) => {
-      if (event.key === "Enter") {
-        input.blur();
-      }
-    });
   }
 
   function editTableTextAreaCell(entry, column, cell) {
@@ -905,11 +919,13 @@
       }
       insertButton.classList.remove("disabled");
       insertButton.innerHTML = "{% trans 'product.database.insert' %}";
-      let row = displayTableRow({cells: [{column: "id", value: response.id}]});
+      let entry = {cells: [{column: "id", value: response.id}]};
+      databaseContent.unshift(entry);
+      let row = displayTableRow(entry);
       if (rowPlaceholders.length > 0) {
         rowPlaceholders.shift().remove();
       }
-      let table = document.getElementById("database-table");
+      let table = document.getElementById("database-table-body");
       table.insertBefore(row, table.firstChild);
       if (Cookie.find("dulno-theme") === "dark") {
         row.style.animation = 'database-row-new-dark 0.8s ease';
