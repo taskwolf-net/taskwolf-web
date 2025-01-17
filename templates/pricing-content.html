@@ -1001,7 +1001,7 @@
       packageData.databaseNumberLimit, "{% trans 'home.pricing.summary.database.number' %}");
     let dataLimit = packageData.databaseDataLimit;
     displayPackageCell("pricing-package-feature-database-data-", packageName,
-      dataLimit, (dataLimit > 0 ? " GB" : "") + "{% trans 'home.pricing.summary.database.data' %}");
+      dataLimit, (dataLimit > 0 ? " GB" : "") + " " + "{% trans 'home.pricing.summary.database.data' %}");
     displayPackageCell("pricing-availability-", packageName, true);
     displayPackageCell("pricing-workflow-access-", packageName, packageData.workflowAccess);
     displayPackageCell("pricing-workflow-number-", packageName, packageData.workflowNumberLimit);
