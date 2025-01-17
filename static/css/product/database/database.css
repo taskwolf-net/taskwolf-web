@@ -60,6 +60,10 @@
   #database-name {
     margin-left: 10px;
   }
+
+  #database-selection-count {
+    display: none;
+  }
 }
 
 @media (max-width: 450px) {
@@ -299,6 +303,27 @@ tr:last-child {
 @keyframes database-row-new-light {
   40% { background-color: #efefef; }
   60% { background-color: #efefef; }
+}
+
+.database-row-create-highlight {
+  animation: database-row-create-highlight-animation 1.5s infinite;
+}
+
+@keyframes database-row-create-highlight-animation  {
+  from {
+    box-shadow: 0 0 0 rgb(72, 130, 255);
+    transform: translateY(2px);
+  }
+
+  50% {
+    transform: translateY(-2px);
+    box-shadow: 0 0 36px rgba(72, 130, 255, 0.8);
+  }
+
+  to {
+    transform: translateY(2px);
+    box-shadow: 0 0 0 rgb(0, 0, 0, 0);
+  }
 }
 
 .database-rename-content input, .database-column-add-content input, .database-text-area-edit-content textarea {

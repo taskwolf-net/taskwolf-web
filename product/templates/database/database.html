@@ -69,6 +69,9 @@
       fetchFirstDatabasePage(function(response) {
         updatePaging(response);
         displayTablePlaceholders();
+        if (databaseContent.length === 0) {
+          document.getElementById("database-insert").classList.add("database-row-create-highlight");
+        }
         removeLoader();
       });
     });
@@ -921,6 +924,7 @@
       }, 1000);
       let container = document.getElementById("database-table-container");
       container.scrollTo({top: 0, behavior: 'smooth'});
+      document.getElementById("database-insert").classList.remove("database-row-create-highlight");
     });
   }
 
