@@ -26,29 +26,59 @@
 </html>
 
 <script>
-  let timeline;
+  let currentPage = "";
+  let fetchingNextPage = true;
 
   $(document).ready(function() {
     displayLoader();
     if (sessionStorage.getItem("workflow-selected") === null || sessionStorage.getItem("workflow-id") === null) {
       return;
     }
-    fetchTimelineData(function() {
-      displayTimeline();
+    fetchFirstTimelinePage(function(timeline) {
+      displayTimeline(timeline);
       removeLoader();
     });
   });
 
-  function fetchTimelineData(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/workflow/timeline/find/", "POST",
+  function fetchFirstTimelinePage(callback) {
+    let request = new HttpRequest("https://api.dulno.com/v1/workflow/timeline/page/first/", "POST",
       [], {workflow: sessionStorage.getItem("workflow-id")});
     request.send(function (status, responseText) {
-      timeline = JSON.parse(responseText).timeline;
-      callback();
+      let response = JSON.parse(responseText);
+      currentPage = response.page;
+      fetchingNextPage = false;
+      callback(response.timeline);
     });
   }
 
-  function displayTimeline() {
+  document.body.addEventListener("scroll", () => {
+    let container = document.body;
+    const scrollTop = container.scrollTop;
+    const scrollHeight = container.scrollHeight;
+    const clientHeight = container.clientHeight;
+    if (!fetchingNextPage && currentPage !== "" && scrollHeight - scrollTop - clientHeight <= 200) {
+      fetchNextTimelinePage(function (timeline) {
+        displayTimeline(timeline);
+      });
+    }
+  });
+
+  function fetchNextTimelinePage(callback) {
+    if (fetchingNextPage) {
+      return;
+    }
+    fetchingNextPage = true;
+    let request = new HttpRequest("https://api.dulno.com/v1/workflow/timeline/page/next/", "POST",
+      [], {workflow: sessionStorage.getItem("workflow-id"), pageState: currentPage});
+    request.send(function (status, responseText) {
+      let response = JSON.parse(responseText);
+      currentPage = response.page;
+      fetchingNextPage = false;
+      callback(response.timeline);
+    });
+  }
+
+  function displayTimeline(timeline) {
     document.getElementById("workflow-timeline").innerHTML = "";
     for (let i = 0; i < timeline.length; i++) {
       displayEntry(timeline[i], i === 0);
