@@ -1080,7 +1080,7 @@
       displayPackageCell("pricing-price-", packageName, packageData.price + " €");
     }
     if (packageName === "free") {
-      displayPackageCell("pricing-runtime-", packageName, "{% trans 'home.pricing.time.week' %}");
+      displayPackageCell("pricing-runtime-", packageName, "{% trans 'home.pricing.time.unlimited' %}");
     } else {
       displayPackageCell("pricing-runtime-", packageName, (bundleRuntime === "MONTHLY" ?
         "{% trans 'home.pricing.time.month' %}" : "{% trans 'home.pricing.time.year' %}"));
