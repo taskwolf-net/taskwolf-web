@@ -51,7 +51,7 @@
     });
   }
 
-  document.body.addEventListener("scroll", () => {
+  document.body.onscroll = function() {
     let container = document.body;
     const scrollTop = container.scrollTop;
     const scrollHeight = container.scrollHeight;
@@ -61,7 +61,7 @@
         displayTimeline(timeline);
       });
     }
-  });
+  };
 
   function fetchNextTimelinePage(callback) {
     if (fetchingNextPage) {
@@ -79,7 +79,6 @@
   }
 
   function displayTimeline(timeline) {
-    document.getElementById("workflow-timeline").innerHTML = "";
     for (let i = 0; i < timeline.length; i++) {
       displayEntry(timeline[i], i === 0);
     }
