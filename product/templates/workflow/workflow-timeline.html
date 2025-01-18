@@ -36,6 +36,11 @@
     }
     fetchFirstTimelinePage(function(timeline) {
       displayTimeline(timeline);
+      if (timeline.length === 0) {
+        document.getElementById("workflow-timeline-empty").style.display = "block";
+      } else {
+        document.getElementById("workflow-timeline-reset").classList.remove("d-none");
+      }
       removeLoader();
     });
   });
@@ -81,11 +86,6 @@
   function displayTimeline(timeline) {
     for (let i = 0; i < timeline.length; i++) {
       displayEntry(timeline[i], i === 0);
-    }
-    if (timeline.length === 0) {
-      document.getElementById("workflow-timeline-empty").style.display = "block";
-    } else {
-      document.getElementById("workflow-timeline-reset").classList.remove("d-none");
     }
   }
 
