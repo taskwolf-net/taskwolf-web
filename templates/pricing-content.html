@@ -12,7 +12,7 @@
   </div>
 </div>
 <div id="pricing-table-container-desktop">
-  <table class="pricing-table">
+  <table class="pricing-table-head">
     <thead>
       <th class="pricing-table-advantages">
         <img class="pricing-table-advantages-logo" src="{% static 'img/logo-light.webp' %}">
@@ -97,6 +97,8 @@
         </ul>
       </th>
     </thead>
+  </table>
+  <table class="pricing-table">
     <tbody>
       <tr>
         <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.runtime' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.runtime.tip' %}"></h5></td>
@@ -118,6 +120,8 @@
         <td>{% trans 'home.pricing.feature.workflows' %}</td>
         <td colspan="4"></td>
       </tr>
+    </tbody>
+    <tbody>
       <tr>
         <td class="pricing-feature">{% trans 'home.pricing.feature.workflows.access' %}</td>
         <td class="pricing-workflow-access-free"></td>
@@ -152,6 +156,8 @@
         <td>{% trans 'home.pricing.feature.processes' %}</td>
         <td colspan="4"></td>
       </tr>
+    </tbody>
+    <tbody>
       <tr>
         <td class="pricing-feature">{% trans 'home.pricing.feature.processes.access' %}</td>
         <td class="pricing-process-access-free"></td>
@@ -172,6 +178,8 @@
         <td>{% trans 'home.pricing.feature.databases' %}</td>
         <td colspan="4"></td>
       </tr>
+    </tbody>
+    <tbody>
       <tr>
         <td class="pricing-feature">{% trans 'home.pricing.feature.databases.access' %}</td>
         <td class="pricing-database-access-free"></td>
@@ -199,6 +207,8 @@
         <td>{% trans 'home.pricing.feature.webhooks' %}</td>
         <td colspan="4"></td>
       </tr>
+    </tbody>
+    <tbody>
       <tr>
         <td class="pricing-feature">{% trans 'home.pricing.feature.webhooks.access' %}</td>
         <td class="pricing-webhook-access-free"></td>
@@ -219,6 +229,8 @@
         <td>{% trans 'home.pricing.feature.organizations' %}</td>
         <td colspan="4"></td>
       </tr>
+    </tbody>
+    <tbody>
       <tr>
         <td class="pricing-feature">{% trans 'home.pricing.feature.organizations.access' %}</td>
         <td class="pricing-organization-access-free"></td>
@@ -246,6 +258,8 @@
         <td>{% trans 'home.pricing.feature.devices' %}</td>
         <td colspan="4"></td>
       </tr>
+    </tbody>
+    <tbody>
       <tr>
         <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.devices.access' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.devices.access.tip' %}"></h5></td>
         <td class="pricing-device-access-free"></td>
@@ -266,6 +280,8 @@
         <td>{% trans 'home.pricing.feature.accounts' %}</td>
         <td colspan="4"></td>
       </tr>
+    </tbody>
+    <tbody>
       <tr>
         <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.accounts.access' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.accounts.access.tip' %}"></h5></td>
         <td class="pricing-account-access-free"></td>
@@ -302,7 +318,6 @@
               <p class="pricing-package-description">{% trans 'home.pricing.free.description' %}</p>
               <div class="pricing-package-price-container">
                 <h1 class="pricing-price-free pricing-package-price">€</h1>
-                <p class="pricing-package-time">{% trans 'home.pricing.free.time' %}</p>
               </div>
               <button type="button" class="pricing-package-free-buy pricing-get-button btn btn-outline-light">{% trans 'home.pricing.free.try' %}</button>
               <p class="pricing-package-features-headline">{% trans 'home.pricing.summary.headline' %}</p>

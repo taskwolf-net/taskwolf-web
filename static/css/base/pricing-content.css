@@ -62,6 +62,19 @@
   }
 }
 
+.pricing-table-head {
+  width: 100%;
+  table-layout: fixed;
+  color: white;
+  border-collapse: separate;
+  border-spacing: 15px 0;
+  margin: auto auto 20vh;
+}
+
+.pricing-table thead tr {
+  background-color: #0d1117 !important;
+}
+
 .pricing-table {
   width: 100%;
   margin: auto;
@@ -69,20 +82,10 @@
   color: white;
 }
 
-.pricing-table thead tr {
-  background-color: #0d1117 !important;
-}
-
-.pricing-table thead:after {
-  content: "-";
-  display: block;
-  line-height: 20vh;
-  color: transparent;
-}
-
 .pricing-table-advantages {
   width: 20% !important;
   position: relative;
+  text-align: center;
 }
 
 .pricing-table-advantages-logo {
@@ -113,6 +116,22 @@
   border: 1px solid #2b333f;
 }
 
+#pricing-table-container-desktop .pricing-table tr:not(.pricing-feature-bundle-headline):first-of-type td:nth-child(3) {
+  border-top: 2px solid #1e76ff;
+}
+
+#pricing-table-container-desktop .pricing-table tr:last-child td:nth-child(3) {
+  border-bottom: 2px solid #1e76ff;
+}
+
+#pricing-table-container-desktop .pricing-table td:nth-child(2) {
+  border-right: 2px solid #1e76ff;
+}
+
+#pricing-table-container-desktop .pricing-table td:nth-child(3) {
+  border-right: 2px solid #1e76ff;
+}
+
 .pricing-package {
   width: 20%;
   position: sticky !important;
@@ -123,8 +142,6 @@
   text-align: center;
   padding: 10px 30px;
   border-radius: 20px;
-  border-left: 5px solid #0d1117;
-  border-right: 5px solid #0d1117;
 }
 
 .pricing-package-title {
@@ -244,6 +261,10 @@
 
 .pricing-package-individual {
   background-color: #324450;
+}
+
+#pricing-table-container-desktop .pricing-package-individual {
+  outline: 5px solid #1e76ff;
 }
 
 .pricing-package-team {
