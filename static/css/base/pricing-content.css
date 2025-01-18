@@ -117,7 +117,7 @@
   width: 20%;
   position: sticky !important;
   top: 87px;
-  z-index: 100 !important;
+  z-index: 99 !important;
   vertical-align: top;
   color: white;
   text-align: center;
@@ -337,4 +337,57 @@
   .pricing-table-mobile-head {
     width: 71.5%;
   }
+}
+
+#pricing-faq-accordion {
+  width: min(calc(1000px), 100%);
+  margin: auto;
+}
+
+.accordion-item {
+  border: none !important;
+}
+
+.dark .accordion-item {
+  background-color: #0d1117 !important;
+}
+
+.light .accordion-item {
+  background-color: #fafafa !important;
+}
+
+.accordion-button {
+  font-size: 25px !important;
+  font-weight: bold;
+}
+
+.dark .accordion-button {
+  color: white !important;
+  background-color: #0d1117 !important;
+  border-bottom: 2px #4a4a4a solid !important;
+}
+
+.light .accordion-button {
+  color: black !important;
+  background-color: #fafafa !important;
+  border-bottom: 2px #878787 solid !important;
+}
+
+.accordion-button:after {
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>") !important;
+}
+
+.dark .accordion-collapse {
+  color: white !important;
+  background-color: #0d1117 !important;
+}
+
+.light .accordion-collapse {
+  color: black !important;
+  background-color: #fafafa !important;
+}
+
+:focus {
+  outline: 0 !important;
+  box-shadow: none !important;
 }

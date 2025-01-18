@@ -101,7 +101,7 @@
   function displayPackageRuntime(packageType, packageRuntime) {
     if (packageType === "FREE") {
       document.getElementById("payment-package-runtime").innerHTML =
-        "{% trans 'home.payment.package.runtime.week' %}";
+        "{% trans 'home.payment.package.runtime.unlimited' %}";
       return;
     }
     if (packageRuntime === "MONTHLY") {

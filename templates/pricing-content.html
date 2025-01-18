@@ -25,7 +25,6 @@
         <p class="pricing-package-description">{% trans 'home.pricing.free.description' %}</p>
         <div class="pricing-package-price-container">
           <h1 class="pricing-price-free pricing-package-price">€</h1>
-          <p class="pricing-package-time">{% trans 'home.pricing.free.time' %}</p>
         </div>
         <button type="button" class="pricing-package-free-buy pricing-get-button btn btn-outline-light">{% trans 'home.pricing.free.try' %}</button>
         <p class="pricing-package-features-headline">{% trans 'home.pricing.summary.headline' %}</p>
@@ -915,6 +914,107 @@
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Next</span>
     </button>
+  </div>
+</div>
+<div>
+  <h1 class="fw-bold my-5 pt-5">{% trans 'home.pricing.faq.headline' %}</h1>
+  <div id="pricing-faq-accordion" class="accordion">
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#pricing-faq-runtime-question" aria-expanded="true">
+          {% trans 'home.pricing.faq.runtime.question' %}
+        </button>
+      </h2>
+      <div id="pricing-faq-runtime-question" class="accordion-collapse collapse" data-bs-parent="#pricing-faq-accordion">
+        <div class="accordion-body">
+          {% trans 'home.pricing.faq.runtime.answer' %}
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#pricing-faq-operation-question" aria-expanded="true">
+          {% trans 'home.pricing.faq.operation.question' %}
+        </button>
+      </h2>
+      <div id="pricing-faq-operation-question" class="accordion-collapse collapse" data-bs-parent="#pricing-faq-accordion">
+        <div class="accordion-body">
+          {% trans 'home.pricing.faq.operation.answer' %}
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#pricing-faq-organization-question" aria-expanded="true">
+          {% trans 'home.pricing.faq.organization.question' %}
+        </button>
+      </h2>
+      <div id="pricing-faq-organization-question" class="accordion-collapse collapse" data-bs-parent="#pricing-faq-accordion">
+        <div class="accordion-body">
+          {% trans 'home.pricing.faq.organization.answer' %}
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#pricing-faq-package-question" aria-expanded="true">
+          {% trans 'home.pricing.faq.package.question' %}
+        </button>
+      </h2>
+      <div id="pricing-faq-package-question" class="accordion-collapse collapse" data-bs-parent="#pricing-faq-accordion">
+        <div class="accordion-body">
+          {% trans 'home.pricing.faq.package.answer' %}
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#pricing-faq-upgrade-question" aria-expanded="true">
+          {% trans 'home.pricing.faq.upgrade.question' %}
+        </button>
+      </h2>
+      <div id="pricing-faq-upgrade-question" class="accordion-collapse collapse" data-bs-parent="#pricing-faq-accordion">
+        <div class="accordion-body">
+          {% trans 'home.pricing.faq.upgrade.answer' %}
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#pricing-faq-downgrade-question" aria-expanded="true">
+          {% trans 'home.pricing.faq.downgrade.question' %}
+        </button>
+      </h2>
+      <div id="pricing-faq-downgrade-question" class="accordion-collapse collapse" data-bs-parent="#pricing-faq-accordion">
+        <div class="accordion-body">
+          {% trans 'home.pricing.faq.downgrade.answer' %}
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#pricing-faq-termination-question" aria-expanded="true">
+          {% trans 'home.pricing.faq.termination.question' %}
+        </button>
+      </h2>
+      <div id="pricing-faq-termination-question" class="accordion-collapse collapse" data-bs-parent="#pricing-faq-accordion">
+        <div class="accordion-body">
+          {% trans 'home.pricing.faq.termination.answer' %}
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#pricing-faq-expiration-question" aria-expanded="true">
+          {% trans 'home.pricing.faq.expiration.question' %}
+        </button>
+      </h2>
+      <div id="pricing-faq-expiration-question" class="accordion-collapse collapse" data-bs-parent="#pricing-faq-accordion">
+        <div class="accordion-body">
+          {% trans 'home.pricing.faq.expiration.answer' %}
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 

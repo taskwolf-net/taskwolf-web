@@ -56,7 +56,7 @@
                 </div>
                 <span id="package-general-information-runtime"></span>
               </li>
-              <div id="package-general-information-divider-expiration"  class="package-general-information-divider"></div>
+              <div id="package-general-information-divider-expiration" class="package-general-information-divider"></div>
               <li id="package-general-information-entry-expiration" class="package-general-information-entry">
                 <div class="package-general-information-entry-description">
                   <div class="package-general-information-entry-icon">
@@ -255,9 +255,9 @@
     document.getElementById("package-general-information-runtime").innerHTML =
       findPackageRuntime(bundle);
     $(document.getElementById("package-general-information-entry-expiration"))
-      .toggleClass("d-none", bundle.runtime !== "UNBOUND");
+      .toggleClass("d-none", !(bundle.runtime === "INFINITE" && bundle.runtime === "UNBOUND"));
     $(document.getElementById("package-general-information-divider-expiration"))
-      .toggleClass("d-none", bundle.runtime !== "UNBOUND");
+      .toggleClass("d-none", !(bundle.runtime === "INFINITE" && bundle.runtime === "UNBOUND"));
     document.getElementById("package-general-information-expiration").innerHTML =
       Math.ceil(Number(bundle.expiration - Date.now()) / (1000 * 60 * 60 * 24)).toString();
     document.getElementById("package-general-information-workflow-access").innerHTML =
@@ -315,8 +315,8 @@
   }
 
   function findPackageRuntime(bundle) {
-    if (bundle.runtime === "WEEKLY") {
-      return "{% trans 'product.package.general.runtime.week' %}";
+    if (bundle.runtime === "INFINITE") {
+      return "{% trans 'product.package.general.runtime.unlimited' %}";
     } else if (bundle.runtime === "MONTHLY") {
       return "{% trans 'product.package.general.runtime.month' %}";
     } else if (bundle.runtime === "YEARLY") {

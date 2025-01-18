@@ -275,9 +275,9 @@
     document.getElementById("organization-package-information-runtime").innerHTML =
       findPackageRuntime(bundle);
     $(document.getElementById("organization-package-information-entry-expiration"))
-      .toggleClass("d-none", bundle.runtime !== "UNBOUND");
+      .toggleClass("d-none", !(bundle.runtime === "INFINITE" && bundle.runtime === "UNBOUND"));
     $(document.getElementById("organization-package-information-divider-expiration"))
-      .toggleClass("d-none", bundle.runtime !== "UNBOUND");
+      .toggleClass("d-none", !(bundle.runtime === "INFINITE" && bundle.runtime === "UNBOUND"));
     document.getElementById("organization-package-information-expiration").innerHTML =
       Math.ceil(Number(bundle.expiration - Date.now()) / (1000 * 60 * 60 * 24)).toString();
     document.getElementById("organization-package-information-workflow-access").innerHTML =
@@ -341,8 +341,8 @@
   }
 
   function findPackageRuntime(bundle) {
-    if (bundle.runtime === "WEEKLY") {
-      return "{% trans 'product.organization.package.runtime.week' %}";
+    if (bundle.runtime === "INFINITE") {
+      return "{% trans 'product.organization.package.runtime.unlimited' %}";
     } else if (bundle.runtime === "MONTHLY") {
       return "{% trans 'product.organization.package.runtime.month' %}";
     } else if (bundle.runtime === "YEARLY") {
