@@ -1,3 +1,7 @@
+:root {
+  --pricing-package-highlight-color: #33b1ff;
+}
+
 #pricing-personalization {
   display: flex;
   justify-content: space-between;
@@ -68,11 +72,10 @@
   color: white;
   border-collapse: separate;
   border-spacing: 15px 0;
-  margin: auto auto 20vh;
 }
 
-.pricing-table thead tr {
-  background-color: #0d1117 !important;
+.pricing-table-head thead tr {
+  background-color: transparent !important;
 }
 
 .pricing-table {
@@ -80,6 +83,8 @@
   margin: auto;
   table-layout: fixed;
   color: white;
+  border-collapse: separate;
+  border-spacing: 15px 0;
 }
 
 .pricing-table-advantages {
@@ -89,17 +94,20 @@
 }
 
 .pricing-table-advantages-logo {
-  width: calc(60%);
-  height: calc(60%);
+  width: calc(70%);
+  height: calc(70%);
 }
 
-.pricing-table-advantages-title {
-  position: absolute;
-  bottom: -18vh;
-  left: 0;
-  right: 0;
-  color: white !important;
-  background-color: #0d1117 !important;
+.pricing-head-stuck .pricing-table-advantages-logo {
+  display: none;
+}
+
+.pricing-table-divider {
+  width: 100%;
+  height: 0;
+  border-bottom: 1px solid #2b333f;
+  margin-top: 10vh;
+  margin-bottom: 10vh;
 }
 
 .pricing-table tr {
@@ -107,29 +115,64 @@
   text-align: center;
 }
 
-.pricing-table tr:nth-child(odd) {
-  background-color: #161d27;
+.pricing-table tr td {
+  padding: 10px;
 }
 
-.pricing-table td {
-  padding: 20px;
-  border: 1px solid #2b333f;
+.pricing-table tr td:nth-child(1) {
+  border-bottom: 1px solid #2b333f;
 }
 
-#pricing-table-container-desktop .pricing-table tr:not(.pricing-feature-bundle-headline):first-of-type td:nth-child(3) {
-  border-top: 2px solid #1e76ff;
+.pricing-table tr td:nth-child(2) {
+  border-bottom: 1px solid #101217;
 }
 
-#pricing-table-container-desktop .pricing-table tr:last-child td:nth-child(3) {
-  border-bottom: 2px solid #1e76ff;
+.pricing-table tr td:nth-child(3) {
+  border-bottom: 1px solid #1e242c;
 }
 
-#pricing-table-container-desktop .pricing-table td:nth-child(2) {
-  border-right: 2px solid #1e76ff;
+.pricing-table tr td:nth-child(4) {
+  border-bottom: 1px solid #242a34;
+}
+
+.pricing-table tr td:nth-child(5) {
+  border-bottom: 1px solid #2b333f;
+}
+
+.pricing-table tr:last-child td {
+  border-bottom: none;
+}
+
+#pricing-table-container-desktop .pricing-table tbody tr:first-child td:nth-child(3) {
+  border-top: 2px solid var(--pricing-package-highlight-color);
+}
+
+#pricing-table-container-desktop .pricing-table tbody tr:last-child td:nth-child(3) {
+  border-bottom: 2px solid var(--pricing-package-highlight-color);
 }
 
 #pricing-table-container-desktop .pricing-table td:nth-child(3) {
-  border-right: 2px solid #1e76ff;
+  border-left: 2px solid var(--pricing-package-highlight-color);
+  border-right: 2px solid var(--pricing-package-highlight-color);
+}
+
+.pricing-table tbody tr:first-child td {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.pricing-table tbody tr:last-child td {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.pricing-head-stuck {
+  position: sticky !important;
+  top: 87px;
+  z-index: 99 !important;
+  vertical-align: top;
+  border-collapse: separate;
+  border-spacing: 0 0;
 }
 
 .pricing-package {
@@ -255,23 +298,33 @@
   }
 }
 
-.pricing-package-free {
+.pricing-package-free, .pricing-feature-free, #pricing-table-container-desktop .pricing-table tbody td:nth-child(2) {
   background-color: #162a33;
 }
 
-.pricing-package-individual {
+.pricing-package-individual, .pricing-feature-individual, #pricing-table-container-desktop .pricing-table tbody td:nth-child(3) {
   background-color: #324450;
 }
 
 #pricing-table-container-desktop .pricing-package-individual {
-  outline: 5px solid #1e76ff;
+  border: 3px solid var(--pricing-package-highlight-color);
+  outline: 2px solid var(--pricing-package-highlight-color);
+  box-shadow: 0 0 100px var(--pricing-package-highlight-color);
+  z-index: 0 !important;
+  padding: 7px 27px;
 }
 
-.pricing-package-team {
+#pricing-table-container-desktop .pricing-head-stuck .pricing-package-individual {
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+
+.pricing-package-team, .pricing-feature-team, #pricing-table-container-desktop .pricing-table tbody td:nth-child(4) {
   background-color: #425460;
 }
 
-.pricing-package-enterprise {
+.pricing-package-enterprise, .pricing-feature-enterprise, #pricing-table-container-desktop .pricing-table tbody td:nth-child(5) {
   background-color: #62747e;
 }
 
@@ -283,20 +336,23 @@
   background-color: #0d1117 !important;
 }
 
-.pricing-feature-bundle-headline {
-  border-left: 1px solid #2b333f;
-  border-right: 1px solid #2b333f;
-}
-
 .pricing-feature-bundle-headline td {
-  border: none !important;
   font-weight: bold;
+  font-size: 22px;
+  border: none !important;
+  background-color: transparent !important;
+  padding-top: 50px !important;
 }
 
 .pricing-feature {
   text-align: left !important;
   line-height: 30px;
   width: 20% !important;
+}
+
+.pricing-feature-tip {
+  margin-bottom: 0;
+  margin-left: 5px;
 }
 
 #pricing-table-container-mobile {

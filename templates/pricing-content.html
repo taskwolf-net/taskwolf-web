@@ -16,9 +16,6 @@
     <thead>
       <th class="pricing-table-advantages">
         <img class="pricing-table-advantages-logo" src="{% static 'img/logo-light.webp' %}">
-        <div class="pricing-table-advantages-title">
-          <h2>{% trans 'home.pricing.advantages' %}</h2>
-        </div>
       </th>
       <th class="pricing-package-free pricing-package">
         <h2 class="pricing-package-title">{% trans 'home.pricing.free.title' %}</h2>
@@ -98,6 +95,7 @@
       </th>
     </thead>
   </table>
+  <div class="pricing-table-divider"></div>
   <table class="pricing-table">
     <tbody>
       <tr>
@@ -118,7 +116,10 @@
     <tbody>
       <tr class="pricing-feature-bundle-headline">
         <td>{% trans 'home.pricing.feature.workflows' %}</td>
-        <td colspan="4"></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
     </tbody>
     <tbody>
@@ -154,7 +155,10 @@
     <tbody>
       <tr class="pricing-feature-bundle-headline">
         <td>{% trans 'home.pricing.feature.processes' %}</td>
-        <td colspan="4"></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
     </tbody>
     <tbody>
@@ -176,7 +180,10 @@
     <tbody>
       <tr class="pricing-feature-bundle-headline">
         <td>{% trans 'home.pricing.feature.databases' %}</td>
-        <td colspan="4"></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
     </tbody>
     <tbody>
@@ -205,7 +212,10 @@
     <tbody>
       <tr class="pricing-feature-bundle-headline">
         <td>{% trans 'home.pricing.feature.webhooks' %}</td>
-        <td colspan="4"></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
     </tbody>
     <tbody>
@@ -227,7 +237,10 @@
     <tbody>
       <tr class="pricing-feature-bundle-headline">
         <td>{% trans 'home.pricing.feature.organizations' %}</td>
-        <td colspan="4"></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
     </tbody>
     <tbody>
@@ -256,7 +269,10 @@
     <tbody>
       <tr class="pricing-feature-bundle-headline">
         <td>{% trans 'home.pricing.feature.devices' %}</td>
-        <td colspan="4"></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
     </tbody>
     <tbody>
@@ -275,31 +291,9 @@
         <td class="pricing-device-app-enterprise"></td>
       </tr>
     </tbody>
-    <tbody>
-      <tr class="pricing-feature-bundle-headline">
-        <td>{% trans 'home.pricing.feature.accounts' %}</td>
-        <td colspan="4"></td>
-      </tr>
-    </tbody>
-    <tbody>
-      <tr>
-        <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.accounts.access' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.accounts.access.tip' %}"></h5></td>
-        <td class="pricing-account-access-free"></td>
-        <td class="pricing-account-access-individual"></td>
-        <td class="pricing-account-access-team"></td>
-        <td class="pricing-account-access-enterprise"></td>
-      </tr>
-      <tr>
-        <td class="pricing-feature">{% trans 'home.pricing.feature.accounts.number.limit' %}</td>
-        <td class="pricing-account-number-free"></td>
-        <td class="pricing-account-number-individual"></td>
-        <td class="pricing-account-number-team"></td>
-        <td class="pricing-account-number-enterprise"></td>
-      </tr>
-    </tbody>
   </table>
 </div>
-<div id="pricing-table-container-mobile" data-bs-theme="light">
+<div id="pricing-table-container-mobile">
   <div id="pricing-table-carousel" class="carousel slide">
     <div class="carousel-indicators z-0" style="top: -4vh">
       <button type="button" data-bs-target="#pricing-table-carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Free"></button>
@@ -331,15 +325,16 @@
             </th>
           </thead>
         </table>
+        <div class="pricing-table-divider"></div>
         <table class="pricing-table pricing-table-mobile-body">
           <tbody>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.runtime' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.runtime.tip' %}"></h5></td>
-              <td class="pricing-runtime-free"></td>
+              <td class="pricing-runtime-free pricing-feature-free"></td>
             </tr>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.availability' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.availability.tip' %}"></h5></td>
-              <td class="pricing-availability-free"></td>
+              <td class="pricing-availability-free pricing-feature-free"></td>
             </tr>
           </tbody>
           <tbody>
@@ -347,21 +342,23 @@
               <td>{% trans 'home.pricing.feature.workflows' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.workflows.access' %}</td>
-              <td class="pricing-workflow-access-free"></td>
+              <td class="pricing-workflow-access-free pricing-feature-free"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.workflows.number.limit' %}</td>
-              <td class="pricing-workflow-number-free"></td>
+              <td class="pricing-workflow-number-free pricing-feature-free"></td>
             </tr>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.workflows.operation.limit' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.workflows.operation.limit.tip' %}"></h5></td>
-              <td class="pricing-workflow-operation-free"></td>
+              <td class="pricing-workflow-operation-free pricing-feature-free"></td>
             </tr>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.workflows.templates' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.workflows.templates.tip' %}"></h5></td>
-              <td class="pricing-workflow-templates-free"></td>
+              <td class="pricing-workflow-templates-free pricing-feature-free"></td>
             </tr>
           </tbody>
           <tbody>
@@ -369,13 +366,15 @@
               <td>{% trans 'home.pricing.feature.processes' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.processes.access' %}</td>
-              <td class="pricing-process-access-free"></td>
+              <td class="pricing-process-access-free pricing-feature-free"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.processes.number.limit' %}</td>
-              <td class="pricing-process-number-free"></td>
+              <td class="pricing-process-number-free pricing-feature-free"></td>
             </tr>
           </tbody>
           <tbody>
@@ -383,17 +382,19 @@
               <td>{% trans 'home.pricing.feature.databases' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.databases.access' %}</td>
-              <td class="pricing-database-access-free"></td>
+              <td class="pricing-database-access-free pricing-feature-free"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.databases.number.limit' %}</td>
-              <td class="pricing-database-number-free"></td>
+              <td class="pricing-database-number-free pricing-feature-free"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.databases.data.limit' %}</td>
-              <td class="pricing-database-data-free"></td>
+              <td class="pricing-database-data-free pricing-feature-free"></td>
             </tr>
           </tbody>
           <tbody>
@@ -401,13 +402,15 @@
               <td>{% trans 'home.pricing.feature.webhooks' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.webhooks.access' %}</td>
-              <td class="pricing-webhook-access-free"></td>
+              <td class="pricing-webhook-access-free pricing-feature-free"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.webhooks.number.limit' %}</td>
-              <td class="pricing-webhook-number-free"></td>
+              <td class="pricing-webhook-number-free pricing-feature-free"></td>
             </tr>
           </tbody>
           <tbody>
@@ -415,17 +418,19 @@
               <td>{% trans 'home.pricing.feature.organizations' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.organizations.access' %}</td>
-              <td class="pricing-organization-access-free"></td>
+              <td class="pricing-organization-access-free pricing-feature-free"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.organizations.member.limit' %}</td>
-              <td class="pricing-organization-members-free"></td>
+              <td class="pricing-organization-members-free pricing-feature-free"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.organizations.team.limit' %}</td>
-              <td class="pricing-organization-teams-free"></td>
+              <td class="pricing-organization-teams-free pricing-feature-free"></td>
             </tr>
           </tbody>
           <tbody>
@@ -433,27 +438,15 @@
               <td>{% trans 'home.pricing.feature.devices' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.devices.access' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.devices.access.tip' %}"></h5></td>
-              <td class="pricing-device-access-free"></td>
+              <td class="pricing-device-access-free pricing-feature-free"></td>
             </tr>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.devices.app' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.devices.app.tip' %}"></h5></td>
-              <td class="pricing-device-app-free"></td>
-            </tr>
-          </tbody>
-          <tbody>
-            <tr class="pricing-feature-bundle-headline">
-              <td>{% trans 'home.pricing.feature.accounts' %}</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.accounts.access' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.accounts.access.tip' %}"></h5></td>
-              <td class="pricing-account-access-free"></td>
-            </tr>
-            <tr>
-              <td class="pricing-feature">{% trans 'home.pricing.feature.accounts.number.limit' %}</td>
-              <td class="pricing-account-number-free"></td>
+              <td class="pricing-device-app-free pricing-feature-free"></td>
             </tr>
           </tbody>
         </table>
@@ -482,15 +475,16 @@
             </th>
           </thead>
         </table>
+        <div class="pricing-table-divider"></div>
         <table class="pricing-table pricing-table-mobile-body">
           <tbody>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.runtime' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.runtime.tip' %}"></h5></td>
-              <td class="pricing-runtime-individual"></td>
+              <td class="pricing-runtime-individual pricing-feature-individual"></td>
             </tr>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.availability' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.availability.tip' %}"></h5></td>
-              <td class="pricing-availability-individual"></td>
+              <td class="pricing-availability-individual pricing-feature-individual"></td>
             </tr>
           </tbody>
           <tbody>
@@ -498,21 +492,23 @@
               <td>{% trans 'home.pricing.feature.workflows' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.workflows.access' %}</td>
-              <td class="pricing-workflow-access-individual"></td>
+              <td class="pricing-workflow-access-individual pricing-feature-individual"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.workflows.number.limit' %}</td>
-              <td class="pricing-workflow-number-individual"></td>
+              <td class="pricing-workflow-number-individual pricing-feature-individual"></td>
             </tr>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.workflows.operation.limit' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.workflows.operation.limit.tip' %}"></h5></td>
-              <td class="pricing-workflow-operation-individual"></td>
+              <td class="pricing-workflow-operation-individual pricing-feature-individual"></td>
             </tr>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.workflows.templates' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.workflows.templates.tip' %}"></h5></td>
-              <td class="pricing-workflow-templates-individual"></td>
+              <td class="pricing-workflow-templates-individual pricing-feature-individual"></td>
             </tr>
           </tbody>
           <tbody>
@@ -520,13 +516,15 @@
               <td>{% trans 'home.pricing.feature.processes' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.processes.access' %}</td>
-              <td class="pricing-process-access-individual"></td>
+              <td class="pricing-process-access-individual pricing-feature-individual"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.processes.number.limit' %}</td>
-              <td class="pricing-process-number-individual"></td>
+              <td class="pricing-process-number-individual pricing-feature-individual"></td>
             </tr>
           </tbody>
           <tbody>
@@ -534,17 +532,19 @@
               <td>{% trans 'home.pricing.feature.databases' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.databases.access' %}</td>
-              <td class="pricing-database-access-individual"></td>
+              <td class="pricing-database-access-individual pricing-feature-individual"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.databases.number.limit' %}</td>
-              <td class="pricing-database-number-individual"></td>
+              <td class="pricing-database-number-individual pricing-feature-individual"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.databases.data.limit' %}</td>
-              <td class="pricing-database-data-individual"></td>
+              <td class="pricing-database-data-individual pricing-feature-individual"></td>
             </tr>
           </tbody>
           <tbody>
@@ -552,13 +552,15 @@
               <td>{% trans 'home.pricing.feature.webhooks' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.webhooks.access' %}</td>
-              <td class="pricing-webhook-access-individual"></td>
+              <td class="pricing-webhook-access-individual pricing-feature-individual"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.webhooks.number.limit' %}</td>
-              <td class="pricing-webhook-number-individual"></td>
+              <td class="pricing-webhook-number-individual pricing-feature-individual"></td>
             </tr>
           </tbody>
           <tbody>
@@ -566,17 +568,19 @@
               <td>{% trans 'home.pricing.feature.organizations' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.organizations.access' %}</td>
-              <td class="pricing-organization-access-individual"></td>
+              <td class="pricing-organization-access-individual pricing-feature-individual"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.organizations.member.limit' %}</td>
-              <td class="pricing-organization-members-individual"></td>
+              <td class="pricing-organization-members-individual pricing-feature-individual"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.organizations.team.limit' %}</td>
-              <td class="pricing-organization-teams-individual"></td>
+              <td class="pricing-organization-teams-individual pricing-feature-individual"></td>
             </tr>
           </tbody>
           <tbody>
@@ -584,27 +588,15 @@
               <td>{% trans 'home.pricing.feature.devices' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.devices.access' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.devices.access.tip' %}"></h5></td>
-              <td class="pricing-device-access-individual"></td>
+              <td class="pricing-device-access-individual pricing-feature-individual"></td>
             </tr>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.devices.app' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.devices.app.tip' %}"></h5></td>
-              <td class="pricing-device-app-individual"></td>
-            </tr>
-          </tbody>
-          <tbody>
-            <tr class="pricing-feature-bundle-headline">
-              <td>{% trans 'home.pricing.feature.accounts' %}</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.accounts.access' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.accounts.access.tip' %}"></h5></td>
-              <td class="pricing-account-access-individual"></td>
-            </tr>
-            <tr>
-              <td class="pricing-feature">{% trans 'home.pricing.feature.accounts.number.limit' %}</td>
-              <td class="pricing-account-number-individual"></td>
+              <td class="pricing-device-app-individual pricing-feature-individual"></td>
             </tr>
           </tbody>
         </table>
@@ -638,15 +630,16 @@
             </th>
           </thead>
         </table>
+        <div class="pricing-table-divider"></div>
         <table class="pricing-table pricing-table-mobile-body">
           <tbody>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.runtime' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.runtime.tip' %}"></h5></td>
-              <td class="pricing-runtime-team"></td>
+              <td class="pricing-runtime-team pricing-feature-team"></td>
             </tr>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.availability' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.availability.tip' %}"></h5></td>
-              <td class="pricing-availability-team"></td>
+              <td class="pricing-availability-team pricing-feature-team"></td>
             </tr>
           </tbody>
           <tbody>
@@ -654,21 +647,23 @@
               <td>{% trans 'home.pricing.feature.workflows' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.workflows.access' %}</td>
-              <td class="pricing-workflow-access-team"></td>
+              <td class="pricing-workflow-access-team pricing-feature-team"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.workflows.number.limit' %}</td>
-              <td class="pricing-workflow-number-team"></td>
+              <td class="pricing-workflow-number-team pricing-feature-team"></td>
             </tr>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.workflows.operation.limit' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.workflows.operation.limit.tip' %}"></h5></td>
-              <td class="pricing-workflow-operation-team"></td>
+              <td class="pricing-workflow-operation-team pricing-feature-team"></td>
             </tr>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.workflows.templates' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.workflows.templates.tip' %}"></h5></td>
-              <td class="pricing-workflow-templates-team"></td>
+              <td class="pricing-workflow-templates-team pricing-feature-team"></td>
             </tr>
           </tbody>
           <tbody>
@@ -676,13 +671,15 @@
               <td>{% trans 'home.pricing.feature.processes' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.processes.access' %}</td>
-              <td class="pricing-process-access-team"></td>
+              <td class="pricing-process-access-team pricing-feature-team"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.processes.number.limit' %}</td>
-              <td class="pricing-process-number-team"></td>
+              <td class="pricing-process-number-team pricing-feature-team"></td>
             </tr>
           </tbody>
           <tbody>
@@ -690,17 +687,19 @@
               <td>{% trans 'home.pricing.feature.databases' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.databases.access' %}</td>
-              <td class="pricing-database-access-team"></td>
+              <td class="pricing-database-access-team pricing-feature-team"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.databases.number.limit' %}</td>
-              <td class="pricing-database-number-team"></td>
+              <td class="pricing-database-number-team pricing-feature-team"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.databases.data.limit' %}</td>
-              <td class="pricing-database-data-team"></td>
+              <td class="pricing-database-data-team pricing-feature-team"></td>
             </tr>
           </tbody>
           <tbody>
@@ -708,13 +707,15 @@
               <td>{% trans 'home.pricing.feature.webhooks' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.webhooks.access' %}</td>
-              <td class="pricing-webhook-access-team"></td>
+              <td class="pricing-webhook-access-team pricing-feature-team"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.webhooks.number.limit' %}</td>
-              <td class="pricing-webhook-number-team"></td>
+              <td class="pricing-webhook-number-team pricing-feature-team"></td>
             </tr>
           </tbody>
           <tbody>
@@ -722,17 +723,19 @@
               <td>{% trans 'home.pricing.feature.organizations' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.organizations.access' %}</td>
-              <td class="pricing-organization-access-team"></td>
+              <td class="pricing-organization-access-team pricing-feature-team"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.organizations.member.limit' %}</td>
-              <td class="pricing-organization-members-team"></td>
+              <td class="pricing-organization-members-team pricing-feature-team"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.organizations.team.limit' %}</td>
-              <td class="pricing-organization-teams-team"></td>
+              <td class="pricing-organization-teams-team pricing-feature-team"></td>
             </tr>
           </tbody>
           <tbody>
@@ -740,27 +743,15 @@
               <td>{% trans 'home.pricing.feature.devices' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.devices.access' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.devices.access.tip' %}"></h5></td>
-              <td class="pricing-device-access-team"></td>
+              <td class="pricing-device-access-team pricing-feature-team"></td>
             </tr>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.devices.app' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.devices.app.tip' %}"></h5></td>
-              <td class="pricing-device-app-team"></td>
-            </tr>
-          </tbody>
-          <tbody>
-            <tr class="pricing-feature-bundle-headline">
-              <td>{% trans 'home.pricing.feature.accounts' %}</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.accounts.access' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.accounts.access.tip' %}"></h5></td>
-              <td class="pricing-account-access-team"></td>
-            </tr>
-            <tr>
-              <td class="pricing-feature">{% trans 'home.pricing.feature.accounts.number.limit' %}</td>
-              <td class="pricing-account-number-team"></td>
+              <td class="pricing-device-app-team pricing-feature-team"></td>
             </tr>
           </tbody>
         </table>
@@ -793,15 +784,16 @@
             </th>
           </thead>
         </table>
+        <div class="pricing-table-divider"></div>
         <table class="pricing-table pricing-table-mobile-body">
           <tbody>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.runtime' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.runtime.tip' %}"></h5></td>
-              <td class="pricing-runtime-enterprise"></td>
+              <td class="pricing-runtime-enterprise pricing-feature-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.availability' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.availability.tip' %}"></h5></td>
-              <td class="pricing-availability-enterprise"></td>
+              <td class="pricing-availability-enterprise pricing-feature-enterprise"></td>
             </tr>
           </tbody>
           <tbody>
@@ -809,21 +801,23 @@
               <td>{% trans 'home.pricing.feature.workflows' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.workflows.access' %}</td>
-              <td class="pricing-workflow-access-enterprise"></td>
+              <td class="pricing-workflow-access-enterprise pricing-feature-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.workflows.number.limit' %}</td>
-              <td class="pricing-workflow-number-enterprise"></td>
+              <td class="pricing-workflow-number-enterprise pricing-feature-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.workflows.operation.limit' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.workflows.operation.limit.tip' %}"></h5></td>
-              <td class="pricing-workflow-operation-enterprise"></td>
+              <td class="pricing-workflow-operation-enterprise pricing-feature-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.workflows.templates' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.workflows.templates.tip' %}"></h5></td>
-              <td class="pricing-workflow-templates-enterprise"></td>
+              <td class="pricing-workflow-templates-enterprise pricing-feature-enterprise"></td>
             </tr>
           </tbody>
           <tbody>
@@ -831,13 +825,15 @@
               <td>{% trans 'home.pricing.feature.processes' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.processes.access' %}</td>
-              <td class="pricing-process-access-enterprise"></td>
+              <td class="pricing-process-access-enterprise pricing-feature-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.processes.number.limit' %}</td>
-              <td class="pricing-process-number-enterprise"></td>
+              <td class="pricing-process-number-enterprise pricing-feature-enterprise"></td>
             </tr>
           </tbody>
           <tbody>
@@ -845,17 +841,19 @@
               <td>{% trans 'home.pricing.feature.databases' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.databases.access' %}</td>
-              <td class="pricing-database-access-enterprise"></td>
+              <td class="pricing-database-access-enterprise pricing-feature-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.databases.number.limit' %}</td>
-              <td class="pricing-database-number-enterprise"></td>
+              <td class="pricing-database-number-enterprise pricing-feature-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.databases.data.limit' %}</td>
-              <td class="pricing-database-data-enterprise"></td>
+              <td class="pricing-database-data-enterprise pricing-feature-enterprise"></td>
             </tr>
           </tbody>
           <tbody>
@@ -863,13 +861,15 @@
               <td>{% trans 'home.pricing.feature.webhooks' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.webhooks.access' %}</td>
-              <td class="pricing-webhook-access-enterprise"></td>
+              <td class="pricing-webhook-access-enterprise pricing-feature-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.webhooks.number.limit' %}</td>
-              <td class="pricing-webhook-number-enterprise"></td>
+              <td class="pricing-webhook-number-enterprise pricing-feature-enterprise"></td>
             </tr>
           </tbody>
           <tbody>
@@ -877,17 +877,19 @@
               <td>{% trans 'home.pricing.feature.organizations' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.organizations.access' %}</td>
-              <td class="pricing-organization-access-enterprise"></td>
+              <td class="pricing-organization-access-enterprise pricing-feature-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.organizations.member.limit' %}</td>
-              <td class="pricing-organization-members-enterprise"></td>
+              <td class="pricing-organization-members-enterprise pricing-feature-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature">{% trans 'home.pricing.feature.organizations.team.limit' %}</td>
-              <td class="pricing-organization-teams-enterprise"></td>
+              <td class="pricing-organization-teams-enterprise pricing-feature-enterprise"></td>
             </tr>
           </tbody>
           <tbody>
@@ -895,27 +897,15 @@
               <td>{% trans 'home.pricing.feature.devices' %}</td>
               <td></td>
             </tr>
+          </tbody>
+          <tbody>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.devices.access' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.devices.access.tip' %}"></h5></td>
-              <td class="pricing-device-access-enterprise"></td>
+              <td class="pricing-device-access-enterprise pricing-feature-enterprise"></td>
             </tr>
             <tr>
               <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.devices.app' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.devices.app.tip' %}"></h5></td>
-              <td class="pricing-device-app-enterprise"></td>
-            </tr>
-          </tbody>
-          <tbody>
-            <tr class="pricing-feature-bundle-headline">
-              <td>{% trans 'home.pricing.feature.accounts' %}</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.accounts.access' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.accounts.access.tip' %}"></h5></td>
-              <td class="pricing-account-access-enterprise"></td>
-            </tr>
-            <tr>
-              <td class="pricing-feature">{% trans 'home.pricing.feature.accounts.number.limit' %}</td>
-              <td class="pricing-account-number-enterprise"></td>
+              <td class="pricing-device-app-enterprise pricing-feature-enterprise"></td>
             </tr>
           </tbody>
         </table>
@@ -931,8 +921,9 @@
     </button>
   </div>
 </div>
+<div class="pricing-table-divider"></div>
 <div>
-  <h1 class="fw-bold my-5 pt-5">{% trans 'home.pricing.faq.headline' %}</h1>
+  <h1 class="fw-bold ms-3">{% trans 'home.pricing.faq.headline' %}</h1>
   <div id="pricing-faq-accordion" class="accordion">
     <div class="accordion-item">
       <h2 class="accordion-header">
@@ -1049,21 +1040,30 @@
         container: tooltipTriggerEl
       });
     });
-    observeStickiness("pricing-package-free");
-    observeStickiness("pricing-package-individual");
-    observeStickiness("pricing-package-team");
-    observeStickiness("pricing-package-enterprise");
+    //observeStickiness("pricing-package-free");
+    //observeStickiness("pricing-package-individual");
+    //observeStickiness("pricing-package-team");
+    //observeStickiness("pricing-package-enterprise");
     updatePricing(callback);
   }
 
   function observeStickiness(elementClass) {
-    for (let element of document.getElementsByClassName(elementClass)) {
-      window.addEventListener("scroll", () => {
-        const stickyTop = parseInt(window.getComputedStyle(element).top);
-        const currentTop = element.getBoundingClientRect().top;
-        element.classList.toggle("pricing-package-stuck", currentTop <= stickyTop);
-      });
-    }
+    let element = document.getElementsByClassName(elementClass)[0];
+    let head = document.getElementsByClassName("pricing-table-head")[0];
+    let previousToggle = false;
+    window.addEventListener("scroll", () => {
+      const stickyTop = parseInt(window.getComputedStyle(element).top);
+      const currentTop = element.getBoundingClientRect().top;
+      let toggle = currentTop <= stickyTop;
+      if (previousToggle === toggle) {
+        return;
+      }
+      setTimeout(function () {
+        element.classList.toggle("pricing-package-stuck", toggle);
+        head.classList.toggle("pricing-head-stuck", toggle);
+      }, 0);
+      previousToggle = toggle;
+    });
   }
 
   function updatePricing(callback) {
@@ -1134,8 +1134,6 @@
     displayPackageCell("pricing-organization-teams-", packageName, packageData.organizationTeamLimit);
     displayPackageCell("pricing-device-access-", packageName, packageData.deviceAccess);
     displayPackageCell("pricing-device-app-", packageName, packageData.deviceAccess);
-    displayPackageCell("pricing-account-access-", packageName, packageData.accountsAccess);
-    displayPackageCell("pricing-account-number-", packageName, packageData.accountsNumberLimit);
   }
 
   function displayPackageCell(packageCellId, packageName, value, suffix) {
