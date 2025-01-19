@@ -1040,30 +1040,7 @@
         container: tooltipTriggerEl
       });
     });
-    //observeStickiness("pricing-package-free");
-    //observeStickiness("pricing-package-individual");
-    //observeStickiness("pricing-package-team");
-    //observeStickiness("pricing-package-enterprise");
     updatePricing(callback);
-  }
-
-  function observeStickiness(elementClass) {
-    let element = document.getElementsByClassName(elementClass)[0];
-    let head = document.getElementsByClassName("pricing-table-head")[0];
-    let previousToggle = false;
-    window.addEventListener("scroll", () => {
-      const stickyTop = parseInt(window.getComputedStyle(element).top);
-      const currentTop = element.getBoundingClientRect().top;
-      let toggle = currentTop <= stickyTop;
-      if (previousToggle === toggle) {
-        return;
-      }
-      setTimeout(function () {
-        element.classList.toggle("pricing-package-stuck", toggle);
-        head.classList.toggle("pricing-head-stuck", toggle);
-      }, 0);
-      previousToggle = toggle;
-    });
   }
 
   function updatePricing(callback) {
