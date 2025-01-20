@@ -57,7 +57,9 @@
     displayPackageType(packageType);
     displayPackageClass(packageType, packageClass);
     displayPackageRuntime(packageType, packageRuntime);
-    document.getElementById("payment-package-price").innerHTML = packagePrice + " €";
+    let language = Cookie.find("dulno-home-language");
+    document.getElementById("payment-package-price").innerHTML = (language === "de" ?
+      packagePrice.toString().replaceAll(".", ",") : packagePrice) + " €";
     if (packageType === "FREE") {
       document.getElementById("payment-package-payment-interval").classList.add("d-none");
       document.getElementById("payment-pay-method-headline").classList.add("d-none");

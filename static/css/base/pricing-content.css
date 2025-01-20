@@ -37,7 +37,6 @@
 
 @media (max-width: 1000px) {
   #pricing-personalization {
-    margin-right: 2.5%;
     display: block;
   }
 
@@ -73,6 +72,12 @@
   color: white;
   border-collapse: separate;
   border-spacing: 15px 0;
+}
+
+@media (max-width: 1350px) {
+  .pricing-table-head {
+    border-spacing: 0 0;
+  }
 }
 
 .pricing-table-head thead tr {
@@ -113,7 +118,7 @@
 }
 
 .pricing-table tr td {
-  padding: 10px;
+  padding: 12px;
 }
 
 .pricing-table tr td:nth-child(1) {
@@ -288,13 +293,13 @@
 
 .pricing-feature {
   text-align: left !important;
-  line-height: 30px;
   width: 20% !important;
 }
 
 .pricing-feature-tip {
   margin-bottom: 0;
-  margin-left: 5px;
+  float: right;
+  text-align: right;
 }
 
 #pricing-table-container-mobile {

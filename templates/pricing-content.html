@@ -99,6 +99,15 @@
   <table class="pricing-table">
     <tbody>
       <tr>
+        <td class="pricing-feature border border-0 pb-4"></td>
+        <td class="bg-transparent pb-4"><h4 class="mb-0 fw-bold">{% trans 'home.pricing.free.title' %}</h4></td>
+        <td class="bg-transparent border border-0 pb-4" style="color: var(--pricing-package-highlight-color)"><h4 class="mb-0 fw-bold">{% trans 'home.pricing.individual.title' %}</h4></td>
+        <td class="bg-transparent pb-4"><h4 class="mb-0 fw-bold">{% trans 'home.pricing.team.title' %}</h4></td>
+        <td class="bg-transparent pb-4"><h4 class="mb-0 fw-bold">{% trans 'home.pricing.enterprise.title' %}</h4></td>
+      </tr>
+    </tbody>
+    <tbody>
+      <tr>
         <td class="pricing-feature" data-bs-toggle="tooltip-parent" data-bs-theme="dark">{% trans 'home.pricing.feature.runtime' %} <h5 class="pricing-feature-tip fa fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'home.pricing.feature.runtime.tip' %}"></h5></td>
         <td class="pricing-runtime-free"></td>
         <td class="pricing-runtime-individual"></td>
@@ -303,7 +312,7 @@
     </div>
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <table class="pricing-table pricing-table-mobile-head">
+        <table class="pricing-table-head pricing-table-mobile-head">
           <thead>
             <th class="pricing-table-advantages">
             </th>
@@ -452,7 +461,7 @@
         </table>
       </div>
       <div class="carousel-item">
-        <table class="pricing-table pricing-table-mobile-head">
+        <table class="pricing-table-head pricing-table-mobile-head">
           <thead>
             <th class="pricing-table-advantages">
             </th>
@@ -602,7 +611,7 @@
         </table>
       </div>
       <div class="carousel-item">
-        <table class="pricing-table pricing-table-mobile-head">
+        <table class="pricing-table-head pricing-table-mobile-head">
           <thead>
             <th class="pricing-table-advantages">
             </th>
@@ -757,7 +766,7 @@
         </table>
       </div>
       <div class="carousel-item">
-        <table class="pricing-table pricing-table-mobile-head">
+        <table class="pricing-table-head pricing-table-mobile-head">
           <thead>
             <th class="pricing-table-advantages">
             </th>
@@ -1069,7 +1078,9 @@
 
   function displayPackage(packageName, packageData) {
     if (packageName !== "enterprise") {
-      displayPackageCell("pricing-price-", packageName, packageData.price + " €");
+      let language = Cookie.find("dulno-home-language");
+      displayPackageCell("pricing-price-", packageName, (language === "de" ?
+        packageData.price.toString().replaceAll(".", ",") : packageData.price) + " €");
     }
     if (packageName === "free") {
       displayPackageCell("pricing-runtime-", packageName, "{% trans 'home.pricing.time.unlimited' %}");
