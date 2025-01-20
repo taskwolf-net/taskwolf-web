@@ -1,5 +1,6 @@
 :root {
   --pricing-package-highlight-color: #33b1ff;
+  --pricing-package-highlight-shadow: rgba(51, 177, 255, 0.8);
 }
 
 #pricing-personalization {
@@ -254,11 +255,11 @@
 }
 
 #pricing-table-container-desktop .pricing-package-individual {
-  border: 3px solid var(--pricing-package-highlight-color);
+  border: 1px solid var(--pricing-package-highlight-color);
   outline: 2px solid var(--pricing-package-highlight-color);
-  box-shadow: 0 0 100px var(--pricing-package-highlight-color);
+  box-shadow: 0 0 80px var(--pricing-package-highlight-color);
   z-index: 0 !important;
-  padding: 7px 27px;
+  padding: 9px 29px;
 }
 
 .pricing-package-team, .pricing-feature-team, #pricing-table-container-desktop .pricing-table tbody td:nth-child(4) {
