@@ -50,20 +50,20 @@
   });
 
   function displayForOperatingSystem(detected, tabs) {
-    document.getElementById("download-desktop-content-text").innerHTML +=
-      "<p>" + "{% trans 'home.download.desktop.instruction' %}" + "</p>";
+    let content = document.getElementById("download-desktop-content-text");
+    content.innerHTML += "<p>" + "{% trans 'home.download.desktop.instruction' %}" + "</p>";
     if (detected === "WINDOWS") {
-      document.getElementById("download-desktop-content-text").appendChild(
-        createDownloadButton("{% trans 'home.download.desktop.windows.download' %}",
-          "/static/download/dulno-1.0.0.exe"));
+      content.appendChild(createDownloadButton(content,
+        "{% trans 'home.download.desktop.windows.download' %}",
+        "/static/download/dulno-1.0.0.exe"));
     } else if (detected === "LINUX") {
-      document.getElementById("download-desktop-content-text").appendChild(
-        createDownloadButton("{% trans 'home.download.desktop.linux.download' %}",
-          "/static/download/dulno-1.0.0.deb"));
+      content.appendChild(createDownloadButton(content,
+        "{% trans 'home.download.desktop.linux.download' %}",
+        "/static/download/dulno-1.0.0.deb"));
     } else if (detected === "MACOS") {
-      document.getElementById("download-desktop-content-text").appendChild(
-        createDownloadButton("{% trans 'home.download.desktop.macos.download' %}",
-          "/static/download/"));
+      content.appendChild(createDownloadButton(content,
+        "{% trans 'home.download.desktop.macos.download' %}",
+        ""));
     }
     for (let i = 0; i < tabs.length; i++) {
       if (tabs[i] === "WINDOWS") {
@@ -94,7 +94,7 @@
     createAlternativeTab("download-desktop-macos",
       "{% trans 'home.download.desktop.macos' %}",
       "{% trans 'home.download.desktop.macos.download' %}",
-      "/static/download/", width, selected);
+      "", width, selected);
   }
 
   function createAlternativeTab(
@@ -127,18 +127,35 @@
     }
     content.role = "tabpanel";
     content.setAttribute("aria-labelledby", id);
-    content.appendChild(createDownloadButton(downloadName, downloadFile));
+    content.appendChild(createDownloadButton(content, downloadName, downloadFile));
     document.getElementById("download-desktop-alternative-content")
       .appendChild(content);
   }
 
-  function createDownloadButton(name, downloadFile) {
+  function createDownloadButton(container, name, downloadFile) {
     let button = document.createElement("button");
     button.classList.add("btn", "btn-primary", "d-block", "mx-auto", "mt-5");
     button.innerHTML = '<i class="fa-solid fa-download me-2"></i>' + name;
-    button.onclick = function (event) {
-      window.open(downloadFile);
+    if (downloadFile !== "") {
+      button.onclick = function (event) {
+        window.open(downloadFile);
+      }
+    } else {
+      button.classList.add("disabled");
+      button.style.cursor = "not-allowed";
+      button.style.pointerEvents = "auto";
+      applyTooltips(button, container, "{% trans 'home.download.desktop.unavailable' %}");
     }
     return button;
+  }
+
+  function applyTooltips(element, container, text) {
+    $(element).attr("data-bs-toggle", "tooltip");
+    $(element).attr("data-bs-placement", "top");
+    $(element).attr("data-bs-title", text);
+    container.classList.add("position-relative");
+    new bootstrap.Tooltip(element, {
+      container: container
+    });
   }
 </script>

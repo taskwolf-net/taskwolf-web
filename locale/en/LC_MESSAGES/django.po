@@ -350,6 +350,8 @@ msgid "home.download.mobile.headline"
 msgstr "Mobile"
 msgid "home.download.mobile.description"
 msgstr "Download the Dulno app from the store of your choice"
+msgid "home.download.mobile.unavailable"
+msgstr "Unfortunately not yet available"
 
 # DOWNLOAD DESKTOP
 msgid "home.download.desktop.title"
@@ -378,6 +380,8 @@ msgid "home.download.desktop.alternative.description"
 msgstr "Here you can find the alternative download options for other operating systems"
 msgid "home.download.desktop.unsupported"
 msgstr "It seems that your operating system is not compatible with the Dulno desktop app. We apologize for this. Perhaps you will find something for you in the alternative download options below."
+msgid "home.download.desktop.unavailable"
+msgstr "Unfortunately not yet available"
 
 # DOWNLOAD CLI
 msgid "home.download.cli.title"
