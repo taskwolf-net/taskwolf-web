@@ -49,6 +49,10 @@
       document.getElementById("payment-not-found").classList.remove("d-none");
       return;
     }
+    if (packageType === "FREE" && Cookie.find("token") !== null) {
+      window.location.href = "/";
+      return;
+    }
     displayPackage(packageType, packageClass, packageRuntime, packagePrice);
   });
 
