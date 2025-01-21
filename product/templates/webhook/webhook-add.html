@@ -56,7 +56,7 @@
       <span class="spinner-border spinner-border-sm ms-2" aria-hidden="true"></span>
       <span class="visually-hidden" role="status">Loading...</span>
     `;
-    let request = new HttpRequest("https://api.dulno.com/v1/webhook/add/", "POST",
+    let request = new HttpRequest("/webhook/add/", "POST",
       [],
       {name: document.getElementById("name").value});
     request.send(function (status, responseText) {

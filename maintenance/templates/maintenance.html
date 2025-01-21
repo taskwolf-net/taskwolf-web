@@ -44,7 +44,7 @@
   }
 
   function fetchMaintenance(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/maintenance/running/", "GET", []);
+    let request = new HttpRequest("/maintenance/running/", "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });

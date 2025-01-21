@@ -107,7 +107,7 @@
   }
 
   function fetchTicketNotificationData(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/tickets/unseen/", "GET",
+    let request = new HttpRequest("/tickets/unseen/", "GET",
       []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText).unseenTickets);
@@ -137,7 +137,7 @@
   };
 
   document.getElementById('logout-button').onclick = function() {
-    let request = new HttpRequest("https://api.dulno.com/v1/verification/logout/",
+    let request = new HttpRequest("/verification/logout/",
       "GET", []);
     request.send(function (status, responseText) {
       Cookie.destroy("home-token");

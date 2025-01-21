@@ -87,7 +87,7 @@
     let location = window.location;
     let id = location.href.replace(location.host, "").replace(location.protocol, "")
       .replace("database", "").replaceAll("/", "");
-    let request = new HttpRequest("https://api.dulno.com/v1/table/find/", "POST",
+    let request = new HttpRequest("/table/find/", "POST",
       [], {table: id});
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
@@ -96,7 +96,7 @@
 
   function fetchFirstDatabasePage(callback) {
     pageSize = Math.ceil((window.innerHeight - 70 - 2 * 75 - 87 + 200) / 69);
-    let request = new HttpRequest("https://api.dulno.com/v1/table/content/page/first/",
+    let request = new HttpRequest("/table/content/page/first/",
       "POST", [], {table: database.id, pageSize: pageSize});
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
@@ -120,7 +120,7 @@
       return;
     }
     fetchingNextPage = true;
-    let request = new HttpRequest("https://api.dulno.com/v1/table/content/page/next/",
+    let request = new HttpRequest("/table/content/page/next/",
       "POST", [], {table: database.id, pageState: currentPage, pageSize: pageSize});
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
@@ -244,7 +244,7 @@
       containerElement.classList.remove("editing");
       nameElement.innerText = value;
       column.name = value;
-      let request = new HttpRequest("https://api.dulno.com/v1/table/column/rename/", "POST",
+      let request = new HttpRequest("/table/column/rename/", "POST",
         [], {table: database.id, columnId: column.id, columnName: value});
       request.send(function (status, responseText) {
       });
@@ -268,7 +268,7 @@
     fillTableContent(databaseContent);
     rowPlaceholders = [];
     displayTablePlaceholders();
-    let request = new HttpRequest("https://api.dulno.com/v1/table/column/move/", "POST",
+    let request = new HttpRequest("/table/column/move/", "POST",
       [], {table: database.id, sourceColumn: column.id, targetColumn:
         database.columns[index].id});
     request.send(function (status, responseText) {
@@ -286,7 +286,7 @@
     }).then(result => {
       if (result.isConfirmed) {
         loaderPopup();
-        let request = new HttpRequest("https://api.dulno.com/v1/table/column/remove/", "POST",
+        let request = new HttpRequest("/table/column/remove/", "POST",
           [], {table: database.id, column: column});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.database.column.remove.successful.title' %}",
@@ -359,7 +359,7 @@
           return;
         }
         loaderPopup();
-        let request = new HttpRequest("https://api.dulno.com/v1/table/column/add/", "POST",
+        let request = new HttpRequest("/table/column/add/", "POST",
           [], {table: database.id, columnName: input.value, columnType: type});
         request.send(function (status, responseText) {
           let response = JSON.parse(responseText);
@@ -570,7 +570,7 @@
     } else {
       cell.value = value;
     }
-    let request = new HttpRequest("https://api.dulno.com/v1/table/entry/update/", "POST",
+    let request = new HttpRequest("/table/entry/update/", "POST",
       [], {table: database.id, row: findRowId(entry), column: column, value: value});
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
@@ -726,7 +726,7 @@
   }
 
   async function downloadTable() {
-    let response = await fetch("https://api.dulno.com/v1/table/download/", {
+    let response = await fetch(HttpRequest.PREFIX + "/table/download/", {
       method: "POST",
       headers: createRequestHeaders(),
       body: JSON.stringify({table: database.id})
@@ -757,7 +757,7 @@
       cancelButtonText: "{% trans 'popup.cancel' %}",
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.dulno.com/v1/table/delete/", "POST",
+        let request = new HttpRequest("/table/delete/", "POST",
           [], {table: database.id});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.database.delete.successful.title' %}",
@@ -799,7 +799,7 @@
             "{% trans 'product.database.rename.empty.body' %}", "error");
           return;
         }
-        let request = new HttpRequest("https://api.dulno.com/v1/table/rename/", "POST",
+        let request = new HttpRequest("/table/rename/", "POST",
           [], {table: database.id, name: input.value});
         request.send(function (status, responseText) {
           database.name = input.value;
@@ -849,7 +849,7 @@
             databaseContent.splice(databaseContent.indexOf(entry.row), 1);
           }
         }
-        let request = new HttpRequest("https://api.dulno.com/v1/table/entries/remove/", "POST",
+        let request = new HttpRequest("/table/entries/remove/", "POST",
           [], {table: database.id, rows: rows});
         request.send(function (status, responseText) {
           for (let element of elements) {
@@ -880,7 +880,7 @@
     }).then(result => {
       if (result.isConfirmed) {
         loaderPopup();
-        let request = new HttpRequest("https://api.dulno.com/v1/table/clear/", "POST",
+        let request = new HttpRequest("/table/clear/", "POST",
           [], {table: database.id});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.database.clear.successful.title' %}",
@@ -911,7 +911,7 @@
       <span class="spinner-border spinner-border-sm ms-2" aria-hidden="true"></span>
       <span class="visually-hidden" role="status">Loading...</span>
     `;
-    let request = new HttpRequest("https://api.dulno.com/v1/table/entry/insert/", "POST",
+    let request = new HttpRequest("/table/entry/insert/", "POST",
       [], {table: database.id});
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);

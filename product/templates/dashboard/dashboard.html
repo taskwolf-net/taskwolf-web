@@ -116,7 +116,7 @@
     selectButton.style.width = "150px";
     selectButton.innerText = "{% trans 'product.dashboard.target.select' %}";
     selectButton.onclick = function (event) {
-      let request = new HttpRequest("https://api.dulno.com/v1/target/change/", "POST",
+      let request = new HttpRequest("/target/change/", "POST",
         [], {target: target.id});
       request.send(function (status, responseText) {
         window.location.reload();
@@ -216,7 +216,7 @@
   }
 
   function fetchUsername(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/settings/profile/username/", "GET", []);
+    let request = new HttpRequest("/settings/profile/username/", "GET", []);
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
       callback(response.username);
@@ -224,7 +224,7 @@
   }
 
   function fetchTargets(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/targets/all/", "GET", []);
+    let request = new HttpRequest("/targets/all/", "GET", []);
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
       callback(response.targets, response.currentTarget);
@@ -232,7 +232,7 @@
   }
 
   function fetchActivities(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/activities/", "GET", []);
+    let request = new HttpRequest("/activities/", "GET", []);
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
       callback(response.activities);
@@ -240,7 +240,7 @@
   }
 
   function fetchTutorial(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/tutorial/", "GET", []);
+    let request = new HttpRequest("/tutorial/", "GET", []);
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
       callback(response.active);
@@ -248,7 +248,7 @@
   }
 
   function fetch2FA(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/settings/2fa/", "GET", []);
+    let request = new HttpRequest("/settings/2fa/", "GET", []);
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
       callback(response.enabled);

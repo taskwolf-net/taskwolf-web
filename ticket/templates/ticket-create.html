@@ -109,7 +109,7 @@
   document.getElementById("ticket-create").onclick = function(event) {
     let title = document.getElementById("ticket-title").value;
     let message =  document.getElementsByClassName("ql-editor")[0].innerHTML;
-    let request = new HttpRequest("https://api.dulno.com/v1/ticket/create/", "POST",
+    let request = new HttpRequest("/ticket/create/", "POST",
       [], {title: title, type: ticketType, message: message});
     request.send(function (status, responseText) {
       if (status !== 200) {

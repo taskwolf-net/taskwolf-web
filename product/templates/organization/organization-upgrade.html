@@ -101,7 +101,7 @@
   }
 
   function fetchBundle(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/bundle/", "GET", []);
+    let request = new HttpRequest("/bundle/", "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });
@@ -137,7 +137,7 @@
   }
 
   function fetchPackage(packageName, callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/bundle/preset/", "POST",
+    let request = new HttpRequest("/bundle/preset/", "POST",
       [], {type: packageName, class: bundleClass, runtime: bundleRuntime});
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
@@ -146,7 +146,7 @@
   }
 
   function fetchOrganization(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/organization/", "GET", []);
+    let request = new HttpRequest("/organization/", "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });

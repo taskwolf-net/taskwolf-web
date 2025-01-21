@@ -36,7 +36,7 @@
         window.location.href.replace("https://dulno.com", "");
       return;
     }
-    let request = new HttpRequest("https://api.dulno.com/v1/organization/join/", "POST",
+    let request = new HttpRequest("/organization/join/", "POST",
       [], {organization: "{{organization}}", token: "{{token}}"});
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);

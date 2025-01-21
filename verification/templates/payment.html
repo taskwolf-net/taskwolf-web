@@ -131,7 +131,7 @@
   }
 
   function processPayment(packageType, packageClass, packageRuntime) {
-    let request = new HttpRequest("https://api.dulno.com/v1/checkout/", "POST",
+    let request = new HttpRequest("/checkout/", "POST",
       [], {bundleType: packageType, bundleClass: packageClass,
         bundleRuntime: packageRuntime});
     request.send(function (status, responseText) {
@@ -154,7 +154,7 @@
   }
 
   function processTrial() {
-    let request = new HttpRequest("https://api.dulno.com/v1/trial/use/", "GET", []);
+    let request = new HttpRequest("/trial/use/", "GET", []);
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
       resetPackageSelection();

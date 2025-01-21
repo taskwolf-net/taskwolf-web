@@ -57,7 +57,7 @@
   }
 
   function fetchMoreTemplates(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/templates/load/", "POST",
+    let request = new HttpRequest("/templates/load/", "POST",
       [], {pageState: currentPageState, search: currentSearch});
     request.send(function (status, responseText) {
       let result = JSON.parse(responseText);
@@ -69,7 +69,7 @@
   }
 
   function fetchBundle(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/bundle/", "GET", []);
+    let request = new HttpRequest("/bundle/", "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });

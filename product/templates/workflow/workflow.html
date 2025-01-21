@@ -527,7 +527,7 @@
     if (isSelected) {
       requestBody.workflow = sessionStorage.getItem("workflow-id");
     }
-    let request = new HttpRequest("https://api.dulno.com/v1/workflow" +
+    let request = new HttpRequest("/workflow" +
       (isSelected ? "/update/" : "/add/"), "POST", [], requestBody);
     request.send(function (status, responseText) {
       if (status !== 200) {
@@ -574,7 +574,7 @@
     }).then(result => {
       if (result.isConfirmed) {
         loaderPopup();
-        let request = new HttpRequest("https://api.dulno.com/v1/workflow/remove/", "POST",
+        let request = new HttpRequest("/workflow/remove/", "POST",
           [], {workflow: sessionStorage.getItem("workflow-id")});
         request.send(function (status, responseText) {
           pageChangeApproved = true;

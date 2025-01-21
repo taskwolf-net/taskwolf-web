@@ -1,4 +1,6 @@
 class HttpRequest {
+  static PREFIX = "https://api.dulno.com/v1";
+
   constructor(url, method, headers, data) {
     this.url = url;
     this.method = method;
@@ -26,7 +28,7 @@ class HttpRequest {
       headers.push({key: "WHITELIST-KEY", value: whitelistKey});
     }
     const xhr = new XMLHttpRequest();
-    xhr.open(self.method, self.url);
+    xhr.open(self.method, HttpRequest.PREFIX + self.url);
     for (const entry of headers) {
       xhr.setRequestHeader(entry.key, entry.value);
     }
@@ -49,7 +51,7 @@ class HttpRequest {
     if (refreshToken == null) {
       return;
     }
-    let request = new HttpRequest("https://api.dulno.com/v1/verification/refresh/", "POST",
+    let request = new HttpRequest("/verification/refresh/", "POST",
       [], {refreshToken: refreshToken});
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);

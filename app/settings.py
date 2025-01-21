@@ -26,9 +26,6 @@ if DEVELOPMENT:
 
 BACKEND_ENDPOINT = 'http://10.96.0.4'
 
-if DEVELOPMENT:
-  BACKEND_ENDPOINT = 'https://api.dulno.com'
-
 # Application definition
 
 INSTALLED_APPS = [

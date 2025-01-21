@@ -23,7 +23,7 @@
   });
 
   document.getElementById('verify').onclick = function() {
-    let request = new HttpRequest("https://api.dulno.com/v1/whitelist/isValid/", "POST", [],
+    let request = new HttpRequest("/whitelist/isValid/", "POST", [],
       {key: document.getElementById("key").value});
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);

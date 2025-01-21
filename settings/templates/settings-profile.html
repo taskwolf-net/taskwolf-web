@@ -30,7 +30,7 @@
   });
 
   function displayCurrentUsername() {
-    let request = new HttpRequest("https://api.dulno.com/v1/settings/profile/username/", "GET",
+    let request = new HttpRequest("/settings/profile/username/", "GET",
       []);
     request.send(function (status, responseText) {
       document.getElementById("settings-profile-name").value = JSON.parse(responseText).username;
@@ -65,7 +65,7 @@
   });
 
   document.getElementById("settings-profile-update-button").onclick = function(event) {
-    let request = new HttpRequest("https://api.dulno.com/v1/settings/profile/username/change/", "POST",
+    let request = new HttpRequest("/settings/profile/username/change/", "POST",
       [], {username: document.getElementById("settings-profile-name").value});
     request.send(function (status, responseText) {
       Swal.fire("{% trans 'settings.profile.name.changed.title' %}", "{% trans 'settings.profile.name.changed.body' %}", "success");

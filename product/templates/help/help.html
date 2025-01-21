@@ -79,7 +79,7 @@
 
 <script>
   document.getElementById("help-tutorial-restart").onclick = function() {
-    let request = new HttpRequest("https://api.dulno.com/v1/tutorial/restart/", "POST", []);
+    let request = new HttpRequest("/tutorial/restart/", "POST", []);
     request.send(function (status, responseText) {
       window.location.href = "/dashboard/";
     });

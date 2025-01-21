@@ -74,7 +74,7 @@
   }
 
   function connectChatGPT(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/chatgpt/add/", "POST", [],
+    let request = new HttpRequest("/chatgpt/add/", "POST", [],
       {accessToken: document.getElementById("api-key").value,
         organization: document.getElementById("organization").value});
     request.send(function (status, responseText) {

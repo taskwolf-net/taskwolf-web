@@ -141,7 +141,7 @@
   }
 
   function connectGitlab(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/gitlab/add/", "POST", [],
+    let request = new HttpRequest("/gitlab/add/", "POST", [],
       {hostname: hostnameInput.value, applicationId: applicationInput.value,
         secret: secretInput.value});
     request.send(function (status, responseText) {

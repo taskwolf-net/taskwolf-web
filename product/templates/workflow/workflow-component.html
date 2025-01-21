@@ -163,11 +163,11 @@
   });
 
   function fetchApplicationsData(callback) {
-    let applicationsRequest = new HttpRequest("https://api.dulno.com/v1/modules/available/", "POST",
+    let applicationsRequest = new HttpRequest("/modules/available/", "POST",
       [], {componentType: "{{type}}"});
     applicationsRequest.send(function (status, applicationsResponseText) {
       applications = JSON.parse(applicationsResponseText).modules;
-      let hotApplicationsRequest = new HttpRequest("https://api.dulno.com/v1/modules/" + "{{type}}" + "/hot/", "GET", []);
+      let hotApplicationsRequest = new HttpRequest("/modules/" + "{{type}}" + "/hot/", "GET", []);
       hotApplicationsRequest.send(function (status, hotApplicationsResponseText) {
         hotApplications = JSON.parse(hotApplicationsResponseText).modules;
         callback();
@@ -323,7 +323,7 @@
   function displayAccountInformation() {
     let accountContentElement = document.getElementById("workflow-component-account-content");
     accountContentElement.innerHTML = "";
-    let request = new HttpRequest("https://api.dulno.com/v1/account/information/", "POST",
+    let request = new HttpRequest("/account/information/", "POST",
       [], {module: selectedApplication.toLowerCase()});
     request.send(function (status, responseText) {
       let information = JSON.parse(responseText);
@@ -405,7 +405,7 @@
 
   function fillEventDropdown() {
     document.getElementById("workflow-component-event-dropdown-list").innerHTML = "";
-    let request = new HttpRequest("https://api.dulno.com/v1/components/find/", "POST",
+    let request = new HttpRequest("/components/find/", "POST",
       [], {componentType: "{{type}}", module: selectedApplication.toLowerCase()});
     request.send(function (status, responseText) {
       let events = JSON.parse(responseText).components;
@@ -509,7 +509,7 @@
       component = JSON.parse(sessionStorage.getItem("workflow-steps"))
         .steps.filter(element => element.index === stepIndex)[0];
     }
-    let request = new HttpRequest("https://api.dulno.com/v1/component/find/", "POST",
+    let request = new HttpRequest("/component/find/", "POST",
       [], {componentType: "{{type}}", module: selectedApplication.toLowerCase(),
         type: selectedEvent, currentContent: JSON.parse(component.content),
         previousComponents: findPreviousComponentsContent(stepIndex)});

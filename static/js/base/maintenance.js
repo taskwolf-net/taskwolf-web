@@ -1,5 +1,5 @@
 window.addEventListener('load', function () {
-  let request = new HttpRequest("https://api.dulno.com/v1/maintenance/scheduled/", "GET", []);
+  let request = new HttpRequest("/maintenance/scheduled/", "GET", []);
   request.send(function (status, responseText) {
     let maintenance = JSON.parse(responseText);
     if (!maintenance.found) {

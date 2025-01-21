@@ -188,7 +188,7 @@
   }
 
   function connectMail(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/mail/add/", "POST", [],
+    let request = new HttpRequest("/mail/add/", "POST", [],
       {domain: domainInput.value, mailUser: userInput.value,
         mailPassword: passwordInput.value,
         smtpHost: smtpHostInput.value, smtpPort: parseInt(smtpPortInput.value),

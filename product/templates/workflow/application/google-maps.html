@@ -112,7 +112,7 @@
   }
 
   function connectGoogleMaps(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/google/maps/add/", "POST", [],
+    let request = new HttpRequest("/google/maps/add/", "POST", [],
       {name: nameInput.value, apiKey: apiKeyInput.value});
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));

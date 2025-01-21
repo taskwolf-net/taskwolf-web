@@ -164,7 +164,7 @@
   }
 
   document.getElementById("offer-accept").onclick = function (event) {
-    let request = new HttpRequest("https://api.dulno.com/v1/offer/accept/", "POST",
+    let request = new HttpRequest("/offer/accept/", "POST",
       [], {offer: "{{offer}}"});
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
@@ -176,7 +176,7 @@
   }
 
   document.getElementById("offer-decline").onclick = function (event) {
-    let request = new HttpRequest("https://api.dulno.com/v1/offer/decline/", "POST",
+    let request = new HttpRequest("/offer/decline/", "POST",
       [], {offer: "{{offer}}"});
     request.send(function (status, responseText) {
       window.location.href = "/";
@@ -184,7 +184,7 @@
   }
 
   function fetchOffer(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/offer/find/", "POST",
+    let request = new HttpRequest("/offer/find/", "POST",
       [], {offer: "{{offer}}"});
     request.send(function (status, responseText) {
       if (status === 403) {

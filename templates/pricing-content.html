@@ -1147,7 +1147,7 @@
   }
 
   function fetchPackage(packageName, callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/bundle/preset/", "POST",
+    let request = new HttpRequest("/bundle/preset/", "POST",
       [], {type: packageName, class: bundleClass, runtime: bundleRuntime});
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);

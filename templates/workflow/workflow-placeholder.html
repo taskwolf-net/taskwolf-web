@@ -122,12 +122,12 @@
     }
     let request;
     if (stepKind === "trigger" || stepKind === "action") {
-      request = new HttpRequest("https://api.dulno.com/v1/component/find/", "POST",
+      request = new HttpRequest("/component/find/", "POST",
         [], {componentType: stepKind, module: component.module, type: type,
           currentContent: JSON.parse(component.content),
           previousComponents: findPreviousComponentsContent(stepIndex)});
     } else {
-      request = new HttpRequest("https://api.dulno.com/v1/loop/find/", "POST", [],
+      request = new HttpRequest("/loop/find/", "POST", [],
         {identifier: type, currentContent: JSON.parse(component.content),
           previousComponents: findPreviousComponentsContent(stepIndex)});
     }

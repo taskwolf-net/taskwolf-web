@@ -87,21 +87,21 @@
   }
 
   function fetchTerminationStatus(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/termination/status/", "GET", []);
+    let request = new HttpRequest("/termination/status/", "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });
   }
 
   function fetchBundle(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/bundle/", "GET", []);
+    let request = new HttpRequest("/bundle/", "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });
   }
 
   function fetchOrganization(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/organization/", "GET", []);
+    let request = new HttpRequest("/organization/", "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });
@@ -117,7 +117,7 @@
       cancelButtonText: "{% trans 'popup.cancel' %}",
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.dulno.com/v1/terminate/", "GET", []);
+        let request = new HttpRequest("/terminate/", "GET", []);
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.organization.termination.process.successful.title' %}", "{% trans 'product.organization.termination.process.successful.body' %}", "success").then(success => window.location.reload());
         });

@@ -68,7 +68,7 @@
       Cookie.create("dulno-remember-me", document.getElementById("email").value,
         12 * 30 * 24 * 60 * 60);
     }
-    let request = new HttpRequest("https://api.dulno.com/v1/verification/login/", "POST", [],
+    let request = new HttpRequest("/verification/login/", "POST", [],
       {email: document.getElementById("email").value, password: document.getElementById("password").value,
         multiFactorCode: multiFactorCode});
     request.send(function (status, responseText) {

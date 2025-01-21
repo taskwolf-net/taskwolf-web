@@ -18,10 +18,10 @@
 
 <script>
   $(document).ready(function() {
-    let request = new HttpRequest("https://api.dulno.com/v1/settings/account/email/change/complete/", "POST",
+    let request = new HttpRequest("/settings/account/email/change/complete/", "POST",
       [], {user: "{{user}}", token: "{{token}}"});
     request.send(function (status, responseText) {
-      let request = new HttpRequest("https://api.dulno.com/v1/verification/logout/",
+      let request = new HttpRequest("/verification/logout/",
         "GET", []);
       request.send(function (status, responseText) {
         Cookie.destroy("token");

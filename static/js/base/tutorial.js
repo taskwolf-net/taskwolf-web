@@ -4,7 +4,7 @@ window.addEventListener('load', function () {
   if (Cookie.find("token") === null) {
     return;
   }
-  let request = new HttpRequest("https://api.dulno.com/v1/tutorial/", "GET", []);
+  let request = new HttpRequest("/tutorial/", "GET", []);
   request.send(function (status, responseText) {
     let tutorial = JSON.parse(responseText);
     if (!tutorial.active) {
@@ -61,7 +61,7 @@ function displayTutorial(tutorial, showCancel) {
 }
 
 function cancelTutorial() {
-  let request = new HttpRequest("https://api.dulno.com/v1/tutorial/cancel/", "POST", []);
+  let request = new HttpRequest("/tutorial/cancel/", "POST", []);
   request.send(function (status, responseText) {
     let tutorial = JSON.parse(responseText);
     if (!tutorial.active) {
@@ -72,7 +72,7 @@ function cancelTutorial() {
 }
 
 function continueTutorial() {
-  let request = new HttpRequest("https://api.dulno.com/v1/tutorial/next/", "POST", []);
+  let request = new HttpRequest("/tutorial/next/", "POST", []);
   request.send(function (status, responseText) {
     let tutorial = JSON.parse(responseText);
     if (!tutorial.active) {

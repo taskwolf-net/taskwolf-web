@@ -314,7 +314,7 @@
         callback();
         return;
       }
-      let request = new HttpRequest("https://api.dulno.com/v1/process/workflow/inputs/",
+      let request = new HttpRequest("/process/workflow/inputs/",
         "POST", [], {workflow: self.workflow.id});
       request.send(function (status, responseText) {
         let response = JSON.parse(responseText);
@@ -409,7 +409,7 @@
         html: loaderContainer,
         showConfirmButton: false,
       });
-      let request = new HttpRequest("https://api.dulno.com/v1/process/workflow/execute/", "POST",
+      let request = new HttpRequest("/process/workflow/execute/", "POST",
         [], {workflow: this.workflow.id, inputs: inputs});
       request.send(function (status, responseText) {
         let success = JSON.parse(responseText).success;
@@ -703,7 +703,7 @@
   });
 
   function fetchProcessData(id, callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/process/find/", "POST",
+    let request = new HttpRequest("/process/find/", "POST",
       [], {process: id});
     request.send(function (status, responseText) {
       process = JSON.parse(responseText);
@@ -935,7 +935,7 @@
   }
 
   function addProcess(title, description) {
-    let request = new HttpRequest("https://api.dulno.com/v1/process/add/", "POST",
+    let request = new HttpRequest("/process/add/", "POST",
       [], createProcessPayload(title, description));
     request.send(function (status, responseText) {
       if (status === 400) {
@@ -949,7 +949,7 @@
   function updateProcess(title, description) {
     let payload = createProcessPayload(title, description);
     payload.process = process.id;
-    let request = new HttpRequest("https://api.dulno.com/v1/process/update/", "POST",
+    let request = new HttpRequest("/process/update/", "POST",
       [], payload);
     request.send(function (status, responseText) {
       window.location.href = "/processes/";
@@ -1009,7 +1009,7 @@
       cancelButtonText: "{% trans 'popup.cancel' %}",
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.dulno.com/v1/process/remove/", "POST",
+        let request = new HttpRequest("/process/remove/", "POST",
           [], {process: process.id});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'product.process.delete.successful.title' %}", "{% trans 'product.process.delete.successful.body' %}", "success").then(success => window.location.href = "/processes/");
@@ -1089,7 +1089,7 @@
   }
 
   document.getElementById("process-step-workflow-button").onclick = function (event) {
-    let request = new HttpRequest("https://api.dulno.com/v1/process/workflows/", "GET",
+    let request = new HttpRequest("/process/workflows/", "GET",
       []);
     request.send(function (status, responseText) {
       let workflows = JSON.parse(responseText).workflows;

@@ -197,7 +197,7 @@
 
   function clickConditionSelect(identifier, dropdownContainer, dropdownList, dropdownButton) {
     dropdownList.innerHTML = "";
-    let request = new HttpRequest("https://api.dulno.com/v1/conditions/find/", "GET",
+    let request = new HttpRequest("/conditions/find/", "GET",
       []);
     request.send(function (status, responseText) {
       let items = JSON.parse(responseText).conditions;

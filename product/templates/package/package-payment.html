@@ -179,7 +179,7 @@
   }
 
   function fetchPayments(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/payments/", "GET", []);
+    let request = new HttpRequest("/payments/", "GET", []);
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
       callback(response.payments);
@@ -187,7 +187,7 @@
   }
 
   function fetchBundle(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/bundle/", "GET", []);
+    let request = new HttpRequest("/bundle/", "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });

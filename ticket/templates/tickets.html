@@ -218,7 +218,7 @@
     for (let i = 0; i < entryCheckboxes.length; i++) {
       let entry = entryCheckboxes[i];
       if (entry.checkbox.checked) {
-        let request = new HttpRequest("https://api.dulno.com/v1/ticket/close/", "POST",
+        let request = new HttpRequest("/ticket/close/", "POST",
           [], {ticket: entry.id});
         request.send(function (status, responseText) {
         });
@@ -326,7 +326,7 @@
     let body = createPagingBody();
     body.search = pagingFilterSearch;
     body.targetPage = targetPage;
-    let request = new HttpRequest("https://api.dulno.com/v1/tickets/page/",
+    let request = new HttpRequest("/tickets/page/",
       "POST", [], body);
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
@@ -349,7 +349,7 @@
     body.pageState = pageState;
     body.startingPoint = pagingStartingPoint;
     body.direction = direction < 0 ? "BACKWARD" : "FORWARD";
-    let request = new HttpRequest("https://api.dulno.com/v1/tickets/page/shift/",
+    let request = new HttpRequest("/tickets/page/shift/",
       "POST", [], body);
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);

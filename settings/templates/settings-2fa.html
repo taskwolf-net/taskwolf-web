@@ -42,14 +42,14 @@
   }
 
   function fetch2FA(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/settings/2fa/", "GET", []);
+    let request = new HttpRequest("/settings/2fa/", "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText).enabled);
     });
   }
 
   function needs2FAConfirmation(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/settings/2fa/isConfirmed/", "GET", []);
+    let request = new HttpRequest("/settings/2fa/isConfirmed/", "GET", []);
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
       if (response.success === false) {
@@ -87,7 +87,7 @@
       cancelButtonText: "{% trans 'popup.cancel' %}",
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("https://api.dulno.com/v1/settings/2fa/switch/", "POST",
+        let request = new HttpRequest("/settings/2fa/switch/", "POST",
           [], {password: input.value});
         request.send(function (status, responseText) {
           let response = JSON.parse(responseText);
@@ -179,7 +179,7 @@
 
   function confirm2FA() {
     display2FA(function(code) {
-      let request = new HttpRequest("https://api.dulno.com/v1/settings/2fa/confirm/", "POST",
+      let request = new HttpRequest("/settings/2fa/confirm/", "POST",
         [], {code: code});
       request.send(function (status, responseText) {
         let response = JSON.parse(responseText);

@@ -111,7 +111,7 @@
   });
 
   function fetchLoopTypes(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/loops/find/", "GET", []);
+    let request = new HttpRequest("/loops/find/", "GET", []);
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText).loops);
     });
@@ -215,7 +215,7 @@
     let stepIndex = parseInt(sessionStorage.getItem("workflow-step-index"));
     let component = JSON.parse(sessionStorage.getItem("workflow-steps"))
       .steps.filter(element => element.index === stepIndex)[0];
-    let request = new HttpRequest("https://api.dulno.com/v1/loop/find/", "POST",
+    let request = new HttpRequest("/loop/find/", "POST",
       [], {identifier: selectedType, currentContent: JSON.parse(component.content),
         previousComponents: findPreviousComponentsContent(stepIndex)});
     request.send(function (status, responseText) {

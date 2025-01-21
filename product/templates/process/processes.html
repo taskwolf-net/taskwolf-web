@@ -206,7 +206,7 @@
     for (let i = 0; i < entryCheckboxes.length; i++) {
       let entry = entryCheckboxes[i];
       if (entry.checkbox.checked) {
-        let request = new HttpRequest("https://api.dulno.com/v1/process/remove/", "POST",
+        let request = new HttpRequest("/process/remove/", "POST",
           [], {process: entry.id});
         request.send(function (status, responseText) {
         });
@@ -317,7 +317,7 @@
     let body = createPagingBody();
     body.search = pagingFilterSearch;
     body.targetPage = targetPage;
-    let request = new HttpRequest("https://api.dulno.com/v1/processes/page/",
+    let request = new HttpRequest("/processes/page/",
       "POST", [], body);
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
@@ -340,7 +340,7 @@
     body.pageState = pageState;
     body.startingPoint = pagingStartingPoint;
     body.direction = direction < 0 ? "BACKWARD" : "FORWARD";
-    let request = new HttpRequest("https://api.dulno.com/v1/processes/page/shift/",
+    let request = new HttpRequest("/processes/page/shift/",
       "POST", [], body);
     request.send(function (status, responseText) {
       let response = JSON.parse(responseText);
@@ -395,7 +395,7 @@
   }
 
   function fetchOrganization(callback) {
-    let request = new HttpRequest("https://api.dulno.com/v1/organization/", "GET", []);
+    let request = new HttpRequest("/organization/", "GET", []);
     request.send(function (status, responseText) {
       let organization = JSON.parse(responseText);
       if ("id" in organization) {
