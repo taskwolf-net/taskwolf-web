@@ -16,7 +16,7 @@ DEVELOPMENT = False
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = DEVELOPMENT
 
-ALLOWED_HOSTS = ['dulno.com', '0.0.0.0']
+ALLOWED_HOSTS = ['dulno.com', 'www.dulno.com', '0.0.0.0']
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
 COOKIE_DOMAIN = '.dulno.com'
