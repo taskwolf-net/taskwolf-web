@@ -27,9 +27,9 @@ deploy:
   dependencies:
     - publish
   before_script:
-    - mkdir -p ~/.kube
-    - echo "$KUBERNETES_CONFIGURATION" > ~/.kube/config
+    - /bin/sh -c "mkdir -p ~/.kube"
+    - /bin/sh -c "echo \"$KUBERNETES_CONFIGURATION\" > ~/.kube/config"
   script:
-    - kubectl rollout restart deployment/dulno-web-deployment
+    - /bin/sh -c "kubectl rollout restart deployment/dulno-web-deployment"
   only:
     - master
