@@ -22,4 +22,6 @@ COPY --from=builder /web /web
 
 WORKDIR /web
 
+RUN django-admin compilemessages
+
 ENTRYPOINT ["gunicorn","--config","app/gunicorn-config.py", "app.wsgi"]
