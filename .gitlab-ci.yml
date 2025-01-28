@@ -32,8 +32,6 @@ deploy:
     - mkdir -p ~/.kube
     - echo "$KUBERNETES_CONFIGURATION" > ~/.kube/config
   script:
-    - echo ~
-    - cat ~/.kube/config
     - kubectl rollout restart deployment/dulno-web-deployment
   only:
     - master
