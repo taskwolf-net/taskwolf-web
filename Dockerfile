@@ -1,4 +1,4 @@
-FROM 10.0.0.2:5000/dulno-obfuscation:latest AS builder
+FROM registry.dulno.com/dulno-obfuscation:latest AS builder
 
 RUN ln -s /obfuscation /web
 
