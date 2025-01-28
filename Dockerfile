@@ -12,6 +12,8 @@ RUN node obfuscation/obfuscate.js
 
 FROM python:3
 
+RUN apt-get update && apt-get install -y gettext && apt-get clean
+
 RUN pip install django
 RUN pip install gunicorn
 RUN pip install django-cors-headers
