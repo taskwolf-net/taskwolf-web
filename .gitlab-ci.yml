@@ -35,9 +35,10 @@ deploy:
   before_script:
     - mkdir -p ~/.kube
     - echo "$KUBERNETES_CONFIGURATION" > ~/.kube/config
-    - apt-get update && apt-get install -y curl
   script:
     - kubectl rollout restart $KUBERNETES_RESOURCE
-    - curl -X POST -F token=$NGINX_PIPELINE_TRIGGER_TOKEN -F ref=master $NGINX_PIPELINE_TRIGGER_URL
+  trigger:
+    project: 'dulno/dulno-nginx'
+    branch: 'master'
   only:
     - master
