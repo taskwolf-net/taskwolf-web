@@ -1,7 +1,6 @@
 FROM registry.dulno.com/dulno-obfuscation:latest AS builder
 
 RUN mkdir -p /home/dulno/web
-RUN ln -s obfuscation /home/dulno/web
 
 COPY static /home/dulno/web/static
 COPY obfuscation /home/dulno/web/obfuscation
