@@ -42,8 +42,6 @@ deploy_web:
 
 deploy_nginx:
   stage: deploy
-  dependencies:
-    - publish
   trigger:
     project: 'dulno/dulno-nginx'
     branch: 'master'
