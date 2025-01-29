@@ -3,8 +3,8 @@ FROM registry.dulno.com/dulno-obfuscation:latest AS builder
 RUN mkdir -p /home/dulno/web
 RUN ln -s /obfuscation /home/dulno/web
 
-COPY web/static /home/dulno/web/static
-COPY web/obfuscation /home/dulno/web/obfuscation
+COPY static /home/dulno/web/static
+COPY obfuscation /home/dulno/web/obfuscation
 
 ENV OBFUSCATION_HOME=/home/dulno/web
 
