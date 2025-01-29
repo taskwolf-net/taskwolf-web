@@ -43,7 +43,7 @@ deploy_web:
 deploy_nginx:
   stage: deploy
   trigger:
-    project: 'dulno/dulno-nginx'
-    branch: 'master'
+    project: $NGINX_PIPELINE_PROJECT
+    branch: $NGINX_PIPELINE_BRANCH
   only:
     - master
