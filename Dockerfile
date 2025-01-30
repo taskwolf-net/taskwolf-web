@@ -26,4 +26,4 @@ WORKDIR /web
 
 RUN django-admin compilemessages
 
-ENTRYPOINT ["gunicorn","--config","app/gunicorn-config.py", "app.wsgi"]
+ENTRYPOINT ["gunicorn", "--config", "app/gunicorn-config.py", "app.wsgi"]
