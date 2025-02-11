@@ -1,14 +1,17 @@
 stages:
+  - build
+  - scan
   - publish
   - deploy
 
 variables:
   DOCKER_IMAGE: "dulno-web"
-  DOCKER_STATIC_IMAGE: "dulno-web-static"
+  DOCKER_PROXY_IMAGE: "dulno-web-proxy"
   KUBERNETES_RESOURCE: "deployment/dulno-web-deployment"
+  KUBERNETES_PROXY_RESOURCE: "deployment/dulno-web-proxy-deployment"
 
-publish:
-  stage: publish
+build:
+  stage: build
   image: docker:cli
   services:
     - docker:dind
@@ -18,14 +21,62 @@ publish:
     DOCKER_DRIVER: overlay2
   script:
     - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin $DOCKER_REGISTRY
-    - docker build -t $DOCKER_REGISTRY/$DOCKER_IMAGE:latest .
-    - docker push $DOCKER_REGISTRY/$DOCKER_IMAGE:latest
-    - docker buildx build -t $DOCKER_REGISTRY/$DOCKER_STATIC_IMAGE:latest -f nginx/Dockerfile .
-    - docker push $DOCKER_REGISTRY/$DOCKER_STATIC_IMAGE:latest
+    - docker build -t $DOCKER_REGISTRY/$DOCKER_IMAGE:test .
+    - docker push $DOCKER_REGISTRY/$DOCKER_IMAGE:test
+    - docker buildx build -t $DOCKER_REGISTRY/$DOCKER_PROXY_IMAGE:test -f proxy/Dockerfile .
+    - docker push $DOCKER_REGISTRY/$DOCKER_PROXY_IMAGE:test
   only:
     - master
 
-deploy_web:
+scan:
+  stage: scan
+  image:
+    name: aquasec/trivy:latest
+    entrypoint: [""]
+  dependencies:
+    - build
+  variables:
+    GIT_STRATEGY: none
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_DRIVER: overlay2
+    TRIVY_USERNAME: $DOCKER_USERNAME
+    TRIVY_PASSWORD: $DOCKER_PASSWORD
+  script:
+    - trivy --version
+    - time trivy clean --scan-cache
+    - time trivy image --download-db-only --no-progress --cache-dir .trivycache/
+    - trivy image --ignore-unfixed --scanners vuln --severity HIGH,CRITICAL --exit-code 1 --cache-dir .trivycache/ $DOCKER_REGISTRY/$DOCKER_IMAGE:test
+    - trivy image --ignore-unfixed --scanners vuln --severity HIGH,CRITICAL --exit-code 1 --cache-dir .trivycache/ $DOCKER_REGISTRY/$DOCKER_PROXY_IMAGE:test
+  cache:
+    paths:
+      - .trivycache/
+  only:
+    - master
+
+publish:
+  stage: publish
+  image: docker:cli
+  services:
+    - docker:dind
+  dependencies:
+    - scan
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_DRIVER: overlay2
+  script:
+    - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin $DOCKER_REGISTRY
+    - docker pull $DOCKER_REGISTRY/$DOCKER_IMAGE:test
+    - docker tag $DOCKER_REGISTRY/$DOCKER_IMAGE:test $DOCKER_REGISTRY/$DOCKER_IMAGE:latest
+    - docker push $DOCKER_REGISTRY/$DOCKER_IMAGE:latest
+    - docker pull $DOCKER_REGISTRY/$DOCKER_PROXY_IMAGE:test
+    - docker tag $DOCKER_REGISTRY/$DOCKER_PROXY_IMAGE:test $DOCKER_REGISTRY/$DOCKER_PROXY_IMAGE:latest
+    - docker push $DOCKER_REGISTRY/$DOCKER_PROXY_IMAGE:latest
+  only:
+    - master
+
+deploy:
   stage: deploy
   image:
     name: bitnami/kubectl:latest
@@ -37,13 +88,8 @@ deploy_web:
     - echo "$KUBERNETES_CONFIGURATION" > ~/.kube/config
   script:
     - kubectl rollout restart $KUBERNETES_RESOURCE
-  only:
-    - master
-
-deploy_nginx:
-  stage: deploy
-  trigger:
-    project: $NGINX_PIPELINE_PROJECT
-    branch: $NGINX_PIPELINE_BRANCH
+    - kubectl rollout restart $KUBERNETES_PROXY_RESOURCE
+    - kubectl rollout status $KUBERNETES_RESOURCE
+    - kubectl rollout status $KUBERNETES_PROXY_RESOURCE
   only:
     - master
