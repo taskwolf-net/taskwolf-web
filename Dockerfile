@@ -10,15 +10,13 @@ ENV OBFUSCATION_HOME=/web
 
 RUN node obfuscation/obfuscate.js
 
-FROM python:3
+FROM python:3.13-slim
 
-RUN apt-get update && apt-get install -y gettext && apt-get clean
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gettext linux-libc-dev curl && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN pip install django
-RUN pip install gunicorn
-RUN pip install django-cors-headers
-RUN pip install requests
-RUN pip install jwt
+RUN pip install --no-cache-dir django gunicorn django-cors-headers requests jwt
 
 COPY --from=builder /web /web
 
