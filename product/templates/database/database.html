@@ -111,12 +111,13 @@
     if (!fetchingNextPage && currentPage !== "" && scrollHeight - scrollTop - clientHeight <= 200) {
       fetchNextDatabasePage(function (response) {
         updatePaging(response);
-      })
+      });
     }
   });
 
   function fetchNextDatabasePage(callback) {
-    if (fetchingNextPage) {
+    if (fetchingNextPage || currentPage === "") {
+      callback(null);
       return;
     }
     fetchingNextPage = true;
@@ -128,6 +129,9 @@
   }
 
   function updatePaging(response) {
+    if (response === null) {
+      return;
+    }
     fetchingNextPage = false;
     currentPage = response.page;
     databaseContent = databaseContent.concat(response.content);
@@ -849,9 +853,7 @@
             databaseContent.splice(databaseContent.indexOf(entry.row), 1);
           }
         }
-        let request = new HttpRequest("/table/entries/remove/", "POST",
-          [], {table: database.id, rows: rows});
-        request.send(function (status, responseText) {
+        removeEntries(rows, function () {
           for (let element of elements) {
             element.remove();
           }
@@ -865,6 +867,22 @@
           Swal.fire("{% trans 'product.database.remove.successful.title' %}",
             "{% trans 'product.database.remove.successful.body' %}", "success");
         });
+      }
+    });
+  }
+
+  function removeEntries(rows, callback) {
+    let request = new HttpRequest("/table/entries/remove/", "POST",
+      [], {table: database.id, rows: rows});
+    request.send(function (status, responseText) {
+      let remainingLines = Math.ceil((window.innerHeight - 70 - 2 * 75 - 87 - databaseContent.length * 69) / 69);
+      if (remainingLines > 0) {
+        fetchNextDatabasePage(function (response) {
+          updatePaging(response);
+          callback();
+        });
+      } else {
+        callback();
       }
     });
   }
