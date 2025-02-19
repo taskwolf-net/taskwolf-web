@@ -37,8 +37,7 @@
 <script>
   $(document).ready(function() {
     if (Cookie.find("home-token") == null) {
-      window.location.href = "/login/?redirect=" +
-        window.location.href.replace("https://dulno.com", "");
+      loginRedirect();
       return;
     }
     let packageType = Cookie.find("dulno-package-type");
@@ -138,7 +137,7 @@
       if (status === 403) {
         Swal.fire("{% trans 'home.payment.failed.not.found.title' %}",
           "{% trans 'home.payment.failed.not.found.body' %}", "error")
-          .then(success => window.location.href = "/login/");
+          .then(success => loginRedirect());
         return;
       }
       let response = JSON.parse(responseText);
@@ -178,6 +177,11 @@
           .then(success => window.location.href = "/login/");
       }
     });
+  }
+
+  function loginRedirect() {
+    window.location.href = "/login/?redirect=" +
+      window.location.href.replace("https://dulno.com", "");
   }
 
   function resetPackageSelection() {
