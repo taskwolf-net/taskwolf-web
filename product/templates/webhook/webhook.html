@@ -66,7 +66,7 @@
     displayLoader();
     fetchWebhookData(function() {
       key = webhook.key;
-      document.getElementById("webhook-name").innerHTML = webhook.name;
+      document.getElementById("webhook-name").innerText = webhook.name;
       document.getElementById("webhook-url").value = webhook.url;
       document.getElementById("webhook-testing-url").innerText = webhook.url;
       applyTooltips(document.getElementById("webhook-url-copy"),

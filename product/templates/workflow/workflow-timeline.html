@@ -96,18 +96,18 @@
     entryHeaderElement.classList.add("timeline-item-header");
     let entryTitleElement = document.createElement("h5");
     entryTitleElement.classList.add("timeline-item-title", "fw-bold");
-    entryTitleElement.innerHTML = entry.title;
+    entryTitleElement.innerText = entry.title;
     entryHeaderElement.appendChild(entryTitleElement);
     let entryDateElement = document.createElement("p");
     entryDateElement.classList.add("timeline-item-date", "mb-2", "fw-bold");
-    entryDateElement.innerHTML = entry.time;
+    entryDateElement.innerText = entry.time;
     entryHeaderElement.appendChild(entryDateElement);
     entryElement.appendChild(entryHeaderElement);
     if (entry.isFailure) {
       entryElement.appendChild(createEntryFailureElement(entry, isFirst));
     }
     let entryDescriptionElement = document.createElement("p");
-    entryDescriptionElement.innerHTML = entry.description;
+    entryDescriptionElement.innerText = entry.description;
     entryElement.appendChild(entryDescriptionElement);
     if (entry.level === "SUCCESS") {
       entryElement.classList.add("timeline-item-success");

@@ -1114,7 +1114,7 @@
     let workflowElement = document.createElement("li");
     workflowElement.classList.add("dropdown-item", "text-truncate");
     let workflowNameName = document.createElement("b");
-    workflowNameName.innerHTML = name;
+    workflowNameName.innerText = name;
     workflowElement.appendChild(workflowNameName);
     workflowElement.onclick = function(event) {
       click();
