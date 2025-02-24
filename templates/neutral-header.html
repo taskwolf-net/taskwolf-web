@@ -9,6 +9,11 @@
 
 <script>
   document.getElementById("close-button").onclick = function (event) {
-    window.location.href = sessionStorage.getItem("neutral-return");
+    let target = sessionStorage.getItem("neutral-return");
+    if (target === null) {
+      window.location.href = "/";
+      return;
+    }
+    window.location.href = target;
   }
 </script>
