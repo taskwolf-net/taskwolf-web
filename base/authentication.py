@@ -125,15 +125,16 @@ async def isHomeAuthenticated(request):
   return {"success": True}
 
 async def applyHomeLanguage(request):
-  token = request.COOKIES.get('token')
+  token = request.COOKIES.get('home-token')
   if (token is None):
-    headers = {"Home-Authorization": "Bearer " + request.COOKIES.get('home-token')}
-  else:
-    headers = {"Authorization": "Bearer " + token}
+    return await applyLanguage(request)
+  headers = {"Home-Authorization": "Bearer " + request.COOKIES.get('home-token')}
   applyWhitelistKey(request, headers)
   response = await asyncio.get_event_loop().run_in_executor(None,
     partial(requests.get, BACKEND_ENDPOINT + "/v1/settings/language/",
     headers = headers))
+  if (response.status_code != 200):
+    return await applyLanguage(request)
   text = response.text
   jsonText = json.loads(text)
   language = jsonText["language"]
