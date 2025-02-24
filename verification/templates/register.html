@@ -258,6 +258,10 @@
           Swal.fire("{% trans 'home.registration.failed.title' %}",
             "{% trans 'home.registration.failed.recaptcha' %}", "error")
             .then(success => window.location.reload(true));
+        } else if (errorCode === 1003) {
+          Swal.fire("{% trans 'home.registration.failed.title' %}",
+            "{% trans 'home.registration.failed.email.pattern' %}", "error")
+            .then(success => window.location.reload(true));
         }
       }
     });

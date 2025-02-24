@@ -816,6 +816,8 @@ msgid "home.registration.failed.already.exists"
 msgstr "There is already an account with this email. Please try the registration process again"
 msgid "home.registration.failed.recaptcha"
 msgstr "Your request could not be verified. You have been recognized as a robot and not as a human. Please try again"
+msgid "home.registration.failed.email.pattern"
+msgstr "The specified email could not be found. Please try again or enter another email"
 
 # LOGIN / REGISTER
 msgid "home.login.register.title"
