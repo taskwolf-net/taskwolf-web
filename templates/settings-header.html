@@ -50,6 +50,11 @@
   }
 
   document.getElementById("close-settings").onclick = function (event) {
-    window.location.href = sessionStorage.getItem("settings-return");
+    let target = sessionStorage.getItem("settings-return");
+    if (target === null) {
+      window.location.href = "/";
+      return;
+    }
+    window.location.href = target;
   }
 </script>
