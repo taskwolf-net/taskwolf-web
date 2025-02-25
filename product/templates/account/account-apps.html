@@ -80,7 +80,7 @@
     logoElement.height = 64;
     entryElement.appendChild(logoElement);
     let nameElement = document.createElement("b");
-    nameElement.innerHTML = name;
+    nameElement.innerText = name;
     entryElement.appendChild(nameElement);
     entryElement.onclick = function(event) {
       sessionStorage.setItem("account-app-identifier", id);

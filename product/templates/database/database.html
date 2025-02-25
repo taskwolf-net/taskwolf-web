@@ -64,7 +64,7 @@
     displayLoader();
     fetchDatabaseData(function(result) {
       database = result;
-      document.getElementById("database-name").innerHTML = database.name;
+      document.getElementById("database-name").innerText = database.name;
       fillTableHead();
       fetchFirstDatabasePage(function(response) {
         updatePaging(response);
@@ -807,7 +807,7 @@
           [], {table: database.id, name: input.value});
         request.send(function (status, responseText) {
           database.name = input.value;
-          document.getElementById("database-name").innerHTML = database.name;
+          document.getElementById("database-name").innerText = database.name;
           Swal.fire("{% trans 'product.database.rename.successful.title' %}",
             "{% trans 'product.database.rename.successful.body' %}", "success");
         });

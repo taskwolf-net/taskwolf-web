@@ -38,12 +38,14 @@
         <a href="/terms-of-service/">{% trans 'home.footer.terms.of.service' %}</a><br>
       </div>
     </div>
-    <h5 id="home-footer-copyright">© 2024 Dulno.com</h5>
+    <h5 id="home-footer-copyright">© Dulno.com</h5>
   </div>
 </div>
 
 <script>
   $(document).ready(function() {
+    document.getElementById("home-footer-copyright").innerHTML =
+      "© " + new Date().getFullYear() + " Dulno.com";
     resizeDividers();
   });
 
