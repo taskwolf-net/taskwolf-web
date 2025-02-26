@@ -517,6 +517,18 @@
       this.state = "INACTIVE";
       this.outerRect.fill(isDarkTheme ? "#1b232f" : "#c5c5c5");
     }
+
+    serialize() {
+      return JSON.stringify({
+        "x": this.x,
+        "y": this.y,
+        "type": this.type,
+        "title": this.title,
+        "description": this.description,
+        "todos": this.todos,
+        "workflow": (this.workflow == null) ? "" : this.workflow.id,
+      });
+    }
   }
 
   class ConnectionPoint {
@@ -733,6 +745,13 @@
       this.state = "INACTIVE";
       this.display();
     }
+
+    serialize() {
+      return JSON.stringify({
+        "origin": this.origin.serialize(),
+        "destination": this.destination.serialize()
+      });
+    }
   }
 </script>
 <script>
@@ -740,12 +759,15 @@
   let process = null;
   let steps = [];
   let connections = [];
+  let initialSteps = [];
+  let initialConnections = [];
   let mouseDown = false;
   let aimedConnectionPoint = null;
   let currentSelectedStep = null;
   let history = [];
   let revertedHistory = [];
   let background = null;
+  let pageChangeApproved = false;
   const width = window.innerWidth;
   const height = window.innerHeight;
 
@@ -774,6 +796,8 @@
         "{% trans 'product.process.description' %}", [], null));
       connections.push(new Connection(draw, steps[0], steps[1]));
       connections.push(new Connection(draw, steps[1], steps[2]));
+      initialSteps = steps.map(entry => entry.serialize());
+      initialConnections = connections.map(entry => entry.serialize());
       display();
       return;
     }
@@ -808,6 +832,8 @@
       let destination = stepIdRelation.filter((step) => step.id === entry.connectionDestinationStep)[0].step;
       connections.push(new Connection(draw, origin, destination));
     }
+    initialSteps = steps.map(entry => entry.serialize());
+    initialConnections = connections.map(entry => entry.serialize());
     display();
   }
 
@@ -1022,6 +1048,7 @@
         Swal.fire("{% trans 'product.process.publish.limit.reached.title' %}", "{% trans 'product.process.publish.limit.reached.body' %}", "error");
         return;
       }
+      pageChangeApproved = true;
       window.location.href = "/processes/";
     });
   }
@@ -1032,6 +1059,7 @@
     let request = new HttpRequest("/process/update/", "POST",
       [], payload);
     request.send(function (status, responseText) {
+      pageChangeApproved = true;
       window.location.href = "/processes/";
     });
   }
@@ -1092,6 +1120,7 @@
         let request = new HttpRequest("/process/remove/", "POST",
           [], {process: process.id});
         request.send(function (status, responseText) {
+          pageChangeApproved = true;
           Swal.fire("{% trans 'product.process.delete.successful.title' %}", "{% trans 'product.process.delete.successful.body' %}", "success").then(success => window.location.href = "/processes/");
         });
       }
@@ -1351,5 +1380,25 @@
     currentActiveSteps = [];
     pendingSteps = [];
     completedSteps = [];
+  }
+
+  window.onbeforeunload = function() {
+    if (!pageChangeApproved && checkUnsavedChanges()) {
+      return "{% trans 'product.process.unsaved.changes.body' %}";
+    }
+  };
+
+  function checkUnsavedChanges() {
+    return !checkProcessInitialState(initialSteps, steps) ||
+      !checkProcessInitialState(initialConnections, connections);
+  }
+
+  function checkProcessInitialState(initial, current) {
+    if (initial.length !== current.length) {
+      return false;
+    }
+    let sortedInitial = initial.map(obj => obj).sort();
+    let sortedCurrent = current.map(obj => obj.serialize()).sort();
+    return sortedInitial.every((item, index) => item === sortedCurrent[index]);
   }
 </script>
