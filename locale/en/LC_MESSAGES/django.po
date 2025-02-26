@@ -1676,6 +1676,8 @@ msgid "product.process.delete.successful.title"
 msgstr "Deleted!"
 msgid "product.process.delete.successful.body"
 msgstr "That process has been successfully deleted!"
+msgid "product.process.unsaved.changes.body"
+msgstr "Unsecured changes have been found. Are you sure you want to leave the site?"
 
 # DATABASES
 msgid "product.databases.title"
