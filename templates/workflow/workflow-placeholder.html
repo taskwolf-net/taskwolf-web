@@ -153,7 +153,7 @@
 
   function displayPlaceholder(identifier, name) {
     let placeholderElement = document.createElement("li");
-    placeholderElement.classList.add("workflow-placeholder");
+    placeholderElement.classList.add("workflow-placeholder", "text-truncate");
     preparePlaceholderDrag(identifier, name, placeholderElement);
     let placeholderNameElement = document.createElement("b");
     placeholderNameElement.innerHTML = name;

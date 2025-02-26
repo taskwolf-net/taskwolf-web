@@ -469,7 +469,8 @@
     inputContainer.classList.add("d-flex", "align-items-center", "mb-4");
     let inputElement = document.createElement("div");
     inputElement.id = "workflow-specification-list-input-" + generateElementIdentifier(32);
-    inputElement.classList.add("workflow-specification-input", "form-control");
+    inputElement.classList.add("workflow-specification-input", "form-control",
+      "flex-grow-1", "text-truncate");
     inputContainer.appendChild(inputElement);
     let inputRemoveButton = document.createElement("div");
     inputRemoveButton.classList.add("workflow-specification-list-remove",
@@ -616,7 +617,8 @@
     let inputElement = document.createElement("div");
     inputElement.id = "workflow-specification-list-input-" + identifier + "-" +
       mapEntry.identifier + "-" + type;
-    inputElement.classList.add("workflow-specification-input", "form-control");
+    inputElement.classList.add("workflow-specification-input", "form-control",
+      "flex-grow-1", "text-truncate");
     if (type === "key") {
       inputElement.classList.add("me-3");
     }
