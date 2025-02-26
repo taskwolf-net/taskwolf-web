@@ -280,6 +280,37 @@ body {
   }
 }
 
+.process-workflow-result-list {
+  padding: 10px;
+  list-style: none;
+  text-align: start;
+  max-height: 500px;
+  overflow-y: auto;
+  border-radius: 10px;
+}
+
+.dark .process-workflow-result-list {
+  border: 1px solid #4b555e;
+}
+
+.light .process-workflow-result-list {
+  border: 1px solid #e1e1e1;
+}
+
+.process-workflow-result-value {
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin: 0;
+}
+
+.dark .process-workflow-result-value {
+  background-color: #3f474f;
+}
+
+.light .process-workflow-result-value {
+  background-color: #eeeeee;
+}
+
 .process-publish-form {
   width: 50%;
 }

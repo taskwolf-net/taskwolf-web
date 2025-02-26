@@ -320,7 +320,7 @@
         let response = JSON.parse(responseText);
         let inputs = response.inputs;
         if (inputs.length === 0) {
-          self.executeWorkflow(callback, []);
+          self.executeWorkflow(callback, response.workflow, []);
           return;
         }
         self.openWorkflowWindow(callback, response.workflow, inputs);
@@ -390,12 +390,12 @@
         for (let input of inputElements) {
           inputs[input.name] = input.element.value;
         }
-        self.executeWorkflow(callback, inputs);
+        self.executeWorkflow(callback, workflowName, inputs);
       });
       inputElements[0].element.focus();
     }
 
-    executeWorkflow(callback, inputs) {
+    executeWorkflow(callback, workflowName, inputs) {
       let self = this;
       let loaderContainer = document.createElement("div");
       loaderContainer.classList.add("my-5");
@@ -413,9 +413,10 @@
       let request = new HttpRequest("/process/workflow/execute/", "POST",
         [], {workflow: this.workflow.id, inputs: inputs});
       request.send(function (status, responseText) {
-        let success = JSON.parse(responseText).success;
+        let response = JSON.parse(responseText);
+        let results = response.results;
         setTimeout(function () {
-          if (success) {
+          if (response.success && results.length === 0) {
             Swal.fire({
               title: "{% trans 'product.process.workflow.execution.successful.title' %}",
               text: "{% trans 'product.process.workflow.execution.successful.body' %}",
@@ -423,6 +424,8 @@
               timer: 1000,
               timerProgressBar: true,
             }).then(result => callback());
+          } else if (response.success && results.length > 0) {
+            self.showWorkflowResult(results, workflowName, callback);
           } else {
             Swal.fire({
               title: "{% trans 'product.process.workflow.execution.failure.title' %}",
@@ -443,6 +446,38 @@
           }
         }, 1000);
       });
+    }
+
+    showWorkflowResult(results, workflowName, callback) {
+      let resultContainer = document.createElement("div");
+      let workflowNameElement = document.createElement("h6");
+      workflowNameElement.classList.add("mb-4");
+      workflowNameElement.innerText = workflowName;
+      resultContainer.appendChild(workflowNameElement);
+      let resultOutputList = document.createElement("ul");
+      resultOutputList.classList.add("process-workflow-result-list");
+      for (let i = 0; i < results.length; i++) {
+        let result = results[i];
+        let resultContainer = document.createElement("li");
+        if (i < results.length - 1) {
+          resultContainer.classList.add("mb-4");
+        }
+        let resultKeyElement = document.createElement("h5");
+        resultKeyElement.classList.add("fw-bold", "mb-2");
+        resultKeyElement.innerText = result.key;
+        resultContainer.appendChild(resultKeyElement);
+        let resultValueElement = document.createElement("p");
+        resultValueElement.classList.add("process-workflow-result-value");
+        resultValueElement.innerText = result.value;
+        resultContainer.appendChild(resultValueElement);
+        resultOutputList.appendChild(resultContainer);
+      }
+      resultContainer.appendChild(resultOutputList);
+      Swal.fire({
+        title: "{% trans 'product.process.workflow.title' %}",
+        width: 600,
+        html: resultContainer,
+      }).then(result => callback());
     }
 
     clickWorkflow(id, redirect) {
