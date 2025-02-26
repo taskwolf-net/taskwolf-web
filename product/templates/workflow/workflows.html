@@ -243,9 +243,8 @@
             text: "{% trans 'product.workflows.execution.failure.body' %}",
             icon: "error",
             showConfirmButton: true,
-            confirmButtonText: `
-              <i class="fa-solid fa-arrow-up-right-from-square me-2"></i> {% trans 'product.workflows.execution.failure.timeline' %}
-            `,
+            confirmButtonText: "<i class='fa-solid fa-arrow-up-right-from-square me-2'></i>" +
+              "{% trans 'product.workflows.execution.failure.timeline' %}",
             showCancelButton: true,
             cancelButtonText: "{% trans 'popup.cancel' %}",
           }).then(result => {
