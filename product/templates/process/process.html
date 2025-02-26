@@ -396,6 +396,7 @@
     }
 
     executeWorkflow(callback, inputs) {
+      let self = this;
       let loaderContainer = document.createElement("div");
       loaderContainer.classList.add("my-5");
       let loader = document.createElement("div");
@@ -427,9 +428,88 @@
               title: "{% trans 'product.process.workflow.execution.failure.title' %}",
               text: "{% trans 'product.process.workflow.execution.failure.body' %}",
               icon: "error",
-            }).then(result => callback());
+              showConfirmButton: true,
+              confirmButtonText: `
+              <i class="fa-solid fa-arrow-up-right-from-square me-2"></i> {% trans 'product.process.workflow.execution.failure.timeline' %}
+            `,
+              showCancelButton: true,
+              cancelButtonText: "{% trans 'popup.cancel' %}",
+            }).then(result => {
+              if (result.isConfirmed) {
+                self.clickWorkflow(self.workflow.id, "/workflow/timeline/");
+              } else {
+                callback();
+              }
+            });
           }
         }, 1000);
+      });
+    }
+
+    clickWorkflow(id, redirect) {
+      let request = new HttpRequest("/workflow/find/", "POST", [], {workflow: id});
+      request.send(function (status, responseText) {
+        let workflow = JSON.parse(responseText);
+        sessionStorage.removeItem("workflow-name");
+        sessionStorage.removeItem("workflow-description");
+        sessionStorage.removeItem("workflow-trigger");
+        sessionStorage.removeItem("workflow-steps");
+        sessionStorage.removeItem("workflow-selected");
+        sessionStorage.removeItem("workflow-id");
+        sessionStorage.setItem("workflow-selected", "true");
+        sessionStorage.setItem("workflow-id", workflow.id);
+        sessionStorage.setItem("workflow-name", workflow.name);
+        sessionStorage.setItem("workflow-initial-name", workflow.name);
+        sessionStorage.setItem("workflow-description", workflow.description);
+        sessionStorage.setItem("workflow-initial-description", workflow.description);
+        let trigger = JSON.stringify({
+          "kind": "trigger",
+          "module": workflow.triggerModule,
+          "moduleLogo": workflow.triggerModuleLogo,
+          "type": workflow.triggerType,
+          "typeDescription": workflow.triggerTypeDescription,
+          "content": workflow.triggerContent,
+          "selected": true
+        });
+        sessionStorage.setItem("workflow-trigger", trigger);
+        sessionStorage.setItem("workflow-initial-trigger", trigger);
+        let steps = [];
+        for (let i = 0; i < workflow.actions.length; i++) {
+          let workflowActionInformation = workflow.actions[i];
+          steps.push({
+            "kind": "action",
+            "index": workflowActionInformation.actionIndex,
+            "module": workflowActionInformation.actionModule,
+            "moduleLogo": workflowActionInformation.actionModuleLogo,
+            "type": workflowActionInformation.actionType,
+            "typeDescription": workflowActionInformation.actionTypeDescription,
+            "content": workflowActionInformation.actionContent,
+            "selected": true
+          });
+        }
+        for (let i = 0; i < workflow.conditions.length; i++) {
+          let workflowConditionInformation = workflow.conditions[i];
+          steps.push({
+            "kind": "condition",
+            "index": workflowConditionInformation.conditionIndex,
+            "type": workflowConditionInformation.conditionType,
+            "content": workflowConditionInformation.conditionContent,
+            "selected": true
+          });
+        }
+        if (workflow.loop.loopEnabled) {
+          steps.push({
+            "kind": "loop",
+            "index": workflow.loop.loopIndex,
+            "type": workflow.loop.loopType,
+            "content": workflow.loop.loopContent,
+            "selected": true
+          });
+        }
+        let parseSteps = JSON.stringify({steps: steps});
+        sessionStorage.setItem("workflow-steps", parseSteps);
+        sessionStorage.setItem("workflow-initial-steps", parseSteps);
+        window.location.href = redirect;
       });
     }
 

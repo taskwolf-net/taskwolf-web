@@ -190,7 +190,7 @@
       ) {
         return;
       }
-      clickWorkflow(id);
+      clickWorkflow(id, "/workflow/");
     }
     document.getElementById("workflows-list").appendChild(entry);
   }
@@ -238,8 +238,21 @@
           Swal.fire("{% trans 'product.workflows.execution.successful.title' %}",
             "{% trans 'product.workflows.execution.successful.body' %}", "success");
         } else {
-          Swal.fire("{% trans 'product.workflows.execution.failure.title' %}",
-            "{% trans 'product.workflows.execution.failure.body' %}", "error");
+          Swal.fire({
+            title: "{% trans 'product.workflows.execution.failure.title' %}",
+            text: "{% trans 'product.workflows.execution.failure.body' %}",
+            icon: "error",
+            showConfirmButton: true,
+            confirmButtonText: `
+              <i class="fa-solid fa-arrow-up-right-from-square me-2"></i> {% trans 'product.workflows.execution.failure.timeline' %}
+            `,
+            showCancelButton: true,
+            cancelButtonText: "{% trans 'popup.cancel' %}",
+          }).then(result => {
+            if (result.isConfirmed) {
+              clickWorkflow(id, "/workflow/timeline/");
+            }
+          });
         }
       });
     }
@@ -387,7 +400,7 @@
       .then(success => window.location.reload());
   }
 
-  function clickWorkflow(id) {
+  function clickWorkflow(id, redirect) {
     let request = new HttpRequest("/workflow/find/", "POST", [], {workflow: id});
     request.send(function (status, responseText) {
       let workflow = JSON.parse(responseText);
@@ -450,7 +463,7 @@
       let parseSteps = JSON.stringify({steps: steps});
       sessionStorage.setItem("workflow-steps", parseSteps);
       sessionStorage.setItem("workflow-initial-steps", parseSteps);
-      window.location.href = "/workflow/";
+      window.location.href = redirect;
     });
   }
 
