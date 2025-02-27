@@ -39,6 +39,7 @@
   margin-left: auto;
   margin-right: 35px;
   font-size: 40px;
+  cursor: pointer;
 }
 
 .dark #close-button {
