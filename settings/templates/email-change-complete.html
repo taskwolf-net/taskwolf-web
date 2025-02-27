@@ -1,17 +1,10 @@
 {% load static %}
+{% load i18n %}
 <html lang="en">
   {% include 'head.html' %}
   <body class="dark" data-bs-theme="dark">
     {% include 'home-header.html' %}
     <div id="email-change">
-      <div class="success-icon-wrapper">
-        <div class="success-icon">
-          <div class="success-icon__tip"></div>
-          <div class="success-icon__long"></div>
-        </div>
-      </div>
-      <h1 id="email-change-headline">Email change completed</h1>
-      <p id="email-change-description">You have successfully changed your account email. You can now continue with the login.</p>
     </div>
   </body>
 </html>
@@ -21,14 +14,29 @@
     let request = new HttpRequest("/settings/account/email/change/complete/", "POST",
       [], {user: "{{user}}", token: "{{token}}"});
     request.send(function (status, responseText) {
-      let request = new HttpRequest("/verification/logout/",
-        "GET", []);
-      request.send(function (status, responseText) {
-        Cookie.destroy("token");
-        Cookie.destroy("refresh-token");
-        Cookie.destroy("home-token");
-        window.location.href = "/";
-      });
+      let response = JSON.parse(responseText);
+      if (response.success === false) {
+        if (response.errorCode === 1000 || response.errorCode === 1001) {
+          Swal.fire("{% trans 'settings.account.email.change.complete.failed.title' %}",
+            "{% trans 'settings.account.email.change.complete.failed.expired' %}", "error")
+            .then(success => window.location.href = "/");
+        }
+      } else {
+        Swal.fire("{% trans 'settings.account.email.change.complete.success.title' %}",
+          "{% trans 'settings.account.email.change.complete.success.body' %}", "success")
+          .then(success => finishEmailChange());
+      }
     });
   });
+
+  function finishEmailChange() {
+    let request = new HttpRequest("/verification/logout/",
+      "GET", []);
+    request.send(function (status, responseText) {
+      Cookie.destroy("token");
+      Cookie.destroy("refresh-token");
+      Cookie.destroy("home-token");
+      window.location.href = "/login/";
+    });
+  }
 </script>
