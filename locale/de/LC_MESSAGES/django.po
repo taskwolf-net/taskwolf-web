@@ -1076,7 +1076,7 @@ msgstr "Lerne Dulno richtig kennen, indem du das Tutorial durcharbeitest. Nur da
 msgid "product.dashboard.tip.2fa.headline"
 msgstr "Aktivieren Sie die 2-Faktor-Authentifizierung"
 msgid "product.dashboard.tip.2fa.description"
-msgstr "Gehen Sie nun in Ihre Einstellungen und aktivieren Sie die 2-Faktor-Authentifizierung unter '2FA'. Dies erhöht die Sicherheit Ihres Kontos immens, da wichtige Änderungen oder das Einloggen in das Konto von einer zweiten Quelle bestätigt werden müssen."
+msgstr "Gehen Sie nun in Ihre Einstellungen und aktivieren Sie die 2-Faktor-Authentifizierung unter '2FA' oder klicken Sie einfach <a href='/settings/2fa/'>hier</a>. Dies erhöht die Sicherheit Ihres Kontos immens, da wichtige Änderungen oder das Einloggen in das Konto von einer zweiten Quelle bestätigt werden müssen."
 
 # WORKFLOWS
 msgid "product.workflows.title"
