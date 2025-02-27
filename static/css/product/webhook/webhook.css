@@ -145,11 +145,19 @@ input[maxlength] {
 
 .webhook-code {
   position: relative;
-  background-color: #0a0d12;
-  border: 1px solid #3a3a3a;
   border-radius: 10px;
   padding: 20px;
   width: 100%;
+}
+
+.dark .webhook-code {
+  background-color: #0a0d12;
+  border: 1px solid #3a3a3a;
+}
+
+.light .webhook-code {
+  background-color: #eaeaea;
+  border: 1px solid #4c4c4c;
 }
 
 .webhook-code div {
@@ -165,8 +173,6 @@ input[maxlength] {
 
 .webhook-code-copy {
   position: absolute;
-  color: white;
-  background-color: #272727;
   top: 10px;
   right: 10px;
   width: 42px;
@@ -176,6 +182,20 @@ input[maxlength] {
   font-size: 20px;
 }
 
-.webhook-code-copy:hover {
+.dark .webhook-code-copy {
+  color: white;
+  background-color: #272727;
+}
+
+.dark .webhook-code-copy:hover {
   background-color: #383838;
+}
+
+.light .webhook-code-copy {
+  color: black;
+  background-color: #c3c3c3;
+}
+
+.light .webhook-code-copy:hover {
+  background-color: #a8a8a8;
 }
