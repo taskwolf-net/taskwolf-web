@@ -229,3 +229,7 @@
   background-color: #f8d7da;
   color: #721c24;
 }
+
+.dark .dashboard-tip-issue a {
+  color: #0000EE;
+}

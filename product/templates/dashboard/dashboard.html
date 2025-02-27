@@ -207,10 +207,10 @@
     let tipElement = document.createElement("div");
     tipElement.classList.add(type);
     let headlineElement = document.createElement("h4");
-    headlineElement.innerText = headline;
+    headlineElement.innerHTML = headline;
     tipElement.appendChild(headlineElement);
     let descriptionElement = document.createElement("span");
-    descriptionElement.innerText = description;
+    descriptionElement.innerHTML = description;
     tipElement.appendChild(descriptionElement);
     return tipElement;
   }
