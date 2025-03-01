@@ -1,4 +1,5 @@
-FROM registry.dulno.com/dulno-obfuscation:latest AS builder
+ARG DOCKER_REGISTRY
+FROM ${DOCKER_REGISTRY}/dulno-obfuscation:latest AS builder
 
 RUN ln -s /obfuscation /web
 
