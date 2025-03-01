@@ -152,7 +152,7 @@ deploy_staging:
     - publish_staging
   before_script:
     - mkdir -p ~/.kube
-    - echo "$PRODUCTIVE_KUBERNETES_CONFIGURATION" > ~/.kube/config
+    - echo "$STAGING_KUBERNETES_CONFIGURATION" > ~/.kube/config
   script:
     - kubectl rollout restart $KUBERNETES_RESOURCE
     - kubectl rollout restart $KUBERNETES_PROXY_RESOURCE
