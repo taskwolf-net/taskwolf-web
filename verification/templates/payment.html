@@ -181,7 +181,7 @@
 
   function loginRedirect() {
     window.location.href = "/login/?redirect=" +
-      window.location.href.replace("https://dulno.com", "");
+      window.location.href.replace("{{base_url}}", "");
   }
 
   function resetPackageSelection() {

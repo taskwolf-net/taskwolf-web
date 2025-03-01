@@ -85,7 +85,7 @@
     displayLoader();
     if (Cookie.find("home-token") == null) {
       window.location.href = "/login/?redirect=" +
-        window.location.href.replace("https://dulno.com", "");
+        window.location.href.replace("{{base_url}}", "");
       return;
     }
     fetchOffer(function (offer) {

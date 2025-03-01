@@ -21,8 +21,8 @@
       <p>{% trans 'home.download.cli.installation.4' %}</p>
       <div class="download-cli-code mt-5 mb-5">
         <button id="download-cli-step-3-copy" class="download-cli-code-copy"><i class="fa-solid fa-copy"></i></button>
-        <span>curl -fsSL https://apt.dulno.com/key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/dulno-archive-keyring.gpg</span><br><br>
-        <span>echo "deb [signed-by=/etc/apt/keyrings/dulno-archive-keyring.gpg] https://apt.dulno.com/ ./stable main" | sudo tee /etc/apt/sources.list.d/dulno.list</span>
+        <span>curl -fsSL https://apt.{{domain}}/key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/dulno-archive-keyring.gpg</span><br><br>
+        <span>echo "deb [signed-by=/etc/apt/keyrings/dulno-archive-keyring.gpg] https://apt.{{domain}}/ ./stable main" | sudo tee /etc/apt/sources.list.d/dulno.list</span>
       </div>
       <p>{% trans 'home.download.cli.installation.5' %}</p>
       <div class="download-cli-code mt-5 mb-5">
@@ -51,8 +51,8 @@
   }
 
   document.getElementById("download-cli-step-3-copy").onclick = function(event) {
-    navigator.clipboard.writeText("curl -fsSL https://apt.dulno.com/key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/dulno-archive-keyring.gpg\n" +
-      "echo \"deb [signed-by=/etc/apt/keyrings/dulno-archive-keyring.gpg] https://apt.dulno.com/ ./stable main\" | sudo tee /etc/apt/sources.list.d/dulno.list");
+    navigator.clipboard.writeText("curl -fsSL https://apt." + "{{domain}}" + "/key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/dulno-archive-keyring.gpg\n" +
+      "echo \"deb [signed-by=/etc/apt/keyrings/dulno-archive-keyring.gpg] https://apt." + "{{domain}}" + "/ ./stable main\" | sudo tee /etc/apt/sources.list.d/dulno.list");
   }
 
   document.getElementById("download-cli-step-4-copy").onclick = function(event) {
