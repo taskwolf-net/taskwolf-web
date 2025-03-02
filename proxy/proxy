@@ -1,5 +1,5 @@
 server {
-  server_name ${SERVER_NAME};
+  server_name _;
 
   location /static/ {
     alias /home/dulno/web/static/;
