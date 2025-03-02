@@ -1,5 +1,5 @@
 window.addEventListener('load', function () {
-  let url = window.location.href.replace("https://dulno.com/", "").replaceAll("/", "");
+  let url = window.location.pathname.replaceAll("/", "");
   if (url === "imprint" || url === "privacy-policy" || url === "terms-of-service") {
     return;
   }

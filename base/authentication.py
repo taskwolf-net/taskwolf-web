@@ -6,7 +6,7 @@ import json
 import jwt
 import datetime
 from home import home
-from app.settings import BACKEND_ENDPOINT, COOKIE_DOMAIN, DEVELOPMENT
+from app.settings import BACKEND_ENDPOINT, COOKIE_DOMAIN, ENVIRONMENT
 from django.utils import translation
 from django.conf import settings
 from django.shortcuts import redirect
@@ -152,4 +152,4 @@ def setCookie(response, key, value, expirationDays):
   expires = datetime.datetime.strftime(datetime.datetime.utcnow() +
     datetime.timedelta(days=expirationDays), "%a, %d-%b-%Y %H:%M:%S GMT")
   response.set_cookie(key, value, expires=expires, domain=COOKIE_DOMAIN,
-    secure=(DEVELOPMENT == False))
+    secure=(ENVIRONMENT == 'PRODUCTIVE' or ENVIRONMENT == 'STAGING'))

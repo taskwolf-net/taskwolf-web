@@ -26,7 +26,7 @@
             <li>{% trans 'product.workflow.application.gitlab.application.step.1' %}</li>
             <li>{% trans 'product.workflow.application.gitlab.application.step.2' %}</li>
             <li>{% trans 'product.workflow.application.gitlab.application.step.3' %}</li>
-            <li>{% trans 'product.workflow.application.gitlab.application.step.4' %}</li>
+            <li id="gitlab-application-introduction-4"></li>
             <li>{% trans 'product.workflow.application.gitlab.application.step.5' %}</li>
             <li>{% trans 'product.workflow.application.gitlab.application.step.6' %}</li>
             <li>{% trans 'product.workflow.application.gitlab.application.step.7' %}</li>
@@ -51,6 +51,9 @@
   let gitlabRedirectWindow;
 
   $(document).ready(function() {
+    document.getElementById("gitlab-application-introduction-4").innerHTML =
+      "{% trans 'product.workflow.application.gitlab.application.step.4' %}"
+        .replaceAll("%ENDPOINT%", "{{public_endpoint}}");
     document.getElementById("hostname").focus();
   });
 

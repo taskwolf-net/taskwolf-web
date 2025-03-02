@@ -10,18 +10,33 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '***REMOVED***'
 
-# Whether the project should be configured in development mode
-DEVELOPMENT = False
+# The client side google recaptcha token
+RECAPTCHA_TOKEN = os.getenv('DULNO_RECAPTCHA', '')
+
+# The client id of the google application
+GOOGLE_CLIENT_ID = os.getenv('DULNO_GOOGLE_CLIENT_ID', '')
+
+# Whether the project should be configured in productive, staging or local mode
+# Possible values: PRODUCTIVE, STAGING, LOCAL
+ENVIRONMENT = os.getenv('DULNO_ENVIRONMENT', 'LOCAL')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = DEVELOPMENT
+DEBUG = ENVIRONMENT == 'STAGING' or ENVIRONMENT == 'LOCAL'
 
-ALLOWED_HOSTS = ['dulno.com', 'www.dulno.com', '0.0.0.0']
+if ENVIRONMENT == 'PRODUCTIVE':
+  ALLOWED_HOSTS = ['dulno.com', 'www.dulno.com', '0.0.0.0']
+elif ENVIRONMENT == 'STAGING':
+  ALLOWED_HOSTS = ['10.96.0.15', '0.0.0.0']
+elif ENVIRONMENT == 'LOCAL':
+  ALLOWED_HOSTS = ['0.0.0.0']
+
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
-COOKIE_DOMAIN = '.dulno.com'
-
-if DEVELOPMENT:
+if ENVIRONMENT == 'PRODUCTIVE':
+  COOKIE_DOMAIN = '.dulno.com'
+elif ENVIRONMENT == 'STAGING':
+  COOKIE_DOMAIN = '.dulno.dev'
+elif ENVIRONMENT == 'LOCAL':
   COOKIE_DOMAIN = '0.0.0.0'
 
 BACKEND_ENDPOINT = 'http://10.96.0.4'
@@ -61,8 +76,6 @@ MIDDLEWARE = [
   'maintenance.middleware.MaintenanceMiddleware',
 ]
 
-CSRF_TRUSTED_ORIGINS = ["https://dulno.com"]
-
 ROOT_URLCONF = 'app.urls'
 
 TEMPLATES = [
@@ -76,6 +89,7 @@ TEMPLATES = [
         'django.template.context_processors.request',
         'django.contrib.auth.context_processors.auth',
         'django.contrib.messages.context_processors.messages',
+        'base.context_processors.domain'
       ],
     },
   },
