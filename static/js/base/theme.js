@@ -1,5 +1,5 @@
 window.addEventListener('load', function () {
-  let url = window.location.href.replace("https://dulno.com/", "").replaceAll("/", "");
+  let url = window.location.pathname.replaceAll("/", "");
   if (url === "" || url === "product" || url === "solution" || url === "pricing" ||
     url === "expiration" || url.includes("login") || url.includes("register") ||
     url.includes("password") || url.includes("offer") || url.includes("download") ||

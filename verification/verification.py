@@ -2,20 +2,21 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from home.home import home_page
 from django.utils.translation import gettext
+from app.settings import RECAPTCHA_TOKEN, GOOGLE_CLIENT_ID
 
 @home_page
 async def login(request):
   redirect = request.GET.get('redirect', '')
   return render(request, 'login.html', {'title': gettext("home.login.title"),
     'css': ['css/base/home-header.css', 'css/base/home-language.css', 'css/base/2fa.css', 'css/verification/login.css'],
-    'redirect': redirect})
+    'redirect': redirect, 'google_client_id': GOOGLE_CLIENT_ID})
 
 @home_page
 async def register(request):
   redirect = request.GET.get('redirect', '')
   return render(request, 'register.html', {'title': gettext("home.registration.title"),
     'css': ['css/base/home-header.css', 'css/base/home-language.css', 'css/verification/register.css'],
-    'redirect': redirect})
+    'redirect': redirect, 'recaptcha_token': RECAPTCHA_TOKEN})
 
 @home_page
 async def registerConfirm(request, user, token):
