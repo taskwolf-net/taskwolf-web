@@ -1,5 +1,5 @@
 class HttpRequest {
-  static PREFIX = "https://api.dulno.com/v1";
+  static PREFIX = "{{request_prefix}}";
 
   constructor(url, method, headers, data) {
     this.url = url;
