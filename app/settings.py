@@ -24,9 +24,9 @@ ENVIRONMENT = os.getenv('DULNO_ENVIRONMENT', 'LOCAL')
 DEBUG = ENVIRONMENT == 'STAGING' or ENVIRONMENT == 'LOCAL'
 
 if ENVIRONMENT == 'PRODUCTIVE':
-  ALLOWED_HOSTS = ['dulno.com', 'www.dulno.com']
+  ALLOWED_HOSTS = ['dulno.com', 'www.dulno.com', '0.0.0.0']
 elif ENVIRONMENT == 'STAGING':
-  ALLOWED_HOSTS = ['10.96.0.5']
+  ALLOWED_HOSTS = ['10.96.0.5', '0.0.0.0']
 elif ENVIRONMENT == 'LOCAL':
   ALLOWED_HOSTS = ['0.0.0.0']
 
