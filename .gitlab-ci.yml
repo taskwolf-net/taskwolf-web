@@ -24,7 +24,7 @@ build_staging:
     - echo $STAGING_DOCKER_PASSWORD | docker login -u $STAGING_DOCKER_USERNAME --password-stdin $STAGING_DOCKER_REGISTRY
     - docker build --build-arg DOCKER_REGISTRY="$STAGING_DOCKER_REGISTRY" -t $STAGING_DOCKER_REGISTRY/$DOCKER_IMAGE:test .
     - docker push $STAGING_DOCKER_REGISTRY/$DOCKER_IMAGE:test
-    - docker buildx build --build-arg DOCKER_REGISTRY="$STAGING_DOCKER_REGISTRY" -t $STAGING_DOCKER_REGISTRY/$DOCKER_PROXY_IMAGE:test -f proxy/Dockerfile .
+    - docker buildx build --build-arg DOCKER_REGISTRY="$STAGING_DOCKER_REGISTRY" --build-arg SERVER_NAME="dulno.dev www.dulno.dev" -t $STAGING_DOCKER_REGISTRY/$DOCKER_PROXY_IMAGE:test -f proxy/Dockerfile .
     - docker push $STAGING_DOCKER_REGISTRY/$DOCKER_PROXY_IMAGE:test
   only:
     - dev
@@ -42,7 +42,7 @@ build_productive:
     - echo $PRODUCTIVE_DOCKER_PASSWORD | docker login -u $PRODUCTIVE_DOCKER_USERNAME --password-stdin $PRODUCTIVE_DOCKER_REGISTRY
     - docker build --build-arg DOCKER_REGISTRY="$PRODUCTIVE_DOCKER_REGISTRY" -t $PRODUCTIVE_DOCKER_REGISTRY/$DOCKER_IMAGE:test .
     - docker push $PRODUCTIVE_DOCKER_REGISTRY/$DOCKER_IMAGE:test
-    - docker buildx build --build-arg DOCKER_REGISTRY="$PRODUCTIVE_DOCKER_REGISTRY" -t $PRODUCTIVE_DOCKER_REGISTRY/$DOCKER_PROXY_IMAGE:test -f proxy/Dockerfile .
+    - docker buildx build --build-arg DOCKER_REGISTRY="$PRODUCTIVE_DOCKER_REGISTRY" --build-arg SERVER_NAME="dulno.com www.dulno.com" -t $PRODUCTIVE_DOCKER_REGISTRY/$DOCKER_PROXY_IMAGE:test -f proxy/Dockerfile .
     - docker push $PRODUCTIVE_DOCKER_REGISTRY/$DOCKER_PROXY_IMAGE:test
   only:
     - main

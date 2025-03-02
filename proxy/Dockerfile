@@ -13,6 +13,9 @@ RUN node /home/dulno/web/obfuscation/obfuscate.js
 
 FROM nginx
 
+ARG SERVER_NAME
+ENV SERVER_NAME=${SERVER_NAME}
+
 COPY --from=builder /home/dulno/web/static /home/dulno/web/static/
 
 COPY proxy/nginx.conf /etc/nginx/nginx.conf

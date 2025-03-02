@@ -1,5 +1,5 @@
 server {
-  server_name dulno.com www.dulno.com;
+  server_name $SERVER_NAME;
 
   location /static/ {
     alias /home/dulno/web/static/;
