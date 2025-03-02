@@ -26,7 +26,7 @@ DEBUG = ENVIRONMENT == 'STAGING' or ENVIRONMENT == 'LOCAL'
 if ENVIRONMENT == 'PRODUCTIVE':
   ALLOWED_HOSTS = ['dulno.com', 'www.dulno.com', '0.0.0.0']
 elif ENVIRONMENT == 'STAGING':
-  ALLOWED_HOSTS = ['10.96.0.5', '0.0.0.0']
+  ALLOWED_HOSTS = ['10.96.0.15', '0.0.0.0']
 elif ENVIRONMENT == 'LOCAL':
   ALLOWED_HOSTS = ['0.0.0.0']
 

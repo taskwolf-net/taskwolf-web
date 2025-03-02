@@ -18,3 +18,5 @@ COPY --from=builder /home/dulno/web/static /home/dulno/web/static/
 COPY proxy/nginx.conf /etc/nginx/nginx.conf
 COPY proxy/proxy /etc/nginx/sites-available/proxy
 COPY proxy/proxy /etc/nginx/sites-enabled/proxy
+
+RUN rm /etc/nginx/conf.d/default.conf
