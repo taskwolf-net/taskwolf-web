@@ -124,7 +124,7 @@
   }
 
   document.getElementById("login-external-service-google").onclick = function (event) {
-    let googleUrl = "https://accounts.google.com/o/oauth2/auth?access_type=offline&prompt=consent&client_id={{google_client_id}}&redirect_uri={{public_endpoint}}/v1/google/login/&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile&state=";
+    let googleUrl = "https://accounts.google.com/o/oauth2/auth?access_type=offline&prompt=consent&client_id=" + "{{google_client_id}}" + "&redirect_uri=" + "{{public_endpoint}}" + "/v1/google/login/&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile&state=";
     if ("{{redirect}}" !== "") {
       googleUrl += "{{redirect}}";
     } else {
