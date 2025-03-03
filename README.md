@@ -13,3 +13,31 @@ The entire web application is managed in this repository. The project can be div
 |------|---------------------------------------------------------------------|
 | main | ![](https://git.dulno.com/dulno/dulno-web/badges/main/pipeline.svg) |
 | dev  | ![](https://git.dulno.com/dulno/dulno-web/badges/dev/pipeline.svg)  |
+
+## Installation
+
+```bash
+python -m venv env
+
+source env/bin/activate
+
+pip install django gunicorn django-cors-headers requests jwt
+
+django-admin compilemessages
+
+gunicorn --config app/gunicorn-config.py app.wsgi
+```
+
+## Run
+
+```bash
+source env/bin/activate
+
+gunicorn --config app/gunicorn-config.py app.wsgi
+```
+
+## Compile locales
+
+```bash
+django-admin compilemessages
+```
