@@ -200,6 +200,10 @@
     let dropdown = document.createElement("ul");
     dropdown.classList.add("device-settings-dropdown", "dropdown-menu");
     if (ownDevice) {
+      dropdown.appendChild(createSettingsDropdownButton(dropdown, "fa-pen",
+        "{% trans 'product.devices.rename' %}", undefined,
+        function() {renameDevice(device)}));
+      dropdown.appendChild(createSettingsDropdownDivider());
       dropdown.appendChild(createSettingsDropdownButton(dropdown, "fa-trash",
         "{% trans 'product.devices.delete' %}", "text-danger",
         function() {deleteDevice(device)}));
@@ -210,6 +214,12 @@
     }
     settingsDiv.appendChild(dropdown);
     return settingsDiv;
+  }
+
+  function createSettingsDropdownDivider() {
+    let dropdownDivider = document.createElement("li");
+    dropdownDivider.innerHTML = "<hr class='dropdown-divider'>";
+    return dropdownDivider;
   }
 
   function createSettingsDropdownButton(dropdown, icon, content, color, click) {
@@ -632,6 +642,57 @@
         });
       }
     });
+  }
+
+  function renameDevice(device) {
+    let content = document.createElement("div");
+    content.classList.add("devices-rename-content");
+    let text = document.createElement("p");
+    text.classList.add("mb-4");
+    text.innerText = "{% trans 'product.devices.rename.body' %}";
+    content.appendChild(text);
+    let inputContainer = document.createElement("div");
+    inputContainer.classList.add("mb-3", "mx-auto");
+    inputContainer.style.width = "min(260px, 100%)";
+    let input = document.createElement("input");
+    input.classList.add("w-100");
+    input.placeholder = "{% trans 'product.devices.rename.name' %}";
+    input.maxLength = 64;
+    input.addEventListener('input', tickInputMaxLength);
+    inputContainer.appendChild(input);
+    input.parentElement.classList.add('max-length-badged');
+    tickInputMaxLength(input);
+    content.appendChild(inputContainer);
+    Swal.fire({
+      title: "{% trans 'product.devices.rename.title' %}",
+      html: content,
+      showCancelButton: true,
+      cancelButtonText: "{% trans 'popup.cancel' %}",
+    }).then(result => {
+      if (result.isConfirmed) {
+        let request = new HttpRequest("/device/rename/", "POST",
+          [], {device: device, information: input.value});
+        request.send(function (status, responseText) {
+          Swal.fire("{% trans 'product.devices.rename.successful.title' %}", "{% trans 'product.devices.rename.successful.body' %}", "success").then(success => window.location.href = "/devices/");
+        });
+      }
+    });
+    input.focus();
+  }
+
+  function tickInputMaxLength(element) {
+    if (element.target) {
+      element = element.target
+    }
+    let limit = element.maxLength;
+    let parent = element.parentElement;
+    let length = element.value.length;
+    parent.dataset['limit'] = limit;
+    parent.dataset['remaining'] = limit - length;
+    parent.classList.remove('max-length-reached');
+    if (length === limit) {
+      parent.classList.add('max-length-reached');
+    }
   }
 
   function deleteDevice(device) {
