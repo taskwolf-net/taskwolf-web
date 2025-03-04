@@ -269,7 +269,7 @@
 
   function register(callback) {
     grecaptcha.ready(function() {
-      grecaptcha.execute('6LdEpEQqAAAAAMifavVkpRB2ganIyA-rqFc6b1mi', {action: 'register'}).then(function(token) {
+      grecaptcha.execute("{{recaptcha_token}}", {action: 'register'}).then(function(token) {
         let request = new HttpRequest("/verification/register/", "POST", [],
           {email: emailInput.value, name: usernameInput.value, password: passwordInput.value,
             redirect: "{{redirect}}", recaptchaToken: token,
