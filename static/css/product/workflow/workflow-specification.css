@@ -73,11 +73,6 @@
   overflow-y: auto;
 }
 
-.workflow-specification-selected-item b {
-  word-wrap: break-word;
-  overflow: hidden;
-}
-
 .workflow-specification-select-empty:hover {
   background-color: rgba(0,0,0,0) !important;
 }

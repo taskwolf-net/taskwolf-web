@@ -133,107 +133,91 @@ input:-webkit-autofill:active{
   box-shadow: none !important;
 }
 
-#workflow-loop-type-dropdown {
-  text-align: center;
-  margin-top: 3vh;
+#workflow-loop-type-list {
+  width: 95%;
+  list-style-type: none;
+  margin: 2% auto;
+  align-items: stretch;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: center;
+  column-gap: 40px;
+  row-gap: 30px;
+  max-height: 300px;
+  overflow-y: scroll;
+  padding: 12px;
 }
 
-#workflow-loop-type-dropdown button {
-  width: 40%;
-}
-
-#workflow-loop-type-dropdown ul {
-  width: 40%;
-}
-
-.workflow-loop-type-description {
-  width: 100%;
-  font-size: 12px;
-  white-space: initial;
-}
-
-#workflow-loop-type-selected {
-  margin: 4vh auto 3vh;
-  width: 40%;
-  display: none;
-  text-align: center;
+.workflow-loop-type-entry {
+  position: relative;
+  border: 1px solid #7f7f7f;
+  border-radius: 10px;
   padding: 10px;
-  border-radius: 5px;
   transition-duration: 0.3s;
-  border: 1px solid #535353;
+  transition-property: background-color;
+  user-select: none;
+  cursor: pointer;
 }
 
-.dark #workflow-loop-type-selected {
-  background-color: #212529;
+.workflow-loop-type-icon {
+  border-radius: 25%;
 }
 
-.light #workflow-loop-type-selected {
-  background-color: #cccccc;
+.dark .workflow-loop-type-icon {
+  background-color: white;
+  color: black;
 }
 
-#workflow-loop-type-selected b {
-  font-size: 22px;
-  padding-left: 10px;
-  padding-right: 10px;
+.light .workflow-loop-type-icon {
+  background-color: black;
+  color: white;
 }
 
-#workflow-loop-type-selected p {
-  font-size: 20px;
-  padding-left: 10px;
-  padding-right: 10px;
+.dark .workflow-loop-type-entry:hover {
+  border: 1px solid #8e8e8e;
+  background-color: #141a23;
 }
 
-.dark #workflow-loop-type-selected:hover {
-  background-color: #2f343a;
+.light .workflow-loop-type-entry:hover {
+  border: 1px solid #777777;
+  background-color: #f1f1f1;
 }
 
-.light #workflow-loop-type-selected:hover {
-  background-color: #a9a9a9;
+.workflow-loop-type-selected {
+  border: 1px #0d6efd solid !important;
 }
 
-#workflow-loop-type-selected-description {
-  font-size: 13px;
+.workflow-loop-type-selected::before {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  top: -12.5px;
+  left: -12.5px;
+  padding: 10px;
+  color: white;
+  border-radius: 50%;
+  background-color: #0d6efd;
+  z-index: 100;
+  font-size: 15px;
+  width: 25px;
+  height: 25px;
+  font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f00c";
 }
 
 @media (max-width: 1500px) {
-  #workflow-loop-type-dropdown button {
-    width: 60%;
-  }
-
-  #workflow-loop-type-dropdown ul {
-    width: 60%;
-  }
-
-  #workflow-loop-type-selected {
-    width: 60%;
+  #workflow-loop-type-list {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 900px) {
-  #workflow-loop-type-dropdown button {
-    width: 75%
-  }
-
-  #workflow-loop-type-dropdown ul {
-    width: 75%
-  }
-
-  #workflow-loop-type-selected {
-    width: 75%;
-  }
-}
-
-@media (max-width: 575px) {
-  #workflow-loop-type-dropdown button {
-    width: 90%
-  }
-
-  #workflow-loop-type-dropdown ul {
-    width: 90%
-  }
-
-  #workflow-loop-type-selected {
-    width: 90%;
+@media (max-width: 950px) {
+  #workflow-loop-type-list {
+    grid-template-columns: repeat(1, 1fr);
   }
 }
 
