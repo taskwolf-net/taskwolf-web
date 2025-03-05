@@ -21,14 +21,17 @@
               </h2>
               <div id="workflow-loop-type" class="accordion-collapse collapse show" data-bs-parent="#workflow-loop-accordion">
                 <div id="workflow-loop-type-body" class="accordion-body">
-                  <h4 class="text-center">{% trans 'product.workflow.loop.type.subline' %}</h4>
-                  <div id="workflow-loop-type-dropdown" class="dropdown">
-                    <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                      {% trans 'product.workflow.loop.type.headline' %}
-                    </button>
-                    <ul id="workflow-loop-type-dropdown-list" class="dropdown-menu">
-                    </ul>
+                  <h4 id="workflow-loop-type-subline" class="text-center">{% trans 'product.workflow.loop.type.subline' %}</h4>
+                  <div id="workflow-loop-type-expand-container" class="d-flex justify-content-end">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="workflow-loop-type-expand">
+                      <label class="form-check-label" for="workflow-loop-type-expand">
+                        {% trans 'product.workflow.loop.type.expand' %}
+                      </label>
+                    </div>
                   </div>
+                  <ul id="workflow-loop-type-list">
+                  </ul>
                   <div id="workflow-loop-type-selected">
                   </div>
                 </div>
@@ -84,6 +87,8 @@
   let selectedComponentSetup = false;
   let selectedType;
   let selectedTypeDescription;
+  let selectedTypeElement;
+  let latestTypes;
 
   $(document).ready(function() {
     displayLoader();
@@ -103,7 +108,7 @@
       selectedComponentSetup = true;
     }
     fetchLoopTypes(function (types) {
-      fillTypeDropdown(types);
+      fillTypes(types);
       if (!selectedComponentSetup) {
         removeLoader();
       }
@@ -117,91 +122,94 @@
     });
   }
 
-  function fillTypeDropdown(types) {
-    document.getElementById("workflow-loop-type-dropdown-list").innerHTML = "";
+  function fillTypes(types) {
+    document.getElementById("workflow-loop-type-list").innerHTML = "";
+    let expanded = document.getElementById("workflow-loop-type-expand").checked;
+    document.getElementById("workflow-loop-type-subline").innerHTML =
+      "{% trans 'product.workflow.loop.type.subline' %}" + " (" + types.length + ")";
     for (let i = 0; i < types.length; i++) {
       let type = types[i];
-      addTypeDropdownEntry(type.identifier, type.name, type.description);
+      addTypeEntry(type.identifier, type.name, type.description, expanded);
     }
+    latestTypes = types;
   }
 
-  function addTypeDropdownEntry(identifier, name, description) {
+  function addTypeEntry(identifier, name, description, expanded) {
     let entryElement = document.createElement("li");
-    entryElement.classList.add("dropdown-item");
+    entryElement.classList.add("workflow-loop-type-entry");
+    if (selectedType === identifier) {
+      entryElement.classList.add("workflow-loop-type-selected");
+      selectedTypeElement = entryElement;
+    }
+    let entryHeader = document.createElement("div");
+    entryHeader.classList.add("d-flex", "align-items-center");
+    if (expanded) {
+      entryHeader.classList.add("mb-2", "pb-2", "border-bottom",
+        "border-secondary-subtle");
+    }
+    let iconElement = document.createElement("h3");
+    iconElement.classList.add("workflow-loop-type-icon", "me-3", "mb-0",
+      "p-2", "fa-solid", "fa-arrow-rotate-right");
+    entryHeader.appendChild(iconElement);
     let nameElement = document.createElement("b");
     nameElement.classList.add("workflow-loop-type-name");
     nameElement.innerHTML = name;
-    entryElement.appendChild(nameElement);
-    entryElement.appendChild(document.createElement("br"));
-    let descriptionElement = document.createElement("span");
-    descriptionElement.classList.add("workflow-loop-type-description");
-    descriptionElement.innerHTML = description;
-    entryElement.appendChild(descriptionElement);
-    entryElement.onclick = function (type) {
-      selectType(identifier, name, description);
+    entryHeader.appendChild(nameElement);
+    entryElement.appendChild(entryHeader);
+    if (expanded) {
+      let descriptionElement = document.createElement("small");
+      descriptionElement.classList.add("workflow-loop-type-description");
+      descriptionElement.innerHTML = description;
+      entryElement.appendChild(descriptionElement);
     }
-    document.getElementById("workflow-loop-type-dropdown-list").appendChild(entryElement);
+    entryElement.onclick = function (type) {
+      selectType(identifier, name, description, entryElement);
+    }
+    document.getElementById("workflow-loop-type-list").appendChild(entryElement);
     if (selectedComponentSetup && selectedComponent.type === identifier) {
-      selectType(identifier, name, description);
+      selectType(identifier, name, description, entryElement);
     }
   }
 
-  function selectType(identifier, name, description) {
+  function selectType(identifier, name, description, element) {
+    if (selectedType === identifier) {
+      return;
+    }
+    if (selectedType && selectedType !== "") {
+      selectedTypeElement.classList.remove("workflow-loop-type-selected");
+      resetSpecifications();
+    }
     selectedType = identifier;
     selectedTypeDescription = description;
-    document.getElementById("workflow-loop-type-dropdown").style.display = "none";
-    let selectedElement = document.getElementById("workflow-loop-type-selected");
-    let nameElement = document.createElement("b");
-    nameElement.id = "workflow-loop-type-selected-name";
-    nameElement.innerHTML = name;
-    selectedElement.appendChild(nameElement);
-    let dividerElement = document.createElement("hr");
-    dividerElement.classList.add("hr");
-    selectedElement.appendChild(dividerElement);
-    let descriptionElement = document.createElement("p");
-    descriptionElement.id = "workflow-loop-type-selected-description";
-    descriptionElement.innerHTML = description;
-    selectedElement.appendChild(descriptionElement);
-    selectedElement.style.display = "block";
-    createResetButton(document.getElementById("workflow-loop-type-body"), function() {
-      resetType();
+    selectedTypeElement = element;
+    element.classList.add("workflow-loop-type-selected");
+    prepareSpecifications(function (redundant) {
+      if (!selectedComponentSetup) {
+        if (!redundant) {
+          let elementContent = element.firstChild.innerHTML;
+          element.firstChild.innerHTML = element.firstChild.innerHTML + `
+            <span class="spinner-border spinner-border-sm ms-2" aria-hidden="true"></span>
+            <span class="visually-hidden" role="status">Loading...</span>
+          `;
+          setTimeout(function() {
+            if (!redundant) {
+              $('#workflow-loop-specifications').collapse("toggle");
+            }
+            element.firstChild.innerHTML = elementContent;
+          }, 500);
+        }
+      }
     });
-    prepareSpecifications();
-    if (!selectedComponentSetup) {
-      setTimeout(function() {
-        $('#workflow-loop-specifications').collapse("toggle");
-      }, 600);
-    }
   }
 
-  function resetType() {
-    let resetButtons = document.getElementById("workflow-loop-type-body").getElementsByClassName("workflow-loop-reset");
-    for (let i = 0; i < resetButtons.length; i++) {
-      document.getElementById("workflow-loop-type-body").removeChild(resetButtons[i]);
+  document.getElementById("workflow-loop-type-expand").addEventListener('change', (event) => {
+    document.getElementById("workflow-loop-type-list").innerHTML = "";
+    let expanded = event.currentTarget.checked;
+    for (let i = 0; i < latestTypes.length; i++) {
+      let type = latestTypes[i];
+      addTypeEntry(type.identifier, type.name, type.description, expanded);
     }
-    let selectedElement = document.getElementById("workflow-loop-type-selected");
-    selectedElement.innerHTML = "";
-    selectedElement.style.display = "none";
-    document.getElementById("workflow-loop-type-dropdown").style.display = "block";
-    selectedType = "";
-    selectedTypeDescription = "";
-    resetSpecifications();
-  }
-
-  function createResetButton(container, resetCallback) {
-    let resetButtonContainer = document.createElement("div");
-    resetButtonContainer.classList.add("workflow-loop-reset");
-    let resetButton = document.createElement("button");
-    resetButton.type = "button";
-    resetButton.classList.add("btn", "btn-danger");
-    resetButton.innerHTML = "{% trans 'product.workflow.loop.reset' %}";
-    resetButtonContainer.appendChild(resetButton);
-    container.appendChild(resetButtonContainer);
-    resetButton.onclick = function (event) {
-      resetCallback();
-    }
-    return resetButtonContainer;
-  }
+  })
 </script>
 
 {% include 'workflow/workflow-specification.html' %}

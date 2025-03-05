@@ -44,7 +44,6 @@
 {% include 'workflow/workflow-placeholder.html' %}
 
 <script>
-  let selectButtons = [];
   let inputValue = "";
   let conditionType = "";
   let comparativeValue = "";
@@ -82,14 +81,6 @@
     addConditionInput("condition-input-value", "{% trans 'product.workflow.condition.input.value' %}", "{% trans 'product.workflow.condition.input.value.tooltip' %}", content);
     addConditionSelect("condition-type", "{% trans 'product.workflow.condition.condition.type' %}", "{% trans 'product.workflow.condition.condition.type.tooltip' %}");
     addConditionInput("condition-comparative-value", "{% trans 'product.workflow.condition.comparative.value' %}", "{% trans 'product.workflow.condition.comparative.value.tooltip' %}", content);
-    createResetButton(inputListElement, function() {
-      selectButtons = [];
-      inputValue = "";
-      conditionType = "";
-      comparativeValue = "";
-      updateAdoptability(false);
-      fillConditionInputs(null);
-    });
   }
 
   function addConditionInput(identifier, name, description, content) {
@@ -175,10 +166,6 @@
     dropdownContainer.classList.add("workflow-condition-select-container", "dropdown");
     let dropdownButton = document.createElement("button");
     dropdownButton.classList.add("btn", "btn-dark", "dropdown-toggle");
-    if (document.getElementsByClassName("workflow-condition-select-container").length > 0) {
-      dropdownButton.setAttribute("disabled", "disabled");
-      selectButtons.push(dropdownButton);
-    }
     $(dropdownButton).attr('data-bs-toggle','dropdown');
     dropdownButton.type = "button";
     dropdownButton.innerHTML = name;
@@ -187,15 +174,15 @@
     dropdownList.classList.add("workflow-condition-select-list", "dropdown-menu");
     dropdownContainer.appendChild(dropdownList);
     dropdownButton.addEventListener("click", function (event) {
-      clickConditionSelect(identifier, dropdownContainer, dropdownList, dropdownButton);
+      clickConditionSelect(identifier, name, dropdownContainer, dropdownList, dropdownButton);
     });
     document.getElementById("workflow-condition-input-list").appendChild(dropdownContainer);
     if (conditionType !== "") {
-      clickConditionSelect(identifier, dropdownContainer, dropdownList, dropdownButton);
+      clickConditionSelect(identifier, name, dropdownContainer, dropdownList, dropdownButton);
     }
   }
 
-  function clickConditionSelect(identifier, dropdownContainer, dropdownList, dropdownButton) {
+  function clickConditionSelect(identifier, name, dropdownContainer, dropdownList, dropdownButton) {
     dropdownList.innerHTML = "";
     let request = new HttpRequest("/conditions/find/", "GET",
       []);
@@ -209,12 +196,12 @@
         itemNameName.innerHTML = item.name;
         itemElement.appendChild(itemNameName);
         itemElement.onclick = function (event) {
-          selectConditionSelect(identifier, item.identifier, item.name,
+          selectConditionSelect(identifier, name, item.identifier, item.name,
             dropdownContainer, dropdownButton, dropdownList);
         }
         dropdownList.appendChild(itemElement);
         if (conditionType !== "" && item.identifier === conditionType) {
-          selectConditionSelect(identifier, item.identifier, item.name,
+          selectConditionSelect(identifier, name, item.identifier, item.name,
             dropdownContainer, dropdownButton, dropdownList);
           setTimeout(removeLoader, 500);
         }
@@ -222,20 +209,9 @@
     });
   }
 
-  function selectConditionSelect(selectIdentifier, itemIdentifier, itemName, dropdownContainer, dropdownButton, dropdownList) {
+  function selectConditionSelect(selectIdentifier, selectName, itemIdentifier, itemName, dropdownContainer, dropdownButton) {
     conditionType = itemIdentifier;
-    conditionName = itemName;
-    dropdownContainer.removeChild(dropdownButton);
-    dropdownContainer.removeChild(dropdownList);
-    let itemElement = document.createElement("div");
-    itemElement.classList.add("workflow-condition-selected-item");
-    let itemNameElement = document.createElement("b");
-    itemNameElement.innerHTML = itemName;
-    itemElement.appendChild(itemNameElement);
-    dropdownContainer.appendChild(itemElement);
-    if (selectButtons.length > 0) {
-      selectButtons.shift().removeAttribute("disabled");
-    }
+    dropdownButton.innerText = selectName + ": " + itemName;
     checkAdoptability();
   }
 
@@ -285,21 +261,6 @@
       }),
       "selected": true
     };
-  }
-
-  function createResetButton(container, resetCallback) {
-    let resetButtonContainer = document.createElement("div");
-    resetButtonContainer.classList.add("workflow-condition-reset");
-    let resetButton = document.createElement("button");
-    resetButton.type = "button";
-    resetButton.classList.add("btn", "btn-danger");
-    resetButton.innerHTML = "{% trans 'product.workflow.condition.reset' %}";
-    resetButtonContainer.appendChild(resetButton);
-    container.appendChild(resetButtonContainer);
-    resetButton.onclick = function (event) {
-      resetCallback();
-    }
-    return resetButtonContainer;
   }
 
   var pageChangeApproved = false;
@@ -388,8 +349,11 @@
   }
 
   function removeLoader() {
-    document.getElementById("workflow-condition-container")
-      .removeChild(document.getElementsByClassName("loader")[0]);
+    let loaders = document.getElementsByClassName("loader");
+    if (loaders.length === 0) {
+      return;
+    }
+    document.getElementById("workflow-condition-container").removeChild(loaders[0]);
     document.getElementById("workflow-condition-wrapper").classList.remove("d-none");
     for (var i = 0; i < quillInputElements.length; i++) {
       adjustEditorHeight(quillInputElements[i]);

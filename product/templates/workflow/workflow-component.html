@@ -15,20 +15,23 @@
           <div class="accordion accordion-flush" id="workflow-component-accordion">
             <div class="accordion-item">
               <h2 class="accordion-header">
-                <button class="accordion-button show" type="button" data-bs-toggle="collapse" data-bs-target="#workflow-component-application" aria-expanded="false" aria-controls="workflow-component-application">
+                <button id="workflow-component-application-button" class="accordion-button show" type="button" data-bs-toggle="collapse" data-bs-target="#workflow-component-application" aria-expanded="false" aria-controls="workflow-component-application">
                   {% trans 'product.workflow.component.application.headline' %}
                 </button>
               </h2>
               <div id="workflow-component-application" class="accordion-collapse collapse show" data-bs-parent="#workflow-component-accordion">
                 <div id="workflow-component-application-body" class="accordion-body">
-                  <h4 class="text-center mb-4 mb-xl-0">{% with "product.workflow.component.application.subline."|add:type as value %}{% trans value %}{% endwith %}</h4>
+                  <h4 class="text-center mb-4 mb-xl-0">{% trans 'product.workflow.component.application.subline' %}</h4>
                   <div id="workflow-component-application-name" class="form-outline mb-4">
-                    <label for="name" class="form-label">{% trans 'product.workflow.component.application.name' %}</label>
-                    <input id="workflow-component-application-name-input" type="name" id="name" class="form-control" placeholder="{% trans 'product.workflow.component.application.name' %}">
+                    <label class="form-label">{% trans 'product.workflow.component.application.search' %}</label>
+                    <div id="workflow-component-application-name-input-container">
+                      <input id="workflow-component-application-name-input" class="form-control" placeholder="{% trans 'product.workflow.component.application.name' %}">
+                    </div>
                   </div>
                   <hr id="workflow-component-application-divider" class="hr"/>
                   <ul id="workflow-component-application-list">
                   </ul>
+                  <h6 id="workflow-component-application-list-empty" class="text-center mt-3 d-none">{% trans 'product.workflow.component.application.list.empty' %}</h6>
                   <div id="workflow-component-application-page">
                     <a id="workflow-component-application-previous-page" class="workflow-component-application-page-button workflow-component-application-page-button-disabled"><</a>
                     <a id="workflow-component-application-next-page" class="workflow-component-application-page-button workflow-component-application-page-button-disabled">></a>
@@ -44,7 +47,7 @@
               </h2>
               <div id="workflow-component-account" class="accordion-collapse collapse" data-bs-parent="#workflow-component-accordion">
                 <div id="workflow-component-account-body" class="accordion-body">
-                  <h4 class="text-center">{% with "product.workflow.component.account.subline."|add:type as value %}{% trans value %}{% endwith %}</h4>
+                  <h4 class="text-center">{% trans 'product.workflow.component.account.subline' %}</h4>
                   <div id="workflow-component-account-content">
                   </div>
                   <h6 id="workflow-component-account-unable" class="mt-5 text-center">{% trans 'product.workflow.component.account.unable' %}</h6>
@@ -59,16 +62,17 @@
               </h2>
               <div id="workflow-component-event" class="accordion-collapse collapse" data-bs-parent="#workflow-component-accordion">
                 <div id="workflow-component-event-body" class="accordion-body">
-                  <h4 class="text-center">{% with "product.workflow.component.event.subline."|add:type as value %}{% trans value %}{% endwith %}</h4>
-                  <div id="workflow-component-event-dropdown" class="dropdown">
-                    <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                      {% trans 'product.workflow.component.event.headline' %}
-                    </button>
-                    <ul id="workflow-component-event-dropdown-list" class="dropdown-menu">
-                    </ul>
+                  <h4 id="workflow-component-event-subline" class="text-center">{% trans 'product.workflow.component.event.subline' %}</h4>
+                  <div id="workflow-component-event-expand-container" class="d-flex justify-content-end d-none">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="workflow-component-event-expand">
+                      <label class="form-check-label" for="workflow-component-event-expand">
+                        {% trans 'product.workflow.component.event.expand' %}
+                      </label>
+                    </div>
                   </div>
-                  <div id="workflow-component-event-selected">
-                  </div>
+                  <ul id="workflow-component-event-list" class="d-none">
+                  </ul>
                   <h6 id="workflow-component-event-unable" class="mt-5 text-center">{% trans 'product.workflow.component.event.unable' %}</h6>
                 </div>
               </div>
@@ -81,7 +85,7 @@
               </h2>
               <div id="workflow-component-specifications" class="accordion-collapse collapse" data-bs-parent="#workflow-component-accordion">
                 <div id="workflow-component-specifications-body" class="accordion-body">
-                  <h4 class="text-center mb-4">{% with "product.workflow.component.specifications.subline."|add:type as value %}{% trans value %}{% endwith %}</h4>
+                  <h4 class="text-center mb-4">{% trans 'product.workflow.component.specifications.subline' %}</h4>
                   <div id="workflow-component-specifications-container">
                     <div id="workflow-component-specifications-inputs">
                       <h5 id="workflow-component-specifications-inputs-headline" class="text-center">{% trans 'product.workflow.component.specifications.inputs.title' %}</h5>
@@ -124,6 +128,7 @@
   let workflowCurrentApplicationFilter = "";
   let selectedApplication;
   let selectedApplicationLogo;
+  let selectedApplicationElement;
   let currentApplicationPage = 0;
   let selectedComponentSetup = false;
 
@@ -153,11 +158,13 @@
     fetchApplicationsData(function() {
       if (selectedComponentSetup) {
         workflowCurrentApplicationFilter = selectedComponent.module;
+        document.getElementById("workflow-component-application-name-input").value =
+          selectedComponent.module;
       }
-      displayApplications();
-      workflowCurrentApplicationFilter = "";
+      switchApplicationPage(currentApplicationPage);
       if (!selectedComponentSetup) {
         removeLoader();
+        document.getElementById("workflow-component-application-name-input").focus();
       }
     });
   });
@@ -175,31 +182,20 @@
     });
   }
 
-  function displayApplications() {
-    if (workflowCurrentApplicationFilter === "") {
-      switchApplicationPage(currentApplicationPage);
-      return;
-    }
-    document.getElementById("workflow-component-application-list").innerHTML = "";
-    for (let i = 0; i < applications.length; i++) {
-      let entry = applications[i];
-      if(!(entry.id.toLowerCase().includes(workflowCurrentApplicationFilter.toLowerCase()) ||
-          entry.name.toLowerCase().includes(workflowCurrentApplicationFilter.toLowerCase()))) {
-        continue;
-      }
-      displayApplication(entry.id, entry.name, entry.logo, entry.novelty);
-    }
-  }
-
   function displayApplication(id, name, logo, novelty) {
     let entryElement = document.createElement("li");
     entryElement.classList.add("workflow-component-application-entry");
+    if (selectedApplication === id.toLowerCase()) {
+      entryElement.classList.add("workflow-component-application-entry-selected");
+      selectedApplicationElement = entryElement;
+    }
     let logoElement = document.createElement("img");
     logoElement.src = "{% static '' %}" + "img/applications/" + logo.split(".")[0] + ".webp";
     logoElement.width = 48;
     logoElement.height = 48;
     entryElement.appendChild(logoElement);
-    let nameElement = document.createElement("label");
+    let nameElement = document.createElement("span");
+    nameElement.classList.add("ms-2");
     nameElement.innerHTML = name;
     entryElement.appendChild(nameElement);
     if (novelty === "NEW") {
@@ -219,25 +215,40 @@
   }
 
   function selectApplication(id, logo, entryElement, collapse) {
+    if (selectedApplication === id.toLowerCase()) {
+      return;
+    }
+    if (selectedApplication) {
+      selectedApplicationElement.classList.remove("workflow-component-application-entry-selected");
+      resetAccount();
+      resetEvent();
+      resetSpecifications();
+    }
+    let entryElementContent = entryElement.innerHTML;
+    entryElement.innerHTML = entryElement.innerHTML + `
+      <span class="spinner-border spinner-border-sm ms-2" aria-hidden="true"></span>
+      <span class="visually-hidden" role="status">Loading...</span>
+    `;
     selectedApplication = id.toLowerCase();
     selectedApplicationLogo = logo;
-    document.getElementById("workflow-component-application-list").style.display = "none";
-    document.getElementById("workflow-component-application-page").classList.add("d-none");
+    selectedApplicationElement = entryElement;
     entryElement.classList.add("workflow-component-application-entry-selected");
-    document.getElementById("workflow-component-application-body").appendChild(entryElement);
-    createResetButton(document.getElementById("workflow-component-application-body"), function() {
-      resetApplication(entryElement);
-    });
-    entryElement.onclick = function(event) {}
-    prepareAccount();
+    let startingTime = +new Date();
     if (!selectedComponentSetup) {
       prepareEvent();
     }
-    if (collapse) {
-      setTimeout(function(){
-        $('#workflow-component-account').collapse("toggle");
-      }, 600);
-    }
+    prepareAccount(function (accountExists) {
+      setTimeout(function () {
+        if (collapse) {
+          if (accountExists) {
+            $('#workflow-component-event').collapse("toggle");
+          } else {
+            $('#workflow-component-account').collapse("toggle");
+          }
+        }
+        entryElement.innerHTML = entryElementContent;
+      }, Math.max(500 - (+new Date() - startingTime), 0));
+    });
   }
 
   let nextPageElement = document.getElementById("workflow-component-application-next-page");
@@ -258,7 +269,19 @@
     let selectableApplications = hotApplications.concat(applications.filter(application =>
       hotApplications.filter(hotApplication => hotApplication.id === application.id)
         .length === 0));
+    for (let i = selectableApplications.length - 1; i >= 0; i--) {
+      let entry = selectableApplications[i];
+      if(!(entry.id.toLowerCase().includes(workflowCurrentApplicationFilter.toLowerCase()) ||
+        entry.name.toLowerCase().includes(workflowCurrentApplicationFilter.toLowerCase()))) {
+        selectableApplications.splice(i, 1);
+      }
+    }
     document.getElementById("workflow-component-application-list").innerHTML = "";
+    if (selectableApplications.length === 0) {
+      document.getElementById("workflow-component-application-list-empty").classList.remove("d-none");
+    } else {
+      document.getElementById("workflow-component-application-list-empty").classList.add("d-none");
+    }
     for (let i = 6 * page; i < Math.min(6 * (page + 1), selectableApplications.length); i++) {
       let entry = selectableApplications[i];
       displayApplication(entry.id, entry.name, entry.logo, entry.novelty);
@@ -276,51 +299,53 @@
     }
   }
 
-  function resetApplication(entryElement) {
-    document.getElementById("workflow-component-application-body").removeChild(entryElement);
-    document.getElementById("workflow-component-application-list").style.display = "block";
-    document.getElementById("workflow-component-application-page").classList.remove("d-none");
-    let resetButtons = document.getElementById("workflow-component-application-body").getElementsByClassName("workflow-component-reset");
-    for (let i = 0; i < resetButtons.length; i++) {
-      document.getElementById("workflow-component-application-body").removeChild(resetButtons[i]);
-    }
-    selectedApplication = null;
-    selectedApplicationLogo = null;
-    resetAccount();
-    resetEvent();
-    resetSpecifications();
-    displayApplications();
-  }
-
   document.getElementById("workflow-component-application-name-input").oninput = function(event) {
     workflowCurrentApplicationFilter = event.target.value;
-    displayApplications();
+    switchApplicationPage(0);
   };
 
-  function createResetButton(container, resetCallback) {
-    let resetButtonContainer = document.createElement("div");
-    resetButtonContainer.classList.add("workflow-component-reset");
-    let resetButton = document.createElement("button");
-    resetButton.type = "button";
-    resetButton.classList.add("btn", "btn-danger");
-    resetButton.innerHTML = "{% trans 'product.workflow.component.reset' %}";
-    resetButtonContainer.appendChild(resetButton);
-    container.appendChild(resetButtonContainer);
-    resetButton.onclick = function (event) {
-      resetCallback();
+  document.getElementById("workflow-component-application-name-input").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      let count = 0;
+      let application = null;
+      for (let i = 0; i < applications.length; i++) {
+        let entry = applications[i];
+        if(!(entry.id.toLowerCase().includes(workflowCurrentApplicationFilter.toLowerCase()) ||
+          entry.name.toLowerCase().includes(workflowCurrentApplicationFilter.toLowerCase()))) {
+          continue;
+        }
+        application = entry;
+        count++;
+      }
+      if (count !== 1) {
+        return;
+      }
+      selectApplication(application.id, application.logo,
+        document.getElementById("workflow-component-application-list").children[0],
+        true);
     }
-    return resetButtonContainer;
+  });
+
+  let applicationAccordionButton = document.getElementById("workflow-component-application-button");
+  applicationAccordionButton.onclick = function(event) {
+    setTimeout(function () {
+      if (applicationAccordionButton.classList.contains("collapsed")) {
+        return;
+      }
+      document.getElementById("workflow-component-application-name-input").focus();
+    }, 200);
   }
 </script>
 
 <script>
-  function prepareAccount() {
+  function prepareAccount(callback) {
     document.getElementById("workflow-component-account-content").style.display = "block";
     document.getElementById("workflow-component-account-unable").style.display = "none";
-    displayAccountInformation();
+    displayAccountInformation(callback);
   }
 
-  function displayAccountInformation() {
+  function displayAccountInformation(callback) {
     let accountContentElement = document.getElementById("workflow-component-account-content");
     accountContentElement.innerHTML = "";
     let request = new HttpRequest("/account/information/", "POST",
@@ -353,6 +378,7 @@
         removeLoader();
         prepareEvent();
       }
+      callback(information.accountExists);
     });
   }
 
@@ -396,97 +422,130 @@
 <script>
   let selectedEvent;
   let selectedEventDescription;
+  let selectedEventElement;
+  let latestEvents;
 
   function prepareEvent() {
-    document.getElementById("workflow-component-event-dropdown").style.display = "block";
+    document.getElementById("workflow-component-event-list").classList.remove("d-none");
+    document.getElementById("workflow-component-event-expand-container").classList.remove("d-none");
     document.getElementById("workflow-component-event-unable").style.display = "none";
-    fillEventDropdown();
+    fillEvents();
   }
 
-  function fillEventDropdown() {
-    document.getElementById("workflow-component-event-dropdown-list").innerHTML = "";
+  function fillEvents() {
+    document.getElementById("workflow-component-event-list").innerHTML = "";
     let request = new HttpRequest("/components/find/", "POST",
       [], {componentType: "{{type}}", module: selectedApplication.toLowerCase()});
     request.send(function (status, responseText) {
       let events = JSON.parse(responseText).components;
+      let expanded = document.getElementById("workflow-component-event-expand").checked;
+      document.getElementById("workflow-component-event-subline").innerHTML =
+        "{% trans 'product.workflow.component.event.subline' %}" + " (" + events.length + ")"
       for (let i = 0; i < events.length; i++) {
         let event = events[i];
-        addEventDropdownEntry(event.identifier, event.name, event.description,
-          event.novelty);
+        addEventEntry(event.identifier, event.name, event.description,
+          event.novelty, expanded);
       }
+      latestEvents = events;
     });
   }
 
-  function addEventDropdownEntry(identifier, name, description, novelty) {
+  function addEventEntry(identifier, name, description, novelty, expanded) {
     let entryElement = document.createElement("li");
-    entryElement.classList.add("dropdown-item");
+    entryElement.classList.add("workflow-component-event-entry");
+    if (selectedEvent === identifier) {
+      entryElement.classList.add("workflow-component-event-selected");
+      selectedEventElement = entryElement;
+    }
+    let entryHeader = document.createElement("div");
+    entryHeader.classList.add("d-flex", "align-items-center");
+    if (expanded) {
+      entryHeader.classList.add("mb-2", "pb-2", "border-bottom",
+        "border-secondary-subtle");
+    }
+    let iconElement = document.createElement("img");
+    iconElement.classList.add("me-3");
+    iconElement.width = 48;
+    iconElement.height = 48;
+    iconElement.src = "{% static '' %}" + "img/applications/" + selectedApplicationLogo.split(".")[0] + ".webp";
+    entryHeader.appendChild(iconElement);
     let nameElement = document.createElement("b");
     nameElement.classList.add("workflow-component-event-name");
     nameElement.innerHTML = name;
-    entryElement.appendChild(nameElement);
+    entryHeader.appendChild(nameElement);
     if (novelty === "NEW") {
       let noveltyElement = document.createElement("span");
       noveltyElement.classList.add("workflow-component-new", "badge",
         "text-bg-success");
       noveltyElement.innerHTML = "{% trans 'product.workflow.component.new' %}";
-      entryElement.appendChild(noveltyElement);
+      entryHeader.appendChild(noveltyElement);
     }
-    entryElement.appendChild(document.createElement("br"));
-    let descriptionElement = document.createElement("span");
-    descriptionElement.classList.add("workflow-component-event-description");
-    descriptionElement.innerHTML = description;
-    entryElement.appendChild(descriptionElement);
+    entryElement.appendChild(entryHeader);
+    if (expanded) {
+      let descriptionElement = document.createElement("small");
+      descriptionElement.classList.add("workflow-component-event-description");
+      descriptionElement.innerHTML = description;
+      entryElement.appendChild(descriptionElement);
+    }
     entryElement.onclick = function (event) {
-      selectEvent(identifier, name, description);
+      selectEvent(identifier, name, description, entryElement);
     }
-    document.getElementById("workflow-component-event-dropdown-list").appendChild(entryElement);
+    document.getElementById("workflow-component-event-list").appendChild(entryElement);
     if (selectedComponentSetup && selectedComponent.type === identifier) {
-      selectEvent(identifier, name, description);
+      selectEvent(identifier, name, description, entryElement);
     }
   }
 
-  function selectEvent(identifier, name, description) {
+  function selectEvent(identifier, name, description, element) {
+    if (selectedEvent === identifier) {
+      return;
+    }
+    if (selectedEvent && selectedEvent !== "") {
+      selectedEventElement.classList.remove("workflow-component-event-selected");
+      resetSpecifications();
+    }
     selectedEvent = identifier;
     selectedEventDescription = description;
-    document.getElementById("workflow-component-event-dropdown").style.display = "none";
-    let selectedElement = document.getElementById("workflow-component-event-selected");
-    let nameElement = document.createElement("b");
-    nameElement.id = "workflow-component-event-selected-name";
-    nameElement.innerHTML = name;
-    selectedElement.appendChild(nameElement);
-    let dividerElement = document.createElement("hr");
-    dividerElement.classList.add("hr");
-    selectedElement.appendChild(dividerElement);
-    let descriptionElement = document.createElement("p");
-    descriptionElement.id = "workflow-component-event-selected-description";
-    descriptionElement.innerHTML = description;
-    selectedElement.appendChild(descriptionElement);
-    selectedElement.style.display = "block";
-    createResetButton(document.getElementById("workflow-component-event-body"), function() {
-      resetEvent();
-      prepareEvent();
+    selectedEventElement = element;
+    element.classList.add("workflow-component-event-selected");
+    prepareSpecifications(function (redundant) {
+      if (!selectedComponentSetup) {
+        if (!redundant) {
+          let elementContent = element.firstChild.innerHTML;
+          element.firstChild.innerHTML = element.firstChild.innerHTML + `
+            <span class="spinner-border spinner-border-sm ms-2" aria-hidden="true"></span>
+            <span class="visually-hidden" role="status">Loading...</span>
+          `;
+          setTimeout(function() {
+            if (!redundant) {
+              $('#workflow-component-specifications').collapse("toggle");
+            }
+            element.firstChild.innerHTML = elementContent;
+          }, 500);
+        }
+      }
     });
-    prepareSpecifications();
-    if (!selectedComponentSetup) {
-      setTimeout(function() {
-        $('#workflow-component-specifications').collapse("toggle");
-      }, 600);
-    }
   }
+
+  document.getElementById("workflow-component-event-expand").addEventListener('change', (event) => {
+    document.getElementById("workflow-component-event-list").innerHTML = "";
+    let expanded = event.currentTarget.checked;
+    for (let i = 0; i < latestEvents.length; i++) {
+      let event = latestEvents[i];
+      addEventEntry(event.identifier, event.name, event.description,
+        event.novelty, expanded);
+    }
+  })
 
   function resetEvent(isApplicationSelected) {
     if (!isApplicationSelected) {
-      document.getElementById("workflow-component-event-dropdown").style.display = "none";
+      document.getElementById("workflow-component-event-list").classList.add("d-none");
+      document.getElementById("workflow-component-event-expand-container").classList.add("d-none");
       document.getElementById("workflow-component-event-unable").style.display = "block";
     }
-    let resetButtons = document.getElementById("workflow-component-event-body").getElementsByClassName("workflow-component-reset");
-    for (let i = 0; i < resetButtons.length; i++) {
-      document.getElementById("workflow-component-event-body").removeChild(resetButtons[i]);
-    }
-    document.getElementById("workflow-component-event-dropdown-list").innerHTML = "";
-    let selectedElement = document.getElementById("workflow-component-event-selected");
-    selectedElement.innerHTML = "";
-    selectedElement.style.display = "none";
+    document.getElementById("workflow-component-event-list").innerHTML = "";
+    document.getElementById("workflow-component-event-subline").innerHTML =
+      "{% trans 'product.workflow.component.event.subline' %}";
     selectedEvent = "";
     selectedEventDescription = "";
     resetSpecifications();
