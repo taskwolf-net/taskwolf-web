@@ -21,7 +21,7 @@
               </h2>
               <div id="workflow-component-application" class="accordion-collapse collapse show" data-bs-parent="#workflow-component-accordion">
                 <div id="workflow-component-application-body" class="accordion-body">
-                  <h4 class="text-center mb-4 mb-xl-0">{% with "product.workflow.component.application.subline."|add:type as value %}{% trans value %}{% endwith %}</h4>
+                  <h4 class="text-center mb-4 mb-xl-0">{% trans 'product.workflow.component.application.subline' %}</h4>
                   <div id="workflow-component-application-name" class="form-outline mb-4">
                     <label class="form-label">{% trans 'product.workflow.component.application.search' %}</label>
                     <div id="workflow-component-application-name-input-container">
@@ -47,7 +47,7 @@
               </h2>
               <div id="workflow-component-account" class="accordion-collapse collapse" data-bs-parent="#workflow-component-accordion">
                 <div id="workflow-component-account-body" class="accordion-body">
-                  <h4 class="text-center">{% with "product.workflow.component.account.subline."|add:type as value %}{% trans value %}{% endwith %}</h4>
+                  <h4 class="text-center">{% trans 'product.workflow.component.account.subline' %}</h4>
                   <div id="workflow-component-account-content">
                   </div>
                   <h6 id="workflow-component-account-unable" class="mt-5 text-center">{% trans 'product.workflow.component.account.unable' %}</h6>
@@ -62,7 +62,7 @@
               </h2>
               <div id="workflow-component-event" class="accordion-collapse collapse" data-bs-parent="#workflow-component-accordion">
                 <div id="workflow-component-event-body" class="accordion-body">
-                  <h4 id="workflow-component-event-subline" class="text-center">{% with "product.workflow.component.event.subline."|add:type as value %}{% trans value %}{% endwith %}</h4>
+                  <h4 id="workflow-component-event-subline" class="text-center">{% trans 'product.workflow.component.event.subline' %}</h4>
                   <div id="workflow-component-event-expand-container" class="d-flex justify-content-end d-none">
                     <div class="form-check">
                       <input class="form-check-input" type="checkbox" value="" id="workflow-component-event-expand">
@@ -85,7 +85,7 @@
               </h2>
               <div id="workflow-component-specifications" class="accordion-collapse collapse" data-bs-parent="#workflow-component-accordion">
                 <div id="workflow-component-specifications-body" class="accordion-body">
-                  <h4 class="text-center mb-4">{% with "product.workflow.component.specifications.subline."|add:type as value %}{% trans value %}{% endwith %}</h4>
+                  <h4 class="text-center mb-4">{% trans 'product.workflow.component.specifications.subline' %}</h4>
                   <div id="workflow-component-specifications-container">
                     <div id="workflow-component-specifications-inputs">
                       <h5 id="workflow-component-specifications-inputs-headline" class="text-center">{% trans 'product.workflow.component.specifications.inputs.title' %}</h5>
@@ -440,8 +440,7 @@
       let events = JSON.parse(responseText).components;
       let expanded = document.getElementById("workflow-component-event-expand").checked;
       document.getElementById("workflow-component-event-subline").innerHTML =
-        "{% with 'product.workflow.component.event.subline.'|add:type as value %}{% trans value %}{% endwith %}" +
-        " (" + events.length + ")";
+        "{% trans 'product.workflow.component.event.subline' %}" + " (" + events.length + ")"
       for (let i = 0; i < events.length; i++) {
         let event = events[i];
         addEventEntry(event.identifier, event.name, event.description,
@@ -546,7 +545,7 @@
     }
     document.getElementById("workflow-component-event-list").innerHTML = "";
     document.getElementById("workflow-component-event-subline").innerHTML =
-      "{% with 'product.workflow.component.event.subline.'|add:type as value %}{% trans value %}{% endwith %}";
+      "{% trans 'product.workflow.component.event.subline' %}";
     selectedEvent = "";
     selectedEventDescription = "";
     resetSpecifications();
