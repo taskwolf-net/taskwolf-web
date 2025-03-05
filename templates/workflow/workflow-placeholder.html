@@ -8,7 +8,7 @@
     if (index === -1) {
       document.getElementById(specificationPrefix + "-placeholders-empty")
         .classList.remove("d-none");
-      fillSpecificationsInputs();
+      callback();
       return;
     }
     displayPlaceholdersTabs();

@@ -2,6 +2,7 @@
 {% load i18n %}
 <script>
   let specificationSelectButtons = [];
+  let specificationEnabledSelectButtons = [];
   let specificationValues = {};
   let currentPlaceholderElement;
   let requiredSpecificationVariables = [];
@@ -24,19 +25,22 @@
       height + "px";
   }
 
-  function prepareSpecifications() {
+  function prepareSpecifications(response) {
     document.getElementById(specificationPrefix + "-container").style.display = "flex";
     document.getElementById(specificationPrefix + "-unable").style.display = "none";
     preparePlaceholders(function () {
-      fillSpecificationsInputs();
+      fillSpecificationsInputs(response);
     });
   }
 
-  function fillSpecificationsInputs() {
+  function fillSpecificationsInputs(callback) {
     fetchSpecificationInputs(function (status, responseText) {
       document.getElementById(specificationPrefix + "-input-list").innerHTML = "";
       let component = JSON.parse(responseText);
       let inputVariables = component.inputVariables;
+      if (callback) {
+        callback(inputVariables.length === 0);
+      }
       if (inputVariables.length === 0) {
         document.getElementById(specificationPrefix + "-container").style.display = "none";
         document.getElementById(specificationPrefix + "-redundant").style.display = "block";
@@ -94,14 +98,6 @@
       }
     }
     checkSetupCompletion();
-    createResetButton(document.getElementById(specificationPrefix + "-input-list"), function() {
-      specificationSelectButtons = [];
-      specificationValues = {};
-      dynamicInputVariables = [];
-      requiredSpecificationVariables = [];
-      updateAdoptability(false);
-      fillSpecificationsInputs();
-    });
     if (selectedApplication === "scheduler") {
       specificationValues["timezone"] = Intl.DateTimeFormat().resolvedOptions().timeZone;
     }
@@ -165,9 +161,13 @@
     dropdownContainer.classList.add("workflow-specification-select-container", "dropdown");
     let dropdownButton = document.createElement("button");
     dropdownButton.classList.add("btn", "btn-dark", "dropdown-toggle");
+    dropdownButton.setAttribute("workflow-specification-identifier", identifier);
+    dropdownButton.setAttribute("workflow-specification-name", name);
     if (document.getElementsByClassName("workflow-specification-select-container").length > 0) {
       dropdownButton.setAttribute("disabled", "disabled");
       specificationSelectButtons.push(dropdownButton);
+    } else {
+      specificationEnabledSelectButtons.push(dropdownButton);
     }
     $(dropdownButton).attr('data-bs-toggle','dropdown');
     dropdownButton.type = "button";
@@ -243,17 +243,24 @@
   }
 
   function selectSpecificationSelect(selectIdentifier, itemIdentifier, itemName, dropdownContainer, dropdownButton, dropdownList) {
+    if (specificationValues[selectIdentifier]) {
+      let buttonIndex = specificationEnabledSelectButtons.indexOf(dropdownButton);
+      for (let i = specificationEnabledSelectButtons.length - 1; i > buttonIndex; i--) {
+        let button = specificationEnabledSelectButtons[i];
+        button.innerText = button.getAttribute("workflow-specification-name");
+        delete specificationValues[button.getAttribute("workflow-specification-identifier")];
+        button.setAttribute("disabled", "disabled");
+        specificationSelectButtons.unshift(button);
+      }
+      specificationEnabledSelectButtons.splice(buttonIndex + 1);
+      checkAdoptability();
+    }
     specificationValues[selectIdentifier] = itemIdentifier;
-    dropdownContainer.removeChild(dropdownButton);
-    dropdownContainer.removeChild(dropdownList);
-    let itemElement = document.createElement("div");
-    itemElement.classList.add("workflow-specification-selected-item");
-    let itemNameElement = document.createElement("b");
-    itemNameElement.innerHTML = itemName;
-    itemElement.appendChild(itemNameElement);
-    dropdownContainer.appendChild(itemElement);
+    dropdownButton.innerText = dropdownButton.getAttribute("workflow-specification-name") + ": " + itemName;
     if (specificationSelectButtons.length > 0) {
-      specificationSelectButtons.shift().removeAttribute("disabled");
+      let button = specificationSelectButtons.shift();
+      button.removeAttribute("disabled");
+      specificationEnabledSelectButtons.push(button);
     }
     checkAdoptability();
   }
