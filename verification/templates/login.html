@@ -130,6 +130,9 @@
     } else {
       googleUrl += "/dashboard/";
     }
+    googleUrl += "DULNO-STATE-SPLIT";
+    let language = Cookie.find("dulno-home-language");
+    googleUrl += language;
     window.location.href = googleUrl;
   }
 </script>
