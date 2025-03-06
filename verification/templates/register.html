@@ -270,9 +270,10 @@
   function register(callback) {
     grecaptcha.ready(function() {
       grecaptcha.execute("{{recaptcha_token}}", {action: 'register'}).then(function(token) {
+        let language = Cookie.find("dulno-home-language");
         let request = new HttpRequest("/verification/register/", "POST", [],
           {email: emailInput.value, name: usernameInput.value, password: passwordInput.value,
-            redirect: "{{redirect}}", recaptchaToken: token,
+            language: language, redirect: "{{redirect}}", recaptchaToken: token,
             legalAccepted: document.getElementById("legal-check").checked,
             newsletter: document.getElementById("notification-check").checked});
         request.send(function (status, responseText) {
