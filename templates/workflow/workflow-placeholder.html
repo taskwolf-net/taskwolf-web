@@ -445,7 +445,7 @@
       for (let i = 0; i < variables.length; i++) {
         let variable = variables[i];
         value = value.replaceAll(
-          buildPlaceholderElement(prefix, variable.identifier, variable.value),
+          buildPlaceholderElement(prefix, variable.identifier, variable.name),
           "%" + prefix + variable.identifier + "%");
       }
     }

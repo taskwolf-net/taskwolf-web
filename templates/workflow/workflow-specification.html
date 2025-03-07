@@ -811,7 +811,7 @@
         let variable = variables[i];
         selectedComponentContent[identifier] = selectedComponentContent[identifier]
           .replaceAll("%" + prefix + variable.identifier + "%",
-            buildPlaceholderElement(prefix, variable.identifier, variable.value));
+            buildPlaceholderElement(prefix, variable.identifier, variable.name));
       }
     }
     return selectedComponentContent;

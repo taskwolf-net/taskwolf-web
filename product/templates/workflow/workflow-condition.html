@@ -110,7 +110,7 @@
     inputElement.ondrop = function (event) {
       appendPlaceholder(event.dataTransfer.getData("placeholder-identifier"),
         event.dataTransfer.getData("placeholder-name"));
-      inputSpecificationInput(quill, identifier);
+      inputConditionInput(quill, identifier);
     };
     inputElement.firstChild.onfocus = function (event) {
       latestInputFunction = (placeholderIdentifier, placeholderName) =>
@@ -138,7 +138,7 @@
       for (let i = 0; i < variables.length; i++) {
         let variable = variables[i];
         value = value.replaceAll("%" + prefix + variable.identifier + "%",
-          buildPlaceholderElement(prefix, variable.identifier, variable.value));
+          buildPlaceholderElement(prefix, variable.identifier, variable.name));
       }
     }
     quill.clipboard.dangerouslyPasteHTML(0, value.split('\n')
