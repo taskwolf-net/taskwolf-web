@@ -1,0 +1,113 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark" data-bs-theme="dark">
+    {% include 'product-header.html' %}
+    {% include 'product-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="account-add-wrapper">
+        <div id="account-add-header">
+          <div class="w-50">
+            <button id="account-add-page-back"><i class="fa-solid fa-arrow-left-long"></i></button>
+          </div>
+          <h1 id="account-add-headline">{% trans 'product.account.add.headline' %}</h1>
+          <div class="w-50">
+          </div>
+        </div>
+        <div id="account-add-apps-search-box" class="mt-5 mb-5">
+          <input id="account-add-apps-search-input" placeholder="{% trans 'product.account.add.search' %}" type="text" class="form-control" value="" autocomplete="off">
+          <button type="button">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+        <ul id="account-add-apps-list">
+        </ul>
+        <div id="account-add-loader">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  let apps;
+  let appsCurrentNameFilter = "";
+
+  $(document).ready(function() {
+    displayLoader();
+    fetchAppsData(function() {
+      displayApps();
+    });
+  });
+
+  function fetchAppsData(callback) {
+    let request = new HttpRequest("/account/apps/", "POST",
+      [], {connectedOnly: false});
+    request.send(function (status, responseText) {
+      apps = JSON.parse(responseText).apps
+        .sort((a, b) => a.name.localeCompare(b.name));
+      removeLoader();
+      callback();
+    });
+  }
+
+  function displayApps() {
+    document.getElementById("account-add-apps-list").innerHTML = "";
+    for (let i = 0; i < apps.length; i++) {
+      let entry = apps[i];
+      if(!(shouldDisplayAppEntry(entry))) {
+        continue;
+      }
+      displayApp(entry.id, entry.name, entry.logo, entry.registrationUrl);
+    }
+  }
+
+  function shouldDisplayAppEntry(entry) {
+    return appsCurrentNameFilter.length === 0 ||
+      entry.name.toLowerCase().includes(appsCurrentNameFilter.toLowerCase());
+  }
+
+  function displayApp(id, name, logo, registrationUrl) {
+    let entryElement = document.createElement("li");
+    let logoElement = document.createElement("img");
+    logoElement.src = "/static/img/applications/" + logo.split(".")[0] + ".webp";
+    logoElement.width = 80;
+    logoElement.height = 80;
+    logoElement.classList.add("mb-4");
+    entryElement.appendChild(logoElement);
+    entryElement.appendChild(document.createElement("br"));
+    let nameElement = document.createElement("b");
+    nameElement.innerHTML = name;
+    entryElement.appendChild(nameElement);
+    entryElement.onclick = function() {
+      window.open(registrationUrl);
+      sessionStorage.setItem("account-app-identifier", id);
+      sessionStorage.setItem("account-app-name", name);
+      sessionStorage.setItem("account-app-logo", logo);
+      sessionStorage.setItem("account-app-registration-url", registrationUrl);
+      window.location.href = "/accounts/";
+    }
+    document.getElementById("account-add-apps-list").appendChild(entryElement);
+  }
+
+  document.getElementById("account-add-page-back").onclick = function (event) {
+    window.location.href = "/account/apps/";
+  }
+
+  document.getElementById("account-add-apps-search-input").oninput = function(event) {
+    appsCurrentNameFilter = event.target.value;
+    displayApps();
+  };
+
+  function displayLoader() {
+    let loader = document.createElement("div");
+    loader.classList.add("loader", "loader-list");
+    document.getElementById("account-add-loader").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("account-add-loader").removeChild(
+      document.getElementsByClassName("loader")[0]);
+  }
+</script>

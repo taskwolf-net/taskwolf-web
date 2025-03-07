@@ -66,6 +66,9 @@
   width: min(1000px, 95%);
   margin: 4vh auto auto;
   border-bottom: 2px #4a4a4a solid;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 #accounts-list {
@@ -78,7 +81,7 @@
 .account-entry {
   display: flex;
   align-items: center;
-  margin-top: 1%;
+  margin-top: 10px;
   padding: 15px;
   border: 1px solid #5b5b5b;
   border-radius: 10px;
@@ -86,11 +89,9 @@
 }
 
 .account-entry b {
-  margin-left: 5%;
-  margin-right: 5%;
   font-size: 18px;
   white-space: nowrap;
-  text-overflow:ellipsis;
+  text-overflow: ellipsis;
   overflow: hidden;
 }
 

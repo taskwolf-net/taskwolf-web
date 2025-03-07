@@ -1,12 +1,15 @@
 #account-apps-header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
   margin: 4vh auto auto;
   width: min(1000px, 95%);
 }
 
 #account-apps-headline {
   font-weight: bold;
+  text-wrap: nowrap;
+  margin: 0;
 }
 
 #account-apps-search-box {
