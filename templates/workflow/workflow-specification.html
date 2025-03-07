@@ -128,7 +128,6 @@
     inputElement.ondrop = function (event) {
       appendPlaceholder(event.dataTransfer.getData("placeholder-identifier"),
         event.dataTransfer.getData("placeholder-name"));
-      inputSpecificationInput(quill, identifier);
     };
     inputElement.firstChild.onfocus = function (event) {
       latestInputFunction = (placeholderIdentifier, placeholderName) =>
@@ -570,10 +569,17 @@
       event.preventDefault();
     };
     inputElement.ondrop = function (event) {
-      addPlaceholder(quill, inputElement.id, event.dataTransfer.getData("placeholder-identifier"),
+      appendPlaceholder(event.dataTransfer.getData("placeholder-identifier"),
         event.dataTransfer.getData("placeholder-name"));
-      inputSpecificationListInput(quill, identifier, listInput);
     };
+    inputElement.firstChild.onfocus = function (event) {
+      latestInputFunction = (placeholderIdentifier, placeholderName) =>
+        appendPlaceholder(placeholderIdentifier, placeholderName);
+    }
+    function appendPlaceholder(placeholderIdentifier, placeholderName) {
+      addPlaceholder(quill, inputElement.id, placeholderIdentifier, placeholderName);
+      inputSpecificationListInput(quill, identifier, listInput);
+    }
     inputSpecificationListInput(quill, identifier, listInput);
   }
 
@@ -705,10 +711,17 @@
       event.preventDefault();
     };
     inputElement.ondrop = function (event) {
-      addPlaceholder(quill, inputElement.id, event.dataTransfer.getData("placeholder-identifier"),
+      appendPlaceholder(event.dataTransfer.getData("placeholder-identifier"),
         event.dataTransfer.getData("placeholder-name"));
-      inputSpecificationMapInput(quill, identifier, mapEntry, type);
     };
+    inputElement.firstChild.onfocus = function (event) {
+      latestInputFunction = (placeholderIdentifier, placeholderName) =>
+        appendPlaceholder(placeholderIdentifier, placeholderName);
+    }
+    function appendPlaceholder(placeholderIdentifier, placeholderName) {
+      addPlaceholder(quill, inputElement.id, placeholderIdentifier, placeholderName);
+      inputSpecificationMapInput(quill, identifier, mapEntry, type);
+    }
     inputSpecificationMapInput(quill, identifier, mapEntry, type);
   }
 
