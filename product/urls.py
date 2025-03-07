@@ -40,6 +40,7 @@ urlpatterns = [
   path('organization/termination/', organization.organizationTermination),
   path('organization/join/<str:organization>/<str:token>/', organization.organizationJoin),
   path('account/apps/', account.accountApps),
+  path('account/add/', account.accountAdd),
   path('accounts/', account.accounts),
   path('devices/', device.devices),
   path('help/', product.help),
