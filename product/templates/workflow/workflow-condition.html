@@ -108,10 +108,18 @@
       event.preventDefault();
     };
     inputElement.ondrop = function (event) {
-      addPlaceholder(quill, inputElement.id, event.dataTransfer.getData("placeholder-identifier"),
+      appendPlaceholder(event.dataTransfer.getData("placeholder-identifier"),
         event.dataTransfer.getData("placeholder-name"));
-      inputConditionInput(quill, identifier);
+      inputSpecificationInput(quill, identifier);
     };
+    inputElement.firstChild.onfocus = function (event) {
+      latestInputFunction = (placeholderIdentifier, placeholderName) =>
+        appendPlaceholder(placeholderIdentifier, placeholderName);
+    }
+    function appendPlaceholder(placeholderIdentifier, placeholderName) {
+      addPlaceholder(quill, inputElement.id, placeholderIdentifier, placeholderName);
+      inputConditionInput(quill, identifier);
+    }
     inputConditionInput(quill, identifier);
     autoCompleteInput(identifier, quill, content);
   }
@@ -130,9 +138,7 @@
       for (let i = 0; i < variables.length; i++) {
         let variable = variables[i];
         value = value.replaceAll("%" + prefix + variable.identifier + "%",
-          '<span class="placeholder" data-placeholder="' +
-          prefix + variable.identifier + ':' + variable.name + '">﻿<span contenteditable="false"> ' +
-          variable.name + ' </span>﻿</span>')
+          buildPlaceholderElement(prefix, variable.identifier, variable.value));
       }
     }
     quill.clipboard.dangerouslyPasteHTML(0, value.split('\n')
