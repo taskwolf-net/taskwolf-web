@@ -2,6 +2,7 @@
 {% load i18n %}
 <script>
   let placeholderPrefix;
+  let latestInputFunction;
 
   function preparePlaceholders(callback) {
     let index = parseInt(sessionStorage.getItem("workflow-step-index"));
@@ -163,6 +164,12 @@
 
   function preparePlaceholderDrag(identifier, name, placeholderElement) {
     placeholderElement.draggable = "true";
+    placeholderElement.onclick = function (event) {
+      if (!latestInputFunction) {
+        return;
+      }
+      latestInputFunction(identifier, name);
+    }
     placeholderElement.ondragstart = function (event) {
       event.dataTransfer.setData("placeholder-identifier", identifier);
       event.dataTransfer.setData("placeholder-name", name);
@@ -241,12 +248,33 @@
 
   function setupPlaceholderInput(identifier, placeholderText) {
     var Embed = Quill.import('blots/embed');
+    let quill;
     class PlaceholderBlot extends Embed {
       static create(value) {
         let node = super.create();
         node.classList.add('placeholder');
         node.setAttribute('data-placeholder', value);
-        node.innerText = " " + value.split(":")[1] + " ";
+        node.innerHTML = " " + value.split(":")[1] + " ";
+        let removeButton = document.createElement('i');
+        removeButton.classList.add('placeholder-remove', 'fa-solid', 'fa-xmark');
+        removeButton.onclick = () => {
+          node.remove();
+          adjustEditorHeight(quill);
+        }
+        let previousY;
+        node.addEventListener("mouseover", (event) => {
+          removeButton.classList.add('placeholder-remove-hover');
+          previousY = node.getBoundingClientRect().y;
+        });
+        node.addEventListener("mouseout", (event) => {
+          if (previousY !== node.getBoundingClientRect().y) {
+            return;
+          }
+          removeButton.classList.remove('placeholder-remove-hover');
+        });
+        let resizeObserver = new ResizeObserver(entries => adjustEditorHeight(quill));
+        resizeObserver.observe(node);
+        node.appendChild(removeButton);
         return node;
       }
 
@@ -258,7 +286,7 @@
     PlaceholderBlot.tagName = 'span';
     Quill.register(PlaceholderBlot);
 
-    let quill = new Quill('#' + identifier, {
+    quill = new Quill('#' + identifier, {
       theme: 'snow',
       formats: [
         identifier
@@ -416,9 +444,9 @@
       let variables = entry.variables;
       for (let i = 0; i < variables.length; i++) {
         let variable = variables[i];
-        value = value.replaceAll('<span class="placeholder" data-placeholder="' +
-          prefix + variable.identifier + ':' + variable.name + '">﻿<span contenteditable="false"> ' +
-          variable.name + ' </span>﻿</span>', "%" + prefix + variable.identifier + "%");
+        value = value.replaceAll(
+          buildPlaceholderElement(prefix, variable.identifier, variable.value),
+          "%" + prefix + variable.identifier + "%");
       }
     }
     value = value.replaceAll("<br>", "");
@@ -426,6 +454,12 @@
     value = value.replaceAll("</p>", "\n");
     value = value.replace(/\n$/, '');
     return value;
+  }
+
+  function buildPlaceholderElement(prefix, identifier, name) {
+    return '<span class="placeholder" data-placeholder="' + prefix + identifier +
+      ':' + name + '">﻿<span contenteditable="false"> ' + name + ' ' +
+      '<i class="placeholder-remove fa-solid fa-xmark"></i></span>﻿</span>';
   }
 
   function findPlaceholderPrefix(index) {

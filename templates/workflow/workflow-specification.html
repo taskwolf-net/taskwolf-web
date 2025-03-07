@@ -124,10 +124,18 @@
       event.preventDefault();
     };
     inputElement.ondrop = function (event) {
-      addPlaceholder(quill, inputElement.id, event.dataTransfer.getData("placeholder-identifier"),
+      appendPlaceholder(event.dataTransfer.getData("placeholder-identifier"),
         event.dataTransfer.getData("placeholder-name"));
       inputSpecificationInput(quill, identifier);
     };
+    inputElement.firstChild.onfocus = function (event) {
+      latestInputFunction = (placeholderIdentifier, placeholderName) =>
+        appendPlaceholder(placeholderIdentifier, placeholderName);
+    }
+    function appendPlaceholder(placeholderIdentifier, placeholderName) {
+      addPlaceholder(quill, inputElement.id, placeholderIdentifier, placeholderName);
+      inputSpecificationInput(quill, identifier);
+    }
     prefillSpecificationInput(identifier, quill);
   }
 
@@ -744,9 +752,8 @@
       for (let i = 0; i < variables.length; i++) {
         let variable = variables[i];
         selectedComponentContent[identifier] = selectedComponentContent[identifier]
-          .replaceAll("%" + prefix + variable.identifier + "%", "<span class='placeholder' data-placeholder='" +
-            prefix + variable.identifier + ":" + variable.name + "'>﻿<span contenteditable='false'> " +
-            variable.name + " </span>﻿</span>")
+          .replaceAll("%" + prefix + variable.identifier + "%",
+            buildPlaceholderElement(prefix, variable.identifier, variable.value));
       }
     }
     return selectedComponentContent;
