@@ -96,7 +96,7 @@
         addSpecificationMap(inputVariable.identifier, inputVariable.name, inputVariable.description);
       } else if (inputVariable.dataType === "DYNAMIC") {
         dynamicInputVariables.push({identifier: inputVariable.identifier,
-          requiredPredecessors: inputVariable.requiredPredecessors, alive: false, filled: false});
+          requiredPredecessors: inputVariable.requiredPredecessors, alive: false});
       }
     }
     checkSetupCompletion();
@@ -208,6 +208,7 @@
       return;
     }
     dropdownList.innerHTML = "";
+    let found = false;
     for (let i = 0; i < items.length; i++) {
       let item = JSON.parse(items[i]);
       let itemElement = document.createElement("li");
@@ -223,9 +224,15 @@
       if (selectedComponentSetup && selectedComponent.content !== undefined &&
         JSON.parse(selectedComponent.content)[identifier] === item.identifier
       ) {
+        found = true;
         selectSpecificationSelect(identifier, item.identifier, item.name,
           dropdownContainer, dropdownButton, dropdownList);
       }
+    }
+    if (!found && selectedComponentSetup && selectedComponent.content !== undefined) {
+      selectedComponentSetup = false;
+      checkAdoptability();
+      finishSpecificationSetup();
     }
     completeVariableSetup(identifier);
     if (items.length === 0) {
@@ -271,6 +278,7 @@
   }
 
   function selectSpecificationSelect(selectIdentifier, itemIdentifier, itemName, dropdownContainer, dropdownButton, dropdownList) {
+    let changedIdentifiers = [selectIdentifier];
     if (specificationValues[selectIdentifier]) {
       let buttonIndex = specificationEnabledSelectButtons.indexOf(dropdownButton);
       for (let i = specificationEnabledSelectButtons.length - 1; i > buttonIndex; i--) {
@@ -281,12 +289,14 @@
         delete selectionItems[identifier];
         button.setAttribute("disabled", "disabled");
         specificationSelectButtons.unshift(button);
+        changedIdentifiers.push(identifier);
       }
       specificationEnabledSelectButtons.splice(buttonIndex + 1);
       checkAdoptability();
     }
     specificationValues[selectIdentifier] = itemIdentifier;
     dropdownButton.innerText = dropdownButton.getAttribute("workflow-specification-name") + ": " + itemName;
+    checkDynamicInputAvailability(changedIdentifiers);
     if (specificationSelectButtons.length > 0) {
       let button = specificationSelectButtons.shift();
       let identifier = button.getAttribute("workflow-specification-identifier");
@@ -296,6 +306,26 @@
         button.parentNode.children[2], button);
     }
     checkAdoptability();
+  }
+
+  function checkDynamicInputAvailability(changedIdentifiers) {
+    for (let dynamicInputVariable of dynamicInputVariables) {
+      let isRelated = false;
+      for (let predecessor of dynamicInputVariable.requiredPredecessors) {
+        if (changedIdentifiers.includes(predecessor)) {
+          isRelated = true;
+          break;
+        }
+      }
+      if (isRelated && dynamicInputVariable.alive) {
+        dynamicInputVariable.alive = false;
+        for (let element of dynamicInputVariable.inputElements) {
+          element.remove();
+        }
+        dynamicInputVariable.inputElements = [];
+        checkDynamicInputs(function() {});
+      }
+    }
   }
 
   function addSpecificationFile(identifier, name, description) {
@@ -745,7 +775,10 @@
           "POST", [], body);
         request.send(function (status, responseText) {
           let dynamicInputs = JSON.parse(responseText).dynamicInputs;
+          let previousInputCount = document.getElementById(specificationPrefix + "-input-list").children.length;
           displayInputs(dynamicInputs);
+          let currentInputs = document.getElementById(specificationPrefix + "-input-list").children;
+          dynamicInputVariable.inputElements = Array.from(currentInputs).slice(previousInputCount, currentInputs.length);
           completeVariableSetup(dynamicInputVariable.identifier);
           competedInputs++;
           if (competedInputs === dynamicInputVariables.length) {
