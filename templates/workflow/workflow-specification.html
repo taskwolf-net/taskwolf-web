@@ -13,6 +13,8 @@
   let specificationPrefix;
   let adoptButton;
   let fetchSpecificationInputs;
+  let selectionItems = {};
+  let selectionArrivalObserver;
 
   window.addEventListener('load', function () {
     new ResizeObserver(() => updateSpecificationsDividerHeight())
@@ -75,7 +77,7 @@
       if (inputVariable.dataType === "TEXT" || inputVariable.dataType === "TEXT_AREA") {
         addSpecificationInput(inputVariable.identifier, inputVariable.name, inputVariable.description, inputVariable.placeholder, inputVariable.dataType);
       } else if (inputVariable.dataType === "SELECT") {
-        addSpecificationSelect(inputVariable.identifier, inputVariable.name, inputVariable.description, i);
+        addSpecificationSelect(inputVariable.identifier, inputVariable.name, inputVariable.description);
       } else if (inputVariable.dataType === "FILE") {
         addSpecificationFile(inputVariable.identifier, inputVariable.name, inputVariable.description);
       } else if (inputVariable.dataType === "BOOLEAN") {
@@ -162,7 +164,7 @@
     checkAdoptability();
   }
 
-  function addSpecificationSelect(identifier, name, description, index) {
+  function addSpecificationSelect(identifier, name, description) {
     let dropdownContainer = document.createElement("div");
     dropdownContainer.classList.add("mb-4");
     dropdownContainer.appendChild(createSpecificationHeadline(name, description));
@@ -171,7 +173,8 @@
     dropdownButton.classList.add("btn", "btn-dark", "dropdown-toggle");
     dropdownButton.setAttribute("workflow-specification-identifier", identifier);
     dropdownButton.setAttribute("workflow-specification-name", name);
-    if (document.getElementsByClassName("workflow-specification-select-container").length > 0) {
+    let firstSelect = document.getElementsByClassName("workflow-specification-select-container").length === 0;
+    if (!firstSelect) {
       dropdownButton.setAttribute("disabled", "disabled");
       specificationSelectButtons.push(dropdownButton);
     } else {
@@ -188,49 +191,52 @@
       clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton);
     });
     document.getElementById(specificationPrefix + "-input-list").appendChild(dropdownContainer);
-    if (selectedComponentSetup && "content" in selectedComponent) {
-      setTimeout(function(){
-        clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton);
-      }, 500 * index);
+    if (firstSelect) {
+      processSelectionItems(identifier, dropdownContainer, dropdownList, dropdownButton);
     }
   }
 
   function clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton) {
-    dropdownList.innerHTML = "";
-    dropdownList.appendChild(createSpecificationSelectLoader());
-    let request = new HttpRequest("/component/select/items/", "POST",
-      [], {componentType: "{{type}}", module: selectedApplication.toLowerCase(), type: selectedEvent, previousInputs: specificationValues, select: identifier});
-    request.send(function (status, responseText) {
-      let items = JSON.parse(responseText).items;
+    let items = selectionItems[identifier];
+    if (!items) {
       dropdownList.innerHTML = "";
-      let found = false;
-      for (let i = 0; i < items.length; i++) {
-        let item = JSON.parse(items[i]);
-        let itemElement = document.createElement("li");
-        itemElement.classList.add("dropdown-item");
-        let itemNameName = document.createElement("b");
-        itemNameName.innerHTML = item.name;
-        itemElement.appendChild(itemNameName);
-        itemElement.onclick = function (event) {
-          selectSpecificationSelect(identifier, item.identifier, item.name, dropdownContainer, dropdownButton, dropdownList);
-        }
-        dropdownList.appendChild(itemElement);
-        if (selectedComponentSetup && selectedComponent.content !== undefined && JSON.parse(selectedComponent.content)[identifier] === item.identifier) {
-          selectSpecificationSelect(identifier, item.identifier, item.name, dropdownContainer, dropdownButton, dropdownList);
-          found = true;
-        }
+      dropdownList.appendChild(createSpecificationSelectLoader());
+      selectionArrivalObserver = function() {
+        clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton);
+        selectionArrivalObserver = undefined;
       }
-      completeVariableSetup(identifier);
-      if (items.length === 0) {
-        let itemElement = document.createElement("li");
-        itemElement.classList.add("dropdown-item");
-        itemElement.classList.add("workflow-specification-select-empty");
-        let itemNameName = document.createElement("b");
-        itemNameName.innerHTML = "{% trans 'product.workflow.specifications.empty' %}";
-        itemElement.appendChild(itemNameName);
-        dropdownList.appendChild(itemElement);
+      return;
+    }
+    dropdownList.innerHTML = "";
+    for (let i = 0; i < items.length; i++) {
+      let item = JSON.parse(items[i]);
+      let itemElement = document.createElement("li");
+      itemElement.classList.add("dropdown-item");
+      let itemNameName = document.createElement("b");
+      itemNameName.innerHTML = item.name;
+      itemElement.appendChild(itemNameName);
+      itemElement.onclick = function (event) {
+        selectSpecificationSelect(identifier, item.identifier, item.name,
+          dropdownContainer, dropdownButton, dropdownList);
       }
-    });
+      dropdownList.appendChild(itemElement);
+      if (selectedComponentSetup && selectedComponent.content !== undefined &&
+        JSON.parse(selectedComponent.content)[identifier] === item.identifier
+      ) {
+        selectSpecificationSelect(identifier, item.identifier, item.name,
+          dropdownContainer, dropdownButton, dropdownList);
+      }
+    }
+    completeVariableSetup(identifier);
+    if (items.length === 0) {
+      let itemElement = document.createElement("li");
+      itemElement.classList.add("dropdown-item");
+      itemElement.classList.add("workflow-specification-select-empty");
+      let itemNameName = document.createElement("b");
+      itemNameName.innerHTML = "{% trans 'product.workflow.specifications.empty' %}";
+      itemElement.appendChild(itemNameName);
+      dropdownList.appendChild(itemElement);
+    }
   }
 
   function createSpecificationSelectLoader() {
@@ -250,13 +256,29 @@
     return loaderEntry;
   }
 
+  function processSelectionItems(identifier, dropdownContainer, dropdownList, dropdownButton) {
+    let request = new HttpRequest("/component/select/items/", "POST",
+      [], {componentType: "{{type}}", module: selectedApplication.toLowerCase(),
+        type: selectedEvent, previousInputs: specificationValues, select: identifier});
+    request.send(function (status, responseText) {
+      selectionItems[identifier] = JSON.parse(responseText).items;
+      if (selectedComponentSetup && "content" in selectedComponent) {
+        clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton);
+      } else if (selectionArrivalObserver) {
+        selectionArrivalObserver();
+      }
+    });
+  }
+
   function selectSpecificationSelect(selectIdentifier, itemIdentifier, itemName, dropdownContainer, dropdownButton, dropdownList) {
     if (specificationValues[selectIdentifier]) {
       let buttonIndex = specificationEnabledSelectButtons.indexOf(dropdownButton);
       for (let i = specificationEnabledSelectButtons.length - 1; i > buttonIndex; i--) {
         let button = specificationEnabledSelectButtons[i];
         button.innerText = button.getAttribute("workflow-specification-name");
-        delete specificationValues[button.getAttribute("workflow-specification-identifier")];
+        let identifier = button.getAttribute("workflow-specification-identifier");
+        delete specificationValues[identifier];
+        delete selectionItems[identifier];
         button.setAttribute("disabled", "disabled");
         specificationSelectButtons.unshift(button);
       }
@@ -267,8 +289,11 @@
     dropdownButton.innerText = dropdownButton.getAttribute("workflow-specification-name") + ": " + itemName;
     if (specificationSelectButtons.length > 0) {
       let button = specificationSelectButtons.shift();
+      let identifier = button.getAttribute("workflow-specification-identifier");
       button.removeAttribute("disabled");
       specificationEnabledSelectButtons.push(button);
+      processSelectionItems(identifier, button.parentNode,
+        button.parentNode.children[2], button);
     }
     checkAdoptability();
   }
