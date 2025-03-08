@@ -100,7 +100,7 @@
     entryHeaderElement.appendChild(entryTitleElement);
     let entryDateElement = document.createElement("p");
     entryDateElement.classList.add("timeline-item-date", "mb-2", "fw-bold");
-    entryDateElement.innerText = entry.time;
+    entryDateElement.innerText = new Date(entry.time).toLocaleString();
     entryHeaderElement.appendChild(entryDateElement);
     entryElement.appendChild(entryHeaderElement);
     if (entry.isFailure) {
