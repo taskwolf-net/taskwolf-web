@@ -8,7 +8,11 @@
     <div class="sidebar-influenced">
       <div id="account-apps-wrapper">
         <div id="account-apps-header">
+          <div class="w-50"></div>
           <h1 id="account-apps-headline">{% trans 'product.account.apps.headline' %}</h1>
+          <div class="w-50 text-end">
+            <button id="account-apps-link" class="btn btn-success">{% trans 'product.account.apps.link' %}</button>
+          </div>
         </div>
         <div id="account-apps-search-box">
           <input id="account-apps-search-input" placeholder="{% trans 'product.account.apps.search' %}" type="text" class="form-control" value="" autocomplete="off">
@@ -45,8 +49,8 @@
   });
 
   function fetchAppsData(callback) {
-    let request = new HttpRequest("/account/apps/", "GET",
-      []);
+    let request = new HttpRequest("/account/apps/", "POST",
+      [], {connectedOnly: true});
     request.send(function (status, responseText) {
       apps = JSON.parse(responseText).apps;
       removeLoader();
@@ -61,7 +65,7 @@
       if(!(shouldDisplayAppEntry(entry))) {
         continue;
       }
-      displayApp(entry.id, entry.name, entry.logo);
+      displayApp(entry.id, entry.name, entry.logo, entry.registrationUrl);
     }
   }
 
@@ -70,7 +74,7 @@
       entry.name.toLowerCase().includes(appsCurrentNameFilter.toLowerCase());
   }
 
-  function displayApp(id, name, logo) {
+  function displayApp(id, name, logo, registrationUrl) {
     let entryElement = document.createElement("li");
     entryElement.role = "button";
     entryElement.classList.add("account-application-entry");
@@ -86,6 +90,7 @@
       sessionStorage.setItem("account-app-identifier", id);
       sessionStorage.setItem("account-app-name", name);
       sessionStorage.setItem("account-app-logo", logo);
+      sessionStorage.setItem("account-app-registration-url", registrationUrl);
       window.location.href = "/accounts/";
     }
     let arrowElement = document.createElement("i");
@@ -98,6 +103,10 @@
     appsCurrentNameFilter = event.target.value;
     displayApps();
   };
+
+  document.getElementById("account-apps-link").onclick = function(event) {
+    window.location.href = "/account/add/";
+  }
 
   function displayLoader() {
     let loader = document.createElement("div");

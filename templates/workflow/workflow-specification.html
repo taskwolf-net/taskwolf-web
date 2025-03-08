@@ -13,6 +13,8 @@
   let specificationPrefix;
   let adoptButton;
   let fetchSpecificationInputs;
+  let selectionItems = {};
+  let selectionArrivalObserver;
 
   window.addEventListener('load', function () {
     new ResizeObserver(() => updateSpecificationsDividerHeight())
@@ -75,7 +77,7 @@
       if (inputVariable.dataType === "TEXT" || inputVariable.dataType === "TEXT_AREA") {
         addSpecificationInput(inputVariable.identifier, inputVariable.name, inputVariable.description, inputVariable.placeholder, inputVariable.dataType);
       } else if (inputVariable.dataType === "SELECT") {
-        addSpecificationSelect(inputVariable.identifier, inputVariable.name, inputVariable.description, i);
+        addSpecificationSelect(inputVariable.identifier, inputVariable.name, inputVariable.description);
       } else if (inputVariable.dataType === "FILE") {
         addSpecificationFile(inputVariable.identifier, inputVariable.name, inputVariable.description);
       } else if (inputVariable.dataType === "BOOLEAN") {
@@ -94,7 +96,7 @@
         addSpecificationMap(inputVariable.identifier, inputVariable.name, inputVariable.description);
       } else if (inputVariable.dataType === "DYNAMIC") {
         dynamicInputVariables.push({identifier: inputVariable.identifier,
-          requiredPredecessors: inputVariable.requiredPredecessors, alive: false, filled: false});
+          requiredPredecessors: inputVariable.requiredPredecessors, alive: false});
       }
     }
     checkSetupCompletion();
@@ -124,15 +126,22 @@
       event.preventDefault();
     };
     inputElement.ondrop = function (event) {
-      addPlaceholder(quill, inputElement.id, event.dataTransfer.getData("placeholder-identifier"),
+      appendPlaceholder(event.dataTransfer.getData("placeholder-identifier"),
         event.dataTransfer.getData("placeholder-name"));
-      inputSpecificationInput(quill, identifier);
     };
+    inputElement.firstChild.onfocus = function (event) {
+      latestInputFunction = (placeholderIdentifier, placeholderName) =>
+        appendPlaceholder(placeholderIdentifier, placeholderName);
+    }
+    function appendPlaceholder(placeholderIdentifier, placeholderName) {
+      addPlaceholder(quill, inputElement.id, placeholderIdentifier, placeholderName);
+      inputSpecificationInput(quill, identifier);
+    }
     prefillSpecificationInput(identifier, quill);
   }
 
   function prefillSpecificationInput(identifier, quill) {
-    let content = replaceSelectedComponentPlaceholders(identifier);
+    let content = formatSelectedComponent(identifier);
     if (content) {
       quill.clipboard.dangerouslyPasteHTML(0, content[identifier]
         .split('\n').map(line => "<p>" + (line === "" ? "<br>" : line) + "</p>")
@@ -154,7 +163,7 @@
     checkAdoptability();
   }
 
-  function addSpecificationSelect(identifier, name, description, index) {
+  function addSpecificationSelect(identifier, name, description) {
     let dropdownContainer = document.createElement("div");
     dropdownContainer.classList.add("mb-4");
     dropdownContainer.appendChild(createSpecificationHeadline(name, description));
@@ -163,7 +172,8 @@
     dropdownButton.classList.add("btn", "btn-dark", "dropdown-toggle");
     dropdownButton.setAttribute("workflow-specification-identifier", identifier);
     dropdownButton.setAttribute("workflow-specification-name", name);
-    if (document.getElementsByClassName("workflow-specification-select-container").length > 0) {
+    let firstSelect = document.getElementsByClassName("workflow-specification-select-container").length === 0;
+    if (!firstSelect) {
       dropdownButton.setAttribute("disabled", "disabled");
       specificationSelectButtons.push(dropdownButton);
     } else {
@@ -180,49 +190,59 @@
       clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton);
     });
     document.getElementById(specificationPrefix + "-input-list").appendChild(dropdownContainer);
-    if (selectedComponentSetup && "content" in selectedComponent) {
-      setTimeout(function(){
-        clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton);
-      }, 500 * index);
+    if (firstSelect) {
+      processSelectionItems(identifier, dropdownContainer, dropdownList, dropdownButton);
     }
   }
 
   function clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton) {
-    dropdownList.innerHTML = "";
-    dropdownList.appendChild(createSpecificationSelectLoader());
-    let request = new HttpRequest("/component/select/items/", "POST",
-      [], {componentType: "{{type}}", module: selectedApplication.toLowerCase(), type: selectedEvent, previousInputs: specificationValues, select: identifier});
-    request.send(function (status, responseText) {
-      let items = JSON.parse(responseText).items;
+    let items = selectionItems[identifier];
+    if (!items) {
       dropdownList.innerHTML = "";
-      let found = false;
-      for (let i = 0; i < items.length; i++) {
-        let item = JSON.parse(items[i]);
-        let itemElement = document.createElement("li");
-        itemElement.classList.add("dropdown-item");
-        let itemNameName = document.createElement("b");
-        itemNameName.innerHTML = item.name;
-        itemElement.appendChild(itemNameName);
-        itemElement.onclick = function (event) {
-          selectSpecificationSelect(identifier, item.identifier, item.name, dropdownContainer, dropdownButton, dropdownList);
-        }
-        dropdownList.appendChild(itemElement);
-        if (selectedComponentSetup && selectedComponent.content !== undefined && JSON.parse(selectedComponent.content)[identifier] === item.identifier) {
-          selectSpecificationSelect(identifier, item.identifier, item.name, dropdownContainer, dropdownButton, dropdownList);
-          found = true;
-        }
+      dropdownList.appendChild(createSpecificationSelectLoader());
+      selectionArrivalObserver = function() {
+        clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton);
+        selectionArrivalObserver = undefined;
       }
-      completeVariableSetup(identifier);
-      if (items.length === 0) {
-        let itemElement = document.createElement("li");
-        itemElement.classList.add("dropdown-item");
-        itemElement.classList.add("workflow-specification-select-empty");
-        let itemNameName = document.createElement("b");
-        itemNameName.innerHTML = "{% trans 'product.workflow.specifications.empty' %}";
-        itemElement.appendChild(itemNameName);
-        dropdownList.appendChild(itemElement);
+      return;
+    }
+    dropdownList.innerHTML = "";
+    let found = false;
+    for (let i = 0; i < items.length; i++) {
+      let item = JSON.parse(items[i]);
+      let itemElement = document.createElement("li");
+      itemElement.classList.add("dropdown-item");
+      let itemNameName = document.createElement("b");
+      itemNameName.innerHTML = item.name;
+      itemElement.appendChild(itemNameName);
+      itemElement.onclick = function (event) {
+        selectSpecificationSelect(identifier, item.identifier, item.name,
+          dropdownContainer, dropdownButton, dropdownList);
       }
-    });
+      dropdownList.appendChild(itemElement);
+      if (selectedComponentSetup && selectedComponent.content !== undefined &&
+        JSON.parse(selectedComponent.content)[identifier] === item.identifier
+      ) {
+        found = true;
+        selectSpecificationSelect(identifier, item.identifier, item.name,
+          dropdownContainer, dropdownButton, dropdownList);
+      }
+    }
+    if (!found && selectedComponentSetup && selectedComponent.content !== undefined) {
+      selectedComponentSetup = false;
+      checkAdoptability();
+      finishSpecificationSetup();
+    }
+    completeVariableSetup(identifier);
+    if (items.length === 0) {
+      let itemElement = document.createElement("li");
+      itemElement.classList.add("dropdown-item");
+      itemElement.classList.add("workflow-specification-select-empty");
+      let itemNameName = document.createElement("b");
+      itemNameName.innerHTML = "{% trans 'product.workflow.specifications.empty' %}";
+      itemElement.appendChild(itemNameName);
+      dropdownList.appendChild(itemElement);
+    }
   }
 
   function createSpecificationSelectLoader() {
@@ -242,27 +262,69 @@
     return loaderEntry;
   }
 
+  function processSelectionItems(identifier, dropdownContainer, dropdownList, dropdownButton) {
+    let request = new HttpRequest("/component/select/items/", "POST",
+      [], {componentType: "{{type}}", module: selectedApplication.toLowerCase(),
+        type: selectedEvent, previousInputs: specificationValues, select: identifier});
+    request.send(function (status, responseText) {
+      selectionItems[identifier] = JSON.parse(responseText).items;
+      if (selectedComponentSetup && "content" in selectedComponent) {
+        clickSpecificationSelect(identifier, dropdownContainer, dropdownList, dropdownButton);
+      } else if (selectionArrivalObserver) {
+        selectionArrivalObserver();
+      }
+    });
+  }
+
   function selectSpecificationSelect(selectIdentifier, itemIdentifier, itemName, dropdownContainer, dropdownButton, dropdownList) {
+    let changedIdentifiers = [selectIdentifier];
     if (specificationValues[selectIdentifier]) {
       let buttonIndex = specificationEnabledSelectButtons.indexOf(dropdownButton);
       for (let i = specificationEnabledSelectButtons.length - 1; i > buttonIndex; i--) {
         let button = specificationEnabledSelectButtons[i];
         button.innerText = button.getAttribute("workflow-specification-name");
-        delete specificationValues[button.getAttribute("workflow-specification-identifier")];
+        let identifier = button.getAttribute("workflow-specification-identifier");
+        delete specificationValues[identifier];
+        delete selectionItems[identifier];
         button.setAttribute("disabled", "disabled");
         specificationSelectButtons.unshift(button);
+        changedIdentifiers.push(identifier);
       }
       specificationEnabledSelectButtons.splice(buttonIndex + 1);
       checkAdoptability();
     }
     specificationValues[selectIdentifier] = itemIdentifier;
     dropdownButton.innerText = dropdownButton.getAttribute("workflow-specification-name") + ": " + itemName;
+    checkDynamicInputAvailability(changedIdentifiers);
     if (specificationSelectButtons.length > 0) {
       let button = specificationSelectButtons.shift();
+      let identifier = button.getAttribute("workflow-specification-identifier");
       button.removeAttribute("disabled");
       specificationEnabledSelectButtons.push(button);
+      processSelectionItems(identifier, button.parentNode,
+        button.parentNode.children[2], button);
     }
     checkAdoptability();
+  }
+
+  function checkDynamicInputAvailability(changedIdentifiers) {
+    for (let dynamicInputVariable of dynamicInputVariables) {
+      let isRelated = false;
+      for (let predecessor of dynamicInputVariable.requiredPredecessors) {
+        if (changedIdentifiers.includes(predecessor)) {
+          isRelated = true;
+          break;
+        }
+      }
+      if (isRelated && dynamicInputVariable.alive) {
+        dynamicInputVariable.alive = false;
+        for (let element of dynamicInputVariable.inputElements) {
+          element.remove();
+        }
+        dynamicInputVariable.inputElements = [];
+        checkDynamicInputs(function() {});
+      }
+    }
   }
 
   function addSpecificationFile(identifier, name, description) {
@@ -448,21 +510,28 @@
 
   function prefillSpecificationList(specificationList, container) {
     let identifier = specificationList.identifier;
-    let content = replaceSelectedComponentPlaceholders(identifier);
-    if (content) {
-      let listEntries = JSON.parse(content[identifier]);
-      for (let i = 0; i < listEntries.length; i++) {
-        if (i > 0) {
-          createSpecificationListInput(specificationList, container);
-        }
-        let input = specificationList.inputs.filter(input => input.index === i)[0];
-        let quill = input.quill;
-        quill.clipboard.dangerouslyPasteHTML(0, listEntries[i]
-          .split('\n').map(line => "<p>" + (line === "" ? "<br>" : line) + "</p>")
-          .join(''));
-        adjustEditorHeight(quill);
-        inputSpecificationListInput(quill, identifier, input);
+    if (!selectedComponentSetup || !("content" in selectedComponent)) {
+      completeVariableSetup(identifier);
+      return;
+    }
+    let selectedComponentContent = JSON.parse(selectedComponent.content);
+    if (!(identifier in selectedComponentContent)) {
+      completeVariableSetup(identifier);
+      return;
+    }
+    let listEntries = JSON.parse(selectedComponentContent[identifier]);
+    for (let i = 0; i < listEntries.length; i++) {
+      if (i > 0) {
+        createSpecificationListInput(specificationList, container);
       }
+      let input = specificationList.inputs.filter(input => input.index === i)[0];
+      let quill = input.quill;
+      let formattedEntry = replaceSelectedComponentPlaceholders(listEntries[i]);
+      quill.clipboard.dangerouslyPasteHTML(0, formattedEntry
+        .split('\n').map(line => "<p>" + (line === "" ? "<br>" : line) + "</p>")
+        .join(''));
+      adjustEditorHeight(quill);
+      inputSpecificationListInput(quill, identifier, input);
     }
     completeVariableSetup(identifier);
   }
@@ -507,10 +576,17 @@
       event.preventDefault();
     };
     inputElement.ondrop = function (event) {
-      addPlaceholder(quill, inputElement.id, event.dataTransfer.getData("placeholder-identifier"),
+      appendPlaceholder(event.dataTransfer.getData("placeholder-identifier"),
         event.dataTransfer.getData("placeholder-name"));
-      inputSpecificationListInput(quill, identifier, listInput);
     };
+    inputElement.firstChild.onfocus = function (event) {
+      latestInputFunction = (placeholderIdentifier, placeholderName) =>
+        appendPlaceholder(placeholderIdentifier, placeholderName);
+    }
+    function appendPlaceholder(placeholderIdentifier, placeholderName) {
+      addPlaceholder(quill, inputElement.id, placeholderIdentifier, placeholderName);
+      inputSpecificationListInput(quill, identifier, listInput);
+    }
     inputSpecificationListInput(quill, identifier, listInput);
   }
 
@@ -565,20 +641,27 @@
 
   function prefillSpecificationMap(specificationMap, container) {
     let identifier = specificationMap.identifier;
-    let content = replaceSelectedComponentPlaceholders(identifier);
-    if (content) {
-      let mapEntries = JSON.parse(content[identifier]);
-      let mapKeys = Object.keys(mapEntries);
-      for (let i = 0; i < mapKeys.length; i++) {
-        if (i > 0) {
-          createSpecificationMapEntry(specificationMap, container);
-        }
-        let entry = specificationMap.entries[i];
-        let entryKey = mapKeys[i];
-        let entryValue = mapEntries[entryKey];
-        prefillSpecificationMapInput(specificationMap, entry, "key", entryKey);
-        prefillSpecificationMapInput(specificationMap, entry, "value", entryValue);
+    if (!selectedComponentSetup || !("content" in selectedComponent)) {
+      completeVariableSetup(identifier);
+      return;
+    }
+    let selectedComponentContent = JSON.parse(selectedComponent.content);
+    if (!(identifier in selectedComponentContent)) {
+      completeVariableSetup(identifier);
+      return;
+    }
+    let mapEntries = JSON.parse(selectedComponentContent[identifier]);
+    let mapKeys = Object.keys(mapEntries);
+    for (let i = 0; i < mapKeys.length; i++) {
+      if (i > 0) {
+        createSpecificationMapEntry(specificationMap, container);
       }
+      let entry = specificationMap.entries[i];
+      let key = mapKeys[i];
+      let formattedKey = replaceSelectedComponentPlaceholders(key);
+      let formattedValue = replaceSelectedComponentPlaceholders(mapEntries[key]);
+      prefillSpecificationMapInput(specificationMap, entry, "key", formattedKey);
+      prefillSpecificationMapInput(specificationMap, entry, "value", formattedValue);
     }
     completeVariableSetup(identifier);
   }
@@ -642,10 +725,17 @@
       event.preventDefault();
     };
     inputElement.ondrop = function (event) {
-      addPlaceholder(quill, inputElement.id, event.dataTransfer.getData("placeholder-identifier"),
+      appendPlaceholder(event.dataTransfer.getData("placeholder-identifier"),
         event.dataTransfer.getData("placeholder-name"));
-      inputSpecificationMapInput(quill, identifier, mapEntry, type);
     };
+    inputElement.firstChild.onfocus = function (event) {
+      latestInputFunction = (placeholderIdentifier, placeholderName) =>
+        appendPlaceholder(placeholderIdentifier, placeholderName);
+    }
+    function appendPlaceholder(placeholderIdentifier, placeholderName) {
+      addPlaceholder(quill, inputElement.id, placeholderIdentifier, placeholderName);
+      inputSpecificationMapInput(quill, identifier, mapEntry, type);
+    }
     inputSpecificationMapInput(quill, identifier, mapEntry, type);
   }
 
@@ -712,7 +802,10 @@
           "POST", [], body);
         request.send(function (status, responseText) {
           let dynamicInputs = JSON.parse(responseText).dynamicInputs;
+          let previousInputCount = document.getElementById(specificationPrefix + "-input-list").children.length;
           displayInputs(dynamicInputs);
+          let currentInputs = document.getElementById(specificationPrefix + "-input-list").children;
+          dynamicInputVariable.inputElements = Array.from(currentInputs).slice(previousInputCount, currentInputs.length);
           completeVariableSetup(dynamicInputVariable.identifier);
           competedInputs++;
           if (competedInputs === dynamicInputVariables.length) {
@@ -728,7 +821,7 @@
     }
   }
 
-  function replaceSelectedComponentPlaceholders(identifier) {
+  function formatSelectedComponent(identifier) {
     if (!selectedComponentSetup || !("content" in selectedComponent)) {
       return false;
     }
@@ -736,6 +829,12 @@
     if (!(identifier in selectedComponentContent)) {
       return false;
     }
+    selectedComponentContent[identifier] =
+      replaceSelectedComponentPlaceholders(selectedComponentContent[identifier]);
+    return selectedComponentContent;
+  }
+
+  function replaceSelectedComponentPlaceholders(content) {
     for (let i = 0; i < componentsOutputVariables.length; i++) {
       let entry = componentsOutputVariables[i];
       let index = entry.index;
@@ -743,13 +842,11 @@
       let variables = entry.variables;
       for (let i = 0; i < variables.length; i++) {
         let variable = variables[i];
-        selectedComponentContent[identifier] = selectedComponentContent[identifier]
-          .replaceAll("%" + prefix + variable.identifier + "%", "<span class='placeholder' data-placeholder='" +
-            prefix + variable.identifier + ":" + variable.name + "'>﻿<span contenteditable='false'> " +
-            variable.name + " </span>﻿</span>")
+        content = content.replaceAll("%" + prefix + variable.identifier + "%",
+          buildPlaceholderElement(prefix, variable.identifier, variable.name));
       }
     }
-    return selectedComponentContent;
+    return content;
   }
 
   function generateElementIdentifier(length) {
