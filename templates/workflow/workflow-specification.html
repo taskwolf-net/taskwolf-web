@@ -141,7 +141,7 @@
   }
 
   function prefillSpecificationInput(identifier, quill) {
-    let content = replaceSelectedComponentPlaceholders(identifier);
+    let content = formatSelectedComponent(identifier);
     if (content) {
       quill.clipboard.dangerouslyPasteHTML(0, content[identifier]
         .split('\n').map(line => "<p>" + (line === "" ? "<br>" : line) + "</p>")
@@ -510,21 +510,28 @@
 
   function prefillSpecificationList(specificationList, container) {
     let identifier = specificationList.identifier;
-    let content = replaceSelectedComponentPlaceholders(identifier);
-    if (content) {
-      let listEntries = JSON.parse(content[identifier]);
-      for (let i = 0; i < listEntries.length; i++) {
-        if (i > 0) {
-          createSpecificationListInput(specificationList, container);
-        }
-        let input = specificationList.inputs.filter(input => input.index === i)[0];
-        let quill = input.quill;
-        quill.clipboard.dangerouslyPasteHTML(0, listEntries[i]
-          .split('\n').map(line => "<p>" + (line === "" ? "<br>" : line) + "</p>")
-          .join(''));
-        adjustEditorHeight(quill);
-        inputSpecificationListInput(quill, identifier, input);
+    if (!selectedComponentSetup || !("content" in selectedComponent)) {
+      completeVariableSetup(identifier);
+      return;
+    }
+    let selectedComponentContent = JSON.parse(selectedComponent.content);
+    if (!(identifier in selectedComponentContent)) {
+      completeVariableSetup(identifier);
+      return;
+    }
+    let listEntries = JSON.parse(selectedComponentContent[identifier]);
+    for (let i = 0; i < listEntries.length; i++) {
+      if (i > 0) {
+        createSpecificationListInput(specificationList, container);
       }
+      let input = specificationList.inputs.filter(input => input.index === i)[0];
+      let quill = input.quill;
+      let formattedEntry = replaceSelectedComponentPlaceholders(listEntries[i]);
+      quill.clipboard.dangerouslyPasteHTML(0, formattedEntry
+        .split('\n').map(line => "<p>" + (line === "" ? "<br>" : line) + "</p>")
+        .join(''));
+      adjustEditorHeight(quill);
+      inputSpecificationListInput(quill, identifier, input);
     }
     completeVariableSetup(identifier);
   }
@@ -634,20 +641,27 @@
 
   function prefillSpecificationMap(specificationMap, container) {
     let identifier = specificationMap.identifier;
-    let content = replaceSelectedComponentPlaceholders(identifier);
-    if (content) {
-      let mapEntries = JSON.parse(content[identifier]);
-      let mapKeys = Object.keys(mapEntries);
-      for (let i = 0; i < mapKeys.length; i++) {
-        if (i > 0) {
-          createSpecificationMapEntry(specificationMap, container);
-        }
-        let entry = specificationMap.entries[i];
-        let entryKey = mapKeys[i];
-        let entryValue = mapEntries[entryKey];
-        prefillSpecificationMapInput(specificationMap, entry, "key", entryKey);
-        prefillSpecificationMapInput(specificationMap, entry, "value", entryValue);
+    if (!selectedComponentSetup || !("content" in selectedComponent)) {
+      completeVariableSetup(identifier);
+      return;
+    }
+    let selectedComponentContent = JSON.parse(selectedComponent.content);
+    if (!(identifier in selectedComponentContent)) {
+      completeVariableSetup(identifier);
+      return;
+    }
+    let mapEntries = JSON.parse(selectedComponentContent[identifier]);
+    let mapKeys = Object.keys(mapEntries);
+    for (let i = 0; i < mapKeys.length; i++) {
+      if (i > 0) {
+        createSpecificationMapEntry(specificationMap, container);
       }
+      let entry = specificationMap.entries[i];
+      let key = mapKeys[i];
+      let formattedKey = replaceSelectedComponentPlaceholders(key);
+      let formattedValue = replaceSelectedComponentPlaceholders(mapEntries[key]);
+      prefillSpecificationMapInput(specificationMap, entry, "key", formattedKey);
+      prefillSpecificationMapInput(specificationMap, entry, "value", formattedValue);
     }
     completeVariableSetup(identifier);
   }
@@ -807,7 +821,7 @@
     }
   }
 
-  function replaceSelectedComponentPlaceholders(identifier) {
+  function formatSelectedComponent(identifier) {
     if (!selectedComponentSetup || !("content" in selectedComponent)) {
       return false;
     }
@@ -815,6 +829,12 @@
     if (!(identifier in selectedComponentContent)) {
       return false;
     }
+    selectedComponentContent[identifier] =
+      replaceSelectedComponentPlaceholders(selectedComponentContent[identifier]);
+    return selectedComponentContent;
+  }
+
+  function replaceSelectedComponentPlaceholders(content) {
     for (let i = 0; i < componentsOutputVariables.length; i++) {
       let entry = componentsOutputVariables[i];
       let index = entry.index;
@@ -822,12 +842,11 @@
       let variables = entry.variables;
       for (let i = 0; i < variables.length; i++) {
         let variable = variables[i];
-        selectedComponentContent[identifier] = selectedComponentContent[identifier]
-          .replaceAll("%" + prefix + variable.identifier + "%",
-            buildPlaceholderElement(prefix, variable.identifier, variable.name));
+        content = content.replaceAll("%" + prefix + variable.identifier + "%",
+          buildPlaceholderElement(prefix, variable.identifier, variable.name));
       }
     }
-    return selectedComponentContent;
+    return content;
   }
 
   function generateElementIdentifier(length) {
