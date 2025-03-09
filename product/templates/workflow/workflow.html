@@ -178,12 +178,15 @@
   function createComponentAddButton(index) {
     let buttonContainer = document.createElement("div");
     buttonContainer.classList.add("workflow-component-add-container");
+    let buttonWrapper = document.createElement("div");
+    buttonWrapper.classList.add("workflow-component-add-wrapper");
     let iconContainer = document.createElement("i");
     iconContainer.classList.add("workflow-component-add", "fa-solid", "fa-add");
-    buttonContainer.appendChild(iconContainer);
-    iconContainer.addEventListener("click", function(event) {
+    buttonWrapper.appendChild(iconContainer);
+    buttonWrapper.addEventListener("click", function(event) {
       openComponentAddMenu(index);
     });
+    buttonContainer.appendChild(buttonWrapper);
     return buttonContainer;
   }
 
@@ -329,13 +332,16 @@
   function createAddActionButton(parent) {
     let buttonContainer = document.createElement("div");
     buttonContainer.classList.add("workflow-action-add-container");
+    let buttonWrapper = document.createElement("div");
+    buttonWrapper.classList.add("workflow-action-add-wrapper");
     let iconContainer = document.createElement("i");
     iconContainer.classList.add("workflow-action-add", "fa-solid", "fa-plus");
-    buttonContainer.appendChild(iconContainer);
-    iconContainer.addEventListener("click", function(event) {
+    buttonWrapper.appendChild(iconContainer);
+    buttonWrapper.addEventListener("click", function(event) {
       openComponentAddMenu(JSON.parse(sessionStorage.getItem("workflow-steps"))
         .steps.length);
     });
+    buttonContainer.appendChild(buttonWrapper);
     parent.appendChild(buttonContainer);
   }
 

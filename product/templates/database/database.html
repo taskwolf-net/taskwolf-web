@@ -149,6 +149,10 @@
     for (let i = 0; i < columns.length; i++) {
       let column = columns[i];
       let entries = [];
+      if (column.type === "NUMBER") {
+        entries.push({icon: "fa-magnifying-glass-chart", content: "{% trans 'product.database.column.settings.analyze' %}",
+          click: () => openAnalyzeColumnMenu(column)});
+      }
       entries.push({icon: "fa-pen", content: "{% trans 'product.database.column.settings.rename' %}",
         click: () => editColumnName(column)});
       if (i > 0) {
@@ -161,7 +165,8 @@
       }
       entries.push({icon: "fa-trash", content: "{% trans 'product.database.column.settings.delete' %}",
         color: "text-danger", click: () => openRemoveColumnMenu(column.id)});
-      let dropdown = createTableDropdown(entries, columns.length > 1 ? [1, entries.length - 1] : []);
+      let dropdown = createTableDropdown(entries, columns.length > 1 ?
+        [column.type === "NUMBER" ? 2 : 1, entries.length - 1] : []);
       let element = createTableColumnHead(column.id, column.name,
         findColumnIcon(column.type), dropdown);
       element.ondblclick = function (event) {
@@ -301,12 +306,83 @@
     });
   }
 
+  function openAnalyzeColumnMenu(column) {
+    let content = document.createElement("div");
+    content.classList.add("database-analyze-column-menu");
+    content.appendChild(createAnalyzeColumnSelector("fa-plus",
+      "{% trans 'product.database.column.analyze.sum' %}", column, "SUM"));
+    content.appendChild(createAnalyzeColumnSelector("fa-wave-square",
+      "{% trans 'product.database.column.analyze.average' %}", column, "AVG"));
+    content.appendChild(createAnalyzeColumnSelector("fa-arrow-down",
+      "{% trans 'product.database.column.analyze.min' %}", column, "MIN"));
+    content.appendChild(createAnalyzeColumnSelector("fa-arrow-up",
+      "{% trans 'product.database.column.analyze.max' %}", column, "MAX"));
+    Swal.fire({
+      title: "{% trans 'product.database.column.analyze.title' %}",
+      html: content,
+      width: 700,
+      showConfirmButton: false
+    });
+  }
+
+  function createAnalyzeColumnSelector(icon, label, column, aggregation) {
+    let actionSelector = document.createElement("div");
+    actionSelector.role = "button";
+    actionSelector.classList.add("database-analyze-column-menu-selector");
+    let selectorIcon = document.createElement("i");
+    selectorIcon.classList.add("fa-solid", icon, "database-analyze-column-menu-icon");
+    actionSelector.appendChild(selectorIcon);
+    let selectorLabel = document.createElement("h3");
+    selectorLabel.classList.add("database-analyze-column-menu-label");
+    selectorLabel.innerText = label;
+    actionSelector.appendChild(selectorLabel);
+    actionSelector.onclick = function() {
+      loaderPopup();
+      let request = new HttpRequest("/table/aggregate/", "POST",
+        [], {table: database.id, column: column.id, aggregation: aggregation});
+      request.send(function (status, responseText) {
+        displayAnalyzeColumnResult(label, JSON.parse(responseText));
+      });
+    };
+    return actionSelector;
+  }
+
+  function displayAnalyzeColumnResult(label, response) {
+    if (response.success === false) {
+      if (response.errorCode === 1000) {
+        Swal.fire("{% trans 'product.database.column.analyze.failed.title' %}",
+          "{% trans 'product.database.column.analyze.failed.not.found' %}", "error");
+      } else if (response.errorCode === 1001) {
+        Swal.fire("{% trans 'product.database.column.analyze.failed.title' %}",
+          "{% trans 'product.database.column.analyze.failed.type' %}", "error");
+      }
+      return;
+    }
+    let resultContainer = document.createElement("div");
+    resultContainer.classList.add("database-analyze-column-result-menu");
+    let resultKeyElement = document.createElement("h5");
+    resultKeyElement.classList.add("fw-bold", "mb-2");
+    resultKeyElement.innerText = label;
+    resultContainer.appendChild(resultKeyElement);
+    let resultValueElement = document.createElement("p");
+    resultValueElement.classList.add("database-analyze-column-result-menu-value");
+    resultValueElement.innerText = response.result;
+    resultContainer.appendChild(resultValueElement);
+    Swal.fire({
+      title: "{% trans 'product.database.column.analyze.result.title' %}",
+      width: 600,
+      html: resultContainer,
+    });
+  }
+
   function createTableAddColumnButton() {
     let dropdown = createTableDropdown([
       {icon: findColumnIcon("TEXT"), content: "{% trans 'product.database.column.type.text' %}",
         click: () => openAddColumnMenu("TEXT")},
       {icon: findColumnIcon("TEXT_AREA"), content: "{% trans 'product.database.column.type.text.area' %}",
         click: () => openAddColumnMenu("TEXT_AREA")},
+      {icon: findColumnIcon("NUMBER"), content: "{% trans 'product.database.column.type.number' %}",
+        click: () => openAddColumnMenu("NUMBER")},
       {icon: findColumnIcon("DATE"), content: "{% trans 'product.database.column.type.date' %}",
         click: () => openAddColumnMenu("DATE")},
       {icon: findColumnIcon("SWITCH"), content: "{% trans 'product.database.column.type.switch' %}",
@@ -323,6 +399,8 @@
       return "fa-t";
     } else if (type === "TEXT_AREA") {
       return "fa-align-left";
+    } else if (type === "NUMBER") {
+      return "fa-hashtag";
     } else if (type === "DATE") {
       return "fa-calendar-days";
     } else if (type === "SWITCH") {
@@ -411,6 +489,8 @@
         row.appendChild(createTextTableCell(entry, column));
       } else if (column.type === "TEXT_AREA") {
         row.appendChild(createTextAreaTableCell(entry, column));
+      } else if (column.type === "NUMBER") {
+        row.appendChild(createNumberTableCell(entry, column));
       } else if (column.type === "DATE") {
         row.appendChild(createDateTableCell(entry, column));
       } else if (column.type === "SWITCH" || column.type === "CHECKBOX") {
@@ -522,6 +602,80 @@
     input.focus();
   }
 
+  function createNumberTableCell(entry, column) {
+    let cell = document.createElement("td");
+    let cellContent = document.createElement("text");
+    cell.appendChild(cellContent);
+    let input = document.createElement("input");
+    input.type = "text";
+    input.oninput = function (event) {
+      formatNumberInput(input);
+    };
+    input.classList.add("database-table-cell-editor", "database-editor-hidden");
+    cell.appendChild(input);
+    let entryCell = entry.cells.filter((some) => some.column === column.id)[0];
+    if (entryCell && entryCell.value !== null && entryCell.value !== "") {
+      let value = entryCell.value;
+      cellContent.innerText = value;
+      input.value = value;
+    } else {
+      cellContent.innerHTML = "&nbsp;";
+    }
+    cell.onclick = function (event) {
+      editTableNumberCell(entry, column.id, cell, cellContent, input);
+    }
+    return cell;
+  }
+
+  function formatNumberInput(input) {
+    let value = input.value;
+    value = value.replace(",", ".");
+    value = value.replace(/[^0-9.-]/g, "");
+    value = value.replace(/(?!^)-/g, "");
+    const parts = value.split(".");
+    if (parts.length > 2) {
+      value = parts[0] + "." + parts.slice(1).join("");
+    }
+    input.value = value;
+  }
+
+  function editTableNumberCell(entry, column, cell, cellContent, input) {
+    if (cell.classList.contains("database-table-cell-editing")) {
+      return;
+    }
+    cell.classList.add("database-table-cell-editing");
+    cellContent.classList.add("d-none");
+    input.classList.remove("database-editor-hidden");
+    input.focus();
+    input.select();
+    input.addEventListener("blur", () => {
+      let value = input.value.replaceAll("\n", "");
+      if (value.endsWith(".")) {
+        value = value.slice(0, -1);
+      }
+      if (!value) {
+        cellContent.innerHTML = "&nbsp;";
+      } else {
+        cellContent.innerText = value;
+      }
+      input.value = value;
+      cell.classList.remove("database-table-cell-editing");
+      cellContent.classList.remove("d-none");
+      input.classList.add("database-editor-hidden");
+      if (isNaN(value) || value === "") {
+        value = null;
+      } else {
+        value = parseFloat(value);
+      }
+      submitTableEdit(entry, column, value);
+    });
+    input.addEventListener("keypress", (event) => {
+      if (event.key === "Enter") {
+        input.blur();
+      }
+    });
+  }
+
   function createDateTableCell(entry, column) {
     let cell = document.createElement("td");
     cell.classList.add("database-table-cell-date");
@@ -574,6 +728,7 @@
     } else {
       cell.value = value;
     }
+    console.log(JSON.stringify({table: database.id, row: findRowId(entry), column: column, value: value}));
     let request = new HttpRequest("/table/entry/update/", "POST",
       [], {table: database.id, row: findRowId(entry), column: column, value: value});
     request.send(function (status, responseText) {
