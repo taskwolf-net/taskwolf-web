@@ -349,31 +349,41 @@ input[maxlength] {
 
 .workflow-action-add-container {
   width: 100%;
-  text-align: center;
-  margin-top: 2%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.workflow-component-add-wrapper, .workflow-action-add-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.dark .workflow-component-add-wrapper, .dark .workflow-action-add-wrapper {
+  background-color: #5c616a;
+}
+
+.dark .workflow-component-add-wrapper:hover, .dark .workflow-action-add-wrapper:hover {
+  background-color: #3c3f45;
+}
+
+.light .workflow-component-add-wrapper, .light .workflow-action-add-wrapper {
+  background-color: #d8d8d8;
+}
+
+.light .workflow-component-add-wrapper:hover, .light .workflow-action-add-wrapper:hover {
+  background-color: #c0c0c0;
 }
 
 .workflow-component-add, .workflow-action-add {
   font-size: 25px;
-  border-radius: 50%;
-  padding: 20px;
-  transition-duration: 0.4s;
-}
-
-.dark .workflow-component-add, .dark .workflow-action-add {
-  background-color: #5c616a;
-}
-
-.dark .workflow-component-add:hover, .dark .workflow-action-add:hover {
-  background-color: #3c3f45;
-}
-
-.light .workflow-component-add, .light .workflow-action-add {
-  background-color: #d8d8d8;
-}
-
-.light .workflow-component-add:hover, .light .workflow-action-add:hover {
-  background-color: #c0c0c0;
 }
 
 .workflow-component-add-menu {
