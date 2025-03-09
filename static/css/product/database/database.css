@@ -381,3 +381,76 @@ input[maxlength] {
     color: #dc3545;
   }
 }
+
+.database-analyze-column-menu {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+
+@media (max-width: 700px) {
+  .database-analyze-column-menu {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.database-analyze-column-menu-selector {
+  border-radius: 10px;
+  padding: 10px;
+  transition-duration: 0.3s;
+}
+
+.dark .database-analyze-column-menu-selector {
+  background-color: #4a4f5a;
+}
+
+.dark .database-analyze-column-menu-selector:hover {
+  background-color: #5b616f;
+}
+
+.light .database-analyze-column-menu-selector {
+  background-color: #dfdfdf;
+}
+
+.light .database-analyze-column-menu-selector:hover {
+  background-color: #c3c3c3;
+}
+
+.database-analyze-column-menu-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+.database-analyze-column-result-menu {
+  padding: 10px;
+  list-style: none;
+  text-align: start;
+  max-height: 500px;
+  overflow-y: auto;
+  border-radius: 10px;
+}
+
+.dark .database-analyze-column-result-menu {
+  border: 1px solid #4b555e;
+}
+
+.light .database-analyze-column-result-menu {
+  border: 1px solid #e1e1e1;
+}
+
+.database-analyze-column-result-menu-value {
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin: 0;
+}
+
+.dark .database-analyze-column-result-menu-value {
+  background-color: #3f474f;
+}
+
+.light .database-analyze-column-result-menu-value {
+  background-color: #eeeeee;
+}

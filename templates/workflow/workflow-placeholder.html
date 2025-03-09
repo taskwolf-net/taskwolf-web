@@ -138,16 +138,19 @@
   }
 
   function findPreviousComponentsContent(stepIndex) {
-    let previousComponents = JSON.parse(sessionStorage.getItem("workflow-steps")).steps
+    let steps = JSON.parse(sessionStorage.getItem("workflow-steps")).steps;
+    let previousComponents = steps
       .sort(function (a, b) {return a.index - b.index;})
       .filter(element => element.kind === "action" && element.index < stepIndex &&
         element.selected === true)
       .map(element => {
-        return {module: element.module, type: element.type};
+        return {kind: "action", module: element.module, type: element.type,
+          content: element.content, index: element.index};
       });
     let trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
     if (trigger.selected === true) {
-      previousComponents.unshift({module: trigger.module, type: trigger.type});
+      previousComponents.unshift({kind: "trigger", module: trigger.module,
+        type: trigger.type, content: trigger.content});
     }
     return previousComponents;
   }
