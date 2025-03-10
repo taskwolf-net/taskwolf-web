@@ -43,5 +43,6 @@ urlpatterns = [
   path('account/add/', account.accountAdd),
   path('accounts/', account.accounts),
   path('devices/', device.devices),
+  path('device/scan/<str:scan>/<str:token>/', device.deviceScan),
   path('help/', product.help),
 ]
