@@ -7,3 +7,7 @@ from django.utils.translation import gettext
 async def devices(request):
   return render(request, 'device/devices.html', {'title': gettext('product.devices.title'),
     'css': ['css/base/product-header.css', 'css/base/product-sidebar.css', 'css/product/device/devices.css']})
+
+async def deviceScan(request, scan, token):
+  return render(request, 'device/device-scan.html', {'title': '', 'css': [],
+    'scan': scan, 'token': token})
