@@ -177,6 +177,18 @@
   list-style-type: none;
 }
 
+#devices-scan {
+  width: 20%;
+  height: 38px;
+  margin-left: 1.5%;
+}
+
+.devices-scan-content {
+  height: fit-content;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
 @media (max-width: 1300px) {
   #devices-filter-container {
     flex-direction: column;
@@ -190,6 +202,16 @@
   .vr {
     display: none !important;
   }
+}
+
+@media (max-width: 1200px) {
+  #devices-scan {
+    width: fit-content;
+  }
+}
+
+.swal2-image {
+  border-radius: 20px;
 }
 
 #devices-list {

@@ -16,6 +16,7 @@
               <i class="fa fa-search"></i>
             </button>
           </div>
+          <button type="button" id="devices-scan" class="btn btn-primary btn-block"><i class="fa-solid fa-qrcode me-2"></i> {% trans 'product.devices.scan' %}</button>
         </div>
         <div id="devices-filter-container" class="rounded-4 py-3 mt-4 d-none">
           <div class="devices-filter-section">
@@ -729,6 +730,87 @@
     });
   }
 
+  document.getElementById("devices-scan").onclick = function () {
+    let request = new HttpRequest("/device/scan/create/", "GET", []);
+    request.send(function (status, responseText) {
+      let response = JSON.parse(responseText);
+      if (response.success === true) {
+        displayScanQRCode(response.scan, response.qrCode);
+      }
+    });
+  }
+
+  function displayScanQRCode(scan, qrCode) {
+    let content = document.createElement("div");
+    content.classList.add("devices-scan-content");
+    let waitingElement = document.createElement("p");
+    waitingElement.innerHTML = "{% trans 'product.devices.scan.waiting' %}" + `
+      <span class="spinner-border spinner-border-sm ms-2" aria-hidden="true"></span>
+      <span class="visually-hidden" role="status">Loading...</span>
+    `;
+    content.appendChild(waitingElement);
+    Swal.fire({
+      title: "{% trans 'product.devices.scan.title' %}",
+      html: content,
+      showConfirmButton: false,
+      showCancelButton: true,
+      cancelButtonText: "{% trans 'popup.cancel' %}",
+      imageUrl: "data:image/png;base64," + qrCode,
+      imageWidth: 256,
+      imageHeight: 256
+    });
+    let interval = setInterval(function () {
+      let request = new HttpRequest("/device/scan/scanned/", "POST", [], {scan: scan});
+      request.send(function (status, responseText) {
+        let response = JSON.parse(responseText);
+        if (response.success === true  && response.scanned === true) {
+          clearInterval(interval);
+          displayScanDecision(scan, response.information, response.platform);
+        }
+      });
+    }, 2000);
+  }
+
+  function displayScanDecision(scan, information, platform) {
+    let content = document.createElement("div");
+    content.classList.add("devices-scan-content");
+    let deviceElement = document.createElement("div");
+    deviceElement.classList.add("d-flex", "justify-content-center", "align-items-center");
+    let deviceName = document.createElement("span");
+    deviceName.classList.add("me-2");
+    deviceName.innerText = information;
+    deviceElement.appendChild(deviceName);
+    deviceElement.appendChild(createDevicePlatformCell(platform));
+    content.appendChild(deviceElement);
+    Swal.fire({
+      title: "{% trans 'product.devices.scan.scanned' %} " +
+        "<i class='fa-solid fa-check ms-2'></i>",
+      html: content,
+      showConfirmButton: true,
+      confirmButtonColor: "#68883e",
+      confirmButtonText: "{% trans 'product.devices.scan.accept' %}",
+      showCancelButton: true,
+      cancelButtonColor: "#dc3545",
+      cancelButtonText: "{% trans 'product.devices.scan.decline' %}",
+    }).then(result => {
+      if (result.isConfirmed) {
+        loaderPopup();
+      }
+      let request = new HttpRequest("/device/scan/decide/", "POST",
+        [], {scan: scan, approved: result.isConfirmed});
+      request.send(function (status, responseText) {
+        let success = JSON.parse(responseText).success;
+        if (success === true && result.isConfirmed) {
+          setTimeout(function () {
+            Swal.fire("{% trans 'product.devices.scan.successful.title' %}",
+              "{% trans 'product.devices.scan.successful.body' %}", "success")
+              .then(success => window.location.href = "/devices/");
+          }, 5000);
+        }
+      });
+    });
+  }
+
   function displayLoader() {
     let loader = document.createElement("div");
     loader.classList.add("loader", "loader-list");
@@ -738,5 +820,18 @@
   function removeLoader() {
     document.getElementById("devices-loader").removeChild(
       document.getElementsByClassName("loader")[0]);
+  }
+
+  function loaderPopup() {
+    Swal.fire({
+      html: `
+        <div style="display: flex; justify-content: center; align-items: center; height: calc(340px - 4rem)">
+          <div class="spinner-border" role="status" style="width: 4rem; height: 4rem;">
+            <span class="visually-hidden">Loading</span>
+          </div>
+        </div>
+      `,
+      showConfirmButton: false
+    });
   }
 </script>
