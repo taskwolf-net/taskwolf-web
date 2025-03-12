@@ -144,7 +144,7 @@ input:-webkit-autofill:active{
   column-gap: 40px;
   row-gap: 30px;
   max-height: 300px;
-  overflow-y: scroll;
+  overflow-y: auto;
   padding: 12px;
 }
 
@@ -196,8 +196,9 @@ input:-webkit-autofill:active{
   font-variant: normal;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
-  top: -12.5px;
-  left: -12.5px;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
   padding: 10px;
   color: white;
   border-radius: 50%;
