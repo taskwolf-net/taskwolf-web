@@ -133,11 +133,6 @@
   fill: black;
 }
 
-.template-entry b {
-  display: block;
-  margin-bottom: 5%;
-}
-
 .template-entry img {
   border-radius: 25%;
   display: block;
@@ -146,10 +141,6 @@
   height: auto;
   flex-shrink: 1;
   min-width: 0;
-}
-
-.template-entry span {
-  display: block;
 }
 
 .dark .template-entry-unavailable:hover {

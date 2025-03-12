@@ -100,12 +100,17 @@
     let entryElement = document.createElement("li");
     entryElement.classList.add("template-entry");
     entryElement.appendChild(createWorkflowElement(trigger, actions));
-    let nameElement = document.createElement("b");
+    var entryTextElement = document.createElement("div");
+    entryTextElement.classList.add("w-100", "mx-1");
+    let nameElement = document.createElement("h5");
+    nameElement.classList.add("mb-3", "fw-bold");
     nameElement.innerHTML = name;
-    entryElement.appendChild(nameElement);
+    entryTextElement.appendChild(nameElement);
     let descriptionElement = document.createElement("span");
+    descriptionElement.classList.add("text-muted");
     descriptionElement.innerHTML = description;
-    entryElement.appendChild(descriptionElement);
+    entryTextElement.appendChild(descriptionElement);
+    entryElement.appendChild(entryTextElement);
     entryElement.onclick = function(event) {
       if (isTrial && accessType === "CHARGEABLE") {
         return;
