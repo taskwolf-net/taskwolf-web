@@ -5,7 +5,7 @@
 }
 
 #templates-header {
-  width: min(calc(1500px - 15vw), 95%);
+  width: min(1000px, 95%);
   margin: 5vh auto auto;
   display: flex;
   align-items: center;
@@ -65,7 +65,7 @@
 }
 
 #templates-list {
-  width: min(calc(2000px - 15vw), 95%);
+  width: min(1500px, 95%);
   list-style-type: none;
   margin: 2% auto;
   padding: 0;
@@ -78,11 +78,11 @@
 
 .template-entry {
   position: relative;
-  height: 350px;
   border: 1px solid #7f7f7f;
   border-radius: 10px;
   padding: 10px;
   transition-duration: 0.3s;
+  min-width: 100%;
 }
 
 .dark .template-entry:hover {
@@ -93,29 +93,44 @@
   background-color: #efefef;
 }
 
-.template-workflow {
+.template-workflow-container {
   padding: 50px 10px;
   margin-bottom: 10px;
   border-radius: 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
 }
 
-.dark .template-workflow {
+.dark .template-workflow-container {
   background-color: #202428;
 }
 
-.light .template-workflow {
+.light .template-workflow-container {
   background-color: #d8d8d8;
 }
 
+.template-workflow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
 .template-workflow-arrow {
-  font-size: 42px;
-  transform: scale(1.5);
-  height: 64px;
-  margin-left: 20px;
-  margin-right: 20px;
+  margin-left: 5%;
+  margin-right: 5%;
+  width: 36px;
+  min-width: 24px;
+  flex-shrink: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dark .template-workflow-arrow {
+  fill: white;
+}
+
+.light .template-workflow-arrow {
+  fill: black;
 }
 
 .template-entry b {
@@ -125,6 +140,12 @@
 
 .template-entry img {
   border-radius: 25%;
+  display: block;
+  width: 100%;
+  max-width: 64px;
+  height: auto;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 .template-entry span {
@@ -156,7 +177,7 @@
   margin-top: 5vh;
 }
 
-@media (max-width: 1500px) {
+@media (max-width: 1600px) {
   #templates-list {
     grid-template-columns: repeat(2, 1fr);
   }
