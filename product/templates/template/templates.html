@@ -132,32 +132,44 @@
     sessionStorage.removeItem("workflow-name");
     sessionStorage.removeItem("workflow-description");
     sessionStorage.removeItem("workflow-trigger");
-    sessionStorage.removeItem("workflow-actions");
-    sessionStorage.removeItem("workflow-conditions");
+    sessionStorage.removeItem("workflow-steps");
     sessionStorage.removeItem("workflow-selected");
     sessionStorage.removeItem("workflow-id");
+    sessionStorage.setItem("workflow-selected", "true");
     sessionStorage.setItem("workflow-name", name);
+    sessionStorage.setItem("workflow-initial-name", name);
     sessionStorage.setItem("workflow-description", description);
-    sessionStorage.setItem("workflow-trigger", JSON.stringify({
+    sessionStorage.setItem("workflow-initial-description", description);
+    let parsedTrigger = JSON.stringify({
+      "kind": "trigger",
       "module": trigger.module,
       "moduleLogo": trigger.moduleLogo,
       "type": trigger.type,
       "typeDescription": trigger.typeDescription,
+      "content": "{}",
+      "templated": true,
       "selected": true
-    }));
-    let encodedActions = [];
+    });
+    sessionStorage.setItem("workflow-trigger", parsedTrigger);
+    sessionStorage.setItem("workflow-initial-trigger", parsedTrigger);
+    let steps = [];
     for (let i = 0; i < actions.length; i++) {
       let action = actions[i];
-      encodedActions.push({
-        "actionIndex": action.actionIndex,
+      steps.push({
+        "kind": "action",
+        "index": action.actionIndex,
         "module": action.module,
         "moduleLogo": action.moduleLogo,
         "type": action.type,
         "typeDescription": action.typeDescription,
+        "content": "{}",
+        "templated": true,
         "selected": true
       });
     }
-    sessionStorage.setItem("workflow-actions", JSON.stringify({actions: encodedActions}));
+    let parseSteps = JSON.stringify({steps: steps});
+    sessionStorage.setItem("workflow-steps", parseSteps);
+    sessionStorage.setItem("workflow-initial-steps", parseSteps);
     window.location.href = "/workflow/";
   }
 

@@ -452,8 +452,8 @@
     }
     let trigger = JSON.parse(sessionStorage.getItem("workflow-trigger"));
     let steps = JSON.parse(sessionStorage.getItem("workflow-steps")).steps;
-    if ((!("content" in trigger)) || trigger.selected === false ||
-      steps.some((step) => !("content" in step) || step.selected === false)
+    if ((!("content" in trigger)) || ("templated" in trigger) || trigger.selected === false ||
+      steps.some((step) => !("content" in step) || ("templated" in step) || step.selected === false)
     ) {
       updatePublishability(false);
       return;
