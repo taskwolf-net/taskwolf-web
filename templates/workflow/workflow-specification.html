@@ -153,7 +153,7 @@
   }
 
   function inputSpecificationInput(quill, identifier) {
-    let value = findPlaceholderInputContent(quill, componentsOutputVariables);
+    let value = findPlaceholderInputContent(quill);
     if (value === "" && identifier in specificationValues) {
       delete specificationValues[identifier];
     }
@@ -609,7 +609,7 @@
   }
 
   function inputSpecificationListInput(quill, identifier, listInput) {
-    let value = findPlaceholderInputContent(quill, componentsOutputVariables);
+    let value = findPlaceholderInputContent(quill);
     let specificationValue = specificationValues[identifier];
     let json = specificationValue ? JSON.parse(specificationValue) : [];
     json[listInput.index] = value;
@@ -753,7 +753,7 @@
   }
 
   function inputSpecificationMapInput(quill, identifier, mapEntry, type) {
-    let value = findPlaceholderInputContent(quill, componentsOutputVariables);
+    let value = findPlaceholderInputContent(quill);
     let specificationValue = specificationValues[identifier];
     let json = specificationValue ? JSON.parse(specificationValue) : {};
     if (type === "key") {

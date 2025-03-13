@@ -256,8 +256,8 @@
       static create(value) {
         let node = super.create();
         node.classList.add('placeholder');
-        node.setAttribute('data-placeholder', value);
-        node.innerHTML = " " + value.split(":")[1] + " ";
+        node.setAttribute('data-placeholder', value.attribute);
+        node.innerHTML = value.content;
         let removeButton = document.createElement('i');
         removeButton.classList.add('placeholder-remove', 'fa-solid', 'fa-xmark');
         removeButton.onclick = () => {
@@ -282,7 +282,11 @@
       }
 
       static value(node) {
-        return node.getAttribute('data-placeholder');
+        return {attribute: node.getAttribute("data-placeholder"),
+          content: node.innerHTML
+            .replaceAll('<i class="placeholder-remove fa-solid fa-xmark"></i>', "")
+            .replaceAll('﻿<span contenteditable="false">', "")
+            .replaceAll('</span>﻿', "")};
       }
     }
     PlaceholderBlot.blotName = identifier;
@@ -430,38 +434,36 @@
   }
 
   function addPlaceholder(quill, identifier, variableId, variableName) {
-    var range = quill.getSelection(true);
+    let range = quill.getSelection(true);
     if (range) {
-      quill.insertEmbed(range.index, identifier, variableId + ':' + variableName,
+      quill.insertEmbed(range.index, identifier,
+        {attribute: variableId, content: " " + variableName + " "},
         Quill.sources.USER);
       quill.setSelection(range.index + 1, Quill.sources.SILENT);
     }
   }
 
-  function findPlaceholderInputContent(quill, componentsOutputVariables) {
-    let value = quill.root.innerHTML;
-    for (let i = 0; i < componentsOutputVariables.length; i++) {
-      let entry = componentsOutputVariables[i];
-      let index = entry.index;
-      let prefix = findPlaceholderPrefix(index);
-      let variables = entry.variables;
-      for (let i = 0; i < variables.length; i++) {
-        let variable = variables[i];
-        value = value.replaceAll(
-          buildPlaceholderElement(prefix, variable.identifier, variable.name),
-          "%" + prefix + variable.identifier + "%");
+  function findPlaceholderInputContent(quill) {
+    const originalDelta = quill.getContents();
+    const modifiedDelta = JSON.parse(JSON.stringify(originalDelta));
+    modifiedDelta.ops = modifiedDelta.ops.map(op => {
+      let insert = op.insert;
+      if (insert && typeof insert === 'object') {
+        return {insert: "%" + insert[Object.keys(insert)[0]].attribute + "%"};
       }
-    }
-    value = value.replaceAll("<br>", "");
-    value = value.replaceAll("<p>", "");
-    value = value.replaceAll("</p>", "\n");
-    value = value.replace(/\n$/, '');
-    return value;
+      return op;
+    });
+    return modifiedDelta.ops
+      .map(op => (typeof op.insert === 'string' ? op.insert : ""))
+      .join('').replace(/\n$/, '');
   }
 
   function buildPlaceholderElement(prefix, identifier, name) {
-    return '<span class="placeholder" data-placeholder="' + prefix + identifier +
-      ':' + name + '">﻿<span contenteditable="false"> ' + name + ' ' +
+    let div = document.createElement("div");
+    div.textContent = name;
+    name = div.innerHTML;
+    return '<span class="placeholder" data-placeholder="' + prefix + identifier + '">' +
+      '﻿<span contenteditable="false"> ' + name + ' ' +
       '<i class="placeholder-remove fa-solid fa-xmark"></i></span>﻿</span>';
   }
 
