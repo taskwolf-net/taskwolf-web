@@ -49,10 +49,6 @@
       sessionStorage.getItem("account-app-name");
     fetchAccountsData(function() {
       displayAccounts();
-      if (accounts.length === 0) {
-        document.getElementById("accounts-empty").style.display = "block";
-        document.getElementById("accounts-empty-headline").innerHTML = "{% trans 'product.accounts.empty' %}".replace("%APP%", sessionStorage.getItem("account-app-name"));
-      }
       removeLoader();
     });
   });
@@ -67,6 +63,13 @@
   }
 
   function displayAccounts() {
+    if (accounts.length === 0) {
+      document.getElementById("accounts-empty").style.display = "block";
+      document.getElementById("accounts-empty-headline").innerHTML =
+        "{% trans 'product.accounts.empty' %}".replace("%APP%", sessionStorage.getItem("account-app-name"));
+    } else {
+      document.getElementById("accounts-empty").style.display = "none";
+    }
     document.getElementById("accounts-list").innerHTML = "";
     for (let i = 0; i < accounts.length; i++) {
       let entry = accounts[i];
