@@ -728,7 +728,6 @@
     } else {
       cell.value = value;
     }
-    console.log(JSON.stringify({table: database.id, row: findRowId(entry), column: column, value: value}));
     let request = new HttpRequest("/table/entry/update/", "POST",
       [], {table: database.id, row: findRowId(entry), column: column, value: value});
     request.send(function (status, responseText) {
