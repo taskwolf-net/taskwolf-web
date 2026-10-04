@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      DJANGO_SECRET_KEY: ci-only
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - run: sudo apt-get update && sudo apt-get install -y gettext
+      - run: pip install django gunicorn django-cors-headers requests jwt
+      - run: python manage.py check
+      - run: django-admin compilemessages
