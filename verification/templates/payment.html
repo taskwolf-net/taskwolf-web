@@ -40,10 +40,10 @@
       loginRedirect();
       return;
     }
-    let packageType = Cookie.find("dulno-package-type");
-    let packageClass = Cookie.find("dulno-package-class");
-    let packageRuntime = Cookie.find("dulno-package-runtime");
-    let packagePrice = Cookie.find("dulno-package-price");
+    let packageType = Cookie.find("taskwolf-package-type");
+    let packageClass = Cookie.find("taskwolf-package-class");
+    let packageRuntime = Cookie.find("taskwolf-package-runtime");
+    let packagePrice = Cookie.find("taskwolf-package-price");
     if (packageType == null || packageClass == null || packageRuntime == null || packagePrice == null) {
       document.getElementById("payment-not-found").classList.remove("d-none");
       return;
@@ -60,7 +60,7 @@
     displayPackageType(packageType);
     displayPackageClass(packageType, packageClass);
     displayPackageRuntime(packageType, packageRuntime);
-    let language = Cookie.find("dulno-home-language");
+    let language = Cookie.find("taskwolf-home-language");
     document.getElementById("payment-package-price").innerHTML = (language === "de" ?
       packagePrice.toString().replaceAll(".", ",") : packagePrice) + " €";
     if (packageType === "FREE") {
@@ -119,9 +119,9 @@
   }
 
   document.getElementById("payment-pay-redirect").onclick = function (event) {
-    let packageType = Cookie.find("dulno-package-type");
-    let packageClass = Cookie.find("dulno-package-class");
-    let packageRuntime = Cookie.find("dulno-package-runtime");
+    let packageType = Cookie.find("taskwolf-package-type");
+    let packageClass = Cookie.find("taskwolf-package-class");
+    let packageRuntime = Cookie.find("taskwolf-package-runtime");
     if (packageType === "FREE") {
       processTrial();
       return;
@@ -185,10 +185,10 @@
   }
 
   function resetPackageSelection() {
-    Cookie.destroy("dulno-package-type");
-    Cookie.destroy("dulno-package-class");
-    Cookie.destroy("dulno-package-runtime");
-    Cookie.destroy("dulno-package-price");
+    Cookie.destroy("taskwolf-package-type");
+    Cookie.destroy("taskwolf-package-class");
+    Cookie.destroy("taskwolf-package-runtime");
+    Cookie.destroy("taskwolf-package-price");
   }
 
   document.getElementById("payment-not-found-redirect").onclick = function (event) {

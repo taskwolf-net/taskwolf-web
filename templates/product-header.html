@@ -3,7 +3,7 @@
 <nav id="navbar">
   <button id="sidebar-button" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="false" aria-controls="sidebar"></button>
   <div id="navbar-content">
-    <a href="/" id="navbar-logo"><img class="dulno-logo" width="60px" height="60px" alt=""></a>
+    <a href="/" id="navbar-logo"><img class="taskwolf-logo" width="60px" height="60px" alt=""></a>
     <div id="header-control-container">
       <div id="team-target-button-container" class="dropdown d-none">
         <button class="dropdown-toggle btn" id="team-target-button-wrapper" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -190,10 +190,10 @@
   let isSidebarShown;
 
   window.onload = function() {
-    if (sessionStorage.getItem("dulno-sidebar") === null) {
-      sessionStorage.setItem("dulno-sidebar", "true");
+    if (sessionStorage.getItem("taskwolf-sidebar") === null) {
+      sessionStorage.setItem("taskwolf-sidebar", "true");
     }
-    let sidebarSetting = sessionStorage.getItem("dulno-sidebar").toLowerCase() === "true";
+    let sidebarSetting = sessionStorage.getItem("taskwolf-sidebar").toLowerCase() === "true";
     isSidebarShown = window.innerWidth > 575 && sidebarSetting;
     if (isSidebarShown) {
       document.getElementById("sidebar").classList.add("show");
@@ -204,7 +204,7 @@
 
   document.getElementById('sidebar-button').onclick = function() {
     isSidebarShown = !isSidebarShown;
-    sessionStorage.setItem("dulno-sidebar", isSidebarShown);
+    sessionStorage.setItem("taskwolf-sidebar", isSidebarShown);
     updateSidebarSpacing();
     updateSidebarButtonIcon();
   };

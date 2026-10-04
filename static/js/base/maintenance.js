@@ -53,8 +53,8 @@ function buildMaintenanceInformation(maintenance) {
 
 function generateMaintenanceInformationFormat() {
   let language = "en";
-  let homeLanguage = Cookie.find("dulno-home-language");
-  let productLanguage = Cookie.find("dulno-language");
+  let homeLanguage = Cookie.find("taskwolf-home-language");
+  let productLanguage = Cookie.find("taskwolf-language");
   if (homeLanguage != null) {
     language = homeLanguage.toLowerCase();
   } else if (productLanguage != null) {

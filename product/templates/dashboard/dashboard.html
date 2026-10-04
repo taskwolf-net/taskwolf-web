@@ -111,7 +111,7 @@
       return selectedBadgeContainer;
     }
     let selectButton = document.createElement("button");
-    selectButton.classList.add("btn", Cookie.find("dulno-theme") === "dark" ?
+    selectButton.classList.add("btn", Cookie.find("taskwolf-theme") === "dark" ?
       "btn-outline-light" : "btn-outline-dark");
     selectButton.style.width = "150px";
     selectButton.innerText = "{% trans 'product.dashboard.target.select' %}";
@@ -153,7 +153,7 @@
     activityNameContainer.classList.add("text-center", "fw-bold", "mb-3");
     let activityNameElement = document.createElement("span");
     activityNameElement.classList.add("badge",
-      Cookie.find("dulno-theme") === "dark" ? "text-bg-light" : "text-bg-dark");
+      Cookie.find("taskwolf-theme") === "dark" ? "text-bg-light" : "text-bg-dark");
     activityNameElement.innerText = activity.title;
     activityNameContainer.appendChild(activityNameElement);
     firstContainer.appendChild(activityNameContainer);

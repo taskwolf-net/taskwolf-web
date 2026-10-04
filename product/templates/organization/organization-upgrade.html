@@ -191,10 +191,10 @@
   }
 
   document.getElementById("organization-upgrade-buy").onclick = function (event) {
-    Cookie.create("dulno-package-type", "TEAM", 60 * 60 * 24);
-    Cookie.create("dulno-package-class", bundleClass, 60 * 60 * 24);
-    Cookie.create("dulno-package-runtime", bundleRuntime, 60 * 60 * 24);
-    Cookie.create("dulno-package-price", organizationPackageData.price, 60 * 60 * 24);
+    Cookie.create("taskwolf-package-type", "TEAM", 60 * 60 * 24);
+    Cookie.create("taskwolf-package-class", bundleClass, 60 * 60 * 24);
+    Cookie.create("taskwolf-package-runtime", bundleRuntime, 60 * 60 * 24);
+    Cookie.create("taskwolf-package-price", organizationPackageData.price, 60 * 60 * 24);
     window.location.href = "/payment/";
   }
 

@@ -25,7 +25,7 @@ class WhitelistMiddleware(object):
     return await self.get_response(request)
 
   async def isWhitelisted(self, request):
-    key = request.COOKIES.get('dulno-whitelist-key')
+    key = request.COOKIES.get('taskwolf-whitelist-key')
     if (key is None):
       return False
     response = await asyncio.get_event_loop().run_in_executor(None,

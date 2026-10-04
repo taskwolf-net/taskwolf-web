@@ -1,5 +1,5 @@
 const updateIcon = (event) => {
-  var iconElements = document.getElementsByClassName("dulno-icon");
+  var iconElements = document.getElementsByClassName("taskwolf-icon");
   for (var i = 0; i < iconElements.length; i++) {
     if (event.matches) {
       iconElements[i].href = "/static/img/icon-light.ico";

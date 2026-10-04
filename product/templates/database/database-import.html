@@ -238,7 +238,7 @@
     if (token !== null) {
       headers["Authorization"] = "Bearer " + token;
     }
-    let whitelistKey = Cookie.find("dulno-whitelist-key");
+    let whitelistKey = Cookie.find("taskwolf-whitelist-key");
     if (whitelistKey !== null) {
       headers["WHITELIST-KEY"] = whitelistKey;
     }

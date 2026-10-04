@@ -23,7 +23,7 @@ class HttpRequest {
     if (homeToken !== null) {
       headers.push({key: "Home-Authorization", value: "Bearer " + homeToken});
     }
-    let whitelistKey = Cookie.find("dulno-whitelist-key");
+    let whitelistKey = Cookie.find("taskwolf-whitelist-key");
     if (whitelistKey !== null) {
       headers.push({key: "WHITELIST-KEY", value: whitelistKey});
     }

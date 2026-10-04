@@ -898,7 +898,7 @@
     if (token !== null) {
       headers["Authorization"] = "Bearer " + token;
     }
-    let whitelistKey = Cookie.find("dulno-whitelist-key");
+    let whitelistKey = Cookie.find("taskwolf-whitelist-key");
     if (whitelistKey !== null) {
       headers["WHITELIST-KEY"] = whitelistKey;
     }
@@ -1102,7 +1102,7 @@
       }
       let table = document.getElementById("database-table-body");
       table.insertBefore(row, table.firstChild);
-      if (Cookie.find("dulno-theme") === "dark") {
+      if (Cookie.find("taskwolf-theme") === "dark") {
         row.style.animation = 'database-row-new-dark 0.8s ease';
       } else {
         row.style.animation = 'database-row-new-light 0.8s ease';

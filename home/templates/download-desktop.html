@@ -55,11 +55,11 @@
     if (detected === "WINDOWS") {
       content.appendChild(createDownloadButton(content,
         "{% trans 'home.download.desktop.windows.download' %}",
-        "https://app." + "{{domain}}" + "/download/windows/dulno.exe"));
+        "https://app." + "{{domain}}" + "/download/windows/taskwolf.exe"));
     } else if (detected === "LINUX") {
       content.appendChild(createDownloadButton(content,
         "{% trans 'home.download.desktop.linux.download' %}",
-        "https://app." + "{{domain}}" + "/download/linux/dulno.deb"));
+        "https://app." + "{{domain}}" + "/download/linux/taskwolf.deb"));
     } else if (detected === "MACOS") {
       content.appendChild(createDownloadButton(content,
         "{% trans 'home.download.desktop.macos.download' %}",
@@ -80,14 +80,14 @@
     createAlternativeTab("download-desktop-windows",
       "{% trans 'home.download.desktop.windows' %}",
       "{% trans 'home.download.desktop.windows.download' %}",
-      "https://app." + "{{domain}}" + "/download/windows/dulno.exe", width, selected);
+      "https://app." + "{{domain}}" + "/download/windows/taskwolf.exe", width, selected);
   }
 
   function createLinuxAlternativeTab(width, selected) {
     createAlternativeTab("download-desktop-linux",
       "{% trans 'home.download.desktop.linux' %}",
       "{% trans 'home.download.desktop.linux.download' %}",
-      "https://app." + "{{domain}}" + "/download/linux/dulno.deb", width, selected);
+      "https://app." + "{{domain}}" + "/download/linux/taskwolf.deb", width, selected);
   }
 
   function createMacOSAlternativeTab(width, selected) {

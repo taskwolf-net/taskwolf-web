@@ -39,7 +39,7 @@
 
 <script>
   $(document).ready(function() {
-    let rememberMe = Cookie.find("dulno-remember-me");
+    let rememberMe = Cookie.find("taskwolf-remember-me");
     if (rememberMe != null) {
       document.getElementById("email").value = rememberMe;
     }
@@ -65,7 +65,7 @@
 
   function login(multiFactorCode) {
     if (document.getElementById("remember-check").checked) {
-      Cookie.create("dulno-remember-me", document.getElementById("email").value,
+      Cookie.create("taskwolf-remember-me", document.getElementById("email").value,
         12 * 30 * 24 * 60 * 60);
     }
     let request = new HttpRequest("/verification/login/", "POST", [],
@@ -130,8 +130,8 @@
     } else {
       googleUrl += "/dashboard/";
     }
-    googleUrl += "DULNO-STATE-SPLIT";
-    let language = Cookie.find("dulno-home-language");
+    googleUrl += "TASKWOLF-STATE-SPLIT";
+    let language = Cookie.find("taskwolf-home-language");
     googleUrl += language;
     window.location.href = googleUrl;
   }

@@ -21,14 +21,14 @@
       <p>{% trans 'home.download.cli.installation.4' %}</p>
       <div class="download-cli-code mt-5 mb-5">
         <button id="download-cli-step-3-copy" class="download-cli-code-copy"><i class="fa-solid fa-copy"></i></button>
-        <span>curl -fsSL https://apt.{{domain}}/key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/dulno-archive-keyring.gpg</span><br><br>
-        <span>echo "deb [signed-by=/etc/apt/keyrings/dulno-archive-keyring.gpg] https://apt.{{domain}}/ ./stable main" | sudo tee /etc/apt/sources.list.d/dulno.list</span>
+        <span>curl -fsSL https://apt.{{domain}}/key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/taskwolf-archive-keyring.gpg</span><br><br>
+        <span>echo "deb [signed-by=/etc/apt/keyrings/taskwolf-archive-keyring.gpg] https://apt.{{domain}}/ ./stable main" | sudo tee /etc/apt/sources.list.d/taskwolf.list</span>
       </div>
       <p>{% trans 'home.download.cli.installation.5' %}</p>
       <div class="download-cli-code mt-5 mb-5">
         <button id="download-cli-step-4-copy" class="download-cli-code-copy"><i class="fa-solid fa-copy"></i></button>
         <span>sudo apt-get update</span><br><br>
-        <span>sudo apt-get install dulno</span>
+        <span>sudo apt-get install taskwolf</span>
       </div>
       <p>{% trans 'home.download.cli.installation.6' %}</p>
       <b>{% trans 'home.download.cli.installation.important' %}</b><p>{% trans 'home.download.cli.installation.7' %}</p>
@@ -51,13 +51,13 @@
   }
 
   document.getElementById("download-cli-step-3-copy").onclick = function(event) {
-    navigator.clipboard.writeText("curl -fsSL https://apt." + "{{domain}}" + "/key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/dulno-archive-keyring.gpg\n" +
-      "echo \"deb [signed-by=/etc/apt/keyrings/dulno-archive-keyring.gpg] https://apt." + "{{domain}}" + "/ ./stable main\" | sudo tee /etc/apt/sources.list.d/dulno.list");
+    navigator.clipboard.writeText("curl -fsSL https://apt." + "{{domain}}" + "/key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/taskwolf-archive-keyring.gpg\n" +
+      "echo \"deb [signed-by=/etc/apt/keyrings/taskwolf-archive-keyring.gpg] https://apt." + "{{domain}}" + "/ ./stable main\" | sudo tee /etc/apt/sources.list.d/taskwolf.list");
   }
 
   document.getElementById("download-cli-step-4-copy").onclick = function(event) {
     navigator.clipboard.writeText("sudo apt-get update\n" +
-      "sudo apt-get install dulno");
+      "sudo apt-get install taskwolf");
   }
 
   document.getElementById("download-cli-step-5-copy").onclick = function(event) {

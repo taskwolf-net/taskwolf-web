@@ -8,10 +8,10 @@ window.addEventListener('load', function () {
   ) {
     return;
   }
-  if (Cookie.find("dulno-theme") == null) {
-    Cookie.create("dulno-theme", "dark", 60 * 60 * 24 * 365);
+  if (Cookie.find("taskwolf-theme") == null) {
+    Cookie.create("taskwolf-theme", "dark", 60 * 60 * 24 * 365);
   }
-  let theme = Cookie.find("dulno-theme");
+  let theme = Cookie.find("taskwolf-theme");
   var logoSource;
   if (theme === "dark") {
     document.body.classList.add("dark");
@@ -23,7 +23,7 @@ window.addEventListener('load', function () {
     document.body.setAttribute("data-bs-theme", "light");
     logoSource = "logo-dark.webp";
   }
-  var logoElements = document.getElementsByClassName("dulno-logo");
+  var logoElements = document.getElementsByClassName("taskwolf-logo");
   for (var i = 0; i < logoElements.length; i++) {
     logoElements[i].src = "/static/img/" + logoSource;
   }

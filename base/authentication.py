@@ -22,8 +22,8 @@ def authentication_required(function):
         request.COOKIES["refresh-token"] = authenticationResponse["data"]["refreshToken"]
       language = await applyLanguage(request)
       response = await function(request, *args, **kwargs)
-      setCookie(response, "dulno-language", language, 30)
-      setCookie(response, "dulno-home-language", language, 30)
+      setCookie(response, "taskwolf-language", language, 30)
+      setCookie(response, "taskwolf-home-language", language, 30)
       if ("data" in authenticationResponse):
         setCookie(response, "token", authenticationResponse["data"]["token"], 30)
         setCookie(response, "refresh-token", authenticationResponse["data"]["refreshToken"], 30)
@@ -65,8 +65,8 @@ async def refreshAuthentication(request):
   jsonText = json.loads(text)
   success = jsonText["success"]
   if (success == "true"):
-    request.dulnoToken = jsonText["productApiKey"]
-    request.dulnoRefreshToken = jsonText["refreshToken"]
+    request.taskwolfToken = jsonText["productApiKey"]
+    request.taskwolfRefreshToken = jsonText["refreshToken"]
     return {"success": True, "data": {"token": jsonText["productApiKey"],
       "refreshToken": jsonText["refreshToken"]}}
   return {"success": False}
@@ -96,8 +96,8 @@ def home_authentication_required(function):
         request.COOKIES["refresh-token"] = authenticationResponse["data"]["refreshToken"]
       language = await applyHomeLanguage(request)
       response = await function(request, *args, **kwargs)
-      setCookie(response, "dulno-language", language, 30)
-      setCookie(response, "dulno-home-language", language, 30)
+      setCookie(response, "taskwolf-language", language, 30)
+      setCookie(response, "taskwolf-home-language", language, 30)
       if ("data" in authenticationResponse):
         setCookie(response, "token", authenticationResponse["data"]["token"], 30)
         setCookie(response, "refresh-token", authenticationResponse["data"]["refreshToken"], 30)
@@ -144,7 +144,7 @@ async def applyHomeLanguage(request):
 def applyWhitelistKey(request, headers):
   if (not settings.WHITELIST):
     return
-  whitelistKey = request.COOKIES.get('dulno-whitelist-key')
+  whitelistKey = request.COOKIES.get('taskwolf-whitelist-key')
   if (whitelistKey != None):
     headers["WHITELIST-KEY"] = whitelistKey
 

@@ -163,24 +163,24 @@
     });
   }
 
-  function displayEntry(dulnoWritten, author, date, time, contentElement) {
+  function displayEntry(taskwolfWritten, author, date, time, contentElement) {
     let messageContainer = document.createElement("li");
     messageContainer.classList.add("ticket-message-container");
     let messageDescription = document.createElement("div");
     messageDescription.classList.add("ticket-message-description");
     messageDescription.appendChild(document.createElement("br"));
     messageDescription.appendChild(document.createElement("br"));
-    if (dulnoWritten) {
-      let dulnoPicture = document.createElement("img");
-      dulnoPicture.classList.add("ticket-message-profile-picture");
-      let theme = Cookie.find("dulno-theme");
+    if (taskwolfWritten) {
+      let taskwolfPicture = document.createElement("img");
+      taskwolfPicture.classList.add("ticket-message-profile-picture");
+      let theme = Cookie.find("taskwolf-theme");
       theme = theme == null ? "dark" : theme;
       if (theme === "dark") {
-        dulnoPicture.src = "{% static 'img/logo-light.webp' %}";
+        taskwolfPicture.src = "{% static 'img/logo-light.webp' %}";
       } else {
-        dulnoPicture.src = "{% static 'img/logo-dark.webp' %}";
+        taskwolfPicture.src = "{% static 'img/logo-dark.webp' %}";
       }
-      messageDescription.appendChild(dulnoPicture);
+      messageDescription.appendChild(taskwolfPicture);
     } else {
       let userPicture = document.createElement("i");
       userPicture.classList.add("ticket-message-profile-icon", "fa-regular", "fa-user");

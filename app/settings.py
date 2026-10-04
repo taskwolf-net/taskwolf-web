@@ -11,20 +11,20 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
 # The client side google recaptcha token
-RECAPTCHA_TOKEN = os.getenv('DULNO_RECAPTCHA', '')
+RECAPTCHA_TOKEN = os.getenv('TASKWOLF_RECAPTCHA', '')
 
 # The client id of the google application
-GOOGLE_CLIENT_ID = os.getenv('DULNO_GOOGLE_CLIENT_ID', '')
+GOOGLE_CLIENT_ID = os.getenv('TASKWOLF_GOOGLE_CLIENT_ID', '')
 
 # Whether the project should be configured in productive, staging or local mode
 # Possible values: PRODUCTIVE, STAGING, LOCAL
-ENVIRONMENT = os.getenv('DULNO_ENVIRONMENT', 'LOCAL')
+ENVIRONMENT = os.getenv('TASKWOLF_ENVIRONMENT', 'LOCAL')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = ENVIRONMENT == 'STAGING' or ENVIRONMENT == 'LOCAL'
 
 if ENVIRONMENT == 'PRODUCTIVE':
-  ALLOWED_HOSTS = ['dulno.com', 'www.dulno.com', '0.0.0.0']
+  ALLOWED_HOSTS = ['taskwolf.net', 'www.taskwolf.net', '0.0.0.0']
 elif ENVIRONMENT == 'STAGING':
   ALLOWED_HOSTS = ['10.96.0.15', '0.0.0.0']
 elif ENVIRONMENT == 'LOCAL':
@@ -33,9 +33,9 @@ elif ENVIRONMENT == 'LOCAL':
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
 if ENVIRONMENT == 'PRODUCTIVE':
-  COOKIE_DOMAIN = '.dulno.com'
+  COOKIE_DOMAIN = '.taskwolf.net'
 elif ENVIRONMENT == 'STAGING':
-  COOKIE_DOMAIN = '.dulno.dev'
+  COOKIE_DOMAIN = '.taskwolf.dev'
 elif ENVIRONMENT == 'LOCAL':
   COOKIE_DOMAIN = '0.0.0.0'
 

@@ -3,7 +3,7 @@ window.addEventListener('load', function () {
   if (url === "imprint" || url === "privacy-policy" || url === "terms-of-service") {
     return;
   }
-  if (Cookie.find("dulno-cookies") != null) {
+  if (Cookie.find("taskwolf-cookies") != null) {
     return;
   }
   Swal.fire({
@@ -26,7 +26,7 @@ window.addEventListener('load', function () {
       htmlContainer: "cookie-banner-container",
     }
   }).then((result) => {
-    Cookie.create("dulno-cookies", true, 60 * 60 * 24 * 365);
+    Cookie.create("taskwolf-cookies", true, 60 * 60 * 24 * 365);
     window.location.reload();
   });
 });

@@ -15,7 +15,7 @@ def home_page(function):
   return home_page
 
 def applyLanguage(request):
-  language = request.COOKIES.get("dulno-home-language")
+  language = request.COOKIES.get("taskwolf-home-language")
   if (language is None):
     translation.activate("en")
   translation.activate(language)

@@ -1,5 +1,5 @@
 ARG DOCKER_REGISTRY
-FROM ${DOCKER_REGISTRY}/dulno-obfuscation:latest AS builder
+FROM ${DOCKER_REGISTRY}/taskwolf-obfuscation:latest AS builder
 
 RUN ln -s /obfuscation /web
 
